@@ -37,7 +37,7 @@ class GraphError(GenError):
         g_str = str(g)
         # If the string representation of the graph is too 
         # large to fit in one screen, truncate it
-        g_str_lines = split(g_str, '\n')
+        g_str_lines = g_str.split('\n')
         if (len(g_str_lines) > 12):
             g_str_lines = g_str_lines[0:12] + [' ...(additional lines not shown)]']
             g_str = '\n'.join(g_str_lines)
@@ -56,6 +56,7 @@ class NotUndirected(GraphError):
 
 
 class Edge(object):
+    __slots__=["start","stop","attr"]
     def __init__(self, 
                  iv_start, # edge starts here (index into vertex list)
                  iv_stop,   # edge ends here (index into vertex list)
@@ -70,6 +71,7 @@ class Edge(object):
 
 
 class Vertex(object):
+    __slots__=["attr"]
     def __init__(self, attr=None):
         self.attr = attr
 

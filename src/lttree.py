@@ -39,8 +39,6 @@ except NameError:
     basestring = unicode = str
 
 
-data_atoms = 'Data Atoms' # <-- The name of the file/section storing Atom data.
-
 
 
 class LttreeSettings(BasicUISettings):
@@ -65,6 +63,8 @@ class LttreeSettings(BasicUISettings):
         self.i_atomid=None     #<--An integer indicating which column has the atomid
         self.i_atomtype=None   #<--An integer indicating which column has the atomtype
         self.i_molid=None      #<--An integer indicating which column has the molid, if applicable
+        self.infile=None       # Name of the outermost file.  This is the file
+                               # which was read at the moment parsing begins.
 
 
 
@@ -83,9 +83,9 @@ def LttreeParseArgs(argv, settings):
             (argv[i].lower() == '-atom-style') or 
             (argv[i].lower() == '-atom_style')):
             if i+1 >= len(argv):
-                raise InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
-                                 '       (Or single quoted string which includes a space-separated\n'
-                                 '       list of column names.)\n')
+                raise InputError('Error('+g_program_name+'): The '+argv[i]+' flag should be followed by a LAMMPS\n'
+                                 '       atom_style name (or single quoted string containing a space-separated\n'
+                                 '       list of column names such as: atom-ID atom-type q x y z molecule-ID.)\n')
             settings.column_names = AtomStyle2ColNames(argv[i+1])
             sys.stderr.write('\n    \"'+data_atoms+'\" column format:\n')
             sys.stderr.write('    '+(' '.join(settings.column_names))+'\n\n')
@@ -164,7 +164,7 @@ def LttreeParseArgs(argv, settings):
 
         elif ((argv[i][0] == '-') and (__name__ == "__main__")):
             #elif (__name__ == "__main__"):
-            raise InputError('Error('+__file__+'):\n'
+            raise InputError('Error('+g_program_name+'):\n'
                              'Unrecogized command line argument \"'+argv[i]+'\"\n')
         else:
             i += 1
@@ -195,7 +195,7 @@ def LttreeParseArgs(argv, settings):
         else:
             # if there are more than 2 remaining arguments,
             problem_args = ['\"'+arg+'\"' for arg in argv[1:]]
-            raise InputError('Syntax Error('+__file__+'):\n\n'
+            raise InputError('Syntax Error('+g_program_name+'):\n\n'
                              '       Problem with argument list.\n'
                              '       The remaining arguments are:\n\n'
                              '         '+(' '.join(problem_args))+'\n\n'
@@ -234,9 +234,6 @@ def LttreeParseArgs(argv, settings):
         #                 '##      dipole or ellipsoid (ie. a rotateable vector).##\n'
         #                 '##      (More than one triplet can be specified. The  ##\n'
         #                 '##       number of entries must be divisible by 3.)   ##\n'
-                         #'##   5) Include a                                     ##\n'
-                         #'##      write(\"Init.txt\"){atom_style ...}          ##\n'
-                         #'##      statement in your .ttree file.                ##\n'
                          '########################################################\n')
 
         # The default atom_style is "full"
@@ -265,8 +262,17 @@ def TransformAtomText(text, matrix):
     #sys.stderr.write('matrix_stack.M = \n'+ MatToStr(matrix) + '\n')
 
     lines = text.split('\n')
+
     for i in range(0, len(lines)):
-        line = lines[i]
+        line_orig = lines[i]
+        ic = line_orig.find('#')
+        if ic != -1:
+            line = line_orig[:ic]
+            comment = ' '+line_orig[ic:].rstrip('\n')
+        else:
+            line = line_orig.rstrip('\n')
+            comment = ''
+
         columns = line.split()
         if len(columns) > 0:
             if len(columns) == len(settings.column_names)+3:
@@ -298,7 +304,7 @@ def TransformAtomText(text, matrix):
                     LinearTransform(x, matrix, x0)  # x = matrix * x0
                 for d in range(0,3):
                     columns[cxcycz[d]] = str(x[d])
-        lines[i] = ' '.join(columns)
+        lines[i] = ' '.join(columns) + comment
     return '\n'.join(lines)
 
 
@@ -402,9 +408,10 @@ def _ExecCommands(command_list,
         index += 1
 
         # For debugging only
-        #if ((not isinstance(command, StackableCommand)) and
-        #    (not isinstance(command, ScopeCommand))):
-        sys.stderr.write(str(command)+'\n')
+        if ((not isinstance(command, StackableCommand)) and
+            (not isinstance(command, ScopeCommand)) and
+            (not isinstance(command, WriteFileCommand))):
+            sys.stderr.write(str(command)+'\n')
 
 
         if isinstance(command, PopCommand):
@@ -497,11 +504,6 @@ def _ExecCommands(command_list,
 
         elif isinstance(command, WriteFileCommand):
 
-            if ((len(command.tmpl_list) > 1) and
-                (isinstance(command.tmpl_list[1], VarRef)) and
-                (command.tmpl_list[1].binding.full_name == '$/atom:polymer/monomers[6]/CA')):
-                pass
-
             # --- Throw away lines containin references to deleted variables:---
 
             # First: To edit the content of a template, 
@@ -510,8 +512,7 @@ def _ExecCommands(command_list,
             for entry in command.tmpl_list:
                 if isinstance(entry, TextBlock):
                     tmpl_list.append(TextBlock(entry.text, 
-                                               entry.locBeg, 
-                                               entry.locEnd))
+                                               entry.srcloc)) #, entry.srcloc_end))
                 else:
                     tmpl_list.append(entry)
 
@@ -531,10 +532,10 @@ def _ExecCommands(command_list,
             # This requires us to re-parse the contents of this text
             # (after it has been rendered), and apply these transformations
             # before passing them on to the caller.
-            if command.file_name == data_atoms:
+            if command.filename == data_atoms:
                 text = TransformAtomText(text, matrix_stack.M)
 
-            files_content[command.file_name].append(text)
+            files_content[command.filename].append(text)
 
 
         elif isinstance(command, ScopeBegin):
@@ -559,14 +560,14 @@ def _ExecCommands(command_list,
                                   substitute_vars)
 
         elif isinstance(command, ScopeEnd):
-            if 'Data Atoms' in files_content:
+            if data_atoms in files_content:
                 for ppcommand in postprocessing_commands:
-                    if 'Data Masses' in files_content:
-                        xcm = CalcCM(files_content['Data Atoms'],
-                                     files_content['Data Masses'],
+                    if data_masses in files_content:
+                        xcm = CalcCM(files_content[data_atoms],
+                                     files_content[data_masses],
                                      settings)
                     else:
-                        xcm = CalcCM(files_content['Data Atoms'])
+                        xcm = CalcCM(files_content[data_atoms])
                     if isinstance(ppcommand, PushRightCommand):
                         matrix_stack.PushCommandsRight(ppcommand.contents,
                                                        ppcommand.srcloc,
@@ -577,8 +578,8 @@ def _ExecCommands(command_list,
                                                       ppcommand.srcloc,
                                                       xcm,
                                                       which_stack=command.context_node)
-                    files_content['Data Atoms'] = \
-                        TransformAtomText(Files_content['Data Atoms'],
+                    files_content[data_atoms] = \
+                        TransformAtomText(files_content[data_atoms],
                                           matrix_stack.M)
 
                 for ppcommand in postprocessing_commands:
@@ -600,9 +601,9 @@ def _ExecCommands(command_list,
 
     # After processing the commands in this list,
     # merge the templates with the callers template list
-    for file_name, tmpl_list in files_content.items():
-        global_files_content[file_name] += \
-            files_content[file_name]
+    for filename, tmpl_list in files_content.items():
+        global_files_content[filename] += \
+            files_content[filename]
         
     return index
 
@@ -628,17 +629,17 @@ def ExecCommands(commands,
 
 
 def WriteFiles(files_content, suffix='', write_to_stdout=True):
-    for file_name, str_list in files_content.items():
-        if file_name != None:
+    for filename, str_list in files_content.items():
+        if filename != None:
             out_file = None
-            if file_name == '':
+            if filename == '':
                 if write_to_stdout:
                     out_file = sys.stdout
             else:
-                out_file = open(file_name+suffix, 'a')
+                out_file = open(filename+suffix, 'a')
             if out_file != None:
                 out_file.write(''.join(str_list))
-                if file_name != '':
+                if filename != '':
                     out_file.close()
 
 
@@ -657,14 +658,14 @@ if __name__ == "__main__":
     5)and carries out the "write" commands to write the templates a file(s).
 
     """
-    g_program_name = 'lttree.py'
-    g_date_str     = '2012-10-19'
-    g_version_str  = '0.35'
+    g_program_name = __file__.split('/')[-1]  # ='lttree.py'
+    g_date_str     = '2013-7-15'
+    g_version_str  = '0.72'
 
     #######  Main Code Below: #######
     sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
     sys.stderr.write('\n(python version '+str(sys.version)+')\n')
-    if sys.version < '2.6':
+    if sys.version < '2.7':
         raise InputError('Error: Alas, you must upgrade to a newever version of python.')
 
     try:
@@ -691,8 +692,11 @@ if __name__ == "__main__":
                 g_static_commands,
                 g_instance_commands)
 
-        # Now, carry out the commands
-        # This involves rendering the templates and post-processing them.
+        # Interpret the the commands.  (These are typically write() or
+        # write_once() commands, rendering templates into text.
+        # This step also handles coordinate transformations and delete commands.
+        # Coordinate transformations can be applied to the rendered text
+        # as a post-processing step.
 
         sys.stderr.write(' done\nbuilding templates...')
 
@@ -706,6 +710,8 @@ if __name__ == "__main__":
                      files_content,
                      settings, 
                      False)
+
+        # Finally: write the rendered text to actual files.
 
         # Erase the files that will be written to:
         sys.stderr.write(' done\nwriting templates...')
@@ -723,7 +729,14 @@ if __name__ == "__main__":
         ExecCommands(g_instance_commands, files_content, settings, True)
         sys.stderr.write(' done\nwriting rendered templates...\n')
         WriteFiles(files_content)
+        sys.stderr.write(' done\n')
 
+        # Step 11: Now write the variable bindings/assignments table.
+        # Now write the variable bindings/assignments table.
+        sys.stderr.write('writing \"ttree_assignments.txt\" file...')
+        open('ttree_assignments.txt', 'w').close() # <-- erase previous version.
+        WriteVarBindingsFile(g_objectdefs)
+        WriteVarBindingsFile(g_objects)
         sys.stderr.write(' done\n')
 
     except (ValueError, InputError) as err:
