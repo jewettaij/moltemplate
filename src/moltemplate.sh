@@ -7,8 +7,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="1.13"
-G_DATE="2013-9-18"
+G_VERSION="1.15"
+G_DATE="2013-10-15"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -549,20 +549,24 @@ while [ "$i" -lt "$ARGC" ]; do
         # But in the original bourn shell (sh), this does not work. 
         # Instead we use a hack involving basename and dirname:
 
-        DN=`dirname "$A"`
-        if [ "$DN" == "." ]; then
-            DN=""
-	else
-            DN="${DN}/"
-        fi
+        A_FIRSTCHAR="$(echo $A| cut -c 1)"
 
-        BN=`basename "$A" .lt`
-        if [ "${DN}${BN}" != "$A" ]; then
-            OUT_FILE_BASE="$BN"
-        else
-            BN=`basename "$A" .LT`
+        if [ "$A_FIRSTCHAR" != "-" ]; then
+            DN=`dirname "$A"`
+            if [ "$DN" == "." ]; then
+                DN=""
+            else
+                DN="${DN}/"
+            fi
+
+            BN=`basename "$A" .lt`
             if [ "${DN}${BN}" != "$A" ]; then
                 OUT_FILE_BASE="$BN"
+            else
+                BN=`basename "$A" .LT`
+                if [ "${DN}${BN}" != "$A" ]; then
+                    OUT_FILE_BASE="$BN"
+                fi
             fi
         fi
     fi
