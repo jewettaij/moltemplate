@@ -1,3 +1,12 @@
+# You can run LAMMPS this way
+#   lmp_linux -i run.in.npt
+# (Assuming your LAMMPS binary is named "lmp_linux")
+#
+# PREREQUISITES:
+# You will need these files (created by moltemplate.sh):
+#    system.data, system.in.init, system.in.settings
+# (See README_setup.sh for details)
+
 # ------------------------------- Initialization Section --------------------
 
 include         system.in.init
@@ -28,11 +37,12 @@ include       system.in.settings
 
 timestep        2.0
 dump            1 all custom 200 traj_npt.lammpstrj id mol type x y z ix iy iz
-fix             fxnpt all npt temp 400.0 400.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
+fix             fxnpt all npt temp 400.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
 thermo          100
-#thermo_modify  flush yes
+
+#restart         10000  restart_npt
 
 run             20000
 
-write_restart   system_after_npt.rst
+write_data   system_after_npt.data
