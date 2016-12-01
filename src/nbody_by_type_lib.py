@@ -238,7 +238,7 @@ def GenInteractions_int(G_system,
 
                 # Explanation:
                 # (Again) only if ALL of the atoms and bond requirements for
-                # this typepattern are satisfied by at least SOME of the atoms
+                # this type pattern are satisfied by at least SOME of the atoms
                 # present in the this system, ...THEN print a status message.
                 # (Because for complex all-atom force-fields, the number of
                 # possible atom types, and typepatterns far exceeds the number

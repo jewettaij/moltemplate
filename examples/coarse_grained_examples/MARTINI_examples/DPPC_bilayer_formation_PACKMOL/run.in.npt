@@ -1,10 +1,9 @@
 # PREREQUISITES:
 #
-# 1)   You must use moltemplate.sh to create 3 files:
+#   1) You must use moltemplate.sh to create 3 files:
 #        system.data  system.in.init  system.in.settings
-#      (See README_setup.sh for details.)
-# 2)   You must minimize the coordinates using by running lammps witn
-#      run.in.min
+#   2) You must minimize the coordinates using by running lammps using:
+#      lmp_mpi -i run.in.min     (the name of your binary "lmp_mpi" may vary)
 #      
 
 # ------------------------------- Initialization Section --------------------

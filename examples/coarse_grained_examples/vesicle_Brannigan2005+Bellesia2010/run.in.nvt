@@ -8,6 +8,9 @@
 # 3) Unpack it
 # 4) copy the .cpp and .h files to the src folding of your lammps installation.
 # 5) Compile LAMMPS.
+# 6) Minimize the system using:
+#      lmp_mpi -i run.in.npt
+#    (assuming "lmp_mpi" is the name of the lammps binary you created in step 5)
 #
 # If LAMMPS complains about an "Invalid pair_style", or "Invalid dihedral_style"
 # then you made a mistake in the instructions above.

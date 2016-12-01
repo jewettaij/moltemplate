@@ -5,11 +5,16 @@ cd moltemplate_files
 
   # run moltemplate
 
-  moltemplate.sh -a "@atom:/WatMW/mW 1" system.lt
+  moltemplate.sh -a "@atom:WatMW/mW 1" system.lt
 
-  # Here we just want to make sure that the "mW" atom type is assigned to 
-  # number "1".  It should be by default, so usually you can leave out 
-  #    -a "@atom:/WatMW/mW 1".
+  # Each atom type (eg "mW") must be assigned to an integer (because LAMMPS
+  # does not understand descriptive names).  Normally LAMMPS does not care what
+  # these numbers are, however many-body force-fields (used in this example)
+  # are an exception.  Here we just want to make sure that the "mW" atom
+  # type is assigned to number "1" so we use -a "@atom:WatMW/mW 1"
+  # (The full-name of the atom is "WatMW/mW", not "mW", because it is part 
+  #  of the "WatMW" molecule-object.  See "watmw.lt" for details.)
+
 
   # This will generate various files with names ending in *.in* and *.data. 
   # These files are the input files directly read by LAMMPS.  Move them to 

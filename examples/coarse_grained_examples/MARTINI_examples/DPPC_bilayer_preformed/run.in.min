@@ -26,6 +26,8 @@ include         system.in.settings
 
 thermo          5
 dump  1 all custom 100 traj_min.lammpstrj id mol type x y z ix iy iz
+min_style fire
+min_modify dmax 0.01
 minimize 1.0e-4 1.0e-6 100000 400000
 
 write_data   system_after_min.data

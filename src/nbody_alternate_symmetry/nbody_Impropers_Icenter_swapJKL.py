@@ -22,12 +22,9 @@ def canonical_order(match):
     The atoms (and bonds) in a candidate match are rearranged by the 
     canonical_order().  Then the re-ordered list of atom and bond ids is 
     tested against the list of atom/bond ids in the matches-found-so-far,
-    before it is added to the list of interactions found so far.
-    (For example, it does not make sense to define a separate 4-body improper-
-      angle interaction between atoms 1,2,3,4  AND 1,4,2,3,
-         or 1,3,4,2,  or  1,4,3,2 or  1,2,4,3, or 1,3,2,4, for that matter.)
-    In some cases, the second atom is the central atom (the "hub"), and the
-    potential is invariant with respect to permutations of the other 3 atoms.
+    before it is added to the list of interactions found so far.  In this
+    case we assume the second atom is the central atom (the "hub"), and the
+    energy is invariant with respect to permutations of the other 3 atoms.
     So we arbitrarily sort these other 3 atoms in increasing order
     (as well as the bonds which connect the central atom to them).
 
