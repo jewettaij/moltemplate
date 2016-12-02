@@ -69,5 +69,5 @@ https://en.wikipedia.org/wiki/List_of_text_editors
    **  License:  **
 
 Moltemplate is available under the terms of the open-source 3-clause BSD 
-license.  (See LICENSE.md.)
+license.  (See `LICENSE.txt`.)
 
