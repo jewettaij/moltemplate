@@ -13,7 +13,7 @@ Moltemplate is a cross-platform text-based molecule builder for LAMMPS.
 
 Documentation, examples, and supporting code can be downloaded at:
 
-    http://www.moltemplate.org
+http://www.moltemplate.org
 
 ## Requirements
 
