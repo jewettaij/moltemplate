@@ -43,7 +43,7 @@ path, such as `/usr/local/bin`. (This will require admin privileges.)
 
 ### Installation example
 
-Suppose the directory with this README.TXT file is located at ~/moltemplate.
+Suppose the directory with this README file is located at ~/moltemplate.
 
 If you use the bash shell, typically you would edit your 
 `~/.profile`, `~/.bash_profile` or `~/.bashrc` files to contain the following line:
