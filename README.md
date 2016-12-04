@@ -65,7 +65,7 @@ If you do not know what a `PATH` environment variable is and are curious, read:
 
 https://msdn.microsoft.com/en-us/commandline/wsl/install_guide
 
-   I have not tried this.  If that fails, try following the tutorial written by Yanqing Fu:
+   If you are using an older version of windows, try following the tutorial written by Yanqing Fu:
 
 https://sourceforge.net/p/lammps/mailman/message/32599824/
 
