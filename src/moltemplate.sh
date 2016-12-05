@@ -9,8 +9,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="1.40"
-G_DATE="2016-11-21"
+G_VERSION="2.0.2"
+G_DATE="2016-12-05"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
