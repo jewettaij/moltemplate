@@ -1,4 +1,4 @@
-# The "2beadFF" is a force-field environment object containing 
+# The "HPForceField" is a force-field environment object containing 
 # force-field data, atomic masses, and bond rules.
 # Later, when we define molecules (such as "H" and "P"), we can inherit
 # atom types and bond-rules from this force-field.  This will automatically
@@ -9,7 +9,7 @@
 
 
 
-2beadFF {
+HPForceField {
 
   # There are 3 atom types:
 
@@ -135,5 +135,5 @@
   }
 
 
-}  # 2beadFF
+}  # HPForceField
 

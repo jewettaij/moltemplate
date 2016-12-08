@@ -1,5 +1,5 @@
-
-import "monomers.lt"   # This defines the monomer types named "H" and "P"
+import "monomer_H.lt"      # defines the "H" molecular subunit
+import "monomer_P.lt"      # defines the "P" molecular subunit
 
 
 
@@ -9,8 +9,8 @@ Polymer {
                      # (The "Data Atoms" in H and P must use "$mol:..." notation.)
 
   # This causes mon1,mon2,mon3,...,mon14 to share the same molecule counter
-  # because in the 2bead.lt file, the "..." in "$mol:..." preferentially looks
-  # for a counter of that type in a parent molecule or earlier ancestor.
+  # because in the forcefield.lt file, the "..." in "$mol:..." preferentially 
+  # looks for a counter of that type in a parent molecule or earlier ancestor.
 
 
   # A polymer of alternating "H" and "P" monomers:
@@ -61,4 +61,4 @@ Polymer {
 
 
 # Angle, dihedral and improper interactions between monomers will be generated
-# automatically according to the instructions in the "force_field.lt" file.
+# automatically according to the instructions in the "forcefield.lt" file.

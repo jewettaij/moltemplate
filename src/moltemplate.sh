@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # (note: Classic Bourne shell (#!/bin/sh) also worked at some point.)
-
-
+#
 # Author: Andrew Jewett (jewett.aij at g mail)
 #         http://www.moltemplate.org
-# License: 3-clause BSD License  (See LICENSE.TXT)
+#         http://jensenlab.caltech.edu
+#         http://www.chem.ucsb.edu/~sheagroup
+# License: 3-clause BSD License  (See LICENSE.txt)
 # Copyright (c) 2012, Regents of the University of California
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.0.2"
-G_DATE="2016-12-05"
+G_DATE="2016-12-04"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2

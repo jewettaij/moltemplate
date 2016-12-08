@@ -20,7 +20,7 @@
 
 BasicUI  This section of the code contains the user interface for ttree
          when run as a stand-alone program, as described above.  (This
-         section of code contains the "if __name__ == __main__:" code block.)
+         section of code contains the "if __name__ == '__main__':" code block.)
 
 -- Data Types --
 
@@ -94,7 +94,7 @@ g_filename    = __file__.split('/')[-1]
 g_module_name  = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str     = '2016-9-21'
+g_date_str     = '2016-12-05'
 g_version_str  = '0.84'
 
 
@@ -268,7 +268,7 @@ class StackableCommand(Command):
     The actual commands themselves are represented by the "contents" member
     which is usually a text string.
     ttree.py does not attempt to understand the content of these commands.
-    That job is left up to the __main___ module.  (IE. whatever script that
+    That job is left up to the __main__ module.  (IE. whatever script that
     happens to be importing ttree.py.  If there is no script, and
     ttree.py IS the main module, then it simply ignores these commands.)
 
@@ -5110,19 +5110,19 @@ def BasicUIParseArgs(argv, settings):
             TtreeShlex.custom_path = RemoveOuterQuotes(argv[i+1])
             del(argv[i:i+2])
 
-        elif ((argv[i][0] == '-') and (__name__ == "__main__")):
-            #elif (__name__ == "__main__"):
+        elif ((argv[i][0] == '-') and (__name__ == '__main__')):
+            #elif (__name__ == '__main__'):
             raise InputError('Error('+g_filename+'):\n'
                              'Unrecogized command line argument \"'+argv[i]+'\"\n')
         else:
             i += 1
 
 
-    if __name__ == "__main__":
+    if __name__ == '__main__':
 
         # Instantiate the lexer we will be using.
         #  (The lexer's __init__() function requires an openned file.
-        #   Assuming __name__ == "__main__", then the name of that file should
+        #   Assuming __name__ == '__main__', then the name of that file should
         #   be the last remaining (unprocessed) argument in the argument list.
         #   Otherwise, then name of that file will be determined later by the
         #   python script which imports this module, so we let them handle it.)
@@ -5305,7 +5305,7 @@ def BasicUI(settings,
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     """
     This is is a "main module" wrapper for invoking ttree.py

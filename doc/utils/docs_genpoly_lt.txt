@@ -15,6 +15,7 @@ Usage:
       [-inherits ForceFieldObject] \\
       [-header "import \"monomer.lt\""] \\
       [-cuts cuts.txt] \\
+      [-box paddingX,paddingY,paddingZ] \\
       < coords.raw > polymer.lt
 
 Explanation:
@@ -155,6 +156,14 @@ Arguments (optional):
 		   polymers will be part of a larger object defined by this
 		   program.  Instantiating that object will create all of the
 		   individual polymers.)
+
+    -box paddingX,paddingY,paddingZ
+                  This will cause the program to attempt to estimate the size
+		  of the smallest rectangular box which encloses all of the
+		  coordinates in the coordinate file.  The user must supply
+		  3 comma-separated numbers (no spaces) which indicate how much
+		  extra room is needed in the x,y,z directions, at both ends.
+
 
 Examples:
 

@@ -8,9 +8,20 @@
    The user can specify the subunits to use when building the polymer,
    the atoms to to build bonds (and angles, and dihedrals) between monomers
    and the helical pitch of the polymer.  The output of this program is
-   a text file in moltemplate (.lt) format containing a Polymer molecule.
-   Multiple polymers can be created from coordinates in the same file
-   by using the -cut command line argument.
+   a text file in moltemplate (.lt) format containing the sequence of 
+   moltemplate commands needed to build this polymer molecule(s).  (One must 
+   then run moltemplate on this file to build the LAMMPS simulation files.)
+       Multiple Polymers:
+   To make it easier to create polymer melts, multiple polymers can be created
+   from coordinates in the same file by using the "-cuts" command line argument.
+      Encapsulation:
+   If the "-polymer-name PolyName" command line option is given, then these 
+   moltemplate commands will be nested within the definition of a moltemplate 
+   object (named "PolyName", in this example. Later in your moltemplate files, 
+   you must remember to instantiate a copy of this moltemplate object using 
+   a command like "polymer = new PolyName"  Atoms within this object will 
+   share the same molecule-ID number.)  If multiple polymers are requested, then
+   each of them will have their own polymer object.
 
 """
 
@@ -34,6 +45,7 @@ Usage:
       [-inherits ForceFieldObject] \\
       [-header "import \"monomer.lt\""] \\
       [-cuts cuts.txt] \\
+      [-box paddingX,paddingY,paddingZ] \\
       < coords.raw > polymer.lt
 
 """
@@ -72,10 +84,11 @@ class Settings(object):
         self.delta_phi      = 0.0
         self.header = 'import \"forcefield.lt\"'
         self.name_monomer = 'Monomer'
-        self.name_polymer = 'Polymer'
+        self.name_polymer = ''
         self.inherits = ''
         self.name_sequence = []
         self.cuts = []
+        self.box_padding = None
         self.bonds_name = []
         self.bonds_type = []
         self.bonds_atoms = []
@@ -253,6 +266,14 @@ class Settings(object):
                     raise InputError('Error: '+argv[i]+' flag should be followed by a number (angle in degrees)\n')
                 self.delta_phi = float(argv[i+1])
                 del(argv[i:i+2])
+            elif (argv[i].lower() == '-box'):
+                if i+1 >= len(argv):
+                    raise InputError('Error: '+argv[i]+' flag should be followed '+ \
+                        'by 3 numbers separated by commas (no spaces)\n')
+                self.box_padding = map(float, argv[i+1].split(','))
+                if len(self.box_padding) == 1:
+                    self.box_padding = self.box_padding * 3
+                del(argv[i:i+2])
 
             #elif ((argv[i][0] == '-') and (__name__ == '__main__')):
             #
@@ -264,41 +285,28 @@ class Settings(object):
                  i += 1
 
 
+
         for b in range(0, len(self.bonds_type)):
             if len(self.bonds_type) > 1:
-                self.bonds_name.append('genpoly_b'+str(b+1)+'_')
+                self.bonds_name.append('genpoly'+str(b+1)+'_')
             else:
-                self.bonds_name.append('genpoly_b')
+                self.bonds_name.append('genpoly')
         for b in range(0, len(self.angles_type)):
             if len(self.angles_type) > 1:
-                self.angles_name.append('genpoly_a'+str(b+1)+'_')
+                self.angles_name.append('genpoly'+str(b+1)+'_')
             else:
-                self.angles_name.append('genpoly_a')
+                self.angles_name.append('genpoly')
         for b in range(0, len(self.dihedrals_type)):
             if len(self.dihedrals_type) > 1:
-                self.dihedrals_name.append('genpoly_d'+str(b+1)+'_')
+                self.dihedrals_name.append('genpoly'+str(b+1)+'_')
             else:
-                self.dihedrals_name.append('genpoly_d')
+                self.dihedrals_name.append('genpoly')
         for b in range(0, len(self.impropers_type)):
             if len(self.impropers_type) > 1:
-                self.impropers_name.append('genpoly_i'+str(b+1)+'_')
+                self.impropers_name.append('genpoly'+str(b+1)+'_')
             else:
-                self.impropers_name.append('genpoly_i')
+                self.impropers_name.append('genpoly')
 
-
-
-                
-class BoundsViolation(Exception):
-    """ This exception gets thrown whenever we try to access the ith monomer
-        in a polymer of length N, and i is not in the range from [0,N-1]
-
-    """
-    def __init__(self):
-        self.err_msg = 'BoundsViolation'
-    def __str__(self):
-        return self.err_msg
-    def __repr__(self):
-        return str(self)
 
 
 
@@ -329,14 +337,19 @@ class GenPoly(object):
         at these positions, oriented appropriately, with bonds (and angles,
         dihedrals, etc...) connecting successive monomers together.
         By default (if settings.cuts==False) only a single polymer is created.
+        However this class create multiple polymers of different shape/length.
+        The list of coordinates for each polymer are saved separately within
+        the "self.coords_multi" member.
         
     """
 
     def __init__(self, argv):
         self.settings = Settings()
         self.settings.ParseArgs(argv)
-        self.coords_multi = []
+        self.coords_multi = []  # a list-of-list-of-lists of numbers Nxnx3
         self.direction_vects = []
+        self.box_bounds_min = [0.0, 0.0, 0.0]
+        self.box_bounds_max = [0.0, 0.0, 0.0]
         self.N = 0
 
     def ReadCoords(self, infile):
@@ -403,7 +416,14 @@ class GenPoly(object):
 
 
     def WriteLTFile(self, outfile):
+        """ Write an moltemplate (.lt) file containing the definition of
+        this polymer object.  (If multiple polymer objects were requested by
+        the user (using the -cuts argument), then their definitions will
+        appear nested within this object, and each of them will be 
+        instantiated once when the parent object is instantiated.)
 
+        """
+        
         outfile.write(self.settings.header+"\n\n\n")
         if len(self.coords_multi) == 1:
             self.WritePolymer(outfile,
@@ -411,11 +431,12 @@ class GenPoly(object):
                               self.settings.inherits,
                               self.coords_multi[0])
         else:
-            outfile.write(self.settings.name_polymer + " {\n\n")
+            if self.settings.name_polymer != '':
+                outfile.write(self.settings.name_polymer + " {\n\n")
             outfile.write('# Definitions of individual polymers to follow\n\n')
             for i in range(0, len(self.coords_multi)):
                 self.WritePolymer(outfile,
-                                  self.settings.name_polymer + str(i+1) +
+                                  self.settings.name_polymer + '_sub'+str(i+1)+
                                   self.settings.inherits,
                                   self.coords_multi[i])
             outfile.write('\n\n'
@@ -423,10 +444,20 @@ class GenPoly(object):
 
             for i in range(0, len(self.coords_multi)):
                 outfile.write('polymers['+str(i)+'] = new '+
-                              self.settings.name_polymer + str(i+1) + '\n')
+                              self.settings.name_polymer + '_sub'+str(i+1)+'\n')
 
-            outfile.write('\n\n'
-                          '}  # ' + self.settings.name_polymer + '\n\n')
+            if self.settings.name_polymer != '':
+                outfile.write('\n\n'
+                              '}  # ' + self.settings.name_polymer + '\n\n')
+
+            if self.settings.box_padding != None:
+                for i in range(0, len(self.coords_multi)):
+                    # calculate the box big enough to collectively enclose
+                    # all of the coordinates (even multiple coordinate sets)
+                    self.CalcBoxBoundaries(self.coords_multi[i])
+                self.WriteBoxBoundaries()
+
+
 
 
 
@@ -435,18 +466,22 @@ class GenPoly(object):
                      outfile,
                      name_polymer,
                      coords):
+        """ Write a single polymer object to a file.  
+            This function is invoked by WriteLTFile()
+
+        """
         self.ChooseDirections(coords)
-        outfile.write(name_polymer + ' {\n')
-        outfile.write(
-"""
+
+        if name_polymer != '':
+            outfile.write(name_polymer + ' {\n'
+                          '\n\n\n'
+                          'create_var {$mol}\n'
+                          '# The line above forces all monomer subunits to share the same molecule-ID\n'
+                          '# (Note: Setting the molecule-ID number is optional and is usually ignored.)\n\n\n\n')
 
 
-create_var {$mol}
-# The line above forces all monomer subunits to share the same molecule-ID
-# (Note: Setting the molecule-ID number is optional and is usually ignored.)
 
-
-
+        outfile.write("""
 # ------------ List of Monomers: ------------
 #
 # (Note: move(), rot(), and rotvv() commands control the position
@@ -621,14 +656,38 @@ create_var {$mol}
         if len(self.settings.impropers_type) > 0:
             outfile.write("}  # write(\"Data Impropers\") {...\n\n\n")
         
-        outfile.write("}  # "+name_polymer+"\n\n\n\n")
+        if name_polymer != '':
+            outfile.write("}  # "+name_polymer+"\n\n\n\n")
         
 
 
 
+    def CalcBoxBoundaries(self, coords):
+        for i in range(0, N):
+            for d in range(0, 3):
+                if not self.box_bounds_min:
+                    assert(not self.box_bounds_max)
+                    self.box_bounds_min = [xd for xd in coords[i]]
+                    self.box_bounds_max = [xd for xd in coords[i]]
+                else:
+                    if coords[i][d] > self.box_bounds_max[d]:
+                        self.box_bounds_max[d] = coords[i][d]
+                    if coords[i][d] < self.box_bounds_min[d]:
+                        self.box_bounds_min[d] = coords[i][d]
 
-
-
+        
+   
+    def WriteBoxBoundary(self, outfile):
+        for d in range(0, 3):
+            self.box_bounds_min[d] -= self.settings.box_padding[d]
+            self.box_bounds_max[d] += self.settings.box_padding[d]
+        outfile.write("\n"
+                      "\n"
+                      "write_once(\"Data Boundary\") {\n"
+                      +str(box_bounds_min[0])+"  "+str(box_bounds_max[0])+" xlo xhi\n"
+                      +str(box_bounds_min[1])+"  "+str(box_bounds_max[1])+" ylo yhi\n"
+                      +str(box_bounds_min[2])+"  "+str(box_bounds_max[2])+" zlo zhi\n"
+                      "}\n\n\n")
 
 
 if __name__ == '__main__':

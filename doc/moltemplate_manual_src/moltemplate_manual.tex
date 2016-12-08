@@ -304,8 +304,8 @@ under the terms of the open-source 3-clause BSD license.
 %    %``nbody\_by\_type.py'' is a utility which generates 
 %    %many-body bonded interactions between atoms automatically, 
 %    %according to the atom and bond type.
-%    %(It processes the ``Angles By Type'', 
-%    %``Dihedrals By Type'', and ``Impropers By Type'' sections.)
+%    %(It processes the ``Data Angles By Type'', 
+%    %``Data Dihedrals By Type'', and ``Data Impropers By Type'' sections.)
 %    %\end{list}
 %  The ``ttree.py'' program is a general text manipulation tool which 
 %  should continue to work in the distant future, 
@@ -331,7 +331,7 @@ under the terms of the open-source 3-clause BSD license.
 the most up-to-date version can be downloaded at
 \url{http://www.moltemplate.org}
 If you obtained moltemplate as a .tar.gz file,
-you can unpack it using:
+(as opposed to github), you can unpack it using:
 \begin{verbatim}
 tar -xzvf moltemplate_2016-11-21.tar.gz
 \end{verbatim}
@@ -347,7 +347,7 @@ are located in the \textit{``src''} subdirectory.  If necessary, move the \texti
 %point to the \textit{``common''} subdirectory.
 %(Force fields and commonly used molecules will eventually be located here.)
 
-If you use the bash shell, typically you would edit your 
+If you use the \textbf{bash} shell, typically you would edit your 
 \mbox{$\sim$/.bash\_profile}, 
 \mbox{$\sim$/.bashrc}, or 
 \mbox{$\sim$/.profile} files
@@ -355,11 +355,7 @@ and append the following line:
 \begin{verbatim}
 export PATH="$PATH:$HOME/moltemplate/src"
 \end{verbatim}
-%\begin{verbatim}
-%export PATH="$PATH:$HOME/moltemplate/src"
-%export MOLTEMPLATE_PATH="$HOME/moltemplate/common"
-%\end{verbatim}
-If you use the tcsh shell, typically you would edit your 
+If instead you use the \textbf{tcsh} shell, typically you would edit your 
 \mbox{$\sim$/.login}, 
 \mbox{$\sim$/.cshrc}, or 
 \mbox{$\sim$/.tcshrc} files 
@@ -367,26 +363,12 @@ and append the following line:
 \begin{verbatim}
 setenv PATH "$PATH:$HOME/moltemplate/src"
 \end{verbatim}
-%\begin{verbatim}
-%setenv PATH "$PATH:$HOME/moltemplate/src"
-%setenv MOLTEMPLATE_PATH "$HOME/moltemplate/common"
-%\end{verbatim}
+
+
 
 \textit{Note: You may need to log out and then 
 log back in again for the changes to take effect.}
 
-  %The ``/'' slash in ``Tubulin/Dimer'' indicates tells moltemplate where to
-  %find the definition of the ``Dimer'' molecule 
-  %(IE., nested within the definition of ``Tubulin'').
-  %The ``/'' character is used to denote both membership 
-  %and nesting with in a class or namespace.
-  %Once created, you can access the individual protein subunits 
-  %in the microtubule using ``/'' syntax.
-  %As will be explained later in more detail,
-  %to access the type ``A'' subunit of the 77'th tubulin chain, 
-  %you would use: ``proteins[77]/a''.
-    %(The ``/'' slash character bears similarity to the ``.'' character 
-    %in python, or, in some scenarios, the ``.'' and ``::'' characters in C++.)
 
 \subsubsection*{Installation Method 2}
 An alternate way to install moltemplate is to simply copy the entire \textit{contents} of moltemplate's ``src'' subdirectory into a directory which is already in your path, such as /usr/local/bin.  (This will require admin privileges.)
@@ -425,7 +407,7 @@ commands to define Atoms, Bonds, Angles, Coeffs, etc...
 then this will append additional \textbf{content} to its definition.)}
 \textbf{new} and \textbf{delete} commands can be used 
 to create or delete molecular subunits \textit{within} this molecule.
-(See the \textit{SPCE}, \textit{2bead}, and \textit{Butane} 
+(See the \textit{SPCE}, \textit{Monomer}, and \textit{Butane} 
  molecules, and the \textit{TraPPE} namespace 
  defined in sections \ref{sec:spce_example}, \ref{sec:2bead},
  \ref{sec:inheritance}, \& \ref{sec:trappe}.
@@ -1107,7 +1089,6 @@ Coordinates of a single water molecule in our example.
 In addition to coordinates, topology and force-field settings, 
 ``LT'' files can optionally include any other kind of LAMMPS settings
 including SHAKE constraints, k-space settings, and even group definitions.
-\textit{(Unicode is supported.)}
   %\pagebreak
 \begin{verbatim}
 # (NOTE: Text following '#' characters are comments)
@@ -1741,8 +1722,6 @@ Users can override these assignment rules and create custom categories.
 (See appendices \ref{sec:manual_assignment} and \ref{sec:custom_categories}
 for details.)
 
-\textit{(Unicode is supported.)}
-
 \subsubsection{Static counters begin with ``@''}
 \label{sec:static_variables}
 
@@ -1828,10 +1807,19 @@ This is because the two variables will have different \textit{full} names
 (``@atom:SPCE/H'', and ``@atom:Arginine/H'').
 
 
+
+
+
+
+
 \subsubsection*{Sharing atom types or other variables between molecules}
-If you want to share atom types between molecules, 
-you can place them outside the current molecule definition.
-Later you can use file-system-path-like syntax 
+There are several ways to share atom types between two molecules.
+The \textit{recommended way} is to define them in a separate
+file and refer to them when needed.
+This approach is demonstrated in section \ref{sec:2bead}.
+
+\textit{(Alternately, you can define them outside the current molecule definition,
+and use file-system-path-like syntax 
 (``../'', or ``../../'' or ``/'')
 to access atoms (or molecules) outside of the current molecule.
    %(or nested within the definition of another molecule).
@@ -1839,10 +1827,9 @@ For example, two different molecule types can share the same type of
 hydrogen atom by referring to it using this syntax: ``@atom:../H''.
   %(Two molecules could share the same atom-id in a similar way, 
   % using ``\$atom:../H1''.  This is not recommended)
-(More complex nested relationships are possible.
-For example see
-  %figure \ref{fig:LPN} and also 
-section \ref{sec:paths}.) 
+For details, see
+section \ref{sec:paths}.
+and appendix \ref{sec:adv_variable_syntax}.)
   %To be on the safe side, if you want to define a single 
   %hydrogen atom type named ``H'' globally, for example, 
   %then you would refer to this atom everywhere using ``@atom:/H''.
@@ -1850,10 +1837,13 @@ section \ref{sec:paths}.)
   % syntax explained in appendix \ref{sec:adv_variable_syntax}.
   % This is similar to ``@atom:/H'',
   % however using the ellipsis syntax ``@atom:.../H'' allows you to 
-  % share your molecule definitions (LT files) with others 
+  % share your molecule definitions (ET files) with others 
   % who may have a different notion of what the ``H'' atom is.)
-\textit{(Further details of variable syntax are discussed 
-in appendix \ref{sec:adv_variable_syntax}.)}
+}
+
+
+
+
 
 \subsection{Troubleshooting using the \textit{output\_ttree} directory}
 \label{sec:output_ttree}
@@ -1924,11 +1914,11 @@ Users can create their own custom sections to a LAMMPS data file.
    %Moltemplate will add the section headers 
    %and blank lines needed to keep LAMMPS happy.)
 
-However the ``write()'' and ``write\_once()'' commands are not only 
-used for generating sections from a DATA file or INPUT scripts. 
-Any file can be created. 
-Files whose names do not begin with ``In '' or ``Data '' can have any format
-(and are not moved or cleaned up).
+More generally, the ``write()'' and ``write\_once()'' commands can be used to
+create any other files you may need to run your simulations,
+which refer to the same \textit{@atom} and \textit{@bond} types.
+   %Files whose names do not begin with ``In '' or ``Data '' can have any format
+   %(and are not moved or cleaned up).
    %(These files are not removed or hidden later.) 
 (See section \ref{sec:aux_files} 
   % and \ref{sec:output_ttree} for examples
@@ -1974,14 +1964,12 @@ This allows users to adapt to future changes in the LAMMPS data file format.
 
 
 
-
-\subsection{Details/Comments}
-Note that it is okay for static and instance variables to share the same 
-variable names (such as ``@atom:O'' and ``\$atom:O'', 
-or ``@angle:HOH'' and ``\$angle:HOH'').  
-These are distinct and are counted separately.
-
+\subsubsection*{Does ``@atom:O'' conflict with ``\$atom:O''?}
 \label{sec:vardetails}
+No.  It is okay for static and instance variables to share the same 
+names.  Moltemplate considers them distinct and they are counted separately.
+
+\subsubsection*{Addional Details}
 Variable and molecule names can include unicode characters.
 They can also include some whitespace characters and other special characters
 by using backslashes and curly-brackets, for example:
@@ -1993,20 +1981,17 @@ This prevents the ``*'' character from being appended to the end of the
 (Note that using the ``*'' character in any of the \textit{coeff} commands
 within moltemplate is discouraged.  See section \ref{sec:wildcard_bug}.)
 
+\textit{(Unicode is supported.)}
 
 
 \pagebreak
 \section{ Object composition and coordinate generation }
 \label{sec:coordinates}
 
-Each time a molecule is created using the ``new'' command,
-it can be rotated, moved, and scaled.
-(Individual atom positions can be customized later
- using the ``write("Data Atoms")'' command. 
- Molecules are free to move during the simulation, of course.)
-The initial atomic coordinates 
-of a large compound object is typically created 
-by moving each individual component.
+Objects can be connected together to form larger molecule objects.
+These objects can be used to form still larger objects.
+As an example, we define a small 2-atom molecule named ``Monomer'',
+and use it to construct a short polymer (``Peptide'').
 
 \begin{figure}[htbp]
 \centering
@@ -2051,62 +2036,55 @@ for details.}
 
 \subsection{Building a large molecule from smaller pieces}
 \label{sec:2bead}
-As an example, we define a small 2-atom molecule ``2bead'',
-construct a short polymer (``peptide'') using it as a building block,
-and then create a lattice of peptides.
-At each step, we define the relative orientation and position of each unit.
-
-The file below contains the definition of the ``2bead'' molecule. 
-It contains coordinates of two atoms,
-and their atomic properties (such as their mass, and Lennard Jones parameters).
-  %(In this example, the atom IDs are ``\$atom:CA'' and ``\$atom:R'', 
-  % and their atom types are ``@atom:CA'' and ``@atom:R''.)
-In addition, it defines a bond between the atoms,
-as well as parameters for that type of bond (``@bond:sidechain'').
-If we were only planning to build a system containing a few isolated 
-``2bead'' molecules, then this would be all we need.
-  %we don't need this extra information.  
-However, later
-we intend to connect multiple ``2bead'' molecules 
-together later to build a polymer (in this example).  
-
-Consequently, some new sections have been added to the ``2bead'' molecule 
-which may seem out of place in a simple 2-atom molecule.
-This molecule is slightly more complicated because each ``2bead'' molecule will
-eventually be used as a building-block for a larger molecule (``Polymer'').
-Consequently, additional information will be used to define additional 
-2-body (@bond), 3-body (@angle), and 4-body (@dihedral) interactions 
-between atoms in different monomers in the final polymer.
-  %We define an additional type of bonded interaction (``@bond:backbone'')
-  %as well as several 3-body and 4-body bonded angular interactions.
-  %These extra interactions would be unnecessary for a molecule with 
-  %only two atoms.
-Hopefully the meaning of these interactions will be clear
-by the context in which they are used.
-(If not, read section \ref{sec:nbody_by_type_intro}.)
-
+Consider the following simple 2-atom dumbell-shaped molelule (``Monomer'')
 \begin{verbatim}
-# -- file "2bead.lt" --
+# -- file "monomer.lt" --
 
-2bead {
+import "forcefield.lt"   # contains force-field parameters
+
+Monomer {
 
   write("Data Atoms") {
     # atomId molId   atomType   charge   x      y        z      
     $atom:CA $mol:... @atom:CA   0.0   0.000  1.0000   0.0000000
     $atom:R  $mol:... @atom:R    0.0   0.000  4.4000   0.0000000
   }
+  write("Data Bonds") {
+    # bond-id   bond-type      atom-id1  atom-id2
+    $bond:CR  @bond:Sidechain  $atom:CA  $atom:R
+  }
+}
+\end{verbatim}
 
-  # Note: The "..." in "$mol:..." tells moltemplate that this molecule
-  #       may be a part of a larger molecule, and to use the larger
-  #       parent object’s molecule id number as it’s own, if present.
 
+Soon will use it to construct a polymer (``Peptide'')
+\textit{Note: The ellipsis notation used here ``\$mol:...''.
+warns moltemplate that the ``Monomer'' molecule may be part of a larger
+molecule.
+(This is explained in more detail in section \ref{sec:ellipsis_mol}.)
+}
+
+In this example we will define two kinds of molecule objects:
+``Monomer'', and ``Peptide'' (\textit{defined later}).
+It is often convenient to store atom types, masses, and force-field 
+parameters in a separate file so that they
+can be shared between these different molecules.
+We do that in the ``forcefield.lt'' file below:
+
+
+\begin{verbatim}
+# -- file "forcefield.lt" --
+
+ForceField {
+
+  # There are 2 atom types: "CA" and "R"
   write_once("Data Masses") {
-    # atomType  mass
     @atom:CA    13.0
     @atom:R     50.0
   }
 
-  # As usual, force-field parameters ("coeffs") go in the "In Settings" section:
+  # Force-field parameters ("coeffs") go in the "In Settings" section:
+
   write_once("In Settings") {
     # Pairwise (non-bonded) interactions:
     #           atomType1 atomType2   epsilon sigma
@@ -2115,51 +2093,64 @@ by the context in which they are used.
     # (Interactions between different atoms are determined by mixing rules.)
   }
 
-  write("Data Bonds") {
-    # bond-id   bond-type      atom-id1  atom-id2
-    $bond:CR  @bond:sidechain  $atom:CA  $atom:R
-  }
-
+  # 2-body (bonded) interactions:
+  #
+  #   Ubond(r) = k*(r-r0)^2
+  #
   write_once("In Settings") {
     #             bond-type        k     r0
-    bond_coeff  @bond:sidechain   30.0   3.4
-    bond_coeff  @bond:backbone    30.0   3.7
+    bond_coeff  @bond:Sidechain   15.0   3.4
+    bond_coeff  @bond:Backbone    15.0   3.7
   }
 
-  # Although there's no need to define angular interactions (because this 
-  # "molecule" only contains two atoms), we define the settings for angles
-  # or dihedrals which might be present later when we build a polymer.
+  # Although the simple "Monomer" object we defined above has only
+  # two atoms, later on, we will create molecules with many bonds.
+  # By convention, in this file we keep track of all of the possible
+  # interactions which could exist between these atoms:
 
   # Rules for determining 3-body (angle) interactions by atom & bond type:
+  # angle-type     atomType1 atomType2 atomType3  bondType1 bondType2
+
   write_once("Data Angles By Type") {
-    # angle-type     atomType1 atomType2 atomType3  bondType1 bondType2
-    @angle:backbone  @atom:CA  @atom:CA  @atom:CA   @bond:*   @bond:*
-    @angle:sidechain @atom:CA  @atom:CA  @atom:R    @bond:*   @bond:*
+    @angle:Backbone  @atom:CA  @atom:CA  @atom:CA   @bond:*   @bond:*
+    @angle:Sidechain @atom:CA  @atom:CA  @atom:R    @bond:*   @bond:*
   }
 
   # Force-field parameters for 3-body (angle) interactions:
+  #
+  #   Uangle(theta) = k*(theta-theta0)^2
+  #
   write_once("In Settings") {
     #             angle-type       k    theta0
-    angle_coeff @angle:backbone   30.00  114
-    angle_coeff @angle:sidechain  30.00  123
+    angle_coeff @angle:Backbone   30.00  114
+    angle_coeff @angle:Sidechain  30.00  132
   }
 
   # Rules for determining 4-body (dihedral) interactions by atom & bond type:
   write_once("Data Dihedrals By Type") {
     # dihedralType atmType1 atmType2 atmType3 atmType4  bndType1 bnd2   bnd3
-    @dihedral:back @atom:CA @atom:CA @atom:CA @atom:CA  @bond:* @bond:* @bond:*
-    @dihedral:side @atom:R  @atom:CA @atom:CA @atom:R   @bond:* @bond:* @bond:*
+    @dihedral:CCCC @atom:CA @atom:CA @atom:CA @atom:CA  @bond:* @bond:* @bond:*
+    @dihedral:RCCR @atom:R  @atom:CA @atom:CA @atom:R   @bond:* @bond:* @bond:*
   }
 
-  # Force-field parameters for 4-body (dihedral) interactions:
+  # 4-body interactions in this example are listed by atomType
+  # The forumula used is:
+  #
+  # Udihedral(phi) = K * (1 + cos(n*phi - d))
+  #
+  #     The d parameter is in degrees, K is in kcal/mol/rad^2.
+  #
+  # The corresponding command is 
+  # dihedral_coeff dihedralType       K  n   d  w(ignored)
+
   write_once("In Settings") {
-    #              dihedral-type      K  n   d  w
-    dihedral_coeff @dihedral:back   -0.5 1 -180 0.0
-    dihedral_coeff @dihedral:side   -1.5 1 -180 0.0
+    dihedral_coeff @dihedral:CCCC   -0.5 1 -180 0.0
+    dihedral_coeff @dihedral:RCCR   -1.5 1 -180 0.0
   }
 
   write_once("In Init") {
-    # -- Default styles for "2bead" --
+    # -- Styles used in "ForceField" --
+    # -- (Changing these styles will change the formulas above) --
     units           real
     atom_style      full
     bond_style      harmonic
@@ -2173,52 +2164,47 @@ by the context in which they are used.
 }
 \end{verbatim}
 
-\textit{Note: The ellipsis notation used here ``\$mol:...''.
-warns moltemplate that the ``2bead'' molecule may be part of a larger molecule.
-(This is explained in more detail in section \ref{sec:ellipsis_mol}.)
-}
-
 
 
 \subsubsection{Building a simple polymer}
-We construct a short polymer by making 7 copies of ``2bead'',
+We construct a short polymer by making 7 copies of ``Monomer'',
 rotating and moving each copy:
 \label{sec:2beadPeptide}
 \begin{verbatim}
 # -- file "peptide.lt" --
 
-import "2bead.lt"
+import "monomer.lt"
 
-Peptide {
+Peptide inherits ForceField {
 
   create_var {$mol}  # optional:force all monomers to share the same molecule-ID
-                     # (The "Data Atoms" in 2bead must use the "$mol:..." notation.)
+                     # (The "Data Atoms" in Monomer must use the "$mol:..." notation.)
 
-  res1 = new 2bead
-  res2 = new 2bead.rot(180.0, 1,0,0).move(3.2,0,0)
-  res3 = new 2bead.rot(360.0, 1,0,0).move(6.4,0,0)
-  res4 = new 2bead.rot(540.0, 1,0,0).move(9.6,0,0)
-  res5 = new 2bead.rot(720.0, 1,0,0).move(12.8,0,0)
-  res6 = new 2bead.rot(900.0, 1,0,0).move(16.0,0,0)
-  res7 = new 2bead.rot(1080.0, 1,0,0).move(19.2,0,0)
+  res1 = new Monomer
+  res2 = new Monomer.rot(180.0, 1,0,0).move(3.2,0,0)
+  res3 = new Monomer.rot(360.0, 1,0,0).move(6.4,0,0)
+  res4 = new Monomer.rot(540.0, 1,0,0).move(9.6,0,0)
+  res5 = new Monomer.rot(720.0, 1,0,0).move(12.8,0,0)
+  res6 = new Monomer.rot(900.0, 1,0,0).move(16.0,0,0)
+  res7 = new Monomer.rot(1080.0, 1,0,0).move(19.2,0,0)
 
   # Now, link the residues together this way:
   write("Data Bonds") {
-    $bond:backbone1  @bond:2bead/backbone  $atom:res1/CA  $atom:res2/CA
-    $bond:backbone2  @bond:2bead/backbone  $atom:res2/CA  $atom:res3/CA
-    $bond:backbone3  @bond:2bead/backbone  $atom:res3/CA  $atom:res4/CA
-    $bond:backbone4  @bond:2bead/backbone  $atom:res4/CA  $atom:res5/CA
-    $bond:backbone5  @bond:2bead/backbone  $atom:res5/CA  $atom:res6/CA
-    $bond:backbone6  @bond:2bead/backbone  $atom:res6/CA  $atom:res7/CA
+    $bond:Backbone1  @bond:Backbone  $atom:res1/CA  $atom:res2/CA
+    $bond:Backbone2  @bond:Backbone  $atom:res2/CA  $atom:res3/CA
+    $bond:Backbone3  @bond:Backbone  $atom:res3/CA  $atom:res4/CA
+    $bond:Backbone4  @bond:Backbone  $atom:res4/CA  $atom:res5/CA
+    $bond:Backbone5  @bond:Backbone  $atom:res5/CA  $atom:res6/CA
+    $bond:Backbone6  @bond:Backbone  $atom:res6/CA  $atom:res7/CA
   }
 }
 \end{verbatim}
-The position and orientation of each copy of ``2bead'' 
+The position and orientation of each copy of ``Monomer'' 
 is specified after the ``new'' statement. 
 Each ``new'' statement is typically followed by a chain of 
 move/rotate/scale functions separated by dots, evaluated left-to-right
 (optionally followed by square brackets and then more dots). 
-For example, ``res2'' is a copy of ``2bead'' which is first rotated 
+For example, ``res2'' is a copy of ``Monomer'' which is first rotated 
 180 degrees around the X axis (denoted by ``1,0,0''), 
 and \textbf{then} moved in the (3.2,0,0) direction.
 (The last three arguments to the ``rot()'' command 
@@ -2234,29 +2220,29 @@ To bond atoms in different molecules or molecular subunits together, we used
 the write(``Data Bonds'') command to append additional bonds to the system.
 (Because we are outside the definition of these molecules, 
 we must be careful to refer to the atom-IDs and bond-types by their
-\textit{full-names}.  Here I'm using the ``@bond:backbone'' settings which
-were defined in the ``2bead'' molecule, so I refer to the bond type
-as ``@bond:2bead/backbone''.  See section \ref{sec:full_names}.)
-  %Recall that a ``@bond:backbone'' variable was 
-  %created within the ``2bead'' molecule. 
+\textit{full-names}.  Here I'm using the ``@bond:Backbone'' settings which
+were defined in the ``Monomer'' molecule, so I refer to the bond type
+as ``@bond:ForceField/backbone''.  See section \ref{sec:full_names}.)
+  %Recall that a ``@bond:Backbone'' variable was 
+  %created within the ``Monomer'' molecule. 
   %We could define a new bond type, but in this example, 
   %I wanted to use the bond type defined there.)
 
-\subsubsection{Sharing atom, bond and angle types}
-Normally you must separately define the parameters for all of the atoms types,
-and bond types, angle types etc... in every type of molecule.
-However different kinds of monomers in a heteropolymer typically will 
-share some common backbone atom types and other properties.
-You must be careful to indicate which atom and bond types are shared between
-different monomers by referring them using a ``../'' prefix.
-(See sections \ref{sec:variable_scope}, 
-\ref{sec:paths}, and 
-\ref{sec:butane} for details and examples.)
-\textit{Note: There is a heteropolymer example in the the 
-``2bead\_heteropolymer/'' directory in the online examples.
-This example demonstrates how to share backbone atoms, bonds, and angles. 
-You can also define specific angle or dihedral interactions which are
-specific to the atom types in different residues.}
+%\subsubsection{Sharing atom, bond and angle types}
+%Normally you must separately define the parameters for all of the atoms types,
+%and bond types, angle types etc... in every type of molecule.
+%However different kinds of monomers in a heteropolymer typically will 
+%share some common backbone atom types and other properties.
+%You must be careful to indicate which atom and bond types are shared between
+%different monomers by referring them using a ``../'' prefix.
+%(See sections \ref{sec:variable_scope}, 
+%\ref{sec:paths}, and 
+%\ref{sec:butane} for details and examples.)
+%\textit{Note: There is a heteropolymer example in the the 
+%``2bead\_heteropolymer/'' directory in the online examples.
+%This example demonstrates how to share backbone atoms, bonds, and angles. 
+%You can also define specific angle or dihedral interactions which are
+%specific to the atom types in different residues.}
 
 
 \subsection{Bonded interactions \textit{by type}}
@@ -2274,9 +2260,9 @@ which atoms participate in 3-body and 4-body bonded interactions.
 Moltemplate can detect consecutively bonded atoms and 
 determine the forces between them based on atom type.
 (Bond type can also be used as a criteria.)
-We did this in ``2bead.lt'' using the
-\mbox{``write\_once("Angles By Type")''} and 
-\mbox{``write\_once("Dihedrals By Type")''} 
+We did this in ``forcefield.lt'' using the
+\mbox{``write\_once("Data Angles By Type")''} and 
+\mbox{``write\_once("Data Dihedrals By Type")''} 
 commands.
 You can also generate improper interactions 
 between any 4-atoms bonded together in a T-shaped topology
@@ -2291,14 +2277,14 @@ See appendix \ref{sec:nbody_by_type} for more details.
   %interactions which appear earlier, such as in this example:
   %\begin{verbatim}
   %  write_once("Data Angles By Type") {
-  %    @angle:backbone  @atom:C* @atom:C*  @atom:*    @bond:*   @bond:*
-  %    @angle:sidechain @atom:CA @atom:CA  @atom:R    @bond:*   @bond:*
+  %    @angle:Backbone  @atom:C* @atom:C*  @atom:*    @bond:*   @bond:*
+  %    @angle:Sidechain @atom:CA @atom:CA  @atom:R    @bond:*   @bond:*
   %  }
   %\end{verbatim}
   % %Here the first line of this file creates a 3-body angle interaction
-  % %of type ``@angle:backbone'' between \textit{every} triplet of bonded atoms 
+  % %of type ``@angle:Backbone'' between \textit{every} triplet of bonded atoms 
   % %in the molecule whose first two atom types begin with the letter ``C''.
-  %The second line creates 3body interactions (of type ``@angle:sidechain'')
+  %The second line creates 3body interactions (of type ``@angle:Sidechain'')
   %specifically between atoms of type ``@atom:CA'', ``@atom:CA'', and 
   %``@atom:R'', overriding any triplets of this type which appeared earlier.
 
@@ -2306,9 +2292,9 @@ See appendix \ref{sec:nbody_by_type} for more details.
 
 %\subsection*{\textit{(Advanced)} Mixing regular and ``By Type'' interactions}
 
-%If an LT file contains both ``Angles'' and ``Angles By Type'',
+%If an LT file contains both ``Data Angles'' and ``Data Angles By Type'',
 %then the interactions explicitly defined in the ``Angles'' section will 
-%always override the assignments made in ``Angles By Type''.
+%always override the assignments made in ``Data Angles By Type''.
 %The also applies to Dihedrals and Impropers.
 
   %\begin{verbatim}
@@ -2454,15 +2440,15 @@ RandPoly50 {
 
   # Now, link the monomers together this way:
   write("Data Bonds") {
-    $bond:bb1 @bond:backbone $atom:monomers[0]/CA $atom:monomers[1]/CA
-    $bond:bb2 @bond:backbone $atom:monomers[1]/CA $atom:monomers[2]/CA
-    $bond:bb3 @bond:backbone $atom:monomers[2]/CA $atom:monomers[3]/CA
-    $bond:bb4 @bond:backbone $atom:monomers[3]/CA $atom:monomers[4]/CA
+    $bond:bb1 @bond:Backbone $atom:monomers[0]/CA $atom:monomers[1]/CA
+    $bond:bb2 @bond:Backbone $atom:monomers[1]/CA $atom:monomers[2]/CA
+    $bond:bb3 @bond:Backbone $atom:monomers[2]/CA $atom:monomers[3]/CA
+    $bond:bb4 @bond:Backbone $atom:monomers[3]/CA $atom:monomers[4]/CA
 \end{verbatim}
 $\quad \quad \quad \vdots $
 %           :           :              :                     :
 \begin{verbatim}
-    $bond:bb50 @bond:backbone $atom:monomers[48]/CA $atom:monomers[49]/CA
+    $bond:bb50 @bond:Backbone $atom:monomers[48]/CA $atom:monomers[49]/CA
   }
   #(Note: Both the "2bead" and "3bead" molecules contain atoms
   #       named "$atom:CA".  The atom types are different, however.)
@@ -3450,7 +3436,7 @@ this file stores the force-field parameters (coeffs) for the
 interactions between them.
 
 \subsubsection*{Bonded interactions \textit{by type}}
-Again, the ``Angles By Type'' and ``Dihedrals By Type'' sections 
+Again, the ``Data Angles By Type'' and ``Data Dihedrals By Type'' sections 
 tell moltemplate.sh that bonded 3-body and 4-body interactions exist between
 any 3 or 4 consecutively bonded carbon atoms (of type CH2, CH3, or CH4)
 assuming they are bonded using ``CC'' (saturated) bonds.
@@ -3461,7 +3447,7 @@ The ``*'' character is a wild-card.
 %(moltemplate.sh can automatically generate bonded angle, dihedral, and improper
 %interactions between bonded atoms according to their \textit{type} 
 %as well as bond type connecting them.
-%Note: The syntax used in the ``Angles By Type'' and ``Dihedrals By Type''
+%Note: The syntax used in the ``Data Angles By Type'' and ``Data Dihedrals By Type''
 %sections is explained in more detail in appendix \ref{sec:nbody_by_type}.
 %
 %The ability to specify interactions by atom type instead of atom ID hardly
@@ -3987,9 +3973,9 @@ Please let me know if it is not working.
    Wildcard characters work reliably and are used for \textit{string}
    pattern matching when inside any of the \textit{``By Type''} sections 
    in an LT file (such as
-   \textit{``Angles By Type''}, 
-   \textit{``Dihedrals By Type''}, and 
-   \textit{``Impropers By Type''}).
+   \textit{``Data Angles By Type''}, 
+   \textit{``Data Dihedrals By Type''}, and 
+   \textit{``Data Impropers By Type''}).
    However these characters are interpreted differently when they appear
    in \textit{pair\_coeff}, \textit{bond\_coeff}, \textit{angle\_coeff}
    \textit{dihedral\_coeff}, and \textit{improper\_coeff} commands 
@@ -4037,8 +4023,8 @@ Specifying interactions this way can eliminate significant redundancy
 since many atoms share the same type. 
 
 To make use of this feature, you would create a new section named
-\mbox{``Angles By Type''}, \mbox{``Dihedrals By Type''}, 
-or \mbox{``Impropers By Type''} 
+\mbox{``Data Angles By Type''}, \mbox{``Data Dihedrals By Type''}, 
+or \mbox{``Data Impropers By Type''} 
 whose syntax mimics the 
 \mbox{``Angles''}, \mbox{``Dihedrals''}, and \mbox{``Impropers''} 
 sections of a LAMMPS data file.
