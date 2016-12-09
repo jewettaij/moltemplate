@@ -1108,14 +1108,14 @@ SPCE {
   # atomID      molID         atomType  charge  coordX    coordY    coordZ
 
   write("Data Atoms") {
-    $atom:O      $mol:.       @atom:O  -0.8476  0.0000000 0.000000  0.00000
-    $atom:H1     $mol:.       @atom:H   0.4238  0.8164904 0.5773590 0.00000
-    $atom:H2     $mol:.       @atom:H   0.4238  -0.8164904 0.5773590 0.00000
+    $atom:o      $mol:.       @atom:O  -0.8476  0.0000000 0.000000  0.00000
+    $atom:h1     $mol:.       @atom:H   0.4238  0.8164904 0.5773590 0.00000
+    $atom:h2     $mol:.       @atom:H   0.4238  -0.8164904 0.5773590 0.00000
   }
 
   # Variables beginning with $ or @ will be replaced by numbers LAMMPS will
   # eventually read.  Each of the three atoms" will be assigned unique
-  # atomIDs (denoted here by "$atom:O", "$atom:H1", "$atom:H2"), even if
+  # atomIDs (denoted here by "$atom:o", "$atom:h1", "$atom:h2"), even if
   # they belong to different molecules.  However, the atom types
   # (denoted "@atom:O", "@atom:H") are shared for atoms in all molecules.
   # All 3 atoms share same molID number (represeted here by "$mol:.")
@@ -1129,13 +1129,13 @@ SPCE {
 
   write("Data Bonds") {
     #  bondID  bondType  atomID1  atomID2
-    $bond:OH1  @bond:OH  $atom:O  $atom:H1
-    $bond:OH2  @bond:OH  $atom:O  $atom:H2
+    $bond:oh1  @bond:OH  $atom:o  $atom:h1
+    $bond:oh2  @bond:OH  $atom:o  $atom:h2
   }
 
   write("Data Angles") {
     # angleID  angleType  atomID1  atomID2 atomID3
-    $angle:HOH @angle:HOH $atom:H1 $atom:O $atom:H2
+    $angle:hoh @angle:HOH $atom:h1 $atom:o $atom:h2
   }
 
   # --- Force-field parameters go in the "In Settings" section: ---
@@ -1248,9 +1248,9 @@ This will create 1000 molecules with names like
 You can always access individual atomIDs, molIDs, bondIDs, angleIDs, 
 and dihedralIDs (if present), for any molecule 
 elsewhere in your LT files using this notation:
-``\$atom:wat[2][3][4]/H1'', 
-``\$bond:wat[0][5][1]/OH1'', 
-``\$angle:wat[2][8][3]/HOH'', 
+``\$atom:wat[2][3][4]/h1'', 
+``\$bond:wat[0][5][1]/oh1'', 
+``\$angle:wat[2][8][3]/hoh'', 
 ``\$mol:wat[0][1][2]''.
 This allows you to define interactions which link
 different molecules together (see section \ref{sec:coordinates}).
@@ -1588,7 +1588,7 @@ In addition, all users should be familiar with the following commands:
 %it supports a wide variety of force-field types. 
 %The commands above are \textit{raw} LAMMPS commands,
 %augmented by ttree variables
-%(like ``@atom:O'' and ``\$atom:O''), which are explained below.
+%(like ``@atom:O'' and ``\$atom:o''), which are explained below.
 
 
   %and/or CHARMM27 parameter files.
@@ -1753,27 +1753,27 @@ wat = new SPCE[10][10][10]
 \end{verbatim}
 then moltemplate creates 3000 ``\$atom'' variables with names like
 \begin{verbatim}
-$atom:wat[0][0][0]/O
-$atom:wat[0][0][0]/H1
-$atom:wat[0][0][0]/H2
-$atom:wat[0][0][1]/O
-$atom:wat[0][0][1]/H1
-$atom:wat[0][0][1]/H2
+$atom:wat[0][0][0]/o
+$atom:wat[0][0][0]/h1
+$atom:wat[0][0][0]/h2
+$atom:wat[0][0][1]/o
+$atom:wat[0][0][1]/h1
+$atom:wat[0][0][1]/h2
 \end{verbatim}
 $\quad \vdots $
 \begin{verbatim}
-$atom:wat[9][9][9]/O
-$atom:wat[9][9][9]/H1
-$atom:wat[9][9][9]/H2
+$atom:wat[9][9][9]/o
+$atom:wat[9][9][9]/h1
+$atom:wat[9][9][9]/h2
 \end{verbatim}
 
 \subsubsection{Variable names: short-names \textit{vs.} full-names}
 \label{sec:full_names}
 
 In the example above, the \$ variables have full-names like
-``\$atom:wat[8][3][7]/H1'', not ``\$atom:H1''.  However inside the
+``\$atom:wat[8][3][7]/h1'', not ``\$atom:h1''.  However inside the
 definition of the water molecule, you don't specify the full name.
-You can refer to this atom as ``\$atom:H1''.
+You can refer to this atom as ``\$atom:h1''.
 Likewise, the full-name for the @atom variables is actually
 ``@atom:SPCE/H'', not ``@atom:H''.  However inside the definition of the water
 molecule, you typically use the shorthand notation ``@atom:H''.
@@ -1826,7 +1826,7 @@ to access atoms (or molecules) outside of the current molecule.
 For example, two different molecule types can share the same type of
 hydrogen atom by referring to it using this syntax: ``@atom:../H''.
   %(Two molecules could share the same atom-id in a similar way, 
-  % using ``\$atom:../H1''.  This is not recommended)
+  % using ``\$atom:../h1''.  This is not recommended)
 For details, see
 section \ref{sec:paths}.
 and appendix \ref{sec:adv_variable_syntax}.)
@@ -1869,7 +1869,7 @@ indicates the file and line number where this variable is first used.)
 The ``output\_ttree'' directory also contains all of the files that you created.
 The versions with a ``.template'' extension contain text
 interspersed with \textit{full} variable names (before numeric substitution).
-(A spelling mistake, like using ``\$atom:H'' when you meant to say ``\$atom:H1''
+(A spelling mistake, like using ``\$atom:h'' when you meant to say ``\$atom:h1''
 or ``@atom:H'' will show up in these files if you inspect them carefully.)
 This can help you identify where the mistake occurred
 in your LT files.
@@ -1964,10 +1964,11 @@ This allows users to adapt to future changes in the LAMMPS data file format.
 
 
 
-\subsubsection*{Does ``@atom:O'' conflict with ``\$atom:O''?}
+\subsubsection*{Does ``@atom:H'' conflict with ``\$atom:H''?}
 \label{sec:vardetails}
-No.  It is okay for static and instance variables to share the same 
-names.  Moltemplate considers them distinct and they are counted separately.
+No.  It is okay for static(@) and instance(\$) variables to share the same names.
+(Moltemplate considers them distinct variables and they will be assigned independently.)
+
 
 \subsubsection*{Addional Details}
 Variable and molecule names can include unicode characters.
@@ -2034,6 +2035,9 @@ for details.}
 \end{figure}
 
 
+
+\pagebreak
+
 \subsection{Building a large molecule from smaller pieces}
 \label{sec:2bead}
 Consider the following simple 2-atom dumbell-shaped molelule (``Monomer'')
@@ -2042,16 +2046,16 @@ Consider the following simple 2-atom dumbell-shaped molelule (``Monomer'')
 
 import "forcefield.lt"   # contains force-field parameters
 
-Monomer {
+Monomer inherits ForceField {
 
   write("Data Atoms") {
     # atomId molId   atomType   charge   x      y        z      
-    $atom:CA $mol:... @atom:CA   0.0   0.000  1.0000   0.0000000
-    $atom:R  $mol:... @atom:R    0.0   0.000  4.4000   0.0000000
+    $atom:ca $mol:... @atom:CA   0.0   0.000  1.0000   0.0000000
+    $atom:r  $mol:... @atom:R    0.0   0.000  4.4000   0.0000000
   }
   write("Data Bonds") {
-    # bond-id   bond-type      atom-id1  atom-id2
-    $bond:CR  @bond:Sidechain  $atom:CA  $atom:R
+    # bond-id   bond-type        atom-id1  atom-id2
+    $bond:cr    @bond:Sidechain  $atom:ca  $atom:r
   }
 }
 \end{verbatim}
@@ -2128,7 +2132,7 @@ ForceField {
 
   # Rules for determining 4-body (dihedral) interactions by atom & bond type:
   write_once("Data Dihedrals By Type") {
-    # dihedralType atmType1 atmType2 atmType3 atmType4  bndType1 bnd2   bnd3
+    # dihedralType atmType1 atmType2 atmType3 atmType4 bondType1 bnd2   bnd3
     @dihedral:CCCC @atom:CA @atom:CA @atom:CA @atom:CA  @bond:* @bond:* @bond:*
     @dihedral:RCCR @atom:R  @atom:CA @atom:CA @atom:R   @bond:* @bond:* @bond:*
   }
@@ -2190,12 +2194,12 @@ Peptide inherits ForceField {
 
   # Now, link the residues together this way:
   write("Data Bonds") {
-    $bond:Backbone1  @bond:Backbone  $atom:res1/CA  $atom:res2/CA
-    $bond:Backbone2  @bond:Backbone  $atom:res2/CA  $atom:res3/CA
-    $bond:Backbone3  @bond:Backbone  $atom:res3/CA  $atom:res4/CA
-    $bond:Backbone4  @bond:Backbone  $atom:res4/CA  $atom:res5/CA
-    $bond:Backbone5  @bond:Backbone  $atom:res5/CA  $atom:res6/CA
-    $bond:Backbone6  @bond:Backbone  $atom:res6/CA  $atom:res7/CA
+    $bond:backbone1  @bond:Backbone  $atom:res1/ca  $atom:res2/ca
+    $bond:backbone2  @bond:Backbone  $atom:res2/ca  $atom:res3/ca
+    $bond:backbone3  @bond:Backbone  $atom:res3/ca  $atom:res4/ca
+    $bond:backbone4  @bond:Backbone  $atom:res4/ca  $atom:res5/ca
+    $bond:backbone5  @bond:Backbone  $atom:res5/ca  $atom:res6/ca
+    $bond:backbone6  @bond:Backbone  $atom:res6/ca  $atom:res7/ca
   }
 }
 \end{verbatim}
@@ -2218,15 +2222,6 @@ See sections \ref{sec:arrays} and \ref{sec:random_arrays} for examples.)}
 
 To bond atoms in different molecules or molecular subunits together, we used 
 the write(``Data Bonds'') command to append additional bonds to the system.
-(Because we are outside the definition of these molecules, 
-we must be careful to refer to the atom-IDs and bond-types by their
-\textit{full-names}.  Here I'm using the ``@bond:Backbone'' settings which
-were defined in the ``Monomer'' molecule, so I refer to the bond type
-as ``@bond:ForceField/backbone''.  See section \ref{sec:full_names}.)
-  %Recall that a ``@bond:Backbone'' variable was 
-  %created within the ``Monomer'' molecule. 
-  %We could define a new bond type, but in this example, 
-  %I wanted to use the bond type defined there.)
 
 %\subsubsection{Sharing atom, bond and angle types}
 %Normally you must separately define the parameters for all of the atoms types,
@@ -2299,8 +2294,8 @@ See appendix \ref{sec:nbody_by_type} for more details.
 
   %\begin{verbatim}
   %write("Data Angles") {
-  %  $angle:1 @angle:CCCgeneral $atom:C1 $atom:C2 $atom:C3
-  %  $angle:2 @angle:CCCgeneral $atom:C2 $atom:C3 $atom:C4
+  %  $angle:1 @angle:CCCgeneral $atom:c1 $atom:c2 $atom:c3
+  %  $angle:2 @angle:CCCgeneral $atom:c1 $atom:c3 $atom:c4
   %}
   %\end{verbatim}
 
@@ -2316,11 +2311,11 @@ with molecules or atoms.
 
 Here we show an easier way to create the short polymer 
 shown in section \ref{sec:2beadPeptide}.
-You can make 7 copies of the \textit{2bead} molecule this way:
+You can make 7 copies of the \textit{Monomer} molecule this way:
 \begin{verbatim}
-  res = new 2bead [7]
+  res = new Monomer[7]
 \end{verbatim}
-This creates 7 new \textit{2bead} molecules (named 
+This creates 7 new \textit{Monomer} molecules (named 
 \mbox{\textit{res[0]}}, 
 \mbox{\textit{res[1]}}, 
 \mbox{\textit{res[2]}}, 
@@ -2337,7 +2332,7 @@ For example, we could have generated atomic coordinates for the
 the short polymer in section \ref{sec:2beadPeptide}
 using this command:
 \begin{verbatim}
-  res = new 2bead [7].rot(180, 1,0,0).move(3.2,0,0)
+  res = new Monomer [7].rot(180, 1,0,0).move(3.2,0,0)
 \end{verbatim}
 This will create 7 molecules.  
 The coordinates of the first molecule \textit{res[0]} are will be unmodified.
@@ -2349,10 +2344,10 @@ You can also make adjustments to the initial coordinates of the molecule
 before it is copied, and before any of the array transformations are applied.
 For example:
 \begin{verbatim}
-  res = new 2bead.scale(1.5) [7].rot(180, 1,0,0).move(3.2,0,0)
+  res = new Monomer.scale(1.5) [7].rot(180, 1,0,0).move(3.2,0,0)
 \end{verbatim}
 In this example, the ``scale(1.5)'' transformation is applied once to 
-enlarge every \textit{2bead} monomer initially.
+enlarge every \textit{Monomer} object initially.
 This will happen before any of the rotation and move commands 
 are applied to build the polymer
 (so the 3.2 Angstrom spacings between each monomer will not be effected).
@@ -2362,7 +2357,7 @@ are applied to build the polymer
 Alternately you apply transformations to a molecule 
 after they have been created (even if they are part of an array).
 \begin{verbatim}
-  res = new 2bead [7]
+  res = new Monomer [7]
 
   # Again, the first line creates the molecules named 
   # "res[0]", "res[1]", "res[2]", "res[3]", ... "res[6]".
@@ -2419,7 +2414,7 @@ peptide_ring[*].move(0,25,0)
 \caption{
 \label{fig:random_heteropolymer}
 A random heteropolymer (\textbf{c}),
-composed of of \textit{2bead} and \textit{3bead} monomers
+composed of of \textit{Monomer} and \textit{Monomer3} monomer subunits
 (\textbf{a} and \textbf{b}) with (target) probabilities 0.6 and 0.4.
 (However, due to random fluctuations, the actual ratio 
  in this case was 68\% and 32\%.
@@ -2429,29 +2424,29 @@ composed of of \textit{2bead} and \textit{3bead} monomers
 Arrays of random molecules can be generated using the 
 \mbox{\textit{new random() []}} syntax.  For example,
 below we define a random polymer composed of 50 
-\textit{2bead} and \textit{3bead} monomers.
+\textit{Monomer} and \textit{Monomer3} monomer subunits.
 (See figure \ref{fig:random_heteropolymer}.)
 \begin{verbatim}
-RandPoly50 {
+RandPoly50 inherits ForceField {
   # Make a chain of randomly chosen monomers:
 
-  monomers = new random([2bead, 3bead], [0.6, 0.4], 123456)
+  monomers = new random([Monomer, Monomer3], [0.6, 0.4], 123456)
                  [50].rot(180,1,0,0).move(2.95, 0, 0)
 
   # Now, link the monomers together this way:
   write("Data Bonds") {
-    $bond:bb1 @bond:Backbone $atom:monomers[0]/CA $atom:monomers[1]/CA
-    $bond:bb2 @bond:Backbone $atom:monomers[1]/CA $atom:monomers[2]/CA
-    $bond:bb3 @bond:Backbone $atom:monomers[2]/CA $atom:monomers[3]/CA
-    $bond:bb4 @bond:Backbone $atom:monomers[3]/CA $atom:monomers[4]/CA
+    $bond:bb1 @bond:Backbone $atom:monomers[0]/ca $atom:monomers[1]/ca
+    $bond:bb2 @bond:Backbone $atom:monomers[1]/ca $atom:monomers[2]/ca
+    $bond:bb3 @bond:Backbone $atom:monomers[2]/ca $atom:monomers[3]/ca
+    $bond:bb4 @bond:Backbone $atom:monomers[3]/ca $atom:monomers[4]/ca
 \end{verbatim}
 $\quad \quad \quad \vdots $
 %           :           :              :                     :
 \begin{verbatim}
-    $bond:bb50 @bond:Backbone $atom:monomers[48]/CA $atom:monomers[49]/CA
+    $bond:bb50 @bond:Backbone $atom:monomers[48]/ca $atom:monomers[49]/ca
   }
-  #(Note: Both the "2bead" and "3bead" molecules contain atoms
-  #       named "$atom:CA".  The atom types are different, however.)
+  #(Note: Both the "Monomer" and "Monomer3" subunits contain atoms
+  #       named "$atom:ca".
 } #RandPoly50
 \end{verbatim}
 It is also possible to fill a 2 or 3-dimensional volume with
@@ -2461,23 +2456,23 @@ molecules randomly.  This is discussed in section
 %\textit{Note: To specify the exactly number of molecules of each type,
 %you can also use this notation (discussed below).}
 %\begin{verbatim}
-%  monomers = new random([2bead, 3bead], [30, 20], 123456)
+%  monomers = new random([Monomer, Monomer3], [30, 20], 123456)
 %                 [50].rot(180,1,0,0).move(2.95, 0, 0)
 %\end{verbatim}
 
 
 The \mbox{\textit{new random()}} function takes 2 or 3 arguments:
 a list of molecule types 
-(\mbox{\textit{2bead}} and \mbox{\textit{3bead}} in this example),
+(\mbox{\textit{Monomer}} and \mbox{\textit{Monomer3}} in this example),
 and a list of probabilities (\textit{0.6} and \textit{0.4})
 both enclosed in square-brackets [].
 
 \subsubsection{Random arrays with exact molecule type counts}
 \label{sec:random_exact}
 Recall that we requested that 60\% of the molecules be of type
-``2bead'' and 40\% type ``3bead'' (corresponding to 30 and 20, respectively).
+``Monomer'' and 40\% type ``Monomer3'' (corresponding to 30 and 20, respectively).
 However, the resulting polymer (shown in figure \ref{fig:random_heteropolymer})
-contains 34 ``2bead'' and 16 ``3bead'' monomers (68\% and 34\%, respectively).
+contains 34 ``Monomer'' and 16 ``Monomer3'' monomers (68\% and 34\%, respectively).
 This is because each time a monomer is created, a random number is generated
 to decide which type of monomer will be created.
 There is no guarantee that the total final fraction of monomers will 
@@ -2486,10 +2481,10 @@ To specify the number of molecule types precisely, you can replace
 the list of probabilities ``[0.6,0.4]''
 with a list of integers ``[30,20]''.
 \begin{verbatim}
-  monomers = new random([2bead, 3bead], [30, 20], 123456)
+  monomers = new random([Monomer, Monomer3], [30, 20], 123456)
                  [50].rot(180,1,0,0).move(2.95, 0, 0)
 \end{verbatim}
-This will create exactly 30 ``2bead'' and 20 ``3bead'' monomers.
+This will create exactly 30 ``Monomer'' and 20 ``Monomer3'' monomers.
 (You can do this with multidimensional arrays as well.  
 See section \ref{sec:random_multidim_exact}.)
 %(In both case, the sum of the molecule type counts (30,20) must match the 
@@ -2506,8 +2501,8 @@ See section \ref{sec:random_multidim_exact}.)
 
 \textit{Note:}
 Although this example, there are only two monomer types
-(``2bead'' and ``3bead''), there is no limit to the number 
-of molecule types which appear in these lists (eg ``[2bead, 3bead, 4bead],[0.2,0.3,0.2]'')
+(``Monomer'' and ``Monomer3''), there is no limit to the number 
+of molecule types which appear in these lists (eg ``[Monomer, Monomer3, 4bead],[0.2,0.3,0.2]'')
 
 \textit{Note:}
 An optional random-seed argument can also be included.
@@ -2529,10 +2524,10 @@ Once a molecule containing random monomers is defined,
 You can customize the position of each type of molecule in the array,
 before the array is constructed.
 To do this, you can add additional movement commands after 
-each molecule's type name in the list (eg ``2bead'' and ``3bead''):
+each molecule's type name in the list (eg ``Monomer'' and ``Monomer3''):
 \begin{verbatim}
-  monomers = new random([2bead.move(0,0.01,0),
-                         3bead.move(0,-0.01,0)], 
+  monomers = new random([Monomer.move(0,0.01,0),
+                         Monomer3.move(0,-0.01,0)], 
                         [30,20],
                         123456)
                  [50].rot(180,1,0,0).move(2.95, 0, 0) 
@@ -2588,18 +2583,18 @@ The example below demonstrates how to build a polymer,
 specifying which part is random, and and which part is not:
 
 \begin{verbatim}
-  monomers[0]    = new 3bead
-  monomers[1-48] = new random([2bead, 3bead], [30, 18], 123456)
+  monomers[0]    = new Monomer3
+  monomers[1-48] = new random([Monomer, Monomer3], [30, 18], 123456)
                        [48].rot(180,1,0,0).move(2.95, 0, 0)
-  monomers[49]   = new 3bead
+  monomers[49]   = new Monomer3
   # It's a good idea to move these monomers to keep them from overlapping
   monomers[0].rotate(180,1,0,0)
   monomers[1-48].move(2.95,0,0)
   monomers[49].move(144.55,0,0)    #(note: 144.55=49*2.95)
 \end{verbatim}
 In this example, we insure that monomers[0] and monomers[49] are both
-of type ``3bead'' 
-(while keeping the total number of ``2bead'' and ``3bead'' monomers at 
+of type ``Monomer3'' 
+(while keeping the total number of ``Monomer'' and ``Monomer3'' monomers at 
  30 and 20, respectively).
 
 \textit{(Note: You can replace ``monomers[1-48]'' with
@@ -2807,7 +2802,7 @@ The \textit{Dimer} molecule is shown in figure \ref{fig:dimers}a).
 \textit{Optional: If you want all the atoms in a ``Dimer'' to share the same molecule-ID,
 then define ``Dimer'' this way:}
 \begin{verbatim}
-Dimer {
+Dimer inherits ForceField {
   create_var { $mol }
   peptides[0] = new Peptide
   peptides[1] = new Peptide.rot(180,1,0,0).move(0, 12.4, 0)
@@ -2843,16 +2838,12 @@ To make changes that apply to every subsequently created \textit{``Peptide''} or
 The ``move'' or ``rot'' commands can not be used to control the positions
 of \textit{individual atoms}.
 Instead simply overwrite their coordinates this way:
-%$atom:dimer/peptides[0]/res[2]/CA $mol:dimer/peptides[1] @atom:2bead/R 0 6.4 8.0 0
+%$atom:dimer/peptides[0]/res[2]/CA $mol:dimer/peptides[1] @atom:R 0 6.4 8.0 0
 \begin{verbatim}
 write("Data Atoms") {
-  $atom:dimer/peptides[0]/res[2]/CA $mol:dimer/peptides[1] @atom:2bead/R 0 6.4 8.2 0.6
+  $atom:dimer/peptides[0]/res[2]/ca $mol:... @atom:R 0 6.4 8.2 0.6
 }
 \end{verbatim}
-Note that because you are outside the definition of the 2bead molecule, 
-you must be careful to refer to the atom-ID, molecule-ID, and atom-Type 
-variables using their \textit{full} names, as shown above.  (Don't use 
-the abbreviated names you normally use. See section \ref{sec:full_names}.)
 
 \subsection{Adding bonds and angles to individual molecules}
 \label{sec:adding_atoms_bonds}
@@ -2881,8 +2872,8 @@ delete dimer/peptides[1]/res[2]
 \label{sec:delete_atoms_bonds}
 Individual atoms or bonds can be deleted in a similar way:
 \begin{verbatim}
-delete dimer/peptides[1]/res[3]/CA         #<-- deletes the "CA" atom
-delete dimer/peptides[1]/res[4]/sidechain  #<-- deletes the "sidechain" bond
+delete dimer/peptides[1]/res[3]/ca         #<-- deletes the "ca" atom
+delete dimer/peptides[1]/res[4]/cr         #<-- deletes the "cr" bond
 \end{verbatim}
 Whenever an atom or a molecule is deleted, the bonds, angles, dihedrals, 
 and improper interactions involving those atoms are deleted as well.
@@ -2957,13 +2948,13 @@ to make sure they look reasonable.
 %You can also center a molecule around it's center-of-mass using ``movecm()'',
 %rotate it, and then move it this way:
 %\begin{verbatim}
-%re6s = new 2bead.movecm(0,0,0).rot(180.0, 1,0,0).move(14.2, 0, 0)
+%re6s = new Monomer.movecm(0,0,0).rot(180.0, 1,0,0).move(14.2, 0, 0)
 %\end{verbatim}
 %By default all rotations are about the origin, not the center-of-mass.
 %You can also rotate a molecule around it's center-of-mass using ``rotcm()''
 %(without centering it first), and them move the molecule this way:
 %\begin{verbatim}
-%res6 = new 2bead.rotcm(180.0, 1,0,0).move(14.2, 0, 0)
+%res6 = new Monomer.rotcm(180.0, 1,0,0).move(14.2, 0, 0)
 %\end{verbatim}
 
 
@@ -2991,19 +2982,19 @@ Dimer0 = Dimer
 
 # Add some new atoms connecting the two peptides in the dimer
 
-Dimer0 {
+Dimer0 inherits ForceField {
   write("Data Atoms") {
-    $atom:t1 $mol:. @atom:2bead/CA   0.0   23.0   0.0     0.0
-    $atom:t2 $mol:. @atom:2bead/CA   0.0   24.7   4.0     0.0
-    $atom:t3 $mol:. @atom:2bead/CA   0.0   24.7   8.4     0.0
-    $atom:t4 $mol:. @atom:2bead/CA   0.0   23.0   12.4    0.0
+    $atom:t1 $mol:. @atom:CA   0.0   23.0   0.0     0.0
+    $atom:t2 $mol:. @atom:CA   0.0   24.7   4.0     0.0
+    $atom:t3 $mol:. @atom:CA   0.0   24.7   8.4     0.0
+    $atom:t4 $mol:. @atom:CA   0.0   23.0   12.4    0.0
   }
   write("Data Bonds") {
-    $bond:b1 @bond:2bead/backbone $atom:peptides[0]/res7/CA $atom:t1
-    $bond:b2 @bond:2bead/backbone $atom:t1 $atom:t2
-    $bond:b3 @bond:2bead/backbone $atom:t2 $atom:t3
-    $bond:b4 @bond:2bead/backbone $atom:t3 $atom:t4
-    $bond:b5 @bond:2bead/backbone $atom:t4 $atom:peptides[1]/res7/CA
+    $bond:b1 @bond:Backbone $atom:peptides[0]/res7/CA $atom:t1
+    $bond:b2 @bond:Backbone $atom:t1 $atom:t2
+    $bond:b3 @bond:Backbone $atom:t2 $atom:t3
+    $bond:b4 @bond:Backbone $atom:t3 $atom:t4
+    $bond:b5 @bond:Backbone $atom:t4 $atom:peptides[1]/res7/ca
   }
 }
 
@@ -3158,8 +3149,8 @@ SPCE {
 
   #  bond-id   bond-type  atom-id1 atom-id2
   write("Data Bonds") {
-    $bond:OH1  @bond:OH   $atom:O  $atom:H1
-    $bond:OH2  @bond:OH   $atom:O  $atom:H2
+    $bond:oh1  @bond:OH   $atom:O  $atom:H1
+    $bond:oh2  @bond:OH   $atom:O  $atom:H2
   }
 
   #             bond-type   bond-style-name  parameter-list
@@ -3169,7 +3160,7 @@ SPCE {
 
   # angle-id   angle-type  atom-id1 atom-id2 atom-id3
   write("Data Angles") {
-    $angle:HOH @angle:HOH  $atom:H1 $atom:O $atom:H2
+    $angle:hoh @angle:HOH  $atom:H1 $atom:O $atom:H2
   }
 
   #              angle-type  angle-style-name  parameter-list
@@ -3366,19 +3357,19 @@ cyclopentane {
 
   # AtomID  MolID('.'=this) AtomType  charge coordX  coordY   coordZ
   write("Data Atoms") {
-    $atom:C1 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.000000000 1.0000000
-    $atom:C2 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.951056516 0.3090170
-    $atom:C3 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.587785252 -0.809017
-    $atom:C4 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.587785252 -0.809017
-    $atom:C5 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.951056516 0.3090170
+    $atom:c1 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.000000000 1.0000000
+    $atom:c2 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.951056516 0.3090170
+    $atom:c3 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.587785252 -0.809017
+    $atom:c4 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.587785252 -0.809017
+    $atom:c5 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.951056516 0.3090170
   }
 
   write("Data Bonds") {
-    $bond:bond1 @bond:TraPPE/CC $atom:C1 $atom:C2
-    $bond:bond2 @bond:TraPPE/CC $atom:C2 $atom:C3
-    $bond:bond3 @bond:TraPPE/CC $atom:C3 $atom:C4
-    $bond:bond4 @bond:TraPPE/CC $atom:C4 $atom:C5
-    $bond:bond5 @bond:TraPPE/CC $atom:C5 $atom:C1
+    $bond:bond1 @bond:TraPPE/CC $atom:c1 $atom:c2
+    $bond:bond2 @bond:TraPPE/CC $atom:c2 $atom:c3
+    $bond:bond3 @bond:TraPPE/CC $atom:c3 $atom:c4
+    $bond:bond4 @bond:TraPPE/CC $atom:c4 $atom:c5
+    $bond:bond5 @bond:TraPPE/CC $atom:c5 $atom:c1
   }
 }
 \end{verbatim}
@@ -3493,15 +3484,15 @@ import "trappe1998.lt"
 
 Butane {
   write("Data Atoms"){
-    $atom:C1 $mol:. @atom:TraPPE/CH3 0.0  0.419372  0.000 -1.937329
-    $atom:C2 $mol:. @atom:TraPPE/CH2 0.0  -0.419372  0.000 -0.645776
-    $atom:C3 $mol:. @atom:TraPPE/CH2 0.0  0.419372  0.000  0.645776
-    $atom:C4 $mol:. @atom:TraPPE/CH3 0.0  -0.419372  0.0000 1.937329
+    $atom:c1 $mol:. @atom:TraPPE/CH3 0.0  0.419372  0.000 -1.937329
+    $atom:c2 $mol:. @atom:TraPPE/CH2 0.0  -0.419372  0.000 -0.645776
+    $atom:c3 $mol:. @atom:TraPPE/CH2 0.0  0.419372  0.000  0.645776
+    $atom:c4 $mol:. @atom:TraPPE/CH3 0.0  -0.419372  0.0000 1.937329
   }
   write("Data Bonds"){
-    $bond:b1 @bond:TraPPE/CC $atom:C1 $atom:C2
-    $bond:b2 @bond:TraPPE/CC $atom:C2 $atom:C3
-    $bond:b3 @bond:TraPPE/CC $atom:C3 $atom:C4
+    $bond:b1 @bond:TraPPE/CC $atom:c1 $atom:c2
+    $bond:b2 @bond:TraPPE/CC $atom:c2 $atom:c3
+    $bond:b3 @bond:TraPPE/CC $atom:c3 $atom:c4
   }
 }
 \end{verbatim}
@@ -3527,15 +3518,15 @@ import "trappe1998.lt"
 TraPPE {
   Butane {
     write("Data Atoms"){
-      $atom:C1 $mol:. @atom:../CH3 0.0  0.419372  0.000 -1.937329
-      $atom:C2 $mol:. @atom:../CH2 0.0  -0.419372  0.000 -0.645776
-      $atom:C3 $mol:. @atom:../CH2 0.0  0.419372  0.000  0.645776
-      $atom:C4 $mol:. @atom:../CH3 0.0  -0.419372  0.0000 1.937329
+      $atom:c1 $mol:. @atom:../CH3 0.0  0.419372  0.000 -1.937329
+      $atom:c2 $mol:. @atom:../CH2 0.0  -0.419372  0.000 -0.645776
+      $atom:c3 $mol:. @atom:../CH2 0.0  0.419372  0.000  0.645776
+      $atom:c4 $mol:. @atom:../CH3 0.0  -0.419372  0.0000 1.937329
     }
     write("Data Bonds"){
-      $bond:b1 @bond:../CC $atom:C1 $atom:C2
-      $bond:b2 @bond:../CC $atom:C2 $atom:C3
-      $bond:b3 @bond:../CC $atom:C3 $atom:C4
+      $bond:b1 @bond:../CC $atom:c1 $atom:c2
+      $bond:b2 @bond:../CC $atom:c2 $atom:c3
+      $bond:b3 @bond:../CC $atom:c3 $atom:c4
     }
   }
 }
@@ -3670,8 +3661,8 @@ import "trappe_butane.lt"
 using namespace TraPPE
 butane = new Butane
 write("Data Atoms") {
-  $atom:C1 $mol @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
-  $atom:C2 $mol @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
+  $atom:c1 $mol @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
+  $atom:c2 $mol @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
 }
 \end{verbatim}
 If, for example, you want to leave out the ``TraPPE/'' prefix 
@@ -3687,15 +3678,15 @@ import "trappe1998.lt"
 
 Butane inherits TraPPE {
   write("Data Atoms"){
-    $atom:C1 $mol:. @atom:CH3 0.0  0.419372  0.000 -1.937329
-    $atom:C2 $mol:. @atom:CH2 0.0  -0.419372  0.000 -0.645776
-    $atom:C3 $mol:. @atom:CH2 0.0  0.419372  0.000  0.645776
-    $atom:C4 $mol:. @atom:CH3 0.0  -0.419372  0.0000 1.937329
+    $atom:c1 $mol:. @atom:CH3 0.0  0.419372  0.000 -1.937329
+    $atom:c2 $mol:. @atom:CH2 0.0  -0.419372  0.000 -0.645776
+    $atom:c3 $mol:. @atom:CH2 0.0  0.419372  0.000  0.645776
+    $atom:c4 $mol:. @atom:CH3 0.0  -0.419372  0.0000 1.937329
   }
   write("Data Bonds"){
-    $bond:b1 @bond:CC $atom:C1 $atom:C2
-    $bond:b2 @bond:CC $atom:C2 $atom:C3
-    $bond:b3 @bond:CC $atom:C3 $atom:C4
+    $bond:b1 @bond:CC $atom:c1 $atom:c2
+    $bond:b2 @bond:CC $atom:c2 $atom:c3
+    $bond:b3 @bond:CC $atom:c3 $atom:c4
   }
 }
 \end{verbatim}
@@ -3782,17 +3773,17 @@ A {
   %  # In the CGLipid model, the tail is represented by 
   %  # a single linear chain.
   %  write("Data Atoms"){
-  %    $atom:C1 $mol:. @atom:C 0.0  0.419372  0.00000 -1.481799
-  %    $atom:C2 $mol:. @atom:C 0.0  -0.419372 0.00000 -2.773352
-  %    $atom:C3 $mol:. @atom:C 0.0  0.419372  0.00000 -4.064904
-  %    $atom:C4 $mol:. @atom:C 0.0  -0.419372 0.00000 -5.356457
-  %    $atom:C5 $mol:. @atom:C 0.0  0.419372  0.00000 -6.648010
+  %    $atom:c1 $mol:. @atom:C 0.0  0.419372  0.00000 -1.481799
+  %    $atom:c2 $mol:. @atom:C 0.0  -0.419372 0.00000 -2.773352
+  %    $atom:c3 $mol:. @atom:C 0.0  0.419372  0.00000 -4.064904
+  %    $atom:c4 $mol:. @atom:C 0.0  -0.419372 0.00000 -5.356457
+  %    $atom:c5 $mol:. @atom:C 0.0  0.419372  0.00000 -6.648010
   %  }
   %  write("Data Bonds"){
-  %    $bond:C12 @bond:tail $atom:C1 $atom:C2
-  %    $bond:C23 @bond:tail $atom:C2 $atom:C3
-  %    $bond:C34 @bond:tail $atom:C3 $atom:C4
-  %    $bond:C45 @bond:tail $atom:C4 $atom:C5
+  %    $bond:c12 @bond:Tail $atom:c1 $atom:c2
+  %    $bond:c23 @bond:Tail $atom:c2 $atom:c3
+  %    $bond:c34 @bond:Tail $atom:c3 $atom:c4
+  %    $bond:c45 @bond:Tail $atom:c4 $atom:c5
   %  }
   %  write("Data Angles"){
   %  :
@@ -3810,7 +3801,7 @@ A {
    % }
    % # Now connect the head to the tail
    % write("Data Bonds"){
-  %    $bond:head-tail @bond:head-tail $atom:head $atom:C1
+  %    $bond:head-tail @bond:Head-Tail $atom:head $atom:c1
   %  }
   %  :
   %}
@@ -3823,7 +3814,7 @@ A {
   %    @atom:. 122.0
   %  }
   %  write("Data Bonds"){
-  %    $bond:head-tail @bond:head-tail $atom:head $atom:C1
+  %    $bond:head-tail @bond:Head-Tail $atom:head $atom:c1
   %  }
   %  :
   %}
@@ -4032,9 +4023,9 @@ The syntax is best explained by example:
 
 \begin{verbatim}
 write("Data Angles By Type") {
-  @angle:XCXgeneral      *      *C*      *
-  @angle:CCCgeneral   @atom:C @atom:C @atom:C    *         *
-  @angle:CCCsaturated @atom:C @atom:C @atom:C @bond:sp3 @bond:sp3
+  @angle:XCXgeneral       *      *C*      *
+  @angle:CCCgeneral    @atom:C @atom:C @atom:C    *         *
+  @angle:CCCsaturated  @atom:C @atom:C @atom:C @bond:SAT @bond:SAT
 }
 \end{verbatim}
 
@@ -4060,7 +4051,7 @@ regardless of the type of bonds connecting them.
 The third line will generate a 3-body interaction of
 type \mbox{``@angle:CCCsaturated''}
 between any 3 atoms of type \mbox{``@atom:C''},
-if they are connected by bonds of type \mbox{``@bond:sp3''}.
+if they are connected by bonds of type \mbox{``@bond:SAT''}.
 %\end{list}
 
 Note: The 2nd and 3rd lines in this example will generate new interactions 
@@ -4167,7 +4158,7 @@ Moltemplate will assign all of these variables to new numbers
 when you run it on your LT file later (so the names and numbers do not matter).
 Still, you may wish to use a text-editor (or \textit{sed}) to replace all
 instances of ``@atom:type7'' with something more meaningful, like ``@atom:CG1'',
-and ``@bond:type3'' with ``@bond:C=C''.
+and ``@bond:Type3'' with ``@bond:C=C''.
 
 
 \subsection{Examples}
@@ -4784,8 +4775,8 @@ is defined within the scope of each instance of the ``Protein'' molecule:
 \begin{verbatim}
 Residue {
   write("Data Atoms") {
-    $atom:CA @atom:CA $resid:.  0.0  0.0 0.0 0.0
-    $atom:CB @atom:CB $resid:.  0.0  1.53 0.0 0.0
+    $atom:ca @atom:CA $resid:.  0.0  0.0 0.0 0.0
+    $atom:cb @atom:CB $resid:.  0.0  1.53 0.0 0.0
   }
 }
 
