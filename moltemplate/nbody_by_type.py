@@ -367,13 +367,10 @@ def GenInteractions_files(lines_data,
                                  suffix,
                                  report_progress)
 
+    return
 
 
-
-
-
-if __name__ == "__main__":
-
+def main():
     g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
     g_date_str     = '2014-12-19'
     g_version_str  = '0.18'
@@ -662,3 +659,8 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
+
+    return
+
+if __name__ == '__main__':
+    main()

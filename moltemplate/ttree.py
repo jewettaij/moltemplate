@@ -5301,12 +5301,10 @@ def BasicUI(settings,
 
     sys.stderr.write(' done\n')
 
+    return
 
 
-
-
-if __name__ == '__main__':
-
+def main():
     """
     This is is a "main module" wrapper for invoking ttree.py
     as a stand alone program.  This program:
@@ -5380,3 +5378,8 @@ if __name__ == '__main__':
     except (ValueError, InputError) as err:
         sys.stderr.write('\n\n'+str(err)+'\n')
         sys.exit(-1)
+
+    return
+
+if __name__ == '__main__':
+    main()

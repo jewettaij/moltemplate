@@ -742,22 +742,10 @@ def WriteFrameToData(out_file,
 
         out_file.write(line+'\n')
 
+    return
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-
+def main():
     g_program_name = 'dump2data.py'
     g_date_str     = '2015-8-11'
     g_version_str  = 'v0.51'
@@ -1287,3 +1275,9 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
+
+    return
+
+
+if __name__ == '__main__':
+    main()

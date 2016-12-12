@@ -642,11 +642,10 @@ def WriteFiles(files_content, suffix='', write_to_stdout=True):
                 if filename != '':
                     out_file.close()
 
+    return
 
 
-
-if __name__ == "__main__":
-
+def main():
     """
     This is is a "main module" wrapper for invoking lttree.py
     as a stand alone program.  This program:
@@ -741,3 +740,9 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n\n'+str(err)+'\n')
         sys.exit(-1)
+
+    return
+
+
+if __name__ == '__main__':
+    main()
