@@ -7,7 +7,7 @@
 # Copyright (c) 2012, Regents of the University of California
 # All rights reserved.
 
-from ttree_lex import InputError
+from .ttree_lex import InputError
 
 
 # Users of lttree typically generate the following files:

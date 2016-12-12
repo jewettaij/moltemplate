@@ -12,8 +12,8 @@
 """
 
 import sys
-from lttree_styles import *
-from ttree_lex import ExtractCatName
+from .lttree_styles import *
+from .ttree_lex import ExtractCatName
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_postprocess.py'
 g_version_str  = '0.4'

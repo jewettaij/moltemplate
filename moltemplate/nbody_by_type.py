@@ -139,10 +139,10 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 
 
 import sys
-from extract_lammps_data import *
-from nbody_by_type_lib import GenInteractions_str
-from ttree_lex import *
-from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+from .extract_lammps_data import *
+from .nbody_by_type_lib import GenInteractions_str
+from .ttree_lex import *
+from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 import os, inspect # <- Needed to import modules in subdirectories (see below)
 
 if sys.version < '2.6':

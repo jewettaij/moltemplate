@@ -28,9 +28,9 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 import sys
-from ttree import *
-from lttree_styles import *
-from ttree_matrix_stack import *
+from .ttree import *
+from .lttree_styles import *
+from .ttree_matrix_stack import *
 
 try:
     unicode

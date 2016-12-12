@@ -16,8 +16,8 @@ and prints out the new (rendered) text to the standard-out.
 
 
 import sys
-from ttree_lex import *
-from ttree import *
+from .ttree_lex import *
+from .ttree import *
 import gc
 
 

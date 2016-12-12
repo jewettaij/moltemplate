@@ -28,8 +28,8 @@ define large systems containing this molecule.
 """
 
 import sys
-from ttree_lex import *
-from lttree_styles import *
+from .ttree_lex import *
+from .lttree_styles import *
 
 
 

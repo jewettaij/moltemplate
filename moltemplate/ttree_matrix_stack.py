@@ -6,7 +6,7 @@
 
 from collections import deque
 from array import array
-from ttree_lex import *
+from .ttree_lex import *
 #import sys
 
 def MultMat(dest, A, B):

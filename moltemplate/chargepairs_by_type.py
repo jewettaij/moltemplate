@@ -27,9 +27,9 @@ import sys
 from collections import defaultdict
 #from extract_lammps_data import *
 #from nbody_by_type_lib import GenInteractions_str
-import ttree_lex
+from . import ttree_lex
 #from ttree_lex import *
-from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 
 
 
