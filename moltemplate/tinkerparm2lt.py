@@ -35,10 +35,10 @@ doc_msg = \
 
 
 
-def SplitQuotedString(string, 
+def SplitQuotedString(string,
                       quotes='\'\"',
-                      delimiters=' \t\r\f\n', 
-                      escape='\\', 
+                      delimiters=' \t\r\f\n',
+                      escape='\\',
                       comment_char='#'):
     tokens = []
     token = ''
@@ -170,7 +170,7 @@ try:
             filename_in = argv[i+1]
             try:
                 file_in = open(filename_in, 'r')
-            except IOError: 
+            except IOError:
                 sys.stderr.write('Error: Unable to open file\n'
                                  '       \"'+filename_in+'\"\n'
                                  '       for reading.\n')
@@ -202,7 +202,7 @@ try:
                 sys.stdout.write("Error: Unable to open link:\n"+url+"\n")
                 sys.exit(1)
             del argv[i:i+2]
-        
+
         elif argv[i] in ('-help','--help','-?','--?'):
             sys.stderr.write(doc_msg)
             sys.exit(0)
@@ -307,7 +307,7 @@ try:
                 dihedrals_by_type[tokens[1],tokens[2],tokens[3],tokens[4]]=(K1,K2,K3,K4)
             else:
                 assert(False)
-            
+
         elif (len(tokens) > 7) and (tokens[0] == 'imptors'):
             k      = float(tokens[5])
             angle0 = float(tokens[6])
@@ -410,7 +410,7 @@ sys.stdout.write(ffname+" {\n\n")
 sys.stdout.write("  # Below we will use lammps \"set\" command to assign atom charges\n"
                  "  # by atom type.  http://lammps.sandia.gov/doc/set.html\n\n")
 
-sys.stdout.write("  write_once(\"In Charges\") {\n") 
+sys.stdout.write("  write_once(\"In Charges\") {\n")
 for atype in atom2mass:
     assert(atype in atom2descr)
     sys.stdout.write("    set type @atom:" + atype + " charge " + str(atom2charge[atype]) +
@@ -418,7 +418,7 @@ for atype in atom2mass:
 sys.stdout.write("  } #(end of atom partial charges)\n\n\n")
 
 
-sys.stdout.write("  write_once(\"Data Masses\") {\n") 
+sys.stdout.write("  write_once(\"Data Masses\") {\n")
 for atype in atom2mass:
     sys.stdout.write("    @atom:" + atype + " " + str(atom2mass[atype]) + "\n")
 sys.stdout.write("  } #(end of atom masses)\n\n\n")
@@ -459,11 +459,11 @@ sys.stdout.write("  # --------------- Non-Bonded interactions: -----------------
                  "  # Syntax:\n"
                  "  # pair_coeff    AtomType1    AtomType2   pair_style_name  parameters...\n\n")
 
-sys.stdout.write("  write_once(\"In Settings\") {\n") 
+sys.stdout.write("  write_once(\"In Settings\") {\n")
 for atype in atom2vdw_e:
     assert(atype in atom2vdw_s)
     assert(atype in atom2ffid)
-    
+
     sys.stdout.write("    pair_coeff " +
                      "@atom:"+atype+"_b"+atom2ffid[atype]+"_a"+atom2ffid[atype]+"_d"+atom2ffid[atype]+"_i"+atom2ffid[atype]+" "
                      "@atom:"+atype+"_b"+atom2ffid[atype]+"_a"+atom2ffid[atype]+"_d"+atom2ffid[atype]+"_i"+atom2ffid[atype]+" "+
@@ -478,7 +478,7 @@ sys.stdout.write("  # ------- Bonded Interactions: -------\n"
                  "  # Syntax:  \n"
                  "  # bond_coeff BondTypeName  BondStyle  parameters...\n\n")
 
-sys.stdout.write("  write_once(\"In Settings\") {\n") 
+sys.stdout.write("  write_once(\"In Settings\") {\n")
 for btype in bonds_by_type:
     ffid1 = btype[0] if btype[0] != "0" else "X"
     ffid2 = btype[1] if btype[1] != "0" else "X"
@@ -491,7 +491,7 @@ sys.stdout.write("  # Rules for assigning bond types by atom type:\n"
                  "  # BondTypeName       AtomType1         AtomType2\n"
                  "  #   (* = wildcard)\n\n")
 
-sys.stdout.write("  write_once(\"Data Bonds By Type\") {\n") 
+sys.stdout.write("  write_once(\"Data Bonds By Type\") {\n")
 for btype in bonds_by_type:
     ffid1 = btype[0] if btype[0] != "0" else "X"
     ffid2 = btype[1] if btype[1] != "0" else "X"
@@ -507,7 +507,7 @@ sys.stdout.write("  # ------- Angle Interactions: -------\n"
                  "  # Syntax:  \n"
                  "  # angle_coeff AngleTypeName  AngleStyle  parameters...\n\n")
 
-sys.stdout.write("  write_once(\"In Settings\") {\n") 
+sys.stdout.write("  write_once(\"In Settings\") {\n")
 for atype in angles_by_type:
     ffid1 = atype[0] if atype[0] != "0" else "X"
     ffid2 = atype[1] if atype[1] != "0" else "X"
@@ -522,7 +522,7 @@ sys.stdout.write("  # Rules for creating angle interactions according to atom ty
                  "  #   AngleTypeName     AtomType1       AtomType2          AtomType3\n"
                  "  #   (* = wildcard)\n\n")
 
-sys.stdout.write("  write_once(\"Data Angles By Type\") {\n") 
+sys.stdout.write("  write_once(\"Data Angles By Type\") {\n")
 for atype in angles_by_type:
     ffid1 = atype[0] if atype[0] != "0" else "X"
     ffid2 = atype[1] if atype[1] != "0" else "X"
@@ -537,10 +537,10 @@ sys.stdout.write("  } #(end of angles by type)\n\n\n\n\n")
 
 sys.stdout.write("  # ----------- Dihedral Interactions: ------------\n"
                  "  # "+dihedral_style_link+"\n"
-                 "  # Syntax:\n"  
+                 "  # Syntax:\n"
                  "  # dihedral_coeff DihedralTypeName  DihedralStyle  parameters...\n\n")
 
-sys.stdout.write("  write_once(\"In Settings\") {\n") 
+sys.stdout.write("  write_once(\"In Settings\") {\n")
 for dtype in dihedrals_by_type:
     ffid1 = dtype[0] if dtype[0] != "0" else "X"
     ffid2 = dtype[1] if dtype[1] != "0" else "X"
@@ -571,7 +571,7 @@ sys.stdout.write("  # Rules for creating dihedral interactions according to atom
                  "  #   DihedralTypeName     AtomType1     AtomType2     AtomType3     AtomType4\n"
                  "  #   (* = wildcard)\n\n")
 
-sys.stdout.write("  write_once(\"Data Dihedrals By Type\") {\n") 
+sys.stdout.write("  write_once(\"Data Dihedrals By Type\") {\n")
 for dtype in dihedrals_by_type:
     ffid1 = dtype[0] if dtype[0] != "0" else "X"
     ffid2 = dtype[1] if dtype[1] != "0" else "X"
@@ -588,10 +588,10 @@ sys.stdout.write("  } #(end of dihedrals by type)\n\n\n\n\n")
 
 sys.stdout.write("  # ---------- Improper Interactions: ----------\n"
                  "  # "+improper_style_link+"\n"
-                 "  # Syntax:\n"  
+                 "  # Syntax:\n"
                  "  # improper_coeff ImproperTypeName  ImproperStyle  parameters\n\n")
 
-sys.stdout.write("  write_once(\"In Settings\") {\n") 
+sys.stdout.write("  write_once(\"In Settings\") {\n")
 for itype in impropers_by_type:
     ffid1 = itype[0] if itype[0] != "0" else "X"
     ffid2 = itype[1] if itype[1] != "0" else "X"
@@ -608,7 +608,7 @@ sys.stdout.write("  # Rules for creating dihedral interactions according to atom
                  "  #   ImproperTypeName   AtomType1    AtomType2       AtomType3       AtomType4\n"
                  "  #   (* = wildcard)\n")
 
-sys.stdout.write("  write_once(\"Data Impropers By Type (opls_imp.py)\") {\n") 
+sys.stdout.write("  write_once(\"Data Impropers By Type (opls_imp.py)\") {\n")
 for itype in impropers_by_type:
     ffid1 = itype[0] if itype[0] != "0" else "X"
     ffid2 = itype[1] if itype[1] != "0" else "X"
@@ -667,4 +667,3 @@ sys.stdout.write("}  # "+ffname+"\n\n")
 
 if filename_in != "":
     file_in.close()
-    

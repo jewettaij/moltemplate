@@ -8,7 +8,7 @@ file into fragments which (it thinks) correspond to the mass, pair, bond,
 angle, dihedral, and improper section of the original .dat file.
 (However sometimes it gets this wrong and you have to split it up manually!)
 
-Then this bash script invokes the relevant python script to convert 
+Then this bash script invokes the relevant python script to convert
 each section into .LT format:
 amberparm_to_mass.py
 amberparm_to_pair.py
@@ -29,7 +29,7 @@ BEFORE YOU RUN THIS SCRIPT, BE SURE TO CHANGE THE ORDER OF THE IMPROPER DIHEDRAL
 PARAMETERS SO THAT THE "SPECIFIC" IMPROPER DIHEDRALS APPEAR LAST, AND THE
 "GENERIC" IMPROPER DIHEDRALS APPEAR FIRST.
 
-For example replace these two lines: 
+For example replace these two lines:
 
 X -o -c -o          1.1          180.          2.           JCC,7,(1986),230
 X -X -c -o          10.5         180.          2.           JCC,7,(1986),230
@@ -64,11 +64,10 @@ excerpt:
 >
 > "specific" torsions are search for first, and used if a match is found. If
 > no match is found, then a search is made to see if a "generic" (aka wild-card)
-> torsion with match. 
-> ...good luck...dac 
+> torsion with match.
+> ...good luck...dac
 
 Good luck
 
 -Andrew
 2014-4-19
-

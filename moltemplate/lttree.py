@@ -10,18 +10,18 @@
 lttree.py
 
 lttree.py is an extension of the generic ttree.py program.
-This version can understand and manipulate ttree-style templates which 
+This version can understand and manipulate ttree-style templates which
 are specialized for storing molecule-specific data for use in LAMMPS.
 
 The main difference between lttree.py and ttree.py is:
-Unlike ttree.py, lttree.py understands rigid-body movement commands like 
+Unlike ttree.py, lttree.py understands rigid-body movement commands like
 "rot()" and "move()" which allows it to reorient and move each copy
 of a molecule to a new location.  (ttree.py just ignores these commands.
 Consequently LAMMPS input file (fragments) created with ttree.py have
-invalid (overlapping) atomic coordinates and must be modified or aguemted 
+invalid (overlapping) atomic coordinates and must be modified or aguemted
 later (by loading atomic coordinates from a PDB file or an XYZ file).
-lttree.py understands the "Data Atoms" section of a LAMMPS 
-data file (in addition to the various "atom_styles" which effect it). 
+lttree.py understands the "Data Atoms" section of a LAMMPS
+data file (in addition to the various "atom_styles" which effect it).
 
 Additional LAMMPS-specific features may be added in the future.
 
@@ -47,14 +47,14 @@ class LttreeSettings(BasicUISettings):
                  user_bindings=None,
                  order_method='by_command'):
 
-        BasicUISettings.__init__(self, 
-                                 user_bindings_x, 
-                                 user_bindings, 
+        BasicUISettings.__init__(self,
+                                 user_bindings_x,
+                                 user_bindings,
                                  order_method)
 
         # The following new member data indicate which columns store
-        # LAMMPS-specific information.  
-        # The next 6 members store keep track of the different columns 
+        # LAMMPS-specific information.
+        # The next 6 members store keep track of the different columns
         # of the "Data Atoms" section of a LAMMPS data file:
         self.column_names = [] #<--A list of column names (optional)
         self.ii_coords=[]      #<--A list of triplets of column indexes storing coordinate data
@@ -79,8 +79,8 @@ def LttreeParseArgs(argv, settings):
     i = 1
     while i < len(argv):
         #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
-        if ((argv[i].lower() == '-atomstyle') or 
-            (argv[i].lower() == '-atom-style') or 
+        if ((argv[i].lower() == '-atomstyle') or
+            (argv[i].lower() == '-atom-style') or
             (argv[i].lower() == '-atom_style')):
             if i+1 >= len(argv):
                 raise InputError('Error('+g_program_name+'): The '+argv[i]+' flag should be followed by a LAMMPS\n'
@@ -97,7 +97,7 @@ def LttreeParseArgs(argv, settings):
             if i+1 >= len(argv):
                 raise InputError('Error: '+argv[i]+' flag should be followed by list of integers\n'
                                  '       corresponding to column numbers for coordinates in\n'
-                                 '       the \"'+data_atoms+'\" section of a LAMMPS data file.\n') 
+                                 '       the \"'+data_atoms+'\" section of a LAMMPS data file.\n')
             ilist = argv[i+1].split()
             if (len(ilist) % 3) != 0:
                 raise InputError('Error: '+argv[i]+' flag should be followed by list of integers.\n'
@@ -115,7 +115,7 @@ def LttreeParseArgs(argv, settings):
             if i+1 >= len(argv):
                 raise InputError('Error: '+argv[i]+' flag should be followed by list of integers\n'
                                  '       corresponding to column numbers for direction vectors in\n'
-                                 '       the \"'+data_atoms+'\" section of a LAMMPS data file.\n') 
+                                 '       the \"'+data_atoms+'\" section of a LAMMPS data file.\n')
             ilist = argv[i+1].split()
             if (len(ilist) % 3) != 0:
                 raise InputError('Error: '+argv[i]+' flag should be followed by list of integers.\n'
@@ -124,13 +124,13 @@ def LttreeParseArgs(argv, settings):
                                  '       (even if the simulation is in 2 dimensions)\n')
             settings.ivects = []
             for i in range(0, len(ilist)/3):
-                cols = [int(ilist[3*i])+1, 
-                        int(ilist[3*i+1])+1, 
+                cols = [int(ilist[3*i])+1,
+                        int(ilist[3*i+1])+1,
                         int(ilist[3*i+2])+1]
                 settings.ivects.append(cols)
             del(argv[i:i+2])
-        elif ((argv[i].lower() == '-iatomid') or 
-              (argv[i].lower() == '-iid') or 
+        elif ((argv[i].lower() == '-iatomid') or
+              (argv[i].lower() == '-iid') or
               (argv[i].lower() == '-iatom-id')):
             if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
                 raise InputError('Error: '+argv[i]+' flag should be followed by an integer\n'
@@ -139,8 +139,8 @@ def LttreeParseArgs(argv, settings):
                                  '       (This argument is unnecessary if you use the -atomstyle argument.)\n')
             i_atomid = int(argv[i+1])-1
             del(argv[i:i+2])
-        elif ((argv[i].lower() == '-iatomtype') or 
-              (argv[i].lower() == '-itype') or               
+        elif ((argv[i].lower() == '-iatomtype') or
+              (argv[i].lower() == '-itype') or
               (argv[i].lower() == '-iatom-type')):
             if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
                 raise InputError('Error: '+argv[i]+' flag should be followed by an integer\n'
@@ -149,10 +149,10 @@ def LttreeParseArgs(argv, settings):
                                  '       (This argument is unnecessary if you use the -atomstyle argument.)\n')
             i_atomtype = int(argv[i+1])-1
             del(argv[i:i+2])
-        elif ((argv[i].lower() == '-imolid') or 
-              (argv[i].lower() == '-imol') or 
-              (argv[i].lower() == '-imol-id') or 
-              (argv[i].lower() == '-imoleculeid') or 
+        elif ((argv[i].lower() == '-imolid') or
+              (argv[i].lower() == '-imol') or
+              (argv[i].lower() == '-imol-id') or
+              (argv[i].lower() == '-imoleculeid') or
               (argv[i].lower() == '-imolecule-id')):
             if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
                 raise InputError('Error: '+argv[i]+' flag should be followed by an integer\n'
@@ -185,7 +185,7 @@ def LttreeParseArgs(argv, settings):
         elif len(argv) == 2:
             try:
                 settings.lex = TemplateLexer(open(argv[1], 'r'), argv[1]) # Parse text from file
-            except IOError: 
+            except IOError:
                 sys.stderr.write('Error: unable to open file\n'
                                  '       \"'+argv[1]+'\"\n'
                                  '       for reading.\n')
@@ -215,7 +215,7 @@ def LttreeParseArgs(argv, settings):
         #                 '## To specify the \"'+data_atoms+'\" column format you can:      ##\n'
         #                 '##   1) Use the -atomstyle \"STYLE\"  argument         ##\n'
         #                 '##      where \"STYLE\" is a string indicating a LAMMPS ##\n'
-        #                 '##      atom_style, including hybrid styles.(Standard ##\n' 
+        #                 '##      atom_style, including hybrid styles.(Standard ##\n'
         #                 '##      atom styles defined in 2011 are supported.)   ##\n'
         #                 '##   2) Use the -atomstyle \"COL_LIST\"    argument    ##\n'
         #                 '##      where \"COL_LIST" is a quoted list of strings  ##\n'
@@ -251,8 +251,8 @@ def LttreeParseArgs(argv, settings):
 
 
 def TransformAtomText(text, matrix):
-    """ Apply transformations to the coordinates and other vector degrees 
-    of freedom stored in the \"Data Atoms\" section of a LAMMPS data file.  
+    """ Apply transformations to the coordinates and other vector degrees
+    of freedom stored in the \"Data Atoms\" section of a LAMMPS data file.
     This is the \"text\" argument.
     The \"matrix\" stores the aggregate sum of combined transformations
     to be applied.
@@ -309,8 +309,8 @@ def TransformAtomText(text, matrix):
 
 
 
-def CalcCM(text_Atoms, 
-           text_Masses=None, 
+def CalcCM(text_Atoms,
+           text_Masses=None,
            settings=None):
     types2masses = None
     # Loop through the "Masses" section: what is the mass of each atom type?
@@ -365,7 +365,7 @@ def CalcCM(text_Atoms,
                 for d in range(0,3):
                     x[d] = float(columns[cxcycz[d]])
                     tot_x[d] += x[d]
-            # Note: dipole moments and other direction vectors don't effect 
+            # Note: dipole moments and other direction vectors don't effect
             #       the center of mass. So I commented out the loop below.
             #for cxcycz in settings.ii_vects:
             #    for d in range(0,3):
@@ -386,12 +386,12 @@ def _ExecCommands(command_list,
                   matrix_stack,
                   current_scope_id=None,
                   substitute_vars=True):
-    """ 
+    """
     _ExecCommands():
-    The argument "commands" is a nested list of lists of 
+    The argument "commands" is a nested list of lists of
     "Command" data structures (defined in ttree.py).
 
-    Carry out the write() and write_once() commands (which 
+    Carry out the write() and write_once() commands (which
     write out the contents of the templates contain inside them).
     Instead of writing the files, save their contents in a string.
 
@@ -434,7 +434,7 @@ def _ExecCommands(command_list,
             # the "movecm(0,0,0)" waits until all of the coordinates have
             # been rendered, calculates the center-of-mass, and then applies
             # a translation moving the center of mass to the origin (0,0,0).
-            # We need to figure out which of these commands need to be 
+            # We need to figure out which of these commands need to be
             # postponed, and which commands can be carried out now.
             # ("now"=pushing transformation matrices onto the matrix stack).
             # UNFORTUNATELY POSTPONING SOME COMMANDS MAKES THE CODE UGLY
@@ -445,13 +445,13 @@ def _ExecCommands(command_list,
             #command.contents = '.rot(30,0,0,1).movecm(0,0,0).rot(45,1,0,0).scalecm(2.0).move(-2,1,0)'
             #  then
             #transform_list = ['rot(30,0,0,1)', 'movecm(0,0,0)', 'rot(45,1,0,0)', 'scalecm(2.0)', 'move(-2,1,0)']
-            # Note: the first command 'rot(30,0,0,1)' is carried out now. 
+            # Note: the first command 'rot(30,0,0,1)' is carried out now.
             # The remaining commands are carried out during post-processing,
             # (when processing the "ScopeEnd" command.
-            # 
+            #
             # We break up the commands into "blocks" separated by center-
             # of-mass transformations ('movecm', 'rotcm', or 'scalecm')
-            # 
+            #
             # transform_blocks = ['.rot(30,0,0,1)',
             #                     '.movecm(0,0,0).rot(45,1,0,0)',
             #                     '.scalecm(2.0).move(-2,1,0)']
@@ -506,26 +506,26 @@ def _ExecCommands(command_list,
 
             # --- Throw away lines containin references to deleted variables:---
 
-            # First: To edit the content of a template, 
+            # First: To edit the content of a template,
             #        you need to make a deep local copy of it
             tmpl_list = []
             for entry in command.tmpl_list:
                 if isinstance(entry, TextBlock):
-                    tmpl_list.append(TextBlock(entry.text, 
+                    tmpl_list.append(TextBlock(entry.text,
                                                entry.srcloc)) #, entry.srcloc_end))
                 else:
                     tmpl_list.append(entry)
 
 
-            #     Now throw away lines with deleted variables 
+            #     Now throw away lines with deleted variables
 
             DeleteLinesWithBadVars(tmpl_list)
 
             # --- Now render the text ---
-            text = Render(tmpl_list, 
+            text = Render(tmpl_list,
                           substitute_vars)
 
-            # ---- Coordinates of the atoms, must be rotated 
+            # ---- Coordinates of the atoms, must be rotated
             # and translated after rendering.
             # In addition, other vectors (dipoles, ellipsoid orientations)
             # must be processed.
@@ -541,21 +541,21 @@ def _ExecCommands(command_list,
         elif isinstance(command, ScopeBegin):
 
             if isinstance(command.node, InstanceObj):
-                if ((command.node.children != None) and 
+                if ((command.node.children != None) and
                     (len(command.node.children) > 0)):
                     matrix_stack.PushStack(command.node)
 
             # "command_list" is a long list of commands.
             # ScopeBegin and ScopeEnd are (usually) used to demarcate/enclose
-            # the commands which are issued for a single class or 
-            # class instance.  _ExecCommands() carries out the commands for 
-            # a single class/instance.  If we reach a ScopeBegin(), 
+            # the commands which are issued for a single class or
+            # class instance.  _ExecCommands() carries out the commands for
+            # a single class/instance.  If we reach a ScopeBegin(),
             # then recursively process the commands belonging to the child.
             index = _ExecCommands(command_list,
                                   index,
-                                  files_content, 
+                                  files_content,
                                   settings,
-                                  matrix_stack, 
+                                  matrix_stack,
                                   command.node,
                                   substitute_vars)
 
@@ -587,7 +587,7 @@ def _ExecCommands(command_list,
                     #(same as PopRight())
 
             if isinstance(command.node, InstanceObj):
-                if ((command.node.children != None) and 
+                if ((command.node.children != None) and
                     (len(command.node.children) > 0)):
                     matrix_stack.PopStack()
 
@@ -604,23 +604,23 @@ def _ExecCommands(command_list,
     for filename, tmpl_list in files_content.items():
         global_files_content[filename] += \
             files_content[filename]
-        
+
     return index
 
 
 
-def ExecCommands(commands, 
-                 files_content, 
-                 settings, 
+def ExecCommands(commands,
+                 files_content,
+                 settings,
                  substitute_vars=True):
 
     matrix_stack = MultiAffineStack()
 
     index = _ExecCommands(commands,
                           0,
-                          files_content, 
+                          files_content,
                           settings,
-                          matrix_stack, 
+                          matrix_stack,
                           None,
                           substitute_vars)
     assert(index == len(commands))
@@ -651,7 +651,7 @@ if __name__ == "__main__":
     This is is a "main module" wrapper for invoking lttree.py
     as a stand alone program.  This program:
 
-    1)reads a ttree file, 
+    1)reads a ttree file,
     2)constructs a tree of class definitions (g_objectdefs)
     3)constructs a tree of instantiated class objects (g_objects),
     4)automatically assigns values to the variables,
@@ -687,7 +687,7 @@ if __name__ == "__main__":
 
 
         BasicUI(settings,
-                g_objectdefs, 
+                g_objectdefs,
                 g_objects,
                 g_static_commands,
                 g_instance_commands)
@@ -702,13 +702,13 @@ if __name__ == "__main__":
 
         files_content = defaultdict(list)
 
-        ExecCommands(g_static_commands, 
-                     files_content, 
-                     settings, 
-                     False)
-        ExecCommands(g_instance_commands, 
+        ExecCommands(g_static_commands,
                      files_content,
-                     settings, 
+                     settings,
+                     False)
+        ExecCommands(g_instance_commands,
+                     files_content,
+                     settings,
                      False)
 
         # Finally: write the rendered text to actual files.
@@ -718,7 +718,7 @@ if __name__ == "__main__":
         EraseTemplateFiles(g_static_commands)
         EraseTemplateFiles(g_instance_commands)
 
-        # Write the files as templates 
+        # Write the files as templates
         # (with the original variable names present)
         WriteFiles(files_content, suffix=".template", write_to_stdout=False)
 
@@ -741,4 +741,3 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n\n'+str(err)+'\n')
         sys.exit(-1)
-

@@ -68,7 +68,7 @@ for i in range(0, len(lines_gaff)):
     # NOTE: In "gaff.dat", the central atom is the third atom (at3)
     #       so we have to take this into account when matching atom order.
     # http://archive.ambermd.org/201307/0519.html
-    
+
 
 sys.stdout.write('  } # (end of Impropers By Type)\n')
 sys.stdout.write('\n')
@@ -77,14 +77,14 @@ sys.stdout.write('\n')
 #       It's not clear if we should be using the dihedral angle between
 #       planes I-J-K and J-K-L.  As of 2014-4, improper_style cvff does this.
 #       Even if we create improper interactions with the angle defined between
-#       the wrong planes, at least the minima should be the same 
+#       the wrong planes, at least the minima should be the same
 #       (0 degrees or 180 degrees).
-#       So I'm not too worried we are getting this detail wrong long as 
-#       we generate new impropers realizing that the 3rd atom (K) is the 
+#       So I'm not too worried we are getting this detail wrong long as
+#       we generate new impropers realizing that the 3rd atom (K) is the
 #       central atom (according to AMBER conventions).
 #
 # http://structbio.vanderbilt.edu/archives/amber-archive/2007/0408.php
 #
-# Currently, we only apply improper torsional angles for atoms 
+# Currently, we only apply improper torsional angles for atoms
 # in a planar conformations. Is it clear?
-# Junmei 
+# Junmei

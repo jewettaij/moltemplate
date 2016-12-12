@@ -49,7 +49,7 @@ def LinTransform(dest, M, x):
 
 def AffineTransform(dest, M, x):
     """ This function performs an affine transformation on vector "x".
-        Multiply 3-dimensional vector "x" by first three columns of 3x4 
+        Multiply 3-dimensional vector "x" by first three columns of 3x4
         matrix M.  Add to this the final column of M.  Store result in "dest":
     dest[0] = M[0][0]*x[0] + M[0][1]*x[1] + M[0][2]*x[2]  +  M[0][3]
     dest[1] = M[1][0]*x[0] + M[1][1]*x[1] + M[1][2]*x[2]  +  M[1][3]
@@ -82,7 +82,7 @@ def AffineCompose(dest, M2, M1):
          then, affine transformation M2 is applied to (M1 x)
 
     """
-    
+
     D = len(M1)
     #assert(len(M1[0]) == D+1)
     #assert(len(M2[0]) == D+1)
@@ -186,7 +186,7 @@ class AffineStack(object):
         #  (No need to return a matrix,"self.M",after popping.
         #   The caller can directly access self.M later.)
         #return self.M
-        
+
 
     def PopRight(self):
         self.Pop()
@@ -202,7 +202,7 @@ class AffineStack(object):
                           xcm = None): # position of center of object
         """Generate affine transformation matrices from simple text commands
            (such as \"rotcm(90,0,0,1)\" and \"move(0,5.0,0)".
-            Chains of "rotcm", "movecm", "rot", and "move" commands 
+            Chains of "rotcm", "movecm", "rot", and "move" commands
             can also be strung together:
                \"rotcm(90,0,0,1).move(0,5.0,0)\"
            Commands ending in \"cm\" are carried out relative to center-of-mass
@@ -425,13 +425,13 @@ class AffineStack(object):
             # #     if i_paren_close == -1:
             # #         i_paren_close = len(transform_str)
             # #     args = transform_str[8:i_paren_close].split(',')
-            # # 
+            # #
             # #     moveCMtoOrig = [[1.0, 0.0, 0.0, -xcm[0]],
             # #                     [0.0, 1.0, 0.0, -xcm[1]],
             # #                     [0.0, 0.0, 1.0, -xcm[2]]]
             # #     AffineCompose(Mtmp, moveCMtoOrig, Mdest)
             # #     CopyMat(Mdest, Mtmp)
-            # # 
+            # #
             # #     M[0][3] = 0.0 #ScaleMat() only modifies 3x3 submatrix of M
             # #     M[1][3] = 0.0 #The remaining final column must be zeroed by hand
             # #     M[2][3] = 0.0
@@ -443,7 +443,7 @@ class AffineStack(object):
             # #         raise InputError('Error near '+ErrorLeader(src_loc.infile, src_loc.lineno)+':\n'
             # #                          '       Invalid command: \"'+transform_str+'\"\n'
             # #                          '       This command requires either 1 or 3 numerical arguments.')
-            # # 
+            # #
             # #     AffineCompose(Mtmp, M, Mdest)
             # #     CopyMat(Mdest, Mtmp)
             # #     moveCmBack = [[1.0, 0.0, 0.0, xcm[0]],
@@ -538,7 +538,7 @@ class MultiAffineStack(object):
                           which_stack=None): # position of center of object
         """Generate affine transformation matrices from simple text commands
            (such as \"rotcm(90,0,0,1)\" and \"move(0,5.0,0)".
-            Chains of "rotcm", "movecm", "rot", and "move" commands 
+            Chains of "rotcm", "movecm", "rot", and "move" commands
             can also be strung together:
                \"rotcm(90,0,0,1).move(0,5.0,0)\"
            Commands ending in \"cm\" are carried out relative to center-of-mass
@@ -689,7 +689,7 @@ def Normalize(dest, source):
     for d in range(0, len(source)):
         dest[d] = source[d] / L
 
-def RotMatXYZXYZ(dest, 
+def RotMatXYZXYZ(dest,
                  xold, yold, zold,
                  xnew, ynew, znew):
     A = [xold, yold, zold]

@@ -19,7 +19,7 @@ g_program_name    = __file__.split('/')[-1]
 #  First make a copy of the \"oplsaa.prm\" file
 #  (which can be downloaded from the TINKER web site).
 #  The lines in this file beginning with the word \"atoms\" should
-#  define the atoms which you plan to put in your simulation. All other 
+#  define the atoms which you plan to put in your simulation. All other
 #  lines beginning with the word \"atoms\" should be deleted.
 #  (Leave the other sections of this file alone.)
 #""")
@@ -75,14 +75,14 @@ for i in range(0, len(lines)):
 
 
 # As of late 2014, there appear to be 906 atom types, but we don't assume this.
-# First try to infer out how many atom types there were in the original 
+# First try to infer out how many atom types there were in the original
 # oplsaa.prm file, or at least find an upper bound on the atom-type numbers.
 # (Keep track of the maximum value of the first column in the "atom" section.)
 max_atomType = 0
 num_atomTypes = 0
 for line in lines:
    # skip over text after a # comment character
-   ic = line.find('#') 
+   ic = line.find('#')
    if ic != -1:
       line = (line[:ic]).strip()
    else:
@@ -115,7 +115,7 @@ vdw_by_type=[(0.0,0.0) for i in range(0,max_atomType+1)] # lookup epsilon & sigm
 
 
 
-#atom is declared this way so for sorting purposes.  
+#atom is declared this way so for sorting purposes.
 #atom contains the following data upon allocation
 #atom[][0]=atom_id( Important for partial charges and non_bonded interactions)
 #atom[][1]=atom_ffid( Important for stretches, bending, torsions and impropers)
@@ -160,7 +160,7 @@ improper=[]
 for line in lines:
 
    # skip over text after a # comment character
-   ic = line.find('#') 
+   ic = line.find('#')
    if ic != -1:
       line = (line[:ic]).strip()
    else:
@@ -169,7 +169,7 @@ for line in lines:
    if line.find("atom") == 0:
       line=line.split()
       atom[int(line[1])-1]=[int(line[1]),int(line[2]),float(line[-2]),
-                            0.0,0.0,0.0," ".join(line[3:-2])]    
+                            0.0,0.0,0.0," ".join(line[3:-2])]
    elif line.find("vdw") == 0:
       line=line.split()
       #vdw_temp.append([float(line[1]),float(line[2]),float(line[3])])
@@ -193,7 +193,7 @@ for line in lines:
          charge_by_type[int(line[1])] = float(line[2])
    elif line.find("imptors") == 0:
       line=line.split()
-      improper.append([int(line[1]), int(line[2]), 
+      improper.append([int(line[1]), int(line[2]),
       int(line[3]), int(line[4]), float(line[5]), float(line[6])])
 
 
@@ -237,7 +237,7 @@ for i in range(0,len(atom)):
       vdw_params = vdw_by_type[atom_type_num]
       atom[i][4] = vdw_params[0]
       atom[i][5] = vdw_params[1]
-   
+
 del(charge_by_type)
 del(vdw_by_type)
 
@@ -292,7 +292,7 @@ g.write("  } #(end of atom charges)\n\n")
 #-----------------------------------------------------------#
 
 # This part of the code creates a lookup dictionary
-# that allows you to find every type of atom by its 
+# that allows you to find every type of atom by its
 # force field id. force field id is the id number
 # relevant to bonds, angles, dihedrals, and impropers.
 # This greatly increases the speed of angle, bond, dihedral
@@ -331,7 +331,7 @@ if might_have_bonds:
         g.write("    bond_coeff @bond:{}-{} harmonic {} {}\n".format(y,z,x[2],x[3]))
         h.write("    @bond:{0}-{1} @atom:{0} @atom:{1}\n".format(y,z))
   g.write("  } #(end of bond_coeffs)\n\n")
-  h.seek(0,0)      
+  h.seek(0,0)
   g.write("  write_once(\"Data Bonds By Type\") {\n")
   for line in h.readlines():
     g.write(line)
@@ -342,7 +342,7 @@ if might_have_bonds:
 
 #-----------------------------------------------------------#
 #writing out angle coefficients and angles by type.---------#
-#-----------------------------------------------------------#  
+#-----------------------------------------------------------#
 
 # First check if the atoms in system can potentially form angle interactions
 might_have_angles = False
@@ -365,13 +365,13 @@ if might_have_angles:
            h.write("    angle_coeff @angle:{}-{}-{} harmonic {} {}\n".format(y,z,u,x[3],x[4]))
            g.write("    @angle:{0}-{1}-{2} @atom:{0} @atom:{1} @atom:{2}\n".format(y,z,u))
 
-  g.write("  } #(end of angles by type)\n\n") 
+  g.write("  } #(end of angles by type)\n\n")
   h.seek(0,0)
   g.write("  write_once(\"In Settings\" ){\n")
   for line in h.readlines():
     g.write(line)
-  g.write("  } #(end of angle_coeffs)\n\n")                    
-  del(angle)           
+  g.write("  } #(end of angle_coeffs)\n\n")
+  del(angle)
   h.close()
 
 #----------------------------------------------------------#
@@ -383,7 +383,7 @@ might_have_dihedrals = False
 for x in dihedral:
   for y in atom_lookup.get(x[0],[]):
     for z in atom_lookup.get(x[1],[]):
-      for u in atom_lookup.get(x[2],[]): 
+      for u in atom_lookup.get(x[2],[]):
         for v in atom_lookup.get(x[3],[]):
           might_have_dihedrals = True
 
@@ -394,7 +394,7 @@ if might_have_dihedrals:
   for x in dihedral:
     for y in atom_lookup.get(x[0],[]):
       for z in atom_lookup.get(x[1],[]):
-        for u in atom_lookup.get(x[2],[]): 
+        for u in atom_lookup.get(x[2],[]):
           for v in atom_lookup.get(x[3],[]):
             if x[0]!=0 and x[3]!=0:
               g.write("    @dihedral:{0}-{1}-{2}-{3} @atom:{0} @atom:{1} @atom:{2} @atom:{3}\n".format(y,z,u,v))
@@ -405,20 +405,20 @@ if might_have_dihedrals:
               h.write("    dihedral_coeff @dihedral:0-{}-{}-{} opls {} {} {} {}\n".format(z,u,v,x[4],x[5],x[6],x[7]))
             elif x[0]==0 and x[3]==0:
               g.write("    @dihedral:0-{1}-{2}-0 @atom:{0} @atom:{1} @atom:{2} @atom:{3}\n".format(y,z,u,v))
-              #h.write("    dihedral_coeff @dihedral:0-{}-{}-0 harmonic {} {} {} {}\n".format(z,u,x[4],x[5],x[6],x[7]))       
-              h.write("    dihedral_coeff @dihedral:0-{}-{}-0 opls {} {} {} {}\n".format(z,u,x[4],x[5],x[6],x[7]))       
- 
+              #h.write("    dihedral_coeff @dihedral:0-{}-{}-0 harmonic {} {} {} {}\n".format(z,u,x[4],x[5],x[6],x[7]))
+              h.write("    dihedral_coeff @dihedral:0-{}-{}-0 opls {} {} {} {}\n".format(z,u,x[4],x[5],x[6],x[7]))
+
   del(dihedral)
-  g.write("  } #(end of Dihedrals by type)\n\n")               
-  h.seek(0,0)   
-  g.write("  write_once(\"In Settings\") {\n") 
+  g.write("  } #(end of Dihedrals by type)\n\n")
+  h.seek(0,0)
+  g.write("  write_once(\"In Settings\") {\n")
   for line in h.readlines():
      g.write(line)
   g.write("  } #(end of dihedral_coeffs)\n\n")
   h.close()
 
 #-----------------------------------------------------------------------#
-#----writing out improper coefficients and impropers by type------------# 
+#----writing out improper coefficients and impropers by type------------#
 #-----------------------------------------------------------------------#
 
 # First check if the atoms in system can potentially form improper interactions
@@ -426,7 +426,7 @@ might_have_impropers = False
 for x in improper:
   for y in atom_lookup.get(x[0],[]):
     for z in atom_lookup.get(x[1],[]):
-      for u in atom_lookup.get(x[2],[]): 
+      for u in atom_lookup.get(x[2],[]):
         for v in atom_lookup.get(x[3],[]):
           might_have_impropers = True
 
@@ -436,9 +436,9 @@ if might_have_impropers:
   for x in improper:
     for y in atom_lookup.get(x[0],[]):
       for z in atom_lookup.get(x[1],[]):
-        for u in atom_lookup.get(x[2],[]): 
+        for u in atom_lookup.get(x[2],[]):
           for v in atom_lookup.get(x[3],[]):
-            # Notation: let I,J,K,L denote the atom types ("biotypes") 
+            # Notation: let I,J,K,L denote the atom types ("biotypes")
             #  listed in the order they appear in the "oplsaa.prm" file.
             # (I think J and L are represented by "u" and "v" in the code here.)
             # It looks like the "oplsaa.prm" file distributed with tinker
@@ -453,9 +453,9 @@ if might_have_impropers:
               h.write("    improper_coeff @improper:0-0-{2}-{3} harmonic {4} {5} \n".format(y,z,u,v,x[4]/2,180))
 
 
-  g.write("  } #(end of impropers by type)\n\n") 
-  h.seek(0,0)   
-  g.write("  write_once(\"In Settings\") {\n") 
+  g.write("  } #(end of impropers by type)\n\n")
+  h.seek(0,0)
+  g.write("  write_once(\"In Settings\") {\n")
   for line in h.readlines():
     g.write(line)
   g.write("  } #(end of improp_coeffs)\n\n")
@@ -476,7 +476,7 @@ g.write("    dihedral_style hybrid opls\n")
 g.write("    improper_style hybrid harmonic\n")
 g.write(pair_style_command)
 g.write("    pair_modify mix geometric\n")
-g.write("    special_bonds lj/coul 0.0 0.0 0.5\n")    
+g.write("    special_bonds lj/coul 0.0 0.0 0.5\n")
 g.write(kspace_style)
 g.write("  } #end of init parameters\n\n")
 g.write("} # OPLSAA\n")
@@ -486,4 +486,3 @@ os.remove("temp.txt")
 
 
 sys.stderr.write("...finished.\n")
-

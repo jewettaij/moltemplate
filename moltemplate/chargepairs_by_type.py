@@ -172,11 +172,11 @@ def LookupChargePairs(chargebyatomid,
 
             chargepair = (float(tokens[2]),
                           float(tokens[3]))
-                                                     
+
             typepattern = []
 
             for typestr in tokens[:2]:
-                if ((len(typestr) >= 2) and 
+                if ((len(typestr) >= 2) and
                     (typestr[0] == '/') and (typestr[-1] == '/')):
                     regex_str = typestr[1:-1]
                     typepattern.append( re.compile(regex_str) )
@@ -235,7 +235,7 @@ def LookupChargePairs(chargebyatomid,
                          '         The first bond with this problem is between this pair of atoms:\n'
                          '            '+str(warning_unassigned_chargepairs[0])+'\n'
                          '            '+str(warning_unassigned_chargepairs[1])+'\n'
-                         '---------------------------------------------------------------------------\n')           
+                         '---------------------------------------------------------------------------\n')
 
 
 
@@ -305,8 +305,8 @@ if __name__ == "__main__":
                 section_name = "Data Bond List"
                 del(argv[i:i+2])
 
-            elif ((argv[i].lower() == '-chargepairsbytype') or 
-                  (argv[i].lower() == '-chargepairs-by-type') or 
+            elif ((argv[i].lower() == '-chargepairsbytype') or
+                  (argv[i].lower() == '-chargepairs-by-type') or
                   (argv[i].lower() == '-charge-pairs-by-type')):
                 if i+1 >= len(argv):
                     raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
@@ -317,7 +317,7 @@ if __name__ == "__main__":
                 fname_chargepairsbytype = argv[i+1]
                 del(argv[i:i+2])
 
-            elif ((argv[i].lower() == '-atom-style') or 
+            elif ((argv[i].lower() == '-atom-style') or
                 (argv[i].lower() == '-atom_style')):
                 if i+1 >= len(argv):
                     raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
@@ -351,21 +351,21 @@ if __name__ == "__main__":
                 fbonds = open(fname_bonds, 'r')
                 lines_bonds = fbonds.readlines()
                 fbonds.close()
-        except IOError: 
+        except IOError:
             pass
         try:
             if fname_bond_list != None:
                 fbond_list = open(fname_bond_list, 'r')
                 lines_bond_list = fbond_list.readlines()
                 fbond_list.close()
-        except IOError: 
+        except IOError:
             pass
         if ((len(lines_bonds) == 0) and (len(lines_bond_list) == 0)):
             sys.stderr.write('Error('+g_program_name+'): No bonds defined for this system\n'
                              '      (This error may be a bug in moltemplate.)\n')
         fchargepairsbytype = open(fname_chargepairsbytype, 'r')
         lines_atoms = fatoms.readlines()
-        
+
         lines_chargepairsbytype = fchargepairsbytype.readlines()
         fatoms.close()
         fchargepairsbytype.close()
@@ -386,4 +386,3 @@ if __name__ == "__main__":
     except (ValueError, ttree_lex.InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
-

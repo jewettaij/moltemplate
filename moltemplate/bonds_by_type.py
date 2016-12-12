@@ -48,8 +48,8 @@ def LookupBondTypes(bond_types,
     LookupBondTypes() looks up bond types.
 
     Output:
-    ...It looks up the corresponding type of each bond and store it in the 
-       "bond_types" list.  (If the bond_ids were not specified by the user, 
+    ...It looks up the corresponding type of each bond and store it in the
+       "bond_types" list.  (If the bond_ids were not specified by the user,
        generate them and store them in the bond_ids list.)
 
 
@@ -63,7 +63,7 @@ def LookupBondTypes(bond_types,
     ...and a list of bond-types-as-a-function-of-atom-types
         stored in the lines_bondsbytype (from the "Data Bonds By Type" section)
 
-    Generated bond_ids (if applicable) are of the form 
+    Generated bond_ids (if applicable) are of the form
       prefix + str(number) + suffix
         (where "number" begins at bond_ids_offset+1)
 
@@ -155,7 +155,7 @@ def LookupBondTypes(bond_types,
             typepattern = []
 
             for typestr in tokens[1:]:
-                if ((len(typestr) >= 2) and 
+                if ((len(typestr) >= 2) and
                     (typestr[0] == '/') and (typestr[-1] == '/')):
                     regex_str = typestr[1:-1]
                     typepattern.append( re.compile(regex_str) )
@@ -163,7 +163,7 @@ def LookupBondTypes(bond_types,
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))
 
             typepattern_to_coefftypes.append([typepattern, coefftype])
-            
+
 
 
     assert(len(bond_ids) == len(bond_pairs))
@@ -288,7 +288,7 @@ if __name__ == "__main__":
                 fname_bondsbytype = argv[i+1]
                 del(argv[i:i+2])
 
-            elif ((argv[i].lower() == '-atom-style') or 
+            elif ((argv[i].lower() == '-atom-style') or
                 (argv[i].lower() == '-atom_style')):
                 if i+1 >= len(argv):
                     raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
@@ -367,4 +367,3 @@ if __name__ == "__main__":
     except (ValueError, ttree_lex.InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
-

@@ -11,7 +11,7 @@ lttree_check.py
 
 The original template file format supports any variable types or file names.
 However if you plan to process template files using lttree.py to create
-LAMMPS-readable input/data files, then variables and file names obey certain 
+LAMMPS-readable input/data files, then variables and file names obey certain
 naming conventions.  This code attempts to insure these conventions are obeyed
 and to make sure that necessary variables are defined.
 
@@ -63,10 +63,10 @@ g_no_check_msg = \
 
 
 def CheckCommonVarNames(prefix, descr_str, suffix, srcloc):
-    """ Check the name of variables in a lttree-file to confirm 
-        that they follow the conventions used by lttree.  
-        Almost any variable/category name is permitted, except for 
-        names which closely match those reserved by lttree. 
+    """ Check the name of variables in a lttree-file to confirm
+        that they follow the conventions used by lttree.
+        Almost any variable/category name is permitted, except for
+        names which closely match those reserved by lttree.
 
     """
 
@@ -172,7 +172,7 @@ def CheckDataFileNames(filename,
                              'You should probably use write(\"'+filename+'\") instead.\n')
 
 
-    elif ((section_name.lower() == 'mass') or 
+    elif ((section_name.lower() == 'mass') or
           (section_name.lower() == 'masses')):
         if (filename != data_masses):
             raise InputError('Probable typo in '+ErrorLeader(srcloc.infile,srcloc.lineno)+'\n\n'+
@@ -185,9 +185,9 @@ def CheckDataFileNames(filename,
                              'want to use the '+write_command+'() command with \"'+filename+'\".\n'
                              'You should probably use write_once(\"'+filename+'\") instead.\n')
 
-    elif ((section_name.lower() == 'ellipsoids') or 
-          (section_name.lower() == 'ellipsoid') or 
-          (section_name.lower() == 'elipsoids') or 
+    elif ((section_name.lower() == 'ellipsoids') or
+          (section_name.lower() == 'ellipsoid') or
+          (section_name.lower() == 'elipsoids') or
           (section_name.lower() == 'elipsoid')):
         if (filename != data_ellipsoids):
             raise InputError('Probable typo in '+ErrorLeader(srcloc.infile,srcloc.lineno)+'\n\n'+
@@ -200,7 +200,7 @@ def CheckDataFileNames(filename,
                              'want to use the '+write_command+'() command with \"'+filename+'\".\n'
                              'You should probably use write(\"'+filename+'\") instead.\n')
 
-    elif ((section_name.lower() == 'triangle') or 
+    elif ((section_name.lower() == 'triangle') or
           (section_name.lower() == 'triangles')):
         if (filename != data_triangles):
             raise InputError('Probable typo in '+ErrorLeader(srcloc.infile,srcloc.lineno)+'\n\n'+
@@ -213,7 +213,7 @@ def CheckDataFileNames(filename,
                              'want to use the '+write_command+'() command with \"'+filename+'\".\n'
                              'You should probably use write(\"'+filename+'\") instead.\n')
 
-    elif ((section_name.lower() == 'line') or 
+    elif ((section_name.lower() == 'line') or
           (section_name.lower() == 'lines')):
         if (filename != data_lines):
             raise InputError('Probable typo in '+ErrorLeader(srcloc.infile,srcloc.lineno)+'\n\n'+
@@ -435,12 +435,12 @@ def CheckDataFileNames(filename,
 
 
     elif ((section_name.lower() == 'bonds by type') or
-          (section_name.lower() == 'bonds bytype') or          
+          (section_name.lower() == 'bonds bytype') or
           (section_name.lower() == 'bonds_by_type') or
           (section_name.lower() == 'bonds_bytype') or
           (section_name.lower() == 'bondsbytype') or
           (section_name.lower() == 'bond by type') or
-          (section_name.lower() == 'bond bytype') or          
+          (section_name.lower() == 'bond bytype') or
           (section_name.lower() == 'bond_by_type') or
           (section_name.lower() == 'bond_bytype') or
           (section_name.lower() == 'bondbytype')):
@@ -458,12 +458,12 @@ def CheckDataFileNames(filename,
 
 
     elif ((section_name.lower() == 'angles by type') or
-          (section_name.lower() == 'angles bytype') or          
+          (section_name.lower() == 'angles bytype') or
           (section_name.lower() == 'angles_by_type') or
           (section_name.lower() == 'angles_bytype') or
           (section_name.lower() == 'anglesbytype') or
           (section_name.lower() == 'angle by type') or
-          (section_name.lower() == 'angle bytype') or          
+          (section_name.lower() == 'angle bytype') or
           (section_name.lower() == 'angle_by_type') or
           (section_name.lower() == 'angle_bytype') or
           (section_name.lower() == 'anglebytype')):
@@ -479,12 +479,12 @@ def CheckDataFileNames(filename,
                              'You should probably use write_once(\"'+filename+'\") instead.\n')
 
     elif ((section_name.lower() == 'dihedrals by type') or
-          (section_name.lower() == 'dihedrals bytype') or          
+          (section_name.lower() == 'dihedrals bytype') or
           (section_name.lower() == 'dihedrals_by_type') or
           (section_name.lower() == 'dihedrals_bytype') or
           (section_name.lower() == 'dihedralsbytype') or
           (section_name.lower() == 'dihedral by type') or
-          (section_name.lower() == 'dihedral bytype') or          
+          (section_name.lower() == 'dihedral bytype') or
           (section_name.lower() == 'dihedral_by_type') or
           (section_name.lower() == 'dihedral_bytype') or
           (section_name.lower() == 'dihedralbytype')):
@@ -500,12 +500,12 @@ def CheckDataFileNames(filename,
                              'You should probably use write_once(\"'+filename+'\") instead.\n')
 
     elif ((section_name.lower() == 'impropers by type') or
-          (section_name.lower() == 'impropers bytype') or          
+          (section_name.lower() == 'impropers bytype') or
           (section_name.lower() == 'impropers_by_type') or
           (section_name.lower() == 'impropers_bytype') or
           (section_name.lower() == 'impropersbytype') or
           (section_name.lower() == 'improper by type') or
-          (section_name.lower() == 'improper bytype') or          
+          (section_name.lower() == 'improper bytype') or
           (section_name.lower() == 'improper_by_type') or
           (section_name.lower() == 'improper_bytype') or
           (section_name.lower() == 'improperbytype')):
@@ -624,12 +624,12 @@ def CheckCommonFileNames(filename,
                          srcloc,
                          write_command,
                          filenames_found):
-    """ 
-    Check the write() or write_once() statements in a 
-    lttree-file to make sure that the files being written 
-    follow the conventions used by lttree.  
-    Almost any file name is permitted, except for file names 
-    which closely match those reserved by lttree. 
+    """
+    Check the write() or write_once() statements in a
+    lttree-file to make sure that the files being written
+    follow the conventions used by lttree.
+    Almost any file name is permitted, except for file names
+    which closely match those reserved by lttree.
 
     """
 
@@ -729,7 +729,7 @@ def CheckCommonFileNames(filename,
 def CheckSyntaxCheap(lex):
 
     """ Parse() builds a static tree of StaticObjs by parsing text file.
-    -The "lex" argument is afile or input stream which has been converted 
+    -The "lex" argument is afile or input stream which has been converted
      to a "TemplateLexer" object (similar to the python's built-in shlex lexer).
     """
 
@@ -755,7 +755,7 @@ def CheckSyntaxCheap(lex):
 
             #print('Parse():     open_paren=\"'+open_paren+'\"')
 
-            if open_paren=='{': 
+            if open_paren=='{':
                 # ..then the user neglected to specify the "filename" file-name
                 # argument.  In that case, supply the default, ''.
                 # (which is shorthand for the standard out in this case)
@@ -774,7 +774,7 @@ def CheckSyntaxCheap(lex):
                 open_curly  = lex.get_token()
                 srcloc      = lex.GetSrcLoc()
 
-            if ((open_curly != '{') or 
+            if ((open_curly != '{') or
                 ((open_paren == '')  and (close_paren != '')) or
                 ((open_paren == '(') and (close_paren != ')'))):
                 raise InputError('Error: in '+lex.error_leader()+'\n\n'
@@ -796,7 +796,7 @@ def CheckSyntaxCheap(lex):
                 if (type(entry) is VarRef):
 
                     CheckCommonVarNames(entry.prefix,
-                                        entry.descr_str, 
+                                        entry.descr_str,
                                         entry.suffix,
                                         entry.srcloc)
 
@@ -847,7 +847,7 @@ def CheckSyntaxCheap(lex):
     #                     '--------------------------------------------------\n')
     if (in_init not in fnames_found):
         sys.stderr.write('WARNING: \"'+in_init+'\" file not found\n')
-    
+
     if (in_settings not in fnames_found):
         sys.stderr.write('WARNING: \"'+in_settings+'\" file not found\n')
 
@@ -855,8 +855,8 @@ def CheckSyntaxCheap(lex):
 
 
 
-def CheckSyntaxStatic(context_node, 
-                      root_node, 
+def CheckSyntaxStatic(context_node,
+                      root_node,
                       atom_column_names,
                       data_pair_coeffs_defined,
                       data_bond_coeffs_defined,
@@ -932,9 +932,9 @@ def CheckSyntaxStatic(context_node,
                                     syntax_err = True
                                 elif ((atom_column_names[j].lower() == 'atom-type') and
                                       (not ((j < len(table[i])) and
-                                            (isinstance(table[i][j], VarRef)) and 
-                                            (table[i][j].prefix in ('@', '@{')) and 
-                                            (table[i][j].nptr.cat_name == 'atom') and 
+                                            (isinstance(table[i][j], VarRef)) and
+                                            (table[i][j].prefix in ('@', '@{')) and
+                                            (table[i][j].nptr.cat_name == 'atom') and
                                             (table[i][j].nptr.cat_node == root_node)))):
                                     syntax_err = True
 
@@ -983,9 +983,9 @@ def CheckSyntaxStatic(context_node,
                                 syntax_err = True
                             if len(table[i]) > 1:
                                 table_entry = table[i][1]
-                            if (not ((isinstance(table_entry, VarRef)) and 
-                                     (table_entry.prefix in ('@', '@{')) and 
-                                     (table_entry.nptr.cat_name == 'bond') and 
+                            if (not ((isinstance(table_entry, VarRef)) and
+                                     (table_entry.prefix in ('@', '@{')) and
+                                     (table_entry.nptr.cat_name == 'bond') and
                                      (table_entry.nptr.cat_node == root_node))):
                                 syntax_err = True
                             if len(table[i]) > 2:
@@ -1082,9 +1082,9 @@ def CheckSyntaxStatic(context_node,
                                 syntax_err = True
                             if len(table[i]) > 1:
                                 table_entry = table[i][1]
-                            if (not ((isinstance(table_entry, VarRef)) and 
-                                     (table_entry.prefix in ('@', '@{')) and 
-                                     (table_entry.nptr.cat_name == 'angle') and 
+                            if (not ((isinstance(table_entry, VarRef)) and
+                                     (table_entry.prefix in ('@', '@{')) and
+                                     (table_entry.nptr.cat_name == 'angle') and
                                      (table_entry.nptr.cat_node == root_node))):
                                 syntax_err = True
                             if len(table[i]) > 2:
@@ -1140,9 +1140,9 @@ def CheckSyntaxStatic(context_node,
                                 syntax_err = True
                             if len(table[i]) > 1:
                                 table_entry = table[i][1]
-                            if (not ((isinstance(table_entry, VarRef)) and 
-                                     (table_entry.prefix in ('@', '@{')) and 
-                                     (table_entry.nptr.cat_name == 'dihedral') and 
+                            if (not ((isinstance(table_entry, VarRef)) and
+                                     (table_entry.prefix in ('@', '@{')) and
+                                     (table_entry.nptr.cat_name == 'dihedral') and
                                      (table_entry.nptr.cat_node == root_node))):
                                 syntax_err = True
                             if len(table[i]) > 2:
@@ -1204,9 +1204,9 @@ def CheckSyntaxStatic(context_node,
                                 syntax_err = True
                             if len(table[i]) > 1:
                                 table_entry = table[i][1]
-                            if (not ((isinstance(table_entry, VarRef)) and 
-                                     (table_entry.prefix in ('@', '@{')) and 
-                                     (table_entry.nptr.cat_name == 'improper') and 
+                            if (not ((isinstance(table_entry, VarRef)) and
+                                     (table_entry.prefix in ('@', '@{')) and
+                                     (table_entry.nptr.cat_name == 'improper') and
                                      (table_entry.nptr.cat_node == root_node))):
                                 syntax_err = True
                             if len(table[i]) > 2:
@@ -1324,7 +1324,7 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not (isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'bond') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1359,7 +1359,7 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not (isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'angle') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1394,7 +1394,7 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not (isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'dihedral') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1429,7 +1429,7 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not (isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'improper') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1465,7 +1465,7 @@ def CheckSyntaxStatic(context_node,
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not ((len(table[i]) > 0) and
                                isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'atom') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1497,7 +1497,7 @@ def CheckSyntaxStatic(context_node,
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not ((len(table[i]) >= 3) and
                                isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'bond') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1525,7 +1525,7 @@ def CheckSyntaxStatic(context_node,
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not ((len(table[i]) >= 4) and
                                isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'angle') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1553,7 +1553,7 @@ def CheckSyntaxStatic(context_node,
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not ((len(table[i]) >= 5) and
                                isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'dihedral') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1581,7 +1581,7 @@ def CheckSyntaxStatic(context_node,
                         pass #Ignore comment lines (postprocessing removes them)
                     elif (not ((len(table[i]) >= 5) and
                                isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and 
+                               (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'improper') and
                                (table[i][0].nptr.cat_node == root_node))):
                         raise InputError('----------------------------------------------------\n'+
@@ -1598,7 +1598,7 @@ def CheckSyntaxStatic(context_node,
     # Recursively invoke AssignVarPtrs() on all (non-leaf) child nodes:
     for child in context_node.children.values():
         CheckSyntaxStatic(child,
-                          root_node, 
+                          root_node,
                           atom_column_names,
                           data_pair_coeffs_defined,
                           data_bond_coeffs_defined,
@@ -1625,14 +1625,14 @@ def CheckInFileSyntax(tmpl_list,
                       improper_coeffs_defined):
 
     table = TableFromTemplate(tmpl_list,
-                              [[' ','\t','\r'], '\n'], 
+                              [[' ','\t','\r'], '\n'],
                               [True, False])
 
     for i in range(0, len(table)):
         assert(hasattr(table[i], '__len__'))
 
         if len(table[i]) > 0:
-            if ((isinstance(table[i][0], TextBlock)) and 
+            if ((isinstance(table[i][0], TextBlock)) and
                 (table[i][0].text in set(['bond_coeff',
                                           'angle_coeff',
                                           'dihedral_coeff',
@@ -1674,7 +1674,7 @@ def CheckInFileSyntax(tmpl_list,
 
 
 
-            if ((isinstance(table[i][0], TextBlock)) and 
+            if ((isinstance(table[i][0], TextBlock)) and
                 ((table[i][0].text.lower() == 'bondcoeff') or
                  (table[i][0].text.lower() == 'bond_coeff'))):
                 if table[i][0].text != 'bond_coeff':
@@ -1691,8 +1691,8 @@ def CheckInFileSyntax(tmpl_list,
                     (table[i][1].text == '*')):
                     pass # we dealt with this case earlier
                 elif (not ((len(table[i]) > 1) and
-                         (isinstance(table[i][1], VarRef)) and 
-                         (table[i][1].prefix in ('@', '@{')) and 
+                         (isinstance(table[i][1], VarRef)) and
+                         (table[i][1].prefix in ('@', '@{')) and
                          (table[i][1].nptr.cat_name == 'bond') and
                          (table[i][1].nptr.cat_node == root_node))):
                     raise InputError('----------------------------------------------------\n'+
@@ -1708,7 +1708,7 @@ def CheckInFileSyntax(tmpl_list,
                     bond_coeffs_defined.add(table[i][1].binding)
 
 
-            if ((isinstance(table[i][0], TextBlock)) and 
+            if ((isinstance(table[i][0], TextBlock)) and
                 ((table[i][0].text.lower() == 'anglecoeff') or
                  (table[i][0].text.lower() == 'angle_coeff'))):
                 if table[i][0].text != 'angle_coeff':
@@ -1725,8 +1725,8 @@ def CheckInFileSyntax(tmpl_list,
                     (table[i][1].text == '*')):
                     pass # we dealt with this case earlier
                 elif (not ((len(table[i]) > 1) and
-                         (isinstance(table[i][1], VarRef)) and 
-                         (table[i][1].prefix in ('@', '@{')) and 
+                         (isinstance(table[i][1], VarRef)) and
+                         (table[i][1].prefix in ('@', '@{')) and
                          (table[i][1].nptr.cat_name == 'angle') and
                          (table[i][1].nptr.cat_node == root_node))):
                     raise InputError('----------------------------------------------------\n'+
@@ -1742,7 +1742,7 @@ def CheckInFileSyntax(tmpl_list,
                     angle_coeffs_defined.add(table[i][1].binding)
 
 
-            if ((isinstance(table[i][0], TextBlock)) and 
+            if ((isinstance(table[i][0], TextBlock)) and
                 ((table[i][0].text.lower() == 'dihedralcoeff') or
                  (table[i][0].text.lower() == 'dihedral_coeff'))):
                 if table[i][0].text != 'dihedral_coeff':
@@ -1759,8 +1759,8 @@ def CheckInFileSyntax(tmpl_list,
                     (table[i][1].text == '*')):
                     pass # we dealt with this case earlier
                 elif (not ((len(table[i]) > 1) and
-                         (isinstance(table[i][1], VarRef)) and 
-                         (table[i][1].prefix in ('@', '@{')) and 
+                         (isinstance(table[i][1], VarRef)) and
+                         (table[i][1].prefix in ('@', '@{')) and
                          (table[i][1].nptr.cat_name == 'dihedral') and
                          (table[i][1].nptr.cat_node == root_node))):
                     raise InputError('----------------------------------------------------\n'+
@@ -1776,7 +1776,7 @@ def CheckInFileSyntax(tmpl_list,
                     dihedral_coeffs_defined.add(table[i][1].binding)
 
 
-            if ((isinstance(table[i][0], TextBlock)) and 
+            if ((isinstance(table[i][0], TextBlock)) and
                 ((table[i][0].text.lower() == 'impropercoeff') or
                  (table[i][0].text.lower() == 'improper_coeff'))):
                 if table[i][0].text != 'improper_coeff':
@@ -1793,8 +1793,8 @@ def CheckInFileSyntax(tmpl_list,
                     (table[i][1].text == '*')):
                     pass # we dealt with this case earlier
                 elif (not ((len(table[i]) > 1) and
-                         (isinstance(table[i][1], VarRef)) and 
-                         (table[i][1].prefix in ('@', '@{')) and 
+                         (isinstance(table[i][1], VarRef)) and
+                         (table[i][1].prefix in ('@', '@{')) and
                          (table[i][1].nptr.cat_name == 'improper') and
                          (table[i][1].nptr.cat_node == root_node))):
                     raise InputError('----------------------------------------------------\n'+
@@ -1810,7 +1810,7 @@ def CheckInFileSyntax(tmpl_list,
                     improper_coeffs_defined.add(table[i][1].binding)
 
 
-            elif ((isinstance(table[i][0], TextBlock)) and 
+            elif ((isinstance(table[i][0], TextBlock)) and
                   ((table[i][0].text.lower() == 'paircoeff') or
                    (table[i][0].text.lower() == 'pair_coeff'))):
                 if table[i][0].text != 'pair_coeff':
@@ -1875,12 +1875,12 @@ def CheckInFileSyntax(tmpl_list,
                     pass # we dealt with this case earlier
 
                 elif (not ((len(table[i]) > 2) and
-                           (isinstance(table[i][1], VarRef)) and 
-                           (table[i][1].prefix in ('@', '@{')) and 
+                           (isinstance(table[i][1], VarRef)) and
+                           (table[i][1].prefix in ('@', '@{')) and
                            (table[i][1].nptr.cat_name == 'atom') and
                            (table[i][1].nptr.cat_node == root_node) and
-                           (isinstance(table[i][2], VarRef)) and 
-                           (table[i][2].prefix in ('@', '@{')) and 
+                           (isinstance(table[i][2], VarRef)) and
+                           (table[i][2].prefix in ('@', '@{')) and
                            (table[i][2].nptr.cat_name == 'atom') and
                            (table[i][2].nptr.cat_node == root_node))):
                     raise InputError('----------------------------------------------------\n'+
@@ -1899,7 +1899,7 @@ def CheckInFileSyntax(tmpl_list,
 
 
 def LttreeCheckParseArgs(argv, settings):
-                 
+
     LttreeParseArgs(argv, settings)
 
     if __name__ == "__main__":
@@ -1913,9 +1913,9 @@ def LttreeCheckParseArgs(argv, settings):
         elif len(argv) == 2:
             settings.infile = argv[1]
             try:
-                settings.lex = TemplateLexer(open(settings.infile, 'r'), 
+                settings.lex = TemplateLexer(open(settings.infile, 'r'),
                                              settings.infile) # Parse text from file
-            except IOError: 
+            except IOError:
                 sys.stderr.write('Error: unable to open file\n'
                                  '       \"'+settings.infile+'\"\n'
                                  '       for reading.\n')
@@ -1966,7 +1966,7 @@ if __name__ == "__main__":
         # This time parse it using StaticObj.ReadTemplate().
         # (This will allow us to check for deeper problems.)
         del settings.lex
-        settings.lex = TemplateLexer(open(settings.infile, 'r'), 
+        settings.lex = TemplateLexer(open(settings.infile, 'r'),
                                      settings.infile)
         static_tree_root = StaticObj('', None) # The root of the static tree
                                                # has name '' (equivalent to '/')
@@ -2002,7 +2002,7 @@ if __name__ == "__main__":
 
         # Now check the static syntax
         #  Here we check the contents of the the "write_once()" commands:
-        CheckSyntaxStatic(static_tree_root, 
+        CheckSyntaxStatic(static_tree_root,
                           static_tree_root,
                           settings.column_names,
                           data_pair_coeffs_defined,
@@ -2017,7 +2017,7 @@ if __name__ == "__main__":
                           in_improper_coeffs_defined,
                           search_instance_commands=False)
         #  Here we check the contents of the the "write()" commands:
-        CheckSyntaxStatic(static_tree_root, 
+        CheckSyntaxStatic(static_tree_root,
                           static_tree_root,
                           settings.column_names,
                           data_pair_coeffs_defined,
@@ -2035,7 +2035,7 @@ if __name__ == "__main__":
 
         if 'bond' in static_tree_root.categories:
 
-            if ((len(data_bond_coeffs_defined) > 0) and 
+            if ((len(data_bond_coeffs_defined) > 0) and
                 (len(in_bond_coeffs_defined) > 0)):
                 raise InputError('---------------------------------------------------------------------\n'+
                                  '     Syntax error: You can EITHER use \"bond_coeff\" commands\n'+
@@ -2070,7 +2070,7 @@ if __name__ == "__main__":
 
         if 'angle' in static_tree_root.categories:
 
-            if ((len(data_angle_coeffs_defined) > 0) and 
+            if ((len(data_angle_coeffs_defined) > 0) and
                 (len(in_angle_coeffs_defined) > 0)):
                 raise InputError('---------------------------------------------------------------------\n'+
                                  '     Syntax error: You can EITHER use \"angle_coeff\" commands\n'+
@@ -2105,7 +2105,7 @@ if __name__ == "__main__":
 
         if 'dihedral' in static_tree_root.categories:
 
-            if ((len(data_dihedral_coeffs_defined) > 0) and 
+            if ((len(data_dihedral_coeffs_defined) > 0) and
                 (len(in_dihedral_coeffs_defined) > 0)):
                 raise InputError('---------------------------------------------------------------------\n'+
                                  '     Syntax error: You can EITHER use \"dihedral_coeff\" commands\n'+
@@ -2139,7 +2139,7 @@ if __name__ == "__main__":
 
         if 'improper' in static_tree_root.categories:
 
-            if ((len(data_improper_coeffs_defined) > 0) and 
+            if ((len(data_improper_coeffs_defined) > 0) and
                 (len(in_improper_coeffs_defined) > 0)):
                 raise InputError('---------------------------------------------------------------------\n'+
                                  '     Syntax error: You can EITHER use \"improper_coeff\" commands\n'+
@@ -2173,7 +2173,7 @@ if __name__ == "__main__":
 
         if 'atom' in static_tree_root.categories:
 
-            if ((len(data_pair_coeffs_defined) > 0) and 
+            if ((len(data_pair_coeffs_defined) > 0) and
                 (len(in_pair_coeffs_defined) > 0)):
                 raise InputError('---------------------------------------------------------------------\n'+
                                  '     Syntax error: You can EITHER use \"pair_coeff\" commands\n'+
@@ -2192,8 +2192,8 @@ if __name__ == "__main__":
             atom_bindings = static_tree_root.categories['atom'].bindings
             for nd,atom_binding in atom_bindings.items():
                 if not nd.IsDeleted():
-                    if ((not ((atom_binding,atom_binding) 
-                              in 
+                    if ((not ((atom_binding,atom_binding)
+                              in
                               pair_coeffs_defined)) and
                         (not HasWildCard(atom_binding.full_name)) and
                         (not (('*','*') in pair_coeffs_defined)) and
@@ -2219,4 +2219,3 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(1)
-

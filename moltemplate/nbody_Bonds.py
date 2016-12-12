@@ -2,7 +2,7 @@ from nbody_graph_search import Ugraph
 
 #    To find 2-body "bond" interactions, we would use this subgraph:
 #
-#                               
+#
 #       *---*           =>  one bond connects atoms 0 and 1
 #       0   1
 #
@@ -20,7 +20,7 @@ def canonical_order(match):
 
     """
     # match[0][0:2] contains the ID numbers for the 2 atoms in the match
-    atom0 = match[0][0]  
+    atom0 = match[0][0]
     atom1 = match[0][1]
     # match[1][0:1] contains the ID numbers for the 1 bond
     bond0 = match[1][0]

@@ -65,20 +65,20 @@ __all__ = ["TtreeShlex",
 
 
 class TtreeShlex(object):
-    """ A lexical analyzer class for simple shell-like syntaxes. 
-    TtreeShlex is a backwards-compatible version of python's standard shlex 
-    module. It has the additional member: "self.wordterminators", which 
-    overrides the "self.wordchars" member.  This enables better handling of 
-    unicode characters by allowing a much larger variety of characters to 
+    """ A lexical analyzer class for simple shell-like syntaxes.
+    TtreeShlex is a backwards-compatible version of python's standard shlex
+    module. It has the additional member: "self.wordterminators", which
+    overrides the "self.wordchars" member.  This enables better handling of
+    unicode characters by allowing a much larger variety of characters to
     appear in words or tokens parsed by TtreeShlex.
 
     """
 
     custom_path = None
 
-    def __init__(self, 
-                 instream=None, 
-                 infile=None, 
+    def __init__(self,
+                 instream=None,
+                 infile=None,
                  custom_include_path=None,
                  posix=False):
         if isinstance(instream, str):
@@ -98,8 +98,8 @@ class TtreeShlex(object):
         self.wordchars = ('abcdfeghijklmnopqrstuvwxyz'
                           'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_')
         if self.posix:
-            self.wordchars += ('ßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ'
-                               'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ')
+            self.wordchars += ('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½'
+                               'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½')
 
         self.wordterminators = set([])  #WORDTERMINATORS
         self.prev_space_terminator = '' #WORDTERMINATORS
@@ -115,13 +115,13 @@ class TtreeShlex(object):
         self.token = ''
         self.filestack = deque()
         # self.source_triggers
-        # are tokens which allow the seamless insertion of other 
+        # are tokens which allow the seamless insertion of other
         # files into the file being read.
         self.source_triggers=set(['source'])
-        self.source_triggers_x=set([]) 
+        self.source_triggers_x=set([])
         #Note: self.source_triggers_x
         #      This is a subset of self.source_triggers.
-        #      In this case file inclusion is exclusive.  
+        #      In this case file inclusion is exclusive.
         #      In other words, if one of these tokens
         #      is encountered, the file is only included
         #      if it has not been included already.
@@ -147,13 +147,13 @@ class TtreeShlex(object):
             return char not in exclude_chars                 #WORDTERMINATORS
 
     def push_raw_text(self, text):
-        """Push a block of text onto the stack popped by the ReadLine() method. 
+        """Push a block of text onto the stack popped by the ReadLine() method.
         (If multiple lines are present in the text, (which is determined by
         self.line_terminators), then the text is split into multiple lines
         and each one of them is pushed onto this stack individually.
-        The "self.lineno" counter is also adjusted, depending on the number 
+        The "self.lineno" counter is also adjusted, depending on the number
         of newline characters in "line".
-            Do not strip off the newline, or other line terminators 
+            Do not strip off the newline, or other line terminators
             at the end of the text block before using push_raw_text()!
 
         """
@@ -272,7 +272,7 @@ class TtreeShlex(object):
                     if self.debug >= 2:
                         print("TtreeShlex: I see whitespace in whitespace state")
                     if self.token or (self.posix and quoted):
-                        # Keep track of which whitespace 
+                        # Keep track of which whitespace
                         # character terminated the token.
                         self.prev_space_terminator = nextchar     #WORDTERMINATORS
                         break   # emit current token
@@ -345,7 +345,7 @@ class TtreeShlex(object):
                         print("TtreeShlex: I see whitespace in word state")
                     self.state = ' '
                     if self.token or (self.posix and quoted):
-                        # Keep track of which whitespace 
+                        # Keep track of which whitespace
                         # character terminated the token.
                         self.prev_space_terminator = nextchar     #WORDTERMINATORS
                         break   # emit current token
@@ -402,8 +402,8 @@ class TtreeShlex(object):
             newfile_full = os.path.join(os.path.dirname(self.infile), newfile)
         try:
             f = open(newfile_full, "r")
-        except IOError: 
-            # If not found, 
+        except IOError:
+            # If not found,
             err = True
             # ...then check to see if the file is in one of the
             # directories in the self.include_path list.
@@ -461,8 +461,8 @@ def split(s, comments=False, posix=True):
 
 #"""
 #  -- linelex.py --
-#linelex.py defines the LineLex class, which inherits from, and further 
-#augments the capabilities of TtreeShlex by making it easier to parse 
+#linelex.py defines the LineLex class, which inherits from, and further
+#augments the capabilities of TtreeShlex by making it easier to parse
 #individual lines one at a time.  (The original shlex's "source" inclusion
 #ability still works when reading entire lines, and lines are still counted.)
 #
@@ -503,10 +503,10 @@ class SrcLoc(object):
 
 
 
-def SplitQuotedString(string, 
+def SplitQuotedString(string,
                       quotes='\'\"',
-                      delimiters=' \t\r\f\n', 
-                      escape='\\', 
+                      delimiters=' \t\r\f\n',
+                      escape='\\',
                       comment_char='#'):
     tokens = []
     token = ''
@@ -560,8 +560,8 @@ def SplitQuotedString(string,
 
 
 def EscCharStrToChar(s_in, escape='\\'):
-    """ 
-    EscCharStrToChar() replaces any escape sequences 
+    """
+    EscCharStrToChar() replaces any escape sequences
     in a string with their 1-character equivalents.
 
     """
@@ -597,18 +597,18 @@ def EscCharStrToChar(s_in, escape='\\'):
 
 
 
-def SafelyEncodeString(in_str, 
+def SafelyEncodeString(in_str,
                        quotes='\'\"',
-                       delimiters=' \t\r\f\n', 
-                       escape='\\', 
+                       delimiters=' \t\r\f\n',
+                       escape='\\',
                        comment_char='#'):
     """
     SafelyEncodeString(in_str) scans through the input string (in_str),
-    and returns a new string in which probletic characters 
+    and returns a new string in which probletic characters
     (like newlines, tabs, quotes, etc), are replaced by their two-character
-    backslashed equivalents (like '\n', '\t', '\'', '\"', etc).  
+    backslashed equivalents (like '\n', '\t', '\'', '\"', etc).
     The escape character is the backslash by default, but it too can be
-    overridden to create custom escape sequences 
+    overridden to create custom escape sequences
     (but this does not effect the encoding for characters like '\n', '\t').
 
     """
@@ -728,11 +728,11 @@ def MatchesAll(multi_string, pattern):
 
 
 class LineLex(TtreeShlex):
-    """ This class extends the TtreeShlex module (a slightly modified 
-    version of the python 3.2.2 version of shlex).  LineLex has the 
-    ability to read one line at a time (in addition to one token at a time). 
-    (Many files and scripts must be parsed one line at a time instead of one 
-     token at a time.  In these cases, the whitespace position also matters.) 
+    """ This class extends the TtreeShlex module (a slightly modified
+    version of the python 3.2.2 version of shlex).  LineLex has the
+    ability to read one line at a time (in addition to one token at a time).
+    (Many files and scripts must be parsed one line at a time instead of one
+     token at a time.  In these cases, the whitespace position also matters.)
 
     Arguably, this class might not be necessary.
     I could get rid of this class completely.  That would be nice.  To do that
@@ -743,7 +743,7 @@ class LineLex(TtreeShlex):
     1) File inclusion happen whenever the beginning of a line/token matches one
        of the "source_triggers" (not the whole line as required by get_token()).
     2) Lines ending in a special character (by default the backslash character)
-       continue on to the next line. 
+       continue on to the next line.
     This code seems to work on our test files, but I'm sure there are bugs.
     Andrew 2012-3-25
 
@@ -771,8 +771,8 @@ class LineLex(TtreeShlex):
     def _ReadLine(self,
                   recur_level=0):
         """
-        This function retrieves a block of text, halting at a 
-        terminal character.  Escape sequences are respected.  
+        This function retrieves a block of text, halting at a
+        terminal character.  Escape sequences are respected.
         The self.lineno (newline counter) is also maintained.
 
         The main difference between Readline and get_token()
@@ -851,7 +851,7 @@ class LineLex(TtreeShlex):
                 if nextchar in self.line_terminators:
                     line_nrw = line.rstrip(self.whitespace)
                     #sys.stderr.write('line_nrw=\"'+line_nrw+'\"\n')
-                    if ((len(line_nrw) > 0) and 
+                    if ((len(line_nrw) > 0) and
                         (line_nrw[-1] in self.line_extend_chars) and
                         ((len(line_nrw) < 2) or (line_nrw[-2] not in self.escape))):
                         line = line_nrw[:-1] #delete the line_extend character
@@ -883,7 +883,7 @@ class LineLex(TtreeShlex):
         TextBlock2Lines('\nabc\nde^fg\nhi j\n', '^\n')
         returns:
         ['\n', 'abc\n', 'de^', 'fg\n', 'hi j\n']
-        
+
         """
         ls = []
         i = 0
@@ -964,7 +964,7 @@ class VarRef(object):
 
     __slots__=["prefix","descr_str","suffix","srcloc","binding","nptr"]
 
-    def __init__(self, 
+    def __init__(self,
                  prefix    = '',  # '$' or '${'
                  descr_str = '',  # <- descriptor string: "cpath/category:lpath"
                  suffix    = '',  # '}'
@@ -997,7 +997,7 @@ class VarRef(object):
 class VarNPtr(object):
     """
     Every time a variable appears in a template, it has has a "descriptor".
-    For example, consider the variable 
+    For example, consider the variable
        "$atom:CA"
     This is a string which encodes 3 pieces of information.
     1) the category name:  This is essentialy indicates the variable's type.
@@ -1010,16 +1010,16 @@ class VarNPtr(object):
                            specific.  All variables have a category node, which
                            is often not explicitly defined to by the user.
                            (Category node = the root "/", in the example above.)
-    3) the leaf node:      This is a node whose ".name" member matches the name 
+    3) the leaf node:      This is a node whose ".name" member matches the name
                            of a variable.  This node is created for this purpose
                            and it's position in the tree is a reflection of
                            that variable's intended scope.
-                              In a molecule this "name" might be the name 
-                           of a type of atom, or an atom ID, or a bond type, 
+                              In a molecule this "name" might be the name
+                           of a type of atom, or an atom ID, or a bond type,
                            which is found in a particular molecule.
                            (Leaf node would be named "CA" in the example above.)
 
-    The VarNPtr class is simply a 3-tuple which 
+    The VarNPtr class is simply a 3-tuple which
     keeps these 3 pieces of data together.
 
     """
@@ -1046,7 +1046,7 @@ class VarBinding(object):
 
     "self.value" is the data that the variable refers to (usually a string).
 
-    "self.refs" stores a list of VarRefs which mention the same variable 
+    "self.refs" stores a list of VarRefs which mention the same variable
     from the various places inside various templates in the tree.
 
     """
@@ -1076,7 +1076,7 @@ class VarBinding(object):
 
 def ExtractCatName(descr_str):
     """ When applied to a VarRef's "descr_str" member,
-    this function will extract the "catname" of it's corresponding 
+    this function will extract the "catname" of it's corresponding
     "nptr" member.  This can be useful for error reporting.
     (I use it to insure that the user is using the correct counter
      variable types at various locations in their input files.)
@@ -1097,21 +1097,21 @@ def ExtractCatName(descr_str):
             return str_before_colon
         else:
             return str_before_colon[ia+1:]
-    
 
 
-def _DeleteLineFromTemplate(tmpl_list, 
+
+def _DeleteLineFromTemplate(tmpl_list,
                             i_entry, # index into tmpl_list
                             newline_delimiter='\n'):
     """ Delete a single line from tmpl_list.
     tmpl_list is an alternating list of VarRefs and TextBlocks.
     To identify the line, the index corresponding to one of the
     entries in the tmpl_list is used. (Usually it is a VarRef)
-    The text after the preceeding newline, and the text up to the next newline 
+    The text after the preceeding newline, and the text up to the next newline
        (starting from the beginning of the current entry, if a TextBlock)
     is deleted, including any VarRef (variables) located in between.
 
-    It returns the index corresponding to the next 
+    It returns the index corresponding to the next
     entry in the list (after deletion).
 
     """
@@ -1151,11 +1151,11 @@ def _DeleteLineFromTemplate(tmpl_list,
 
 
 
-def DeleteLinesWithBadVars(tmpl_list, 
+def DeleteLinesWithBadVars(tmpl_list,
                            delete_entire_template = False,
                            newline_delimiter = '\n'):
-    """ 
-    Loop through the entries in a template, 
+    """
+    Loop through the entries in a template,
     an alternating list of TextBlocks and VarRefs (tmpl_list).
     If a VarRef points to a leaf_node which no longer exists
     (ie. no longer in the corresponding category's .bindings list).
@@ -1177,7 +1177,7 @@ def DeleteLinesWithBadVars(tmpl_list,
                     return 0
                 else:
                     i = _DeleteLineFromTemplate(tmpl_list,
-                                                i, 
+                                                i,
                                                 newline_delimiter)
             else:
                 i += 1
@@ -1204,7 +1204,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
 
     OUTPUT:
     A list of tokens.
-    Each "token" is either a TextBlock, a VarRef, 
+    Each "token" is either a TextBlock, a VarRef,
     or a (flat, 1-dimensional) list containing more than one of these objects.
     The number of "tokens" returned equals the number of times the delimiter
     is encountered in any of the TextBlocks in the "ltmpl" argument, plus one.
@@ -1222,7 +1222,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
     while i < len(ltmpl):
         entry = ltmpl[i]
         if isinstance(entry, TextBlock):
-        #if hasattr(entry, 'text'):  
+        #if hasattr(entry, 'text'):
             prev_src_loc = entry.srcloc
 
             tokens_str = entry.text.split(delim)
@@ -1250,7 +1250,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                         token_ltmpl = []
                         j += 1
                         continue
-                
+
                 new_src_loc = OSrcLoc(prev_src_loc.infile, lineno)
                 new_src_loc.order = prev_src_loc.order
 
@@ -1259,10 +1259,10 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                     # (We keep track of '\n' characters in delimiters above.)
                     if c == '\n':
                         lineno +=1
-                    
+
                 new_src_loc.lineno = lineno
 
-                text_block = TextBlock(token_str, 
+                text_block = TextBlock(token_str,
                                        new_src_loc)
 
                 prev_src_loc = new_src_loc
@@ -1292,9 +1292,9 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                                 )):
                                 # In that case, this empty token_str corresponds
                                 # to a delimiter which was located immediately
-                                # after the variable name, 
+                                # after the variable name,
                                 # AND
-                                #   -there is more text to follow, 
+                                #   -there is more text to follow,
                                 #   OR
                                 #   -we are at the end of the template.
                                 token_ltmpl.append(text_block)
@@ -1315,7 +1315,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
         elif isinstance(entry, VarRef):
         #elif hasattr(entry, 'descr_str'):
             lineno = entry.srcloc.lineno
-            if ((len(token_ltmpl) == 1) and 
+            if ((len(token_ltmpl) == 1) and
                 isinstance(token_ltmpl[0], TextBlock) and
                 (len(token_ltmpl[0].text) == 0)):
                 # special case: if the previous entry was "", then it means
@@ -1348,18 +1348,18 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
 
 def SplitTemplateMulti(ltmpl, delims, delete_blanks=False):
     """
-    Split a template "ltmpl" into a list of templates using a 
+    Split a template "ltmpl" into a list of templates using a
     single one or more delimiter strings "delim_list".
-    If multiple delimiter strings are provided, splitting 
+    If multiple delimiter strings are provided, splitting
     begins using the first delimiter string in the list.
-    Then each token in the resulting list of templates 
+    Then each token in the resulting list of templates
     is split using the next delimiter string
     and so on until we run out of delimiter strings.
 
     "ltmpl" should be an list of TextBlocks and VarRefs.
     "delims" should be a simple string (type str) or a list of strings
     "delete_blanks" is either True or False
-                    If True, then any blank entries in the resulting list of 
+                    If True, then any blank entries in the resulting list of
                     tokens (sub-templates) will be deleted.
 
     """
@@ -1399,20 +1399,20 @@ def _TableFromTemplate(d, ltmpl, delimiters, delete_blanks):
     output = SplitTemplateMulti(ltmpl, delimiters[d], delete_blanks[d])
 
     if d > 0:
-        i = 0 
+        i = 0
         while i < len(output):
             output[i] = _TableFromTemplate(d-1,
                                            output[i],
                                            delimiters,
                                            delete_blanks)
             # Delete empty LISTS?
-            if (delete_blanks[d] and 
-                hasattr(output[i], '__len__') and 
+            if (delete_blanks[d] and
+                hasattr(output[i], '__len__') and
                 (len(output[i]) == 0)):
                 del output[i]
             else:
                 i += 1
-                
+
     return output
 
 
@@ -1430,26 +1430,26 @@ def TableFromTemplate(ltmpl, delimiters, delete_blanks=True):
     the contents of this text template.
 
     delimiters
-    
+
     The user must supply a list or tuple of delimiters: one delimiter for
     each dimension in the table, with low-priority delimiters
     (such as spaces ' ') appearing first, and higher-priority delimiters
     (sich as newlines '\n') appearing later on in the list.
     This function will divide the entire "ltmpl" into an n-dimensional
-    table.  Initially the text is split into a list of text using the 
-    highest-priority delimiter.  Then each entry in the resulting list is 
+    table.  Initially the text is split into a list of text using the
+    highest-priority delimiter.  Then each entry in the resulting list is
     split into another list according to the next highest-priority delimiter.
     This continues until all of the delimiters are used up and an
     n-dimensional list-of-lists is remaining.
 
     delete_blanks
-    
+
     The optional "delete_blanks" argument can be used to indicate whether
     or not to delete blank entries in the table (which occur as a result
     of placing two delimiters next to each other).  It should be either
-    None (default), or it should be an array of booleans matching the 
-    size of the "delimiters" argument.  This allows the caller to customize 
-    the merge settings separately for each dimension (for example: to allow 
+    None (default), or it should be an array of booleans matching the
+    size of the "delimiters" argument.  This allows the caller to customize
+    the merge settings separately for each dimension (for example: to allow
     merging of whitespace within a line, without ignoring blank lines).
 
 
@@ -1458,9 +1458,9 @@ def TableFromTemplate(ltmpl, delimiters, delete_blanks=True):
     1) Multi-character delimiters ARE allowed (like '\n\n').
 
     2) If a delimiter in the "delimiters" argument is not a string
-    but is a tuple (or a list) of strings, then the text is split according 
+    but is a tuple (or a list) of strings, then the text is split according
     to any of the delimiters in that tuple/list (starting from the last entry).
-    This way, users can use this feature to split text according to multiple 
+    This way, users can use this feature to split text according to multiple
     different kinds of whitespace characters (such as ' ' and '\t'), for
     example, buy setting delimiters[0] = (' ','\t').   If, additionally,
     delete_blanks[0] == True, then this will cause this function to
@@ -1504,7 +1504,7 @@ class TemplateLexer(TtreeShlex):
     """ This class extends the standard python lexing module, shlex, adding a
     new member function (ReadTemplate()), which can read in a block of raw text,
     (halting at an (non-escaped) terminal character), and split the text into
-    alternating blocks of text and variables.  (As far as this lexer is 
+    alternating blocks of text and variables.  (As far as this lexer is
     concerned, "variables" are simply tokens preceeded by $ or @ characters,
     and surrounded by optional curly-brackets {}.)
 
@@ -1524,7 +1524,7 @@ class TemplateLexer(TtreeShlex):
         #
         # We want to allow these characters:
         #     ./$@&%^!*~`-_:;?<>[]()
-        # to appear inside the tokens that TtreeShlex.get_token() 
+        # to appear inside the tokens that TtreeShlex.get_token()
         # retrieves (TtreeShlex.get_token() is used to read class
         # names, and instance names, and variable names)
         #
@@ -1558,7 +1558,7 @@ class TemplateLexer(TtreeShlex):
                                    self.quotes + \
                                    self.escape + \
                                    self.commenters
-        #  Note: 
+        #  Note:
         # self.whitespace = ' \t\r\f\n'
         # self.quotes     = '\'"'
         # self.escape     = '\\'
@@ -1570,7 +1570,7 @@ class TemplateLexer(TtreeShlex):
 
 
         self.source_triggers=set(['include','import'])
-        self.source_triggers_x=set(['import']) 
+        self.source_triggers_x=set(['import'])
 
 
 
@@ -1589,40 +1589,40 @@ class TemplateLexer(TtreeShlex):
         and divides it into variables (tokens following a '$' or '@' character)
         and raw text.  This is similar to pythons string.Template(),
         however it reads from streams (files), not strings, and it allows use
-        of more complicated variable names with multiple variable delimiters 
+        of more complicated variable names with multiple variable delimiters
         (eg '$' and '@').
         This readline()-like member function terminates when reaching a
         user-specified terminator character character (second argument),
-        or when variable (eg: "$var"$ is encountered).  The result is 
+        or when variable (eg: "$var"$ is encountered).  The result is
         a list of variable-separated text-blocks (stored in the first
         argument).   For example, the string:
         "string with $var1 and $var2 variables.}"  contains:
-                "string with ", 
-                $var1, 
-                " and ", 
-                $var2, 
+                "string with ",
+                $var1,
+                " and ",
+                $var2,
                 " variables.}"
-        This simplifies the final process of rendering 
+        This simplifies the final process of rendering
         (substituting text into) the text blocks later on.
             Output:
         This function returns a list of (alternating) blocks of
         text, and variable names.  Each entry in the list is either:
-        1) a text block: 
+        1) a text block:
                Raw text is copied from the source, verbatim, along with
-               some additional data (filename and line numbers), to 
+               some additional data (filename and line numbers), to
                help retroactively identify where the text came from
                (in case a syntax error in the text is discovered later).
                In this case, the list entry is stored as a list
                The format (TextBlock) is similar to:
                   [text_string, ((filenameA,lineBegin), (filenameB,lineEnd))],
                where the tuples, (filenameA,lineBegin) and (filenameB,lineEnd)
-               denote the source file(s) from which the text was read, and 
+               denote the source file(s) from which the text was read, and
                line number at the beginning and ending of the text block.
-               (This information is useful for generating helpful error 
+               (This information is useful for generating helpful error
                messages.  Note that the "TtreeShlex" class allows users to
-               combine multiple files transparently into one stream using 
+               combine multiple files transparently into one stream using
                the "source" (or "sourcehook()") member.  For this reason, it
-               is possible, although unlikely, that the text-block 
+               is possible, although unlikely, that the text-block
                we are reading could span multiple different files.)
         2) a variable (for example "$var" or "${var}"):
                In this case, the list entry is stored in the "VarRef" format
@@ -1632,27 +1632,27 @@ class TemplateLexer(TtreeShlex):
                and other text enclosing the variable name (and may be empty).
 
        As an example, we consider a file named  "datafile" which
-       contains the text containing 2 text blocks and 1 variable: 
+       contains the text containing 2 text blocks and 1 variable:
                "some\n text\n before ${var}. Text after\n".
        ReadTemplate() will read this and return a list with 3 entries:
              [ ['some\n text\n before', (('datafile', 1), ('datafile', 3))],
                [['${', 'var', '}'], ('datafile', 3, 3)],
                ['Text after\n', (('datafile', 3), ('datafile', 4))] ]
 
-        Note that while parsing the text, self.lineno counter is 
+        Note that while parsing the text, self.lineno counter is
         incremented whenever a newline character is encountered.
         (Also: Unlike shlex.get_token(), this function does not
         delete commented text, or insert text from other files.)
 
             Exceptional Cases:
-        Terminator characters are ignored if they are part of a variable 
+        Terminator characters are ignored if they are part of a variable
         reference. (For example, the '}' in "${var}", is used to denote a
         bracketed variable, and does not cause ReadTemplate() to stop reading)
-           OR if they are part of a two-character escape sequence 
+           OR if they are part of a two-character escape sequence
         (for example, '}' in "\}" does not cause terminate parsing).
-        In that case, the text is considered normal text.  (However the 
+        In that case, the text is considered normal text.  (However the
         '\' character is also stripped out.  It is also stripped out if it
-        preceeds any characters in "other_esc_chars", which is 
+        preceeds any characters in "other_esc_chars", which is
         the second argument.  Otherwise it is left in the text block.)
 
         """
@@ -1661,15 +1661,15 @@ class TemplateLexer(TtreeShlex):
         # The main loop of the parser reads only one variable at time.
         # The following variables keep track of where we are in the template.
         reading_var=False # Are we currently reading in the name of a variable?
-                          
+
         prev_char_delim=False #True iff we just read a var_delim character like '$'
         escaped_state=False #True iff we just read a (non-escaped) esc character '\'
         commented_state=False #True iff we are in a region of text where vars should be ignored
-        var_paren_depth=0 # This is non-zero iff we are inside a 
+        var_paren_depth=0 # This is non-zero iff we are inside a
                           # bracketed variable's name for example: "${var}"
         var_terminators = self.whitespace + self.newline + self.var_delim + '{}'
 
-        tmpl_list = [] # List of alternating tuples of text_blocks and 
+        tmpl_list = [] # List of alternating tuples of text_blocks and
                         # variable names (see format comment above)
                         # This list will be returned to the caller.
 
@@ -1751,7 +1751,7 @@ class TemplateLexer(TtreeShlex):
                 if nextchar in self.var_open_paren:  # eg: nextchar == '{'
                     #sys.stdout.write('   ReadTemplate() readmode found {.\n')
                     if escaped_state:
-                        # In this case, the '\' char was only to prevent 
+                        # In this case, the '\' char was only to prevent
                         # interpreting '{' as a variable prefix
                         #delete_prior_escape=True # so delete the '\' character
                         del var_descr_plist[-1]
@@ -1763,7 +1763,7 @@ class TemplateLexer(TtreeShlex):
                             var_paren_depth = 1
                         # "${{var}}" is also a valid way to refer to a variable,
                         # (although strange), but "$va{r}" is not.
-                        # Parenthesis (in bracketed variable names) must 
+                        # Parenthesis (in bracketed variable names) must
                         # immediately follow the '$' character (as in "${var}")
                         elif var_paren_depth > 0:
                             var_paren_depth += 1
@@ -1771,7 +1771,7 @@ class TemplateLexer(TtreeShlex):
                 elif nextchar in self.var_close_paren:
                     #sys.stdout.write('   ReadTemplate() readmode found }.\n')
                     if escaped_state:
-                        # In this case, the '\' char was only to prevent 
+                        # In this case, the '\' char was only to prevent
                         # interpreting '}' as a variable suffix,
                         #delete_prior_escape=True  #so skip the '\' character
                         if (nextchar not in terminators):
@@ -1787,7 +1787,7 @@ class TemplateLexer(TtreeShlex):
                 elif nextchar in var_terminators:
                     #sys.stdout.write('   ReadTemplate() readmode found var_terminator \"'+nextchar+'\"\n')
                     if (escaped_state or (var_paren_depth>0)):
-                        # In this case, the '\' char was only to prevent 
+                        # In this case, the '\' char was only to prevent
                         # interpreting nextchar as a variable terminator
                         #delete_prior_escape = True # so skip the '\' character
                         del var_descr_plist[-1]
@@ -1798,7 +1798,7 @@ class TemplateLexer(TtreeShlex):
                 elif nextchar in self.var_delim:   # such as '$'
                     #sys.stdout.write('   ReadTemplate() readmode found var_delim.\n')
                     if escaped_state:
-                        # In this case, the '\' char was only to prevent 
+                        # In this case, the '\' char was only to prevent
                         # interpreting '$' as a new variable name
                         #delete_prior_escape = True # so skip the '\' character
                         del var_descr_plist[-1]
@@ -1806,12 +1806,12 @@ class TemplateLexer(TtreeShlex):
                     else:
                         prev_var_delim = True
                         # Then we are processing a new variable name
-                        terminate_var = True 
+                        terminate_var = True
                 else:
                     var_descr_plist.append(nextchar)
                     prev_char_delim = False
 
-            
+
             else: # begin else clause for "if reading_var:"
 
                 # Then we are reading a text_block
@@ -1831,7 +1831,7 @@ class TemplateLexer(TtreeShlex):
 
                 elif nextchar in self.var_delim:   # such as '$'
                     if escaped_state:
-                        # In this case, the '\' char was only to prevent 
+                        # In this case, the '\' char was only to prevent
                         # interpreting '$' as a variable prefix.
                         #delete_prior_escape=True  #so delete the '\' character
                         del text_block_plist[-1]
@@ -1868,13 +1868,13 @@ class TemplateLexer(TtreeShlex):
                 #sys.stdout.write(text_block)
 
                 #tmpl_list.append( [text_block,
-                #                   ((prev_filename, prev_lineno), 
+                #                   ((prev_filename, prev_lineno),
                 #                    (self.infile, self.lineno))] )
 
                 if simplify_output:
                     tmpl_list.append(''.join(text_block_plist))
                 else:
-                    tmpl_list.append(TextBlock(''.join(text_block_plist), 
+                    tmpl_list.append(TextBlock(''.join(text_block_plist),
                                                OSrcLoc(prev_filename, prev_lineno)))
                                                #, OSrcLoc(self.infile, self.lineno)))
                 if not done_reading:
@@ -1915,7 +1915,7 @@ class TemplateLexer(TtreeShlex):
                     #        break
                     #    i -= 1
                     i = var_descr_str.rfind('(')
-                    if (((i-6) >= 0) and 
+                    if (((i-6) >= 0) and
                         ((var_descr_str[i-6:i] == '.rjust') or
                          (var_descr_str[i-6:i] == '.ljust'))):
                         var_suffix     =''.join(var_descr_plist[i-6:])+var_suffix
@@ -1949,7 +1949,7 @@ class TemplateLexer(TtreeShlex):
                 var_suffix      = ''
                 # Special case: Variable delimiters like '$'
                 #               terminate the reading of variables,
-                #               but they also signify that a new 
+                #               but they also signify that a new
                 #               variable is being read.
                 if nextchar in self.var_delim:
                     # Then we are processing a new variable name
@@ -1966,9 +1966,9 @@ class TemplateLexer(TtreeShlex):
                     reading_var      = False
 
                 else:
-                    # Generally, we don't want to initialize the next text block 
-                    # with the empty string.  Consider that whatever character 
-                    # caused us to stop reading the previous variable and append 
+                    # Generally, we don't want to initialize the next text block
+                    # with the empty string.  Consider that whatever character
+                    # caused us to stop reading the previous variable and append
                     # it to the block of text that comes after.
                     del text_block_plist
                     text_block_plist = [nextchar]
@@ -1979,12 +1979,12 @@ class TemplateLexer(TtreeShlex):
 
             # If we reached the end of the template (and the user requests it),
             # then the terminal character can be included in the list
-            # of text_blocks to be returned to the caller.  
-            if done_reading and keep_terminal_char: 
+            # of text_blocks to be returned to the caller.
+            if done_reading and keep_terminal_char:
                 #sys.stdout.write('ReadTemplate() appending: \''+nextchar+'\'\n')
-                # Here we create a new text block which contains only the 
+                # Here we create a new text block which contains only the
                 # terminal character (nextchar).
-                #tmpl_list.append( [nextchar, 
+                #tmpl_list.append( [nextchar,
                 #                   ((self.infile, self.lineno),
                 #                    (self.infile, self.lineno))] )
                 if simplify_output:
@@ -1993,7 +1993,7 @@ class TemplateLexer(TtreeShlex):
                     tmpl_list.append(TextBlock(nextchar,
                                                OSrcLoc(self.infile, self.lineno)))
                                                #, OSrcLoc(self.infile, self.lineno)))
-                                               
+
 
             if escaped_state:
                 escaped_state = False
@@ -2021,8 +2021,8 @@ class TemplateLexer(TtreeShlex):
               ".trans(0,10.0*sin(30),10.0*cos(30))"
 
             Sometimes the caller wants to prepend some text to the beginning
-            of the expression (which may contain parenthesis).  For this 
-            reason, an optional first argument ("prepend_str") can be 
+            of the expression (which may contain parenthesis).  For this
+            reason, an optional first argument ("prepend_str") can be
             provided.  By default it is empty.
 
         """
@@ -2032,7 +2032,7 @@ class TemplateLexer(TtreeShlex):
         self.wordterminators = self.wordterminators.replace(left_paren,'').replace(right_paren,'')
 
         token = self.get_token()
-        if ((token == '') or 
+        if ((token == '') or
             (token == self.eof)):
             return prepend_str
 

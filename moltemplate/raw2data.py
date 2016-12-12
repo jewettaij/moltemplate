@@ -17,9 +17,9 @@ try:
     misc_settings.multi = False
 
     warning_strings = []
-    ParseArgs(sys.argv, 
-              misc_settings, 
-              data_settings, 
+    ParseArgs(sys.argv,
+              misc_settings,
+              data_settings,
               warning_strings)
 
     frame_coords = defaultdict(list)
@@ -93,8 +93,8 @@ try:
                          frame_velocities,
                          None,
                          None,
-                         frame_xlo_str, frame_xhi_str, 
-                         frame_ylo_str, frame_yhi_str, 
+                         frame_xlo_str, frame_xhi_str,
+                         frame_ylo_str, frame_yhi_str,
                          frame_zlo_str, frame_zhi_str,
                          frame_xy_str, frame_xz_str, frame_yz_str)
 

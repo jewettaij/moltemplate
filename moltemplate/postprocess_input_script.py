@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
 """
-   Reorder the integer arguments to the commands in a LAMMPS input 
+   Reorder the integer arguments to the commands in a LAMMPS input
    file if these arguments violate LAMMPS order requirements.
-   We have to do this because the moltemplate.sh script will automatically 
+   We have to do this because the moltemplate.sh script will automatically
    assign these integers in a way which may violate these restrictions
    and the user has little control over this.
 
    This script:
    swaps the I and J integers in    "pair_coeff I J ..." commands when I > J
-   
-   Other features may be added later   
+
+   Other features may be added later
 
 """
 
@@ -92,11 +92,11 @@ while i < len(lines_orig):
                 # as a donor, and the other as an acceptor (using the 'i','j' flags)
                 # If swapped atom types eariler, we also need to swap 'i' with 'j'.
                 #
-                # If "hbond/dreiding.." pair style is used with "hybrid" or 
+                # If "hbond/dreiding.." pair style is used with "hybrid" or
                 # "hybrid/overlay" then tokens[3] is the name of the pair style
                 # and tokens[5] is either 'i' or 'j'.
                 if len(pair_style_list) > 0:
-                    if ((pair_style_list[0] == 'hybrid') or 
+                    if ((pair_style_list[0] == 'hybrid') or
                         (pair_style_list[0] == 'hybrid/overlay')):
                         if ((len(tokens) > 5) and (tokens[5] == 'i') and (tokens[3][0:6]=='hbond/')):
                             tokens[5] = 'j'
@@ -144,4 +144,3 @@ if warn_wildcard:
                      '            the first group is <= atom types in the second group.\n'
                      '            Moltemplate does NOT do this when wildcards are used.)\n'
                      '        If you are using a many-body pair style then ignore this warning.\n')
-

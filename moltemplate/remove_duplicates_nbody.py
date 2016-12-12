@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 """
-   Get rid of lines containing duplicate bonded nbody interactions in the 
+   Get rid of lines containing duplicate bonded nbody interactions in the
    corresponding section of a LAMMPS data file (such as bonds, angles,
    dihedrals and impropers).  Duplicate lines which occur later are
    preserved and the earlier lines are erased.
-   (This program reads from sys.stdin.  This program does not parse the entire 
-    data file.  The text from the relevant section of the LAMMPS file should be 
+   (This program reads from sys.stdin.  This program does not parse the entire
+    data file.  The text from the relevant section of the LAMMPS file should be
    extracted in advance before it is sent to this program.)
 
 """

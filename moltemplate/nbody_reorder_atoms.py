@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-   Reorder the atoms in the Angles section of a data file to make sure that 
+   Reorder the atoms in the Angles section of a data file to make sure that
    atoms have a "canonical order" (for example the first atom has a lower
    id than the last atom, for angle and dihedral interactions.
    (This helps us detect potential problems like dupicate Angle interactions.)

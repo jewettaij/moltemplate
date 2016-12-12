@@ -4,8 +4,8 @@
    Get rid of lines containing duplicate copies of the same atom in the "Atoms"
    section of a LAMMPS data file.  Duplicate lines which occur later are
    preserved and the earlier lines are erased.
-   The file is read from sys.stdin.  This program does not parse the entire 
-   data file.  The text from the "Atoms" section of the LAMMPS file must 
+   The file is read from sys.stdin.  This program does not parse the entire
+   data file.  The text from the "Atoms" section of the LAMMPS file must
    be extracted in advance before it is sent to this program.)
 
 """
@@ -50,4 +50,3 @@ for line in lines:
 
 if f != None:
     f.close()
-

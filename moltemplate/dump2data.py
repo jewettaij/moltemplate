@@ -7,7 +7,7 @@ Extract dynamical degrees of freedom from a lammps DUMP file (from the stdin)
 and construct a new DATA file (to the stdout).
 A reference DATA file is needed (argument).
 
-   basic usage 
+   basic usage
 ./dump2data.py orig_file.data < dump.lammpstrj > new_file.data
    (This extract last frame, uses "full" atom_style.)
 
@@ -55,8 +55,8 @@ class MiscSettings(object):
 class AtomStyleSettings(object):
     def __init__(self):
         # The following new member data indicate which columns store
-        # LAMMPS-specific information.  
-        # The next 6 members store keep track of the different columns 
+        # LAMMPS-specific information.
+        # The next 6 members store keep track of the different columns
         # of the "Atoms" section of a LAMMPS data file:
         self.column_names = [] #<--A list of column names (optional)
         self.i_coords=[] #<--A triplet of integers indicating which columns store coordinate data
@@ -107,7 +107,7 @@ def AtomStyle2ColNames(atom_style_string):
     hybrid_args     = atom_style_args[1:]
     if (atom_style not in g_style_map):
         if (len(atom_style_args) >= 2):
-            # If the atom_style_string includes at least 2 words, then we 
+            # If the atom_style_string includes at least 2 words, then we
             # interpret this as a list of the individual column names
             return atom_style_args
         else:
@@ -130,7 +130,7 @@ def AtomStyle2ColNames(atom_style_string):
 
 
 def ColNames2AidAtypeMolid(column_names):
-    # Because of the diversity of ways that these 
+    # Because of the diversity of ways that these
     # numbers are referred to in the LAMMPS documentation,
     # we have to be flexible and allow the user to refer
     # to these quantities in a variety of ways.
@@ -195,8 +195,8 @@ def ColNames2AidAtypeMolid(column_names):
 
 
 def ColNames2Coords(column_names):
-    """ Which of the columns correspond to coordinates 
-        which must be transformed using rigid-body 
+    """ Which of the columns correspond to coordinates
+        which must be transformed using rigid-body
         (affine: rotation + translation) transformations?
         This function outputs a list of lists of triplets of integers.
 
@@ -218,9 +218,9 @@ def ColNames2Coords(column_names):
 
 
 def ColNames2Vects(column_names):
-    """ Which of the columns correspond to coordinates 
+    """ Which of the columns correspond to coordinates
         which must be transformed using rotations?
-        Some coordinates like dipole moments and 
+        Some coordinates like dipole moments and
         ellipsoid orientations should only be rotated
         (not translated).
         This function outputs a list of lists of triplets of integers.
@@ -263,9 +263,9 @@ def ColNames2Vects(column_names):
 
 
 
-def ParseArgs(argv, 
-              misc_settings, 
-              data_settings, 
+def ParseArgs(argv,
+              misc_settings,
+              data_settings,
               warning_strings=None):
 
     # Loop over the remaining arguments not processed yet.
@@ -274,8 +274,8 @@ def ParseArgs(argv,
     i = 1
     while i < len(argv):
         #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
-        if ((argv[i].lower() == '-atomstyle') or 
-            (argv[i].lower() == '-atom_style') or 
+        if ((argv[i].lower() == '-atomstyle') or
+            (argv[i].lower() == '-atom_style') or
             (argv[i].lower() == '-atom-style')):
             in_init = []
             if i+1 >= len(argv):
@@ -304,7 +304,7 @@ def ParseArgs(argv,
             if i+1 >= len(argv):
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by list of integers\n'
                                  '       corresponding to column numbers for coordinates in\n'
-                                 '       the \"Atoms\" section of a LAMMPS data file.\n') 
+                                 '       the \"Atoms\" section of a LAMMPS data file.\n')
             ilist = argv[i+1].split()
             if (len(ilist) % 3) != 0:
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by list of integers.\n'
@@ -331,7 +331,7 @@ def ParseArgs(argv,
             if i+1 >= len(argv):
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by list of integers\n'
                                  '       corresponding to column numbers for direction vectors in\n'
-                                 '       the \"Atoms\" section of a LAMMPS data file.\n') 
+                                 '       the \"Atoms\" section of a LAMMPS data file.\n')
             ilist = argv[i+1].split()
             if (len(ilist) % 3) != 0:
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by list of integers.\n'
@@ -354,8 +354,8 @@ def ParseArgs(argv,
 
             del(argv[i:i+2])
         # i_atomid is not really needed for this program, but I load it anyway
-        elif ((argv[i].lower() == '-iatomid') or 
-              (argv[i].lower() == '-iid') or 
+        elif ((argv[i].lower() == '-iatomid') or
+              (argv[i].lower() == '-iid') or
               (argv[i].lower() == '-iatom-id')):
             if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by an integer\n'
@@ -365,8 +365,8 @@ def ParseArgs(argv,
             i_atomid = int(argv[i+1])-1
             del(argv[i:i+2])
         # i_atomtype is not really needed for this program, but I load it anyway
-        elif ((argv[i].lower() == '-iatomtype') or 
-              (argv[i].lower() == '-itype') or               
+        elif ((argv[i].lower() == '-iatomtype') or
+              (argv[i].lower() == '-itype') or
               (argv[i].lower() == '-iatom-type')):
             if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by an integer\n'
@@ -376,10 +376,10 @@ def ParseArgs(argv,
             i_atomtype = int(argv[i+1])-1
             del(argv[i:i+2])
         # i_molid is not really needed for this program, but I load it anyway
-        elif ((argv[i].lower() == '-imolid') or 
-              (argv[i].lower() == '-imol') or 
-              (argv[i].lower() == '-imol-id') or 
-              (argv[i].lower() == '-imoleculeid') or 
+        elif ((argv[i].lower() == '-imolid') or
+              (argv[i].lower() == '-imol') or
+              (argv[i].lower() == '-imol-id') or
+              (argv[i].lower() == '-imoleculeid') or
               (argv[i].lower() == '-imolecule-id')):
             if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
                 raise InputError('Error(dump2data): '+argv[i]+' flag should be followed by an integer\n'
@@ -520,7 +520,7 @@ dump2data.py -t t -atomstyle style orig.data < dump.lammpstrj > new.data
         ###                  '## To specify the \"Atoms\" column format you can:      ##\n'
         ###                  '##   1) Use the -atom_style \"STYLE\"  argument         ##\n'
         ###                  '##      where \"STYLE\" is a string indicating a LAMMPS ##\n'
-        ###                  '##      atom_style, including hybrid styles.(Standard ##\n' 
+        ###                  '##      atom_style, including hybrid styles.(Standard ##\n'
         ###                  '##      atom styles defined in 2011 are supported.)   ##\n'
         ###                  '##   2) Use the -atom_style \"COL_LIST\"    argument    ##\n'
         ###                  '##      where \"COL_LIST" is a quoted list of strings  ##\n'
@@ -564,8 +564,8 @@ def WriteFrameToData(out_file,
                      velocities,
                      atomtypes,
                      molids,
-                     xlo_str, xhi_str, 
-                     ylo_str, yhi_str, 
+                     xlo_str, xhi_str,
+                     ylo_str, yhi_str,
                      zlo_str, zhi_str,
                      xy_str, xz_str, yz_str):
 
@@ -592,7 +592,7 @@ def WriteFrameToData(out_file,
             firstline = False
 
         if (len(line) > 0):
-            # The initial section (section='') is assumed to be 
+            # The initial section (section='') is assumed to be
             # the "LAMMPS Description" section.  This is where the
             # box boundaries are specified.
             if section == '':
@@ -678,7 +678,7 @@ def WriteFrameToData(out_file,
                         #for I in range(0,len(data_settings.ii_coords)):
                         #    xyz = coords[atomid][I]
                         #            THIS LOOP IS SILLY.
-                        #            EACH ATOM ONLY HAS ONE SET OF X,Y,Z 
+                        #            EACH ATOM ONLY HAS ONE SET OF X,Y,Z
                         #            COORDINATES. COMMENTING OUT THIS LOOP:
                         #    i_x = data_settings.ii_coords[I][0]
                         #    i_y = data_settings.ii_coords[I][1]
@@ -694,13 +694,13 @@ def WriteFrameToData(out_file,
                             (i_z >= len(tokens))):
                             raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
                                              '       Specify the atom_style using -atomstyle style.\n')
-                        # Replace the coordinates with coordinates from 
+                        # Replace the coordinates with coordinates from
                         # the dump file into tokens[i_x]...
                         tokens[i_x] = str(xyz[0])
                         tokens[i_y] = str(xyz[1])
                         tokens[i_z] = str(xyz[2])
 
-                        # Are there there any integer coords 
+                        # Are there there any integer coords
                         # (ix, iy, iz) in the dump file?
                         if coords_ixiyiz[atomid]:
                             assert(len(coords_ixiyiz[atomid]) == 3)
@@ -730,7 +730,7 @@ def WriteFrameToData(out_file,
                         vxvyvz = velocities[atomid]
                         if len(tokens) < 4:
                             raise InputError('Error(dump2data): Not enough columns in the \"Velocities\" file.\n')
-                        # Replace the coordinates with coordinates from 
+                        # Replace the coordinates with coordinates from
                         # the dump file into tokens[i_x]...
                         tokens[1] = str(vxvyvz[0])
                         tokens[2] = str(vxvyvz[1])
@@ -773,9 +773,9 @@ if __name__ == "__main__":
         data_settings = DataSettings()
         misc_settings = MiscSettings()
         warning_strings = []
-        ParseArgs(sys.argv, 
-                  misc_settings, 
-                  data_settings, 
+        ParseArgs(sys.argv,
+                  misc_settings,
+                  data_settings,
                   warning_strings)
 
         # Open the lammps dump file (trajectory file)
@@ -1118,7 +1118,7 @@ if __name__ == "__main__":
                                              '       However there are no columns with this name in your data file\n'
                                              '       (or the column was not in the expected place).\n'
                                              '       Hence, the atom styles in the dump and data files do not match.')
-                                             
+
 
             if finished_reading_frame:
 
@@ -1152,7 +1152,7 @@ if __name__ == "__main__":
 
                 #if (num_frames_in == -1):
                 #    if (misc_settings.timestep_str != ''):
-                #        if (float(frame_timestep_str) >= 
+                #        if (float(frame_timestep_str) >=
                 #            float(misc_settings.timestep_str)):
                 #            num_frames_in = 1
                 #        if not misc_settings.multi:
@@ -1182,7 +1182,7 @@ if __name__ == "__main__":
                         tstart = 0
 
                     if ((int(frame_timestep_str) - tstart)
-                        % 
+                        %
                         misc_settings.skip_interval) != 0:
                         write_this_frame = False
 
@@ -1192,7 +1192,7 @@ if __name__ == "__main__":
                             write_this_frame = True
                     else:
                         assert(misc_settings.timestep_str)
-                        if (int(frame_timestep_str) >= 
+                        if (int(frame_timestep_str) >=
                             int(misc_settings.timestep_str)):
                             write_this_frame = True
                             read_last_frame  = True
@@ -1262,8 +1262,8 @@ if __name__ == "__main__":
                                          frame_velocities,
                                          frame_atomtypes,
                                          frame_molids,
-                                         frame_xlo_str, frame_xhi_str, 
-                                         frame_ylo_str, frame_yhi_str, 
+                                         frame_xlo_str, frame_xhi_str,
+                                         frame_ylo_str, frame_yhi_str,
                                          frame_zlo_str, frame_zhi_str,
                                          frame_xy_str, frame_xz_str, frame_yz_str)
 
@@ -1287,4 +1287,3 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
-

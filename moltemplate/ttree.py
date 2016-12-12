@@ -10,13 +10,13 @@
 """
       ttree.py is a simple program for recursively generating large redundant
       text files (such as data files read by molecular simulation programs)
-      from small (non-redundant) text files (such as molecule definitions 
+      from small (non-redundant) text files (such as molecule definitions
       and force-field parameters).
 
-      By default, the large number of unique template variables generated 
-      in the process are automatically substituted with integers 
+      By default, the large number of unique template variables generated
+      in the process are automatically substituted with integers
       (or other numeric counters, all of which can be overridden),
-      rendered, and the rendered templates are written to a file.  
+      rendered, and the rendered templates are written to a file.
 
 BasicUI  This section of the code contains the user interface for ttree
          when run as a stand-alone program, as described above.  (This
@@ -25,20 +25,20 @@ BasicUI  This section of the code contains the user interface for ttree
 -- Data Types --
 
 StaticObj   Static nodes are data structures used to store ttree class definitions.
-                (Static nodes are useful for defining molecule types or 
+                (Static nodes are useful for defining molecule types or
                  namespaces in LAMMPS or other molecular simulation programs.)
          The nodes themselves are stored in a tree of nested class definitions.
-         Static variables (such as "@atom:C") are also associated with 
+         Static variables (such as "@atom:C") are also associated with
          StaticObjs.
 
-InstanceObj   Instance nodes are created when a user creates one (or many) 
+InstanceObj   Instance nodes are created when a user creates one (or many)
          copies of a class, using the "new" command.
          These classes in turn may instantiate other classes.
             (Example: A user may manually instantiate several copies of a
-                      molecule, such as a protein, however each of those 
+                      molecule, such as a protein, however each of those
                       molecules may contain molecular subunits, such as
                       amino acids, which are automatically instantiated.)
-         Instance variables (such as "$atom:CA") are also associated with 
+         Instance variables (such as "$atom:CA") are also associated with
          InstanceObjs.
 
 """
@@ -58,9 +58,9 @@ except NameError:
 
 #   -- ttree_lex.py --
 # TtreeShlex is a backwards-compatible version of python's standard shlex module
-# It has the additional member: "self.wordterminators", which overrides 
-# the "self.wordchars" member.  This enables better handling of unicode 
-# characters by allowing a much larger variety of characters to appear 
+# It has the additional member: "self.wordterminators", which overrides
+# the "self.wordchars" member.  This enables better handling of unicode
+# characters by allowing a much larger variety of characters to appear
 # in words or tokens parsed by TtreeShlex.  Otherwise it is identical to shlex.
 from ttree_lex import *
 
@@ -104,33 +104,33 @@ g_version_str  = '0.84'
 
 
 class ClassReference(object):
-    """ Every class defined by the user (stored in an StaticObj data structure) 
+    """ Every class defined by the user (stored in an StaticObj data structure)
     may contain references to other classes (ie. other StaticObjs).
     (Note: All of these StaticObjs are stored in the same tree, the
      global static tree.)
     Examples:
-       Whenever an instance of a class is created, this may automatically spawn 
-    the creation of additional classes (which are instantiated because a 'new' 
+       Whenever an instance of a class is created, this may automatically spawn
+    the creation of additional classes (which are instantiated because a 'new'
     command appeared within the first class's definition).  These are stored in
     the "StaticObj.instance_commands[i].class_ref" attribute.
-       Similarly, each class (StaticObj) can optionally inherit some of its 
-    traits (consisting of write() and new commands) from one or more 
-    "class_parents" (also StaticObjs).  A list of these parents is stored in the 
-    "StaticObj.class_parents" attribute.  In both cases (self.instance_commands 
-    or self.class_parents) we need to store a pointer to the StaticObj(s) 
+       Similarly, each class (StaticObj) can optionally inherit some of its
+    traits (consisting of write() and new commands) from one or more
+    "class_parents" (also StaticObjs).  A list of these parents is stored in the
+    "StaticObj.class_parents" attribute.  In both cases (self.instance_commands
+    or self.class_parents) we need to store a pointer to the StaticObj(s)
     corresponding to the instance-childen or class-parents.
     (This stored in self.statobj).
-    However, for the purposes of debugging and interactivity, it is also 
-    convenient to permanently keep track of the string that the user used to 
-    specify the name/location of that class/StaticObj 
-    (stored in self.statobj_str), in addition to the location 
+    However, for the purposes of debugging and interactivity, it is also
+    convenient to permanently keep track of the string that the user used to
+    specify the name/location of that class/StaticObj
+    (stored in self.statobj_str), in addition to the location
     in the file where that string occurs (stored in self.srcloc)."""
 
     __slots__=["statobj_str","srcloc","statobj"]
 
-    def __init__(self, 
-                 statobj_str=None, 
-                 srcloc=None, 
+    def __init__(self,
+                 statobj_str=None,
+                 srcloc=None,
                  statobj=None):
         self.statobj_str  = statobj_str
         if srcloc is None:
@@ -149,7 +149,7 @@ class ClassReference(object):
 # Commands are used to write to files, create new instances, delete instances,
 # or custom commands to modify an instance of a class.
 # (For example "instance = new Class.move(1,0,0).rot(45,0,0,1)"
-#  The ".move(1,0,0)" and ".rot(45,0,0,1)" commands are "stackable" and 
+#  The ".move(1,0,0)" and ".rot(45,0,0,1)" commands are "stackable" and
 #  have similar syntax to member functions in C++, JAVA, Python.)
 
 class Command(object):
@@ -163,7 +163,7 @@ class Command(object):
     #count = 0
     #def __init__(self, srcloc=None):
     #    self.srcloc = srcloc
-    #    # The "order" member is a counter that keeps track of the order 
+    #    # The "order" member is a counter that keeps track of the order
     #    #  in which the Command data types are created (issued by the user).
     #    Command.count += 1
     #    self.order = Command.count
@@ -181,13 +181,13 @@ class WriteFileCommand(Command):
                Text strings are often simple strings, however more
                generally, they can be strings which include other variables
                (ie templates).  In general, templates are lists of alternating
-               TextBlocks and VarRefs, (with additional tags and data to 
+               TextBlocks and VarRefs, (with additional tags and data to
                identify where they occur in in the original user's files).
-               
+
     """
     __slots__=["filename", "tmpl_list"]
 
-    def __init__(self, 
+    def __init__(self,
                  filename = None,
                  tmpl_list = None,
                  srcloc = None):
@@ -209,16 +209,16 @@ class WriteFileCommand(Command):
 
 
 class InstantiateCommand(Command):
-    """ InstantiateCommand is a simple tuple-like datatype used to 
-    store pairs of names (strings, stored in self.name), 
+    """ InstantiateCommand is a simple tuple-like datatype used to
+    store pairs of names (strings, stored in self.name),
     and ClassReferences (see above, stored in self.class_ref).n
-    The "suffix" argument is an optional string which may contain 
+    The "suffix" argument is an optional string which may contain
     additional instructions how to instantiate the object.
 
     """
 
-    __slots__=["name", 
-               "class_ref", 
+    __slots__=["name",
+               "class_ref",
                "instobj"]
 
     def __init__(self,
@@ -378,7 +378,7 @@ class PopLeftCommand(PopCommand):
 
 
 
-# The ScopeCommand, ScopeBegin, and ScopeEnd commands are useful to designate 
+# The ScopeCommand, ScopeBegin, and ScopeEnd commands are useful to designate
 # which commands belong to a particular class definition (or class instance).
 # (This is useful later on, when a linear list of commands has been created.)
 # They are simply markers an do not do anything.  These classes can be ignored.
@@ -435,7 +435,7 @@ class ScopeEnd(ScopeCommand):
 #    a variable to a value (values are text strings).
 #
 #    var_ref    The variable name (tecnically speaking, I call this
-#                 a variable descriptor string and it includes at least one of 
+#                 a variable descriptor string and it includes at least one of
 #                 the following: the name of a leaf node, a category node name,
 #                 and category name)
 #               the location in the file where variable appears, and (eventually
@@ -444,9 +444,9 @@ class ScopeEnd(ScopeCommand):
 #    text_tmpl  Text strings are often simple strings, however more
 #               generally, they can be strings which include other variables
 #               (ie templates).  In general, templates are lists of alternating
-#               TextBlocks and VarRefs, (with additional tags and data to 
+#               TextBlocks and VarRefs, (with additional tags and data to
 #               identify where they occur in in the original user's files).
-#               
+#
 #    """
 #    __slots__=["var_ref","text_tmpl"]
 #
@@ -473,7 +473,7 @@ class ModCommand(object):
 
     def __copy__(self):
         return ModCommand(self.command.__copy__(), self.multi_descr_str)
-        
+
 
 
 
@@ -492,10 +492,10 @@ def CopyTmplList(source_tmpl_list, dest_cpy):
                                           # variable. (Static variables do
                                           # not change during instantiation.)
 
-            elif entry.prefix[0] == '$': # new '$' vars are created 
+            elif entry.prefix[0] == '$': # new '$' vars are created
                                          # during every instantiation.
 
-                # var_refs do change when you instantiate them.  So 
+                # var_refs do change when you instantiate them.  So
                 # create a new VarRef object, and copy the attributes.
                 var_ref = VarRef(entry.prefix,
                                  entry.descr_str,
@@ -523,9 +523,9 @@ def CopyTmplList(source_tmpl_list, dest_cpy):
 def RecursiveJoin(tokens_expr, delimiter = ''):
     """ RecursiveJoin() converts a tree-like list/tuple of tokens, for example:
     ['a ', ('tree', '-', ['like', 'container']), [[' '], 'of'], ' strings']
-    to an ordinary string, eg: 
+    to an ordinary string, eg:
     'a tree-like container of strings'
-    This behavees similarly to  "reduce(lambda a, b: a+b, tokens)", 
+    This behavees similarly to  "reduce(lambda a, b: a+b, tokens)",
     except that it works with arbitrarily nested lists/tuples."""
     text = ''
     if isinstance(tokens_expr, basestring):
@@ -545,7 +545,7 @@ def RecursiveJoin(tokens_expr, delimiter = ''):
 #----------------------------------------------------------
 #    The following code is specific to ttree.
 #
-#    (Up until this point, we have only defined 
+#    (Up until this point, we have only defined
 #    a few simple general text parsing routines.)
 #----------------------------------------------------------
 #----------------------------------------------------------
@@ -553,7 +553,7 @@ def RecursiveJoin(tokens_expr, delimiter = ''):
 
 
 def PtknsToStr(path_tokens):
-    """ 
+    """
     There are three ways to store paths:
       As a single string: '/Protein/Phe/Ca'  <- the format entered by the user
       As a list of tokens ['Protein', 'Phe', 'Ca'] <- split into tokens
@@ -585,21 +585,21 @@ def FindChild(name, node, dbg_loc):
     If it is not found, it returns None.
        Note: I have not yet specified what kind of nodes FindChild() operates
     on.  Both StaticObjs and InstanceObjs have self.children and self.parent.
-    However only StaticObjs have "self.class_parents". 
+    However only StaticObjs have "self.class_parents".
     ("class_parents" are "parents" in the object-oriented sense.)
     If "node" (2nd argument) happens t be an StaticObj, this means it also
     We must search over the children of these class_parents as well.
 
           Terminology used here differs from Object Oriented Programming
 
-    Children in node.children are not children in the object-oriented 
+    Children in node.children are not children in the object-oriented
     programming sense.  However, in OOP, "children" are objects that share all
     of the traits of their ancestors (and may have additionl traits as well).
     I have implemented OOP style children and parents, but this informtion
     is stored in "node.class_parents", instead of "node.parents".
-       For comparison, instantiated nodes (InstanceObjs) are different.  Altough 
-    instantiated classes (InstanceObjs) have access to the attributes of the 
-    class_parents of the StaticObjs that define them, they do not remember the 
+       For comparison, instantiated nodes (InstanceObjs) are different.  Altough
+    instantiated classes (InstanceObjs) have access to the attributes of the
+    class_parents of the StaticObjs that define them, they do not remember the
     ownership of that data.  (It just gets merged with their own member data,
     including their .children.)
        Hence we must treat StaticObjs carefully because their are two ways we can
@@ -614,7 +614,7 @@ def FindChild(name, node, dbg_loc):
     if isinstance(node, StaticObj):
 
         # The object-oriented inheritance stuff appears here.
-        # If you don't care about OOP or inheritance, 
+        # If you don't care about OOP or inheritance,
         # then comment out the loop that follows:
 
         # Search recursively over the "children" (ie attributes or members)
@@ -646,14 +646,14 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         returns the last_node that did match before the error occurred,
         as well as an integer which stores the number of tokens in
         the path_tokens list which were successfully processed.
-        In other words, the list of node naes is not a full path, but the 
-        relative path that takes you from one node (not necessarily the root) 
+        In other words, the list of node naes is not a full path, but the
+        relative path that takes you from one node (not necessarily the root)
         to another.  Return Value:
-           Ideally, each node in the list should be a parent or a child of the 
+           Ideally, each node in the list should be a parent or a child of the
         previous node. (See comment for PathTokensToStr(), for more details.)
-        This function returns the number of path_tokens successfully 
+        This function returns the number of path_tokens successfully
         parsed.  Under normal termination, this is len(path_tokens).
-        If the path can not be followed (because at some point, a child 
+        If the path can not be followed (because at some point, a child
         or parent does not exist), then this function returns a number
         smaller than len(path_tokens).
         We let the caller handle undefined paths. """
@@ -665,7 +665,7 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
 
     node = starting_node
     # Is this path a relative path, or a full path?
-    # If the path-string began with '/', then it's a full path.  This means 
+    # If the path-string began with '/', then it's a full path.  This means
     # that after processing by split('/'), the first token will be ''
     # Example:       path_tokens='/Prot/Alanine'.split('/')
     #            --> path_tokens[0] == ''
@@ -699,15 +699,15 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
                 return i, node_before_ellipsis
 
             search_target = path_tokens[i+1]
-            # Now search over the "children" of this node 
-            # for one who's name matches path_tokens[i]. 
-            # If not found, then move up to the parent node's children. 
-            # (This is not an exhaustive tree search. Only the nodes which 
+            # Now search over the "children" of this node
+            # for one who's name matches path_tokens[i].
+            # If not found, then move up to the parent node's children.
+            # (This is not an exhaustive tree search. Only the nodes which
             #  are immediate children of this node's parents are searched.)
             while node != None:
                 child = FindChild(search_target, node, dbg_loc)
                 if child is None:
-                    node = node.parent 
+                    node = node.parent
                 else:
                     node = child
                     break
@@ -720,14 +720,14 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
             i += 2
 
         elif path_tokens[i] in ('','.'):  # <-Note we ignore empty tokens from now on.
-            # (Same convention is used in specifying a 
+            # (Same convention is used in specifying a
             # directory in a filesystem, eg. using /usr/local
             # or /usr//local or /usr/./local.  These are all equivalent.)
             i += 1
 
         else:
 
-            # Now search over the "children" of this 
+            # Now search over the "children" of this
             # node for one who's name matches path_tokens[i].
             child = FindChild(path_tokens[i], node, dbg_loc)
 
@@ -776,7 +776,7 @@ def PtknsToNode(path_tokens, starting_node, dbg_loc):
                                  '       Expected name following \"...\"\n')
             else:
                 search_target = path_tokens[i_last_ptkn+1]
-                #In that case, we were unable to find the node referenced by "..." 
+                #In that case, we were unable to find the node referenced by "..."
                 raise InputError('Error('+g_module_name+'.PtknsToNode()):\n'
                                  '       Class or variable \"'+search_target+'\" not found\n'
                                  '       in this context: \"'+PtknsToStr(path_tokens)+'\"\n'
@@ -798,7 +798,7 @@ def PtknsToNode(path_tokens, starting_node, dbg_loc):
                       '    If this object refers to an array you must use brackets []\n'+\
                       '    to explicitly specify the element(s) you want from that array.\n'+\
                       '    (To select multiple elements, you can use [*] or [0-9] or [0:10].)\n'
-                   
+
             if (path_tokens[i_last_ptkn] in NodeToPtkns(last_node)):
                 err_msg += '\nIn this case:\n'+\
                            '    It seems like you may have omitted a } character somewhere before:\n'+\
@@ -961,7 +961,7 @@ def CanonicalCatName(cat_name, cat_node, dbg_loc=None):
     return '/'.join(tkns)
 
 
-    
+
 def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
     tkns = CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc)
     descr_str = tkns[0]
@@ -976,10 +976,10 @@ def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
 
 def CollapsePath(path_tokens):
     """
-    CollapsePath() takes a list of Strings argument representing a 
-    directory-like path string 
-    (for example '/SUB1A/Sub2A/../Sub2B/sub3b/../sub3c/entry'), 
-    and replaces it with a version which should contain no '..' patterns. 
+    CollapsePath() takes a list of Strings argument representing a
+    directory-like path string
+    (for example '/SUB1A/Sub2A/../Sub2B/sub3b/../sub3c/entry'),
+    and replaces it with a version which should contain no '..' patterns.
     (In the example above, it returns /SUB1A/Sub2B/sub3c/entry')
     """
     new_ptkns = []
@@ -993,7 +993,7 @@ def CollapsePath(path_tokens):
                 # Note: "path_tokens[i] != '')"  means "/a/b//c" <-> "/a/b/c"
                 ndelete -= 1
             else:
-                if len(path_tokens[i]) > 0: 
+                if len(path_tokens[i]) > 0:
                     new_ptkns.append(path_tokens[i])
         i -= 1
     new_ptkns.reverse()
@@ -1010,7 +1010,7 @@ def CollapsePath(path_tokens):
 def FindCatNode(category_name, current_node, srcloc):
     """ Search upwards (toward the ancester nodes), looking for a node
     containing a category matching category_name (first argument).
-    Useful when the user specifies a category name, but neglects to 
+    Useful when the user specifies a category name, but neglects to
     specify which node it was defined in.
     Note: there is no gaurantee that the category node returned by this function
           contains an entry in it's "categories" list corresponding to this
@@ -1030,7 +1030,7 @@ def FindCatNode(category_name, current_node, srcloc):
     if cat_node is None:
         assert(node.parent is None)
         #sys.stderr.write('Warning near ' +
-        #                 ErrorLeader(srcloc.infile, 
+        #                 ErrorLeader(srcloc.infile,
         #                             srcloc.lineno)+'\n'+
         #                 '       no category named \"'+category_name+'\" found.\n'+
         #                 '       Creating a new global category: /'+
@@ -1052,37 +1052,37 @@ def RemoveNullTokens(in_ptkns):
         if ((in_ptkns[i] != '.') and
             ((in_ptkns[i] != '') or (i==0))):
             out_ptkns.append(in_ptkns[i])
-    # (I'm sure there are ways to write this in python 
+    # (I'm sure there are ways to write this in python
     #  using fewer lines of code.  Sigh.)
     return out_ptkns
-            
+
 
 
 def DescrToCatLeafPtkns(descr_str, dbg_loc):
-    """  
+    """
         Review: Variables in this program have three parts:
      1) A variable category name (designating the type of variable).
-     2) A variable category path, which consists of a node which is an ancestor 
+     2) A variable category path, which consists of a node which is an ancestor
         of the variable leaf (1) in the tree
      3) A variable name ("leaf"), which refers to a node in the tree
         (either a static type tree or instance tree)
 
-       DescrToCatLeafPtkns() takes a string describing a variable, 
-    as it appears in a template     (ie, a write() command, once it has been 
+       DescrToCatLeafPtkns() takes a string describing a variable,
+    as it appears in a template     (ie, a write() command, once it has been
     stripped of it's '$' or '@' prefix, and surrounding {} brackets)
     ...and divides it into strings which specify the location of that leaf in
     a static or instance tree, in addition to the name and location of the
     category node.  Descriptor examples for atoms in water:
-              "AtomType:/Water/O",  There are only 2 --types-- of atoms in 
+              "AtomType:/Water/O",  There are only 2 --types-- of atoms in
               "AtomType:/Water/H",  a water molecule. We identify them this way.
-              "AtomID:O"     However each water molecule has 3 atoms, and we 
-              "AtomID:H1"    can give each atom in each water molecule a unique 
+              "AtomID:O"     However each water molecule has 3 atoms, and we
+              "AtomID:H1"    can give each atom in each water molecule a unique
               "AtomID:H2"    AtomID number.  "AtomID:H2" is the id number of the
                              second hydrogen atom in the current water molecule.
 
       ---- Output:  This function returns a 3-tuple: ----
 
-    leaf_ptkns  The name of the variable's leaf node, as well as the list of 
+    leaf_ptkns  The name of the variable's leaf node, as well as the list of
                tokens denoting the path (named list of nodes) which lead to it.
     cat_name   The name of the variable category (no path information)
     cat_ptkns   A --suggestion-- for where to find the node containing the
@@ -1109,13 +1109,13 @@ def DescrToCatLeafPtkns(descr_str, dbg_loc):
                          '       Error near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n\n'
                          '       Bad variable descriptor: \"'+descr_str+'\"\n'+
                          '       There can be at most one \':\' character in a variable descriptor.\n')
-    # ---- Are we using colon syntax (example '$atom:H1')? 
+    # ---- Are we using colon syntax (example '$atom:H1')?
     elif len(split_colon) == 2:
         # The category name = text after the last '/' (if present)and before ':'
         cat_ptkns  = split_colon[0].split('/')
         cat_name   = cat_ptkns[-1]
-        # The text before that is the suggested (category) path 
-        cat_ptkns  = cat_ptkns[:-1] 
+        # The text before that is the suggested (category) path
+        cat_ptkns  = cat_ptkns[:-1]
         # if len(cat_ptkns) == 0:
         #    cat_ptkns.append('.')
 
@@ -1156,13 +1156,13 @@ def DescrToCatLeafPtkns(descr_str, dbg_loc):
 
 
 
-def DescrToCatLeafNodes(descr_str, 
-                        context_node, 
-                        dbg_loc, 
+def DescrToCatLeafNodes(descr_str,
+                        context_node,
+                        dbg_loc,
                         create_missing_nodes=False):
     """
-    Variables in ttree correspond to nodes in a tree 
-    (and also categories to which they belong). 
+    Variables in ttree correspond to nodes in a tree
+    (and also categories to which they belong).
     DescrToCatLeafNodes() reads the name of a variable,
     (its descriptor) and determines where in the tree
     does this variable reside, and what is it's category?
@@ -1171,11 +1171,11 @@ def DescrToCatLeafNodes(descr_str,
     (It is very messy right now. I will clean up the code later. AJ 2011-9-06)
 
        Arguments:
-    descr_str    The complete name that the user gave 
+    descr_str    The complete name that the user gave
                  to the variable. (Excluding '$' or '@')
 
     context_node  The class (node) in which the variable
-                  was used.  descr_str is interpeted 
+                  was used.  descr_str is interpeted
                   relative to this context.  (This argument
                   is similar to the current directory
                   in which a command was issued in unix.)
@@ -1187,7 +1187,7 @@ def DescrToCatLeafNodes(descr_str,
                  If we lookup a variable whose leaf node
                  does not exist yet, should we create it?
                  Setting this argument to "True" allows
-                 us to augment the tree to add nodes 
+                 us to augment the tree to add nodes
                  corresponding to variables.
 
 
@@ -1211,7 +1211,7 @@ def DescrToCatLeafNodes(descr_str,
 
     Descriptor String:
     The first argument ("descr_str") is a descriptor string.
-    A descriptor string typically contains ":" and "/" 
+    A descriptor string typically contains ":" and "/"
     characters to to divide the string into pieces in order
     to identify a category name, category node, and leaf node.
     Conceptually, the variable's NAME is the leaf node.
@@ -1219,7 +1219,7 @@ def DescrToCatLeafNodes(descr_str,
 
     Node:
     Nodes are used to represent both class objects and variable names
-      1) class objects 
+      1) class objects
     Each type of class objects is represented by an StaticObj.
     Each instantiated object is represented by an InstanceObj.
       2) variable names (leaf nodes)
@@ -1228,30 +1228,30 @@ def DescrToCatLeafNodes(descr_str,
     InstanceObjs (for $ instance variables)
     Again, all variables in ttree are members of a class object.
     In this case, the name of the node corresponds to the variable's
-    name, and it's position in the tree refers to the class to which 
+    name, and it's position in the tree refers to the class to which
     it belongs.
-    However "leaf nodes" do not uniquely identify the 
-    actual variable itself. A single node can refer to two different 
+    However "leaf nodes" do not uniquely identify the
+    actual variable itself. A single node can refer to two different
     variables if they are in different categories.
     All 3 identifiers (leaf node, category node, category name)
     are needed to uniquely identify a ttree variable.  See below.
 
-    Ptkn (Path Token) 
+    Ptkn (Path Token)
     Strings containing multiple '/' characters are typically used
     to identify the location of the category and leaf nodes in the
-    tree (ie the path to the node).  The '/' characters are 
-    delimiters which break up the string into small pieces, (which 
-    are usually the names of classes).  
+    tree (ie the path to the node).  The '/' characters are
+    delimiters which break up the string into small pieces, (which
+    are usually the names of classes).
     These pieces are called "path tokens" or "ptkns"
 
-    Leaf Node:    
+    Leaf Node:
     It exists as a node in a tree (instead of a simple string)
     because, just like member variables in a class in an
     object oriented programming language (or in a C struct)
-    language, variables in ttree belong to the class in 
-    which they are defined.  The node's location in the 
+    language, variables in ttree belong to the class in
+    which they are defined.  The node's location in the
     tree represents which class it belongs to.
-    If a variable's leaf node name 
+    If a variable's leaf node name
     refers to a node which does no exist yet, then we create it
     (assuming the "create_missing_nodes" argument is "True").
 
@@ -1261,24 +1261,24 @@ def DescrToCatLeafNodes(descr_str,
     numeric values are automatically given to each variable.
     So you can think of a category as a counter with a name.
     Variables in different categories have different counters,
-    and are assigned numeric values independently. 
-    Consequently two variables in different categories 
-    may be assigned the same number.  But two variables 
+    and are assigned numeric values independently.
+    Consequently two variables in different categories
+    may be assigned the same number.  But two variables
     in the same category are always given unique values.
     Counters are typically global, but can have local scope.
-    (ie, only defined within a Class, or an instantiated 
+    (ie, only defined within a Class, or an instantiated
      class, and whatever other classes are nested or
-     instantiated beneath it.)  
+     instantiated beneath it.)
     Therefore to identify a counter/category you must specify
-    both a name AND a node. The node identifies the class where 
-    the scope is defined.  It is assumed that the Leaf Node 
+    both a name AND a node. The node identifies the class where
+    the scope is defined.  It is assumed that the Leaf Node
     (see above) lies within this scope (ie. somewhere after
     it in the tree).
-      Example: local counters are used to keep track of the 
+      Example: local counters are used to keep track of the
     residues within in a protein chain. If we use a class to
     represent the protein, we can create a local residue-
-    counter (category) within that protein.  Then when we 
-    instantiate the protein multiple times, this counter 
+    counter (category) within that protein.  Then when we
+    instantiate the protein multiple times, this counter
     is reset for every new instance of of the protein.
 
     """
@@ -1290,16 +1290,16 @@ def DescrToCatLeafNodes(descr_str,
     # ---- ellipsis hack ----
     #
     # Search for class:
-    # Most users expect ttree.py to behave like a 
-    # standard programming language: If the class they are 
-    # instantiating was not defined in this specific 
+    # Most users expect ttree.py to behave like a
+    # standard programming language: If the class they are
+    # instantiating was not defined in this specific
     # location, they expect ttree.py to search for
-    # it outwards, first in the parent's environment, 
-    # and then in the parent's parent's environment, 
+    # it outwards, first in the parent's environment,
+    # and then in the parent's parent's environment,
     # and so on, until the object is found.
     # For example, most users expect this to work:
     # class Res{
-    #   write("Atoms") { 
+    #   write("Atoms") {
     #     $atom:CA @atom:CA 0.123 1.234 2.345
     #     $atom:CB @atom:CB 1.234 2.345 3.456
     #   }
@@ -1308,23 +1308,23 @@ def DescrToCatLeafNodes(descr_str,
     #   write_once("AnglesByType") {
     #     @angle:backbone @atom:Res/CA @atom:Res/CA @atom:Res/CA
     # }
-    # Notice that in class Protein, we did not have to specify 
+    # Notice that in class Protein, we did not have to specify
     # where "Res" was defined because it is defined in the parent
     # environment (ie. immediately outside Proteins's environment).
     #    The general way to do this in ttree.py, is to
-    # use ellipsis syntax "@atom:.../Res/CA" symbol.  The 
+    # use ellipsis syntax "@atom:.../Res/CA" symbol.  The
     # ellipsis ".../" tells ttree.py to search upwards
     # for the object to the right of it ("Res")
-    #    In order to make ttree.py behave the way 
-    # most users are expecting, we artificially insert a 
+    #    In order to make ttree.py behave the way
+    # most users are expecting, we artificially insert a
     # ".../" before the class name here.  (Later on, the
     # code that processes the ".../" symbol will take
     # care of finding A.  We don't have to worry about
     # about doing that now.)
     #
-    #   I think we only want to do this for variables with path information 
+    #   I think we only want to do this for variables with path information
     # such as "@atom:Res/CA" (which means that leaf_ptkns = ['Res', 'CA']).
-    # For simple variables like "@atom:CA", we don't automatically look upwards 
+    # For simple variables like "@atom:CA", we don't automatically look upwards
     # unless the user eplicitly requests it.
     #    (That's why we check to make sure that len(leaf_ptkns) > 1 below
     #     before we insert '...' into the leaf_ptkns.)
@@ -1335,7 +1335,7 @@ def DescrToCatLeafNodes(descr_str,
     #     @atom:CA
     #   }
     #   class B {
-    #     write("Atoms") { 
+    #     write("Atoms") {
     #       @atom:CA
     #     }
     #   }
@@ -1344,9 +1344,9 @@ def DescrToCatLeafNodes(descr_str,
     if ((descr_str.find(':') != -1) and
         #(not ((len(leaf_ptkns) == 1) and
         #      (leaf_ptkns[0] == context_node.name))) and
-        #(len(leaf_ptkns) > 0) and 
+        #(len(leaf_ptkns) > 0) and
         (len(leaf_ptkns) > 1) and
-        (len(leaf_ptkns[0]) > 0) and 
+        (len(leaf_ptkns[0]) > 0) and
         (leaf_ptkns[0][0] not in ('.','*','?'))):
 
         leaf_ptkns.insert(0, '...')
@@ -1362,7 +1362,7 @@ def DescrToCatLeafNodes(descr_str,
     leaf_start_node = context_node
 
     if (len(cat_ptkns) > 0):
-        if cat_ptkns[-1] == '...':        
+        if cat_ptkns[-1] == '...':
             # The "..." in this position means trace the path from the
             # current node (context_node) up to cat_ptkns[:-1].
             cat_start_node = PtknsToNode(cat_ptkns[:-1], context_node, dbg_loc)
@@ -1375,8 +1375,8 @@ def DescrToCatLeafNodes(descr_str,
             cat_node   = PtknsToNode(cat_ptkns, context_node, dbg_loc)
             # Whenever the user supplies an explicit path, then
             # the cat node should be the starting location from
-            # which the leaf path is interpreted.  This nearly 
-            # insures that the leaf node will be an ancestor 
+            # which the leaf path is interpreted.  This nearly
+            # insures that the leaf node will be an ancestor
             # of the category node, which is what we want.
             leaf_start_node = cat_node
 
@@ -1386,13 +1386,13 @@ def DescrToCatLeafNodes(descr_str,
         # (This is the most common scenario.)
         # In this case, climb up the tree to the parent
         # until you find an ancestor with a category whose
-        # name matches cat_name.  
+        # name matches cat_name.
         cat_node = FindCatNode(cat_name, cat_start_node, dbg_loc)
 
     if (cat_name not in cat_node.categories):
         if create_missing_nodes:
-            # If this is the first time we encountered a variable in this 
-            # category (ie if it's the first time we encountered a variable 
+            # If this is the first time we encountered a variable in this
+            # category (ie if it's the first time we encountered a variable
             # with this category's name and node), then we must create a
             # new entry in the cat_node.categories associative container
             # (using cat_name as the dictionary key).
@@ -1410,10 +1410,10 @@ def DescrToCatLeafNodes(descr_str,
 
     if (len(leaf_ptkns) > 0) and (leaf_ptkns[-1] == 'query()'):
         #   Special case: "query()"
-        # Variables named "query()" are not really variables. 
+        # Variables named "query()" are not really variables.
         # (They are a way for users to query a category's counter.)
         # But we treat them as such internally. Consequently we
-        # give them unique names to avoid clashes (just in case 
+        # give them unique names to avoid clashes (just in case
         # "query()" appears multiple times in the same context).
         #leaf_ptkns[-1] = '__query__'+dbg_loc.infile+'_'+str(dbg_loc.lineno)
         leaf_ptkns[-1] = '__query__' + str(dbg_loc.order)
@@ -1422,18 +1422,18 @@ def DescrToCatLeafNodes(descr_str,
 
     # Lookup the path for the leaf:
     #
-    # Often, the leaf that the path refers to does not 
+    # Often, the leaf that the path refers to does not
     # exist yet.  For example, it is common for a template to
     # contain a reference to "$atom:CA". If the current context_node
-    # is "/protein1/res22", this means that the leaf should be 
-    # at "/protein1/res22/CA".  (However in this example, "CA" 
+    # is "/protein1/res22", this means that the leaf should be
+    # at "/protein1/res22/CA".  (However in this example, "CA"
     # is not a class that has been defined yet.  It is the name
-    # of a variable which which may not have even been mentioned 
-    # before.  Think of "CA" as a variable placeholder. 
+    # of a variable which which may not have even been mentioned
+    # before.  Think of "CA" as a variable placeholder.
     #
     # So we follow the path tokens as far as we can:
-    i_last_ptkn, last_node = FollowPath(leaf_ptkns, 
-                                        leaf_start_node, 
+    i_last_ptkn, last_node = FollowPath(leaf_ptkns,
+                                        leaf_start_node,
                                         dbg_loc)
 
     # Did we find the node?
@@ -1461,8 +1461,8 @@ def DescrToCatLeafNodes(descr_str,
                 # a child whose name matches a the requested target
                 # string (located in leaf_ptkns[i_last_ptkn+1])
                 search_target = leaf_ptkns[i_last_ptkn+1]
-                # If such an ancestor exists, then FollowPath() 
-                # should have already found it for us. 
+                # If such an ancestor exists, then FollowPath()
+                # should have already found it for us.
                 #     This means it was not found.
                 # So if there is only one more token in the
                 # list of tokens, then create the needed node
@@ -1481,7 +1481,7 @@ def DescrToCatLeafNodes(descr_str,
                     # Now assign the pointer
                     leaf_node = parent_node.children[new_leaf_name]
                 else:
-                    #In that case, we were unable to find the node referenced by "..." 
+                    #In that case, we were unable to find the node referenced by "..."
                     raise InputError('Error('+g_module_name+'.DescrToCatLeafNodes()):\n'
                                      '       Broken path.\n' # containing ellipsis (...)\n'
                                      '       class/variable \"'+search_target+'\" not found in this\n'
@@ -1500,8 +1500,8 @@ def DescrToCatLeafNodes(descr_str,
                 # It means we need to:
                 #   search backwards up the ancestor tree until
                 #   we find an ancestor variable (of last_node)
-                #   which has the right category, (ie until you 
-                #   find an ancestor node with a variable (VarRef) 
+                #   which has the right category, (ie until you
+                #   find an ancestor node with a variable (VarRef)
                 #   pointing to it with belonging to the correct
                 #   category node and name (determined above).)
                 #  If not found, then use the current context_node.
@@ -1524,7 +1524,7 @@ def DescrToCatLeafNodes(descr_str,
                     leaf_node = node
 
                 else:
-                     # If not found, have it point to the 
+                     # If not found, have it point to the
                      # current (context) node.
                      leaf_node = context_node
 
@@ -1575,7 +1575,7 @@ def DescrToCatLeafNodes(descr_str,
                                  #'       \"'+var_ref.prefix + var_ref.descr_str + var_ref.suffix+'\"\n'
                                  '       \"'+ descr_str + '\"\n'
                                  '    located near '+
-                                 ErrorLeader(dbg_loc.infile, 
+                                 ErrorLeader(dbg_loc.infile,
                                              dbg_loc.lineno)+'\n'
                                  '       There are too many \"..\" tokens in the path string.')
 
@@ -1590,7 +1590,7 @@ def DescrToCatLeafNodes(descr_str,
                                  #'       \"'+var_ref.prefix + var_ref.descr_str + var_ref.suffix+'\"\n'
                                  '       \"'+ descr_str + '\"\n'
                                  '    located near '+
-                                 ErrorLeader(dbg_loc.infile, 
+                                 ErrorLeader(dbg_loc.infile,
                                              dbg_loc.lineno)+'\n'
                                  '       Undefined: \"'+PtknsToStr(leaf_ptkns)+'\"\n'
                                  '       (Specifically \"'+leaf_ptkns[i_last_ptkn]+
@@ -1606,12 +1606,12 @@ def DescrToCatLeafNodes(descr_str,
 
 
 def DescrToVarBinding(descr_str, context_node, dbg_loc):
-    """ DescrToVarBinding() is identical to LookupVar(), but it has a name 
+    """ DescrToVarBinding() is identical to LookupVar(), but it has a name
     that is harder to remember.  See comment for LookupVar() below.
 
     """
-    cat_name, cat_node, leaf_node = DescrToCatLeafNodes(descr_str, 
-                                                        context_node, 
+    cat_name, cat_node, leaf_node = DescrToCatLeafNodes(descr_str,
+                                                        context_node,
                                                         dbg_loc)
 
     if cat_name in cat_node.categories:
@@ -1641,10 +1641,10 @@ def DescrToVarBinding(descr_str, context_node, dbg_loc):
 def LookupVar(descr_str, context_node, dbg_loc):
     """ LookupVar() looks up a string (a variable descriptor, which is the
     variable's name, excluding the '$', '@' prefixes and any '{}' brackets.)
-    This function returns the variable's "VarBinding" (the variable-name:value 
+    This function returns the variable's "VarBinding" (the variable-name:value
     pair). This is useful for querying or changing the value of a variable.
-        Because nearly all variables are local, you must specify the starting 
-    node (ie. the node corresponding to the class in which this class 
+        Because nearly all variables are local, you must specify the starting
+    node (ie. the node corresponding to the class in which this class
     or variable was referred to).  This is typically the global node.
 
     """
@@ -1654,14 +1654,14 @@ def LookupVar(descr_str, context_node, dbg_loc):
 
 
 def LookupNode(obj_name, starting_node, dbg_loc):
-    """ LookupNode() parses through a string like 
+    """ LookupNode() parses through a string like
           '../ClassA/NestedClassB'
         and returns the corresponding node.
         Nodes are data types used for representing a class or class instance.
         They are also used for storing variables.
           'ClassA/NestedClassB/VariableC'
-        Because nearly all variables are local, you must specify the starting 
-        node (ie. the node corresponding to the class in which this class 
+        Because nearly all variables are local, you must specify the starting
+        node (ie. the node corresponding to the class in which this class
         or variable was referred to).  This is typically the global node.
 
         """
@@ -1694,7 +1694,7 @@ class SimpleCounter(object):
 
     def __copy__(self): #makes a (deep) copy of the counter in its current state
         return SimpleCounter(self.n + self.nincr, self.nincr)
-    
+
 
 
 
@@ -1707,7 +1707,7 @@ class Category(object):
 
     name         The name of the category (a string)
 
-    bindings     An OrderedDict() containing leaf_node:VarBinding 
+    bindings     An OrderedDict() containing leaf_node:VarBinding
                  (key:value) pairs. Variables are looked up by their leaf node.
                  The actual variable name (which simply refers to the leaf node)
                  and values are both stored in the VarBinding data structure.
@@ -1720,9 +1720,9 @@ class Category(object):
 
     __slots__=["name","bindings","counter","manual_assignments","reserved_values"]
 
-    def __init__(self, 
-                 name = '', 
-                 bindings = None, 
+    def __init__(self,
+                 name = '',
+                 bindings = None,
                  counter = None,
                  manual_assignments = None,
                  reserved_values = None):
@@ -1762,14 +1762,14 @@ class StaticObj(object):
        These trees contains class definitions, and their nested classes,
        and instructions for how to create new instances (copies) of this class.
        Nodes in this tree are stored using StaticObjs:
-    2) The instance tree: 
+    2) The instance tree:
        This tree contains classes that have been instantiated, and any sub-
        classes (members or attributes) that are instantiated as a result.
        This tree is automatically generated by instantiating the root
        StaticObj.  Nodes in this tree are stored using InstanceObjs.
 
-      StaticObjs and InstanceObjs both contain 
-         "commands" (commands which usually involve instructions 
+      StaticObjs and InstanceObjs both contain
+         "commands" (commands which usually involve instructions
                      for writing templates)
          "categories" (local counters used to assign variables. See below.)
          "children" (Nested class definitions -NOT- OOP child classes. See below.)
@@ -1779,7 +1779,7 @@ class StaticObj(object):
          These three members contain information to create a new instance/copy
          of this class (how to construct an InstanceObj from an StaticObj).
 
-    StaticObj contains the member function Parse() which builds the global static 
+    StaticObj contains the member function Parse() which builds the global static
     tree by parsing the contents of a text file supplied by the user.
 
     The external function BuildInstanceTree(), creates the global instance tree
@@ -1792,10 +1792,10 @@ class StaticObj(object):
      individual instances of that class, I recommend using a capital letter
      for the name of a class type (and lower-case letters for instances).
 
-     1) Commands 
+     1) Commands
         Commands are usually instructions for writing templates.
-      Templates are blocks of ordinary text which contain variables.  
-      (Variables in this program consist of variable names, categories, 
+      Templates are blocks of ordinary text which contain variables.
+      (Variables in this program consist of variable names, categories,
       and (eventually) bound values (usually generated automatically),
       which will be substituted into the template to generate a text file.)
       A class can contain multiple templates, each one having a unique name
@@ -1819,7 +1819,7 @@ class StaticObj(object):
        ("parent") classes.  These nested classes are referred to as "children".
        These sub-classes are not "children" in the OOP sense of the word at
        all (they do not have any of the the traits of their "parents").
-       However in the source code I refer to them as "children" because here 
+       However in the source code I refer to them as "children" because here
        they are implemented as "child" nodes (branches) in the tree-like
        data-structure used to store class definitions (the static tree).
 
@@ -1827,10 +1827,10 @@ class StaticObj(object):
         This is a new concept and is difficult to explain.
         Recall that each class contains a list of templates containing raw text,
         interspersed with variables (whose values will determined later).
-        In most cases, variables are assigned to integer values which are 
-        automatically generated by incrementing a counter. Simply put, 
+        In most cases, variables are assigned to integer values which are
+        automatically generated by incrementing a counter. Simply put,
         "categories" are collections of variables which share the same counter.
-        Within a category, the goal is to assign a unique integer (or other 
+        Within a category, the goal is to assign a unique integer (or other
         symbol) to each distinct variable in this category.
         To avoid name-clashes, variable names have local "scope".
         This scope is the "leaf_token"
@@ -1843,24 +1843,24 @@ class StaticObj(object):
         Static variables (ie. variables with a '@' prefix) are stored this way.
 
            "self.categories"
-        If a class contains a new category, it means that if any nested 
-        classes defined within that class definition contain (static, '@') 
-        variables whose categories match the category name, their values will 
+        If a class contains a new category, it means that if any nested
+        classes defined within that class definition contain (static, '@')
+        variables whose categories match the category name, their values will
         be determined by looking up the couter associated with this category
         stored locally (here) in self.categories.  All variables belonging
         to this category are stored in "self.categories[category_name]".
            "self.instance_categories"
-        Recall that creating a new copy (instance) of a class automatically 
-        creates an InstanceObj in the instance-tree.  InstanceObj's have a 
+        Recall that creating a new copy (instance) of a class automatically
+        creates an InstanceObj in the instance-tree.  InstanceObj's have a
         ".categories" attribute of their own, the contents of which are
         copied from this StaticObj's "self.instance_categories" attribute.
-        Instantiating a new class also spawns the instantiation of any 
+        Instantiating a new class also spawns the instantiation of any
         sub-classes.
         If any of these "instance children" contain variables whose category
         names match a category stored in the parent InstanceObj's .categories
         dictionary, then their values will be determined by that InstanceObj's
         counter for that category name.
-    4)  Parent: 
+    4)  Parent:
         A link to the parent StaticObj is stored in self.parent.
 
     """
@@ -1882,7 +1882,7 @@ class StaticObj(object):
                "instance_commands",
                "instance_commands_pop"]
 
-    def __init__(self, 
+    def __init__(self,
                  name='',
                  parent=None):
         """
@@ -1895,7 +1895,7 @@ class StaticObj(object):
 
         self.parent = parent    #For traversing the global static template tree
 
-        self.children = OrderedDict()  # Nested class definitions. 
+        self.children = OrderedDict()  # Nested class definitions.
 
         self.categories=OrderedDict()  #<- new variable categories that are only defined
                                  # in the context of this molecule's type definition
@@ -1953,7 +1953,7 @@ class StaticObj(object):
     def Parse(self, lex):
 
         """ Parse() builds a static tree of StaticObjs by parsing text file.
-        -The "lex" argument is a file or input stream which has been converted 
+        -The "lex" argument is a file or input stream which has been converted
          to a "TemplateLexer" object (similar to the python's built-in shlex lexer).
         """
 
@@ -1967,9 +1967,9 @@ class StaticObj(object):
         #sys.stdout.write(' -- Parse() invoked --\n')
 
         # Keep track of the location in the users' input files where this
-        # class object is first defined.  (Keep in mind that the user might 
+        # class object is first defined.  (Keep in mind that the user might
         # augment their original class definition, adding new content to an
-        # existing class.  In that case self.srcloc_begin will have already 
+        # existing class.  In that case self.srcloc_begin will have already
         # been assigned.  We don't want to overwrite it in that case.)
         if self.srcloc_begin is None:  # <-- not defined yet?
             self.srcloc_begin = lex.GetSrcLoc()
@@ -1985,14 +1985,14 @@ class StaticObj(object):
                 break
 
 
-            if ((cmd_token == 'write') or 
+            if ((cmd_token == 'write') or
                 (cmd_token == 'write_once') or
                 (cmd_token == 'create_var') or
                 (cmd_token == 'replace')):
                 open_paren  = lex.get_token()
 
                 #print('Parse():     open_paren=\"'+open_paren+'\"')
-                if open_paren=='{': 
+                if open_paren=='{':
                     # ..then the user neglected to specify the "dest" file-name
                     # argument.  In that case, supply the default, ''.
                     # (which is shorthand for the standard out in this case)
@@ -2013,14 +2013,14 @@ class StaticObj(object):
 
                 if (cmd_token == 'create_var'):
                     tmpl_filename = None
-                    # This means: define the template without attaching 
+                    # This means: define the template without attaching
                     # a file name to it. (IE., don't write the contents
                     # of what's enclosed in the curly brackets { } to a file.)
 
                 if (cmd_token == 'replace'):
                     tmpl_filename = "ttree_replacements.txt"
-                
-                if ((open_curly != '{') or 
+
+                if ((open_curly != '{') or
                     ((open_paren == '')  and (close_paren != '')) or
                     ((open_paren == '(') and (close_paren != ')'))):
                     raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
@@ -2038,7 +2038,7 @@ class StaticObj(object):
                 #print(tmpl_contents)
                 #sys.stdout.write('\n----------------\n')
 
-                        
+
                 if (cmd_token == 'write_once' or
                     cmd_token == 'replace'):
 
@@ -2046,7 +2046,7 @@ class StaticObj(object):
                     #    Ordinary instance variables (preceded by a '$')
                     #    should never appear in a write_once() statement.
                     for entry in tmpl_contents:
-                        if (isinstance(entry, VarRef) and 
+                        if (isinstance(entry, VarRef) and
                             (entry.prefix[0]=='$')):
                             err_msg = ('Error('+g_module_name+'.StaticObj.Parse()):\n'+
                                              '       Error near '+ErrorLeader(entry.srcloc.infile,
@@ -2069,9 +2069,9 @@ class StaticObj(object):
                 elif (cmd_token == 'create_var'):
                     commands = self.instance_commands
                 else:
-                    assert(False) 
+                    assert(False)
 
-                command = WriteFileCommand(tmpl_filename, 
+                command = WriteFileCommand(tmpl_filename,
                                            tmpl_contents,
                                            srcloc)
                 commands.append(command)
@@ -2144,7 +2144,7 @@ class StaticObj(object):
                 else:
                     lex.push_token(open_paren)
 
-                if (isinstance(cat_count_start, basestring) or 
+                if (isinstance(cat_count_start, basestring) or
                     isinstance(cat_count_incr, basestring)):
                     raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
                                      '       Error near '+lex.error_leader()+'\n'
@@ -2196,10 +2196,10 @@ class StaticObj(object):
 
             #elif (cmd_token == 'include'):
                 # "include filename" loads a file (adds it to the file stack)
-                # The "TtreeShlex" class (from which "lex" inherits) handles 
+                # The "TtreeShlex" class (from which "lex" inherits) handles
                 # "include" statements (ie. "source" statements) automatically.
 
-            elif ((cmd_token == 'push') or 
+            elif ((cmd_token == 'push') or
                   (cmd_token == 'push_left') or
                   (cmd_token == 'push_right')):
 
@@ -2214,16 +2214,16 @@ class StaticObj(object):
                 push_cmd_text = push_cmd_text[1:-1]
 
                 if (cmd_token == 'push_right'):
-                    push_command = PushRightCommand(push_cmd_text, 
+                    push_command = PushRightCommand(push_cmd_text,
                                                     push_cmd_src_loc)
                     user_push_right_commands.append(push_command)
                 else:
-                    push_command = PushLeftCommand(push_cmd_text, 
+                    push_command = PushLeftCommand(push_cmd_text,
                                                    push_cmd_src_loc)
                     user_push_left_commands.append(push_command)
                 self.instance_commands.append(push_command)
-                
-            elif ((cmd_token == 'pop') or 
+
+            elif ((cmd_token == 'pop') or
                   (cmd_token == 'pop_left') or
                   (cmd_token == 'pop_right')):
 
@@ -2248,7 +2248,7 @@ class StaticObj(object):
                     pop_command = PopLeftCommand(push_command,
                                                  pop_cmd_src_loc)
                 self.instance_commands.append(pop_command)
-                
+
 
 
             else:
@@ -2274,7 +2274,7 @@ class StaticObj(object):
 
                     # Then read in the list of classes which are parents of
                     # of this class.  (Multiple inheritance is allowed.)
-                    # (We don't yet check to insure that these are valid class 
+                    # (We don't yet check to insure that these are valid class
                     #  names.  We'll do this later in LookupStaticRefs().)
 
                     syntax_err_inherits = False
@@ -2293,7 +2293,7 @@ class StaticObj(object):
                                                            lex.GetSrcLoc()))
                     if len(class_parents) == 0:
                         syntax_err_inherits = True
- 
+
                     if syntax_err_inherits:
                         raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
                                          '      Error near '+lex.error_leader()+'\n'
@@ -2303,22 +2303,22 @@ class StaticObj(object):
                 if next_symbol == '{':
                     child_name = object_name
 
-                    # Check to see if this class has already been defined. 
-                    # (IE. check if it present in the list of children.) 
-                    # If the name (child_name) matches another class (child), 
-                    # then the contents of the new class will be appended to 
-                    # the old.  This way, class definitions can be augmented 
+                    # Check to see if this class has already been defined.
+                    # (IE. check if it present in the list of children.)
+                    # If the name (child_name) matches another class (child),
+                    # then the contents of the new class will be appended to
+                    # the old.  This way, class definitions can be augmented
                     # later.  (This is the way "namespaces" work in C++.)
                     child = self.children.get(child_name)
-                    # If found, we refer to it as "child". 
-                    # If not, then we create a new StaticObj named "child". 
+                    # If found, we refer to it as "child".
+                    # If not, then we create a new StaticObj named "child".
                     if child is None:
                         child = StaticObj(child_name, self)
                         self.children[child_name] = child
                     assert(child.name == child_name)
 
-                    # Either way we invoke child.Parse(), to 
-                    # add contents (class commands) to child. 
+                    # Either way we invoke child.Parse(), to
+                    # add contents (class commands) to child.
                     child.Parse(lex)
                     child.class_parents += class_parents
 
@@ -2336,7 +2336,7 @@ class StaticObj(object):
                                                                         base_srcloc.lineno)+'\n'
                                              '          (You can not instantiate some other object\'s members.)\n'
                                              '       Invalid instance name: \"'+base_name+'\"\n')
-                            
+
                         elif base_name in self.instname_refs:
                             ref_srcloc = self.instname_refs[base_name]
                             raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
@@ -2359,9 +2359,9 @@ class StaticObj(object):
                         # "monomers[20-29] = new ...".  This only fills in a
                         # portion of the array from: monomers[20]...monomers[29]
                         #
-                        # We also have to deal with multidimensional syntax 
+                        # We also have to deal with multidimensional syntax
                         # like this: "cells[3][2-3][1][4-7] = new..."
-                        # Split the "cells[3][2-3][2][4-7][2]" string into 
+                        # Split the "cells[3][2-3][2][4-7][2]" string into
                         # "cells[3][", "][1][", and "]".
                         # Later, we will instantiate InstanceObjs with names:
                         # "cells[3][2][1][4]"
@@ -2372,7 +2372,7 @@ class StaticObj(object):
                         # "cells[3][3][1][5]"
                         # "cells[3][3][1][6]"
                         # "cells[3][3][1][7]"
-                        
+
 
                         p1 = base_name.find('[')
                         if p1 == -1:
@@ -2396,7 +2396,7 @@ class StaticObj(object):
 
                             # Search for a '-', ':', or '*' character between []
                             # For example "monomers[20-29] = "
-                            # If present, the user wants us to fill a range 
+                            # If present, the user wants us to fill a range
                             # inside an array. This could be a multi-dimensional
                             # array, (eg "cells[3][2-6][4-11] = "), so we must
                             # figure out which entries in the array the user
@@ -2424,7 +2424,7 @@ class StaticObj(object):
                                                      '         '+ErrorLeader(ref_srcloc.infile,
                                                                              ref_srcloc.lineno)+'\n')
 
-                            
+
 
 
                             if p2 > p3:
@@ -2463,15 +2463,15 @@ class StaticObj(object):
 
 
                         # If the statobj_str token contains a ']' character
-                        # then this means the user wants us to make multiple 
-                        # copies of this template.  The number of copies 
+                        # then this means the user wants us to make multiple
+                        # copies of this template.  The number of copies
                         # to instantiate is enclosed in the [] characters
                         # (Example wat = new Water[3000] creates
                         #  3000 instantiations of the Water template
                         #  named wat[1], wat[2], wat[3], ... wat[3000]).
 
                         # Note: Here '[' and ']' have a special meaning.
-                        # So lex.get_token() should not treat them as 
+                        # So lex.get_token() should not treat them as
                         # ordinary word characters.  To prevent this:
                         orig_wordterminators = lex.wordterminators
                         lex.wordterminators += '[],'
@@ -2586,7 +2586,7 @@ class StaticObj(object):
                         # multidimensional array of class instances
                         # then we must loop through this multidimensional
                         # array and create a new instance for each entry.
-                        # For example fill a 3 dimensional volume 
+                        # For example fill a 3 dimensional volume
                         # with 1000 water molecules
                         # Example 1:
                         #    solvent = new Water [10][10][10]
@@ -2605,11 +2605,11 @@ class StaticObj(object):
                         #      and
                         #    class_suffix = 'transcm(0,0,0)'
                         #      and
-                        #    array_suffixes = ['trans(0,0,4)', 
-                        #                      'trans(0,4,0).rot(45,0,0,1)', 
+                        #    array_suffixes = ['trans(0,0,4)',
+                        #                      'trans(0,4,0).rot(45,0,0,1)',
                         #                      'trans(4,0,0)']
-                        # Note that tree ignores the "trans()" 
-                        #     commands, it stores them so that inherited 
+                        # Note that tree ignores the "trans()"
+                        #     commands, it stores them so that inherited
                         #     classes can attempt to process them.
 
 
@@ -2646,10 +2646,10 @@ class StaticObj(object):
                                     instance_name+=str(i+
                                                        array_name_offsets[d])+\
                                                    array_name_tkns[d+1]
-                                         
 
-                                # Does the user want us to select 
-                                # a class at random? 
+
+                                # Does the user want us to select
+                                # a class at random?
                                 if len(class_names) > 0:
 
                                     if len(num_by_type) > 0:
@@ -2674,7 +2674,7 @@ class StaticObj(object):
 
                                 if class_suffix != '':
                                     command = \
-                                        PopRightCommand(class_suffix_command, 
+                                        PopRightCommand(class_suffix_command,
                                                         srcloc_final)
                                     self.instance_commands.append(command)
 
@@ -2735,7 +2735,7 @@ class StaticObj(object):
 
                             if class_suffix != '':
                                 command = \
-                                    PopRightCommand(class_suffix_command, 
+                                    PopRightCommand(class_suffix_command,
                                                     srcloc_final)
                                 self.instance_commands.append(command)
 
@@ -2747,12 +2747,12 @@ class StaticObj(object):
                         #    /|\           /|\   `-----------.------------'
                         #     |             |                |
                         # child_name  parent_name    optional suffix
- 
+
                         child_name = object_name
                         parent_name_str = next_symbol
- 
+
                         child = StaticObj(child_name, self)
- 
+
                         parent_name, suffix, suffix_srcloc = \
                             self._ProcessClassName(parent_name_str, lex)
 
@@ -2776,8 +2776,8 @@ class StaticObj(object):
                             #sys.stderr.write('child.instance_commands_push = '+str(child.instance_commands_push)+'\n')
 
                             #sys.stderr.write('child.instance_commands_pop = '+str(child.instance_commands_pop)+'\n')
-                         
-                        # Check to see if this class has already been defined. 
+
+                        # Check to see if this class has already been defined.
                         if self.children.get(child_name) is not None:
                             if self.children[i].IsDeleted():
                                 del self.children[child_name]
@@ -2815,8 +2815,8 @@ class StaticObj(object):
                             self._ExtractSuffix(object_name, lex)
 
                         path_tokens = obj_descr_str.split('/')
-                        i_last_ptkn, staticobj = FollowPath(path_tokens, 
-                                                            self, 
+                        i_last_ptkn, staticobj = FollowPath(path_tokens,
+                                                            self,
                                                             lex.GetSrcLoc())
                         instobj_descr_str = './'+'/'.join(path_tokens[i_last_ptkn:])
 
@@ -2835,9 +2835,9 @@ class StaticObj(object):
                             pop_command  = PopLeftCommand(push_command,
                                                           suffix_srcloc,
                                                            '.')
-                            push_mod_command = ModCommand(push_command, 
+                            push_mod_command = ModCommand(push_command,
                                                           instobj_descr_str)
-                            pop_mod_command  = ModCommand(pop_command, 
+                            pop_mod_command  = ModCommand(pop_command,
                                                           instobj_descr_str)
                             if instobj_descr_str != './':
                                 #sys.stderr.write('DEBUG: Adding '+str(push_command)+' to '+
@@ -2859,7 +2859,7 @@ class StaticObj(object):
                         # "delete", or "category".
                         # ... and it is ALSO not any of these:
                         # the name of a class (StaticObj), or
-                        # the name of an instance (InstanceObj) 
+                        # the name of an instance (InstanceObj)
                         #   followed by either a '.' or "= new"
                         #
                         # In that case, it is a syntax error:
@@ -2867,14 +2867,14 @@ class StaticObj(object):
                                          '       Syntax error at or before '+lex.error_leader()+'\n'
                                          '       \"'+object_name+' '+next_symbol+'\".')
 
-        # Keep track of the location in the user's input files 
+        # Keep track of the location in the user's input files
         # where the definition of this object ends.
         self.srcloc_end = lex.GetSrcLoc()
 
 
 
 
-        # Finally, if there are any remaining user_push_left_commands or 
+        # Finally, if there are any remaining user_push_left_commands or
         # user_push_right_commands, deal with them (by popping them).
         for push_command in user_push_left_commands:
             push_command = user_push_left_commands.pop()
@@ -2897,7 +2897,7 @@ class StaticObj(object):
         assert(len(tmpl_contents) > 0)
         if isinstance(tmpl_contents[0], TextBlock):
             first_token_strip = tmpl_contents[0].text.lstrip(' ')
-            if ((len(first_token_strip) > 0) and 
+            if ((len(first_token_strip) > 0) and
                 (first_token_strip[0] in lex.newline)):
                 tmpl_contents[0].text = first_token_strip[1:]
                 tmpl_contents[0].srcloc.lineno += 1
@@ -2926,7 +2926,7 @@ class StaticObj(object):
         if isinstance(tmpl_contents[-1], TextBlock):
             i = len(tmpl_contents[-1].text)-1
             if i >= 0:
-                while ((i >= 0) and 
+                while ((i >= 0) and
                        (tmpl_contents[-1].text[i] in lex.whitespace) and
                        (tmpl_contents[-1].text[i] not in lex.newline)):
                     i -= 1
@@ -2941,13 +2941,13 @@ class StaticObj(object):
         This name is stored as a string.  After all of the classes have been
         defined, then we go back through the tree and replace these names
         with pointers to actual StaticObjs which correspond to those classes.
-        (This was deferred until all of the classes have been defined so 
+        (This was deferred until all of the classes have been defined so
         that users can refer to classes that they will define later on.)
 
         """
 
-        # Now do the same for any children which 
-        # are created during instantiation: 
+        # Now do the same for any children which
+        # are created during instantiation:
         for command in self.instance_commands:
             # Does this command create/instantiate a new copy of a class?
             if isinstance(command, InstantiateCommand):
@@ -2956,9 +2956,9 @@ class StaticObj(object):
                 command.class_ref.statobj = StrToNode(command.class_ref.statobj_str,
                                                       self,
                                                       command.class_ref.srcloc)
-                
+
         # Now recursively resolve StaticObj pointers for the "children"
-        # (in this case, "children" refers to classes whose definitions 
+        # (in this case, "children" refers to classes whose definitions
         #  are nested within this one).
         for child in self.children.values():
             child.LookupStaticRefs()
@@ -2967,7 +2967,7 @@ class StaticObj(object):
 
 
     def _ExtractSuffix(self, class_name_str, lex):
-        """ 
+        """
 
         This ugly function helps process "new" commands such as:
         mola = new ForceFieldA/../MoleculeA.move(30,0,0).rot(45,0,0,1)
@@ -2977,7 +2977,7 @@ class StaticObj(object):
         and suffix "move(30,0,0).rot(45,0,0,1)"
         """
         # Dots in class names can appear for 2 reasons:
-        #   1) as part of a path like "../" describing the location 
+        #   1) as part of a path like "../" describing the location
         #      where this class was defined relative to the caller.
         #      In that case it will be preceeded or followed by
         #      either another dot '.', or a slash '/'
@@ -2993,7 +2993,7 @@ class StaticObj(object):
             if i_dot == -1:
                 break
             # Is the '.' character followed by another '.', as in ".."?
-            # If so, it's part of a path such as "../Parent/Mol', (if 
+            # If so, it's part of a path such as "../Parent/Mol', (if
             # so, it's not what we're looking for, so keep searching)
             if i_dot < len(class_name_str)-1:
                 if class_name_str[i_dot+1] == '.':
@@ -3007,7 +3007,7 @@ class StaticObj(object):
         class_name = class_name_str
         class_suffix_srcloc = None
 
-        if ((i_dot != -1) and 
+        if ((i_dot != -1) and
             (i_dot < len(class_name_str))):
             class_suffix = class_name_str[i_dot:]
             class_name   = class_name_str[:i_dot]
@@ -3027,7 +3027,7 @@ class StaticObj(object):
     def _ProcessClassName(self, class_name_str, lex):
         """
 
-        This function does some additional 
+        This function does some additional
         processing (occasionaly inserting "..." before class_name).
         """
 
@@ -3036,12 +3036,12 @@ class StaticObj(object):
 
         # ---- ellipsis hack ----
         #   (Note-to-self 2012-4-15)
-        # Most users expect ttree.py to behave like a 
-        # standard programming language: If the class they are 
-        # instantiating was not defined in this specific 
+        # Most users expect ttree.py to behave like a
+        # standard programming language: If the class they are
+        # instantiating was not defined in this specific
         # location, they expect ttree.py to search for
-        # it outwards, first in the parent's environment, 
-        # and then in the parent's parent's environment, 
+        # it outwards, first in the parent's environment,
+        # and then in the parent's parent's environment,
         # and so on, until the object is found.
         # For example, most users expect this to work:
         # class A{
@@ -3053,13 +3053,13 @@ class StaticObj(object):
         # Notice in the example above we did not have to specify where "A"
         # was defined, because it is defined in the parent's
         # environment (ie. immediately outside B's environment).
-        # 
-        #    One can obtain the equivalent behavior in ttree.py 
-        # using ellipsis syntax:     "a = new .../A" symbol. 
+        #
+        #    One can obtain the equivalent behavior in ttree.py
+        # using ellipsis syntax:     "a = new .../A" symbol.
         # The ellipsis ".../" tells ttree.py to search upwards
         # for the object to the right of it ("A")
-        #    In order to make ttree.py behave the way 
-        # most users are expecting, we artificially insert a 
+        #    In order to make ttree.py behave the way
+        # most users are expecting, we artificially insert a
         # ".../" before the class name here.  (Later on, the
         # code that processes the ".../" symbol will take
         # care of finding A.)
@@ -3099,7 +3099,7 @@ class StaticObj(object):
                 if ((token == ']') or
                     (token == lex.eof) or
                     (token == '}') or
-                    ((token in lex.wordterminators) and 
+                    ((token in lex.wordterminators) and
                      (token != ','))):
                     if (prev_token in (',','[','(')):
                         class_names.append('')
@@ -3113,7 +3113,7 @@ class StaticObj(object):
 
         token_comma = lex.get_token()
         bracket1 = lex.get_token()
-        if ((token != ']') or 
+        if ((token != ']') or
             (token_comma != ',') or
             (bracket1 != '[')):
             raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
@@ -3146,7 +3146,7 @@ class StaticObj(object):
                 weights.append(weight)
 
         bracket2 = lex.get_token()
-        if ((token != ']') or 
+        if ((token != ']') or
             (bracket2 not in (')',','))):
             raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
                              '       Error near '+lex.error_leader()+'\n'
@@ -3204,7 +3204,7 @@ class StaticObj(object):
 
 
     def BuildCommandList(self, command_list):
-        """ 
+        """
         Search the commands in the tree and make a linear list of commands
         in the order they should be carried out.
 
@@ -3215,7 +3215,7 @@ class StaticObj(object):
 
         # Add a special note to the list of commands to indicate which object
         # the commands refer to.  (This might be useful one day.)
-        # Later we can loop through this command list and still be able to tell 
+        # Later we can loop through this command list and still be able to tell
         # whether or not we are within the scope of a particular class or instance
         # (by seeing if we are between a "ScopeBegin" and "ScopeEnd" pair).
         command_list.append(ScopeBegin(self, self.srcloc_begin))
@@ -3225,9 +3225,9 @@ class StaticObj(object):
 
         #    Unfortunately the commands may be interspersed with the creation of
         # new StaticObjs which have their own commands which we have to explore
-        # recursively. 
+        # recursively.
         # Fortunately each child (StaticObj) has a srcloc_begin member, so we
-        # can infer the correct order of all the commands belonging to the 
+        # can infer the correct order of all the commands belonging to the
         # children and correctly insert them into the correct place in between
         # the commands of the parent.
 
@@ -3238,8 +3238,8 @@ class StaticObj(object):
 
         for child in self.children.values():
             srcloc = child.srcloc_begin
-            # special case: Some children do not have a srcloc because 
-            # they were generated automatically.  These children should 
+            # special case: Some children do not have a srcloc because
+            # they were generated automatically.  These children should
             # not have any commands either so we can ignore them.
             if srcloc != None:
                 srcloc2command_or_child[srcloc] = child
@@ -3307,8 +3307,8 @@ class InstanceObjBasic(object):
 
     __slots__=["name","parent"]
 
-    def __init__(self, 
-                 name = '', 
+    def __init__(self,
+                 name = '',
                  parent = None):
         self.parent = parent  # the environment/object which created this object
                               # Example:
@@ -3316,7 +3316,7 @@ class InstanceObjBasic(object):
                               # belonging to a protein.  The "parent" refers to
                               # the InstanceObj for the protein.  ".parent" is
                               # useful for traversing the global instance tree.
-                              #   (use InstanceObj.statobj.parent for 
+                              #   (use InstanceObj.statobj.parent for
                               #   traversing the global static tree)
 
         self.name   = name    # A string uniquely identifying this object in
@@ -3348,7 +3348,7 @@ class InstanceObjBasic(object):
                             # flags the node as "deleted".  (Nodes are never
                             # actually deleted, just flagged.)
                             # I used to have a separate boolean member variable
-                            # which was set True when deleted, but I started 
+                            # which was set True when deleted, but I started
                             # eliminated unnecessary data members to save space.
 
 
@@ -3395,7 +3395,7 @@ class InstanceObj(InstanceObjBasic):
     "instance tree", the tree of all classes (molecules) which have
     been instantiated.  Recall that whenever a class is instantiated,
     it's members will be instantiated as well.  Since these
-    members can also be classes, this relationship is hierarchical, 
+    members can also be classes, this relationship is hierarchical,
     and can be represented as a tree.
     "InstanceObjs" are the data type used to store the nodes in that tree."""
 
@@ -3420,29 +3420,29 @@ class InstanceObj(InstanceObjBasic):
                #"BuildCommandList"]
 
 
-    def __init__(self, 
-                 name = '', 
+    def __init__(self,
+                 name = '',
                  parent = None):
-        
+
         InstanceObjBasic.__init__(self, name, parent)
 
         self.statobj = None      # The statobj node refered to by this instance
         self.children = {}       # A list of statobjs corresponding to
                                  # constituent parts (members) of the
                                  # current class instance.
-                                 # The typical example is to consider the 
+                                 # The typical example is to consider the
                                  # multiple amino acids (child-molecules)
-                                 # which must be created in order to create a 
-                                 # new protein (instance) to which they belong 
+                                 # which must be created in order to create a
+                                 # new protein (instance) to which they belong
                                  # (which would be "self" in this example)
-        
-        self.categories = {}         # This member stores the same data as the 
-                                     # Instance variables (ie. variables 
+
+        self.categories = {}         # This member stores the same data as the
+                                     # Instance variables (ie. variables
                                      # with a '$' prefix) are stored in a
                                      # category belonging to node.categories
                                      # where "node" is of type InstanceObj.
-                                     # (There is a long explanation of 
-                                     # "categories" in the comments 
+                                     # (There is a long explanation of
+                                     # "categories" in the comments
                                      # of class StaticObj.)
 
         self.commands = []           # An ordered list of commands to carry out
@@ -3458,12 +3458,12 @@ class InstanceObj(InstanceObjBasic):
 
 
 
-    def LookupMultiDescrStr(self, 
-                            multi_descr_str, 
+    def LookupMultiDescrStr(self,
+                            multi_descr_str,
                             srcloc,
                             null_list_warning=False,
                             null_list_error=False):
-        """ 
+        """
         Post-Instance (PI) modifiers/commands are commands which modify
         an instance of a class after it has already been instantiated.
 
@@ -3480,7 +3480,7 @@ class InstanceObj(InstanceObjBasic):
         In the example above "command_2()" is a ModCommand, and
         "a" is the multi_descr_str (string describing the correspond InstanceObj).
         The "command_2()" command will be retroactively pushed onto the
-        list of commands to execute once "a" is instantiated. 
+        list of commands to execute once "a" is instantiated.
         (This is somewhat counter-intuitive.)
 
         When array brackets [] and wildcards are used, a single ModCommand
@@ -3505,7 +3505,7 @@ class InstanceObj(InstanceObjBasic):
 
         In this function, we interpret strings like "a" and "a[*][3][*]"
         in the examples above, and figure out which InstanceObjs they refer to,
-        and push the corresponding command into that InstanceObjs instance 
+        and push the corresponding command into that InstanceObjs instance
         command stack retroactively.
 
            In addition to [*], you can use [a-b] and [a:b] syntax. For example:
@@ -3543,13 +3543,13 @@ class InstanceObj(InstanceObjBasic):
 
                 # If there is a '*' or a ':' character between
                 # the [] brackets, then split the string at '['
-                # (at i_open) and resume reading again at ']' 
+                # (at i_open) and resume reading again at ']'
                 # (at i_close) (and create a new entry in the
                 #  pattern_fragments[] and ranges_ab[] lists)
                 wildcard_here = True
                 range_ab = [0,-1]
                 for j in range(i_open+1, i_close):
-                    if ((pattern_str[j] == ':') or 
+                    if ((pattern_str[j] == ':') or
                         ((pattern_str[j] == '-') and (j > i_open+1)) or
                         (pattern_str[j] == '*')):
                         i_wildcard = len(pattern_fragments)
@@ -3566,7 +3566,7 @@ class InstanceObj(InstanceObjBasic):
                         if (range_b_str != ''):
                             if str.isdigit(range_b_str):
                                 range_ab[1] = int(range_b_str)
-                                # special case: When [a-b] type syntax is 
+                                # special case: When [a-b] type syntax is
                                 #   used, it selects from a to b inclusive.
                                 #   (IE. b is not a strict upper bound.)
                                 if pattern_str[j] == '-':
@@ -3586,8 +3586,8 @@ class InstanceObj(InstanceObjBasic):
                     i_close_prev = i_close
 
         assert(len(pattern_fragments)-1==len(ranges_ab))
-        # Now figure out which InstanceObj or InstanceObjs correspond to 
-        # the name or set of names suggested by the multi_descr_str, 
+        # Now figure out which InstanceObj or InstanceObjs correspond to
+        # the name or set of names suggested by the multi_descr_str,
         # (after wildcard characters have been substituted with integers).
 
         instobj_list = []
@@ -3598,8 +3598,8 @@ class InstanceObj(InstanceObjBasic):
             # Line above will print an error message if the node is not found.
             # However sometimes we don't want this.  Use this code instead:
             path_tokens = pattern_str.split('/')
-            i_last_ptkn, instobj = FollowPath(path_tokens, 
-                                              self, 
+            i_last_ptkn, instobj = FollowPath(path_tokens,
+                                              self,
                                               srcloc)
 
             # If found add to instobj_list
@@ -3610,12 +3610,12 @@ class InstanceObj(InstanceObjBasic):
 
         else:
             # num_counters equals the number of bracket-enclosed wildcards
-            num_counters= len(pattern_fragments)-1 
+            num_counters= len(pattern_fragments)-1
             multi_counters = [ranges_ab[i][0] for i in range(0, num_counters)]
             all_matches_found = False
-            d_carry = 0            
+            d_carry = 0
             while d_carry < num_counters:
-                    
+
                 # Find the next InstanceObj in the set of InstanceObjs which
                 # satisfy the wild-card pattern in pattern_fragments.
 
@@ -3633,8 +3633,8 @@ class InstanceObj(InstanceObjBasic):
                     #                 candidate_descr_str+'\"\n')
 
                     path_tokens = candidate_descr_str.split('/')
-                    i_last_ptkn, instobj = FollowPath(path_tokens, 
-                                                      self, 
+                    i_last_ptkn, instobj = FollowPath(path_tokens,
+                                                      self,
                                                       srcloc)
 
                     # If there is an InstanceObj with that name,
@@ -3657,7 +3657,7 @@ class InstanceObj(InstanceObjBasic):
 
                     # If there is no InstanceObj with that name,
                     # then perhaps it is because we have incremented
-                    # the counter too high.  If there are multiple 
+                    # the counter too high.  If there are multiple
                     # counters, increment the next most significant
                     # counter, and reset this counter to 0.
                     # Keep looking
@@ -3672,7 +3672,7 @@ class InstanceObj(InstanceObjBasic):
                             break
                         multi_counters[d_carry] += 1
                     else:
-                        # Object was not found but we keep going.  Skip 
+                        # Object was not found but we keep going.  Skip
                         # to the next entry in the multi-dimensional list.
                         d_carry = 0
                         multi_counters[0] += 1
@@ -3684,7 +3684,7 @@ class InstanceObj(InstanceObjBasic):
                              ErrorLeader(srcloc.infile,
                                          srcloc.lineno)+'\n'
                              '       No objects (yet) matching name \"'+pattern_str+'\".\n')
-        if (null_list_error and 
+        if (null_list_error and
             (len(instobj_list) == 0)):
             if len(pattern_fragments) == 1:
                 raise InputError('Error('+g_module_name+'.LookupMultiDescrStr()):\n'
@@ -3698,7 +3698,7 @@ class InstanceObj(InstanceObjBasic):
                                  ErrorLeader(srcloc.infile,
                                              srcloc.lineno)+'\n'
                                  '       No objects (yet) matching name \"'+pattern_str+'\".\n')
-                
+
 
         return instobj_list
 
@@ -3754,7 +3754,7 @@ class InstanceObj(InstanceObjBasic):
                           class_parents_in_use):
         """
         This takes care of the details of copying relevant data from an StaticObj
-        into a newly-created InstanceObj.  It allocates space for and performs 
+        into a newly-created InstanceObj.  It allocates space for and performs
         a deep-copy of any instance variables (and new instance categories), but
         it performs a shallow copy of everything else (template text, etc..).
         This is done recursively for every child that this class instantiates.
@@ -3768,8 +3768,8 @@ class InstanceObj(InstanceObjBasic):
         #                 '.BuildInstanceTree('+statobj.name+')\n')
 
         #instance_refs = {}
-        # Keep track of which line in the file (and which file) we were 
-        # in when we began parsing the class which defines this instance, 
+        # Keep track of which line in the file (and which file) we were
+        # in when we began parsing the class which defines this instance,
         # as well as when we stopped parsing.
         # (Don't do this if you are recusively searching class_parents because
         # in that case you would be overwritting .statobj with with the parent.)
@@ -3781,7 +3781,7 @@ class InstanceObj(InstanceObjBasic):
         # Make copies of the class_parents' StaticObj data.
 
         # First deal with the "self.instance_commands_push"
-        # These commands should be carried out before any of the commands 
+        # These commands should be carried out before any of the commands
         # in "self.instance_commands".
         for command in statobj.instance_commands_push:
             #self.commands.append(command)
@@ -3800,7 +3800,7 @@ class InstanceObj(InstanceObjBasic):
         # Now, deal with the data in THIS object and its children
         assert((self.commands != None) and (self.categories != None))
 
-        # "instance_categories" contains a list of new "categories" (ie new 
+        # "instance_categories" contains a list of new "categories" (ie new
         # types of variables) to create whenever this class is instantiated.
         # (This is used whenever we create a local counter variable: Suppose we
         #  want to count the residues within a particular protein, when there
@@ -3819,7 +3819,7 @@ class InstanceObj(InstanceObjBasic):
 
 
         # Finally deal with the "self.instance_commands_pop"
-        # These commands should be carried out after all of the commands 
+        # These commands should be carried out after all of the commands
         # in "self.instance_commands".
         for command in statobj.instance_commands_pop:
             #self.commands.append(command)
@@ -3926,7 +3926,7 @@ class InstanceObj(InstanceObjBasic):
             self.commands.append(command)
 
             for var_ref in command.tmpl_list:
-                # Process the VarRef entries in the tmpl_list, 
+                # Process the VarRef entries in the tmpl_list,
                 #   (and check they have the correct prefix: either '$' or '@')
                 # Ignore other entries (for example, ignore TextBlocks).
 
@@ -3948,18 +3948,18 @@ class InstanceObj(InstanceObjBasic):
                     # "categories" is a dictionary storing "Category" objects
                     # indexed by category names.
 
-                    # Note to self:  Always use the ".categories" member, 
+                    # Note to self:  Always use the ".categories" member,
                     #  (never the ".instance_categories" member.
-                    #  ".instance_categories" are only used temporarilly before 
+                    #  ".instance_categories" are only used temporarilly before
                     #  we instantiate, ie. before we build the tree of InstanceObjs.)
 
                     category = categories[var_ref.nptr.cat_name]
                     # "category" is a Category object containing a
                     # dictionary of VarBinding objects, and an internal counter.
-                    
+
                     var_bindings = category.bindings
-                    # "var_bindings" is a dictionary storing "VarBinding" 
-                    # objects, indexed by leaf nodes.  Each leaf node 
+                    # "var_bindings" is a dictionary storing "VarBinding"
+                    # objects, indexed by leaf nodes.  Each leaf node
                     # corresponds to a unique variable in this category.
 
                     # --- Now update "var_bindings" ---
@@ -3971,7 +3971,7 @@ class InstanceObj(InstanceObjBasic):
                     if var_ref.nptr.leaf_node in var_bindings:
                         var_binding = var_bindings[var_ref.nptr.leaf_node]
                         # "var_binding" stores the information for a variable,
-                        # including pointers to all of the places the variable 
+                        # including pointers to all of the places the variable
                         # is rerefenced, the variable's (full) name, and value.
                         #
                         # Keep track of all the places that varible is
@@ -3988,11 +3988,11 @@ class InstanceObj(InstanceObjBasic):
                         # keep track of the cat_node, cat_name, leaf_node:
                         var_binding.nptr = var_ref.nptr
 
-                        # "var_binding.full_name" stores a unique string like 
-                        #   '@/atom:Water/H' or '$/atom:water[1423]/H2', 
+                        # "var_binding.full_name" stores a unique string like
+                        #   '@/atom:Water/H' or '$/atom:water[1423]/H2',
                         # which contains the full path for the category and leaf
                         # nodes, and uniquely identifies this variable globally.
-                        # Thus these strings correspond uniquely (ie. in a 
+                        # Thus these strings correspond uniquely (ie. in a
                         # one-to-one fashion) with the nodes they represent.
 
 
@@ -4043,7 +4043,7 @@ class InstanceObj(InstanceObjBasic):
 
 
     def BuildCommandList(self, command_list):
-        """ 
+        """
         Search the commands in the tree and make a linear list of commands
         in the order they should be carried out.
 
@@ -4060,7 +4060,7 @@ class InstanceObj(InstanceObjBasic):
 
         # Add a special note to the list of commands to indicate which object
         # the commands refer to.  (This might be useful one day.)
-        # Later we can loop through this command list and still be able to tell 
+        # Later we can loop through this command list and still be able to tell
         # whether or not we are within the scope of a particular class or instance
         # (by seeing if we are between a "ScopeBegin" and "ScopeEnd" pair).
 
@@ -4102,17 +4102,17 @@ class InstanceObj(InstanceObjBasic):
 
 
 def AssignTemplateVarPtrs(tmpl_list, context_node):
-    """ 
-       Now scan through all the variables within the templates defined 
-    for this context_node (either static or dynamic depending on var_filter). 
-    Each reference to a variable in the template has a descriptor which 
-    indicates the variable's type, and in which molecule it is defined (ie 
+    """
+       Now scan through all the variables within the templates defined
+    for this context_node (either static or dynamic depending on var_filter).
+    Each reference to a variable in the template has a descriptor which
+    indicates the variable's type, and in which molecule it is defined (ie
     where it is located in the molecule instance tree or type definition tree).
     (See comments for "class VarNPtr(object):" above for details.)
 
-         Eventually we want to assign a value to each variable. 
-    This same variable (node) may appear multiple times in diffent templates. 
-    So we also create a place to store this variable's value, and also assign 
+         Eventually we want to assign a value to each variable.
+    This same variable (node) may appear multiple times in diffent templates.
+    So we also create a place to store this variable's value, and also assign
     (two-way) pointers from the VarRef in the template, to this storage area so
     that later on when we write out the contents of the template to a file, we
     can substitute this variable with it's value, in all the places it appears.
@@ -4120,16 +4120,16 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
     """
 
     for var_ref in tmpl_list:
-        # Process the VarRef entries in the tmpl_list, 
+        # Process the VarRef entries in the tmpl_list,
         #   (and check they have the correct prefix: either '$' or '@')
         # Ignore other entries (for example, ignore TextBlocks).
 
 
         if (isinstance(var_ref, VarRef) and
-            ((isinstance(context_node, StaticObj) and 
+            ((isinstance(context_node, StaticObj) and
               (var_ref.prefix[0] == '@'))
              or
-             (isinstance(context_node, InstanceObjBasic) and 
+             (isinstance(context_node, InstanceObjBasic) and
               (var_ref.prefix[0] == '$')))):
 
 
@@ -4146,19 +4146,19 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
             # "categories" is a dictionary storing "Category" objects
             # indexed by category names.
 
-            # Note to self:  Always use the ".categories" member, 
+            # Note to self:  Always use the ".categories" member,
             #  (never the ".instance_categories" member.
-            #  ".instance_categories" are only used temporarilly before 
+            #  ".instance_categories" are only used temporarilly before
             #  we instantiate, ie. before we build the tree of InstanceObjs.)
 
 
             category = categories[var_ref.nptr.cat_name]
             # "category" is a Category object containing a
             # dictionary of VarBinding objects, and an internal counter.
-                    
+
             var_bindings = category.bindings
-            # "var_bindings" is a dictionary storing "VarBinding" 
-            # objects, indexed by leaf nodes.  Each leaf node 
+            # "var_bindings" is a dictionary storing "VarBinding"
+            # objects, indexed by leaf nodes.  Each leaf node
             # corresponds to a unique variable in this category.
 
             # --- Now update "var_bindings" ---
@@ -4170,7 +4170,7 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
             if var_ref.nptr.leaf_node in var_bindings:
                 var_binding = var_bindings[var_ref.nptr.leaf_node]
                 # "var_binding" stores the information for a variable,
-                # including pointers to all of the places the variable 
+                # including pointers to all of the places the variable
                 # is rerefenced, the variable's (full) name, and value.
                 #
                 # Keep track of all the places that varible is
@@ -4187,11 +4187,11 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
                 # keep track of the cat_node, cat_name, leaf_node:
                 var_binding.nptr = var_ref.nptr
 
-                # "var_binding.full_name" stores a unique string like 
-                #   '@/atom:Water/H' or '$/atom:water[1423]/H2', 
+                # "var_binding.full_name" stores a unique string like
+                #   '@/atom:Water/H' or '$/atom:water[1423]/H2',
                 # which contains the full path for the category and leaf
                 # nodes, and uniquely identifies this variable globally.
-                # Thus these strings correspond uniquely (ie. in a 
+                # Thus these strings correspond uniquely (ie. in a
                 # one-to-one fashion) with the nodes they represent.
 
 
@@ -4267,7 +4267,7 @@ def AssignVarOrderByCommand(command_list, prefix_filter):
                 if isinstance(var_ref, VarRef):
                     if var_ref.prefix in prefix_filter:
                         count += 1
-                        if ((var_ref.binding.order is None) or 
+                        if ((var_ref.binding.order is None) or
                             (var_ref.binding.order > count)):
                             var_ref.binding.order = count
 
@@ -4275,7 +4275,7 @@ def AssignVarOrderByCommand(command_list, prefix_filter):
 #def AssignVarOrderByFile(command_list, prefix_filter):
 #    """
 #    For each category in context_node, and each variable in that category,
-#    set the order of each variable equal to the position of that variable 
+#    set the order of each variable equal to the position of that variable
 #    in the user's input file.
 #
 #    """
@@ -4286,7 +4286,7 @@ def AssignVarOrderByCommand(command_list, prefix_filter):
 #            for var_ref in tmpl_list:
 #                if isinstance(var_ref, VarRef):
 #                    if var_ref.prefix in prefix_filter:
-#                        if ((var_ref.binding.order is None) or 
+#                        if ((var_ref.binding.order is None) or
 #                            (var_ref.binding.order > var_ref.srcloc.order)):
 #                            var_ref.binding.order = var_ref.srcloc.order
 
@@ -4294,12 +4294,12 @@ def AssignVarOrderByCommand(command_list, prefix_filter):
 def AssignVarOrderByFile(context_node, prefix_filter, search_instance_commands=False):
     """
     For each category in context_node, and each variable in that category,
-    set the order of each variable equal to the position of that variable 
+    set the order of each variable equal to the position of that variable
     in the user's input file.
 
     """
 
-    commands = context_node.commands 
+    commands = context_node.commands
     if search_instance_commands:
         assert(isinstance(context_node, StaticObj))
         commands.append(context_node.instance_commands_push + \
@@ -4310,9 +4310,9 @@ def AssignVarOrderByFile(context_node, prefix_filter, search_instance_commands=F
         if isinstance(command, WriteFileCommand):
             tmpl_list = command.tmpl_list
             for var_ref in tmpl_list:
-                if (isinstance(var_ref, VarRef) and 
+                if (isinstance(var_ref, VarRef) and
                     (var_ref.prefix in prefix_filter)):
-                    if ((var_ref.binding.order == -1) or 
+                    if ((var_ref.binding.order == -1) or
                         (var_ref.binding.order > var_ref.srcloc.order)):
                         var_ref.binding.order = var_ref.srcloc.order
 
@@ -4324,24 +4324,24 @@ def AssignVarOrderByFile(context_node, prefix_filter, search_instance_commands=F
 
 
 
-def AutoAssignVals(cat_node, 
+def AutoAssignVals(cat_node,
                    sort_variables,
                    reserved_values = None,
                    ignore_prior_values = False):
     """
-    This function automatically assigns values to all the variables 
+    This function automatically assigns values to all the variables
     belonging to all the categories in cat_node.categories.
     Each category has its own internal counter.  For every variable in that
-    category, query the counter (which usually returns an integer), 
-    and assign the variable to it.  Exceptions can be made if the integer 
+    category, query the counter (which usually returns an integer),
+    and assign the variable to it.  Exceptions can be made if the integer
     is reserved by some other variable, or if it has been already assigned.
-    Afterwards, we recursively search the child nodes recursively 
+    Afterwards, we recursively search the child nodes recursively
     (in a depth-first-search order).
 
-    sort_variables: Sorting the variables according to their "binding.order" 
+    sort_variables: Sorting the variables according to their "binding.order"
                     counters is optional.
 
-    """    
+    """
 
     if (not hasattr(cat_node, 'categories')):
         # (sometimes leaf nodes lack a 'categories' member, to save memory)
@@ -4365,12 +4365,12 @@ def AutoAssignVals(cat_node,
                 prefix = '@'
             sys.stderr.write('  sorting variables in category: '+prefix+
                              CanonicalCatName(cat_name, cat_node)+':\n')
-            
-            var_bind_iter = iter(sorted(cat.bindings.items(), 
+
+            var_bind_iter = iter(sorted(cat.bindings.items(),
                                         key=operator.itemgetter(1)))
         else:
             # Just iterate through them in the order that they were added
-            # to the category list.  (This happens to be the same order as 
+            # to the category list.  (This happens to be the same order as
             # we found it earlier when searching the tree.)
             var_bind_iter = iter(cat.bindings.items())
 
@@ -4406,7 +4406,7 @@ def AutoAssignVals(cat_node,
                         while True:
                             cat.counter.incr()
                             value = str(cat.counter.query())
-                            if ((reserved_values is None) or 
+                            if ((reserved_values is None) or
                                 ((cat, value) not in reserved_values)):
                                 break
 
@@ -4448,7 +4448,7 @@ def ExtractFormattingCommands(suffix):
 
 
 def Render(tmpl_list, substitute_vars=True):
-    """ 
+    """
     This function converts a TextBlock,VarRef list into a string.
     It is invoked by WriteTemplatesValue() in order to print
     out the templates stored at each node of the tree.
@@ -4530,7 +4530,7 @@ def FindReplacementVarPairs(context_node,
             tmpl_list = command.tmpl_list
             var_alias = None
             for entry in tmpl_list:
-                # Each successive pair of variables indicates a 
+                # Each successive pair of variables indicates a
                 # variable you wish to replace.
                 # (Any ordinary text in between variable names is ignored.)
                 if isinstance(entry, VarRef):
@@ -4545,7 +4545,7 @@ def FindReplacementVarPairs(context_node,
 
                         replace_var_pairs[var_alias] = var_replace
                         var_alias = None
-                    
+
     # Recursively invoke AssignVarPtrs() on all (non-leaf) child nodes:
     for child in context_node.children.values():
         FindReplacementVarPairs(child,
@@ -4579,7 +4579,7 @@ def ReplaceVars(context_node,
     if len(replace_var_pairs) > 0:
         for command in commands:
             if isinstance(command, WriteFileCommand):
-                ReplaceVarsInTmpl(command.tmpl_list, 
+                ReplaceVarsInTmpl(command.tmpl_list,
                                   replace_var_pairs)
 
     # Recursively invoke ReplaceVars() on all (non-leaf) child nodes:
@@ -4632,7 +4632,7 @@ def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
                 if nptr_old.leaf_node in var_bindings:
                     var_bindings[nptr_new_leaf_node].refs += var_bindings[nptr_old.leaf_node].refs
                     del var_bindings[nptr_old.leaf_node]
-                
+
                 var_ref.nptr.cat_name = nptr_new_cat_name
                 var_ref.nptr.cat_node = nptr_new_cat_node
                 var_ref.nptr.leaf_node = nptr_new_leaf_node  # <-- this will...
@@ -4677,7 +4677,7 @@ def MergeWriteCommands(command_list):
 
 
 def WriteTemplatesValue(file_templates):
-    """ Carry out the write() and write_once() commands (which 
+    """ Carry out the write() and write_once() commands (which
     write out the contents of the templates contain inside them).
 
     """
@@ -4708,9 +4708,9 @@ def WriteTemplatesValue(file_templates):
 
 
 def WriteTemplatesVarName(file_templates):
-    """ Carry out the write() and write_once() commands (which 
+    """ Carry out the write() and write_once() commands (which
     write out the contents of the templates contain inside them).
-    However variables within the templates are represented by their 
+    However variables within the templates are represented by their
     full name instead of their assigned value.
 
     """
@@ -4748,10 +4748,10 @@ def EraseTemplateFiles(command_list):
 
 
 def WriteVarBindingsFile(node):
-    """ Write out a single file which contains a list of all 
-    of the variables defined (regardless of which class they 
+    """ Write out a single file which contains a list of all
+    of the variables defined (regardless of which class they
     were defined in).  Next to each variable name is the corresponding
-    information stored in that variable (a number) that variable. 
+    information stored in that variable (a number) that variable.
 
     """
     if (not hasattr(node, 'categories')):
@@ -4810,17 +4810,17 @@ def CustomizeBindings(bindings,
 
         if prefix == '@':
             var_binding = LookupVar(var_descr_str,
-                                    objectdefs, 
+                                    objectdefs,
                                     dbg_loc)
 
         elif prefix == '$':
-            var_binding = LookupVar(var_descr_str, 
+            var_binding = LookupVar(var_descr_str,
                                     objects,
                                     dbg_loc)
         else:
             # If the user neglected a prefix, this should have generated
             # an error earlier on.
-                assert(False) 
+                assert(False)
 
         # Change the assignment:
         var_binding.value = value
@@ -4855,7 +4855,7 @@ def ReplaceVarsInCustomBindings(bindings,
             # At this point, we have probably already binding associated
             # with any replaced variables.  Instead lookup the nodes directly:
 
-            cat_name, cat_node, leaf_node = DescrToCatLeafNodes(var_descr_str, 
+            cat_name, cat_node, leaf_node = DescrToCatLeafNodes(var_descr_str,
                                                                 objectdefs,
                                                                 dbg_loc)
             # If this triplet corresponds to a variable we want to replace
@@ -4877,9 +4877,9 @@ def ReplaceVarsInCustomBindings(bindings,
 
 ##############################################################
 #####################  BasicUI functions #####################
-# These functions are examples of how to use the StaticObj 
+# These functions are examples of how to use the StaticObj
 # and InstanceObj data structures above, and to read a ttree file.
-# These are examples only.  New programs based on ttree_lib.py 
+# These are examples only.  New programs based on ttree_lib.py
 # will probably require their own settings and functions.
 ##############################################################
 
@@ -4887,7 +4887,7 @@ def ReplaceVarsInCustomBindings(bindings,
 def BasicUIReadBindingsFile(bindings_so_far, filename):
     try:
         f = open(filename, 'r')
-    except IOError: 
+    except IOError:
         sys.stderr.write('Error('+g_filename+'):\n''       : unable to open file\n'
                          '\n'
                          '       \"'+filename+'\"\n'
@@ -4974,27 +4974,27 @@ def BasicUIReadBindingsStream(bindings_so_far, in_stream, source_name=''):
 
 class BasicUISettings(object):
     """
-    BasicUISettings() contains several run-time user customisations 
-    for ttree. (These effect the order and values assigned to variables 
-    in a ttreee file). 
+    BasicUISettings() contains several run-time user customisations
+    for ttree. (These effect the order and values assigned to variables
+    in a ttreee file).
     This object, along with the other "UI" functions below are examples only.
     (New programs based on ttree_lib.py will probably have their own settings
      and functions.)
 
     Members:
-        user_bindings 
+        user_bindings
         user_bindings_x
-    These are lists containing pairs of variable names, 
+    These are lists containing pairs of variable names,
     and the string values they are bound to (which are typically numeric).
     Values specified in the "user_bindings_x" list are "exclusive".
-    This means their values are reserved, so that later on, when other 
+    This means their values are reserved, so that later on, when other
     variables (in the same category) are automatically assigned to values, care
     care will be taken to avoid duplicating the values in user_bindings_x.
     However variables in the "user_bindings" list are assigned without regard
     to the values assigned to other variables, and may or may not be unique.
 
         order_method
-    The order_method specifies the order in which values will be automatically 
+    The order_method specifies the order in which values will be automatically
     assigned to variables.  (In the context of building molecular simulation
     input files, this helps the user to insure that the order of the atoms
     created by the ttree file matches the order they appear in other files
@@ -5023,12 +5023,12 @@ class BasicUISettings(object):
 def BasicUIParseArgs(argv, settings):
     """
     BasicUIParseArgs()
-    The following function contains part of the user interface for a 
+    The following function contains part of the user interface for a
     typical ttree-based program.  This function processes an argument list
     and extracts the common ttree user settings.
     This function, along with the other "UI" functions below are examples only.
     (New programs based on ttree_lib.py will probably have their own UI.)
-    
+
     """
 
     #argv = [arg for arg in orig_argv] # (make a deep copy of "orig_argv")
@@ -5061,7 +5061,7 @@ def BasicUIParseArgs(argv, settings):
                                      '      Error in -a \"'+argv[i+1]+'\" argument.\n'
                                      '      '+bind_err_msg_var)
                 BasicUIReadBindingsText(settings.user_bindings_x,
-                                        argv[i+1], 
+                                        argv[i+1],
                                         '__command_line_argument__')
             else:
                 BasicUIReadBindingsFile(settings.user_bindings_x,
@@ -5081,7 +5081,7 @@ def BasicUIParseArgs(argv, settings):
                                      '      Error in -b \"'+argv[i+1]+'\" argument.\n'
                                      '      '+bind_err_msg_var)
                 BasicUIReadBindingsText(settings.user_bindings,
-                                        argv[i+1], 
+                                        argv[i+1],
                                         '__command_line_argument__')
             else:
                 BasicUIReadBindingsFile(settings.user_bindings,
@@ -5134,7 +5134,7 @@ def BasicUIParseArgs(argv, settings):
         elif len(argv) == 2:
             try:
                 settings.lex = TemplateLexer(open(argv[1], 'r'), argv[1]) # Parse text from file
-            except IOError: 
+            except IOError:
                 sys.stderr.write('Error('+g_filename+'):\n'
                                  '       unable to open file\n'
                                  '       \"'+argv[1]+'\"\n'
@@ -5160,7 +5160,7 @@ def BasicUIParseArgs(argv, settings):
 
 
 def BasicUI(settings,
-            static_tree_root, 
+            static_tree_root,
             instance_tree_root,
             static_commands,
             instance_commands):
@@ -5186,12 +5186,12 @@ def BasicUI(settings,
 
     #sys.stderr.write('static = ' + str(static_tree_root) + '\n')
 
-    # Step 2: Now that the static tree has been constructed, lookup 
+    # Step 2: Now that the static tree has been constructed, lookup
     #         any references to classes (StaticObjs), contained within
     #         the instance_children or class_parents of each node in
     #         static_tree_root.  Replace them with (pointers to)
     #         the StaticObjs they refer to (and check validity).
-    #         (Note: Variables stored within the templates defined by write() 
+    #         (Note: Variables stored within the templates defined by write()
     #                and write_once() statements may also refer to StaticObjs in
     #                the tree, but we leave these references alone.  We handle
     #                these assignments later using "AssignVarPtrs()" below.)
@@ -5241,7 +5241,7 @@ def BasicUI(settings,
     #         (for example, the "write()" and "new" commands).
     #         Search through the tree, and append commands to a command list.
     #         Then re-order the list in the order the commands should have
-    #         been executed in.  (We don't carry out the commands yet, 
+    #         been executed in.  (We don't carry out the commands yet,
     #         we just store them and sort them.)
     class_parents_in_use = set([])
     static_tree_root.BuildCommandList(static_commands)
@@ -5256,9 +5256,9 @@ def BasicUI(settings,
 
     # Step 7: We are about to assign numbers to the variables.
     #         We need to decide the order in which to assign them.
-    #         By default static variables (@) are assigned in the order 
+    #         By default static variables (@) are assigned in the order
     #         they appear in the file.
-    #         And, by default instance variables ($) 
+    #         And, by default instance variables ($)
     #         are assigned in the order they are created during instantiation.
     #sys.stderr.write(' done\ndetermining variable count order...')
     AssignVarOrderByFile(static_tree_root, '@', search_instance_commands=True)
@@ -5288,7 +5288,7 @@ def BasicUI(settings,
     AutoAssignVals(instance_tree_root,
                    (settings.order_method != 'by_tree'),
                    reserved_values)
-                        
+
     if len(settings.user_bindings) > 0:
         if len(replace_var_pairs) > 0:
             ReplaceVarsInCustomBindings(settings.user_bindings,
@@ -5311,7 +5311,7 @@ if __name__ == '__main__':
     This is is a "main module" wrapper for invoking ttree.py
     as a stand alone program.  This program:
 
-    1)reads a ttree file, 
+    1)reads a ttree file,
     2)constructs a tree of class definitions (g_objectdefs)
     3)constructs a tree of instantiated class objects (g_objects),
     4)automatically assigns values to the variables,
@@ -5342,7 +5342,7 @@ if __name__ == '__main__':
 
 
         BasicUI(settings,
-                g_objectdefs, 
+                g_objectdefs,
                 g_objects,
                 g_static_commands,
                 g_instance_commands)
@@ -5366,7 +5366,7 @@ if __name__ == '__main__':
         # Write the files with the variable names substituted by values
         WriteTemplatesValue(g_static_commands)
         WriteTemplatesValue(g_instance_commands)
-    
+
         sys.stderr.write(' done\n')
 
         # Step 11: Now write the variable bindings/assignments table.
@@ -5380,4 +5380,3 @@ if __name__ == '__main__':
     except (ValueError, InputError) as err:
         sys.stderr.write('\n\n'+str(err)+'\n')
         sys.exit(-1)
-

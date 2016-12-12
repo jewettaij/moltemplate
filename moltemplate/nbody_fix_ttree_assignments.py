@@ -2,7 +2,7 @@
 
 """
 nbody_fix_ttree_assignments.py
-       
+
 This is an ugly little script which was not intended to be run by end users.
 
 Typical usage:
@@ -12,17 +12,17 @@ nbody_fix_ttree_assignments.py "angles" new_Angles.template \
 
 What it does:
 
-In this example, this program extracts the first column from 
-"new_Angles.template", and appends to it the first column from 
+In this example, this program extracts the first column from
+"new_Angles.template", and appends to it the first column from
 the lines in ttree_assignments.txt containing "@angle:".
 Then it adds a second column which is just a sequence of integers
 counting upwards.
-Finally it inserts this 2-column text into the appropriate place in a 
+Finally it inserts this 2-column text into the appropriate place in a
 ttree_assignments.txt file, replacing the original @angle variables
 with the new ones (followed by the renumbered original).
 
 
-   AWK/GREP equivalent 
+   AWK/GREP equivalent
 This program is roughly equivalent to the following lines of awk/grep:
 
 awk 'BEGIN{i=-1} {if(substr($0,0,8)=="$/angle") i=NR; if (i==-1){print $0}}'\
@@ -32,8 +32,8 @@ awk '{print $1}' < new_Angles.template > Angles_column1.txt
 grep '$/angle:' ttree_assignments.txt | awk '{print $1}' >> Angles_column1.txt
 awk '{print $1 "  " NR}' <  Angles_column1.txt >> ttree_assignments_new.txt
 
-awk 'BEGIN{found=0;passed=0} {if(substr($0,0,8)=="$/angle") found=1; 
-                              else {if (found) {passed=1}} 
+awk 'BEGIN{found=0;passed=0} {if(substr($0,0,8)=="$/angle") found=1;
+                              else {if (found) {passed=1}}
                               if (passed) print $0}' \
           < ttree_assignments.txt >> ttree_assignments_new.txt
 
@@ -54,12 +54,12 @@ try:
                          '   (This is likely a programmer error.\n'
                          '    This script was not intended to be run by end users.)\n')
 
-    cat_name = sys.argv[1] 
+    cat_name = sys.argv[1]
     f = open(sys.argv[2])
     lines_generated = f.readlines()
     f.close()
 
-    # Selections are simply lists of 2-tuples (pairs) 
+    # Selections are simply lists of 2-tuples (pairs)
     #f = open('ttree_assignments.txt','r')
     #lines_bindings = f.readlines()
     #f.close()
@@ -146,4 +146,3 @@ try:
 except (ValueError, InputError) as err:
     sys.stderr.write('\n'+str(err)+'\n')
     sys.exit(-1)
-

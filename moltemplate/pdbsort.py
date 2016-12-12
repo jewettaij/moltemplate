@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-   Unfortunately, the lines in a PDB files are not always listed in the 
+   Unfortunately, the lines in a PDB files are not always listed in the
    correct order.  Software that reads PDB files is expected to re-sort this
    data before interpreting it.  (One reason I don't like them.)
    This script reads a PDB file from the standard input, sorts the lines
-   according to ChainID, SeqNum (residue-number), Icode (insert-code), 
+   according to ChainID, SeqNum (residue-number), Icode (insert-code),
    and AtomID (in that order) and prints the result to the standard-out.
    Only the ATOM and HETATM records are effected.
    All other lines in the PDB file are printed back to the user verbatim.
@@ -20,7 +20,7 @@ from collections import defaultdict
 # identifiers:
 #   the ChainID a single letter specifying
 #   the SeqNum an integer indicating the location within that chain
-#   the ICode ("insert code" usually 0.  I don't know why this number is 
+#   the ICode ("insert code" usually 0.  I don't know why this number is
 #              necessary. ..For the record, I never loved the PDB file format.)
 
 
@@ -135,4 +135,3 @@ sequence_of_atomdescrs = sorted(atomdescrs, key=attrgetter('chainID','seqNum','i
 for atomdescr in sequence_of_atomdescrs:
     for line in atoms2lines[atomdescr]:
         sys.stdout.write(line+'\n')
-

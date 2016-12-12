@@ -11,7 +11,7 @@ lines_gaff = sys.stdin.readlines()
     # Instead I use hybrid lj/charmm/coul/charmm by default, because
     # LAMMPS complains if you attempt to use lj/charmm/coul/long on a
     # system if it does not contain any charged particles.
-    # Currently, moltemplate does not assign atomic charge, 
+    # Currently, moltemplate does not assign atomic charge,
     # so this problem occurs frequently.
 
 #pair_style = 'lj/charmm/coul/charmm'
@@ -24,13 +24,13 @@ for i in range(0, len(lines_gaff)):
     tokens= line.split()
     atype = tokens[0]
 
-    # UGGHHH 
+    # UGGHHH
 
     # OLD CODE:
     #sig=tokens[1]
 
     #   CORRECTION #1
-    # It looks the number in this part of the file is an atom radii, not a 
+    # It looks the number in this part of the file is an atom radii, not a
     # diameter.  In other words, this number is 0.5*sigma instead of sigma.
     # So we multiply it by 2.0.
     #sig=str(2.0*float(tokens[1]))

@@ -23,8 +23,8 @@ lammps_data_sections = set(['Atoms',
                             'Angles By Type'])   # new. not standard LAMMPS
 
 
-def DeleteComments(string, 
-                   escape='\\', 
+def DeleteComments(string,
+                   escape='\\',
                    comment_char='#'):
     escaped_state = False
     for i in range(0,len(string)):
@@ -41,7 +41,7 @@ def DeleteComments(string,
 
 
 def ExtractDataSection(f,
-                       section_name, 
+                       section_name,
                        comment_char = '#',
                        include_section_name = False,
                        return_line_nums = False):
@@ -88,7 +88,7 @@ def ExtractDataSection(f,
                 yield i
             else:
                 yield line_orig
-            
+
         i += 1
 
 
@@ -109,8 +109,8 @@ if __name__ == "__main__":
     else:
         line_nums_exclude = set([])
         for section_name in sys.argv[1:]:
-            for line_num in ExtractDataSection(lines, 
-                                               section_name, 
+            for line_num in ExtractDataSection(lines,
+                                               section_name,
                                                include_section_name=True,
                                                return_line_nums=True):
                 line_nums_exclude.add(line_num)

@@ -44,4 +44,3 @@ for i in range(0, len(lines_gaff)):
 
 sys.stdout.write('  } # (end of Bonds By Type)\n')
 sys.stdout.write('\n')
-

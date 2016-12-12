@@ -8,13 +8,13 @@ from nbody_graph_search import Ugraph
 #   ...
 # }
 
-#    To find 4-body "improper" interactions, 
+#    To find 4-body "improper" interactions,
 #    (by default, most of the time), we would use this subgraph:
 #           3
 #           *                  1st bond connects atoms 0 and 1
 #           |              =>  2nd bond connects atoms 0 and 2
 #         _.*._                3rd bond connects atoms 0 and 3
-#       *'  0  `*              
+#       *'  0  `*
 #      1         2
 #
 
@@ -26,7 +26,7 @@ def canonical_order(match):
     """
     When searching for atoms with matching bond patterns GraphMatcher
     often returns redundant results. We must define a "canonical_order"
-    function which sorts the atoms and bonds in a way which is consistent 
+    function which sorts the atoms and bonds in a way which is consistent
     with the type of N-body interaction being considered.
     However, some improper_styles (such as improper_style class2)
     have no symmetry (at least not for arbitrary choices of parameters).

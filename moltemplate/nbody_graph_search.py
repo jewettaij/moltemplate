@@ -14,7 +14,7 @@ from operator import itemgetter
 
 
 class GenError(Exception):
-    """ 
+    """
     An exception class containing string for error reporting.
 
     """
@@ -26,7 +26,7 @@ class GenError(Exception):
         return str(self)
 
 class GraphError(GenError):
-    """ 
+    """
     An exception class containing a graph and a string for error reporting.
 
     """
@@ -35,7 +35,7 @@ class GraphError(GenError):
         self.g = g
     def __str__(self):
         g_str = str(g)
-        # If the string representation of the graph is too 
+        # If the string representation of the graph is too
         # large to fit in one screen, truncate it
         g_str_lines = g_str.split('\n')
         if (len(g_str_lines) > 12):
@@ -57,7 +57,7 @@ class NotUndirected(GraphError):
 
 class Edge(object):
     __slots__=["start","stop","attr"]
-    def __init__(self, 
+    def __init__(self,
                  iv_start, # edge starts here (index into vertex list)
                  iv_stop,   # edge ends here (index into vertex list)
                  attr=None): # edges have an optional type attribute
@@ -91,7 +91,7 @@ class Dgraph(object):
     NULL = -1  # forbidden vertex id number (used several places)
 
     def __init__(self, edgelist=None):
-        """ 
+        """
         The constructor accepts an optional neighborlist argument.
         This is a simple list of neighbors for every vertex in the graph
         and it completely defines the topology of the graph.
@@ -100,7 +100,7 @@ class Dgraph(object):
         Alternatley, you can leave the neighborlist argument blank,
         and build the graph one vertex at a time later
         using the "AddVertex()" and "AddEdge()" commands.
-        (AddEdge() commands must be issued strictly after 
+        (AddEdge() commands must be issued strictly after
          all vertices have been defined.)
 
         """
@@ -143,7 +143,7 @@ class Dgraph(object):
 
 
     def AddVertex(self, iv=-1, attr=None):
-        """ 
+        """
         Add a vertex to the graph.
         (Edges connected to this vertex must be added later using "AddEdge()"
          All vertices should be added before "AddEdge()" is ever invoked.)
@@ -194,13 +194,13 @@ class Dgraph(object):
     def ReorderVerts(self, vpermutation, invert=False):
         """
         This function allows the user to re-order (relabel) the vertices
-        in a graph, making the necessary changes to the 
+        in a graph, making the necessary changes to the
         self.verts, self.edges, and self.neighbors lists.
-        By default (invert=False).  The vpermutation is a list 
+        By default (invert=False).  The vpermutation is a list
         from 1 to self.nv which is interpreted this way:
             iv = vpermutation[iv_orig]
-        where "iv" and "iv_orig" are the vertex id numbers before 
-        and after the mapping (which also corresponds to its 
+        where "iv" and "iv_orig" are the vertex id numbers before
+        and after the mapping (which also corresponds to its
         position in the self.verts and self.neighbors arrays).
 
         """
@@ -219,16 +219,16 @@ class Dgraph(object):
         for iv_old in range(0, self.nv):
             iv = vperm[iv_old]
             self.verts[iv] = orig_verts[iv_old]
-            
+
         for ie in range(0, self.ne):
             self.edges[ie].start = vperm[self.edges[ie].start]
             self.edges[ie].stop  = vperm[self.edges[ie].stop]
 
         orig_neighbors = [nlist for nlist in self.neighbors]
         # self.neighbors is a 2-d array.
-        # We need to re-sort "self.neighbors" because the first index is 
-        # a vertex id number, and these id numbers have been permuted. 
-        # However, there's no need to sort the contents of each sub-array 
+        # We need to re-sort "self.neighbors" because the first index is
+        # a vertex id number, and these id numbers have been permuted.
+        # However, there's no need to sort the contents of each sub-array
         # (self.neighbors[iv]), because these are edge id numbers (indices into
         # the self.edges[] array). These edge index numbers are never altered.
         # (However the entries stored in self.edges were modified earlier.)
@@ -242,17 +242,17 @@ class Dgraph(object):
 
     def ReorderEdges(self, epermutation, invert=False):
         """
-        This function allows the user to re-order (relabel) the 
-        edges in a graph, making the necessary changes to the 
+        This function allows the user to re-order (relabel) the
+        edges in a graph, making the necessary changes to the
         self.edges and self.neighbors lists.
-        By default (invert=False).  The epermutation is a list 
+        By default (invert=False).  The epermutation is a list
         from 1 to self.ne which is interpreted this way:
             ie = epermutation[ie_orig]
-        where "ie" and "ie_orig" are the edge id numbers before 
+        where "ie" and "ie_orig" are the edge id numbers before
         and after the mapping (which also corresponds to that edge's
         position in the self.edges array).
             (Minor detail: Recall that in this code, Ugraphs
-        are implemented by placing two (directed) edges between each pair of 
+        are implemented by placing two (directed) edges between each pair of
         connected, adjacent vertices, which point back-and-forth between them.
         Consequently the list of edges in self.edges is often typically
         twice as large you might expect.)
@@ -270,7 +270,7 @@ class Dgraph(object):
             eperm = epermutation
 
         orig_edges = [edge for edge in self.edges]
-        for ie_old in range(0, self.ne): 
+        for ie_old in range(0, self.ne):
             ie = eperm[ie_old]
             self.edges[ie] = orig_edges[ie_old]
 
@@ -282,7 +282,7 @@ class Dgraph(object):
     def SortNeighborLists(self):
         assert(self.nv == len(self.neighbors))
         for iv in range(0, self.nv):
-            #Back when self.neighbors was just a 2-dimensional list of 
+            #Back when self.neighbors was just a 2-dimensional list of
             #vertex id numbers, then the following line would have worked:
             #  self.neighbors[iv].sort()
 
@@ -296,12 +296,12 @@ class Dgraph(object):
             #Create a temporary array of 2-tuples (ie, jv)
             nlist = [(ie, self.edges[ie].stop)
                      for ie in self.neighbors[iv]]
-            self.neighbors[iv] = [ie for ie,jv in sorted(nlist, 
+            self.neighbors[iv] = [ie for ie,jv in sorted(nlist,
                                                          key=itemgetter(1))]
 
     def FindEdge(self, istart, istop):
         """
-        A simple function looks up the edge id number 
+        A simple function looks up the edge id number
         corresponding to an edge connecting vertex istart to istop.
         If not present returns Dgraph.NULL.
 
@@ -380,10 +380,10 @@ class Ugraph(Dgraph):
     (One would use the AddEdge() member function to accomplish this.)
     Both vertices and edges have an optional "attr" attribute.
 
-        Undirected graphs (Ugraphs) are represented internally as 
-        directed graphs.  This means that for every edge in the Ugraph, 
-        connecting vertex 2 to 3, for example, two edges are stored 
-        internally, (2 -> 3,   and   3 -> 2), 
+        Undirected graphs (Ugraphs) are represented internally as
+        directed graphs.  This means that for every edge in the Ugraph,
+        connecting vertex 2 to 3, for example, two edges are stored
+        internally, (2 -> 3,   and   3 -> 2),
         Edges which begin and end at the same vertex are stored only once.)
 
     """
@@ -397,7 +397,7 @@ class Ugraph(Dgraph):
         for ieu in range(0, self.ne):
             iv   = self.edges[ieu].start
             jv   = self.edges[ieu].stop
-            if iv != jv: 
+            if iv != jv:
                 ned += 1
 
         self.ieu_to_ied = [Dgraph.NULL for ieu in range(0, neu)]
@@ -411,7 +411,7 @@ class Ugraph(Dgraph):
             self.ieu_to_ied[ie] = ie
             self.ied_to_ieu[ie] = ie
 
-            if iv != jv: 
+            if iv != jv:
                # Then create another edge which points in the reverse direction
                 Dgraph.AddEdge(self, jv, iv, attr) # <--this increments self.ne
                 self.ied_to_ieu[ied_redundant] = ie
@@ -427,7 +427,7 @@ class Ugraph(Dgraph):
         If the edge is already present (and remove_duplicates==True),
         no new edge will be added.
 
-        Note: Undirected Ugraphs are implemented by creating two separate 
+        Note: Undirected Ugraphs are implemented by creating two separate
               digraph edges that conect iv->jv  and jv->iv.
 
         """
@@ -448,8 +448,8 @@ class Ugraph(Dgraph):
     def ReorderEdges(self, epermutation, invert=False):
         Dgraph.ReorderEdges(self, epermutation, invert)
 
-        # Now update the 
-        # self.ieu_to_ied and 
+        # Now update the
+        # self.ieu_to_ied and
         # self.ied_to_ieu lookup tables:
 
         if (invert): # (first invert the permutation if necessary)
@@ -464,7 +464,7 @@ class Ugraph(Dgraph):
         ied_to_ieu_orig = [ieu for ieu in self.ied_to_ieu]
 
         for ieu in range(0, self.neu):
-            ied_old = ieu_to_ied_orig[ieu] 
+            ied_old = ieu_to_ied_orig[ieu]
             ied     = eperm[ied_old]
             self.ieu_to_ied[ieu] = ied
         for ied_old in range(0, self.ne):
@@ -497,16 +497,16 @@ class Ugraph(Dgraph):
 
     def FindEdge(self, istart, istop):
         """
-        A simple function looks up the (undirected) edge id number 
+        A simple function looks up the (undirected) edge id number
         corresponding to an edge connecting vertices istart and istop.
         If not present returns Dgraph.NULL.
 
-        To find the corresponding entry in the self.edges[] list, 
+        To find the corresponding entry in the self.edges[] list,
         you can either:
             use the LookupDirectedEdge() lookup function
              or
             you can use the parent-class' version of this function
-            Dgraph.FindEdge(self, istart, istop) which returns 
+            Dgraph.FindEdge(self, istart, istop) which returns
             this number by default.
 
         """
@@ -516,35 +516,35 @@ class Ugraph(Dgraph):
 
 
     def CalcEdgeLookupTable(self):
-        """ 
+        """
         COMMENT: THIS NEXT FUNCTION IS PROBABLY NOT NECESSARY AND MIGHT BE
                  REMOVED AT A LATER TIME WHEN I FIGURE OUT A BETTER WAY.
 
         Because undirected graphs (Ugraphs) are implemented as directed graphs
-        (Dgraphs) with redundant edges, they may have some extra edges which 
-        the user never explicitly asked for.  
+        (Dgraphs) with redundant edges, they may have some extra edges which
+        the user never explicitly asked for.
         There is some confusion about whether the i'th edge refers to
-        the i'th undirected edge that the user explicitly added, or 
+        the i'th undirected edge that the user explicitly added, or
         the i'th directed edge which is stored internally.
 
            (The number of directed edges is usually twice the number of
            edges that the user asked for.  But not always, because edges
            wich start and end at the same vertex are only represented once.)
 
-        This function calculates lookup tables to translate between 
+        This function calculates lookup tables to translate between
         the two edge numbering systems:
 
         self.ieu_to_ied[ieu] returns a directed edge id number,
                              (which is an index into the self.edges list)
                              corresponding to the ieu'th undirected edge
                              which was explicitly added by the caller.
-                                   
+
         self.ied_to_ieu[ied] takes a directed edge id number (ied,
                              an index into the self.edges list)
                              and returns the undirected edge number,
                              which is allways <= ied
 
-        """        
+        """
 
         self.ieu_to_ied = []
         self.ied_to_ieu = [Ugraph.NULL for ied in range(0, self.ne)]
@@ -659,14 +659,14 @@ class DFS(object):
 
     def _IsCyclicUgraph(self, iv, ivprev):
         """
-        _IsCyclicUgraph() is a recursive function which carries out a 
+        _IsCyclicUgraph() is a recursive function which carries out a
         Depth-First-Search over the graph "self.g" to determine whether the
         graph is cyclic.  This function works on undirected graphs (Ugraphs).
 
         Indirected graphs (Ugraphs) are a special case.
         Ugraphs are implemented by using two (redundant) forward/backward edges
         connecting each pair of adjacent vertices.  This creates trivial loops.
-        This version of _IsCyclicUgraph() only counts loops between more 
+        This version of _IsCyclicUgraph() only counts loops between more
         distantly connected vertices.
 
         """
@@ -685,8 +685,8 @@ class DFS(object):
 
     def _IsCyclic(self, iv):
         """
-        _IsCyclic() is a recursive function which carries out a 
-        Depth-First-Search over the graph "self.g" to determine whether 
+        _IsCyclic() is a recursive function which carries out a
+        Depth-First-Search over the graph "self.g" to determine whether
         the graph is cyclic.
         This function works on directed graphs.
 
@@ -706,14 +706,14 @@ class DFS(object):
 
 class GraphMatcher(object):
     """
-    This class is a variant of the VF2 algorithm for searching 
+    This class is a variant of the VF2 algorithm for searching
     for small connected subgraphs (g) within a larger graph (G).
     GraphMatcher works on directed or underected graphs (Dgraph or Ugraph).
-    This particular version is better optimized for detecting subgraph 
-    isomorphisms between two graphs of highly unequal size.  It should be 
-    faster in these situations because, the computation required for 
+    This particular version is better optimized for detecting subgraph
+    isomorphisms between two graphs of highly unequal size.  It should be
+    faster in these situations because, the computation required for
     each step is independent of the number of vertices in the larger graph
-    In the original VF2 algorithm, the computation time for each step 
+    In the original VF2 algorithm, the computation time for each step
     is proportional to the number of vertices in the larger graph.
     (The distinction matters when one graph is much smaller than the other.)
 
@@ -726,7 +726,7 @@ class GraphMatcher(object):
     """
 
     def __init__(self,
-                 G,  # The "big" graph 
+                 G,  # The "big" graph
                  g): # The little graph (number of vertices in g must be <= G)
 
         self.G = G
@@ -747,7 +747,7 @@ class GraphMatcher(object):
             #raise GenErr('Error: The first argument of GraphMatcher(G,g),\n'+
             #             '       must be at least as large as the second.')
 
-        
+
         # The list self.iv_to_Iv is the mapping between the graph vertices.
         # Iv is an index into the large graph's list of vertices.
         # iv is an index into the small graph's list of vertices.
@@ -767,12 +767,12 @@ class GraphMatcher(object):
         subgraph_searcher = DFS(self.g)
         # Perform a Depth-First-Search on the small graph.
         self.vorder_g, self.eorder_g = subgraph_searcher.Order()
-        # Then re-order the vertices and edgers to 
+        # Then re-order the vertices and edgers to
         # match the order they were visited.
 
         # Note on permutation order:
         # (The DFS.Order() function returns the permutation in this format
-        #       old_index[ new_index ] 
+        #       old_index[ new_index ]
         #  where new_index is the DFS iteration when the vertex/edge was visited
         #    and old_index is the original vertex/edge order.
         #  However the ReorderVerts() and ReorderEdges() functions expect
@@ -823,7 +823,7 @@ class GraphMatcher(object):
 
         self.Reset()
         if self.G_is_too_small:
-            # Then there are fewer verts and edges in G than in g. 
+            # Then there are fewer verts and edges in G than in g.
             # Thus it is impossible for a subgraph of G to be isomorphic to g.
             return # return no matches
 
@@ -834,7 +834,7 @@ class GraphMatcher(object):
             self.voccupiedG[Iv] = True
 
             # Implementation:
-            # In this loop we begin the search process 
+            # In this loop we begin the search process
             # starting with a different vertex (Iv) from big graph G,
             # and matching it with the first vertex (iv=0) from small graph g.
             # In this way the match "begins" from vertex Iv in G.
@@ -842,7 +842,7 @@ class GraphMatcher(object):
             # Any matches found which begin from vertex Iv are distinct
             # from matches beginning from any other vertex in G.
             # Looping over all Iv in G is necessary and sufficient
-            # to insure that all possible subgraphs of G 
+            # to insure that all possible subgraphs of G
             # (which are isomorphic to g) are considered.
 
             self.sv = 1 # we have matched one vertex already
@@ -854,7 +854,7 @@ class GraphMatcher(object):
     def Match(self):
 
         # self.se represents how many vertices have been matched so far.
-        # We are done searching if all of the edges from 0 to self.se-1 
+        # We are done searching if all of the edges from 0 to self.se-1
         # from graph g have been selected (matched with edges from graph G).
         if self.se == self.g.ne:
             # Note: This also gaurantees that all vertices have been visited.
@@ -872,22 +872,22 @@ class GraphMatcher(object):
             assert(iv < self.sv) # <-- check to verify this is so
 
             # The other vertex may or may not have been visited (matched) yet.
-            iv_neighbor   = self.g.edges[self.se].stop 
+            iv_neighbor   = self.g.edges[self.se].stop
 
             # Two cases:
             # Case 1: edge self.se points to a previously visited vertex from g
             #         This means we have a loop.
-            if iv_neighbor < self.sv: 
-                # In that case, then the corresponding edge in G must 
+            if iv_neighbor < self.sv:
+                # In that case, then the corresponding edge in G must
                 # connect the corresponding pair of vertices from G.
-                # (Which we know have already been assigned to vertices in g 
+                # (Which we know have already been assigned to vertices in g
                 #  because both iv and iv_neighbor are < self.sv)
                 Iv_neighbor = self.iv_to_Iv[iv_neighbor]
                 # Loop over all of the edges in G which connect this pair
                 # of vertices (Iv --> Iv_neighbor)
                 for Je in self.G.neighbors[Iv]:
                     Jv = self.G.edges[Je].stop
-                    if ((Jv == Iv_neighbor) and 
+                    if ((Jv == Iv_neighbor) and
                         (not self.eoccupiedG[Je])):
 
                         # Match edge Je from big   graph G with
@@ -902,19 +902,19 @@ class GraphMatcher(object):
                         self.ie_to_Ie[self.se] = Dgraph.NULL
 
             # Case 2:
-            else: # this would mean that iv_neighbor >= self.sv 
+            else: # this would mean that iv_neighbor >= self.sv
 
                 # If iv_neighbor>=self.sv, then this edge points to to a vertex
                 # in g which has not yet been paired with a vertex from G.
 
-                # Loop over all of the edges in G which connect vertex 
+                # Loop over all of the edges in G which connect vertex
                 # Iv from G to new (unvisited) vertices in G
                 for Je in self.G.neighbors[Iv]:
                     Jv = self.G.edges[Je].stop
                     if (not self.voccupiedG[Jv]):
 
                         assert(not self.eoccupiedG[Je])
-                        # Match both edge Je with je 
+                        # Match both edge Je with je
                         #      AND vertex Jv with jv
                         self.ie_to_Ie[self.se] = Je
                         self.se += 1
@@ -933,7 +933,7 @@ class GraphMatcher(object):
                         self.ie_to_Ie[self.se] = Dgraph.NULL
 
     def ReformatMatch(self):
-        #   (This is because we are assuming g is connected. 
+        #   (This is because we are assuming g is connected.
         #    IT should not have any orphanned vertices.)
         # Now return the match:
         #
@@ -947,23 +947,23 @@ class GraphMatcher(object):
         #   Recall that the vertices and edges and g have been re-ordered,
         #   so sort the list of Iv indices in the order they would be
         #   matched with the original vertices from the original graph g:
-        #match = ([self.iv_to_Iv[self.vorder_g[iv]] 
+        #match = ([self.iv_to_Iv[self.vorder_g[iv]]
         #          for iv in range(0,self.g.nv)],
-        #         [self.ie_to_Ie[self.eorder_g[ie]] 
+        #         [self.ie_to_Ie[self.eorder_g[ie]]
         #          for ie in range(0,self.g.ne)])
         # version 4: Similar to version 3 above, but we also translate
         #            the directed edge id list into a shorter undirected
         #            edge id list.
-        match_verts = [self.iv_to_Iv[self.vorder_g[iv]] 
+        match_verts = [self.iv_to_Iv[self.vorder_g[iv]]
                        for iv in range(0,self.g.nv)]
 
         if type(self.g) is Dgraph:
-            match_edges = [self.ie_to_Ie[self.eorder_g[ie]] 
+            match_edges = [self.ie_to_Ie[self.eorder_g[ie]]
                            for ie in range(0, self.g.ne)]
         else:
             #assert(atype(self.g) is Ugraph)
             match_edges = [Dgraph.NULL for ieu in range(0, self.g.neu)]
-            
+
             for ie in range(0, self.g.ne):
                 iv = self.g.edges[ie].start
                 jv = self.g.edges[ie].stop
@@ -972,5 +972,5 @@ class GraphMatcher(object):
                     Ie  = self.ie_to_Ie[ie]
                     Ieu = self.G.LookupUndirectedEdgeIdx(Ie)
                     match_edges[ieu] = Ieu
-    
+
         return (tuple(match_verts), tuple(match_edges))

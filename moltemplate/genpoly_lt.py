@@ -1,25 +1,25 @@
 #!/usr/bin/env python
 
 """
-   Generate a moltemplate (.lt) file containing a definition of a polymer 
-   molecule whose monomers are located at the positions specified in 
+   Generate a moltemplate (.lt) file containing a definition of a polymer
+   molecule whose monomers are located at the positions specified in
    "coords.raw" (a 3-column text file).  Monomers will be rotated so
    that they point in the direction connecting neighbors (r[i+1]-r[i])
    The user can specify the subunits to use when building the polymer,
    the atoms to to build bonds (and angles, and dihedrals) between monomers
    and the helical pitch of the polymer.  The output of this program is
-   a text file in moltemplate (.lt) format containing the sequence of 
-   moltemplate commands needed to build this polymer molecule(s).  (One must 
+   a text file in moltemplate (.lt) format containing the sequence of
+   moltemplate commands needed to build this polymer molecule(s).  (One must
    then run moltemplate on this file to build the LAMMPS simulation files.)
        Multiple Polymers:
    To make it easier to create polymer melts, multiple polymers can be created
    from coordinates in the same file by using the "-cuts" command line argument.
       Encapsulation:
-   If the "-polymer-name PolyName" command line option is given, then these 
-   moltemplate commands will be nested within the definition of a moltemplate 
-   object (named "PolyName", in this example. Later in your moltemplate files, 
-   you must remember to instantiate a copy of this moltemplate object using 
-   a command like "polymer = new PolyName"  Atoms within this object will 
+   If the "-polymer-name PolyName" command line option is given, then these
+   moltemplate commands will be nested within the definition of a moltemplate
+   object (named "PolyName", in this example. Later in your moltemplate files,
+   you must remember to instantiate a copy of this moltemplate object using
+   a command like "polymer = new PolyName"  Atoms within this object will
    share the same molecule-ID number.)  If multiple polymers are requested, then
    each of them will have their own polymer object.
 
@@ -194,7 +194,7 @@ class Settings(object):
                     if ic != -1:
                         line = line[:ic]
                     else:
-                        line = line.strip()    
+                        line = line.strip()
                     if len(line) > 0:
                         self.name_sequence.append(line)
                 del(argv[i:i+2])
@@ -212,7 +212,7 @@ class Settings(object):
                     if ic != -1:
                         line = line[:ic]
                     else:
-                        line = line.strip()    
+                        line = line.strip()
                     if len(line) > 0:
                         try:
                             self.cuts.append(int(line))
@@ -311,8 +311,8 @@ class Settings(object):
 
 
 class WrapPeriodic(object):
-    """ Wrap() calculates the remainder of i % N. 
-        It turns out to be convenient to do this multiple times and later 
+    """ Wrap() calculates the remainder of i % N.
+        It turns out to be convenient to do this multiple times and later
         query whether i/N != 0 in any of them once (by checking bounds_err).
 
     """
@@ -340,7 +340,7 @@ class GenPoly(object):
         However this class create multiple polymers of different shape/length.
         The list of coordinates for each polymer are saved separately within
         the "self.coords_multi" member.
-        
+
     """
 
     def __init__(self, argv):
@@ -419,11 +419,11 @@ class GenPoly(object):
         """ Write an moltemplate (.lt) file containing the definition of
         this polymer object.  (If multiple polymer objects were requested by
         the user (using the -cuts argument), then their definitions will
-        appear nested within this object, and each of them will be 
+        appear nested within this object, and each of them will be
         instantiated once when the parent object is instantiated.)
 
         """
-        
+
         outfile.write(self.settings.header+"\n\n\n")
         if len(self.coords_multi) == 1:
             self.WritePolymer(outfile,
@@ -466,7 +466,7 @@ class GenPoly(object):
                      outfile,
                      name_polymer,
                      coords):
-        """ Write a single polymer object to a file.  
+        """ Write a single polymer object to a file.
             This function is invoked by WriteLTFile()
 
         """
@@ -486,7 +486,7 @@ class GenPoly(object):
 #
 # (Note: move(), rot(), and rotvv() commands control the position
 #  of each monomer.  (See the moltemplate manual for an explanation
-#  of what they do.)  Commands enclosed in push() are cumulative 
+#  of what they do.)  Commands enclosed in push() are cumulative
 #  and remain in effect until removed by pop().)
 
 
@@ -497,8 +497,8 @@ class GenPoly(object):
 
 
         outfile.write("push(move(0,0,0))\n")
-        
-        
+
+
         for i in range(0, self.N):
             #im1 = i-1
             #if im1 < 0 or self.settings.connect_ends:
@@ -517,11 +517,11 @@ class GenPoly(object):
                           str(coords[i][0])+","+
                           str(coords[i][1])+","+
                           str(coords[i][2])+"))\n")
-        
+
             outfile.write("mon["+str(i)+"] = new "+
                           self.settings.name_sequence[i] +
                           ".rot("+str(self.settings.delta_phi*i)+",1,0,0)\n")
-        
+
         assert(len(self.settings.bonds_name) ==
                len(self.settings.bonds_type) ==
                len(self.settings.bonds_atoms) ==
@@ -548,9 +548,9 @@ class GenPoly(object):
                 outfile.write(" @bond:"+self.settings.bonds_type[b]+" $atom:mon["+str(I)+"]/"+self.settings.bonds_atoms[b][0]+" $atom:mon["+str(J)+"]/"+self.settings.bonds_atoms[b][1]+"\n")
         if len(self.settings.bonds_type) > 0:
             outfile.write("}  # write(\"Data Bonds\") {...\n\n\n")
-        
-        
-        
+
+
+
         assert(len(self.settings.angles_name) ==
                len(self.settings.angles_type) ==
                len(self.settings.angles_atoms) ==
@@ -581,10 +581,10 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.angles_type) > 0:
             outfile.write("}  # write(\"Data Angles\") {...\n\n\n")
-        
-        
-        
-        
+
+
+
+
         assert(len(self.settings.dihedrals_name) ==
                len(self.settings.dihedrals_type) ==
                len(self.settings.dihedrals_atoms) ==
@@ -618,10 +618,10 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.dihedrals_type) > 0:
             outfile.write("}  # write(\"Data Dihedrals\") {...\n\n\n")
-        
-        
-        
-        
+
+
+
+
         assert(len(self.settings.impropers_name) ==
                len(self.settings.impropers_type) ==
                len(self.settings.impropers_atoms) ==
@@ -655,10 +655,10 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.impropers_type) > 0:
             outfile.write("}  # write(\"Data Impropers\") {...\n\n\n")
-        
+
         if name_polymer != '':
             outfile.write("}  # "+name_polymer+"\n\n\n\n")
-        
+
 
 
 
@@ -675,8 +675,8 @@ class GenPoly(object):
                     if coords[i][d] < self.box_bounds_min[d]:
                         self.box_bounds_min[d] = coords[i][d]
 
-        
-   
+
+
     def WriteBoxBoundary(self, outfile):
         for d in range(0, 3):
             self.box_bounds_min[d] -= self.settings.box_padding[d]
@@ -712,4 +712,3 @@ if __name__ == '__main__':
     except (ValueError, InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
-

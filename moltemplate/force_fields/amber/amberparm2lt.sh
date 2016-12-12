@@ -29,7 +29,7 @@ MOLTEMPLATE_USAGE_MSG=$(cat <<EOF
 #    Background information and usage explanation:
 # This file contanis a list of atom types and rules for generating bonded
 # interactions between these atoms (hopefully) according to AMBER conventions.
-# By using the atom types shown below in your own molecules, bonds and angular 
+# By using the atom types shown below in your own molecules, bonds and angular
 # interactions will be automatically generated.
 # AMBER (GAFF) force-field parameters will also be assigned to each angle
 # interaction (according to these atom types).
@@ -200,4 +200,3 @@ echo ""
 echo "}"
 echo ""
 echo ""
-

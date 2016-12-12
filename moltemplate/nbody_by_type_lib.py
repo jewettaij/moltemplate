@@ -26,7 +26,7 @@ from ttree_lex import MatchesPattern, MatchesAll, InputError
 #import gc
 
 
-def GenInteractions_int(G_system, 
+def GenInteractions_int(G_system,
                         g_bond_pattern,
                         typepattern_to_coefftypes,
                         canonical_order, #function to sort atoms and bonds
@@ -34,35 +34,35 @@ def GenInteractions_int(G_system,
                         bondtypes_int2str,
                         report_progress = False): #print messages to sys.stderr?
     """
-    GenInteractions() automatically determines a list of interactions 
+    GenInteractions() automatically determines a list of interactions
     present in a system of bonded atoms (argument "G_system"),
-    which satisfy the bond topology present in "g_bond_pattern", and 
+    which satisfy the bond topology present in "g_bond_pattern", and
     satisfy the atom and bond type requirements in "typepattern_to_coefftypes".
 
     Whenever a set of atoms in "G_system" are bonded together in a way which
-    matches "g_bond_pattern", and when the atom and bond types is consistent 
-    with one of the entries in "typepattern_to_coefftypes", the corresponding 
+    matches "g_bond_pattern", and when the atom and bond types is consistent
+    with one of the entries in "typepattern_to_coefftypes", the corresponding
     list of atoms from G_system is appended to the list of results.
 
     These results (the list of lists of atoms participating in an interaction)
-    are organized according their corresponding "coefftype", a string 
+    are organized according their corresponding "coefftype", a string
     which identifies the type of interaction they obey as explained above.
     results are returned as a dictionary using "coefftype" as the lookup key.
 
     Arguments:
-    
+
      -- typepattern_to_coefftypes is a list of 2-tuples --
     The first element of the 2-tuple is the "typepattern".
     It contains a string describing a list of atom types and bond types.
     The typepattern is associated with a "coefftype",
-    which is the second element of the 2-tuple.  This is a string 
-    which identifies the type of interaction between the atoms.  
-    Later on, this string can be used to lookup the force field 
+    which is the second element of the 2-tuple.  This is a string
+    which identifies the type of interaction between the atoms.
+    Later on, this string can be used to lookup the force field
     parameters for this interaction elsewhere.)
 
      -- Arguments: G_system, g_bond_pattern, atomtypes_int2str, bondtypes_int2str --
 
-    G_system stores a list of atoms and bonds, and their attributes in 
+    G_system stores a list of atoms and bonds, and their attributes in
     "Ugraph" format.  In this format:
     Atom ID numbers are represented by indices into the G_system.verts[] list.
     Bond ID numbers are represented by indices into the G_system.edges[] list.
@@ -72,31 +72,31 @@ def GenInteractions_int(G_system,
     atomtypes_int2str, and bondtypes_int2str.
 
     g_bond_pattern is a graph which specifies the type of bonding between
-    the atoms required for a match. It is in Ugraph format (however the 
+    the atoms required for a match. It is in Ugraph format (however the
     atom and bond types are left blank.)
 
-    Atom and bond types are supplied by the user in string format. (These 
+    Atom and bond types are supplied by the user in string format. (These
     strings typically encode integers, but could be any string in principle.)
-    The string-version of the ith atom type is stored in 
+    The string-version of the ith atom type is stored in
        atomtypes_int2str[ G_system.verts[i].attr ]
-    The string-version of the ith bond type is stored in 
+    The string-version of the ith bond type is stored in
        bondtypes_int2str[ G_system.edges[i].attr ]
 
      -- The "canonical_order" argument: --
 
-    The search for atoms with a given bond pattern often yields 
-    redundant matches.  There is no difference for example 
-    between the angle formed between three consecutively 
+    The search for atoms with a given bond pattern often yields
+    redundant matches.  There is no difference for example
+    between the angle formed between three consecutively
     bonded atoms (named, 1, 2, 3, for example), and the
-    angle between the same atoms in reverse order (3, 2, 1). 
+    angle between the same atoms in reverse order (3, 2, 1).
     However both triplets of atoms will be returned by the subgraph-
     matching algorithm when searching for ALL 3-body interactions.)
 
-    To eliminate this redundancy, the caller must supply a "canonical_order" 
+    To eliminate this redundancy, the caller must supply a "canonical_order"
     argument.  This is a function which sorts the atoms and bonds in a way
     which is consistent with the type of N-body interaction being considered.
-    The atoms (and bonds) in a candidate match are rearranged by the 
-    canonical_order().  Then the re-ordered list of atom and bond ids is 
+    The atoms (and bonds) in a candidate match are rearranged by the
+    canonical_order().  Then the re-ordered list of atom and bond ids is
     tested against the list of atom/bond ids in the matches-found-so-far,
     before it is added.
 
@@ -107,8 +107,8 @@ def GenInteractions_int(G_system,
         sys.stderr.write('  searching for matching bond patterns:\n')
         sys.stderr.write('    0%')
 
-    # Figure out which atoms from "G_system" bond together in a way which 
-    # matches the "g_bond_pattern" argument.  Organize these matches by 
+    # Figure out which atoms from "G_system" bond together in a way which
+    # matches the "g_bond_pattern" argument.  Organize these matches by
     # atom and bond types and store all of the non-redundant ones in
     # the "interactions_by_type" variable.
 
@@ -125,8 +125,8 @@ def GenInteractions_int(G_system,
 
         # It's convenient to organize the list of interactions-between-
         # atoms in a dictionary indexed by atomtypes and bondtypes.
-        # (Because many atoms and bonds typically share the same type, 
-        #  organizing the results this way makes it faster to check 
+        # (Because many atoms and bonds typically share the same type,
+        #  organizing the results this way makes it faster to check
         #  whether a given interaction matches a "typepattern" defined
         #  by the user.  We only have to check once for the whole group.)
 
@@ -138,10 +138,10 @@ def GenInteractions_int(G_system,
 
         if report_progress:
             # GraphMatcher.Matches() searches for matches in an order
-            # that selects a different atomid number from G_system, 
+            # that selects a different atomid number from G_system,
             # starting at 0, and continuing up to the number of atoms (-1)
             # in the system (G_system.nv-1), and using this as the first
-            # atom in the match (ie match[0][0]). This number can be used 
+            # atom in the match (ie match[0][0]). This number can be used
             # to guess much progress has been made so far.
             oldatomid = startatomid
             startatomid = atombondids[0][0]
@@ -182,7 +182,7 @@ def GenInteractions_int(G_system,
 
     # -------------------- reporting progress -----------------------
     if report_progress:
-        # The next interval of code is not technically necessary, but it makes 
+        # The next interval of code is not technically necessary, but it makes
         # the printed output easier to read by excluding irrelevant interactions
         # Now, test each match to see if the atoms and bonds involved match
         # any of the type-patterns in the "typepattern_to_coefftypes" argument.
@@ -204,7 +204,7 @@ def GenInteractions_int(G_system,
 
 
         # ------------------ reporting progress -----------------------
-        # The next interval of code is not technically necessary, but it makes 
+        # The next interval of code is not technically necessary, but it makes
         # the printed output easier to read by excluding irrelevant interactions
 
         if report_progress:
@@ -264,12 +264,12 @@ def GenInteractions_int(G_system,
             if MatchesAll(type_strings, typepattern): #<-see "ttree_lex.py"
                 for abids in abidslist:
 
-                    # Re-order the atoms (and bonds) in a "canonical" way. 
-                    # Only add new interactions to the list after re-ordering 
+                    # Re-order the atoms (and bonds) in a "canonical" way.
+                    # Only add new interactions to the list after re-ordering
                     # them and checking that they have not been added earlier.
                     # (...well not when using the same coefftype at least.
-                    #  This prevents the same triplet of atoms from 
-                    #  being used to calculate the bond-angle twice: 
+                    #  This prevents the same triplet of atoms from
+                    #  being used to calculate the bond-angle twice:
                     #  once for 1-2-3 and 3-2-1, for example.)
                     abids = canonical_order(abids)
                     redundant = False
@@ -390,5 +390,3 @@ def GenInteractions_str(bond_pairs,
         #gc.collect()
 
     return coefftype_to_atomids_str
-
-

@@ -11,8 +11,8 @@
 ltemplify.py
 
 The "ltemplify.py" script can be used to convert existing LAMMPS
-input script and data files into a single .lt file 
-(which includes both topology and force-field information 
+input script and data files into a single .lt file
+(which includes both topology and force-field information
  for a single molecule in your system).
 
 Example:
@@ -105,22 +105,22 @@ def StringToInterval(sel_str, slice_delim='*'):
 
 
 
-# Selections are simply lists of 2-tuples (pairs) 
+# Selections are simply lists of 2-tuples (pairs)
 
 def LammpsSelectToIntervals(sel_str, slice_delim='*', or_delim=', '):
 
     """
-    This function converts a string such as "1*4 6 9*12 50*70*10" into 
+    This function converts a string such as "1*4 6 9*12 50*70*10" into
     a list of tuples, for example: [(1,4), (6,6), (9,12), (50,50), (60,60), (70,70)]
     In general, the of intervals has the form:
        [(a1,b1), (a2,b2), (a3,b3), ... ]
-    
-    An atom is considered to belong to this selection 
-    if it happens to lie within the closed interval [a,b] 
-    for any pair of a,b values in the list of intervals. 
-    If for a given pair a,b, either a or b is "None", then that a or b 
-    value is not used to disqualify membership in the interval. 
-    (Similar to -infinity or +infinity.  In other words if a is set to None, 
+
+    An atom is considered to belong to this selection
+    if it happens to lie within the closed interval [a,b]
+    for any pair of a,b values in the list of intervals.
+    If for a given pair a,b, either a or b is "None", then that a or b
+    value is not used to disqualify membership in the interval.
+    (Similar to -infinity or +infinity.  In other words if a is set to None,
      then to belong to the interval it is enough to be less than b.)
 
     """
@@ -166,7 +166,7 @@ def IntervalListToMinMax(interval_list):
 def MergeIntervals(interval_list):
     """
     A crude simple function that merges consecutive intervals in the list
-    whenever they overlap.  (This function does not bother to compare 
+    whenever they overlap.  (This function does not bother to compare
     non-consecutive entries in the interval_list.)
 
     """
@@ -408,8 +408,8 @@ try:
             mol_name = argv[i+1]
             del argv[i:i+2]
 
-        elif ((argv[i].lower() == '-atomstyle') or 
-              (argv[i].lower() == '-atom_style') or 
+        elif ((argv[i].lower() == '-atomstyle') or
+              (argv[i].lower() == '-atom_style') or
               (argv[i].lower() == '-atom-style')):
             if i+1 >= len(argv):
                 raise InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
@@ -435,13 +435,13 @@ try:
                 sys.stderr.write('      (i_atomid='+str(i_atomid+1)+', i_atomtype='+str(i_atomtype+1)+')\n')
             del argv[i:i+2]
 
-        elif ((argv[i].lower() == '-id') or 
-              #(argv[i].lower() == '-a') or 
-              #(argv[i].lower() == '-atoms') or 
-              (argv[i].lower() == '-atomid') or 
-              #(argv[i].lower() == '-atomids') or 
+        elif ((argv[i].lower() == '-id') or
+              #(argv[i].lower() == '-a') or
+              #(argv[i].lower() == '-atoms') or
+              (argv[i].lower() == '-atomid') or
+              #(argv[i].lower() == '-atomids') or
               (argv[i].lower() == '-atom-id')
-              #(argv[i].lower() == '-atom-ids') or 
+              #(argv[i].lower() == '-atom-ids') or
               #(argv[i].lower() == '-$atom') or
               #(argv[i].lower() == '-$atoms')
               ):
@@ -452,20 +452,20 @@ try:
             atomid_selection += LammpsSelectToIntervals(argv[i+1])
             min_sel_atomid, max_sel_atomid = IntervalListToMinMax(atomid_selection)
             del argv[i:i+2]
-        elif ((argv[i].lower() == '-datacoeffs') or 
-              (argv[i].lower() == '-datacoeff') or 
-              (argv[i].lower() == '-Coeff') or 
+        elif ((argv[i].lower() == '-datacoeffs') or
+              (argv[i].lower() == '-datacoeff') or
+              (argv[i].lower() == '-Coeff') or
               (argv[i].lower() == '-Coeffs')):
             remove_coeffs_from_data_file = False
             del argv[i:i+1]
-        elif ((argv[i].lower() == '-type') or 
-              #(argv[i].lower() == '-t') or 
-              (argv[i].lower() == '-atomtype') or 
+        elif ((argv[i].lower() == '-type') or
+              #(argv[i].lower() == '-t') or
+              (argv[i].lower() == '-atomtype') or
               (argv[i].lower() == '-atom-type')
-              #(argv[i].lower() == '-atomtypes') or 
-              #(argv[i].lower() == '-atom-types') or 
-              #(argv[i].lower() == '-@atom') or 
-              #(argv[i].lower() == '-@atoms') or 
+              #(argv[i].lower() == '-atomtypes') or
+              #(argv[i].lower() == '-atom-types') or
+              #(argv[i].lower() == '-@atom') or
+              #(argv[i].lower() == '-@atoms') or
               #(argv[i].lower() == '-@atomtype') or
               #(argv[i].lower() == '-@atomtypes')
               ):
@@ -476,17 +476,17 @@ try:
             atomtype_selection += LammpsSelectToIntervals(argv[i+1])
             min_sel_atomtype, max_sel_atomtype = IntervalListToMinMax(atomtype_selection)
             del argv[i:i+2]
-        elif ((argv[i].lower() == '-mol') or 
-              #(argv[i].lower() == '-m') or 
-              (argv[i].lower() == '-molid') or 
-              #(argv[i].lower() == '-molids') or 
-              (argv[i].lower() == '-mol-id') or 
-              #(argv[i].lower() == '-mol-ids') or 
-              #(argv[i].lower() == '-molecule') or 
-              (argv[i].lower() == '-moleculeid') or 
+        elif ((argv[i].lower() == '-mol') or
+              #(argv[i].lower() == '-m') or
+              (argv[i].lower() == '-molid') or
+              #(argv[i].lower() == '-molids') or
+              (argv[i].lower() == '-mol-id') or
+              #(argv[i].lower() == '-mol-ids') or
+              #(argv[i].lower() == '-molecule') or
+              (argv[i].lower() == '-moleculeid') or
               (argv[i].lower() == '-molecule-id')
-              #(argv[i].lower() == '-molecules') or 
-              #(argv[i].lower() == '-molecule-ids') or 
+              #(argv[i].lower() == '-molecules') or
+              #(argv[i].lower() == '-molecule-ids') or
               #(argv[i].lower() == '-$mol') or
               #(argv[i].lower() == '-$molecule')
               ):
@@ -532,7 +532,7 @@ try:
 
     #---------------------------------------------------------
     #-- The remaining arguments are files that the user wants
-    #-- us to read and convert.  It is typical to have 
+    #-- us to read and convert.  It is typical to have
     #-- multiple input files, because LAMMPS users often
     #-- store their force field parameters in either the LAMMPS
     #-- data files and input script files, or both.
@@ -545,7 +545,7 @@ try:
         fname = argv[i_arg]
         try:
             lammps_file = open(fname, 'r')
-        except IOError: 
+        except IOError:
             raise InputError('Error: unrecognized argument (\"'+fname+'\"),\n'
                              '       OR unable to open file:\n'
                              '\n'
@@ -562,8 +562,8 @@ try:
         data_file_header_names = set(['LAMMPS Description',
                                       'Atoms', 'Masses', 'Velocities', 'Bonds',
                                       'Angles', 'Dihedrals', 'Impropers',
-                                      'Pair Coeffs', 
-                                      'Bond Coeffs', 'Angle Coeffs', 
+                                      'Pair Coeffs',
+                                      'Bond Coeffs', 'Angle Coeffs',
                                       'Dihedral Coeffs', 'Improper Coeffs',
                                       #class2 force fields:
                                       'BondBond Coeffs', 'BondAngle Coeffs',
@@ -602,7 +602,7 @@ try:
             if (len(tokens) > 0):
                 if ((tokens[0] == 'atom_style') and
                     atom_style_undefined):
-                    
+
                     sys.stderr.write('  Atom Style found. Processing: \"'+line.strip()+'\"\n')
                     if atoms_already_read:
                         raise InputError('Error: The file containing the \"atom_style\" command must\n'
@@ -650,7 +650,7 @@ try:
                 #        if line.strip() in data_file_header_names:
                 #            lex.push_raw_text(line) # <- Save line for later
                 #            break
-                  
+
                 elif (line.strip() == 'Atoms'):
                     sys.stderr.write('  reading \"'+line.strip()+'\"\n')
                     atoms_already_read = True
@@ -658,7 +658,7 @@ try:
                     # Before attempting to read atomic coordinates, first find
                     # the lattice vectors of the simulation's boundary box:
                     #    Why do we care about the Simulation Boundary?
-                    # Some LAMMPS data files store atomic coordinates in a 
+                    # Some LAMMPS data files store atomic coordinates in a
                     # complex format with 6 numbers, 3 floats, and 3 integers.
                     # The 3 floats are x,y,z coordinates. Any additional numbers
                     # following these are integers which tell LAMMPS which cell
@@ -718,7 +718,7 @@ try:
                                  (len(tokens) <= i_molid))):
                                 raise InputError('Error: The number of columns in the \"Atoms\" section does\n'
                                                  '       not match the atom_style (see column name list above).\n')
-                            elif ((len(tokens) != len(column_names)) and 
+                            elif ((len(tokens) != len(column_names)) and
                                   (len(tokens) != len(column_names)+3) and
                                   (not complained_atom_style_mismatch)):
                                 complained_atom_style_mismatch = True
@@ -753,19 +753,19 @@ try:
                                 tokens[i_atomtype] = '@atom:'+atomtype_name
 
                                 # Interpreting unit-cell counters
-                                # If present, then unit-cell "flags" must be 
+                                # If present, then unit-cell "flags" must be
                                 # added to the x,y,z coordinates.
                                 #
                                 # For more details on unit-cell "flags", see:
                                 # http://lammps.sandia.gov/doc/read_data.html
-                                # "In the data file, atom lines (all lines or 
+                                # "In the data file, atom lines (all lines or
                                 #  none of them) can optionally list 3 trailing
                                 #  integer values (nx,ny,nz), which are used to
-                                #  initialize the atom’s image flags. 
-                                #  If nx,ny,nz values are not listed in the 
-                                #  data file, LAMMPS initializes them to 0. 
-                                #  Note that the image flags are immediately 
-                                #  updated if an atom’s coordinates need to 
+                                #  initialize the atom’s image flags.
+                                #  If nx,ny,nz values are not listed in the
+                                #  data file, LAMMPS initializes them to 0.
+                                #  Note that the image flags are immediately
+                                #  updated if an atom’s coordinates need to
                                 #  wrapped back into the simulation box."
 
                                 if (len(tokens) == len(column_names)+3):
@@ -780,7 +780,7 @@ try:
                                     tokens[i_z] = str(z)
                                     # Now get rid of them:
                                     del tokens[-3:]
-                                
+
 
 
                                 # I can't use atomids_int2name or atomtypes_int2name yet
@@ -1241,7 +1241,7 @@ try:
                                                  '         character in the \"Pair Coeffs\" section.\n')
                             else:
                                 i = int(atomtype_i_str)
-                                if ((not i) or 
+                                if ((not i) or
                                     BelongsToSel(i, atomtype_selection)):
                                     i_str = '@atom:type'+str(i)
                                     tokens[0] = i_str
@@ -1461,31 +1461,31 @@ try:
 
 
                 # Figure out the size of the simulation box boundary:
-                elif ((len(tokens)==4) and 
-                      (tokens[2] == 'xlo') and 
+                elif ((len(tokens)==4) and
+                      (tokens[2] == 'xlo') and
                       (tokens[3] == 'xhi') and
                       IsNumber(tokens[0]) and
                       IsNumber(tokens[1])):
                     boundary_xlo = float(tokens[0])
                     boundary_xhi = float(tokens[1])
 
-                elif ((len(tokens)==4) and 
-                      (tokens[2] == 'ylo') and 
+                elif ((len(tokens)==4) and
+                      (tokens[2] == 'ylo') and
                       (tokens[3] == 'yhi') and
                       IsNumber(tokens[0]) and
                       IsNumber(tokens[1])):
                     boundary_ylo = float(tokens[0])
                     boundary_yhi = float(tokens[1])
 
-                elif ((len(tokens)==4) and 
-                      (tokens[2] == 'zlo') and 
+                elif ((len(tokens)==4) and
+                      (tokens[2] == 'zlo') and
                       (tokens[3] == 'zhi') and
                       IsNumber(tokens[0]) and
                       IsNumber(tokens[1])):
                     boundary_zlo = float(tokens[0])
                     boundary_zhi = float(tokens[1])
 
-                elif ((len(tokens)==6) and 
+                elif ((len(tokens)==6) and
                       (tokens[3] == 'xy') and
                       (tokens[4] == 'xz') and
                       (tokens[5] == 'yz') and
@@ -1502,7 +1502,7 @@ try:
                                          '       Nonsensical group command:\n'
                                          '       \"'+line.strip()+'\"\n')
                     l_in_group.append((' '*indent)+(' '.join(tokens)+'\n'))
-                
+
                 elif ((tokens[0] == 'fix') and (len(tokens) >= 4)):
                     if (tokens[3].find('rigid') == 0):
                         if (len(tokens) < 6):
@@ -1553,9 +1553,9 @@ try:
         infer_types_from_comments = False
 
     # Pass 1 through l_data_atoms:
-    # Now do a second-pass throught the "l_data_atoms" section, and 
+    # Now do a second-pass throught the "l_data_atoms" section, and
     # finish dealing with "infer_types_from_comments".
-    # During this pass, peplace the atomtype names and atomid names with 
+    # During this pass, peplace the atomtype names and atomid names with
     # atom type names which were inferred from comments read earlier.
 
     sys.stderr.write('pass1')
@@ -1691,11 +1691,11 @@ try:
         split_colon_J = tokens[1].split(':')
         assert(len(split_colon_J) == 2)
         atomtype_J = Intify(split_colon_J[1])
-        if (((not (atomtype_I in needed_atomtypes)) and 
+        if (((not (atomtype_I in needed_atomtypes)) and
              (not ((len(atomtype_selection) > 0) and
                    BelongsToSel(atomtype_I, atomtype_selection))))
             or
-            ((not (atomtype_J in needed_atomtypes)) and 
+            ((not (atomtype_J in needed_atomtypes)) and
              (not ((len(atomtype_selection) > 0) and
                    BelongsToSel(atomtype_J, atomtype_selection))))):
             del l_data_pairij_coeffs[i_line]
@@ -1729,7 +1729,7 @@ try:
             atomtype_i_tokens = atomtype_i_str.split('*')
 
             if atomtype_i_tokens[0] == '':
-                if (min_sel_atomtype and 
+                if (min_sel_atomtype and
                     (min_sel_atomtype < min_needed_atomtype)):
                     i_a = min_sel_atomtype
                 else:
@@ -1738,7 +1738,7 @@ try:
                 i_a = Intify(atomtype_i_tokens[0])
 
             if atomtype_i_tokens[1] == '':
-                if (max_sel_atomtype and 
+                if (max_sel_atomtype and
                     (max_sel_atomtype > max_needed_atomtype)):
                     i_b = max_sel_atomtype
                 else:
@@ -1773,7 +1773,7 @@ try:
             atomtype_j_tokens = atomtype_j_str.split('*')
 
             if atomtype_j_tokens[0] == '':
-                if (min_sel_atomtype and 
+                if (min_sel_atomtype and
                     (min_sel_atomtype < min_needed_atomtype)):
                     j_a = min_sel_atomtype
                 else:
@@ -1782,7 +1782,7 @@ try:
                 j_a = Intify(atomtype_j_tokens[0])
 
             if atomtype_j_tokens[1] == '':
-                if (max_sel_atomtype and 
+                if (max_sel_atomtype and
                     (max_sel_atomtype > max_needed_atomtype)):
                     j_b = max_sel_atomtype
                 else:
@@ -1824,7 +1824,7 @@ try:
                         #tokens[2] = '@atom:type'+str(j)
                         tokens[1] = '@atom:'+atomtypes_int2name[i]
                         tokens[2] = '@atom:'+atomtypes_int2name[j]
-                        l_in_pair_coeffs.insert(i_line, 
+                        l_in_pair_coeffs.insert(i_line,
                                                 (' '*indent)+(' '.join(tokens)+'\n'))
                         i_line += 1
         else:
@@ -1864,7 +1864,7 @@ try:
             atomtype_i_tokens = atomtype_i_str.split('*')
 
             if atomtype_i_tokens[0] == '':
-                if (min_sel_atomtype and 
+                if (min_sel_atomtype and
                     (min_sel_atomtype < min_needed_atomtype)):
                     i_a = min_sel_atomtype
                 else:
@@ -1873,7 +1873,7 @@ try:
                 i_a = Intify(atomtype_i_tokens[0])
 
             if atomtype_i_tokens[1] == '':
-                if (max_sel_atomtype and 
+                if (max_sel_atomtype and
                     (max_sel_atomtype > max_needed_atomtype)):
                     i_b = max_sel_atomtype
                 else:
@@ -2021,7 +2021,7 @@ try:
             for i in range(i_a, i_b+1):
                 if (i in needed_bondtypes):
                     tokens[1] = '@bond:type'+str(i)
-                    l_in_bond_coeffs.insert(i_line, 
+                    l_in_bond_coeffs.insert(i_line,
                                             (' '*indent)+(' '.join(tokens)+'\n'))
                     i_line += 1
         else:
@@ -2047,7 +2047,7 @@ try:
         line = l_data_angles[i_line]
         tokens = line.strip().split()
         assert(len(tokens) == 5)
-        
+
         angleid   = Intify(tokens[0])
         angletype = Intify(tokens[1])
         atomid1  = Intify(tokens[2])
@@ -2172,7 +2172,7 @@ try:
             for i in range(i_a, i_b+1):
                 if (i in needed_angletypes):
                     tokens[1] = '@angle:type'+str(i)
-                    l_in_angle_coeffs.insert(i_line, 
+                    l_in_angle_coeffs.insert(i_line,
                                              (' '*indent)+(' '.join(tokens)+'\n'))
                     i_line += 1
         else:
@@ -2197,7 +2197,7 @@ try:
         line = l_data_dihedrals[i_line]
         tokens = line.strip().split()
         assert(len(tokens) == 6)
-        
+
         dihedralid   = Intify(tokens[0])
         dihedraltype = Intify(tokens[1])
         atomid1  = Intify(tokens[2])
@@ -2238,7 +2238,7 @@ try:
             i_line += 1
 
     # --- class2specific ----
-    # Do the same for MiddleBondTorsion, EndBondTorsion, AngleTorsion, 
+    # Do the same for MiddleBondTorsion, EndBondTorsion, AngleTorsion,
     #                 AngleAngleTorsion, and BondBond13 Coeffs
     # NOTE: LAMMPS INPUT SCRIPTS, ALL CLASS2 COEFFS are represented by:
     #       angle_coeff, dihedral_coeff, and improper_coeff commands.
@@ -2363,7 +2363,7 @@ try:
             for i in range(i_a, i_b+1):
                 if (i in needed_dihedraltypes):
                     tokens[1] = '@dihedral:type'+str(i)
-                    l_in_dihedral_coeffs.insert(i_line, 
+                    l_in_dihedral_coeffs.insert(i_line,
                                                 (' '*indent)+(' '.join(tokens)+'\n'))
                     i_line += 1
         else:
@@ -2387,7 +2387,7 @@ try:
         line = l_data_impropers[i_line]
         tokens = line.strip().split()
         assert(len(tokens) == 6)
-        
+
         improperid   = Intify(tokens[0])
         impropertype = Intify(tokens[1])
         atomid1  = Intify(tokens[2])
@@ -2505,7 +2505,7 @@ try:
             for i in range(i_a, i_b+1):
                 if (i in needed_impropertypes):
                     tokens[1] = '@improper:type'+str(i)
-                    l_in_improper_coeffs.insert(i_line, 
+                    l_in_improper_coeffs.insert(i_line,
                                                 (' '*indent)+(' '.join(tokens)+'\n'))
                     i_line += 1
         else:
@@ -2645,7 +2645,7 @@ try:
 
 
             if len(filtered_selection) > 0:
-                
+
                 tokens = ['group', group_name, specifier_style]
                 for interval in filtered_selection:
                     a = interval[0]
@@ -2778,7 +2778,7 @@ try:
         if i_token != len(tokens):
             i_token += 1
             while (i_token < len(tokens)) and tokens[i_token].isdigit():
-                # delete angle types from the list which 
+                # delete angle types from the list which
                 # do not belong to the selection
                 btype=int(tokens[i_token])
                 if int(tokens[i_token]) in needed_angletypes:
@@ -2796,7 +2796,7 @@ try:
         if i_token != len(tokens):
             i_token += 1
             while (i_token < len(tokens)) and tokens[i_token].isdigit():
-                # delete bond types from the list which 
+                # delete bond types from the list which
                 # do not belong to the selection
                 btype=int(tokens[i_token])
                 if int(tokens[i_token]) in needed_bondtypes:
@@ -2814,7 +2814,7 @@ try:
         if i_token != len(tokens):
             i_token += 1
             while (i_token < len(tokens)) and tokens[i_token].isdigit():
-                # delete atom types from the list which 
+                # delete atom types from the list which
                 # do not belong to the selection
                 btype=int(tokens[i_token])
                 if int(tokens[i_token]) in needed_atomtypes:
@@ -2825,7 +2825,7 @@ try:
                     del tokens[i_token]
 
 
-        #  Selecting atoms by mass feature should still work, so we 
+        #  Selecting atoms by mass feature should still work, so we
         #  don't need to delete or ignore these kinds of commands.
         #for i_token in range(0, len(tokens)):
         #    if tokens[i_token] == 'm':
@@ -2881,7 +2881,7 @@ try:
                              '         This will insure the atom-id numbers in this file are correct.\n'
 
                              '         See the documentation for fix poems for details.\n')
-                             
+
 
         if delete_this_command:
             sys.stderr.write('WARNING: Ignoring line \n\"'+l_in_fix_poems[i_line].rstrip()+'\"\n')
@@ -3264,7 +3264,7 @@ try:
         l_data_impropers.append((' '*cindent)+'}\n')
         sys.stdout.write('\n')
         sys.stdout.write(''.join(l_data_impropers))
-        non_empty_output = True 
+        non_empty_output = True
 
     if len(l_in_group) > 0:
         no_warnings = False

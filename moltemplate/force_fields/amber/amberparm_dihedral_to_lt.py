@@ -39,9 +39,9 @@ for i in range(0, len(lines_gaff)):
 
 
 # ---- processing dihedral fourier series ----
-# ---- (negative "n" values means the 
+# ---- (negative "n" values means the
 # ---- Fourier series is not yet complete.
-    
+
 i = 0
 while i < len(in_dihedral_coeffs):
     type_str = in_dihedral_coeffs[i][0]
@@ -58,7 +58,7 @@ while i < len(in_dihedral_coeffs):
         #sys.stdout.write('interaction_before_append: '+str(in_dihedral_coeffs[i-1])+'\n')
         assert(in_dihedral_coeffs[i-1][0] == in_dihedral_coeffs[i][0])
         in_dihedral_coeffs[i-1][-3] = -in_dihedral_coeffs[i-1][-3]
-        comments = in_dihedral_coeffs[i-1][-1] 
+        comments = in_dihedral_coeffs[i-1][-1]
         in_dihedral_coeffs[i-1][-1] = Kn
         in_dihedral_coeffs[i-1].append(n)
         in_dihedral_coeffs[i-1].append(dn)

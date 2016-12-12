@@ -32,8 +32,8 @@ g_no_check_msg = \
 
 if len(sys.argv) > 1:
     for i in range(0,len(sys.argv)):
-        if ((sys.argv[i].lower() == '-atomstyle') or 
-            (sys.argv[i].lower() == '-atom-style') or 
+        if ((sys.argv[i].lower() == '-atomstyle') or
+            (sys.argv[i].lower() == '-atom-style') or
             (sys.argv[i].lower() == '-atom_style')):
             if i+1 >= len(sys.argv):
                 raise InputError('Error('+g_program_name+'): The '+sys.argv[i]+' flag should be followed by a LAMMPS\n'
@@ -236,7 +236,7 @@ try:
         else:
             line = line_orig.rstrip('\n')
             usage_location_str = ''
-        
+
         tokens = line.strip().split()
         if len(tokens) == 0:
             pass
@@ -305,7 +305,7 @@ try:
                                      '     you specified the correct path which leads to it (using / and ..))\n\n'+
                                      g_no_check_msg)
 
-                # I used to generate an error when a users defines a $mol 
+                # I used to generate an error when a users defines a $mol
                 # variable but does not associate any atoms with it (or if the
                 # user systematically deletes all the atoms in that molecule),
                 # but I stopped this practice.
@@ -332,4 +332,3 @@ try:
 except (ValueError, InputError) as err:
     sys.stderr.write('\n'+str(err)+'\n')
     sys.exit(1)
-

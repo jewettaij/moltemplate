@@ -26,7 +26,7 @@ man_page_text = """
                      -nbodybytype X_by_type.data \\
                      > new_X.data
 
-    In both cases "X" denotes the interaction type, which 
+    In both cases "X" denotes the interaction type, which
     is either "Angles", "Dihedrals", or "Impropers".
     (Support for other interaction types can be added by the user. See below.)
 
@@ -34,11 +34,11 @@ man_page_text = """
 
     nbody_by_type.py X < old.data > new.data
 
-    In this example, nbody_by_type.py reads a LAMMPS data file 
-    "orig.data", and extracts the relevant section ("Angles", 
+    In this example, nbody_by_type.py reads a LAMMPS data file
+    "orig.data", and extracts the relevant section ("Angles",
     "Dihedrals", or "Impropers").  It also looks a section named "X By Type",
        (eg. "Angles By type", "Impropers By type", "Impropers By type")
-    which contains a list of criteria for automatically defining additional 
+    which contains a list of criteria for automatically defining additional
     interactions of that type.  For example, this file might contain:
 
     Angle By Type
@@ -54,17 +54,17 @@ man_page_text = """
     in this example.  (Optionally, regular expressions can also be used to
     define a type match, by enclosing the atom or bond type in / slashes.)
 
-        The first line tells us to that there should be a 3-body "Angle" 
+        The first line tells us to that there should be a 3-body "Angle"
     interaction of type "7" whenever an atom of type 1 is bonded to an atom
     of type "2", which is bonded to another atom of type "1" again.
-    The second line tells us that an angle is defined whenever three atoms 
+    The second line tells us that an angle is defined whenever three atoms
     are bonded together and the first two are of type "2".
     (Redundant angle interactions are filtered.)
 
-        New interactions are created for every group of bonded 
-    atoms which match these criteria if they are bonded together 
+        New interactions are created for every group of bonded
+    atoms which match these criteria if they are bonded together
     in the relevant way for that interaction type (as determined by
-    nbody_X.py), and printed to the standard output.  For example, 
+    nbody_X.py), and printed to the standard output.  For example,
     suppose you are automatically generating 3-body "Angle" interactions using:
 
     nbody_by_type Angles < old.data > new.data
@@ -79,10 +79,10 @@ man_page_text = """
      :  :   :    :    :
     847 9 14827 14848 14849
 
-    The numbers in the first column are counters which assign a ID to 
+    The numbers in the first column are counters which assign a ID to
     every interaction of that type, and start where the original "Angles"
     data left off (New angle ID numbers do not overlap with old ID numbers).
-    The text in the second column ("7", "9", ...) matches the text from the 
+    The text in the second column ("7", "9", ...) matches the text from the
     first column of the "Angle By Type" section of the input file.
 
     -------- Example 2 -------
@@ -112,7 +112,7 @@ man_page_text = """
     the data file from a different file indicated by the arguments following
     the "-atoms", "-bonds", "-nbody", and "-nbodybytype" flags.
 
-    "Angles" is a 3-body interaction style.  So when run this way, 
+    "Angles" is a 3-body interaction style.  So when run this way,
     nbody_by_type.py will create a 5 (=3+2) column file (new_Angles.data).
 
 Note: the atom, bond and other IDs/types in need not be integers.
@@ -121,7 +121,7 @@ Note: This program must be distributed with several python modules, including:
         nbody_Angles.py, nbody_Dihedrals.py, and nbody_Impropers.py.  These
       contain bond definitions for angular, dihedral, and improper interactions.
       (In case any new interaction types are ever added to LAMMPS, with only
-      a few lines of python it is easy to edit to define new bonded 
+      a few lines of python it is easy to edit to define new bonded
       interaction types by supplying new "nbody_X.py" python module.
       Refer to the modules listed above for examples.)
 
@@ -220,14 +220,14 @@ def GenInteractions_lines(lines_atoms,
             tokens = SplitQuotedString(line)
 
             if ((len(tokens) != 1 + g_bond_pattern.GetNumVerts()) and
-                (len(tokens) != 1 + g_bond_pattern.GetNumVerts() 
+                (len(tokens) != 1 + g_bond_pattern.GetNumVerts()
                                   + g_bond_pattern.GetNumEdges())):
                 raise(InputError('Error: Wrong number of columns in \"By Type\" section of data file.\n'
                                  'Offending line:\n'+
                                  '\"'+line+'\"\n'
                                  'Expected either '+
                                  str(1 + g_bond_pattern.GetNumVerts()) + ' or ' +
-                                 str(1 + g_bond_pattern.GetNumVerts() + 
+                                 str(1 + g_bond_pattern.GetNumVerts() +
                                      g_bond_pattern.GetNumEdges())
                                  + ' colunms.'))
 
@@ -235,7 +235,7 @@ def GenInteractions_lines(lines_atoms,
             typepattern = []
 
             for typestr in tokens[1:]:
-                if ((len(typestr) >= 2) and 
+                if ((len(typestr) >= 2) and
                     (typestr[0] == '/') and (typestr[-1] == '/')):
                     regex_str = typestr[1:-1]
                     typepattern.append( re.compile(regex_str) )
@@ -290,7 +290,7 @@ def GenInteractions_files(lines_data,
         except:
             sys.stderr.write('Error: Unable to open file \"'+fname_atoms+'\" for reading.\n')
             sys.exit(-1)
-        lines_atoms = [line for line in f.readlines() 
+        lines_atoms = [line for line in f.readlines()
                        if ((len(line.strip())>0) and (line.strip()[0] != '#'))]
         f.close()
 
@@ -300,10 +300,10 @@ def GenInteractions_files(lines_data,
     else:
         try:
             f = open(fname_bonds, 'r')
-        except IOError: 
+        except IOError:
             sys.stderr.write('Error: Unable to open file \"'+fname_bonds+'\" for reading.\n')
             sys.exit(-1)
-        lines_bonds = [line for line in f.readlines() 
+        lines_bonds = [line for line in f.readlines()
                        if ((len(line.strip())>0) and (line.strip()[0] != '#'))]
         f.close()
 
@@ -313,16 +313,16 @@ def GenInteractions_files(lines_data,
     else:
         try:
             f = open(fname_nbody, 'r')
-            lines_nbody = [line for line in f.readlines() 
+            lines_nbody = [line for line in f.readlines()
                            if ((len(line.strip())>0) and (line.strip()[0] != '#'))]
             f.close()
-        except IOError: 
+        except IOError:
             #sys.stderr.write('    (omitting optional file \"'+fname_nbody+'\")\n')
             lines_nbody = []
 
 
     if fname_nbodybytype == None:
-        lines_nbodybytype=[line for 
+        lines_nbodybytype=[line for
                            line in ExtractDataSection(lines_data,
                                                       section_name_bytype)]
 
@@ -332,7 +332,7 @@ def GenInteractions_files(lines_data,
         except:
             sys.stderr.write('Error: Unable to open file \"'+fname_nbodybytype+'\" for reading.\n')
             sys.exit(-1)
-        lines_nbodybytype = [line for line in f.readlines() 
+        lines_nbodybytype = [line for line in f.readlines()
                              if((len(line.strip())>0)and(line.strip()[0]!='#'))]
         f.close()
 
@@ -352,7 +352,7 @@ def GenInteractions_files(lines_data,
                              '       (Did you mispell the file name?\n'
                              '        Check the \"nbody_alternate_symmetry/\" directory.)\n')
             sys.exit(-1)
-        
+
 
 
 
@@ -459,7 +459,7 @@ if __name__ == "__main__":
                 fname_nbodybytype = argv[i+1]
                 del(argv[i:i+2])
 
-            elif ((argv[i].lower() == '-atom-style') or 
+            elif ((argv[i].lower() == '-atom-style') or
                 (argv[i].lower() == '-atom_style')):
                 if i+1 >= len(argv):
                     raise InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
@@ -518,7 +518,7 @@ if __name__ == "__main__":
                                      '       interactions.  (For example: \"Angles By Type\", \"Dihedrals By Type\",\n'
                                      '        \"Impropers By Type\", etc...  Note that this argument\n'
                                      '        will contain spaces, so surround it with quotes.)\n')
-                
+
                 section_name_bytype = argv[i+1]
                 del(argv[i:i+2])
 
@@ -589,7 +589,7 @@ if __name__ == "__main__":
 
         # Print this text to the standard out.
 
-        # Question: Do we write out the entire DATA file, 
+        # Question: Do we write out the entire DATA file,
         # or just the portion that was generated by this program?
 
         if not output_full_DATA_file:
@@ -604,13 +604,13 @@ if __name__ == "__main__":
         else:
 
 
-            # ...then print out the entire data file, deleting the "By Type" 
+            # ...then print out the entire data file, deleting the "By Type"
             # section, and adding the generated lines of text to the corresponding
 
-            # If present, update the interaction counter at the beginning 
-            # of the LAMMPS data file.  (For example, if if 100 new "Angles" 
+            # If present, update the interaction counter at the beginning
+            # of the LAMMPS data file.  (For example, if if 100 new "Angles"
             # interactions were generated, replace "2 Angles" with "102 Angles")
-            # 
+            #
             for i in range(0, len(lines_data)):
                 line = lines_data[i].strip()
                 tokens = SplitQuotedString(line)
@@ -641,7 +641,7 @@ if __name__ == "__main__":
                 # Insert the new lines into the existing section
                 lines_data[i_nbody_b:i_nbody_b] = lines_new_interactions
 
-            # Figure out where the "By Type" section is located 
+            # Figure out where the "By Type" section is located
             # (so we skip over it)
             i_bytype_a, i_bytype_b = \
                 FindDataSection(lines_data, section_name_bytype)
@@ -649,7 +649,7 @@ if __name__ == "__main__":
             in_bytype_section = False
             for i in range(0, len(lines_data)):
                 line = lines_data[i].strip()
-                # Omit all lines of text in the 'By Type' section (including the 
+                # Omit all lines of text in the 'By Type' section (including the
                 # header and commments or blank lines which immediately follow it.)
                 if line == section_name_bytype:
                     in_bytype_section = True
@@ -662,4 +662,3 @@ if __name__ == "__main__":
     except (ValueError, InputError) as err:
         sys.stderr.write('\n'+str(err)+'\n')
         sys.exit(-1)
-

@@ -6,7 +6,7 @@
    The file is read from sys.stdin.
    This program does not parse an entire LAMMPS data file.
    The text from the "Atoms" section
-    (or "Bonds", or "Angles", or "Dihedrals", or "Impropers" sections) 
+    (or "Bonds", or "Angles", or "Dihedrals", or "Impropers" sections)
    of the LAMMPS file must be extracted in advance.
 
 """
@@ -66,4 +66,3 @@ for i in range(0, len(column1_iorig_columnsAfter1)):
 
 if f != None:
     f.close()
-
