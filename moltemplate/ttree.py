@@ -49,6 +49,8 @@ import operator
 import random
 #import gc
 
+import pkg_resources
+
 try:
     unicode
 except NameError:
@@ -5045,6 +5047,9 @@ def BasicUIParseArgs(argv, settings):
 
     i = 1
 
+    # By default, include force_fields provided with the package
+    TtreeShlex.custom_path = \
+        pkg_resources.resource_filename(__name__, 'force_fields/')
 
     while i < len(argv):
         #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
