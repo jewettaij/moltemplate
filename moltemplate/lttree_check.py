@@ -67,6 +67,11 @@ if sys.version < '2.6':
     raise InputError('Error: Alas, you must upgrade to a newer version of python.')
 
 
+g_program_name = __file__.split('/')[-1]  # = 'lttree_check.py'
+g_version_str  = '0.76'
+g_date_str     = '2014-12-19'
+
+
 #g_no_check_msg = \
 #  "(If this error message is wrong, and/or you would like to continue anyway,\n"+\
 #  "try running moltemplate again using the \"-nocheck\" command-line-argument.)\n"
@@ -1956,9 +1961,6 @@ def LttreeCheckParseArgs(argv, settings):
 
 #######  control flow begins here: #######
 def main():
-    g_program_name = __file__.split('/')[-1]  # = 'lttree_check.py'
-    g_version_str  = '0.76'
-    g_date_str     = '2014-12-19'
     sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+'\n')
 
     try:
