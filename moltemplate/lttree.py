@@ -316,7 +316,7 @@ def TransformAtomText(text, matrix):
             for cxcycz in settings.ii_vects:
                 for d in range(0,3):
                     x0[d] = float(columns[cxcycz[d]])
-                    LinearTransform(x, matrix, x0)  # x = matrix * x0
+                    LinTransform(x, matrix, x0)  # x = matrix * x0
                 for d in range(0,3):
                     columns[cxcycz[d]] = str(x[d])
         lines[i] = ' '.join(columns) + comment

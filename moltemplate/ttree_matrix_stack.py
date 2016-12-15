@@ -39,7 +39,7 @@ def LinTransform(dest, M, x):
         (Not row vectors.)
 
     """
-    I = len(A)
+    I = len(M)
     J = len(x)
     for i in range(0,I):
         dest[i] = 0.0
