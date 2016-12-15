@@ -14,7 +14,7 @@ from .nbody_graph_search import Ugraph
 #      1         2
 #
 
-bond_pattern = Ugraph([(0,1), (0,2), (0,3)])
+bond_pattern = Ugraph([(0, 1), (0, 2), (0, 3)])
 # (Ugraph atom indices begin at 0, not 1)
 
 
@@ -55,8 +55,8 @@ def canonical_order(match):
     bond1 = match[1][1]
     bond2 = match[1][2]
     if atom1 <= atom2:
-        #return ((atom0,atom1,atom2,atom3), (bond0,bond1,bond2))
+        # return ((atom0,atom1,atom2,atom3), (bond0,bond1,bond2))
         # But this is the same thing as:
         return match
     else:
-        return ((atom0,atom2,atom1,atom3), (bond1,bond0,bond2))
+        return ((atom0, atom2, atom1, atom3), (bond1, bond0, bond2))

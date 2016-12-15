@@ -10,7 +10,7 @@ from .nbody_graph_search import Ugraph
 #       0   1   2               2nd bond connects atoms 1 and 2
 #
 
-bond_pattern = Ugraph([(0,1), (1,2)])
+bond_pattern = Ugraph([(0, 1), (1, 2)])
 # (Ugraph atom indices begin at 0, not 1)
 
 
@@ -46,7 +46,7 @@ def canonical_order(match):
     bond0 = match[1][0]
     bond1 = match[1][1]
     if atom0 < atom2:
-        #return ((atom0, atom1, atom2), (bond0, bond1))  same thing as:
+        # return ((atom0, atom1, atom2), (bond0, bond1))  same thing as:
         return match
     else:
         return ((atom2, atom1, atom0), (bond1, bond0))

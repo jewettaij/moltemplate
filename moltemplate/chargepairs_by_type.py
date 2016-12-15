@@ -32,10 +32,9 @@ from . import ttree_lex
 from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 
 
-
 def LookupChargePairs(chargebyatomid,
-                      #bond_ids,
-                      #bond_pairs,
+                      # bond_ids,
+                      # bond_pairs,
                       lines_atoms,
                       lines_bonds,
                       lines_bond_list,
@@ -44,8 +43,8 @@ def LookupChargePairs(chargebyatomid,
                       section_name,
                       prefix='',
                       suffix=''):
-                      #bond_ids_offset=0):
-                      #report_progress = False):
+                      # bond_ids_offset=0):
+                      # report_progress = False):
     """
     LookupChargePairs() looks up partial-charge pair contributions from the
     types of atoms participating in a bond.
@@ -82,15 +81,15 @@ def LookupChargePairs(chargebyatomid,
         if len(line) > 0:
             tokens = ttree_lex.SplitQuotedString(line)
             if ((len(tokens) <= i_atomid) or (len(tokens) <= i_atomtype)):
-                sys.stderr.write("\""+line+"\"\n")
-                raise(ttree_lex.InputError('Error not enough columns on line '+str(iv+1)+' of \"Atoms\" section.'))
+                sys.stderr.write("\"" + line + "\"\n")
+                raise(ttree_lex.InputError(
+                    'Error not enough columns on line ' + str(iv + 1) + ' of \"Atoms\" section.'))
             tokens = ttree_lex.SplitQuotedString(line)
             atomid = ttree_lex.EscCharStrToChar(tokens[i_atomid])
             atomids.append(atomid)
             atomtype = ttree_lex.EscCharStrToChar(tokens[i_atomtype])
             atomtypes.append(atomtype)
             atomids2types[atomid] = atomtype
-
 
     #assert(isinstance(bond_ids, list))
     #assert(isinstance(bond_types, list))
@@ -109,12 +108,12 @@ def LookupChargePairs(chargebyatomid,
             continue
         tokens = ttree_lex.SplitQuotedString(line)
         if len(tokens) == 3:
-            #bond_ids.append(ttree_lex.EscCharStrToChar(tokens[0]))
-            bond_pairs.append( (ttree_lex.EscCharStrToChar(tokens[1]),
-                                ttree_lex.EscCharStrToChar(tokens[2])) )
+            # bond_ids.append(ttree_lex.EscCharStrToChar(tokens[0]))
+            bond_pairs.append((ttree_lex.EscCharStrToChar(tokens[1]),
+                               ttree_lex.EscCharStrToChar(tokens[2])))
         else:
-            raise(ttree_lex.InputError('Incorrect number of columns on line '+str(ie+1)+' of \"'+section_name+'\" section.'))
-
+            raise(ttree_lex.InputError('Incorrect number of columns on line ' +
+                                       str(ie + 1) + ' of \"' + section_name + '\" section.'))
 
     for ie in range(0, len(lines_bonds)):
         line = lines_bonds[ie].strip()
@@ -125,16 +124,15 @@ def LookupChargePairs(chargebyatomid,
             continue
         tokens = ttree_lex.SplitQuotedString(line)
         if len(tokens) == 4:
-            #bond_ids.append(ttree_lex.EscCharStrToChar(tokens[0]))
-            #bond_types.append(ttree_lex.EscCharStrToChar(tokens[1]))
-            bond_pairs.append( (ttree_lex.EscCharStrToChar(tokens[2]),
-                                ttree_lex.EscCharStrToChar(tokens[3])) )
+            # bond_ids.append(ttree_lex.EscCharStrToChar(tokens[0]))
+            # bond_types.append(ttree_lex.EscCharStrToChar(tokens[1]))
+            bond_pairs.append((ttree_lex.EscCharStrToChar(tokens[2]),
+                               ttree_lex.EscCharStrToChar(tokens[3])))
         else:
-            raise(ttree_lex.InputError('Incorrect number of columns on line '+str(ie+1)+' of \"'+section_name+'\" section.'))
+            raise(ttree_lex.InputError('Incorrect number of columns on line ' +
+                                       str(ie + 1) + ' of \"' + section_name + '\" section.'))
 
-
-
-    #for ie in range(0, len(lines_bonds_atomid_atomid)):
+    # for ie in range(0, len(lines_bonds_atomid_atomid)):
     #    line = lines_bonds_atomid_atomid[ie].strip()
     #    if '#' in line:
     #        icomment = line.find('#')
@@ -150,8 +148,6 @@ def LookupChargePairs(chargebyatomid,
     #    else:
     #        raise(ttree_lex.InputError('Incorrect number of columns on line '+str(ie+1)+' of \"'+section_name+'\" section.'))
 
-
-
     assert(len(bond_types) == 0)
     typepattern_to_chargepairs = []
     warning_unassigned_chargepairs = None
@@ -166,9 +162,9 @@ def LookupChargePairs(chargebyatomid,
 
             if (len(tokens) != 4):
                 raise(ttree_lex.InputError('Error: Wrong number of columns in the \"Charge Pairs By Type\" section of data file.\n'
-                                 'Offending line:\n'+
-                                 '\"'+line+'\"\n'
-                                 'Expected 4 columns\n'))
+                                           'Offending line:\n' +
+                                           '\"' + line + '\"\n'
+                                           'Expected 4 columns\n'))
 
             chargepair = (float(tokens[2]),
                           float(tokens[3]))
@@ -177,33 +173,31 @@ def LookupChargePairs(chargebyatomid,
 
             for typestr in tokens[:2]:
                 if ((len(typestr) >= 2) and
-                    (typestr[0] == '/') and (typestr[-1] == '/')):
+                        (typestr[0] == '/') and (typestr[-1] == '/')):
                     regex_str = typestr[1:-1]
-                    typepattern.append( re.compile(regex_str) )
+                    typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))
 
             typepattern_to_chargepairs.append([typepattern, chargepair])
 
-
     for atomid1, atomid2 in bond_pairs:
 
         if atomid1 not in atomids2types:
-            raise ttree_lex.InputError('Error: atom \"'+atomid1+'\" not defined in \"Data Atoms\".\n'
+            raise ttree_lex.InputError('Error: atom \"' + atomid1 + '\" not defined in \"Data Atoms\".\n'
                                        '       This usually happens when the user mistypes one of the names of the\n'
                                        '       $atoms in either a \"Data Atoms\" or \"Data Bond List\" section.\n'
                                        '       To find out where the mistake occured, search the \n'
                                        '       \"ttree_assignments.txt\" file for:\n'
-                                       '       \"'+atomid1+'\"\n')
+                                       '       \"' + atomid1 + '\"\n')
 
         if atomid2 not in atomids2types:
-            raise ttree_lex.InputError('Error: atom \"'+atomid2+'\" not defined in \"Data Atoms\".\n'
+            raise ttree_lex.InputError('Error: atom \"' + atomid2 + '\" not defined in \"Data Atoms\".\n'
                                        '       This usually happens when the user mistypes one of the names of the\n'
                                        '       $atoms in either a \"Data Atoms\" or \"Data Bond List\" section.\n'
                                        '       To find out where the mistake occured, search the \n'
                                        '       \"ttree_assignments.txt\" file for:\n'
-                                       '       \"'+atomid2+'\"\n')
-
+                                       '       \"' + atomid2 + '\"\n')
 
         atomtype1 = atomids2types[atomid1]
         atomtype2 = atomids2types[atomid2]
@@ -221,7 +215,6 @@ def LookupChargePairs(chargebyatomid,
                 if not warning_unassigned_chargepairs:
                     warning_unassigned_chargepairs = (atomid1, atomid2)
 
-
     if warning_unassigned_chargepairs:
         sys.stderr.write('---------------------------------------------------------------------------\n'
                          'Warning: bonds found between atoms with no partial-charge rules.\n'
@@ -233,22 +226,22 @@ def LookupChargePairs(chargebyatomid,
                          '         OR if you are defining the charges for these atoms manually\n'
                          '         In the later case, it is not a problem.\n'
                          '         The first bond with this problem is between this pair of atoms:\n'
-                         '            '+str(warning_unassigned_chargepairs[0])+'\n'
-                         '            '+str(warning_unassigned_chargepairs[1])+'\n'
+                         '            ' +
+                         str(warning_unassigned_chargepairs[0]) + '\n'
+                         '            ' +
+                         str(warning_unassigned_chargepairs[1]) + '\n'
                          '---------------------------------------------------------------------------\n')
-
-
-
 
 
 if __name__ == "__main__":
 
     g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-    g_date_str     = '2016-10-16'
-    g_version_str  = '0.11'
+    g_date_str = '2016-10-16'
+    g_version_str = '0.11'
 
     #######  Main Code Below: #######
-    sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
+    sys.stderr.write(g_program_name + ' v' +
+                     g_version_str + ' ' + g_date_str + ' ')
     if sys.version < '3':
         sys.stderr.write(' (python version < 3)\n')
     else:
@@ -261,12 +254,11 @@ if __name__ == "__main__":
         fname_chargepairsbytype = None
         section_name = 'Data Bond List'  # (This will be replaced later.)
         atom_style = 'full'
-        prefix=''
-        suffix=''
+        prefix = ''
+        suffix = ''
         bond_lack_types = False
 
         argv = [arg for arg in sys.argv]
-
 
         # Loop over the remaining arguments not processed yet.
         # These arguments are specific to the lttree.py program
@@ -275,71 +267,74 @@ if __name__ == "__main__":
         while i < len(argv):
             #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
             if ((argv[i].lower() == '-?') or
-                (argv[i].lower() == '--?') or
-                (argv[i].lower() == '-help') or
-                (argv[i].lower() == '-help')):
-                if i+1 >= len(argv):
-                    sys.stdout.write(man_page_text+'\n')
+                    (argv[i].lower() == '--?') or
+                    (argv[i].lower() == '-help') or
+                    (argv[i].lower() == '-help')):
+                if i + 1 >= len(argv):
+                    sys.stdout.write(man_page_text + '\n')
                     sys.exit(0)
 
             elif argv[i].lower() == '-atoms':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
-                                     '       text which might appear in the "Atoms" section of a LAMMPS data file.\n')
-                fname_atoms = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a file name containing lines of\n'
+                                               '       text which might appear in the "Atoms" section of a LAMMPS data file.\n')
+                fname_atoms = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-bonds':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
-                                     '       text which might appear in the "Bonds" section of a LAMMPS data file.\n')
-                fname_bonds = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a file name containing lines of\n'
+                                               '       text which might appear in the "Bonds" section of a LAMMPS data file.\n')
+                fname_bonds = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-bond-list':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
-                    #raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
+                    # raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
                     #                 '       text which might appear in the "Bonds No Types" section of a LAMMPS data file.\n')
-                fname_bond_list = argv[i+1]
+                fname_bond_list = argv[i + 1]
                 section_name = "Data Bond List"
-                del(argv[i:i+2])
+                del(argv[i:i + 2])
 
             elif ((argv[i].lower() == '-chargepairsbytype') or
                   (argv[i].lower() == '-chargepairs-by-type') or
                   (argv[i].lower() == '-charge-pairs-by-type')):
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
 
-                    #raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing\n'
+                    # raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing\n'
                     #                 '       text which might appear in the "'+section_name+' By Type" section\n'
                     #                 '       of a LAMMPS data file.\n')
-                fname_chargepairsbytype = argv[i+1]
-                del(argv[i:i+2])
+                fname_chargepairsbytype = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif ((argv[i].lower() == '-atom-style') or
-                (argv[i].lower() == '-atom_style')):
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
-                                     '       (Or single quoted string which includes a space-separated\n'
-                                     '       list of column names.)\n')
-                atom_style = argv[i+1]
-                del(argv[i:i+2])
+                  (argv[i].lower() == '-atom_style')):
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a an atom_style name.\n'
+                                               '       (Or single quoted string which includes a space-separated\n'
+                                               '       list of column names.)\n')
+                atom_style = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i][0] == '-':
-                raise ttree_lex.InputError('Error('+g_program_name+'):\n'
-                                 'Unrecogized command line argument \"'+argv[i]+'\"\n')
+                raise ttree_lex.InputError('Error(' + g_program_name + '):\n'
+                                           'Unrecogized command line argument \"' + argv[i] + '\"\n')
             else:
                 i += 1
 
         if len(argv) != 1:
             # if there are more than 2 remaining arguments,
-            problem_args = ['\"'+arg+'\"' for arg in argv[1:]]
-            raise ttree_lex.InputError('Syntax Error('+g_program_name+'):\n\n'
-                             '       Problem with argument list.\n'
-                             '       The remaining arguments are:\n\n'
-                             '         '+(' '.join(problem_args))+'\n\n'
-                             '       (The actual problem may be earlier in the argument list.)\n')
+            problem_args = ['\"' + arg + '\"' for arg in argv[1:]]
+            raise ttree_lex.InputError('Syntax Error(' + g_program_name + '):\n\n'
+                                       '       Problem with argument list.\n'
+                                       '       The remaining arguments are:\n\n'
+                                       '         ' +
+                                       (' '.join(problem_args)) + '\n\n'
+                                       '       (The actual problem may be earlier in the argument list.)\n')
 
         bond_types = []
         fatoms = open(fname_atoms, 'r')
@@ -361,7 +356,7 @@ if __name__ == "__main__":
         except IOError:
             pass
         if ((len(lines_bonds) == 0) and (len(lines_bond_list) == 0)):
-            sys.stderr.write('Error('+g_program_name+'): No bonds defined for this system\n'
+            sys.stderr.write('Error(' + g_program_name + '): No bonds defined for this system\n'
                              '      (This error may be a bug in moltemplate.)\n')
         fchargepairsbytype = open(fname_chargepairsbytype, 'r')
         lines_atoms = fatoms.readlines()
@@ -384,5 +379,5 @@ if __name__ == "__main__":
                              ' charge ' + str(charge) + '\n')
 
     except (ValueError, ttree_lex.InputError) as err:
-        sys.stderr.write('\n'+str(err)+'\n')
+        sys.stderr.write('\n' + str(err) + '\n')
         sys.exit(-1)

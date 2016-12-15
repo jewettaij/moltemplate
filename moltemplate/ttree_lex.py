@@ -21,7 +21,8 @@
 import os.path
 import sys
 from collections import deque
-import re, fnmatch
+import re
+import fnmatch
 import string
 #import gc
 
@@ -62,8 +63,6 @@ __all__ = ["TtreeShlex",
            "TemplateLexer"]
 
 
-
-
 class TtreeShlex(object):
     """ A lexical analyzer class for simple shell-like syntaxes.
     TtreeShlex is a backwards-compatible version of python's standard shlex
@@ -101,8 +100,8 @@ class TtreeShlex(object):
             self.wordchars += ('��������������������������������'
                                '������������������������������')
 
-        self.wordterminators = set([])  #WORDTERMINATORS
-        self.prev_space_terminator = '' #WORDTERMINATORS
+        self.wordterminators = set([])  # WORDTERMINATORS
+        self.prev_space_terminator = ''  # WORDTERMINATORS
         self.whitespace = ' \t\r\f\n'
         self.whitespace_split = False
         self.quotes = '\'"'
@@ -117,9 +116,9 @@ class TtreeShlex(object):
         # self.source_triggers
         # are tokens which allow the seamless insertion of other
         # files into the file being read.
-        self.source_triggers=set(['source'])
-        self.source_triggers_x=set([])
-        #Note: self.source_triggers_x
+        self.source_triggers = set(['source'])
+        self.source_triggers_x = set([])
+        # Note: self.source_triggers_x
         #      This is a subset of self.source_triggers.
         #      In this case file inclusion is exclusive.
         #      In other words, if one of these tokens
@@ -129,22 +128,21 @@ class TtreeShlex(object):
         self.include_path = []
         if TtreeShlex.custom_path:
             include_path_list = TtreeShlex.custom_path.split(':')
-            self.include_path += [d for d in include_path_list if len(d)>0]
+            self.include_path += [d for d in include_path_list if len(d) > 0]
         if 'TTREE_PATH' in os.environ:
             include_path_list = os.environ['TTREE_PATH'].split(':')
-            self.include_path += [d for d in include_path_list if len(d)>0]
+            self.include_path += [d for d in include_path_list if len(d) > 0]
         if self.debug:
-            print('TtreeShlex: reading from %s, line %d' \
+            print('TtreeShlex: reading from %s, line %d'
                   % (self.instream, self.lineno))
         self.end_encountered = False
 
-
-    @staticmethod                                            #WORDTERMINATORS
-    def _belongs_to(char, include_chars, exclude_chars):     #WORDTERMINATORS
-        if ((not exclude_chars) or (len(exclude_chars)==0)): #WORDTERMINATORS
-            return char in include_chars                     #WORDTERMINATORS
-        else:                                                #WORDTERMINATORS
-            return char not in exclude_chars                 #WORDTERMINATORS
+    @staticmethod  # WORDTERMINATORS
+    def _belongs_to(char, include_chars, exclude_chars):  # WORDTERMINATORS
+        if ((not exclude_chars) or (len(exclude_chars) == 0)):  # WORDTERMINATORS
+            return char in include_chars  # WORDTERMINATORS
+        else:  # WORDTERMINATORS
+            return char not in exclude_chars  # WORDTERMINATORS
 
     def push_raw_text(self, text):
         """Push a block of text onto the stack popped by the ReadLine() method.
@@ -159,16 +157,16 @@ class TtreeShlex(object):
         """
         if self.debug >= 1:
             print("TtreeShlex: pushing token " + repr(text))
-        for c in reversed(text):                 #WORDTERMINATORS
-            self.pushback.appendleft(c)          #WORDTERMINATORS
-            if c == '\n':                        #WORDTERMINATORS
-                self.lineno -= 1                 #WORDTERMINATORS
-        if len(text) > 0:                       #WORDTERMINATORS
-            self.end_encountered = False        #WORDTERMINATORS
+        for c in reversed(text):  # WORDTERMINATORS
+            self.pushback.appendleft(c)  # WORDTERMINATORS
+            if c == '\n':  # WORDTERMINATORS
+                self.lineno -= 1  # WORDTERMINATORS
+        if len(text) > 0:  # WORDTERMINATORS
+            self.end_encountered = False  # WORDTERMINATORS
 
     def push_token(self, text):
         "Push a token onto the stack popped by the get_token method"
-        self.push_raw_text(text+self.prev_space_terminator)
+        self.push_raw_text(text + self.prev_space_terminator)
 
     def push_source(self, newstream, newfile=None):
         "Push an input source onto the lexer's input source stack."
@@ -189,35 +187,37 @@ class TtreeShlex(object):
         self.instream.close()
         (self.infile, self.instream, self.lineno) = self.filestack.popleft()
         if self.debug:
-            print('TtreeShlex: popping to %s, line %d' \
+            print('TtreeShlex: popping to %s, line %d'
                   % (self.instream, self.lineno))
         self.state = ' '
 
     def get_token(self):
         "Get a token from the input stream (or from stack if it's nonempty)"
-        #### #CHANGING: self.pushback is now a stack of characters, not tokens #WORDTERMINATORS
-        #### if self.pushback:                                                #WORDTERMINATORS
-        ####    tok = self.pushback.popleft()                                 #WORDTERMINATORS
-        ####    if self.debug >= 1:                                           #WORDTERMINATORS
-        ####        print("TtreeShlex: popping token " + repr(tok))             #WORDTERMINATORS
-        ####    return tok                                                    #WORDTERMINATORS
-        #### No pushback.  Get a token.                                       #WORDTERMINATORS
+        # CHANGING: self.pushback is now a stack of characters, not tokens #WORDTERMINATORS
+        # if self.pushback:                                                #WORDTERMINATORS
+        # tok = self.pushback.popleft()                                 #WORDTERMINATORS
+        # if self.debug >= 1:                                           #WORDTERMINATORS
+        # print("TtreeShlex: popping token " + repr(tok))             #WORDTERMINATORS
+        # return tok                                                    #WORDTERMINATORS
+        # No pushback.  Get a token.
+        # #WORDTERMINATORS
         raw = self.read_token()
         # Handle inclusions
         if self.source_triggers is not None:
             while raw in self.source_triggers:
-                fname=self.read_token()
+                fname = self.read_token()
                 spec = self.sourcehook(fname)
                 if spec:
                     (newfile, newstream) = spec
                     if ((raw not in self.source_triggers_x) or
-                        (newfile not in self.source_files_restricted)):
+                            (newfile not in self.source_files_restricted)):
                         self.push_source(newstream, newfile)
                         if raw in self.source_triggers_x:
                             self.source_files_restricted.add(newfile)
                     else:
                         if self.debug >= 1:
-                            sys.stderr.write('\ndebug warning: duplicate attempt to import file:\n               \"'+newfile+'\"\n')
+                            sys.stderr.write(
+                                '\ndebug warning: duplicate attempt to import file:\n               \"' + newfile + '\"\n')
                 raw = self.get_token()
 
         # Maybe we got EOF instead?
@@ -234,32 +234,32 @@ class TtreeShlex(object):
             else:
                 print("TtreeShlex: token=EOF")
 
-        if raw == self.eof:                #WORDTERMINATORS
-            self.end_encountered = True    #WORDTERMINATORS
+        if raw == self.eof:  # WORDTERMINATORS
+            self.end_encountered = True  # WORDTERMINATORS
 
         return raw
 
-
     def read_char(self):
-        if self.pushback:                      #WORDTERMINATORS
-            nextchar = self.pushback.popleft() #WORDTERMINATORS
-            assert((type(nextchar) is str) and (len(nextchar)==1)) #WORDTERMINATORS
-        else:                                  #WORDTERMINATORS
-            nextchar = self.instream.read(1)   #WORDTERMINATORS
+        if self.pushback:  # WORDTERMINATORS
+            nextchar = self.pushback.popleft()  # WORDTERMINATORS
+            assert((type(nextchar) is str) and (
+                len(nextchar) == 1))  # WORDTERMINATORS
+        else:  # WORDTERMINATORS
+            nextchar = self.instream.read(1)  # WORDTERMINATORS
         return nextchar
 
-
     def read_token(self):
-        self.prev_space_terminator = ''            #WORDTERMINATORS
+        self.prev_space_terminator = ''  # WORDTERMINATORS
         quoted = False
         escapedstate = ' '
         while True:
-            #### self.pushback is now a stack of characters, not tokens  #WORDTERMINATORS
+            # self.pushback is now a stack of characters, not tokens
+            # #WORDTERMINATORS
             nextchar = self.read_char()
             if nextchar == '\n':
                 self.lineno = self.lineno + 1
             if self.debug >= 3:
-                print("TtreeShlex: in state", repr(self.state), \
+                print("TtreeShlex: in state", repr(self.state),
                       "I see character:", repr(nextchar))
             if self.state is None:
                 self.token = ''        # past end of file
@@ -274,7 +274,7 @@ class TtreeShlex(object):
                     if self.token or (self.posix and quoted):
                         # Keep track of which whitespace
                         # character terminated the token.
-                        self.prev_space_terminator = nextchar     #WORDTERMINATORS
+                        self.prev_space_terminator = nextchar  # WORDTERMINATORS
                         break   # emit current token
                     else:
                         continue
@@ -284,9 +284,9 @@ class TtreeShlex(object):
                 elif self.posix and nextchar in self.escape:
                     escapedstate = 'a'
                     self.state = nextchar
-                elif TtreeShlex._belongs_to(nextchar,             #WORDTERMINATORS
-                                            self.wordchars,       #WORDTERMINATORS
-                                            self.wordterminators):#WORDTERMINATORS
+                elif TtreeShlex._belongs_to(nextchar,  # WORDTERMINATORS
+                                            self.wordchars,  # WORDTERMINATORS
+                                            self.wordterminators):  # WORDTERMINATORS
                     self.token = nextchar
                     self.state = 'a'
                 elif nextchar in self.quotes:
@@ -308,7 +308,7 @@ class TtreeShlex(object):
                     if self.debug >= 2:
                         print("TtreeShlex: I see EOF in quotes state")
                     # XXX what error should be raised here?
-                    raise ValueError("Error at or before "+self.error_leader()+"\n"
+                    raise ValueError("Error at or before " + self.error_leader() + "\n"
                                      "      No closing quotation.")
                 if nextchar == self.state:
                     if not self.posix:
@@ -318,7 +318,7 @@ class TtreeShlex(object):
                     else:
                         self.state = 'a'
                 elif self.posix and nextchar in self.escape and \
-                     self.state in self.escapedquotes:
+                        self.state in self.escapedquotes:
                     escapedstate = self.state
                     self.state = nextchar
                 else:
@@ -347,7 +347,7 @@ class TtreeShlex(object):
                     if self.token or (self.posix and quoted):
                         # Keep track of which whitespace
                         # character terminated the token.
-                        self.prev_space_terminator = nextchar     #WORDTERMINATORS
+                        self.prev_space_terminator = nextchar  # WORDTERMINATORS
                         break   # emit current token
                     else:
                         continue
@@ -359,7 +359,7 @@ class TtreeShlex(object):
                         if self.token or (self.posix and quoted):
                             # Keep track of which character(s) terminated
                             # the token (including whitespace and comments).
-                            self.prev_space_terminator = nextchar + comment_contents    #WORDTERMINATORS
+                            self.prev_space_terminator = nextchar + comment_contents  # WORDTERMINATORS
                             break   # emit current token
                         else:
                             continue
@@ -368,11 +368,11 @@ class TtreeShlex(object):
                 elif self.posix and nextchar in self.escape:
                     escapedstate = 'a'
                     self.state = nextchar
-                elif (TtreeShlex._belongs_to(nextchar,          #WORDTERMINATORS
-                                             self.wordchars,    #WORDTERMINATORS
-                                             self.wordterminators)#WORDTERMINATORS
-                      or (nextchar in self.quotes)              #WORDTERMINATORS
-                      or (self.whitespace_split)):              #WORDTERMINATORS
+                elif (TtreeShlex._belongs_to(nextchar,  # WORDTERMINATORS
+                                             self.wordchars,  # WORDTERMINATORS
+                                             self.wordterminators)  # WORDTERMINATORS
+                      or (nextchar in self.quotes)  # WORDTERMINATORS
+                      or (self.whitespace_split)):  # WORDTERMINATORS
                     self.token = self.token + nextchar
                 else:
                     self.pushback.appendleft(nextchar)
@@ -414,10 +414,10 @@ class TtreeShlex(object):
                     err = False
                     break
                 except IOError:
-                    err=True
+                    err = True
             if err:
-                raise InputError('Error at '+self.error_leader()+'\n'
-                                 '       unable to open file \"'+newfile+'\"\n'
+                raise InputError('Error at ' + self.error_leader() + '\n'
+                                 '       unable to open file \"' + newfile + '\"\n'
                                  '       for reading.\n')
         return (newfile, f)
 
@@ -456,15 +456,14 @@ def split(s, comments=False, posix=True):
     return list(lex)
 
 
-
 ##################### NEW ADDITIONS (may be removed later) #################
 
 #"""
 #  -- linelex.py --
-#linelex.py defines the LineLex class, which inherits from, and further
-#augments the capabilities of TtreeShlex by making it easier to parse
-#individual lines one at a time.  (The original shlex's "source" inclusion
-#ability still works when reading entire lines, and lines are still counted.)
+# linelex.py defines the LineLex class, which inherits from, and further
+# augments the capabilities of TtreeShlex by making it easier to parse
+# individual lines one at a time.  (The original shlex's "source" inclusion
+# ability still works when reading entire lines, and lines are still counted.)
 #
 #"""
 
@@ -480,14 +479,16 @@ class InputError(Exception):
 
     def __init__(self, err_msg):
         self.err_msg = err_msg
+
     def __str__(self):
         return self.err_msg
+
     def __repr__(self):
         return str(self)
 
 
 def ErrorLeader(infile, lineno):
-    return '\"'+infile+'\", line '+str(lineno)
+    return '\"' + infile + '\", line ' + str(lineno)
 
 
 class SrcLoc(object):
@@ -495,12 +496,11 @@ class SrcLoc(object):
     of a file (str) and a particular line number inside that file (an integer).
 
     """
-    __slots__=["infile","lineno"]
+    __slots__ = ["infile", "lineno"]
+
     def __init__(self, infile='', lineno=-1):
         self.infile = infile
         self.lineno = lineno
-
-
 
 
 def SplitQuotedString(string,
@@ -512,14 +512,14 @@ def SplitQuotedString(string,
     token = ''
     reading_token = True
     escaped_state = False
-    quote_state  = None
+    quote_state = None
     for c in string:
 
-        if (c in comment_char) and (not escaped_state) and (quote_state==None):
+        if (c in comment_char) and (not escaped_state) and (quote_state == None):
             tokens.append(token)
             return tokens
 
-        elif (c in delimiters) and (not escaped_state) and (quote_state==None):
+        elif (c in delimiters) and (not escaped_state) and (quote_state == None):
             if reading_token:
                 tokens.append(token)
                 token = ''
@@ -585,7 +585,7 @@ def EscCharStrToChar(s_in, escape='\\'):
             elif c in escape:
                 out_lstr.append(c)
             else:
-                out_lstr.append(escape+c) # <- keep both characters
+                out_lstr.append(escape + c)  # <- keep both characters
             escaped_state = False
         else:
             if c in escape:
@@ -594,7 +594,6 @@ def EscCharStrToChar(s_in, escape='\\'):
                 out_lstr.append(c)
 
     return ''.join(out_lstr)
-
 
 
 def SafelyEncodeString(in_str,
@@ -625,9 +624,9 @@ def SafelyEncodeString(in_str,
         elif (c == '\f'):
             c = '\\f'
         elif c in quotes:
-            c = escape[0]+c
+            c = escape[0] + c
         elif c in escape:
-            c = c+c
+            c = c + c
         elif c in delimiters:
             use_outer_quotes = True
         # hmm... that's all that comes to mind.  Did I leave anything out?
@@ -640,11 +639,10 @@ def SafelyEncodeString(in_str,
 
 
 def RemoveOuterQuotes(text, quotes='\"\''):
-    if ((len(text)>=2) and (text[0] in quotes) and (text[-1]==text[0])):
+    if ((len(text) >= 2) and (text[0] in quotes) and (text[-1] == text[0])):
         return text[1:-1]
     else:
         return text
-
 
 
 def MaxLenStr(s1, s2):
@@ -654,7 +652,7 @@ def MaxLenStr(s1, s2):
         return s1
 
 
-#def IsRegex(pat):
+# def IsRegex(pat):
 #    """
 #    Check to see if string (pat) is bracketed by slashes.
 #
@@ -669,7 +667,7 @@ def HasWildCard(pat):
     return (pat.find('*') != -1) or (pat.find('?') != -1)
 
 
-#def HasWildCard(pat):
+# def HasWildCard(pat):
 #    """
 #    Returns true if a string (pat) contains a non-backslash-protected
 #    * or ? character.
@@ -697,12 +695,12 @@ def HasWildCard(pat):
 
 def MatchesPattern(s, pattern):
     if type(pattern) is str:
-        #old code:
-        #if ((len(s) > 1) and (s[0] == '/') and (s[-1] == '/'):
+        # old code:
+        # if ((len(s) > 1) and (s[0] == '/') and (s[-1] == '/'):
         #    re_string = p[1:-1]  # strip off the slashes '/' and '/'
         #    if not re.search(re_string, s):
         #        return False
-        #new code:
+        # new code:
         #    uses precompiled regular expressions (See "pattern.search" below)
         if HasWildCard(pattern):
             if not fnmatch.fnmatchcase(s, pattern):
@@ -717,14 +715,12 @@ def MatchesPattern(s, pattern):
     return True
 
 
-
 def MatchesAll(multi_string, pattern):
     assert(len(multi_string) == len(pattern))
     for i in range(0, len(pattern)):
         if not MatchesPattern(multi_string[i], pattern[i]):
             return False
     return True
-
 
 
 class LineLex(TtreeShlex):
@@ -748,6 +744,7 @@ class LineLex(TtreeShlex):
     Andrew 2012-3-25
 
     """
+
     def __init__(self,
                  instream=None,
                  infile=None,
@@ -757,16 +754,13 @@ class LineLex(TtreeShlex):
         self.line_extend_chars = '\\'
         self.skip_comments_during_readline = True
 
-
     def _StripComments(self, line):
         if self.skip_comments_during_readline:
             for i in range(0, len(line)):
                 if ((line[i] in self.commenters) and
-                    ((i==0) or (line[i-1] not in self.escape))):
+                        ((i == 0) or (line[i - 1] not in self.escape))):
                     return line[:i]
         return line
-
-
 
     def _ReadLine(self,
                   recur_level=0):
@@ -795,13 +789,13 @@ class LineLex(TtreeShlex):
            "token_extender" argument (like '\' for extending lines)
 
         """
-        first_token=''
+        first_token = ''
         line = ''
         escaped_state = False
         found_space = False
         while True:
             nextchar = self.read_char()
-            #sys.stderr.write('nextchar=\"'+nextchar+'\"\n')
+            # sys.stderr.write('nextchar=\"'+nextchar+'\"\n')
             while nextchar == '':
                 if not self.filestack:
                     return self._StripComments(line), '', first_token, found_space
@@ -826,36 +820,36 @@ class LineLex(TtreeShlex):
                     while first_token in self.source_triggers:
                         fname = RemoveOuterQuotes(self.get_token())
                         if (fname == '') or (fname in self.source_triggers):
-                            raise InputError('Error: near '+self.error_leader()+'\n'
+                            raise InputError('Error: near ' + self.error_leader() + '\n'
                                              '       Nonsensical file inclusion request.\n')
                         if self.debug >= 0:
-                            sys.stderr.write( ('  ' * recur_level) +
-                                             'reading file \"'+fname+'\"\n')
+                            sys.stderr.write(('  ' * recur_level) +
+                                             'reading file \"' + fname + '\"\n')
                         spec = self.sourcehook(fname)
                         if spec:
                             (fname, subfile) = spec
                             if ((first_token not in self.source_triggers_x) or
-                                (fname not in self.source_files_restricted)):
+                                    (fname not in self.source_files_restricted)):
                                 self.push_source(subfile, fname)
                             if first_token in self.source_triggers_x:
                                 self.source_files_restricted.add(fname)
                             else:
                                 if self.debug >= 0:
-                                    sys.stderr.write('\nWarning at '+self.error_leader()+':\n'
-                                                     '          duplicate attempt to import file:\n         \"'+fname+'\"\n')
+                                    sys.stderr.write('\nWarning at ' + self.error_leader() + ':\n'
+                                                     '          duplicate attempt to import file:\n         \"' + fname + '\"\n')
 
                         line, nextchar, first_token, found_space = \
-                            self._ReadLine(recur_level+1)
-
+                            self._ReadLine(recur_level + 1)
 
                 if nextchar in self.line_terminators:
                     line_nrw = line.rstrip(self.whitespace)
-                    #sys.stderr.write('line_nrw=\"'+line_nrw+'\"\n')
+                    # sys.stderr.write('line_nrw=\"'+line_nrw+'\"\n')
                     if ((len(line_nrw) > 0) and
-                        (line_nrw[-1] in self.line_extend_chars) and
-                        ((len(line_nrw) < 2) or (line_nrw[-2] not in self.escape))):
-                        line = line_nrw[:-1] #delete the line_extend character
-                                # from the end of that line and keep reading...
+                            (line_nrw[-1] in self.line_extend_chars) and
+                            ((len(line_nrw) < 2) or (line_nrw[-2] not in self.escape))):
+                        # delete the line_extend character
+                        line = line_nrw[:-1]
+                        # from the end of that line and keep reading...
                     else:
                         return self._StripComments(line), nextchar, first_token, found_space
                 else:
@@ -863,15 +857,12 @@ class LineLex(TtreeShlex):
                     if not found_space:
                         first_token += nextchar
 
-
-
     def ReadLine(self, recur_level=0):
         line, nextchar, first_token, found_space = \
             self._ReadLine(recur_level)
         if nextchar == self.eof:
             self.end_encountered = True
         return line + nextchar
-
 
     @staticmethod
     def TextBlock2Lines(text, delimiters, keep_delim=True):
@@ -891,13 +882,13 @@ class LineLex(TtreeShlex):
         while i < len(text):
             if text[i] in delimiters:
                 if keep_delim:
-                    ls.append(text[i_prev:i+1])
+                    ls.append(text[i_prev:i + 1])
                 else:
                     ls.append(text[i_prev:i])
-                i_prev = i+1
+                i_prev = i + 1
             i += 1
         if (i_prev < len(text)):
-            ls.append(text[i_prev:i+1])
+            ls.append(text[i_prev:i + 1])
         return ls
 
     def __iter__(self):
@@ -919,63 +910,61 @@ class OSrcLoc(object):
 
     """
 
-    __slots__ = ["infile","lineno","order"]
+    __slots__ = ["infile", "lineno", "order"]
     count = 0
 
     def __init__(self, infile='', lineno=-1):
         self.infile = infile
         self.lineno = lineno
         OSrcLoc.count += 1
-        self.order = OSrcLoc.count # keep track of how many times it was called
+        self.order = OSrcLoc.count  # keep track of how many times it was called
 
     def __lt__(self, x):
         return self.order < x.order
 
-    #def __repr__(self):
+    # def __repr__(self):
     #    return repr((self.infile, self.lineno, self.order))
-
 
 
 class TextBlock(object):
     """TextBlock is just a 3-tuple consisting of a string, and an OSrcLoc
        to help locate it in the original file from which it was read."""
 
-    __slots__=["text","srcloc"]
+    __slots__ = ["text", "srcloc"]
 
-    def __init__(self, text, srcloc): #srcloc_end):
+    def __init__(self, text, srcloc):  # srcloc_end):
         self.text = text
         if srcloc == None:
             self.srcloc = OSrcLoc()
         else:
             self.srcloc = srcloc
-        #if srcloc_end == None:
+        # if srcloc_end == None:
         #    self.srcloc_end = OSrcLoc()
-        #else:
+        # else:
         #    self.srcloc_end = srcloc_end
 
     def __repr__(self):
-        return '\"'+self.text+'\"'
-
+        return '\"' + self.text + '\"'
 
 
 class VarRef(object):
     """VarRef stores variable names, and paths, and other attribute information,
     as well as a "OSrcLoc" to keep track of the file it was defined in."""
 
-    __slots__=["prefix","descr_str","suffix","srcloc","binding","nptr"]
+    __slots__ = ["prefix", "descr_str", "suffix", "srcloc", "binding", "nptr"]
 
     def __init__(self,
-                 prefix    = '',  # '$' or '${'
-                 descr_str = '',  # <- descriptor string: "cpath/category:lpath"
-                 suffix    = '',  # '}'
-                 srcloc    = None,# location in file where defined
-                 binding   = None,# a pointer to a tuple storing the value
-                 nptr      = None):# <- see class VarNPtr
+                 prefix='',  # '$' or '${'
+                 descr_str='',  # <- descriptor string: "cpath/category:lpath"
+                 suffix='',  # '}'
+                 srcloc=None,  # location in file where defined
+                 binding=None,  # a pointer to a tuple storing the value
+                 nptr=None):  # <- see class VarNPtr
 
-        self.prefix    = prefix #Any text before the descriptor string goes here
-        self.suffix    = suffix #Any text after the descriptor string goes here
+        self.prefix = prefix  # Any text before the descriptor string goes here
+        self.suffix = suffix  # Any text after the descriptor string goes here
         self.descr_str = descr_str
-        if srcloc == None: # <- Location in text file where variable appears
+        if srcloc == None:  # <- Location in text file where variable appears
             self.srcloc = OSrcLoc()
         else:
             self.srcloc = srcloc
@@ -990,7 +979,7 @@ class VarRef(object):
     def __lt__(self, x):
         return self.order < x.order
 
-    #def __repr__(self):
+    # def __repr__(self):
     #    return repr((self.prefix + self.descr_str + self.suffix, srcloc))
 
 
@@ -1024,14 +1013,14 @@ class VarNPtr(object):
 
     """
 
-    __slots__=["cat_name","cat_node","leaf_node"]
+    __slots__ = ["cat_name", "cat_node", "leaf_node"]
 
     def __init__(self, cat_name='', cat_node=None, leaf_node=None):
-        self.cat_name  = cat_name
-        self.cat_node  = cat_node
+        self.cat_name = cat_name
+        self.cat_node = cat_node
         self.leaf_node = leaf_node
 
-    #def __repr__(self):
+    # def __repr__(self):
     #    return repr((self.cat_name, self.cat_node.name, self.leaf_node.name))
 
 
@@ -1051,21 +1040,21 @@ class VarBinding(object):
 
     """
 
-    __slots__=["full_name","nptr","value","refs","order","category"]
+    __slots__ = ["full_name", "nptr", "value", "refs", "order", "category"]
 
     def __init__(self,
-                 full_name = '',
-                 nptr      = None,
-                 value     = None,
-                 refs      = None,
-                 order     = -1,
-                 category  = None):
+                 full_name='',
+                 nptr=None,
+                 value=None,
+                 refs=None,
+                 order=-1,
+                 category=None):
         self.full_name = full_name
-        self.nptr      = nptr
-        self.value     = value
-        self.refs      = refs
-        self.order     = order
-        self.category  = category
+        self.nptr = nptr
+        self.value = value
+        self.refs = refs
+        self.order = order
+        self.category = category
 
     def __lt__(self, x):
         return self.order < x.order
@@ -1096,12 +1085,11 @@ def ExtractCatName(descr_str):
         if ia == -1:
             return str_before_colon
         else:
-            return str_before_colon[ia+1:]
-
+            return str_before_colon[ia + 1:]
 
 
 def _DeleteLineFromTemplate(tmpl_list,
-                            i_entry, # index into tmpl_list
+                            i_entry,  # index into tmpl_list
                             newline_delimiter='\n'):
     """ Delete a single line from tmpl_list.
     tmpl_list is an alternating list of VarRefs and TextBlocks.
@@ -1121,22 +1109,22 @@ def _DeleteLineFromTemplate(tmpl_list,
         entry = tmpl_list[i_prev_newline]
         if isinstance(entry, TextBlock):
             i_char_newline = entry.text.rfind(newline_delimiter)
-            if i_char_newline != -1: # then newline found
+            if i_char_newline != -1:  # then newline found
                 # Delete the text after this newline
-                entry.text = entry.text[:i_char_newline+1]
+                entry.text = entry.text[:i_char_newline + 1]
                 break
         i_prev_newline -= 1
 
     first_var = True
     #i_next_newline = i_entry
-    i_next_newline = i_prev_newline+1
+    i_next_newline = i_prev_newline + 1
     while i_next_newline < len(tmpl_list):
         entry = tmpl_list[i_next_newline]
         if isinstance(entry, TextBlock):
             i_char_newline = entry.text.find(newline_delimiter)
-            if i_char_newline != -1: # then newline found
+            if i_char_newline != -1:  # then newline found
                 # Delete the text before this newline (including the newline)
-                entry.text = entry.text[i_char_newline+1:]
+                entry.text = entry.text[i_char_newline + 1:]
                 break
         # Invoke DeleteSelf() on the first variables on this line.  This will
         # insure that it is deleted from the ttree_assignments.txt file.
@@ -1146,14 +1134,13 @@ def _DeleteLineFromTemplate(tmpl_list,
             first_var = False
         i_next_newline += 1
 
-    del tmpl_list[i_prev_newline + 1 : i_next_newline]
+    del tmpl_list[i_prev_newline + 1: i_next_newline]
     return i_prev_newline + 1
 
 
-
 def DeleteLinesWithBadVars(tmpl_list,
-                           delete_entire_template = False,
-                           newline_delimiter = '\n'):
+                           delete_entire_template=False,
+                           newline_delimiter='\n'):
     """
     Loop through the entries in a template,
     an alternating list of TextBlocks and VarRefs (tmpl_list).
@@ -1169,8 +1156,9 @@ def DeleteLinesWithBadVars(tmpl_list,
         entry = tmpl_list[i]
         if isinstance(entry, VarRef):
             var_ref = entry
-            var_bindings = var_ref.nptr.cat_node.categories[var_ref.nptr.cat_name].bindings
-            #if var_ref.nptr.leaf_node not in var_bindings:
+            var_bindings = var_ref.nptr.cat_node.categories[
+                var_ref.nptr.cat_name].bindings
+            # if var_ref.nptr.leaf_node not in var_bindings:
             if var_ref.nptr.leaf_node.IsDeleted():
                 if delete_entire_template:
                     del tmpl_list[:]
@@ -1185,12 +1173,7 @@ def DeleteLinesWithBadVars(tmpl_list,
             i += 1
 
 
-
-
-
-
-
-def SplitTemplate(ltmpl, delim, delete_blanks = False):
+def SplitTemplate(ltmpl, delim, delete_blanks=False):
     """
     Split a template "ltmpl" into a list of "tokens" (sub-templates)
     using a single delimiter string "delim".
@@ -1222,7 +1205,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
     while i < len(ltmpl):
         entry = ltmpl[i]
         if isinstance(entry, TextBlock):
-        #if hasattr(entry, 'text'):
+            # if hasattr(entry, 'text'):
             prev_src_loc = entry.srcloc
 
             tokens_str = entry.text.split(delim)
@@ -1234,7 +1217,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                 token_str = tokens_str[j]
 
                 delim_found = False
-                if (j < len(tokens_str)-1):
+                if (j < len(tokens_str) - 1):
                     delim_found = True
 
                 if token_str == '':
@@ -1258,7 +1241,7 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                     # Reminder to self:  c != delim  (so c!='\n' if delim='\n')
                     # (We keep track of '\n' characters in delimiters above.)
                     if c == '\n':
-                        lineno +=1
+                        lineno += 1
 
                 new_src_loc.lineno = lineno
 
@@ -1285,11 +1268,11 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                             assert(not delete_blanks)
                             if (isinstance(token_ltmpl[-1], VarRef)
                                 and
-                                ((j>0)
+                                ((j > 0)
                                  or
-                                 ((j == len(tokens_str)-1) and
-                                  (i == len(ltmpl)-1))
-                                )):
+                                 ((j == len(tokens_str) - 1) and
+                                  (i == len(ltmpl) - 1))
+                                 )):
                                 # In that case, this empty token_str corresponds
                                 # to a delimiter which was located immediately
                                 # after the variable name,
@@ -1313,11 +1296,11 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
                 j += 1
 
         elif isinstance(entry, VarRef):
-        #elif hasattr(entry, 'descr_str'):
+            # elif hasattr(entry, 'descr_str'):
             lineno = entry.srcloc.lineno
             if ((len(token_ltmpl) == 1) and
-                isinstance(token_ltmpl[0], TextBlock) and
-                (len(token_ltmpl[0].text) == 0)):
+                    isinstance(token_ltmpl[0], TextBlock) and
+                    (len(token_ltmpl[0].text) == 0)):
                 # special case: if the previous entry was "", then it means
                 # the delimeter appeared at the end of the previous text block
                 # leading up to this variable.  It separates the variable from
@@ -1342,10 +1325,6 @@ def SplitTemplate(ltmpl, delim, delete_blanks = False):
     return tokens_lltmpl
 
 
-
-
-
-
 def SplitTemplateMulti(ltmpl, delims, delete_blanks=False):
     """
     Split a template "ltmpl" into a list of templates using a
@@ -1364,7 +1343,7 @@ def SplitTemplateMulti(ltmpl, delims, delete_blanks=False):
 
     """
 
-    if hasattr(delims, '__len__'): # then it hopefully is a list of strings
+    if hasattr(delims, '__len__'):  # then it hopefully is a list of strings
         delim_list = delims
     else:
         delim_list = [delims]     # then it hopefully is a string
@@ -1387,7 +1366,6 @@ def SplitTemplateMulti(ltmpl, delims, delete_blanks=False):
     return tokens
 
 
-
 def _TableFromTemplate(d, ltmpl, delimiters, delete_blanks):
     """
     See the docstring for the TableFromTemplate() function for an explanation.
@@ -1401,14 +1379,14 @@ def _TableFromTemplate(d, ltmpl, delimiters, delete_blanks):
     if d > 0:
         i = 0
         while i < len(output):
-            output[i] = _TableFromTemplate(d-1,
+            output[i] = _TableFromTemplate(d - 1,
                                            output[i],
                                            delimiters,
                                            delete_blanks)
             # Delete empty LISTS?
             if (delete_blanks[d] and
-                hasattr(output[i], '__len__') and
-                (len(output[i]) == 0)):
+                    hasattr(output[i], '__len__') and
+                    (len(output[i]) == 0)):
                 del output[i]
             else:
                 i += 1
@@ -1492,14 +1470,6 @@ def TableFromTemplate(ltmpl, delimiters, delete_blanks=True):
     return output
 
 
-
-
-
-
-
-
-
-
 class TemplateLexer(TtreeShlex):
     """ This class extends the standard python lexing module, shlex, adding a
     new member function (ReadTemplate()), which can read in a block of raw text,
@@ -1509,14 +1479,15 @@ class TemplateLexer(TtreeShlex):
     and surrounded by optional curly-brackets {}.)
 
     """
+
     def __init__(self,
                  instream=None,
                  infile=None,
                  posix=False):
         TtreeShlex.__init__(self, instream, infile, posix)
-        self.var_delim = '$@'       #characters which can begin a variable name
-        self.var_open_paren  = '{' #optional parenthesis surround a variable
-        self.var_close_paren = '}' #optional parenthesis surround a variable
+        self.var_delim = '$@'  # characters which can begin a variable name
+        self.var_open_paren = '{'  # optional parenthesis surround a variable
+        self.var_close_paren = '}'  # optional parenthesis surround a variable
         self.newline = '\n'
         self.comment_skip_var = '#'
 
@@ -1543,21 +1514,21 @@ class TemplateLexer(TtreeShlex):
         # (We need to figure that out, and put them in settings.lex.wordterminators)
         # To figure that out, uncomment the 8 lines below:
         #
-        #self.wordterminators=''
-        #for i in range(0,256):
+        # self.wordterminators=''
+        # for i in range(0,256):
         #    c = chr(i)
         #    if c not in self.wordchars:
         #        self.wordterminators += c
         #sys.stderr.write('-------- wordterminators = --------\n')
-        #sys.stderr.write(self.wordterminators+'\n')
-        #sys.stderr.write('-----------------------------------\n')
+        # sys.stderr.write(self.wordterminators+'\n')
+        # sys.stderr.write('-----------------------------------\n')
         #
         # Here is the result:
         self.wordterminators = '(){|}' + \
-                                   self.whitespace + \
-                                   self.quotes + \
-                                   self.escape + \
-                                   self.commenters
+            self.whitespace + \
+            self.quotes + \
+            self.escape + \
+            self.commenters
         #  Note:
         # self.whitespace = ' \t\r\f\n'
         # self.quotes     = '\'"'
@@ -1568,22 +1539,17 @@ class TemplateLexer(TtreeShlex):
         # Also * characters are needed for variables containing wildcards
         # in the name (which will be dealt with later).
 
-
-        self.source_triggers=set(['include','import'])
-        self.source_triggers_x=set(['import'])
-
-
-
+        self.source_triggers = set(['include', 'import'])
+        self.source_triggers_x = set(['import'])
 
     def GetSrcLoc(self):
         return OSrcLoc(self.infile, self.lineno)
-
 
     def ReadTemplate(self,
                      simplify_output=False,
                      terminators='}',
                      other_esc_chars='{',
-                     keep_terminal_char = True):
+                     keep_terminal_char=True):
         """
            ReadTemplate() reads a block of text (between terminators)
         and divides it into variables (tokens following a '$' or '@' character)
@@ -1660,42 +1626,41 @@ class TemplateLexer(TtreeShlex):
 
         # The main loop of the parser reads only one variable at time.
         # The following variables keep track of where we are in the template.
-        reading_var=False # Are we currently reading in the name of a variable?
+        reading_var = False  # Are we currently reading in the name of a variable?
 
-        prev_char_delim=False #True iff we just read a var_delim character like '$'
-        escaped_state=False #True iff we just read a (non-escaped) esc character '\'
-        commented_state=False #True iff we are in a region of text where vars should be ignored
-        var_paren_depth=0 # This is non-zero iff we are inside a
-                          # bracketed variable's name for example: "${var}"
+        prev_char_delim = False  # True iff we just read a var_delim character like '$'
+        # True iff we just read a (non-escaped) esc character '\'
+        escaped_state = False
+        # True iff we are in a region of text where vars should be ignored
+        commented_state = False
+        var_paren_depth = 0  # This is non-zero iff we are inside a
+        # bracketed variable's name for example: "${var}"
         var_terminators = self.whitespace + self.newline + self.var_delim + '{}'
 
-        tmpl_list = [] # List of alternating tuples of text_blocks and
-                        # variable names (see format comment above)
-                        # This list will be returned to the caller.
+        tmpl_list = []  # List of alternating tuples of text_blocks and
+        # variable names (see format comment above)
+        # This list will be returned to the caller.
 
-        #sys.stderr.write('report_progress='+str(report_progress))
+        # sys.stderr.write('report_progress='+str(report_progress))
 
-        prev_filename     = self.infile
-        prev_lineno       = self.lineno
-        var_prefix        = ''
-        var_descr_plist   = []
-        var_suffix        = ''
-        text_block_plist  = []
+        prev_filename = self.infile
+        prev_lineno = self.lineno
+        var_prefix = ''
+        var_descr_plist = []
+        var_suffix = ''
+        text_block_plist = []
 
         done_reading = False
 
         while not done_reading:
 
-            terminate_text      = False
-            terminate_var       = False
+            terminate_text = False
+            terminate_var = False
             #delete_prior_escape = False
 
             nextchar = self.read_char()
 
-
             #print('    ReadTemplate() nextchar=\''+nextchar+'\' at '+self.error_leader()+'  esc='+str(escaped_state)+', pvar='+str(prev_char_delim)+', paren='+str(var_paren_depth))
-
-
 
             # Count newlines:
             if nextchar in self.newline:
@@ -1710,7 +1675,7 @@ class TemplateLexer(TtreeShlex):
             if nextchar == '':
 
                 if escaped_state:
-                    raise InputError('Error: in '+self.error_leader()+'\n\n'
+                    raise InputError('Error: in ' + self.error_leader() + '\n\n'
                                      'No escaped character.')
                 if reading_var:
                     terminate_var = True
@@ -1719,9 +1684,7 @@ class TemplateLexer(TtreeShlex):
 
                 done_reading = True
 
-
             # --- Now process the character: ---
-
 
             # What we do next depends on which "mode" we are in.
             #  If we are reading a regular text block (reading_var == False),
@@ -1744,7 +1707,7 @@ class TemplateLexer(TtreeShlex):
                             del var_descr_plist[-1]
                             var_descr_plist.append(nextchar)
 
-                    elif not ((var_paren_depth>0) and (nextchar in self.var_close_paren)):
+                    elif not ((var_paren_depth > 0) and (nextchar in self.var_close_paren)):
                         terminate_var = True
                         done_reading = True
 
@@ -1753,7 +1716,8 @@ class TemplateLexer(TtreeShlex):
                     if escaped_state:
                         # In this case, the '\' char was only to prevent
                         # interpreting '{' as a variable prefix
-                        #delete_prior_escape=True # so delete the '\' character
+                        # delete_prior_escape=True # so delete the '\'
+                        # character
                         del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
                     else:
@@ -1773,7 +1737,7 @@ class TemplateLexer(TtreeShlex):
                     if escaped_state:
                         # In this case, the '\' char was only to prevent
                         # interpreting '}' as a variable suffix,
-                        #delete_prior_escape=True  #so skip the '\' character
+                        # delete_prior_escape=True  #so skip the '\' character
                         if (nextchar not in terminators):
                             del var_descr_plist[-1]
                             var_descr_plist.append(nextchar)
@@ -1786,10 +1750,11 @@ class TemplateLexer(TtreeShlex):
 
                 elif nextchar in var_terminators:
                     #sys.stdout.write('   ReadTemplate() readmode found var_terminator \"'+nextchar+'\"\n')
-                    if (escaped_state or (var_paren_depth>0)):
+                    if (escaped_state or (var_paren_depth > 0)):
                         # In this case, the '\' char was only to prevent
                         # interpreting nextchar as a variable terminator
-                        #delete_prior_escape = True # so skip the '\' character
+                        # delete_prior_escape = True # so skip the '\'
+                        # character
                         del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
                     else:
@@ -1800,7 +1765,8 @@ class TemplateLexer(TtreeShlex):
                     if escaped_state:
                         # In this case, the '\' char was only to prevent
                         # interpreting '$' as a new variable name
-                        #delete_prior_escape = True # so skip the '\' character
+                        # delete_prior_escape = True # so skip the '\'
+                        # character
                         del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
                     else:
@@ -1811,8 +1777,7 @@ class TemplateLexer(TtreeShlex):
                     var_descr_plist.append(nextchar)
                     prev_char_delim = False
 
-
-            else: # begin else clause for "if reading_var:"
+            else:  # begin else clause for "if reading_var:"
 
                 # Then we are reading a text_block
 
@@ -1833,7 +1798,8 @@ class TemplateLexer(TtreeShlex):
                     if escaped_state:
                         # In this case, the '\' char was only to prevent
                         # interpreting '$' as a variable prefix.
-                        #delete_prior_escape=True  #so delete the '\' character
+                        # delete_prior_escape=True  #so delete the '\'
+                        # character
                         del text_block_plist[-1]
                         text_block_plist.append(nextchar)
                     elif commented_state:
@@ -1845,12 +1811,11 @@ class TemplateLexer(TtreeShlex):
                         terminate_text = True
                 else:
                     text_block_plist.append(nextchar)
-                    #TO DO: use "list_of_chars.join()" instead of '+='
+                    # TO DO: use "list_of_chars.join()" instead of '+='
                     prev_char_delim = False  # the previous character was not '$'
 
-
             # Now deal with "other_esc_chars"
-            #if escaped_state and (nextchar in other_esc_chars):
+            # if escaped_state and (nextchar in other_esc_chars):
 
             if escaped_state and (nextchar in other_esc_chars):
                 if reading_var:
@@ -1862,12 +1827,11 @@ class TemplateLexer(TtreeShlex):
                     assert(text_block_plist[-2] in self.escape)
                     del text_block_plist[-2]
 
-
             if terminate_text:
                 #sys.stdout.write('ReadTemplate() appending: ')
-                #sys.stdout.write(text_block)
+                # sys.stdout.write(text_block)
 
-                #tmpl_list.append( [text_block,
+                # tmpl_list.append( [text_block,
                 #                   ((prev_filename, prev_lineno),
                 #                    (self.infile, self.lineno))] )
 
@@ -1876,7 +1840,7 @@ class TemplateLexer(TtreeShlex):
                 else:
                     tmpl_list.append(TextBlock(''.join(text_block_plist),
                                                OSrcLoc(prev_filename, prev_lineno)))
-                                               #, OSrcLoc(self.infile, self.lineno)))
+                    #, OSrcLoc(self.infile, self.lineno)))
                 if not done_reading:
                     # The character that ended the text block
                     # was a variable delimiter (like '$'), in which case
@@ -1884,23 +1848,22 @@ class TemplateLexer(TtreeShlex):
                     var_prefix = nextchar
                 else:
                     var_prefix = ''
-                var_descr_plist  = []
-                var_suffix       = ''
-                prev_filename    = self.infile
-                prev_lineno      = self.lineno
+                var_descr_plist = []
+                var_suffix = ''
+                prev_filename = self.infile
+                prev_lineno = self.lineno
                 del text_block_plist
                 text_block_plist = []
-                #gc.collect()
-
+                # gc.collect()
 
             elif terminate_var:
                 # Print an error if we terminated in the middle of
                 # an incomplete variable name:
                 if prev_char_delim:
-                    raise InputError('Error: near '+self.error_leader()+'\n\n'
+                    raise InputError('Error: near ' + self.error_leader() + '\n\n'
                                      'Null variable name.')
                 if var_paren_depth > 0:
-                    raise InputError('Error: near '+self.error_leader()+'\n\n'
+                    raise InputError('Error: near ' + self.error_leader() + '\n\n'
                                      'Incomplete bracketed variable name.')
 
                 var_descr_str = ''.join(var_descr_plist)
@@ -1908,32 +1871,33 @@ class TemplateLexer(TtreeShlex):
                 # Now check for variable format modifiers,
                 # like python's ".rjust()" and ".ljust()".
                 # If present, then put these in the variable suffix.
-                if ((len(var_descr_plist)>0) and (var_descr_plist[-1]==')')):
+                if ((len(var_descr_plist) > 0) and (var_descr_plist[-1] == ')')):
                     #i = len(var_descr_plist)-1
-                    #while i >= 0:
+                    # while i >= 0:
                     #    if var_descr_plist[i] == '(':
                     #        break
                     #    i -= 1
                     i = var_descr_str.rfind('(')
-                    if (((i-6) >= 0) and
-                        ((var_descr_str[i-6:i] == '.rjust') or
-                         (var_descr_str[i-6:i] == '.ljust'))):
-                        var_suffix     =''.join(var_descr_plist[i-6:])+var_suffix
+                    if (((i - 6) >= 0) and
+                        ((var_descr_str[i - 6:i] == '.rjust') or
+                         (var_descr_str[i - 6:i] == '.ljust'))):
+                        var_suffix = ''.join(
+                            var_descr_plist[i - 6:]) + var_suffix
                         #var_descr_plist = var_descr_plist[:i-6]
-                        var_descr_str = var_descr_str[:i-6]
+                        var_descr_str = var_descr_str[:i - 6]
 
                 # Process any special characters in the variable name
                 var_descr_str = EscCharStrToChar(var_descr_str)
 
-                #tmpl_list.append( [[var_prefix, var_descr_str, var_suffix],
+                # tmpl_list.append( [[var_prefix, var_descr_str, var_suffix],
                 #                   (self.infile, self.lineno)] )
                 if simplify_output:
                     tmpl_list.append(var_prefix + var_descr_str + var_suffix)
                 else:
-                    tmpl_list.append( VarRef(var_prefix, var_descr_str, var_suffix,
-                                             OSrcLoc(self.infile, self.lineno)) )
+                    tmpl_list.append(VarRef(var_prefix, var_descr_str, var_suffix,
+                                            OSrcLoc(self.infile, self.lineno)))
 
-                #if report_progress:
+                # if report_progress:
                 #sys.stderr.write('  parsed variable '+var_prefix+var_descr_str+var_suffix+'\n')
 
                 #sys.stdout.write('ReadTemplate() appending: ')
@@ -1942,28 +1906,28 @@ class TemplateLexer(TtreeShlex):
                 del var_descr_plist
                 del var_descr_str
 
-                prev_filename   = self.infile
-                prev_lineno     = self.lineno
-                var_prefix      = ''
+                prev_filename = self.infile
+                prev_lineno = self.lineno
+                var_prefix = ''
                 var_descr_plist = []
-                var_suffix      = ''
+                var_suffix = ''
                 # Special case: Variable delimiters like '$'
                 #               terminate the reading of variables,
                 #               but they also signify that a new
                 #               variable is being read.
                 if nextchar in self.var_delim:
                     # Then we are processing a new variable name
-                    prev_var_delim  = True
-                    reading_var     = True
+                    prev_var_delim = True
+                    reading_var = True
                     var_paren_depth = 0
-                    var_prefix      = nextchar
+                    var_prefix = nextchar
 
                 elif nextchar in self.var_close_paren:
                     del text_block_plist
                     text_block_plist = []
-                    #gc.collect()
-                    prev_var_delim   = False
-                    reading_var      = False
+                    # gc.collect()
+                    prev_var_delim = False
+                    reading_var = False
 
                 else:
                     # Generally, we don't want to initialize the next text block
@@ -1972,10 +1936,9 @@ class TemplateLexer(TtreeShlex):
                     # it to the block of text that comes after.
                     del text_block_plist
                     text_block_plist = [nextchar]
-                    #gc.collect()
-                    prev_var_delim  = False
-                    reading_var     = False
-
+                    # gc.collect()
+                    prev_var_delim = False
+                    reading_var = False
 
             # If we reached the end of the template (and the user requests it),
             # then the terminal character can be included in the list
@@ -1984,7 +1947,7 @@ class TemplateLexer(TtreeShlex):
                 #sys.stdout.write('ReadTemplate() appending: \''+nextchar+'\'\n')
                 # Here we create a new text block which contains only the
                 # terminal character (nextchar).
-                #tmpl_list.append( [nextchar,
+                # tmpl_list.append( [nextchar,
                 #                   ((self.infile, self.lineno),
                 #                    (self.infile, self.lineno))] )
                 if simplify_output:
@@ -1992,8 +1955,7 @@ class TemplateLexer(TtreeShlex):
                 else:
                     tmpl_list.append(TextBlock(nextchar,
                                                OSrcLoc(self.infile, self.lineno)))
-                                               #, OSrcLoc(self.infile, self.lineno)))
-
+                    #, OSrcLoc(self.infile, self.lineno)))
 
             if escaped_state:
                 escaped_state = False
@@ -2003,9 +1965,6 @@ class TemplateLexer(TtreeShlex):
 
         #print("*** TMPL_LIST0  = ***", tmpl_list)
         return tmpl_list  # <- return value stored here
-
-
-
 
     def GetParenExpr(self, prepend_str='', left_paren='(', right_paren=')'):
         """ GetParenExpr() is useful for reading in strings
@@ -2029,17 +1988,17 @@ class TemplateLexer(TtreeShlex):
 
         src_loc_begin = SrcLoc(self.infile, self.lineno)
         orig_wordterm = self.wordterminators
-        self.wordterminators = self.wordterminators.replace(left_paren,'').replace(right_paren,'')
+        self.wordterminators = self.wordterminators.replace(
+            left_paren, '').replace(right_paren, '')
 
         token = self.get_token()
         if ((token == '') or
-            (token == self.eof)):
+                (token == self.eof)):
             return prepend_str
-
 
         expr_str = prepend_str + token
 
-        #if (expr_str.find(left_paren) == -1):
+        # if (expr_str.find(left_paren) == -1):
         #    raise InputError('Error near or before '+self.error_leader()+'\n'
         #                     'Expected an open-paren (\"'+prepend_str+left_paren+'\") before this point.\n')
         #    return expr_str
@@ -2048,30 +2007,23 @@ class TemplateLexer(TtreeShlex):
         while ((len(expr_str) == 0) or (paren_depth > 0)):
             token = self.get_token()
             if ((type(token) is not str) or
-                (token == '')):
-                raise InputError('Error somewhere between '+
+                    (token == '')):
+                raise InputError('Error somewhere between ' +
                                  self.error_leader(src_loc_begin.infile,
                                                    src_loc_begin.lineno)
-                                  + 'and ' + self.error_leader()+'\n'
-                                 'Invalid expression: \"'+expr_str[0:760]+'\"')
+                                 + 'and ' + self.error_leader() + '\n'
+                                 'Invalid expression: \"' + expr_str[0:760] + '\"')
             expr_str += token
-            paren_depth = expr_str.count(left_paren) - expr_str.count(right_paren)
+            paren_depth = expr_str.count(
+                left_paren) - expr_str.count(right_paren)
         if (paren_depth != 0):
-            raise InputError('Error somewhere between '+
-                                 self.error_leader(src_loc_begin.infile,
-                                                   src_loc_begin.lineno)
-                                  + 'and ' + self.error_leader()+'\n'
-                             'Invalid expression: \"'+expr_str[0:760]+'\"')
+            raise InputError('Error somewhere between ' +
+                             self.error_leader(src_loc_begin.infile,
+                                               src_loc_begin.lineno)
+                             + 'and ' + self.error_leader() + '\n'
+                             'Invalid expression: \"' + expr_str[0:760] + '\"')
         self.wordterminators = orig_wordterm
         return expr_str
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':

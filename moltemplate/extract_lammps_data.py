@@ -12,14 +12,14 @@ lammps_data_sections = set(['Atoms',
                             'Improper Coeffs',
                             'BondBond Coeffs',          # class2 angles
                             'BondAngle Coeffs',         # class2 angles
-                            'MiddleBondTorsion Coeffs', # class2 dihedrals
+                            'MiddleBondTorsion Coeffs',  # class2 dihedrals
                             'EndBondTorsion Coeffs',    # class2 dihedrals
                             'AngleTorsion Coeffs',      # class2 dihedrals
-                            'AngleAngleTorsion Coeffs', # class2 dihedrals
+                            'AngleAngleTorsion Coeffs',  # class2 dihedrals
                             'BondBond13 Coeffs',        # class2 dihedrals
                             'AngleAngle Coeffs',        # class2 impropers
                             'Angles By Type',   # new. not standard LAMMPS
-                            'Dihedrals By Type',# new. not standard LAMMPS
+                            'Dihedrals By Type',  # new. not standard LAMMPS
                             'Angles By Type'])   # new. not standard LAMMPS
 
 
@@ -27,7 +27,7 @@ def DeleteComments(string,
                    escape='\\',
                    comment_char='#'):
     escaped_state = False
-    for i in range(0,len(string)):
+    for i in range(0, len(string)):
         if string[i] in escape:
             if escaped_state:
                 escaped_state = False
@@ -39,15 +39,14 @@ def DeleteComments(string,
     return string
 
 
-
 def ExtractDataSection(f,
                        section_name,
-                       comment_char = '#',
-                       include_section_name = False,
-                       return_line_nums = False):
+                       comment_char='#',
+                       include_section_name=False,
+                       return_line_nums=False):
 
     inside_section = False
-    if section_name in ('header','Header'): #"Header" section includes beginning
+    if section_name in ('header', 'Header'):  # "Header" section includes beginning
         inside_section = True
 
     nonblank_encountered = False
@@ -90,7 +89,6 @@ def ExtractDataSection(f,
                 yield line_orig
 
         i += 1
-
 
 
 if __name__ == "__main__":

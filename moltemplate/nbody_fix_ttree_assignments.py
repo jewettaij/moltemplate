@@ -49,7 +49,7 @@ g_program_name = __file__.split('/')[-1]
 
 try:
     if (len(sys.argv) != 3):
-        raise InputError('Error running  \"'+g_program_name+'\"\n'
+        raise InputError('Error running  \"' + g_program_name + '\"\n'
                          '   Wrong number of arguments.\n'
                          '   (This is likely a programmer error.\n'
                          '    This script was not intended to be run by end users.)\n')
@@ -62,7 +62,7 @@ try:
     # Selections are simply lists of 2-tuples (pairs)
     #f = open('ttree_assignments.txt','r')
     #lines_bindings = f.readlines()
-    #f.close()
+    # f.close()
     lines_bindings = sys.stdin.readlines()
 
     # Figure out which lines in the 'ttree_assignments.txt' file
@@ -71,12 +71,13 @@ try:
     i_preexisting_begin = -1
     i_preexisting_end = -1
     in_section = False
-    possible_cat_names = set(['$'+cat_name, '$/'+cat_name, '${'+cat_name, '${/'+cat_name])
+    possible_cat_names = set(
+        ['$' + cat_name, '$/' + cat_name, '${' + cat_name, '${/' + cat_name])
 
     preexisting_interaction_list = []
     for i in range(0, len(lines_bindings)):
         line = lines_bindings[i].strip()
-        tokens = SplitQuotedString(line)  #strip comments, handle quotes
+        tokens = SplitQuotedString(line)  # strip comments, handle quotes
         if len(tokens) == 2:
             before_colon = tokens[0].split(':')[0]
             if before_colon in possible_cat_names:
@@ -110,8 +111,8 @@ try:
     for line_orig in lines_generated:
         line = line_orig.strip()
         if len(line) > 0:
-            tokens = SplitQuotedString(line)  #strip comments, handle quotes
-            sys.stdout.write(tokens[0]+'  '+str(new_counter)+'\n')
+            tokens = SplitQuotedString(line)  # strip comments, handle quotes
+            sys.stdout.write(tokens[0] + '  ' + str(new_counter) + '\n')
             new_counter += 1
 
     sys.stderr.write('  (adding pre-exisiting lines)\n')
@@ -123,15 +124,15 @@ try:
         #   The first column has our generated variable names
         #   The second column has the counter assigned to that variable
 
-        #sys.stderr.write('  i_preexisting_begin='+
+        # sys.stderr.write('  i_preexisting_begin='+
         #                 str(i_preexisting_begin)+
         #                 ' i_preexisting_end='+str(i_preexisting_end)+'\n')
 
         for i in range(i_preexisting_begin, i_preexisting_end):
             line = lines_bindings[i].strip()
-            tokens = SplitQuotedString(line)  #strip comments, handle quotes
+            tokens = SplitQuotedString(line)  # strip comments, handle quotes
             if len(tokens) == 2:
-                sys.stdout.write(tokens[0]+'  '+str(new_counter)+'\n')
+                sys.stdout.write(tokens[0] + '  ' + str(new_counter) + '\n')
                 new_counter += 1
 
         #sys.stderr.write('  (writing pre-exisiting lines)\n')
@@ -144,5 +145,5 @@ try:
 
 
 except (ValueError, InputError) as err:
-    sys.stderr.write('\n'+str(err)+'\n')
+    sys.stderr.write('\n' + str(err) + '\n')
     sys.exit(-1)

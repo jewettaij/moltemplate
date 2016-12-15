@@ -70,12 +70,13 @@ from .ttree_lex import TtreeShlex, SplitQuotedString, EscCharStrToChar, \
 
 
 if sys.version < '2.6':
-    raise InputError('Error: Using python '+sys.version+'\n'
+    raise InputError('Error: Using python ' + sys.version + '\n'
                      '       Alas, you must upgrade to a newer version of python (2.7 or later).')
 elif sys.version < '2.7':
     sys.stderr.write('--------------------------------------------------------\n'
                      '----------------- WARNING: OLD PYTHON VERSION ----------\n'
-                     '  This program is untested on your python version ('+sys.version+').\n'
+                     '  This program is untested on your python version (' +
+                     sys.version + ').\n'
                      '  PLEASE LET ME KNOW IF THIS PROGRAM CRASHES (and upgrade python).\n'
                      '    -Andrew   2016-9-21\n'
                      '--------------------------------------------------------\n'
@@ -94,17 +95,12 @@ else:
 # We keep track of the program name and version.
 # (This is only used for generating error messages.)
 #g_filename = 'ttree.py'
-g_filename    = __file__.split('/')[-1]
-g_module_name  = g_filename
+g_filename = __file__.split('/')[-1]
+g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str     = '2016-12-05'
-g_version_str  = '0.84'
-
-
-
-
-
+g_date_str = '2016-12-05'
+g_version_str = '0.84'
 
 
 class ClassReference(object):
@@ -130,22 +126,21 @@ class ClassReference(object):
     (stored in self.statobj_str), in addition to the location
     in the file where that string occurs (stored in self.srcloc)."""
 
-    __slots__=["statobj_str","srcloc","statobj"]
+    __slots__ = ["statobj_str", "srcloc", "statobj"]
 
     def __init__(self,
                  statobj_str=None,
                  srcloc=None,
                  statobj=None):
-        self.statobj_str  = statobj_str
+        self.statobj_str = statobj_str
         if srcloc is None:
             self.srcloc = OSrcLoc('', -1)
         else:
             self.srcloc = srcloc
         self.statobj = statobj
 
-    #def __repr__(self):
+    # def __repr__(self):
     #    return repr((self.statobj_str, self.srcloc))
-
 
 
 # "Command"s are tasks to carry out.
@@ -157,7 +152,7 @@ class ClassReference(object):
 #  have similar syntax to member functions in C++, JAVA, Python.)
 
 class Command(object):
-    __slots__=["srcloc"]
+    __slots__ = ["srcloc"]
 
     def __init__(self, srcloc=None):
         self.srcloc = srcloc
@@ -165,15 +160,14 @@ class Command(object):
     # COMMENTING OUT: "COUNT" AND "ORDER" ARE NO LONGER NEEDED
 
     #count = 0
-    #def __init__(self, srcloc=None):
+    # def __init__(self, srcloc=None):
     #    self.srcloc = srcloc
     #    # The "order" member is a counter that keeps track of the order
     #    #  in which the Command data types are created (issued by the user).
     #    Command.count += 1
     #    self.order = Command.count
-    #def __lt__(self, x):
+    # def __lt__(self, x):
     #    return self.order < x.order
-
 
 
 class WriteFileCommand(Command):
@@ -189,26 +183,28 @@ class WriteFileCommand(Command):
                identify where they occur in in the original user's files).
 
     """
-    __slots__=["filename", "tmpl_list"]
+    __slots__ = ["filename", "tmpl_list"]
 
     def __init__(self,
-                 filename = None,
-                 tmpl_list = None,
-                 srcloc = None):
+                 filename=None,
+                 tmpl_list=None,
+                 srcloc=None):
         self.filename = filename
         if tmpl_list is None:
             self.tmpl_list = []
         else:
             Command.__init__(self, srcloc)
             self.tmpl_list = tmpl_list
+
     def __str__(self):
         if self.filename:
-            return 'WriteFileCommand(\"'+self.filename+'\")'
+            return 'WriteFileCommand(\"' + self.filename + '\")'
         else:
             return 'WriteFileCommand(NULL)'
+
     def __copy__(self):
         tmpl_list = []
-        CopyTmplList(self.tmpl_list, tmpl_list) #CHECK:IS_MEMORY_WASTED_HERE?
+        CopyTmplList(self.tmpl_list, tmpl_list)  # CHECK:IS_MEMORY_WASTED_HERE?
         return WriteFileCommand(self.filename, tmpl_list, self.srcloc)
 
 
@@ -221,25 +217,25 @@ class InstantiateCommand(Command):
 
     """
 
-    __slots__=["name",
-               "class_ref",
-               "instobj"]
+    __slots__ = ["name",
+                 "class_ref",
+                 "instobj"]
 
     def __init__(self,
-                 name = None,
-                 class_ref = None,
-                 srcloc = None,
-                 instobj = None):
+                 name=None,
+                 class_ref=None,
+                 srcloc=None,
+                 instobj=None):
         Command.__init__(self, srcloc)
         self.name = name
-        #if class_ref is None:
+        # if class_ref is None:
         #    self.class_ref = ClassReference()
-        #else:
+        # else:
         self.class_ref = class_ref
         self.instobj = instobj
 
     def __str__(self):
-        return 'InstantiateCommand('+self.name+')'
+        return 'InstantiateCommand(' + self.name + ')'
 
     def __copy__(self):
         return InstantiateCommand(self.name,
@@ -249,9 +245,10 @@ class InstantiateCommand(Command):
 
 
 class DeleteCommand(Command):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self,
-                 srcloc = None):
+                 srcloc=None):
         Command.__init__(self, srcloc)
 
     def __str__(self):
@@ -259,8 +256,6 @@ class DeleteCommand(Command):
 
     def __copy__(self):
         return DeleteCommand(self.srcloc)
-
-
 
 
 class StackableCommand(Command):
@@ -278,19 +273,21 @@ class StackableCommand(Command):
 
     """
 
-    __slots__=["context_node"]
+    __slots__ = ["context_node"]
 
     def __init__(self,
                  srcloc,
                  context_node=None):
         Command.__init__(self, srcloc)
-        self.context_node = context_node # if multiple stacks are present, then use "context_node"
-                             # as a key to identify which stack you want
-                             # the command to modify
+        # if multiple stacks are present, then use "context_node"
+        self.context_node = context_node
+        # as a key to identify which stack you want
+        # the command to modify
+
 
 class PushCommand(StackableCommand):
 
-    __slots__=["contents"]
+    __slots__ = ["contents"]
 
     def __init__(self,
                  contents,
@@ -303,10 +300,12 @@ class PushCommand(StackableCommand):
         return PushCommand(self.contents, self.srcloc, self.context_node)
 
     def __str__(self):
-        return 'PushCommand('+str(self.contents)+')'
+        return 'PushCommand(' + str(self.contents) + ')'
+
 
 class PushRightCommand(PushCommand):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self,
                  contents,
                  srcloc,
@@ -317,10 +316,12 @@ class PushRightCommand(PushCommand):
         return PushRightCommand(self.contents, self.srcloc, self.context_node)
 
     def __str__(self):
-        return 'PushRightCommand('+str(self.contents)+')'
+        return 'PushRightCommand(' + str(self.contents) + ')'
+
 
 class PushLeftCommand(PushCommand):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self,
                  contents,
                  srcloc,
@@ -331,10 +332,12 @@ class PushLeftCommand(PushCommand):
         return PushLeftCommand(self.contents, self.srcloc, self.context_node)
 
     def __str__(self):
-        return 'PushLeftCommand('+str(self.contents)+')'
+        return 'PushLeftCommand(' + str(self.contents) + ')'
+
 
 class PopCommand(StackableCommand):
-    __slots__=["partner"]
+    __slots__ = ["partner"]
+
     def __init__(self,
                  partner,
                  srcloc,
@@ -346,10 +349,12 @@ class PopCommand(StackableCommand):
         return PopCommand(self.partner, self.srcloc, self.context_node)
 
     def __str__(self):
-        return 'PopCommand('+str(self.partner.contents)+')'
+        return 'PopCommand(' + str(self.partner.contents) + ')'
+
 
 class PopRightCommand(PopCommand):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self,
                  partner,
                  srcloc,
@@ -361,10 +366,12 @@ class PopRightCommand(PopCommand):
         return PopRightCommand(self.partner, self.srcloc, self.context_node)
 
     def __str__(self):
-        return 'PopRightCommand('+str(self.partner.contents)+')'
+        return 'PopRightCommand(' + str(self.partner.contents) + ')'
+
 
 class PopLeftCommand(PopCommand):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self,
                  partner,
                  srcloc,
@@ -376,10 +383,7 @@ class PopLeftCommand(PopCommand):
         return PopLeftCommand(self.partner, self.srcloc, self.context_node)
 
     def __str__(self):
-        return 'PopLeftCommand('+str(self.partner.contents)+')'
-
-
-
+        return 'PopLeftCommand(' + str(self.partner.contents) + ')'
 
 
 # The ScopeCommand, ScopeBegin, and ScopeEnd commands are useful to designate
@@ -387,7 +391,7 @@ class PopLeftCommand(PopCommand):
 # (This is useful later on, when a linear list of commands has been created.)
 # They are simply markers an do not do anything.  These classes can be ignored.
 class ScopeCommand(Command):
-    __slots__=["node"]
+    __slots__ = ["node"]
 
     def __init__(self,
                  node,
@@ -401,38 +405,45 @@ class ScopeCommand(Command):
 
     def __str__(self):
         if self.node:
-            return 'ScopeCommand('+self.node.name+')'
+            return 'ScopeCommand(' + self.node.name + ')'
         else:
             return 'ScopeCommand(None)'
 
+
 class ScopeBegin(ScopeCommand):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self, node, srcloc):
         ScopeCommand.__init__(self, node, srcloc)
+
     def __copy__(self):
         return ScopeBegin(self.node, self.srcloc)
+
     def __str__(self):
         if self.node:
-            return 'ScopeBegin('+NodeToStr(self.node)+')'
+            return 'ScopeBegin(' + NodeToStr(self.node) + ')'
         else:
             return 'ScopeBegin(None)'
 
+
 class ScopeEnd(ScopeCommand):
-    __slots__=[]
+    __slots__ = []
+
     def __init__(self, node, srcloc):
         ScopeCommand.__init__(self, node, srcloc)
+
     def __copy__(self):
         return ScopeEnd(self.node, self.srcloc)
+
     def __str__(self):
         if self.node:
-            return 'ScopeEnd('+NodeToStr(self.node)+')'
+            return 'ScopeEnd(' + NodeToStr(self.node) + ')'
         else:
             return 'ScopeEnd(None)'
 
 
-
 # COMMENTING OUT: NOT NEEDED AT THE MOMENT
-#class VarAssignCommand(Command):
+# class VarAssignCommand(Command):
 #    """ VarAssignCommand
 #
 #    This class is used whenever the user makes an explicit request to assign
@@ -463,9 +474,9 @@ class ScopeEnd(ScopeCommand):
 #        self.text_tmpl = text_tmpl
 
 
-
 class ModCommand(object):
-    __slots__=["command","multi_descr_str"]
+    __slots__ = ["command", "multi_descr_str"]
+
     def __init__(self,
                  command,
                  multi_descr_str):
@@ -473,30 +484,28 @@ class ModCommand(object):
         self.multi_descr_str = multi_descr_str
 
     def __str__(self):
-        return 'ModCommand('+str(self.command)+')'
+        return 'ModCommand(' + str(self.command) + ')'
 
     def __copy__(self):
         return ModCommand(self.command.__copy__(), self.multi_descr_str)
 
 
-
-
 def CopyTmplList(source_tmpl_list, dest_cpy):
     for entry in source_tmpl_list:
         if isinstance(entry, TextBlock):
-            dest_cpy.append(entry) # Then make a shallow copy
-                                          # (pointer assignment) to the text
-                                          # block (Text blocks do not change
-                                          # during instantiation.)
+            dest_cpy.append(entry)  # Then make a shallow copy
+            # (pointer assignment) to the text
+            # block (Text blocks do not change
+            # during instantiation.)
         elif isinstance(entry, VarRef):
-            assert(len(entry.prefix)>0)
-            if entry.prefix[0] == '@': # '@' vars refer to static data
-                dest_cpy.append(entry) # Then make a shallow copy
-                                          # pointer assignment) to the static
-                                          # variable. (Static variables do
-                                          # not change during instantiation.)
+            assert(len(entry.prefix) > 0)
+            if entry.prefix[0] == '@':  # '@' vars refer to static data
+                dest_cpy.append(entry)  # Then make a shallow copy
+                # pointer assignment) to the static
+                # variable. (Static variables do
+                # not change during instantiation.)
 
-            elif entry.prefix[0] == '$': # new '$' vars are created
+            elif entry.prefix[0] == '$':  # new '$' vars are created
                                          # during every instantiation.
 
                 # var_refs do change when you instantiate them.  So
@@ -505,26 +514,21 @@ def CopyTmplList(source_tmpl_list, dest_cpy):
                                  entry.descr_str,
                                  entry.suffix,
                                  entry.srcloc)
-                                 # Note: for instance variables ('$' vars)
-                                 #       "entry.nptr" should not contain
-                                 #       any data yet, so we just ignore it.
-                                 # I assert this below:
+                # Note: for instance variables ('$' vars)
+                #       "entry.nptr" should not contain
+                #       any data yet, so we just ignore it.
+                # I assert this below:
                 assert((entry.nptr.cat_node is None) and
                        (entry.nptr.leaf_node is None))
 
                 dest_cpy.append(var_ref)
             else:
-                assert(False) # prefix[0] should be either '@' or '$'
+                assert(False)  # prefix[0] should be either '@' or '$'
         else:
-            assert(False) # type(entry) should be either TextBlock or VarRef
+            assert(False)  # type(entry) should be either TextBlock or VarRef
 
 
-
-
-
-
-
-def RecursiveJoin(tokens_expr, delimiter = ''):
+def RecursiveJoin(tokens_expr, delimiter=''):
     """ RecursiveJoin() converts a tree-like list/tuple of tokens, for example:
     ['a ', ('tree', '-', ['like', 'container']), [[' '], 'of'], ' strings']
     to an ordinary string, eg:
@@ -537,12 +541,8 @@ def RecursiveJoin(tokens_expr, delimiter = ''):
     else:
         text_lstr = []
         for i in range(0, len(tokens_expr)):
-            text.append( TokensToStr(tokens_expr[i]) )
+            text.append(TokensToStr(tokens_expr[i]))
         return ''.join(text_lstr, delimiter)
-
-
-
-
 
 
 #----------------------------------------------------------
@@ -553,7 +553,6 @@ def RecursiveJoin(tokens_expr, delimiter = ''):
 #    a few simple general text parsing routines.)
 #----------------------------------------------------------
 #----------------------------------------------------------
-
 
 
 def PtknsToStr(path_tokens):
@@ -574,13 +573,11 @@ def PtknsToStr(path_tokens):
     return text
 
 
-
 def StrToPtkns(path_string):
     """ The inverse of PtknsToStr(), this function splits a string like
         '/usr/local/../bin/awk' into ['usr','local','..','bin','awk'].
         For illustrative purposes only. Use text.split('/') directly instead."""
     return orig_text.split('/')
-
 
 
 def FindChild(name, node, dbg_loc):
@@ -638,9 +635,6 @@ def FindChild(name, node, dbg_loc):
     return None
 
 
-
-
-
 def FollowPath(path_tokens, starting_node, dbg_loc):
     """ FollowPath() returns the "last_node", a node whose position in the
         tree is indicated by a list of path_tokens, describing the names
@@ -678,20 +672,19 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         while node.parent != None:
             node = node.parent
             #sys.stdout.write('FollowPath(): Retreating to node \"'+node.name+'\"\n')
-        i0 = 1 # <- We've just processed the first token.  Skip over it later.
+        i0 = 1  # <- We've just processed the first token.  Skip over it later.
     else:
         i0 = 0
-
 
     i = i0
     while i < len(path_tokens):
 
         if path_tokens[i] == '..':
             if node.parent is None:
-                return i, node # <-return the index into the token list
-                               #   Caller will know that something went awry
-                               #   if the return value is not equal to the
-                               #   length of the token list
+                return i, node  # <-return the index into the token list
+                #   Caller will know that something went awry
+                #   if the return value is not equal to the
+                #   length of the token list
             else:
                 node = node.parent
             i += 1
@@ -699,10 +692,10 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         elif path_tokens[i] == '...':
 
             node_before_ellipsis = node
-            if i == len(path_tokens)-1:
+            if i == len(path_tokens) - 1:
                 return i, node_before_ellipsis
 
-            search_target = path_tokens[i+1]
+            search_target = path_tokens[i + 1]
             # Now search over the "children" of this node
             # for one who's name matches path_tokens[i].
             # If not found, then move up to the parent node's children.
@@ -723,7 +716,8 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
 
             i += 2
 
-        elif path_tokens[i] in ('','.'):  # <-Note we ignore empty tokens from now on.
+        # <-Note we ignore empty tokens from now on.
+        elif path_tokens[i] in ('', '.'):
             # (Same convention is used in specifying a
             # directory in a filesystem, eg. using /usr/local
             # or /usr//local or /usr/./local.  These are all equivalent.)
@@ -738,10 +732,10 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
             if child is None:
                 # In that case, return with the node_list incomplete.
                 # Let the caller check to see if something went wrong.
-                return i, node # <-return the index into the token list (i)
-                          #   Caller will know that something went awry
-                          #   if the return value is not equal to the
-                          #   length of the token list
+                return i, node  # <-return the index into the token list (i)
+                #   Caller will know that something went awry
+                #   if the return value is not equal to the
+                #   length of the token list
             else:
                 node = child
 
@@ -754,9 +748,6 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
     return len(path_tokens), node
 
 
-
-
-
 def PtknsToNode(path_tokens, starting_node, dbg_loc):
     """ PtknsToNode() is identical to def FollowPath() except
     that it raises syntax-error exceptions if the path is undefined."""
@@ -764,56 +755,59 @@ def PtknsToNode(path_tokens, starting_node, dbg_loc):
     i_last_ptkn, last_node = FollowPath(path_tokens, starting_node, dbg_loc)
 
     if i_last_ptkn < len(path_tokens):
-        #assert(isinstance(last_node,StaticObj)) <--why did I assert this? seems wrong
+        # assert(isinstance(last_node,StaticObj)) <--why did I assert this?
+        # seems wrong
 
         if (last_node.parent is None) and (path_tokens[i_last_ptkn] == '..'):
-            #In that case, we tried to back out beyond the root of the tree.
-            raise InputError('Error('+g_module_name+'.PtknsToNode()):\n'
+            # In that case, we tried to back out beyond the root of the tree.
+            raise InputError('Error(' + g_module_name + '.PtknsToNode()):\n'
                              '        Invalid variable/class name:\n'
-                             '        \"'+PtknsToStr(path_tokens)+'\" located near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'
+                             '        \"' + PtknsToStr(path_tokens) + '\" located near ' + ErrorLeader(
+                                 dbg_loc.infile, dbg_loc.lineno) + '\n'
                              '       There are too many \"..\" tokens in the path string.')
 
         elif path_tokens[i_last_ptkn] == '...':
-            if i_last_ptkn+1 == len(path_tokens):
-                raise InputError('Error('+g_module_name+'.PtknsToNode()):\n'
-                                 '       Error in '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'
+            if i_last_ptkn + 1 == len(path_tokens):
+                raise InputError('Error(' + g_module_name + '.PtknsToNode()):\n'
+                                 '       Error in ' +
+                                 ErrorLeader(dbg_loc.infile,
+                                             dbg_loc.lineno) + '\n'
                                  '       Expected name following \"...\"\n')
             else:
-                search_target = path_tokens[i_last_ptkn+1]
-                #In that case, we were unable to find the node referenced by "..."
-                raise InputError('Error('+g_module_name+'.PtknsToNode()):\n'
-                                 '       Class or variable \"'+search_target+'\" not found\n'
-                                 '       in this context: \"'+PtknsToStr(path_tokens)+'\"\n'
-                                 '       located near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno))
+                search_target = path_tokens[i_last_ptkn + 1]
+                # In that case, we were unable to find the node referenced by
+                # "..."
+                raise InputError('Error(' + g_module_name + '.PtknsToNode()):\n'
+                                 '       Class or variable \"' + search_target + '\" not found\n'
+                                 '       in this context: \"' +
+                                 PtknsToStr(path_tokens) + '\"\n'
+                                 '       located near ' + ErrorLeader(dbg_loc.infile, dbg_loc.lineno))
 
         else:
-            #Then the reason is: The string in path_tokens[i_last_ptkn]
-            #was supposed to be a child of last_node but a child
-            #of that name was not found.
-            err_msg = 'Error('+g_module_name+'.PtknsToNode()):\n'+\
-                      '    Undefined variable/class name:\n'+\
-                      '       \"'+PtknsToStr(path_tokens)+'\",\n'+\
-                      '    This occured near or before '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'+\
-                      '    (Specifically \"'+path_tokens[i_last_ptkn]+\
-                      '\" is not a subordinate of \"'+MaxLenStr(last_node.name,'/')+'\".)\n'+\
-                      '    This may be due to a typo located here or earlier.\n'+\
-                      '    It may also occur if you deleted the object earlier.  (Referring to a\n'+\
-                      '        deleted object is only forgiven when using [0-9] or [0:10] notation.)\n'+\
-                      '    If this object refers to an array you must use brackets []\n'+\
-                      '    to explicitly specify the element(s) you want from that array.\n'+\
+            # Then the reason is: The string in path_tokens[i_last_ptkn]
+            # was supposed to be a child of last_node but a child
+            # of that name was not found.
+            err_msg = 'Error(' + g_module_name + '.PtknsToNode()):\n' +\
+                      '    Undefined variable/class name:\n' +\
+                      '       \"' + PtknsToStr(path_tokens) + '\",\n' +\
+                      '    This occured near or before ' + ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n' +\
+                      '    (Specifically \"' + path_tokens[i_last_ptkn] +\
+                      '\" is not a subordinate of \"' + MaxLenStr(last_node.name, '/') + '\".)\n' +\
+                      '    This may be due to a typo located here or earlier.\n' +\
+                      '    It may also occur if you deleted the object earlier.  (Referring to a\n' +\
+                      '        deleted object is only forgiven when using [0-9] or [0:10] notation.)\n' +\
+                      '    If this object refers to an array you must use brackets []\n' +\
+                      '    to explicitly specify the element(s) you want from that array.\n' +\
                       '    (To select multiple elements, you can use [*] or [0-9] or [0:10].)\n'
 
             if (path_tokens[i_last_ptkn] in NodeToPtkns(last_node)):
-                err_msg += '\nIn this case:\n'+\
-                           '    It seems like you may have omitted a } character somewhere before:\n'+\
-                           '    '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)
+                err_msg += '\nIn this case:\n' +\
+                           '    It seems like you may have omitted a } character somewhere before:\n' +\
+                           '    ' + ErrorLeader(dbg_loc.infile, dbg_loc.lineno)
             raise InputError(err_msg)
-        assert(False) # One of the two conditions above should be true.
+        assert(False)  # One of the two conditions above should be true.
 
     return last_node
-
-
-
 
 
 def StrToNode(obj_name, starting_node, dbg_loc):
@@ -821,47 +815,49 @@ def StrToNode(obj_name, starting_node, dbg_loc):
     return PtknsToNode(path_tokens, starting_node, dbg_loc)
 
 
-
 def NodeListToPtkns(node_list, dbg_loc=None):
-    assert(len(node_list) > 0) #The path must contain at least the starting node
+    # The path must contain at least the starting node
+    assert(len(node_list) > 0)
     path_tokens = [node_list[0].name]
     for i in range(1, len(node_list)):
-        if node_list[i] == node_list[i-1].parent:
+        if node_list[i] == node_list[i - 1].parent:
             path_tokens.append('..')
         else:
             path_tokens.append(node_list[i].name)
             # Now check to make sure the user supplied consistent information:
-            if (node_list[i] not in node_list[i-1].children.values()):
-                raise InputError('Error('+g_module_name+'.NodeListToPtkns()):\n'
+            if (node_list[i] not in node_list[i - 1].children.values()):
+                raise InputError('Error(' + g_module_name + '.NodeListToPtkns()):\n'
                                  '        Undefined variable/class name:\n'
-                                 '        \"'+PtknsToStr(path_tokens)+'\" located near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'
-                                 '       (\"'+path_tokens[i]+'\" is not subordinate to \"'+MaxLenStr(node_list[i-1].name,'/')+'\")\n'
+                                 '        \"' + PtknsToStr(path_tokens) + '\" located near ' + ErrorLeader(
+                                     dbg_loc.infile, dbg_loc.lineno) + '\n'
+                                 '       (\"' + path_tokens[i] + '\" is not subordinate to \"' + MaxLenStr(
+                                     node_list[i - 1].name, '/') + '\")\n'
                                  '       This could be an internal error.')
     return path_tokens
 
 
-
 def NodeListToStr(node_list, dbg_loc=None):
-    assert(len(node_list) > 0) #The path must contain at least the starting node
+    # The path must contain at least the starting node
+    assert(len(node_list) > 0)
     path_str = node_list[0].name
     for i in range(1, len(node_list)):
-        if node_list[i] == node_list[i-1].parent:
+        if node_list[i] == node_list[i - 1].parent:
             path_str += '/..'
         else:
             path_str += '/' + node_list[i].name
             # Now check to make sure the user supplied consistent information:
-            if (node_list[i] not in node_list[i-1].children.values()):
-                err_msg = 'Error('+g_module_name+'.NodeListToStr()):\n'+\
+            if (node_list[i] not in node_list[i - 1].children.values()):
+                err_msg = 'Error(' + g_module_name + '.NodeListToStr()):\n' +\
                           '    Invalid variable/class name:\n' +\
-                          '    \"'+PtknsToStr(path_tokens)+'\"'
+                          '    \"' + PtknsToStr(path_tokens) + '\"'
                 if dbg_loc != None:
-                    err_msg += ' located near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)
+                    err_msg += ' located near ' + \
+                        ErrorLeader(dbg_loc.infile, dbg_loc.lineno)
                 err_msg += '\n' +\
-                           '       (\"'+node_list[i].name+'\" is not a subordinate of \"'+MaxLenStr(node_list[i-1].name,'/')+'\")\n'+\
+                           '       (\"' + node_list[i].name + '\" is not a subordinate of \"' + MaxLenStr(node_list[i - 1].name, '/') + '\")\n' +\
                            '    This could be an internal error.'
                 raise InputError(err_msg)
     return path_str
-
 
 
 def NodeToPtkns(node):
@@ -874,7 +870,6 @@ def NodeToPtkns(node):
     return ptkns
 
 
-
 def NodeToStr(node):
     ptkns = NodeToPtkns(node)
     assert(len(ptkns) > 0)
@@ -884,19 +879,18 @@ def NodeToStr(node):
     path_str = ptkns[0]
     i = 1
     while i < len(ptkns):
-        path_str += '/'+ptkns[i]
+        path_str += '/' + ptkns[i]
         i += 1
     return path_str
 
 
-
 def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
     assert((cat_node != None) and (leaf_node != None))
-    assert((cat_name != None) and  (cat_name != ''))
+    assert((cat_name != None) and (cat_name != ''))
 
     # Determine the path of the cat node
     cat_node_ptkns = NodeToPtkns(cat_node)
-    cat_node_ptkns.append(cat_name+':')
+    cat_node_ptkns.append(cat_name + ':')
 
     # Determine the path of the leaf node (which should inherit from cat)
     deleted = False
@@ -906,7 +900,7 @@ def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
         while node.parent != None:
             if node.IsDeleted():
                 deleted = True
-                leaf_node_ptkns.append('DELETED_'+node.name)
+                leaf_node_ptkns.append('DELETED_' + node.name)
                 break
             leaf_node_ptkns.append(node.name)
             if node.parent == cat_node:
@@ -917,35 +911,35 @@ def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
         if not deleted:
             # Check that leaf inherits from cat.  If not, print error.
             if ((node.parent != cat_node) and (node != cat_node)):
-                err_msg = 'Error('+g_module_name+'.CatLeafNodesToPtkns()):\n'+\
+                err_msg = 'Error(' + g_module_name + '.CatLeafNodesToPtkns()):\n' +\
                           '      Invalid variable (category:leaf) pair\n'
                 if dbg_loc != None:
                     cat_node_str = NodeToStr(cat_node)
                     leaf_node_str = NodeToStr(leaf_node)
-                    err_msg += '    located near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'+\
-                               '    (\"'+leaf_node.name+'\" is not in the scope of \"'+cat_node_str+'/'+cat_name+':\")\n'+\
-                               '    This will happen if you used the \"category\" command to manually\n'+\
-                               '    create a category/counter which is not defined globally.\n'+\
-                               '\n'+\
-                               '    Note: Using the analogy of a unix style file system, \n'+\
-                               '    the problem is that \"'+leaf_node_str+'\"\n'+\
-                               '    is not a subdirectory of \"'+cat_node_str+'\".\n'+\
-                               '\n'+\
-                               '    Note: This often occurs when \".../\" is used. In that case, you may\n'+\
-                               '    be able to avoid this error by referring to your variable explicitly\n'+\
+                    err_msg += '    located near ' + ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n' +\
+                               '    (\"' + leaf_node.name + '\" is not in the scope of \"' + cat_node_str + '/' + cat_name + ':\")\n' +\
+                               '    This will happen if you used the \"category\" command to manually\n' +\
+                               '    create a category/counter which is not defined globally.\n' +\
+                               '\n' +\
+                               '    Note: Using the analogy of a unix style file system, \n' +\
+                               '    the problem is that \"' + leaf_node_str + '\"\n' +\
+                               '    is not a subdirectory of \"' + cat_node_str + '\".\n' +\
+                               '\n' +\
+                               '    Note: This often occurs when \".../\" is used. In that case, you may\n' +\
+                               '    be able to avoid this error by referring to your variable explicitly\n' +\
                                '    by using chains of \"../\" tokens in the path instead of \".../\".\n'
-                               #'       Make sure that your variable you are using is defined in \n'+\
-                               #'       an environment (currently \"'+leaf_node_str+'\")\n'+\
-                               #'       which lies WITHIN the environment where the category was defined.\n'+\
-                               #'       (currently \"'+cat_node_str+'\").\n'
+                    #'       Make sure that your variable you are using is defined in \n'+\
+                    #'       an environment (currently \"'+leaf_node_str+'\")\n'+\
+                    #'       which lies WITHIN the environment where the category was defined.\n'+\
+                    #'       (currently \"'+cat_node_str+'\").\n'
                     raise InputError(err_msg)
     else:
         err_msg = 'Warning: Strange variable path'
         if dbg_loc != None:
-            err_msg += ' near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)
+            err_msg += ' near ' + ErrorLeader(dbg_loc.infile, dbg_loc.lineno)
         err_msg += '\n' +\
-            '    The category and leaf nodes for variable \"'+cat_name+':'+leaf_node.name+'\" are the same.\n'+\
-            '    Check to see that this variable is behaving the way you intended.\n'+\
+            '    The category and leaf nodes for variable \"' + cat_name + ':' + leaf_node.name + '\" are the same.\n' +\
+            '    Check to see that this variable is behaving the way you intended.\n' +\
             '    (It\'s possible this could be an internal error in the program.)\n'
         sys.stderr.write(err_msg)
 
@@ -953,29 +947,26 @@ def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
     return cat_node_ptkns + leaf_node_ptkns
 
 
-
 def CanonicalCatName(cat_name, cat_node, dbg_loc=None):
     # Determine the path of the cat node
     tkns = NodeToPtkns(cat_node)
     tkns.append(cat_name)
     #full_cat_name = tkns[0]
-    #for i in range(1,len(tkns)):
+    # for i in range(1,len(tkns)):
     #    full_cat_name += '/'+tkns[i]
     #  better way:
     return '/'.join(tkns)
-
 
 
 def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
     tkns = CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc)
     descr_str = tkns[0]
     for i in range(1, len(tkns)):
-        if (len(descr_str)>0) and (descr_str[-1] == ':'):
+        if (len(descr_str) > 0) and (descr_str[-1] == ':'):
             descr_str += tkns[i]
         else:
-            descr_str += '/'+tkns[i]
+            descr_str += '/' + tkns[i]
     return descr_str
-
 
 
 def CollapsePath(path_tokens):
@@ -988,7 +979,7 @@ def CollapsePath(path_tokens):
     """
     new_ptkns = []
     ndelete = 0
-    i = len(path_tokens)-1
+    i = len(path_tokens) - 1
     while i >= 0:
         if path_tokens[i] == '..':
             ndelete += 1
@@ -1006,9 +997,6 @@ def CollapsePath(path_tokens):
         return ndelete  # <-- useful to let caller know an error ocurred
 
     return new_ptkns
-
-
-
 
 
 def FindCatNode(category_name, current_node, srcloc):
@@ -1033,13 +1021,13 @@ def FindCatNode(category_name, current_node, srcloc):
 
     if cat_node is None:
         assert(node.parent is None)
-        #sys.stderr.write('Warning near ' +
+        # sys.stderr.write('Warning near ' +
         #                 ErrorLeader(srcloc.infile,
         #                             srcloc.lineno)+'\n'+
         #                 '       no category named \"'+category_name+'\" found.\n'+
         #                 '       Creating a new global category: /'+
         #                 category_name+':\n')
-        cat_node = node # the global node
+        cat_node = node  # the global node
 
     assert(cat_node != None)
 
@@ -1052,14 +1040,13 @@ def RemoveNullTokens(in_ptkns):
 
     """
     out_ptkns = []
-    for i in range(0,len(in_ptkns)):
+    for i in range(0, len(in_ptkns)):
         if ((in_ptkns[i] != '.') and
-            ((in_ptkns[i] != '') or (i==0))):
+                ((in_ptkns[i] != '') or (i == 0))):
             out_ptkns.append(in_ptkns[i])
     # (I'm sure there are ways to write this in python
     #  using fewer lines of code.  Sigh.)
     return out_ptkns
-
 
 
 def DescrToCatLeafPtkns(descr_str, dbg_loc):
@@ -1109,17 +1096,19 @@ def DescrToCatLeafPtkns(descr_str, dbg_loc):
 
     split_colon = descr_str.split(':')
     if len(split_colon) > 2:
-        raise InputError('Error('+g_module_name+'.DescrToCatLeafPtkns())\n'
-                         '       Error near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n\n'
-                         '       Bad variable descriptor: \"'+descr_str+'\"\n'+
+        raise InputError('Error(' + g_module_name + '.DescrToCatLeafPtkns())\n'
+                         '       Error near ' +
+                         ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n\n'
+                         '       Bad variable descriptor: \"' + descr_str + '\"\n' +
                          '       There can be at most one \':\' character in a variable descriptor.\n')
     # ---- Are we using colon syntax (example '$atom:H1')?
     elif len(split_colon) == 2:
-        # The category name = text after the last '/' (if present)and before ':'
-        cat_ptkns  = split_colon[0].split('/')
-        cat_name   = cat_ptkns[-1]
+        # The category name = text after the last '/' (if present)and before
+        # ':'
+        cat_ptkns = split_colon[0].split('/')
+        cat_name = cat_ptkns[-1]
         # The text before that is the suggested (category) path
-        cat_ptkns  = cat_ptkns[:-1]
+        cat_ptkns = cat_ptkns[:-1]
         # if len(cat_ptkns) == 0:
         #    cat_ptkns.append('.')
 
@@ -1130,34 +1119,28 @@ def DescrToCatLeafPtkns(descr_str, dbg_loc):
             leaf_ptkns = []
 
         if (cat_name == ''):
-            raise InputError('Error('+g_module_name+'.DescrToCatLeafPtkns()):\n'
-                             '       Error near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n\n'
-                             '       Bad variable descriptor: \"'+descr_str+'\"\n')
+            raise InputError('Error(' + g_module_name + '.DescrToCatLeafPtkns()):\n'
+                             '       Error near ' +
+                             ErrorLeader(dbg_loc.infile,
+                                         dbg_loc.lineno) + '\n\n'
+                             '       Bad variable descriptor: \"' + descr_str + '\"\n')
     else:
         # ---- Are we using colon-less syntax (example: "$../mol") ?
         ptkns = split_colon[0].split('/')
-        cat_name  = ptkns[-1] # last token (eg. "mol") is the cat_name
-        leaf_ptkns = ptkns[:-1] # the rest is the leaf's path ("..")
+        cat_name = ptkns[-1]  # last token (eg. "mol") is the cat_name
+        leaf_ptkns = ptkns[:-1]  # the rest is the leaf's path ("..")
         if len(leaf_ptkns) == 0:
             leaf_ptkns.append('.')
-        #cat_ptkns  = ptkns[:-1] # the same goes for the cat path suggestion
-        #if len(cat_ptkns) == 0:
+        # cat_ptkns  = ptkns[:-1] # the same goes for the cat path suggestion
+        # if len(cat_ptkns) == 0:
         #    cat_ptkns.append('.')
-        cat_ptkns  = []
-
-
+        cat_ptkns = []
 
     #  On 2012-8-22, I commented out this line:
-    #return cat_name, RemoveNullTokens(cat_ptkns), RemoveNullTokens(leaf_ptkns)
+    # return cat_name, RemoveNullTokens(cat_ptkns), RemoveNullTokens(leaf_ptkns)
     #  and replaced it with:
 
     return cat_name, RemoveNullTokens(cat_ptkns), leaf_ptkns
-
-
-
-
-
-
 
 
 def DescrToCatLeafNodes(descr_str,
@@ -1289,8 +1272,6 @@ def DescrToCatLeafNodes(descr_str,
 
     cat_name, cat_ptkns, leaf_ptkns = DescrToCatLeafPtkns(descr_str, dbg_loc)
 
-
-
     # ---- ellipsis hack ----
     #
     # Search for class:
@@ -1346,23 +1327,21 @@ def DescrToCatLeafNodes(descr_str,
     # }
     #
     if ((descr_str.find(':') != -1) and
-        #(not ((len(leaf_ptkns) == 1) and
-        #      (leaf_ptkns[0] == context_node.name))) and
-        #(len(leaf_ptkns) > 0) and
-        (len(leaf_ptkns) > 1) and
-        (len(leaf_ptkns[0]) > 0) and
-        (leaf_ptkns[0][0] not in ('.','*','?'))):
+            #(not ((len(leaf_ptkns) == 1) and
+            #      (leaf_ptkns[0] == context_node.name))) and
+            #(len(leaf_ptkns) > 0) and
+            (len(leaf_ptkns) > 1) and
+            (len(leaf_ptkns[0]) > 0) and
+            (leaf_ptkns[0][0] not in ('.', '*', '?'))):
 
         leaf_ptkns.insert(0, '...')
     # ---- Done with "ellipsis hack" -----
 
+    # sys.stderr.write(' DescrToCatLeafNodes(): (cat_ptkns, cat_name, lptkns) = ('+
+    # str(cat_ptkns)+', \"'+cat_name+'\", '+str(leaf_ptkns)+')\n')
 
-
-    #sys.stderr.write(' DescrToCatLeafNodes(): (cat_ptkns, cat_name, lptkns) = ('+
-    #                 str(cat_ptkns)+', \"'+cat_name+'\", '+str(leaf_ptkns)+')\n')
-
-    cat_node   = None
-    cat_start_node  = context_node
+    cat_node = None
+    cat_start_node = context_node
     leaf_start_node = context_node
 
     if (len(cat_ptkns) > 0):
@@ -1376,7 +1355,7 @@ def DescrToCatLeafNodes(descr_str,
         else:
             # In this case, the user supplied an explicit path
             # for the category node.  Find it now.
-            cat_node   = PtknsToNode(cat_ptkns, context_node, dbg_loc)
+            cat_node = PtknsToNode(cat_ptkns, context_node, dbg_loc)
             # Whenever the user supplies an explicit path, then
             # the cat node should be the starting location from
             # which the leaf path is interpreted.  This nearly
@@ -1402,15 +1381,13 @@ def DescrToCatLeafNodes(descr_str,
             # (using cat_name as the dictionary key).
             cat_node.categories[cat_name] = Category(cat_name)
         else:
-            raise InputError('Error('+g_module_name+'.DescrToCatLeafNodes()):\n'
-                             '       Error near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'
-                             '       Category named \"'+cat_name+'\" not found at\n'
-                             '       position '+NodeToStr(cat_node)+'\n')
-
+            raise InputError('Error(' + g_module_name + '.DescrToCatLeafNodes()):\n'
+                             '       Error near ' +
+                             ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n'
+                             '       Category named \"' + cat_name + '\" not found at\n'
+                             '       position ' + NodeToStr(cat_node) + '\n')
 
     # ---------- Now look up the leaf node -----------
-
-
 
     if (len(leaf_ptkns) > 0) and (leaf_ptkns[-1] == 'query()'):
         #   Special case: "query()"
@@ -1421,8 +1398,6 @@ def DescrToCatLeafNodes(descr_str,
         # "query()" appears multiple times in the same context).
         #leaf_ptkns[-1] = '__query__'+dbg_loc.infile+'_'+str(dbg_loc.lineno)
         leaf_ptkns[-1] = '__query__' + str(dbg_loc.order)
-
-
 
     # Lookup the path for the leaf:
     #
@@ -1459,44 +1434,47 @@ def DescrToCatLeafNodes(descr_str,
             # The "..." means different things depending on
             # whether or not it is the last token in leaf_ptkns.
 
-            if i_last_ptkn+1 < len(leaf_ptkns):
+            if i_last_ptkn + 1 < len(leaf_ptkns):
                 # If "..." is NOT the last token in leaf_ptkns, we
                 # should search for an ancestor of this node who has
                 # a child whose name matches a the requested target
                 # string (located in leaf_ptkns[i_last_ptkn+1])
-                search_target = leaf_ptkns[i_last_ptkn+1]
+                search_target = leaf_ptkns[i_last_ptkn + 1]
                 # If such an ancestor exists, then FollowPath()
                 # should have already found it for us.
                 #     This means it was not found.
                 # So if there is only one more token in the
                 # list of tokens, then create the needed node
                 if (create_missing_nodes and
-                    (i_last_ptkn+1 == len(leaf_ptkns)-1)):
+                        (i_last_ptkn + 1 == len(leaf_ptkns) - 1)):
                     # Create a new leaf node and link it:
                     new_leaf_name = leaf_ptkns[-1]
                     parent_node = last_node
-                    # Is this parent_node an StaticObj? (..or inherit from StaticObj?)
+                    # Is this parent_node an StaticObj? (..or inherit from
+                    # StaticObj?)
                     if isinstance(parent_node, StaticObj):
-                        parent_node.children[new_leaf_name] = StaticObj(new_leaf_name, parent_node)
+                        parent_node.children[new_leaf_name] = StaticObj(
+                            new_leaf_name, parent_node)
                     elif isinstance(parent_node, InstanceObj):
-                        parent_node.children[new_leaf_name] = InstanceObjBasic(new_leaf_name, parent_node)
+                        parent_node.children[new_leaf_name] = InstanceObjBasic(
+                            new_leaf_name, parent_node)
                     else:
-                        assert(False) # (only 2 types of nodes are possible)
+                        assert(False)  # (only 2 types of nodes are possible)
                     # Now assign the pointer
                     leaf_node = parent_node.children[new_leaf_name]
                 else:
-                    #In that case, we were unable to find the node referenced by "..."
-                    raise InputError('Error('+g_module_name+'.DescrToCatLeafNodes()):\n'
-                                     '       Broken path.\n' # containing ellipsis (...)\n'
-                                     '       class/variable \"'+search_target+'\" not found in this\n'
+                    # In that case, we were unable to find the node referenced
+                    # by "..."
+                    raise InputError('Error(' + g_module_name + '.DescrToCatLeafNodes()):\n'
+                                     # containing ellipsis (...)\n'
+                                     '       Broken path.\n'
+                                     '       class/variable \"' + search_target + '\" not found in this\n'
                                      '       context: \"'
                                      #+var_ref.prefix + var_ref.descr_str + var_ref.suffix+'\"\n'
-                                     +descr_str+'\"\n'
-                                     '       located near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno))
-
+                                     + descr_str + '\"\n'
+                                     '       located near ' + ErrorLeader(dbg_loc.infile, dbg_loc.lineno))
 
             else:    # if i_last_ptkn+1 < len(leaf_ptkns):
-
 
                 # If "..." IS the last token, then it means:
                 # we want to search for the CATEGORY NAME,
@@ -1528,21 +1506,20 @@ def DescrToCatLeafNodes(descr_str,
                     leaf_node = node
 
                 else:
-                     # If not found, have it point to the
-                     # current (context) node.
-                     leaf_node = context_node
+                    # If not found, have it point to the
+                    # current (context) node.
+                    leaf_node = context_node
 
             # -----------------------------------------------
             # -- Finished dealing with '...' in leaf_ptkns --
             # -----------------------------------------------
 
-
         elif (create_missing_nodes and
-              ((i_last_ptkn == len(leaf_ptkns)-1) or
+              ((i_last_ptkn == len(leaf_ptkns) - 1) or
                HasWildCard('/'.join(leaf_ptkns)))):
 
-        #elif (create_missing_nodes and
-        #      (i_last_ptkn == len(leaf_ptkns)-1)):
+            # elif (create_missing_nodes and
+            #      (i_last_ptkn == len(leaf_ptkns)-1)):
 
             # Again, another reason the leaf-node was not found is
             # that it refers to a leaf node which has not yet been
@@ -1556,16 +1533,18 @@ def DescrToCatLeafNodes(descr_str,
             new_leaf_name = leaf_ptkns[-1]
             new_leaf_name = '/'.join(leaf_ptkns[i_last_ptkn:])
             parent_node = last_node
-            # Is this parent_node an StaticObj? (..or does it inherit from StaticObj?)
+            # Is this parent_node an StaticObj? (..or does it inherit from
+            # StaticObj?)
             if isinstance(parent_node, StaticObj):
-                parent_node.children[new_leaf_name] = StaticObj(new_leaf_name, parent_node)
+                parent_node.children[new_leaf_name] = StaticObj(
+                    new_leaf_name, parent_node)
             elif isinstance(parent_node, InstanceObj):
-                parent_node.children[new_leaf_name] = InstanceObjBasic(new_leaf_name, parent_node)
+                parent_node.children[new_leaf_name] = InstanceObjBasic(
+                    new_leaf_name, parent_node)
             else:
-                assert(False) # (only 2 types of nodes are possible)
+                assert(False)  # (only 2 types of nodes are possible)
             # Now assign the pointer
             leaf_node = parent_node.children[new_leaf_name]
-
 
         else:
 
@@ -1573,40 +1552,36 @@ def DescrToCatLeafNodes(descr_str,
             # Figure out which kind of mistake and print an error.
 
             if (last_node.parent is None) and (leaf_ptkns[i_last_ptkn] == '..'):
-                #In that case, we tried to back out beyond the root of the tree.
-                raise InputError('Error('+g_module_name+'.DescrToCatLeafNodes()):\n'
+                # In that case, we tried to back out beyond the root of the
+                # tree.
+                raise InputError('Error(' + g_module_name + '.DescrToCatLeafNodes()):\n'
                                  '       Broken path in variable:\n'
                                  #'       \"'+var_ref.prefix + var_ref.descr_str + var_ref.suffix+'\"\n'
-                                 '       \"'+ descr_str + '\"\n'
-                                 '    located near '+
+                                 '       \"' + descr_str + '\"\n'
+                                 '    located near ' +
                                  ErrorLeader(dbg_loc.infile,
-                                             dbg_loc.lineno)+'\n'
+                                             dbg_loc.lineno) + '\n'
                                  '       There are too many \"..\" tokens in the path string.')
-
 
             else:
 
-                #Then the reason is: The string in leaf_ptkns[i_last_ptkn]
-                #was supposed to be a child of last_node but a child
-                #of that name was not found.
-                raise InputError('Error('+g_module_name+'.DescrToCatLeafNodes()):\n'
+                # Then the reason is: The string in leaf_ptkns[i_last_ptkn]
+                # was supposed to be a child of last_node but a child
+                # of that name was not found.
+                raise InputError('Error(' + g_module_name + '.DescrToCatLeafNodes()):\n'
                                  '       Broken path / Undefined variable:\n'
                                  #'       \"'+var_ref.prefix + var_ref.descr_str + var_ref.suffix+'\"\n'
-                                 '       \"'+ descr_str + '\"\n'
-                                 '    located near '+
+                                 '       \"' + descr_str + '\"\n'
+                                 '    located near ' +
                                  ErrorLeader(dbg_loc.infile,
-                                             dbg_loc.lineno)+'\n'
-                                 '       Undefined: \"'+PtknsToStr(leaf_ptkns)+'\"\n'
-                                 '       (Specifically \"'+leaf_ptkns[i_last_ptkn]+
-                                 '\" is not a subordinate of \"'+MaxLenStr(last_node.name,'/')+'\")')
-                                 #'\n    This could be a typo or spelling error.')
+                                             dbg_loc.lineno) + '\n'
+                                 '       Undefined: \"' + \
+                                 PtknsToStr(leaf_ptkns) + '\"\n'
+                                 '       (Specifically \"' + leaf_ptkns[i_last_ptkn] +
+                                 '\" is not a subordinate of \"' + MaxLenStr(last_node.name, '/') + '\")')
+                #'\n    This could be a typo or spelling error.')
 
     return cat_name, cat_node, leaf_node
-
-
-
-
-
 
 
 def DescrToVarBinding(descr_str, context_node, dbg_loc):
@@ -1624,20 +1599,19 @@ def DescrToVarBinding(descr_str, context_node, dbg_loc):
         if leaf_node in var_bindings:
             var_binding = var_bindings[leaf_node]
         else:
-            raise InputError('Error('+g_module_name+'.DescrToVarBinding()):\n'
-                             '       Error near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'
-                             '       Bad variable reference: \"'+descr_str+'\".  There is\n'
-                             '       There no category named \"'+cat_name+'\" defined for "'+NodeToStr(cat_node)+'\".\n')
+            raise InputError('Error(' + g_module_name + '.DescrToVarBinding()):\n'
+                             '       Error near ' +
+                             ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n'
+                             '       Bad variable reference: \"' + descr_str + '\".  There is\n'
+                             '       There no category named \"' + cat_name + '\" defined for "' + NodeToStr(cat_node) + '\".\n')
     else:
-        raise InputError('Error('+g_module_name+'.DescrToVarBinding()):\n'
-                         '       Error near '+ErrorLeader(dbg_loc.infile, dbg_loc.lineno)+'\n'
-                         '       Bad variable reference: \"'+descr_str+'\".  There is\n'
-                         '       no category named \"'+cat_name+'\" defined for "'+NodeToStr(cat_node)+'\".\n')
+        raise InputError('Error(' + g_module_name + '.DescrToVarBinding()):\n'
+                         '       Error near ' +
+                         ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n'
+                         '       Bad variable reference: \"' + descr_str + '\".  There is\n'
+                         '       no category named \"' + cat_name + '\" defined for "' + NodeToStr(cat_node) + '\".\n')
 
     return var_binding
-
-
-
 
 
 # Wrappers:
@@ -1655,8 +1629,6 @@ def LookupVar(descr_str, context_node, dbg_loc):
     return DescrToVarBinding(descr_str, context_node, dbg_loc)
 
 
-
-
 def LookupNode(obj_name, starting_node, dbg_loc):
     """ LookupNode() parses through a string like
           '../ClassA/NestedClassB'
@@ -1672,17 +1644,14 @@ def LookupNode(obj_name, starting_node, dbg_loc):
     return StrToNode(obj_name, starting_node, dbg_loc)
 
 
-
-
-
 class SimpleCounter(object):
-    __slots__=["n","nincr"]
+    __slots__ = ["n", "nincr"]
 
     # static data attributes:
     default_n0 = 1
     default_nincr = 1
 
-    def __init__(self, n0 = None, nincr = None):
+    def __init__(self, n0=None, nincr=None):
         if n0 == None:
             n0 = SimpleCounter.default_n0
         if nincr == None:
@@ -1696,10 +1665,8 @@ class SimpleCounter(object):
     def incr(self):
         self.n += self.nincr
 
-    def __copy__(self): #makes a (deep) copy of the counter in its current state
+    def __copy__(self):  # makes a (deep) copy of the counter in its current state
         return SimpleCounter(self.n + self.nincr, self.nincr)
-
-
 
 
 class Category(object):
@@ -1722,14 +1689,15 @@ class Category(object):
 
     """
 
-    __slots__=["name","bindings","counter","manual_assignments","reserved_values"]
+    __slots__ = ["name", "bindings", "counter",
+                 "manual_assignments", "reserved_values"]
 
     def __init__(self,
-                 name = '',
-                 bindings = None,
-                 counter = None,
-                 manual_assignments = None,
-                 reserved_values = None):
+                 name='',
+                 bindings=None,
+                 counter=None,
+                 manual_assignments=None,
+                 reserved_values=None):
 
         self.name = name
 
@@ -1752,9 +1720,6 @@ class Category(object):
             self.reserved_values = OrderedDict()
         else:
             self.reserved_values = reserved_values
-
-
-
 
 
 class StaticObj(object):
@@ -1869,22 +1834,21 @@ class StaticObj(object):
 
     """
 
-
-    __slots__=["name",
-               "parent",
-               "children",
-               "categories",
-               "commands",
-               "srcloc_begin",
-               "srcloc_end",
-               "deleted",
-               "class_parents",
-               "namespaces",
-               "instname_refs",
-               "instance_categories",
-               "instance_commands_push",
-               "instance_commands",
-               "instance_commands_pop"]
+    __slots__ = ["name",
+                 "parent",
+                 "children",
+                 "categories",
+                 "commands",
+                 "srcloc_begin",
+                 "srcloc_end",
+                 "deleted",
+                 "class_parents",
+                 "namespaces",
+                 "instname_refs",
+                 "instance_categories",
+                 "instance_commands_push",
+                 "instance_commands",
+                 "instance_commands_pop"]
 
     def __init__(self,
                  name='',
@@ -1897,65 +1861,60 @@ class StaticObj(object):
 
         self.name = name
 
-        self.parent = parent    #For traversing the global static template tree
+        self.parent = parent  # For traversing the global static template tree
 
         self.children = OrderedDict()  # Nested class definitions.
 
-        self.categories=OrderedDict()  #<- new variable categories that are only defined
-                                 # in the context of this molecule's type definition
-        self.commands=[]         # Commands to carry out (only once)
+        self.categories = OrderedDict()  # <- new variable categories that are only defined
+        # in the context of this molecule's type definition
+        self.commands = []         # Commands to carry out (only once)
 
-        ##vb##self.var_bindings=[]     # List of variables assigned to this object.
+        # vb##self.var_bindings=[]     # List of variables assigned to this
+        # object.
 
         self.srcloc_begin = None     # Keep track of location in user files
-        self.srcloc_end   = None     # (useful for error message reporting)
+        self.srcloc_end = None     # (useful for error message reporting)
 
-        self.deleted      = False    # Users can delete static objects?
-                                     # (why not?)
+        self.deleted = False    # Users can delete static objects?
+        # (why not?)
 
         # The following members are not shared with InstanceObj:
 
         self.class_parents = []  # classes we inherit traits from (this is
-                                 # similar to the parent/child relationship
-                                 # in an object-oriented-programming language)
+        # similar to the parent/child relationship
+        # in an object-oriented-programming language)
 
         self.namespaces = []  # A list of classes we also look in when searching
-                              # for other static nodes or variables. (similar to
-                              # class_parents, but only used for searches.)
+        # for other static nodes or variables. (similar to
+        # class_parents, but only used for searches.)
 
         self.instname_refs = {}  # <-- used for debugging to insure that
-                                 #     two instances do not have the same name
+        #     two instances do not have the same name
 
-        self.instance_categories=OrderedDict()#<-new variable categories that are defined
-                                   #within the scope of this molecule's instance
-        self.instance_commands_push=[]  #1)process these commands first by adding
-                                       #  these commands to InstanceObj.commands
-                                       #  (before you deal with class_parents)
-        self.instance_commands=[]      #2) then add this to InstanceObj.commands
-        self.instance_commands_pop=[] #3) finally add these commands
-
-
+        # <-new variable categories that are defined
+        self.instance_categories = OrderedDict()
+        # within the scope of this molecule's instance
+        self.instance_commands_push = []  # 1)process these commands first by adding
+        #  these commands to InstanceObj.commands
+        #  (before you deal with class_parents)
+        self.instance_commands = []  # 2) then add this to InstanceObj.commands
+        self.instance_commands_pop = []  # 3) finally add these commands
 
     def DeleteSelf(self):
         for child in self.children.values():
             child.DeleteSelf()
         self.deleted = True
 
-
-
     def IsDeleted(self):
         return self.deleted
 
-
-    ##vb##def AddVarBinding(self, var_binding):
-    ##vb##    if self.var_bindings is None:
-    ##vb##        self.var_bindings = [var_binding]
-    ##vb##    else:
-    ##vb##        self.var_bindings.append(var_binding)
-
+    # vb##def AddVarBinding(self, var_binding):
+    # vb##    if self.var_bindings is None:
+    # vb##        self.var_bindings = [var_binding]
+    # vb##    else:
+    # vb##        self.var_bindings.append(var_binding)
 
     def Parse(self, lex):
-
         """ Parse() builds a static tree of StaticObjs by parsing text file.
         -The "lex" argument is a file or input stream which has been converted
          to a "TemplateLexer" object (similar to the python's built-in shlex lexer).
@@ -1988,32 +1947,31 @@ class StaticObj(object):
                 #print('Parse(): EOF encountered\n')
                 break
 
-
             if ((cmd_token == 'write') or
-                (cmd_token == 'write_once') or
-                (cmd_token == 'create_var') or
-                (cmd_token == 'replace')):
-                open_paren  = lex.get_token()
+                    (cmd_token == 'write_once') or
+                    (cmd_token == 'create_var') or
+                    (cmd_token == 'replace')):
+                open_paren = lex.get_token()
 
                 #print('Parse():     open_paren=\"'+open_paren+'\"')
-                if open_paren=='{':
+                if open_paren == '{':
                     # ..then the user neglected to specify the "dest" file-name
                     # argument.  In that case, supply the default, ''.
                     # (which is shorthand for the standard out in this case)
-                    open_curly     = open_paren[0]
-                    open_paren     = ''
-                    close_paren    = ''
-                    tmpl_filename  = ''
-                    srcloc  = lex.GetSrcLoc()
+                    open_curly = open_paren[0]
+                    open_paren = ''
+                    close_paren = ''
+                    tmpl_filename = ''
+                    srcloc = lex.GetSrcLoc()
                 else:
                     tmpl_filename = lex.get_token()
                     if tmpl_filename == ')':
                         tmpl_filename = ''
                         close_paren = ')'
                     else:
-                        close_paren    = lex.get_token()
-                    open_curly     = lex.get_token()
-                    srcloc        = lex.GetSrcLoc()
+                        close_paren = lex.get_token()
+                    open_curly = lex.get_token()
+                    srcloc = lex.GetSrcLoc()
 
                 if (cmd_token == 'create_var'):
                     tmpl_filename = None
@@ -2025,13 +1983,14 @@ class StaticObj(object):
                     tmpl_filename = "ttree_replacements.txt"
 
                 if ((open_curly != '{') or
-                    ((open_paren == '')  and (close_paren != '')) or
-                    ((open_paren == '(') and (close_paren != ')'))):
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '       Error in '+lex.error_leader()+'\n\n'
-                                     'Syntax error at the beginning of the \"'+cmd_token+'\" command.')
+                        ((open_paren == '') and (close_paren != '')) or
+                        ((open_paren == '(') and (close_paren != ')'))):
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '       Error in ' + lex.error_leader() + '\n\n'
+                                     'Syntax error at the beginning of the \"' + cmd_token + '\" command.')
                 if tmpl_filename != None:
-                    tmpl_filename = RemoveOuterQuotes(tmpl_filename, lex.quotes)
+                    tmpl_filename = RemoveOuterQuotes(
+                        tmpl_filename, lex.quotes)
                 # ( The previous line is similar to:
                 #   tmpl_filename = tmpl_filename.strip(lex.quotes) )
 
@@ -2039,31 +1998,28 @@ class StaticObj(object):
                 StaticObj.CleanupReadTemplate(tmpl_contents, lex)
 
                 #sys.stdout.write('  Parse() after ReadTemplate, tokens:\n\n')
-                #print(tmpl_contents)
-                #sys.stdout.write('\n----------------\n')
-
+                # print(tmpl_contents)
+                # sys.stdout.write('\n----------------\n')
 
                 if (cmd_token == 'write_once' or
-                    cmd_token == 'replace'):
+                        cmd_token == 'replace'):
 
                     # Check for a particular bug:
                     #    Ordinary instance variables (preceded by a '$')
                     #    should never appear in a write_once() statement.
                     for entry in tmpl_contents:
                         if (isinstance(entry, VarRef) and
-                            (entry.prefix[0]=='$')):
-                            err_msg = ('Error('+g_module_name+'.StaticObj.Parse()):\n'+
-                                             '       Error near '+ErrorLeader(entry.srcloc.infile,
-                                                                       entry.srcloc.lineno)+'\n'+
-                                             '       Illegal variable: \"'+entry.prefix+entry.descr_str+entry.suffix+'\"\n'+
-                                             '       All variables in a \"'+cmd_token+'\" statement must be statically\n'+
-                                             '       defined, and hence they must begin with a \'@\' prefix character.\n'+
-                                             '       (not a \'$\' character).\n')
+                                (entry.prefix[0] == '$')):
+                            err_msg = ('Error(' + g_module_name + '.StaticObj.Parse()):\n' +
+                                       '       Error near ' + ErrorLeader(entry.srcloc.infile,
+                                                                          entry.srcloc.lineno) + '\n' +
+                                       '       Illegal variable: \"' + entry.prefix + entry.descr_str + entry.suffix + '\"\n' +
+                                       '       All variables in a \"' + cmd_token + '\" statement must be statically\n' +
+                                       '       defined, and hence they must begin with a \'@\' prefix character.\n' +
+                                       '       (not a \'$\' character).\n')
                             if (cmd_token == 'write_once'):
                                 err_msg += '       Suggestion: Use the \"write()\" command instead.\n'
                             raise InputError(err_msg)
-
-
 
                 if cmd_token == 'write':
                     commands = self.instance_commands
@@ -2080,7 +2036,8 @@ class StaticObj(object):
                                            srcloc)
                 commands.append(command)
 
-            # end of "if (cmd_token == 'write') or (cmd_token == 'write_once'):"
+            # end of "if (cmd_token == 'write') or (cmd_token ==
+            # 'write_once'):"
 
             elif cmd_token == 'delete':
 
@@ -2095,9 +2052,9 @@ class StaticObj(object):
 
                 namespacecom_str = lex.get_token()
                 if namespacecom_str != 'namespace':
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '       Error near '+lex.error_leader()+'\n'
-                                     '       The \"'+cmd_token+'\" command must be followed by the \"namespace\" keyword.')
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '       Error near ' + lex.error_leader() + '\n'
+                                     '       The \"' + cmd_token + '\" command must be followed by the \"namespace\" keyword.')
                 namespace_str = lex.get_token()
 
                 stnode = StrToNode(namespace_str,
@@ -2111,13 +2068,13 @@ class StaticObj(object):
                 cat_name = lex.get_token()
 
                 cat_count_start = 1
-                cat_count_incr  = 1
+                cat_count_incr = 1
 
                 open_paren = lex.get_token()
                 if (open_paren == '('):
                     token = lex.get_token()
                     if token == ',':
-                       token = lex.get_token()
+                        token = lex.get_token()
                     if token != ')':
                         # Interpret token as an integer, float, or string
                         try:
@@ -2126,7 +2083,8 @@ class StaticObj(object):
                             try:
                                 cat_count_start = float(token)
                             except ValueError:
-                                cat_count_start = RemoveOuterQuotes(token, '\'\"')
+                                cat_count_start = RemoveOuterQuotes(
+                                    token, '\'\"')
                         token = lex.get_token()
                         if token == ',':
                             token = lex.get_token()
@@ -2138,23 +2096,24 @@ class StaticObj(object):
                                 try:
                                     cat_count_incr = float(token)
                                 except ValueError:
-                                    cat_count_incr = RemoveOuterQuotes(token, '\'\"')
+                                    cat_count_incr = RemoveOuterQuotes(
+                                        token, '\'\"')
                             token = lex.get_token()
                             if token != ')':
-                                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                 '       Error near '+lex.error_leader()+'\n'
-                                                 '       \"'+cmd_token+' '+cat_name+'...\" has too many arguments,\n'
+                                raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                 '       Error near ' + lex.error_leader() + '\n'
+                                                 '       \"' + cmd_token + ' ' + cat_name + '...\" has too many arguments,\n'
                                                  '       or lacks a close-paren \')\'.\n')
                 else:
                     lex.push_token(open_paren)
 
                 if (isinstance(cat_count_start, basestring) or
-                    isinstance(cat_count_incr, basestring)):
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '       Error near '+lex.error_leader()+'\n'
-                                     '       \"'+cmd_token+' '+cat_name+'('+
-                                     str(cat_count_start)+','+
-                                     str(cat_count_incr)+')\"\n'
+                        isinstance(cat_count_incr, basestring)):
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '       Error near ' + lex.error_leader() + '\n'
+                                     '       \"' + cmd_token + ' ' + cat_name + '(' +
+                                     str(cat_count_start) + ',' +
+                                     str(cat_count_incr) + ')\"\n'
                                      '       Only numeric counters are currently supported.\n')
 
                 # check for really stupid and unlikely errors:
@@ -2165,31 +2124,29 @@ class StaticObj(object):
                         (isinstance(cat_count_incr, int) or
                          isinstance(cat_count_incr, float))):
                         cat_count_start = float(cat_count_start)
-                        cat_count_incr  = float(cat_count_incr)
+                        cat_count_incr = float(cat_count_incr)
                     else:
-                        raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                         '      Error near '+lex.error_leader()+'\n'
-                                         '      Problem with \"'+cmd_token+'\" command.\n')
+                        raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                         '      Error near ' + lex.error_leader() + '\n'
+                                         '      Problem with \"' + cmd_token + '\" command.\n')
 
                 prefix = cat_name[0]
                 cat_name = cat_name[1:]
                 # Add this category to the list.
                 if prefix == '@':
                     self.categories[cat_name] = Category(cat_name)
-                    self.categories[cat_name].counter=SimpleCounter(cat_count_start,
-                                                                    cat_count_incr)
+                    self.categories[cat_name].counter = SimpleCounter(cat_count_start,
+                                                                      cat_count_incr)
                 elif prefix == '$':
                     self.instance_categories[cat_name] = Category(cat_name)
-                    self.instance_categories[cat_name].counter=SimpleCounter(cat_count_start,
-                                                                             cat_count_incr)
+                    self.instance_categories[cat_name].counter = SimpleCounter(cat_count_start,
+                                                                               cat_count_incr)
                 else:
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '       Error near '+lex.error_leader()+'\n'
-                                     '       category name = \"'+cat_name+'\" lacks a \'$\' or \'&\' prefix.\n'
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '       Error near ' + lex.error_leader() + '\n'
+                                     '       category name = \"' + cat_name + '\" lacks a \'$\' or \'&\' prefix.\n'
                                      '       This one-character prefix indicates whether the variables in this\n'
                                      '       new category will be static or dynamics variables\n')
-
-
 
             elif (cmd_token == '}') or (cmd_token == ''):
                 # a '}' character means we have reached the end of our scope.
@@ -2197,8 +2154,7 @@ class StaticObj(object):
                 # (And a '' means we reached the end of the file... I think.)
                 break
 
-
-            #elif (cmd_token == 'include'):
+            # elif (cmd_token == 'include'):
                 # "include filename" loads a file (adds it to the file stack)
                 # The "TtreeShlex" class (from which "lex" inherits) handles
                 # "include" statements (ie. "source" statements) automatically.
@@ -2210,10 +2166,10 @@ class StaticObj(object):
                 push_cmd_src_loc = lex.GetSrcLoc()
                 push_cmd_text = lex.GetParenExpr()
                 if ((len(push_cmd_text) < 2) or
-                    (push_cmd_text[0] != '(') or
-                    (push_cmd_text[-1] != ')')):
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '      Error near '+lex.error_leader()+'\n'
+                        (push_cmd_text[0] != '(') or
+                        (push_cmd_text[-1] != ')')):
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '      Error near ' + lex.error_leader() + '\n'
                                      '      Bad \"push\" command.  Expected an expression in parenthesis.\n')
                 push_cmd_text = push_cmd_text[1:-1]
 
@@ -2237,8 +2193,8 @@ class StaticObj(object):
                     if len(user_push_right_commands) > 0:
                         push_command = user_push_right_commands.pop()
                     else:
-                        raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                         '      Error near '+lex.error_leader()+'\n'
+                        raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                         '      Error near ' + lex.error_leader() + '\n'
                                          '      Too many \"pop_right\" commands.\n')
                     pop_command = PopRightCommand(push_command,
                                                   pop_cmd_src_loc)
@@ -2246,14 +2202,12 @@ class StaticObj(object):
                     if len(user_push_left_commands) > 0:
                         push_command = user_push_left_commands.pop()
                     else:
-                        raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                         '      Error near '+lex.error_leader()+'\n'
+                        raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                         '      Error near ' + lex.error_leader() + '\n'
                                          '      Too many pop, (or pop_left) commands.\n')
                     pop_command = PopLeftCommand(push_command,
                                                  pop_cmd_src_loc)
                 self.instance_commands.append(pop_command)
-
-
 
             else:
 
@@ -2286,7 +2240,7 @@ class StaticObj(object):
                     while True:
                         next_symbol = lex.get_token()
                         if ((next_symbol == '{') or
-                            (next_symbol == lex.eof)):
+                                (next_symbol == lex.eof)):
                             break
                         elif (next_symbol == '='):
                             syntax_err_inherits = True
@@ -2299,10 +2253,9 @@ class StaticObj(object):
                         syntax_err_inherits = True
 
                     if syntax_err_inherits:
-                        raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                         '      Error near '+lex.error_leader()+'\n'
+                        raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                         '      Error near ' + lex.error_leader() + '\n'
                                          '      \"inherits\" should be followed by one or more class names.\n')
-
 
                 if next_symbol == '{':
                     child_name = object_name
@@ -2326,8 +2279,6 @@ class StaticObj(object):
                     child.Parse(lex)
                     child.class_parents += class_parents
 
-
-
                 elif next_symbol == '=':
                     next_symbol = lex.get_token()
                     if next_symbol == 'new':
@@ -2335,28 +2286,24 @@ class StaticObj(object):
                         base_srcloc = lex.GetSrcLoc()
                         array_slice_str = ''
                         if base_name.find('/') != -1:
-                            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                             '       Error near '+ErrorLeader(base_srcloc.infile,
-                                                                        base_srcloc.lineno)+'\n'
+                            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                             '       Error near ' + ErrorLeader(base_srcloc.infile,
+                                                                                base_srcloc.lineno) + '\n'
                                              '          (You can not instantiate some other object\'s members.)\n'
-                                             '       Invalid instance name: \"'+base_name+'\"\n')
+                                             '       Invalid instance name: \"' + base_name + '\"\n')
 
                         elif base_name in self.instname_refs:
                             ref_srcloc = self.instname_refs[base_name]
-                            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                             '       Duplicate class/array \"'+base_name+'\"\n'
+                            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                             '       Duplicate class/array \"' + base_name + '\"\n'
                                              '       This occurs near:\n'
-                                             '         '+ErrorLeader(ref_srcloc.infile,
-                                                                     ref_srcloc.lineno)+'\n'
+                                             '         ' + ErrorLeader(ref_srcloc.infile,
+                                                                       ref_srcloc.lineno) + '\n'
                                              '       and also near:\n'
-                                             '         '+ErrorLeader(base_srcloc.infile,
-                                                                     base_srcloc.lineno)+'\n')
+                                             '         ' + ErrorLeader(base_srcloc.infile,
+                                                                       base_srcloc.lineno) + '\n')
                         else:
                             self.instname_refs[base_name] = base_srcloc
-
-
-
-
 
                         # Check for syntax allowing the user to instantiate
                         # PART of an array. For example, check for this syntax:
@@ -2377,13 +2324,12 @@ class StaticObj(object):
                         # "cells[3][3][1][6]"
                         # "cells[3][3][1][7]"
 
-
                         p1 = base_name.find('[')
                         if p1 == -1:
                             p1 = len(base_name)
                         else:
                             p1 += 1
-                        array_name_tkns = [ base_name[0:p1] ]
+                        array_name_tkns = [base_name[0:p1]]
                         array_name_offsets = []
 
                         p2 = -1
@@ -2392,11 +2338,13 @@ class StaticObj(object):
                             p3 = base_name.find(']', p1)
 
                             if p3 == -1:
-                                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
+                                raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
                                                  '       Expected a \']\' character following:\n'
-                                                 '       \"'+base_name[0:p1]+'\", located near:\n'
-                                                 '         '+ErrorLeader(ref_srcloc.infile,
-                                                                         ref_srcloc.lineno)+'\n')
+                                                 '       \"' +
+                                                 base_name[0:p1] +
+                                                 '\", located near:\n'
+                                                 '         ' + ErrorLeader(ref_srcloc.infile,
+                                                                           ref_srcloc.lineno) + '\n')
 
                             # Search for a '-', ':', or '*' character between []
                             # For example "monomers[20-29] = "
@@ -2422,14 +2370,13 @@ class StaticObj(object):
                                 if base_name[p4] == '[':
                                     p4 += 1  # skip over it
                                 else:
-                                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
+                                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
                                                      '       Expected a \'[\' character forllowing a \']\' character in\n'
-                                                     '       \"'+base_name[0:p2+1]+'\", located near:\n'
-                                                     '         '+ErrorLeader(ref_srcloc.infile,
-                                                                             ref_srcloc.lineno)+'\n')
-
-
-
+                                                     '       \"' +
+                                                     base_name[
+                                                         0:p2 + 1] + '\", located near:\n'
+                                                     '         ' + ErrorLeader(ref_srcloc.infile,
+                                                                               ref_srcloc.lineno) + '\n')
 
                             if p2 > p3:
                                 # Then no '-', ':', or '*' character was found
@@ -2441,7 +2388,7 @@ class StaticObj(object):
                                 if len(array_name_tkns) == 0:
                                     array_name_tkns.append(token)
                                 else:
-                                    array_name_tkns[-1] = array_name_tkns[-1]+token
+                                    array_name_tkns[-1] = array_name_tkns[-1] + token
                                 array_slice_str = 'slice '
                             else:
 
@@ -2451,20 +2398,22 @@ class StaticObj(object):
                                     index_offset = 0
 
                                 elif (not str.isdigit(index_offset_str)):
-                                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                     '       Expected a nonnegative integer preceding the \''+base_name[p2]+'\' character in:\n'
-                                                     '       \"'+base_name[0:p2+1]+'\", located near:\n'
-                                                     '         '+ErrorLeader(ref_srcloc.infile,
-                                                                             ref_srcloc.lineno)+'\n')
+                                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                     '       Expected a nonnegative integer preceding the \'' +
+                                                     base_name[
+                                                         p2] + '\' character in:\n'
+                                                     '       \"' +
+                                                     base_name[
+                                                         0:p2 + 1] + '\", located near:\n'
+                                                     '         ' + ErrorLeader(ref_srcloc.infile,
+                                                                               ref_srcloc.lineno) + '\n')
                                 else:
                                     index_offset = int(index_offset_str)
-                                token=base_name[p3:p4]
+                                token = base_name[p3:p4]
                                 array_name_tkns.append(token)
                                 array_name_offsets.append(index_offset)
 
                             p1 = p4
-
-
 
                         # If the statobj_str token contains a ']' character
                         # then this means the user wants us to make multiple
@@ -2482,31 +2431,33 @@ class StaticObj(object):
 
                         class_name_str = lex.get_token()
                         if ((class_name_str == lex.eof) or
-                            (class_name_str == '}')):
-                                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                 '       Error near '+lex.error_leader()+'\n'
-                                                 'Class ends prematurely. (Incomplete \"new\" statement.)')
+                                (class_name_str == '}')):
+                            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                             '       Error near ' + lex.error_leader() + '\n'
+                                             'Class ends prematurely. (Incomplete \"new\" statement.)')
 
                         assert(len(class_name_str) > 0)
 
                         if (class_name_str[0] == '['):
-                            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                             '      Error near '+lex.error_leader()+'\n'
-                                             '      new '+class_name_str+'\n'
+                            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                             '      Error near ' + lex.error_leader() + '\n'
+                                             '      new ' + class_name_str + '\n'
                                              'Bracketed number should be preceeded by a class name.')
                         class_names = []
                         weights = []
                         num_by_type = []
                         if class_name_str == 'random':
-                            class_names, weights, num_by_type = self._ParseRandom(lex)
+                            class_names, weights, num_by_type = self._ParseRandom(
+                                lex)
                             tmp_token = lex.get_token()
-                            if len(tmp_token)>0:
-                                if tmp_token[0]=='.':
-                                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                     '      Error near '+lex.error_leader()+'\n'
-                                                     '      \"'+tmp_token+'\" should not follow random()\n'
+                            if len(tmp_token) > 0:
+                                if tmp_token[0] == '.':
+                                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                     '      Error near ' + lex.error_leader() + '\n'
+                                                     '      \"' + tmp_token + '\" should not follow random()\n'
                                                      '\n'
-                                                     '      Coordinate transformations and other commands (such as \"'+tmp_token+'\")\n'
+                                                     '      Coordinate transformations and other commands (such as \"' +
+                                                     tmp_token + '\")\n'
                                                      '      should appear after each class name inside the random() statement,\n'
                                                      '      not after it.  For example, do not use:\n'
                                                      '      \"lipids=new random([DPPC,DLPC],[0.5,0.5]).move(0,0,23.6)\"\n'
@@ -2529,15 +2480,15 @@ class StaticObj(object):
                         #  "[2].trans(0,4.5,0).rotate(30,0,0,1) [3].trans(0,0,4.5)"
                         while True:
                             new_token = lex.get_token()
-                            #if ((new_token == '') or (new_token == lex.eof)):
+                            # if ((new_token == '') or (new_token == lex.eof)):
                             #    break
                             if new_token == '[':
                                 number_str = lex.get_token()
                                 close_bracket = lex.get_token()
                                 if ((not str.isdigit(number_str)) or
-                                    (close_bracket != ']')):
-                                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                     '     Error in \"new\" statement near '+lex.error_leader()+'\n'
+                                        (close_bracket != ']')):
+                                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                     '     Error in \"new\" statement near ' + lex.error_leader() + '\n'
                                                      '     A \'[\' character should be followed by a number and a \']\' character.')
                                 array_size.append(int(number_str))
                                 suffix = lex.get_token()
@@ -2572,19 +2523,17 @@ class StaticObj(object):
                                 assert(len(array_name_tkns) == 1)
                                 array_name_offsets = [0] * len(array_size)
                                 array_name_tkns[0] = array_name_tkns[0] + '['
-                                for d in range(0, len(array_size)-1):
+                                for d in range(0, len(array_size) - 1):
                                     array_name_tkns.append('][')
                                 array_name_tkns.append(']')
 
                             if len(array_name_offsets) != len(array_size):
-                                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                 '     Error in \"new\" statement near/before '+lex.error_leader()+'\n'
-                                                 '     Array '+array_slice_str+'dimensionality on the left side of the \'=\' character ('+str(len(array_name_offsets))+')\n'
-                                                 '     does not match the array dimensionality on the right side ('+str(len(array_size))+').\n')
-
-
-
-
+                                raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                 '     Error in \"new\" statement near/before ' + lex.error_leader() + '\n'
+                                                 '     Array ' + array_slice_str +
+                                                 'dimensionality on the left side of the \'=\' character (' + str(
+                                                     len(array_name_offsets)) + ')\n'
+                                                 '     does not match the array dimensionality on the right side (' + str(len(array_size)) + ').\n')
 
                         # If the user wants us to instantiate a
                         # multidimensional array of class instances
@@ -2616,29 +2565,28 @@ class StaticObj(object):
                         #     commands, it stores them so that inherited
                         #     classes can attempt to process them.
 
-
                         D = len(array_size)
                         if D > 0:
 
-                            i_elem = 0   #(used to look up selection_list[])
+                            i_elem = 0  # (used to look up selection_list[])
                             if len(num_by_type) > 0:
                                 selection_list = []
                                 for i in range(0, len(num_by_type)):
-                                    selection_list += [i]*num_by_type[i]
+                                    selection_list += [i] * num_by_type[i]
                                 random.shuffle(selection_list)
 
                                 num_elements = 1
-                                for d in range(0,D):
+                                for d in range(0, D):
                                     num_elements *= array_size[d]
                                 err_msg_str = str(array_size[0])
-                                for d in range(1,D):
-                                    err_msg_str += '*'+str(array_size[d])
+                                for d in range(1, D):
+                                    err_msg_str += '*' + str(array_size[d])
                                 if num_elements != len(selection_list):
-                                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                     '      Error near or before '+lex.error_leader()+'\n'
-                                                     '      The sum of the numbers in the \"new random([],[])\" command ('+str(len(selection_list))+')\n'
-                                                     '      does not equal the number of elements in the array ('+err_msg_str+')\n')
-
+                                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                     '      Error near or before ' + lex.error_leader() + '\n'
+                                                     '      The sum of the numbers in the \"new random([],[])\" command (' + str(
+                                                         len(selection_list)) + ')\n'
+                                                     '      does not equal the number of elements in the array (' + err_msg_str + ')\n')
 
                             digits = [0 for d in range(0, D)]
                             table_filled = False
@@ -2647,28 +2595,30 @@ class StaticObj(object):
                                 instance_name = array_name_tkns[0]
                                 for d in range(0, D):
                                     i = digits[d]
-                                    instance_name+=str(i+
-                                                       array_name_offsets[d])+\
-                                                   array_name_tkns[d+1]
-
+                                    instance_name += str(i +
+                                                         array_name_offsets[d]) +\
+                                        array_name_tkns[d + 1]
 
                                 # Does the user want us to select
                                 # a class at random?
                                 if len(class_names) > 0:
 
                                     if len(num_by_type) > 0:
-                                        class_name_str = class_names[selection_list[i_elem]]
+                                        class_name_str = class_names[
+                                            selection_list[i_elem]]
                                     else:
                                         class_name_str = RandomSelect(class_names,
                                                                       weights)
-                                    class_name, class_suffix, class_suffix_srcloc= \
-                                        self._ProcessClassName(class_name_str, lex)
+                                    class_name, class_suffix, class_suffix_srcloc = \
+                                        self._ProcessClassName(
+                                            class_name_str, lex)
 
                                 if class_suffix != '':
                                     class_suffix_command = \
                                         PushRightCommand(class_suffix.lstrip('.'),
                                                          class_suffix_srcloc)
-                                    self.instance_commands.append(class_suffix_command)
+                                    self.instance_commands.append(
+                                        class_suffix_command)
                                 command = \
                                     InstantiateCommand(instance_name,
                                                        ClassReference(class_name,
@@ -2682,59 +2632,62 @@ class StaticObj(object):
                                                         srcloc_final)
                                     self.instance_commands.append(command)
 
-
                                 # Now go to the next entry in the table.
                                 # The indices of this table are similar to
-                                # a D-digit integer.  We increment this d-digit number now.
-                                d_carry = D-1
+                                # a D-digit integer.  We increment this d-digit
+                                # number now.
+                                d_carry = D - 1
                                 while True:
                                     digits[d_carry] += 1
                                     if digits[d_carry] >= array_size[d_carry]:
                                         digits[d_carry] = 0
                                         if array_suffixes[d_carry] != '':
-                                            for i in range(0, array_size[d_carry]-1):
+                                            for i in range(0, array_size[d_carry] - 1):
                                                 partner = pushed_commands.pop()
                                                 command = PopRightCommand(partner,
                                                                           srcloc_final)
-                                                self.instance_commands.append(command)
+                                                self.instance_commands.append(
+                                                    command)
                                         d_carry -= 1
                                     else:
                                         if array_suffixes[d_carry] != '':
                                             command = PushRightCommand(array_suffixes[d_carry].lstrip('.'),
                                                                        array_srclocs[d_carry])
                                             pushed_commands.append(command)
-                                            self.instance_commands.append(command)
+                                            self.instance_commands.append(
+                                                command)
                                         break
                                     if d_carry < 0:
                                         table_filled = True
                                         break
 
-                                i_elem += 1  #(used to look up selection_list[])
+                                # (used to look up selection_list[])
+                                i_elem += 1
                             pass
-
 
                         else:
                             if len(class_names) > 0:
                                 assert(len(num_by_type) == 0)
-                                #if len(num_by_type) > 0:
+                                # if len(num_by_type) > 0:
                                 #    class_name_str = class_names[selection_list[i_elem]]
-                                #else:
+                                # else:
                                 #    class_name_str = RandomSelect(class_names,
                                 #                                  weights)
                                 class_name_str = RandomSelect(class_names,
                                                               weights)
-                                class_name, class_suffix, class_suffix_srcloc= \
+                                class_name, class_suffix, class_suffix_srcloc = \
                                     self._ProcessClassName(class_name_str, lex)
                             if class_suffix != '':
                                 class_suffix_command = \
                                     PushRightCommand(class_suffix.lstrip('.'),
                                                      class_suffix_srcloc)
-                                self.instance_commands.append(class_suffix_command)
+                                self.instance_commands.append(
+                                    class_suffix_command)
                             command = \
-                              InstantiateCommand(base_name,
-                                                 ClassReference(class_name,
-                                                                base_srcloc),
-                                                 base_srcloc)
+                                InstantiateCommand(base_name,
+                                                   ClassReference(class_name,
+                                                                  base_srcloc),
+                                                   base_srcloc)
                             self.instance_commands.append(command)
 
                             if class_suffix != '':
@@ -2770,12 +2723,14 @@ class StaticObj(object):
                             # Stackable commands come in (Push...Pop) pairs.
                             push_command = PushLeftCommand(suffix,
                                                            suffix_srcloc)
-                            pop_command  = PopLeftCommand(push_command,
-                                                          suffix_srcloc)
+                            pop_command = PopLeftCommand(push_command,
+                                                         suffix_srcloc)
                             push_mod_command = ModCommand(push_command, './')
-                            pop_mod_command  = ModCommand(pop_command, './')
-                            child.instance_commands_push.append(push_mod_command)
-                            child.instance_commands_pop.insert(0,pop_mod_command)
+                            pop_mod_command = ModCommand(pop_command, './')
+                            child.instance_commands_push.append(
+                                push_mod_command)
+                            child.instance_commands_pop.insert(
+                                0, pop_mod_command)
 
                             #sys.stderr.write('child.instance_commands_push = '+str(child.instance_commands_push)+'\n')
 
@@ -2786,13 +2741,11 @@ class StaticObj(object):
                             if self.children[i].IsDeleted():
                                 del self.children[child_name]
                             else:
-                                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                                 '      Error near '+lex.error_leader()+'\n'
-                                                 '      The name \"'+child_name+'\" is already in use.')
+                                raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                                 '      Error near ' + lex.error_leader() + '\n'
+                                                 '      The name \"' + child_name + '\" is already in use.')
 
                         self.children[child_name] = child
-
-
 
                 else:
 
@@ -2800,20 +2753,21 @@ class StaticObj(object):
                     # (a command applied to a class which has been instantiated)
                     #   In that case, the object_name would be followed by
                     #   a dot and a function-call containing a '(' paren (which
-                    #   would have ended up stored in the next_symbol variable).
+                    # would have ended up stored in the next_symbol variable).
 
                     open_paren_encountered = False
                     if (next_symbol == '('):
                         open_paren_encountered = True
-                        lex.push_token(next_symbol) #put '(' back in the stream
+                        # put '(' back in the stream
+                        lex.push_token(next_symbol)
 
-                    i_dot   = object_name.rfind('.')
+                    i_dot = object_name.rfind('.')
                     i_slash = object_name.rfind('/')
                     dot_encountered = ((i_dot != -1) and
                                        ((i_slash == -1) or (i_slash < i_dot)))
 
                     if (open_paren_encountered and dot_encountered and
-                        (object_name[:1] != '[')):
+                            (object_name[:1] != '[')):
 
                         obj_descr_str, suffix, suffix_srcloc = \
                             self._ExtractSuffix(object_name, lex)
@@ -2822,40 +2776,46 @@ class StaticObj(object):
                         i_last_ptkn, staticobj = FollowPath(path_tokens,
                                                             self,
                                                             lex.GetSrcLoc())
-                        instobj_descr_str = './'+'/'.join(path_tokens[i_last_ptkn:])
+                        instobj_descr_str = './' + \
+                            '/'.join(path_tokens[i_last_ptkn:])
 
                         # I still support the "object_name.delete()" syntax for
                         # backwards compatibility.  (However newer input files
                         # use this equivalent syntax: "delete object_name")
                         if suffix == 'delete()':
                             delete_command = DeleteCommand(suffix_srcloc)
-                            mod_command    = ModCommand(delete_command,
-                                                        instobj_descr_str)
+                            mod_command = ModCommand(delete_command,
+                                                     instobj_descr_str)
                             staticobj.instance_commands.append(mod_command)
                         else:
                             push_command = PushLeftCommand(suffix,
                                                            suffix_srcloc,
                                                            '.')
-                            pop_command  = PopLeftCommand(push_command,
-                                                          suffix_srcloc,
-                                                           '.')
+                            pop_command = PopLeftCommand(push_command,
+                                                         suffix_srcloc,
+                                                         '.')
                             push_mod_command = ModCommand(push_command,
                                                           instobj_descr_str)
-                            pop_mod_command  = ModCommand(pop_command,
-                                                          instobj_descr_str)
+                            pop_mod_command = ModCommand(pop_command,
+                                                         instobj_descr_str)
                             if instobj_descr_str != './':
-                                #sys.stderr.write('DEBUG: Adding '+str(push_command)+' to '+
+                                # sys.stderr.write('DEBUG: Adding '+str(push_command)+' to '+
                                 #                 staticobj.name+'.instance_commands\n')
-                                staticobj.instance_commands.append(push_mod_command)
-                                staticobj.instance_commands.append(pop_mod_command)
+                                staticobj.instance_commands.append(
+                                    push_mod_command)
+                                staticobj.instance_commands.append(
+                                    pop_mod_command)
                             else:
-                                #sys.stderr.write('DEBUG: Adding '+str(push_command)+' to '+
+                                # sys.stderr.write('DEBUG: Adding '+str(push_command)+' to '+
                                 #                 staticobj.name+'.instance_commands_push\n')
                                 #     Question: Should I make these PushRight commands and
                                 #               append them in the opposite order?
-                                #               If so I also have to worry about the case above.
-                                staticobj.instance_commands_push.append(push_mod_command)
-                                staticobj.instance_commands_pop.insert(0,pop_mod_command)
+                                # If so I also have to worry about the case
+                                # above.
+                                staticobj.instance_commands_push.append(
+                                    push_mod_command)
+                                staticobj.instance_commands_pop.insert(
+                                    0, pop_mod_command)
 
                     else:
                         # Otherwise, the cmd_token is not any of these:
@@ -2867,16 +2827,13 @@ class StaticObj(object):
                         #   followed by either a '.' or "= new"
                         #
                         # In that case, it is a syntax error:
-                        raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                         '       Syntax error at or before '+lex.error_leader()+'\n'
-                                         '       \"'+object_name+' '+next_symbol+'\".')
+                        raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                         '       Syntax error at or before ' + lex.error_leader() + '\n'
+                                         '       \"' + object_name + ' ' + next_symbol + '\".')
 
         # Keep track of the location in the user's input files
         # where the definition of this object ends.
         self.srcloc_end = lex.GetSrcLoc()
-
-
-
 
         # Finally, if there are any remaining user_push_left_commands or
         # user_push_right_commands, deal with them (by popping them).
@@ -2892,24 +2849,22 @@ class StaticObj(object):
                                           self.srcloc_end)
             self.instance_commands.append(pop_command)
 
-
-
     @staticmethod
     def CleanupReadTemplate(tmpl_contents, lex):
-        #1) Remove any newlines at the beginning of the first text block
+        # 1) Remove any newlines at the beginning of the first text block
         # in tmpl_content.(Sometimes they cause ugly extra blank lines)
         assert(len(tmpl_contents) > 0)
         if isinstance(tmpl_contents[0], TextBlock):
             first_token_strip = tmpl_contents[0].text.lstrip(' ')
             if ((len(first_token_strip) > 0) and
-                (first_token_strip[0] in lex.newline)):
+                    (first_token_strip[0] in lex.newline)):
                 tmpl_contents[0].text = first_token_strip[1:]
                 tmpl_contents[0].srcloc.lineno += 1
 
-        #2) Remove any trailing '}' characters, and complain if absent.
+        # 2) Remove any trailing '}' characters, and complain if absent.
         #   The last token
         assert(isinstance(tmpl_contents[-1], TextBlock))
-        assert(tmpl_contents[-1].text in ['}',''])
+        assert(tmpl_contents[-1].text in ['}', ''])
         if tmpl_contents[-1].text == '}':
             del tmpl_contents[-1]
         else:
@@ -2920,24 +2875,22 @@ class StaticObj(object):
                 tmpl_begin = tmpl_contents[0].srcloc
             else:
                 assert(False)
-            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                             '      Error near '+lex.error_leader()+'\n\n'
+            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                             '      Error near ' + lex.error_leader() + '\n\n'
                              '      Premature end to template.\n'
                              '(Missing terminator character, usually a \'}\'.) The\n'
-                             'incomplete template begins near '+ErrorLeader(tmpl_begin.infile, tmpl_begin.lineno)+'\n')
-        #3) Finally, if there is nothing but whitespace between the
+                             'incomplete template begins near ' + ErrorLeader(tmpl_begin.infile, tmpl_begin.lineno) + '\n')
+        # 3) Finally, if there is nothing but whitespace between the
         #   last newline and the end, then strip that off too.
         if isinstance(tmpl_contents[-1], TextBlock):
-            i = len(tmpl_contents[-1].text)-1
+            i = len(tmpl_contents[-1].text) - 1
             if i >= 0:
                 while ((i >= 0) and
                        (tmpl_contents[-1].text[i] in lex.whitespace) and
                        (tmpl_contents[-1].text[i] not in lex.newline)):
                     i -= 1
                 if (tmpl_contents[-1].text[i] in lex.newline):
-                    tmpl_contents[-1].text = tmpl_contents[-1].text[0:i+1]
-
-
+                    tmpl_contents[-1].text = tmpl_contents[-1].text[0:i + 1]
 
     def LookupStaticRefs(self):
         """ Whenever the user requests to instantiate a new copy of a class,
@@ -2955,7 +2908,8 @@ class StaticObj(object):
         for command in self.instance_commands:
             # Does this command create/instantiate a new copy of a class?
             if isinstance(command, InstantiateCommand):
-                # If so, figure out which statobj is referred to by statobj_str.
+                # If so, figure out which statobj is referred to by
+                # statobj_str.
                 assert(isinstance(command.class_ref.statobj_str, basestring))
                 command.class_ref.statobj = StrToNode(command.class_ref.statobj_str,
                                                       self,
@@ -2966,9 +2920,6 @@ class StaticObj(object):
         #  are nested within this one).
         for child in self.children.values():
             child.LookupStaticRefs()
-
-
-
 
     def _ExtractSuffix(self, class_name_str, lex):
         """
@@ -2999,34 +2950,31 @@ class StaticObj(object):
             # Is the '.' character followed by another '.', as in ".."?
             # If so, it's part of a path such as "../Parent/Mol', (if
             # so, it's not what we're looking for, so keep searching)
-            if i_dot < len(class_name_str)-1:
-                if class_name_str[i_dot+1] == '.':
+            if i_dot < len(class_name_str) - 1:
+                if class_name_str[i_dot + 1] == '.':
                     i_dot += 1
-                    #otherwise, check to see if it is followed by a '/'?
-                elif class_name_str[i_dot+1] != '/':
+                    # otherwise, check to see if it is followed by a '/'?
+                elif class_name_str[i_dot + 1] != '/':
                     # if not, then it must be part of a function name
-                    break;
+                    break
 
         class_suffix = ''
         class_name = class_name_str
         class_suffix_srcloc = None
 
         if ((i_dot != -1) and
-            (i_dot < len(class_name_str))):
+                (i_dot < len(class_name_str))):
             class_suffix = class_name_str[i_dot:]
-            class_name   = class_name_str[:i_dot]
+            class_name = class_name_str[:i_dot]
             if class_name_str[-1] != ')':
                 # If it does not already contains the parenthesis?
                 class_suffix += lex.GetParenExpr()
                 class_suffix_srcloc = lex.GetSrcLoc()
-            #sys.stderr.write('  splitting class name into class_name.suffix\n'
+            # sys.stderr.write('  splitting class name into class_name.suffix\n'
             #                 '  class_name=\"'+class_name+'\"\n'
             #                 '      suffix=\"'+class_suffix+'\"\n')
 
         return class_name, class_suffix.lstrip('.'), class_suffix_srcloc
-
-
-
 
     def _ProcessClassName(self, class_name_str, lex):
         """
@@ -3068,22 +3016,18 @@ class StaticObj(object):
         # code that processes the ".../" symbol will take
         # care of finding A.)
 
-        if (len(class_name)>0) and (class_name[0] not in ('.','/','*','?')):
+        if (len(class_name) > 0) and (class_name[0] not in ('.', '/', '*', '?')):
             class_name = '.../' + class_name
 
         return class_name, class_suffix, class_suffix_srcloc
-
-
-
-
 
     def _ParseRandom(self, lex):
         bracket1 = lex.get_token()
         bracket2 = lex.get_token()
         if ((bracket1 != '(') and (bracket1 != '[')):
-            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                             '       Error near '+lex.error_leader()+'\n'
-                             'Expected a \"([\" following '+class_name+'.')
+            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                             '       Error near ' + lex.error_leader() + '\n'
+                             'Expected a \"([\" following ' + class_name + '.')
         class_names = []
         token = ''
         prev_token = '['
@@ -3092,7 +3036,7 @@ class StaticObj(object):
             if (token == '('):
                 lex.push_token(token)
                 token = lex.GetParenExpr()
-                if (prev_token not in (',','[','(')):
+                if (prev_token not in (',', '[', '(')):
                     assert(len(class_names) > 0)
                     class_names[-1] = prev_token + token
                     prev_token = prev_token + token
@@ -3105,23 +3049,22 @@ class StaticObj(object):
                     (token == '}') or
                     ((token in lex.wordterminators) and
                      (token != ','))):
-                    if (prev_token in (',','[','(')):
+                    if (prev_token in (',', '[', '(')):
                         class_names.append('')
                     break
                 if token != ',':
                     class_names.append(token)
-                elif (prev_token in (',','[','(')):
+                elif (prev_token in (',', '[', '(')):
                     class_names.append('')
                 prev_token = token
-
 
         token_comma = lex.get_token()
         bracket1 = lex.get_token()
         if ((token != ']') or
-            (token_comma != ',') or
-            (bracket1 != '[')):
-            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                             '       Error near '+lex.error_leader()+'\n'
+                (token_comma != ',') or
+                (bracket1 != '[')):
+            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                             '       Error near ' + lex.error_leader() + '\n'
                              'Expected a list of class names enclosed in [] brackets, followed by\n'
                              'a comma, and then a list of probabilities also enclosed in [] brackets.\n'
                              '(A random-seed following another comma is optional.)')
@@ -3139,26 +3082,26 @@ class StaticObj(object):
                 try:
                     weight = float(token)
                 except ValueError:
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '       Error near '+lex.error_leader()+'\n'
-                                     '       \"'+token+'\"\n'
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '       Error near ' + lex.error_leader() + '\n'
+                                     '       \"' + token + '\"\n'
                                      'Expected a list of numbers enclosed in [] brackets.')
                 if (weight < 0.0):
-                    raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                     '       Error near '+lex.error_leader()+'\n'
+                    raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                     '       Error near ' + lex.error_leader() + '\n'
                                      '       Negative numbers are not allowed in \"random(\" argument list.\n')
                 weights.append(weight)
 
         bracket2 = lex.get_token()
         if ((token != ']') or
-            (bracket2 not in (')',','))):
-            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                             '       Error near '+lex.error_leader()+'\n'
+                (bracket2 not in (')', ','))):
+            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                             '       Error near ' + lex.error_leader() + '\n'
                              'Expected a \")\" or a \",\" following the list of numeric weights.')
 
         if len(class_names) != len(weights):
-            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                             '       Error near '+lex.error_leader()+'\n'
+            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                             '       Error near ' + lex.error_leader() + '\n'
                              'Unequal number of entries in object list and probability list.\n')
 
         # Are all the entries in the "weights" array integers?
@@ -3175,12 +3118,11 @@ class StaticObj(object):
 
         tot_weight = sum(weights)
         if (tot_weight <= 0.0):
-            raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                             '       Error near '+lex.error_leader()+'\n'
+            raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                             '       Error near ' + lex.error_leader() + '\n'
                              '       The numbers in the \"random(\" argument list can not all be zero.\n')
-        for i in range(0,len(weights)):
+        for i in range(0, len(weights)):
             weights[i] /= tot_weight
-
 
         if bracket2 == ',':
             try:
@@ -3188,24 +3130,20 @@ class StaticObj(object):
                 seed = int(token)
                 random.seed(seed)
             except ValueError:
-                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                 '       Error near '+lex.error_leader()+'\n'
-                                 '       \"'+token+'\"\n'
+                raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                 '       Error near ' + lex.error_leader() + '\n'
+                                 '       \"' + token + '\"\n'
                                  'Expected an integer (a seed) following the list of weights.')
             bracket2 = lex.get_token()
             if (bracket2 != ')'):
-                raise InputError('Error('+g_module_name+'.StaticObj.Parse()):\n'
-                                 '       Error near '+lex.error_leader()+'\n'
-                                 '       \"'+token+'\"\n'
+                raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
+                                 '       Error near ' + lex.error_leader() + '\n'
+                                 '       \"' + token + '\"\n'
                                  'Expected a \")\".')
         else:
             random.seed()
 
         return (class_names, weights, num_by_type)
-
-
-
-
 
     def BuildCommandList(self, command_list):
         """
@@ -3262,26 +3200,19 @@ class StaticObj(object):
 
         command_list.append(ScopeEnd(self, self.srcloc_end))
 
-
-
-
     def __str__(self):
         out_str = self.name
         if len(self.children) > 0:
             out_str += '('
             i = 0
             for child in self.children.values():
-                if i+1 < len(self.children):
-                    out_str += str(child)+', '
+                if i + 1 < len(self.children):
+                    out_str += str(child) + ', '
                 else:
-                    out_str += str(child)+')'
+                    out_str += str(child) + ')'
                 i += 1
 
         return out_str
-
-
-
-
 
 
 def RandomSelect(entries, weights):
@@ -3291,14 +3222,12 @@ def RandomSelect(entries, weights):
     x = random.random()
     i = 0
     tot_probability = 0.0
-    while i < len(weights)-1:
+    while i < len(weights) - 1:
         tot_probability += weights[i]
         if x <= tot_probability:
             break
         i += 1
     return entries[i]
-
-
 
 
 class InstanceObjBasic(object):
@@ -3309,54 +3238,51 @@ class InstanceObjBasic(object):
 
     """
 
-    __slots__=["name","parent"]
+    __slots__ = ["name", "parent"]
 
     def __init__(self,
-                 name = '',
-                 parent = None):
+                 name='',
+                 parent=None):
         self.parent = parent  # the environment/object which created this object
-                              # Example:
-                              # Suppose this "molecule" is an amino acid monomer
-                              # belonging to a protein.  The "parent" refers to
-                              # the InstanceObj for the protein.  ".parent" is
-                              # useful for traversing the global instance tree.
-                              #   (use InstanceObj.statobj.parent for
-                              #   traversing the global static tree)
+        # Example:
+        # Suppose this "molecule" is an amino acid monomer
+        # belonging to a protein.  The "parent" refers to
+        # the InstanceObj for the protein.  ".parent" is
+        # useful for traversing the global instance tree.
+        #   (use InstanceObj.statobj.parent for
+        #   traversing the global static tree)
 
-        self.name   = name    # A string uniquely identifying this object in
-                              # in it's "parent" environment.
-                              # (It is always the same for every instance
-                              #  of the parent object.  It would save memory to
-                              #  get rid of this member.  Andrew 2012/9/13)
+        self.name = name    # A string uniquely identifying this object in
+        # in it's "parent" environment.
+        # (It is always the same for every instance
+        #  of the parent object.  It would save memory to
+        #  get rid of this member.  Andrew 2012/9/13)
 
         #self.deleted = False
 
-        ##vb##self.var_bindings=None  # List of variables assigned to this object
-        ##vb##                        # or None (None takes up less space than an
-        ##vb##                        # empty list.)
+        # vb##self.var_bindings=None  # List of variables assigned to this object
+        # vb##                        # or None (None takes up less space than an
+        # vb##                        # empty list.)
 
+    # vb##def AddVarBinding(self, var_binding):
+    # vb##    if self.var_bindings is None:
+    # vb##        self.var_bindings = [var_binding]
+    # vb##    else:
+    # vb##        self.var_bindings.append(var_binding)
 
-    ##vb##def AddVarBinding(self, var_binding):
-    ##vb##    if self.var_bindings is None:
-    ##vb##        self.var_bindings = [var_binding]
-    ##vb##    else:
-    ##vb##        self.var_bindings.append(var_binding)
-
-
-    #def DeleteSelf(self):
+    # def DeleteSelf(self):
     #    self.deleted = True
 
     def DeleteSelf(self):
-        #self.Dealloc()
+        # self.Dealloc()
         self.parent = self  # This condition (normally never true)
-                            # flags the node as "deleted".  (Nodes are never
-                            # actually deleted, just flagged.)
-                            # I used to have a separate boolean member variable
-                            # which was set True when deleted, but I started
-                            # eliminated unnecessary data members to save space.
+        # flags the node as "deleted".  (Nodes are never
+        # actually deleted, just flagged.)
+        # I used to have a separate boolean member variable
+        # which was set True when deleted, but I started
+        # eliminated unnecessary data members to save space.
 
-
-    #def IsDeleted(self):
+    # def IsDeleted(self):
     #    return self.deleted
 
     def IsDeleted(self):
@@ -3372,26 +3298,18 @@ class InstanceObjBasic(object):
             node = node.parent
         return False
 
-
-
-
-    #def Dealloc(self):
+    # def Dealloc(self):
     #    pass
-        ##vb##if self.var_bindings is None:
-        ##vb##    return
-        ##vb##N = len(self.var_bindings)-1
-        ##vb##for i in range(0,len(self.var_bindings)):
-        ##vb##    vb = self.var_bindings[N-i]
-        ##vb##    cat = vb.category
-        ##vb##    assert(self in cat.bindings)
-        ##vb##    del cat.bindings[self]
-        ##vb##    del self.var_bindings[N-i]
-        ##vb##self.var_bindings = None
-
-
-
-
-
+        # vb##if self.var_bindings is None:
+        # vb##    return
+        # vb##N = len(self.var_bindings)-1
+        # vb##for i in range(0,len(self.var_bindings)):
+        # vb##    vb = self.var_bindings[N-i]
+        # vb##    cat = vb.category
+        # vb##    assert(self in cat.bindings)
+        # vb##    del cat.bindings[self]
+        # vb##    del self.var_bindings[N-i]
+        # vb##self.var_bindings = None
 
 
 class InstanceObj(InstanceObjBasic):
@@ -3403,64 +3321,62 @@ class InstanceObj(InstanceObjBasic):
     and can be represented as a tree.
     "InstanceObjs" are the data type used to store the nodes in that tree."""
 
-    __slots__=["statobj",
-               "children",
-               "categories",
-               "commands",
-               "commands_push",
-               "commands_pop",
-               "srcloc_begin",
-               "srcloc_end",
-               "deleted"]
-               #"LookupMultiDescrStr",
-               ##"Dealloc",
-               ##"DeleteSelf",
-               ##"IsDeleted",
-               ##"UndeleteSelf",
-               ##"DeleteProgeny",
-               #"BuildInstanceTree",
-               #"ProcessCommand",
-               #"ProcessContextNodes",
-               #"BuildCommandList"]
-
+    __slots__ = ["statobj",
+                 "children",
+                 "categories",
+                 "commands",
+                 "commands_push",
+                 "commands_pop",
+                 "srcloc_begin",
+                 "srcloc_end",
+                 "deleted"]
+    #"LookupMultiDescrStr",
+    # "Dealloc",
+    # "DeleteSelf",
+    # "IsDeleted",
+    # "UndeleteSelf",
+    # "DeleteProgeny",
+    #"BuildInstanceTree",
+    #"ProcessCommand",
+    #"ProcessContextNodes",
+    #"BuildCommandList"]
 
     def __init__(self,
-                 name = '',
-                 parent = None):
+                 name='',
+                 parent=None):
 
         InstanceObjBasic.__init__(self, name, parent)
 
         self.statobj = None      # The statobj node refered to by this instance
         self.children = {}       # A list of statobjs corresponding to
-                                 # constituent parts (members) of the
-                                 # current class instance.
-                                 # The typical example is to consider the
-                                 # multiple amino acids (child-molecules)
-                                 # which must be created in order to create a
-                                 # new protein (instance) to which they belong
-                                 # (which would be "self" in this example)
+        # constituent parts (members) of the
+        # current class instance.
+        # The typical example is to consider the
+        # multiple amino acids (child-molecules)
+        # which must be created in order to create a
+        # new protein (instance) to which they belong
+        # (which would be "self" in this example)
 
         self.categories = {}         # This member stores the same data as the
-                                     # Instance variables (ie. variables
-                                     # with a '$' prefix) are stored in a
-                                     # category belonging to node.categories
-                                     # where "node" is of type InstanceObj.
-                                     # (There is a long explanation of
-                                     # "categories" in the comments
-                                     # of class StaticObj.)
+        # Instance variables (ie. variables
+        # with a '$' prefix) are stored in a
+        # category belonging to node.categories
+        # where "node" is of type InstanceObj.
+        # (There is a long explanation of
+        # "categories" in the comments
+        # of class StaticObj.)
 
         self.commands = []           # An ordered list of commands to carry out
-                                     # during instantiation
+        # during instantiation
 
-        self.commands_push = []      # Stackable commands to carry out (first, before children)
-        self.commands_pop = []       # Stackable commands to carry out (last, after children)
-
+        # Stackable commands to carry out (first, before children)
+        self.commands_push = []
+        # Stackable commands to carry out (last, after children)
+        self.commands_pop = []
 
         self.srcloc_begin = None     # Keep track of location in user files
-        self.srcloc_end   = None     # (useful for error message reporting)
+        self.srcloc_end = None     # (useful for error message reporting)
         self.deleted = False
-
-
 
     def LookupMultiDescrStr(self,
                             multi_descr_str,
@@ -3530,17 +3446,17 @@ class InstanceObj(InstanceObjBasic):
         # which omits the '*' characters:  [ 'a[',  '][3]/b',  '][2]' ]
         # However, we only want to do this when * is enclosed in [].
         pattern_fragments = []
-        ranges_ab         = []
+        ranges_ab = []
         i_close_prev = 0
         i_close = 0
         i_open = 0
         while True:
-            i_open = pattern_str.find('[', i_open+1)
+            i_open = pattern_str.find('[', i_open + 1)
             if i_open == -1:
                 pattern_fragments.append(pattern_str[i_close_prev:])
                 break
             else:
-                i_close = pattern_str.find(']', i_open+1)
+                i_close = pattern_str.find(']', i_open + 1)
                 if i_close == -1:
                     pattern_fragments.append(pattern_str[i_close_prev:])
                     break
@@ -3551,21 +3467,21 @@ class InstanceObj(InstanceObjBasic):
                 # (at i_close) (and create a new entry in the
                 #  pattern_fragments[] and ranges_ab[] lists)
                 wildcard_here = True
-                range_ab = [0,-1]
-                for j in range(i_open+1, i_close):
+                range_ab = [0, -1]
+                for j in range(i_open + 1, i_close):
                     if ((pattern_str[j] == ':') or
-                        ((pattern_str[j] == '-') and (j > i_open+1)) or
-                        (pattern_str[j] == '*')):
+                            ((pattern_str[j] == '-') and (j > i_open + 1)) or
+                            (pattern_str[j] == '*')):
                         i_wildcard = len(pattern_fragments)
-                        range_a_str = pattern_str[i_open+1 : j]
-                        range_b_str = pattern_str[j+1 : i_close]
+                        range_a_str = pattern_str[i_open + 1: j]
+                        range_b_str = pattern_str[j + 1: i_close]
                         if (range_a_str != ''):
                             if str.isdigit(range_a_str):
                                 range_ab[0] = int(range_a_str)
                             else:
-                                raise InputError('Error near '+
+                                raise InputError('Error near ' +
                                                  ErrorLeader(srcloc.infile,
-                                                             srcloc.lineno)+'\n'
+                                                             srcloc.lineno) + '\n'
                                                  '   Expected colon-separated integers.\n')
                         if (range_b_str != ''):
                             if str.isdigit(range_b_str):
@@ -3576,20 +3492,21 @@ class InstanceObj(InstanceObjBasic):
                                 if pattern_str[j] == '-':
                                     range_ab[1] += 1
                             else:
-                                raise InputError('Error near '+
+                                raise InputError('Error near ' +
                                                  ErrorLeader(srcloc.infile,
-                                                             srcloc.lineno)+'\n'
+                                                             srcloc.lineno) + '\n'
                                                  '   Expected colon-separated integers.\n')
                         break
-                    elif j == i_close-1:
+                    elif j == i_close - 1:
                         wildcard_here = False
 
                 if wildcard_here:
-                    pattern_fragments.append(pattern_str[i_close_prev:i_open+1])
+                    pattern_fragments.append(
+                        pattern_str[i_close_prev:i_open + 1])
                     ranges_ab.append(range_ab)
                     i_close_prev = i_close
 
-        assert(len(pattern_fragments)-1==len(ranges_ab))
+        assert(len(pattern_fragments) - 1 == len(ranges_ab))
         # Now figure out which InstanceObj or InstanceObjs correspond to
         # the name or set of names suggested by the multi_descr_str,
         # (after wildcard characters have been substituted with integers).
@@ -3609,12 +3526,12 @@ class InstanceObj(InstanceObjBasic):
             # If found add to instobj_list
 
             if ((i_last_ptkn == len(path_tokens))
-                and (not instobj.IsDeleted())):
+                    and (not instobj.IsDeleted())):
                 instobj_list.append(instobj)
 
         else:
             # num_counters equals the number of bracket-enclosed wildcards
-            num_counters= len(pattern_fragments)-1
+            num_counters = len(pattern_fragments) - 1
             multi_counters = [ranges_ab[i][0] for i in range(0, num_counters)]
             all_matches_found = False
             d_carry = 0
@@ -3627,11 +3544,11 @@ class InstanceObj(InstanceObjBasic):
 
                     candidate_descr_str = ''.join([pattern_fragments[i] +
                                                    str(multi_counters[i])
-                                                   for i in range(0,num_counters)] \
-                                                      + \
-                                                      [pattern_fragments[num_counters]])
+                                                   for i in range(0, num_counters)]
+                                                  +
+                                                  [pattern_fragments[num_counters]])
 
-                    #sys.stderr.write('DEBUG: /'+self.name+
+                    # sys.stderr.write('DEBUG: /'+self.name+
                     #                 '.LookupMultiDescrStr()\n'
                     #                 '       looking up \"'+
                     #                 candidate_descr_str+'\"\n')
@@ -3649,7 +3566,7 @@ class InstanceObj(InstanceObjBasic):
                     # If found (and if the counter is within the range)...
                     if ((i_last_ptkn == len(path_tokens)) and
                         ((ranges_ab[d_carry][1] == -1) or
-                         (multi_counters[d_carry]<ranges_ab[d_carry][1]))):
+                         (multi_counters[d_carry] < ranges_ab[d_carry][1]))):
                         # (make sure it has not yet been "deleted")
                         if (not instobj.IsDeleted()):
                             instobj_list.append(instobj)
@@ -3657,7 +3574,6 @@ class InstanceObj(InstanceObjBasic):
                         multi_counters[0] += 1
                         #sys.stderr.write('DEBUG: InstanceObj found.\n')
                         break
-
 
                     # If there is no InstanceObj with that name,
                     # then perhaps it is because we have incremented
@@ -3668,7 +3584,7 @@ class InstanceObj(InstanceObjBasic):
                     # (We only do this if the user neglected to explicitly
                     #  specify an upper bound --> ranges_ab[d_carry[1]==-1)
                     elif ((ranges_ab[d_carry][1] == -1) or
-                          (multi_counters[d_carry]>=ranges_ab[d_carry][1])):
+                          (multi_counters[d_carry] >= ranges_ab[d_carry][1])):
                         #sys.stderr.write('DEBUG: InstanceObj not found.\n')
                         multi_counters[d_carry] = ranges_ab[d_carry][0]
                         d_carry += 1
@@ -3683,31 +3599,27 @@ class InstanceObj(InstanceObjBasic):
                         break
 
         if (null_list_warning and (len(instobj_list) == 0)):
-            sys.stderr.write('WARNING('+g_module_name+'.LookupMultiDescrStr()):\n'
-                             '       Potential problem near '+
+            sys.stderr.write('WARNING(' + g_module_name + '.LookupMultiDescrStr()):\n'
+                             '       Potential problem near ' +
                              ErrorLeader(srcloc.infile,
-                                         srcloc.lineno)+'\n'
-                             '       No objects (yet) matching name \"'+pattern_str+'\".\n')
+                                         srcloc.lineno) + '\n'
+                             '       No objects (yet) matching name \"' + pattern_str + '\".\n')
         if (null_list_error and
-            (len(instobj_list) == 0)):
+                (len(instobj_list) == 0)):
             if len(pattern_fragments) == 1:
-                raise InputError('Error('+g_module_name+'.LookupMultiDescrStr()):\n'
-                                 '       Syntax error near '+
+                raise InputError('Error(' + g_module_name + '.LookupMultiDescrStr()):\n'
+                                 '       Syntax error near ' +
                                  ErrorLeader(srcloc.infile,
-                                             srcloc.lineno)+'\n'
-                                 '       No objects matching name \"'+pattern_str+'\".')
+                                             srcloc.lineno) + '\n'
+                                 '       No objects matching name \"' + pattern_str + '\".')
             else:
-                sys.stderr.write('WARNING('+g_module_name+'.LookupMultiDescrStr()):\n'
-                                 '       Potential problem near '+
+                sys.stderr.write('WARNING(' + g_module_name + '.LookupMultiDescrStr()):\n'
+                                 '       Potential problem near ' +
                                  ErrorLeader(srcloc.infile,
-                                             srcloc.lineno)+'\n'
-                                 '       No objects (yet) matching name \"'+pattern_str+'\".\n')
-
+                                             srcloc.lineno) + '\n'
+                                 '       No objects (yet) matching name \"' + pattern_str + '\".\n')
 
         return instobj_list
-
-
-
 
     def __str__(self):
         out_str = self.name
@@ -3715,17 +3627,13 @@ class InstanceObj(InstanceObjBasic):
             out_str += '('
             i = 0
             for child in self.children.values():
-                if i+1 < len(self.children):
-                    out_str += str(child)+', '
+                if i + 1 < len(self.children):
+                    out_str += str(child) + ', '
                 else:
-                    out_str += str(child)+')'
+                    out_str += str(child) + ')'
                 i += 1
 
         return out_str
-
-
-
-
 
     def DeleteSelf(self):
         self.deleted = True
@@ -3737,21 +3645,17 @@ class InstanceObj(InstanceObjBasic):
     #                 needed later (so that text-templates containing references
     #                 to these nodes don't cause moltemplate to crash.)
 
-    #def UndeleteSelf(self):
+    # def UndeleteSelf(self):
     #    self.deleted = False
     #
     #
-    #def DeleteProgeny(self):
+    # def DeleteProgeny(self):
     #    for child in self.children.values():
     #        if hasattr(child, 'DeleteProgeny'):
     #            child.DeleteProgeny()
     #        else:
     #            child.DeleteSelf()
     #    self.DeleteSelf();
-
-
-
-
 
     def BuildInstanceTree(self,
                           statobj,
@@ -3768,7 +3672,7 @@ class InstanceObj(InstanceObjBasic):
         if self.IsDeleted():
             return
 
-        #sys.stderr.write('  DEBUG: '+self.name+
+        # sys.stderr.write('  DEBUG: '+self.name+
         #                 '.BuildInstanceTree('+statobj.name+')\n')
 
         #instance_refs = {}
@@ -3776,11 +3680,12 @@ class InstanceObj(InstanceObjBasic):
         # in when we began parsing the class which defines this instance,
         # as well as when we stopped parsing.
         # (Don't do this if you are recusively searching class_parents because
-        # in that case you would be overwritting .statobj with with the parent.)
+        # in that case you would be overwritting .statobj with with the
+        # parent.)
         if len(class_parents_in_use) == 0:
-            self.statobj      = statobj
+            self.statobj = statobj
             self.srcloc_begin = statobj.srcloc_begin
-            self.srcloc_end   = statobj.srcloc_end
+            self.srcloc_end = statobj.srcloc_end
 
         # Make copies of the class_parents' StaticObj data.
 
@@ -3788,14 +3693,14 @@ class InstanceObj(InstanceObjBasic):
         # These commands should be carried out before any of the commands
         # in "self.instance_commands".
         for command in statobj.instance_commands_push:
-            #self.commands.append(command)
+            # self.commands.append(command)
             self.ProcessCommand(command)
 
         # Then deal with class parents
         for class_parent in statobj.class_parents:
             # Avoid the "Diamond of Death" multiple inheritance problem
             if class_parent not in class_parents_in_use:
-                #sys.stderr.write('  DEBUG: '+self.name+'.class_parent = '+
+                # sys.stderr.write('  DEBUG: '+self.name+'.class_parent = '+
                 #                 class_parent.name+'\n')
                 self.BuildInstanceTree(class_parent,
                                        class_parents_in_use)
@@ -3818,26 +3723,21 @@ class InstanceObj(InstanceObjBasic):
 
         # Deal with the "instance_commands",
         for command in statobj.instance_commands:
-            #self.commands.append(command)
+            # self.commands.append(command)
             self.ProcessCommand(command)
-
 
         # Finally deal with the "self.instance_commands_pop"
         # These commands should be carried out after all of the commands
         # in "self.instance_commands".
         for command in statobj.instance_commands_pop:
-            #self.commands.append(command)
+            # self.commands.append(command)
             self.ProcessCommand(command)
-
-
-
-
 
     def ProcessCommand(self, command):
 
         if isinstance(command, ModCommand):
 
-            sys.stderr.write('  processing command \"'+str(command)+'\"\n')
+            sys.stderr.write('  processing command \"' + str(command) + '\"\n')
             mod_command = command
             instobj_list = self.LookupMultiDescrStr(mod_command.multi_descr_str,
                                                     mod_command.command.srcloc)
@@ -3848,16 +3748,16 @@ class InstanceObj(InstanceObjBasic):
                 # whose name matches mod_command.multi_descr_str:
                 for instobj in instobj_list:
                     instobj.DeleteSelf()
-                    #instobj.DeleteProgeny()
+                    # instobj.DeleteProgeny()
 
             elif len(instobj_list) == 0:
 
-                raise InputError('Error('+g_module_name+'.ProcessCommand()):\n'
-                                 '       Syntax error at or before '+
+                raise InputError('Error(' + g_module_name + '.ProcessCommand()):\n'
+                                 '       Syntax error at or before ' +
                                  ErrorLeader(mod_command.command.srcloc.infile,
-                                             mod_command.command.srcloc.lineno)+'\n'
-                                 '       No objects matching name \"'+
-                                 mod_command.multi_descr_str+'\"\n'
+                                             mod_command.command.srcloc.lineno) + '\n'
+                                 '       No objects matching name \"' +
+                                 mod_command.multi_descr_str + '\"\n'
                                  '          (If the object is an array, include brackets. Eg. \"molecules[*][*][*]\")')
 
             else:
@@ -3877,24 +3777,23 @@ class InstanceObj(InstanceObjBasic):
 
             return  # ends "if isinstance(command, ModCommand):"
 
-
         # Otherwise:
         command = command.__copy__()
         self.ProcessContextNodes(command)
 
-
         if isinstance(command, InstantiateCommand):
-            sys.stderr.write('  processing command \"'+str(command)+'\"\n')
-            self.commands.append(command) #<- useful later to keep track of the
-                                          #   order that children were created
+            sys.stderr.write('  processing command \"' + str(command) + '\"\n')
+            # <- useful later to keep track of the
+            self.commands.append(command)
+            #   order that children were created
 
             # check to make sure no child of that name was previously defined
             prev_child = self.children.get(command.name)
             if ((prev_child != None) and (not prev_child.IsDeleted())):
-                raise InputError('Error near '+
+                raise InputError('Error near ' +
                                  ErrorLeader(command.srcloc.infile,
-                                             command.srcloc.lineno)+'\n'
-                                 '   Object \"'+command.name+'\" is already defined.\n')
+                                             command.srcloc.lineno) + '\n'
+                                 '   Object \"' + command.name + '\" is already defined.\n')
 
             child = InstanceObj(command.name, self)
             command.instobj = child
@@ -3923,7 +3822,6 @@ class InstanceObj(InstanceObjBasic):
 
             self.children[child.name] = child
 
-
         elif isinstance(command, WriteFileCommand):
             #sys.stderr.write('  processing command \"'+str(command)+'\"\n')
 
@@ -3933,7 +3831,6 @@ class InstanceObj(InstanceObjBasic):
                 # Process the VarRef entries in the tmpl_list,
                 #   (and check they have the correct prefix: either '$' or '@')
                 # Ignore other entries (for example, ignore TextBlocks).
-
 
                 if (isinstance(var_ref, VarRef) and (var_ref.prefix[0] == '$')):
 
@@ -3946,7 +3843,6 @@ class InstanceObj(InstanceObjBasic):
                                             var_ref.srcloc,
                                             True)
 
-
                     categories = var_ref.nptr.cat_node.categories
 
                     # "categories" is a dictionary storing "Category" objects
@@ -3955,11 +3851,13 @@ class InstanceObj(InstanceObjBasic):
                     # Note to self:  Always use the ".categories" member,
                     #  (never the ".instance_categories" member.
                     #  ".instance_categories" are only used temporarilly before
-                    #  we instantiate, ie. before we build the tree of InstanceObjs.)
+                    # we instantiate, ie. before we build the tree of
+                    # InstanceObjs.)
 
                     category = categories[var_ref.nptr.cat_name]
                     # "category" is a Category object containing a
-                    # dictionary of VarBinding objects, and an internal counter.
+                    # dictionary of VarBinding objects, and an internal
+                    # counter.
 
                     var_bindings = category.bindings
                     # "var_bindings" is a dictionary storing "VarBinding"
@@ -3983,11 +3881,11 @@ class InstanceObj(InstanceObjBasic):
                         var_binding.refs.append(var_ref)
                     else:
                         # Not found, so we create a new binding.
-                        var_binding       = VarBinding()
+                        var_binding = VarBinding()
 
                         # var_binding.refs contains a list of all the places
                         # this variable is referenced. Start with this var_ref:
-                        var_binding.refs  = [var_ref]
+                        var_binding.refs = [var_ref]
 
                         # keep track of the cat_node, cat_name, leaf_node:
                         var_binding.nptr = var_ref.nptr
@@ -3999,7 +3897,6 @@ class InstanceObj(InstanceObjBasic):
                         # Thus these strings correspond uniquely (ie. in a
                         # one-to-one fashion) with the nodes they represent.
 
-
                         var_binding.full_name = var_ref.prefix[0] + \
                             CanonicalDescrStr(var_ref.nptr.cat_name,
                                               var_ref.nptr.cat_node,
@@ -4008,15 +3905,14 @@ class InstanceObj(InstanceObjBasic):
                         # (These names can always be generated later when needed
                         #  but it doesn't hurt to keep track of it here too.)
 
-
                         # Now add this binding to the other
                         # bindings in this category:
                         var_bindings[var_ref.nptr.leaf_node] = var_binding
 
-                        ##vb## var_ref.nptr.leaf_node.AddVarBinding(var_binding)
+                        # vb##
+                        # var_ref.nptr.leaf_node.AddVarBinding(var_binding)
 
                         var_binding.category = category
-
 
                     # It's convenient to add a pointer in the opposite direction
                     # so that later if we find the var_ref, we can find its
@@ -4025,14 +3921,10 @@ class InstanceObj(InstanceObjBasic):
 
                     assert(var_ref.nptr.leaf_node in var_bindings)
 
-
-
         else:
             # Otherwise, we don't know what this command is yet.
             # Append it to the list of commands and process it/ignore it later.
             self.commands.append(command)
-
-
 
     def ProcessContextNodes(self, command):
         if hasattr(command, 'context_node'):
@@ -4043,8 +3935,6 @@ class InstanceObj(InstanceObjBasic):
                                                      self,
                                                      command.srcloc)
             # (Otherwise, just leave it as None)
-
-
 
     def BuildCommandList(self, command_list):
         """
@@ -4100,11 +3990,6 @@ class InstanceObj(InstanceObjBasic):
         command_list.append(ScopeEnd(self, self.srcloc_begin))
 
 
-
-
-
-
-
 def AssignTemplateVarPtrs(tmpl_list, context_node):
     """
        Now scan through all the variables within the templates defined
@@ -4128,7 +4013,6 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
         #   (and check they have the correct prefix: either '$' or '@')
         # Ignore other entries (for example, ignore TextBlocks).
 
-
         if (isinstance(var_ref, VarRef) and
             ((isinstance(context_node, StaticObj) and
               (var_ref.prefix[0] == '@'))
@@ -4136,14 +4020,11 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
              (isinstance(context_node, InstanceObjBasic) and
               (var_ref.prefix[0] == '$')))):
 
-
-
             var_ref.nptr.cat_name, var_ref.nptr.cat_node, var_ref.nptr.leaf_node = \
                 DescrToCatLeafNodes(var_ref.descr_str,
                                     context_node,
                                     var_ref.srcloc,
                                     True)
-
 
             categories = var_ref.nptr.cat_node.categories
 
@@ -4154,7 +4035,6 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
             #  (never the ".instance_categories" member.
             #  ".instance_categories" are only used temporarilly before
             #  we instantiate, ie. before we build the tree of InstanceObjs.)
-
 
             category = categories[var_ref.nptr.cat_name]
             # "category" is a Category object containing a
@@ -4182,11 +4062,11 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
                 var_binding.refs.append(var_ref)
             else:
                 # Not found, so we create a new binding.
-                var_binding       = VarBinding()
+                var_binding = VarBinding()
 
                 # var_binding.refs contains a list of all the places
                 # this variable is referenced. Start with this var_ref:
-                var_binding.refs  = [var_ref]
+                var_binding.refs = [var_ref]
 
                 # keep track of the cat_node, cat_name, leaf_node:
                 var_binding.nptr = var_ref.nptr
@@ -4198,21 +4078,19 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
                 # Thus these strings correspond uniquely (ie. in a
                 # one-to-one fashion) with the nodes they represent.
 
-
                 var_binding.full_name = var_ref.prefix[0] + \
-                            CanonicalDescrStr(var_ref.nptr.cat_name,
-                                              var_ref.nptr.cat_node,
-                                              var_ref.nptr.leaf_node,
-                                              var_ref.srcloc)
+                    CanonicalDescrStr(var_ref.nptr.cat_name,
+                                      var_ref.nptr.cat_node,
+                                      var_ref.nptr.leaf_node,
+                                      var_ref.srcloc)
                 # (These names can always be generated later when needed
                 #  but it doesn't hurt to keep track of it here too.)
-
 
                 # Now add this binding to the other
                 # bindings in this category:
                 var_bindings[var_ref.nptr.leaf_node] = var_binding
 
-                ##vb## var_ref.nptr.leaf_node.AddVarBinding(var_binding)
+                # vb## var_ref.nptr.leaf_node.AddVarBinding(var_binding)
 
                 var_binding.category = category
 
@@ -4224,10 +4102,7 @@ def AssignTemplateVarPtrs(tmpl_list, context_node):
             assert(var_ref.nptr.leaf_node in var_bindings)
 
 
-
-
-
-def AssignStaticVarPtrs(context_node, search_instance_commands = False):
+def AssignStaticVarPtrs(context_node, search_instance_commands=False):
 
     #sys.stdout.write('AssignVarPtrs() invoked on node: \"'+NodeToStr(context_node)+'\"\n')
 
@@ -4241,7 +4116,6 @@ def AssignStaticVarPtrs(context_node, search_instance_commands = False):
         # Otherwise process their commands
         commands = context_node.commands
 
-
     for command in commands:
 
         if isinstance(command, WriteFileCommand):
@@ -4250,9 +4124,6 @@ def AssignStaticVarPtrs(context_node, search_instance_commands = False):
     # Recursively invoke AssignVarPtrs() on all (non-leaf) child nodes:
     for child in context_node.children.values():
         AssignStaticVarPtrs(child, search_instance_commands)
-
-
-
 
 
 def AssignVarOrderByCommand(command_list, prefix_filter):
@@ -4272,11 +4143,11 @@ def AssignVarOrderByCommand(command_list, prefix_filter):
                     if var_ref.prefix in prefix_filter:
                         count += 1
                         if ((var_ref.binding.order is None) or
-                            (var_ref.binding.order > count)):
+                                (var_ref.binding.order > count)):
                             var_ref.binding.order = count
 
 
-#def AssignVarOrderByFile(command_list, prefix_filter):
+# def AssignVarOrderByFile(command_list, prefix_filter):
 #    """
 #    For each category in context_node, and each variable in that category,
 #    set the order of each variable equal to the position of that variable
@@ -4306,8 +4177,8 @@ def AssignVarOrderByFile(context_node, prefix_filter, search_instance_commands=F
     commands = context_node.commands
     if search_instance_commands:
         assert(isinstance(context_node, StaticObj))
-        commands.append(context_node.instance_commands_push + \
-                        context_node.instance_commands + \
+        commands.append(context_node.instance_commands_push +
+                        context_node.instance_commands +
                         context_node.instance_commands_pop)
 
     for command in commands:
@@ -4315,23 +4186,19 @@ def AssignVarOrderByFile(context_node, prefix_filter, search_instance_commands=F
             tmpl_list = command.tmpl_list
             for var_ref in tmpl_list:
                 if (isinstance(var_ref, VarRef) and
-                    (var_ref.prefix in prefix_filter)):
+                        (var_ref.prefix in prefix_filter)):
                     if ((var_ref.binding.order == -1) or
-                        (var_ref.binding.order > var_ref.srcloc.order)):
+                            (var_ref.binding.order > var_ref.srcloc.order)):
                         var_ref.binding.order = var_ref.srcloc.order
 
     for child in context_node.children.values():
         AssignVarOrderByFile(child, prefix_filter, search_instance_commands)
 
 
-
-
-
-
 def AutoAssignVals(cat_node,
                    sort_variables,
-                   reserved_values = None,
-                   ignore_prior_values = False):
+                   reserved_values=None,
+                   ignore_prior_values=False):
     """
     This function automatically assigns values to all the variables
     belonging to all the categories in cat_node.categories.
@@ -4367,8 +4234,8 @@ def AutoAssignVals(cat_node,
             # Is this parent_node an StaticObj? (..or inherit from StaticObj?)
             if isinstance(cat_node, StaticObj):
                 prefix = '@'
-            sys.stderr.write('  sorting variables in category: '+prefix+
-                             CanonicalCatName(cat_name, cat_node)+':\n')
+            sys.stderr.write('  sorting variables in category: ' + prefix +
+                             CanonicalCatName(cat_name, cat_node) + ':\n')
 
             var_bind_iter = iter(sorted(cat.bindings.items(),
                                         key=operator.itemgetter(1)))
@@ -4378,8 +4245,7 @@ def AutoAssignVals(cat_node,
             # we found it earlier when searching the tree.)
             var_bind_iter = iter(cat.bindings.items())
 
-
-        for leaf_node,var_binding in var_bind_iter:
+        for leaf_node, var_binding in var_bind_iter:
 
             if ((var_binding.value is None) or ignore_prior_values):
 
@@ -4401,17 +4267,18 @@ def AutoAssignVals(cat_node,
                 else:
 
                     if ((not var_binding.nptr.leaf_node.IsDeleted()) and
-                        (len(var_binding.refs) > 0)):
+                            (len(var_binding.refs) > 0)):
 
                         # For each (regular) variable, query this category's counter
                         # (convert it to a string), and see if it is already in use
                         # (in this category). If not, then set this variable's value
-                        # to the counter's value. Either way, increment the counter.
+                        # to the counter's value. Either way, increment the
+                        # counter.
                         while True:
                             cat.counter.incr()
                             value = str(cat.counter.query())
                             if ((reserved_values is None) or
-                                ((cat, value) not in reserved_values)):
+                                    ((cat, value) not in reserved_values)):
                                 break
 
                         var_binding.value = value
@@ -4424,31 +4291,25 @@ def AutoAssignVals(cat_node,
                        ignore_prior_values)
 
 
-
-
-
-
 # Did the user ask us to reformat the output string?
 # This information is encoded in the variable's suffix.
 def ExtractFormattingCommands(suffix):
     if (len(suffix) <= 1):
         return None, None
-    if suffix[-1] == '}': # Get rid of any trailing '}' characters
+    if suffix[-1] == '}':  # Get rid of any trailing '}' characters
         suffix = suffix[:-1]
-    if suffix[-1] != ')': # Format functions are always followed by parens
+    if suffix[-1] != ')':  # Format functions are always followed by parens
         return None, None
     else:
-        idot = suffix.find('.') # Format functions usually preceeded by '.'
+        idot = suffix.find('.')  # Format functions usually preceeded by '.'
         ioparen = suffix.find('(')
         icparen = suffix.find(')')
-        format_fname = suffix[idot+1:ioparen]
-        args = suffix[ioparen+1:icparen]
+        format_fname = suffix[idot + 1:ioparen]
+        args = suffix[ioparen + 1:icparen]
         args = args.split(',')
         for i in range(0, len(args)):
             args[i] = RemoveOuterQuotes(args[i].strip(), '\"\'')
         return format_fname, args
-
-
 
 
 def Render(tmpl_list, substitute_vars=True):
@@ -4465,20 +4326,22 @@ def Render(tmpl_list, substitute_vars=True):
         entry = tmpl_list[i]
         if isinstance(entry, VarRef):
             var_ref = entry
-            var_bindings = var_ref.nptr.cat_node.categories[var_ref.nptr.cat_name].bindings
-            #if var_ref.nptr.leaf_node not in var_bindings:
+            var_bindings = var_ref.nptr.cat_node.categories[
+                var_ref.nptr.cat_name].bindings
+            # if var_ref.nptr.leaf_node not in var_bindings:
             #assert(var_ref.nptr.leaf_node in var_bindings)
             if var_ref.nptr.leaf_node.IsDeleted():
-                raise InputError('Error near '+
+                raise InputError('Error near ' +
                                  ErrorLeader(var_ref.srcloc.infile,
-                                             var_ref.srcloc.lineno)+'\n'
+                                             var_ref.srcloc.lineno) + '\n'
                                  '   The variable you referred to does not exist:\n\n'
-                                 '     '+var_ref.prefix+var_ref.descr_str+var_ref.suffix+'\n\n'
+                                 '     ' + var_ref.prefix + var_ref.descr_str + var_ref.suffix + '\n\n'
                                  '   (You probably deleted it or something it belonged to earlier.)\n')
             else:
                 if substitute_vars:
                     value = var_bindings[var_ref.nptr.leaf_node].value
-                    format_fname, args = ExtractFormattingCommands(var_ref.suffix)
+                    format_fname, args = ExtractFormattingCommands(
+                        var_ref.suffix)
                     if format_fname == 'ljust':
                         if len(args) == 1:
                             value = value.ljust(int(args[0]))
@@ -4493,8 +4356,8 @@ def Render(tmpl_list, substitute_vars=True):
 
                 else:
                     out_str_list.append(var_ref.prefix +
-                        SafelyEncodeString(var_bindings[var_ref.nptr.leaf_node].full_name[1:]) +
-                        var_ref.suffix)
+                                        SafelyEncodeString(var_bindings[var_ref.nptr.leaf_node].full_name[1:]) +
+                                        var_ref.suffix)
 
         else:
             assert(isinstance(entry, TextBlock))
@@ -4503,21 +4366,20 @@ def Render(tmpl_list, substitute_vars=True):
 
     return ''.join(out_str_list)
 
+
 def IgnoreThis(a):
     pass
 
 
-
-
 def FindReplacementVarPairs(context_node,
                             replace_var_pairs):
-                            #search_instance_commands = False):
+                            # search_instance_commands = False):
 
     #####################
-    #if search_instance_commands:
+    # if search_instance_commands:
     #    assert(isinstance(context_node, StaticObj))
     #    commands = context_node.instance_commands
-    #else:
+    # else:
     #    # Note: Leaf nodes contain no commands, so skip them
     #    if (not hasattr(context_node, 'commands')):
     #        return
@@ -4530,7 +4392,7 @@ def FindReplacementVarPairs(context_node,
     for command in commands:
 
         if (isinstance(command, WriteFileCommand) and
-            command.filename == 'ttree_replacements.txt'):
+                command.filename == 'ttree_replacements.txt'):
             tmpl_list = command.tmpl_list
             var_alias = None
             for entry in tmpl_list:
@@ -4554,15 +4416,12 @@ def FindReplacementVarPairs(context_node,
     for child in context_node.children.values():
         FindReplacementVarPairs(child,
                                 replace_var_pairs)
-                                #search_instance_commands)
-
-
-
+        # search_instance_commands)
 
 
 def ReplaceVars(context_node,
                 replace_var_pairs,
-                search_instance_commands = False):
+                search_instance_commands=False):
 
     if len(replace_var_pairs) == 0:
         return
@@ -4579,7 +4438,6 @@ def ReplaceVars(context_node,
         # Otherwise process their commands
         commands = context_node.commands
 
-
     if len(replace_var_pairs) > 0:
         for command in commands:
             if isinstance(command, WriteFileCommand):
@@ -4591,9 +4449,6 @@ def ReplaceVars(context_node,
         ReplaceVars(child,
                     replace_var_pairs,
                     search_instance_commands)
-
-
-
 
 
 def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
@@ -4609,32 +4464,34 @@ def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
             var_ref = entry
             #full_name = var_bindings[var_ref.nptr.leaf_node].full_name
             if (var_ref.nptr.cat_name,
-                var_ref.nptr.cat_node,
-                var_ref.nptr.leaf_node) in replace_var_pairs:
+                    var_ref.nptr.cat_node,
+                    var_ref.nptr.leaf_node) in replace_var_pairs:
                 # optional: (since we will eventually delete the variable)
-                #          delete the reference to this variable from "bindings"
+                # delete the reference to this variable from "bindings"
 
                 nptr_old = var_ref.nptr
 
                 # swap the old variable with the new one
                 (nptr_new_cat_name, nptr_new_cat_node, nptr_new_leaf_node) = \
-                     replace_var_pairs[(nptr_old.cat_name,
-                                        nptr_old.cat_node,
-                                        nptr_old.leaf_node)]
+                    replace_var_pairs[(nptr_old.cat_name,
+                                       nptr_old.cat_node,
+                                       nptr_old.leaf_node)]
 
-                var_bindings = var_ref.nptr.cat_node.categories[nptr_old.cat_name].bindings
+                var_bindings = var_ref.nptr.cat_node.categories[
+                    nptr_old.cat_name].bindings
 
                 assert(nptr_new_leaf_node in var_bindings)
 
                 # Copy the things we need from the old variable.
                 # References to the old variable should be added to the new one
                 # (since they are the same variable)
-                #for ref in var_bindings[nptr_old.leaf_node].refs:
+                # for ref in var_bindings[nptr_old.leaf_node].refs:
                 #    ref.nptr.cat_name = nptr_new_cat_name
                 #    ref.nptr.cat_node = nptr_new_cat_node
                 #    ref.nptr.leaf_node = nptr_new_leaf_node
                 if nptr_old.leaf_node in var_bindings:
-                    var_bindings[nptr_new_leaf_node].refs += var_bindings[nptr_old.leaf_node].refs
+                    var_bindings[
+                        nptr_new_leaf_node].refs += var_bindings[nptr_old.leaf_node].refs
                     del var_bindings[nptr_old.leaf_node]
 
                 var_ref.nptr.cat_name = nptr_new_cat_name
@@ -4646,20 +4503,19 @@ def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
                 #     the var_bindings[nptr_new_leaf_node].refs
                 #     (It's better to do it this way instead.)
 
-                #var_ref.prefix = (...no need to modify)
-                #var_ref.suffix = (...no need to modify)
+                # var_ref.prefix = (...no need to modify)
+                # var_ref.suffix = (...no need to modify)
 
                 var_ref.descr_str = \
-                            CanonicalDescrStr(var_ref.nptr.cat_name,
-                                              var_ref.nptr.cat_node,
-                                              var_ref.nptr.leaf_node,
-                                              var_ref.srcloc)
+                    CanonicalDescrStr(var_ref.nptr.cat_name,
+                                      var_ref.nptr.cat_node,
+                                      var_ref.nptr.leaf_node,
+                                      var_ref.srcloc)
 
-                var_bindings[nptr_new_leaf_node].full_name = var_ref.prefix[0] + var_ref.descr_str
+                var_bindings[nptr_new_leaf_node].full_name = var_ref.prefix[
+                    0] + var_ref.descr_str
 
         i += 1
-
-
 
 
 def MergeWriteCommands(command_list):
@@ -4679,7 +4535,6 @@ def MergeWriteCommands(command_list):
     return file_templates
 
 
-
 def WriteTemplatesValue(file_templates):
     """ Carry out the write() and write_once() commands (which
     write out the contents of the templates contain inside them).
@@ -4696,7 +4551,7 @@ def WriteTemplatesValue(file_templates):
             out_file.close()
 
     # Alternate (old method):
-    #for command in command_list:
+    # for command in command_list:
     #    if isinstance(command, WriteFileCommand):
     #        if command.filename != None:
     #            if command.filename == '':
@@ -4708,7 +4563,6 @@ def WriteTemplatesValue(file_templates):
     #
     #           if command.filename != '':
     #               out_file.close()
-
 
 
 def WriteTemplatesVarName(file_templates):
@@ -4726,7 +4580,6 @@ def WriteTemplatesVarName(file_templates):
             out_file.close()
 
 
-
 def EraseTemplateFiles(command_list):
     filenames = set([])
     for command in command_list:
@@ -4741,14 +4594,13 @@ def EraseTemplateFiles(command_list):
                     out_file = open(command.filename + '.template', 'w')
                     out_file.close()
 
-#def ClearTemplates(file_templates):
+# def ClearTemplates(file_templates):
 #    for filename in file_templates:
 #        if filename != '':
 #            out_file = open(filename, 'w')
 #            out_file.close()
 #            out_file = open(filename + '.template', 'w')
 #            out_file.close()
-
 
 
 def WriteVarBindingsFile(node):
@@ -4769,33 +4621,29 @@ def WriteVarBindingsFile(node):
             if nd.IsDeleted():
                 continue   # In that case, skip this variable
 
-            if len(var_binding.refs) == 0: #check2016-6-07
+            if len(var_binding.refs) == 0:  # check2016-6-07
                 continue
 
-            #if type(node) is type(nd):
+            # if type(node) is type(nd):
             if ((isinstance(node, InstanceObjBasic) and isinstance(nd, InstanceObjBasic))
-                or
-                (isinstance(node, StaticObj) and isinstance(nd, StaticObj))):
+                    or
+                    (isinstance(node, StaticObj) and isinstance(nd, StaticObj))):
 
                 # Now omit variables whos names contain "*" or "?"
                 # (these are actually not variables, but wildcard patterns)
                 if not HasWildCard(var_binding.full_name):
                     if len(var_binding.refs) > 0:
-                        usage_example = '       #'+\
-                            ErrorLeader(var_binding.refs[0].srcloc.infile, \
+                        usage_example = '       #' +\
+                            ErrorLeader(var_binding.refs[0].srcloc.infile,
                                         var_binding.refs[0].srcloc.lineno)
                     else:
                         usage_example = ''
-                    out.write(SafelyEncodeString(var_binding.full_name) +'   '+
+                    out.write(SafelyEncodeString(var_binding.full_name) + '   ' +
                               SafelyEncodeString(var_binding.value)
-                              +usage_example+'\n')
+                              + usage_example + '\n')
     out.close()
     for child in node.children.values():
         WriteVarBindingsFile(child)
-
-
-
-
 
 
 def CustomizeBindings(bindings,
@@ -4804,12 +4652,12 @@ def CustomizeBindings(bindings,
 
     var_assignments = set()
 
-    for name,vlpair in bindings.items():
+    for name, vlpair in bindings.items():
 
         prefix = name[0]
         var_descr_str = name[1:]
 
-        value   = vlpair.val
+        value = vlpair.val
         dbg_loc = vlpair.loc
 
         if prefix == '@':
@@ -4824,17 +4672,16 @@ def CustomizeBindings(bindings,
         else:
             # If the user neglected a prefix, this should have generated
             # an error earlier on.
-                assert(False)
+            assert(False)
 
         # Change the assignment:
         var_binding.value = value
         var_assignments.add((var_binding.category, value))
 
-        #sys.stderr.write('  CustomizeBindings: descr=' + var_descr_str +
+        # sys.stderr.write('  CustomizeBindings: descr=' + var_descr_str +
         #                 ', value=' + value + '\n')
 
     return var_assignments
-
 
 
 def ReplaceVarsInCustomBindings(bindings,
@@ -4847,12 +4694,12 @@ def ReplaceVarsInCustomBindings(bindings,
 
     list_of_pairs = bindings.items()
 
-    for name,vlpair in list_of_pairs:
+    for name, vlpair in list_of_pairs:
 
         prefix = name[0]
         var_descr_str = name[1:]
 
-        value   = vlpair.val
+        value = vlpair.val
         dbg_loc = vlpair.loc
 
         if prefix == '@':
@@ -4892,9 +4739,9 @@ def BasicUIReadBindingsFile(bindings_so_far, filename):
     try:
         f = open(filename, 'r')
     except IOError:
-        sys.stderr.write('Error('+g_filename+'):\n''       : unable to open file\n'
+        sys.stderr.write('Error(' + g_filename + '):\n''       : unable to open file\n'
                          '\n'
-                         '       \"'+filename+'\"\n'
+                         '       \"' + filename + '\"\n'
                          '       for reading.\n'
                          '\n'
                          '       (If you were not trying to open a file with this name, then this could\n'
@@ -4907,8 +4754,6 @@ def BasicUIReadBindingsFile(bindings_so_far, filename):
     f.close()
 
 
-
-
 def BasicUIReadBindingsText(bindings_so_far, text, source_name=''):
     if sys.version > '3':
         in_stream = io.StringIO(text)
@@ -4917,12 +4762,12 @@ def BasicUIReadBindingsText(bindings_so_far, text, source_name=''):
     return BasicUIReadBindingsStream(bindings_so_far, in_stream, source_name)
 
 
-
 class ValLocPair(object):
-    __slots__=["val","loc"]
+    __slots__ = ["val", "loc"]
+
     def __init__(self,
-                 val = None,
-                 loc = None):
+                 val=None,
+                 loc=None):
         self.val = val
         self.loc = loc
 
@@ -4935,30 +4780,30 @@ def BasicUIReadBindingsStream(bindings_so_far, in_stream, source_name=''):
     # contain strange or escaped characters, quotes or whitespace.
     # But I kept it in for illustrative purposes:
     #
-    #for line in f:
+    # for line in f:
     #    line = line.strip()
     #    tokens = line.split()
     #    if len(tokens) == 2:
     #        var_name  = tokens[0]
     #        var_value = tokens[1]
     #        var_assignments[var_name] = var_value
-    #f.close()
-
+    # f.close()
 
     lex = TemplateLexer(in_stream, source_name)
     tmpllist = lex.ReadTemplate()
     i = 0
     if isinstance(tmpllist[0], TextBlock):
         i += 1
-    while i+1 < len(tmpllist):
+    while i + 1 < len(tmpllist):
         # process one line at a time (2 entries per line)
         var_ref = tmpllist[i]
-        text_block = tmpllist[i+1]
+        text_block = tmpllist[i + 1]
         assert(isinstance(var_ref, VarRef))
         if (not isinstance(text_block, TextBlock)):
-            raise InputError('Error('+g_filename+'):\n'
+            raise InputError('Error(' + g_filename + '):\n'
                              '       This is not a valid name-value pair:\n'
-                             '          \"'+var_ref.prefix+var_ref.descr_str+' '+text_block.text.rstrip()+'\"\n'
+                             '          \"' + var_ref.prefix + var_ref.descr_str +
+                             ' ' + text_block.text.rstrip() + '\"\n'
                              '       Each variable asignment should contain a variable name (beginning with\n'
                              '       @ or $) followed by a space, and then a string you want to assign to it.\n'
                              '       (Surrounding quotes are optional and will be removed.)\n')
@@ -4967,13 +4812,11 @@ def BasicUIReadBindingsStream(bindings_so_far, in_stream, source_name=''):
         # In other words, the full name of the variable, (including all
         # path information) is stored var_ref.descr_str,
         # and the first character of the prefix stores either a @ or $
-        var_name  = var_ref.prefix[:1] + var_ref.descr_str
+        var_name = var_ref.prefix[:1] + var_ref.descr_str
         text = SplitQuotedString(text_block.text.strip())
         var_value = EscCharStrToChar(RemoveOuterQuotes(text, '\'\"'))
         bindings_so_far[var_name] = ValLocPair(var_value, lex.GetSrcLoc())
         i += 2
-
-
 
 
 class BasicUISettings(object):
@@ -5005,6 +4848,7 @@ class BasicUISettings(object):
     created by other programs.)
 
     """
+
     def __init__(self,
                  user_bindings_x=None,
                  user_bindings=None,
@@ -5022,8 +4866,6 @@ class BasicUISettings(object):
         self.lex = lex
 
 
-
-
 def BasicUIParseArgs(argv, settings, main=False):
     """
     BasicUIParseArgs()
@@ -5035,16 +4877,16 @@ def BasicUIParseArgs(argv, settings, main=False):
 
     """
 
-    #argv = [arg for arg in orig_argv] # (make a deep copy of "orig_argv")
+    # argv = [arg for arg in orig_argv] # (make a deep copy of "orig_argv")
 
     # This error message is used in multiple places:
 
-    bind_err_msg = 'should either be followed by a 2-column\n'+\
-        '      file (containing variable-value pairs on each line).\n'+\
-        '   --OR-- a quoted string (such as \"@atom:x 2\")\n'+\
+    bind_err_msg = 'should either be followed by a 2-column\n' +\
+        '      file (containing variable-value pairs on each line).\n' +\
+        '   --OR-- a quoted string (such as \"@atom:x 2\")\n' +\
         '      with the full variable name and its desired value.'
-    bind_err_msg_var = 'Missing value, or space needed separating variable\n'+\
-        '      and value. (Remember to use quotes to surround the argument\n'+\
+    bind_err_msg_var = 'Missing value, or space needed separating variable\n' +\
+        '      and value. (Remember to use quotes to surround the argument\n' +\
         '      containing the variable name, and it\'s assigned value.)'
 
     i = 1
@@ -5056,74 +4898,80 @@ def BasicUIParseArgs(argv, settings, main=False):
     while i < len(argv):
         #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
         if argv[i] == '-a':
-            if ((i+1 >= len(argv)) or (argv[i+1][:1] == '-')):
-                raise InputError('Error('+g_filename+'):\n'
-                                 '      Error in -a \"'+argv[i+1]+' argument.\"\n'
-                                 '      The -a flag '+bind_err_msg)
-            if (argv[i+1][0] in '@$'):
+            if ((i + 1 >= len(argv)) or (argv[i + 1][:1] == '-')):
+                raise InputError('Error(' + g_filename + '):\n'
+                                 '      Error in -a \"' +
+                                 argv[i + 1] + ' argument.\"\n'
+                                 '      The -a flag ' + bind_err_msg)
+            if (argv[i + 1][0] in '@$'):
                 #tokens = argv[i+1].strip().split(' ')
-                tokens = SplitQuotedString(argv[i+1].strip())
+                tokens = SplitQuotedString(argv[i + 1].strip())
                 if len(tokens) < 2:
-                    raise InputError('Error('+g_filename+'):\n'
-                                     '      Error in -a \"'+argv[i+1]+'\" argument.\n'
-                                     '      '+bind_err_msg_var)
+                    raise InputError('Error(' + g_filename + '):\n'
+                                     '      Error in -a \"' +
+                                     argv[i + 1] + '\" argument.\n'
+                                     '      ' + bind_err_msg_var)
                 BasicUIReadBindingsText(settings.user_bindings_x,
-                                        argv[i+1],
+                                        argv[i + 1],
                                         '__command_line_argument__')
             else:
                 BasicUIReadBindingsFile(settings.user_bindings_x,
-                                        argv[i+1])
+                                        argv[i + 1])
             #i += 2
-            del(argv[i:i+2])
+            del(argv[i:i + 2])
         elif argv[i] == '-b':
-            if ((i+1 >= len(argv)) or (argv[i+1][:1] == '-')):
-                raise InputError('Error('+g_filename+'):\n'
-                                 '      Error in -b \"'+argv[i+1]+' argument.\"\n'
-                                 '      The -b flag '+bind_err_msg)
-            if (argv[i+1][0] in '@$'):
+            if ((i + 1 >= len(argv)) or (argv[i + 1][:1] == '-')):
+                raise InputError('Error(' + g_filename + '):\n'
+                                 '      Error in -b \"' +
+                                 argv[i + 1] + ' argument.\"\n'
+                                 '      The -b flag ' + bind_err_msg)
+            if (argv[i + 1][0] in '@$'):
                 #tokens = argv[i+1].strip().split(' ')
-                tokens = SplitQuotedString(argv[i+1].strip())
+                tokens = SplitQuotedString(argv[i + 1].strip())
                 if len(tokens) < 2:
-                    raise InputError('Error('+g_filename+'):\n'
-                                     '      Error in -b \"'+argv[i+1]+'\" argument.\n'
-                                     '      '+bind_err_msg_var)
+                    raise InputError('Error(' + g_filename + '):\n'
+                                     '      Error in -b \"' +
+                                     argv[i + 1] + '\" argument.\n'
+                                     '      ' + bind_err_msg_var)
                 BasicUIReadBindingsText(settings.user_bindings,
-                                        argv[i+1],
+                                        argv[i + 1],
                                         '__command_line_argument__')
             else:
                 BasicUIReadBindingsFile(settings.user_bindings,
-                                        argv[i+1])
+                                        argv[i + 1])
             #i += 2
-            del(argv[i:i+2])
+            del(argv[i:i + 2])
         elif argv[i] == '-order-command':
             settings.order_method = 'by_command'
             #i += 1
-            del(argv[i:i+1])
+            del(argv[i:i + 1])
         elif argv[i] == '-order-file':
             settings.order_method = 'by_file'
             #i += 1
-            del(argv[i:i+1])
+            del(argv[i:i + 1])
         elif ((argv[i] == '-order-tree') or (argv[i] == '-order-dfs')):
             settings.order_method = 'by_tree'
-            del(argv[i:i+1])
+            del(argv[i:i + 1])
         elif ((argv[i] == '-importpath') or
               (argv[i] == '-import-path') or
               (argv[i] == '-import_path')):
-            if ((i+1 >= len(argv)) or (argv[i+1][:1] == '-')):
-                raise InputError('Error('+g_filename+'):\n'
-                                 '     Error in \"'+argv[i]+'\" argument.\"\n'
-                                 '     The \"'+argv[i]+'\" argument should be followed by the name of\n'
+            if ((i + 1 >= len(argv)) or (argv[i + 1][:1] == '-')):
+                raise InputError('Error(' + g_filename + '):\n'
+                                 '     Error in \"' +
+                                 argv[i] + '\" argument.\"\n'
+                                 '     The \"' +
+                                 argv[
+                                     i] + '\" argument should be followed by the name of\n'
                                  '     an environment variable storing a path for including/importing files.\n')
-            TtreeShlex.custom_path = RemoveOuterQuotes(argv[i+1])
-            del(argv[i:i+2])
+            TtreeShlex.custom_path = RemoveOuterQuotes(argv[i + 1])
+            del(argv[i:i + 2])
 
         elif (argv[i][0] == '-') and main:
-            #elif (__name__ == '__main__'):
-            raise InputError('Error('+g_filename+'):\n'
-                             'Unrecogized command line argument \"'+argv[i]+'\"\n')
+            # elif (__name__ == '__main__'):
+            raise InputError('Error(' + g_filename + '):\n'
+                             'Unrecogized command line argument \"' + argv[i] + '\"\n')
         else:
             i += 1
-
 
     if main:
 
@@ -5135,35 +4983,32 @@ def BasicUIParseArgs(argv, settings, main=False):
         #   python script which imports this module, so we let them handle it.)
 
         if len(argv) == 1:
-            raise InputError('Error('+g_filename+'):\n'
+            raise InputError('Error(' + g_filename + '):\n'
                              '       This program requires at least one argument\n'
                              '       the name of a file containing ttree template commands\n')
         elif len(argv) == 2:
             try:
-                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[1]) # Parse text from file
+                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[
+                                             1])  # Parse text from file
             except IOError:
-                sys.stderr.write('Error('+g_filename+'):\n'
+                sys.stderr.write('Error(' + g_filename + '):\n'
                                  '       unable to open file\n'
-                                 '       \"'+argv[1]+'\"\n'
+                                 '       \"' + argv[1] + '\"\n'
                                  '       for reading.\n')
                 sys.exit(1)
             del(argv[1:2])
 
         else:
             # if there are more than 2 remaining arguments,
-            problem_args = ['\"'+arg+'\"' for arg in argv[1:]]
-            raise InputError('Syntax Error ('+g_filename+'):\n'
+            problem_args = ['\"' + arg + '\"' for arg in argv[1:]]
+            raise InputError('Syntax Error (' + g_filename + '):\n'
                              '       Problem with argument list.\n'
                              '       The remaining arguments are:\n\n'
-                             '         '+(' '.join(problem_args))+'\n\n'
+                             '         ' + (' '.join(problem_args)) + '\n\n'
                              '       (The actual problem may be earlier in the argument list.\n'
                              '       If these arguments are source files, then keep in mind\n'
                              '       that this program can not parse multiple source files.)\n'
                              '       Check the syntax of the entire argument list.\n')
-
-
-
-
 
 
 def BasicUI(settings,
@@ -5188,8 +5033,7 @@ def BasicUI(settings,
     # whether or not the instance_children refer to valid StaticObj types.
     sys.stderr.write('parsing the class definitions...')
     static_tree_root.Parse(settings.lex)
-    #gc.collect()
-
+    # gc.collect()
 
     #sys.stderr.write('static = ' + str(static_tree_root) + '\n')
 
@@ -5204,8 +5048,7 @@ def BasicUI(settings,
     #                these assignments later using "AssignVarPtrs()" below.)
     sys.stderr.write(' done\nlooking up classes...')
     static_tree_root.LookupStaticRefs()
-    #gc.collect()
-
+    # gc.collect()
 
     # Step 3: Now scan through all the (static) variables within the templates
     #         and replace the (static) variable references to pointers
@@ -5229,20 +5072,20 @@ def BasicUI(settings,
                 search_instance_commands=True)
 
     sys.stderr.write(' done\nconstructing the tree of class definitions...')
-    sys.stderr.write(' done\n\nclass_def_tree = ' + str(static_tree_root) + '\n\n')
-    #gc.collect()
-
+    sys.stderr.write(' done\n\nclass_def_tree = ' +
+                     str(static_tree_root) + '\n\n')
+    # gc.collect()
 
     # Step 4: Construct the instance tree (the tree of instantiated
     #         classes) from the static tree of type definitions.
     sys.stderr.write('constructing the instance tree...\n')
     class_parents_in_use = set([])
-    instance_tree_root.BuildInstanceTree(static_tree_root, class_parents_in_use)
+    instance_tree_root.BuildInstanceTree(
+        static_tree_root, class_parents_in_use)
     #sys.stderr.write('done\n  garbage collection...')
-    #gc.collect()
+    # gc.collect()
     sys.stderr.write(' done\n')
     #sys.stderr.write('instance_tree = ' + str(instance_tree_root) + '\n')
-
 
     # Step 5: The commands must be carried out in a specific order.
     #         (for example, the "write()" and "new" commands).
@@ -5256,10 +5099,8 @@ def BasicUI(settings,
     #sys.stderr.write('static_commands = '+str(static_commands)+'\n')
     #sys.stderr.write('instance_commands = '+str(instance_commands)+'\n')
 
-
     # Step 6: Replace any $variables with their equivalents (if applicable)
     ReplaceVars(instance_tree_root, replace_var_pairs)
-
 
     # Step 7: We are about to assign numbers to the variables.
     #         We need to decide the order in which to assign them.
@@ -5270,7 +5111,6 @@ def BasicUI(settings,
     #sys.stderr.write(' done\ndetermining variable count order...')
     AssignVarOrderByFile(static_tree_root, '@', search_instance_commands=True)
     AssignVarOrderByCommand(instance_commands, '$')
-
 
     # Step 8: Assign the variables.
     #         (If the user requested any customized variable bindings,
@@ -5325,25 +5165,24 @@ def main():
     """
 
     g_program_name = g_filename
-    sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
-    sys.stderr.write('\n(python version '+str(sys.version)+')\n')
+    sys.stderr.write(g_program_name + ' v' +
+                     g_version_str + ' ' + g_date_str + ' ')
+    sys.stderr.write('\n(python version ' + str(sys.version) + ')\n')
 
     try:
 
         settings = BasicUISettings()
         BasicUIParseArgs(sys.argv, settings, main=True)
 
-
         # Data structures to store the class definitionss and instances
-        g_objectdefs = StaticObj('', None) # The root of the static tree
-                                           # has name '' (equivalent to '/')
-        g_objects    = InstanceObj('', None) # The root of the instance tree
-                                             # has name '' (equivalent to '/')
+        g_objectdefs = StaticObj('', None)  # The root of the static tree
+        # has name '' (equivalent to '/')
+        g_objects = InstanceObj('', None)  # The root of the instance tree
+        # has name '' (equivalent to '/')
 
         # A list of commands to carry out
         g_static_commands = []
         g_instance_commands = []
-
 
         BasicUI(settings,
                 g_objectdefs,
@@ -5361,7 +5200,7 @@ def main():
         EraseTemplateFiles(g_static_commands)
         EraseTemplateFiles(g_instance_commands)
 
-        g_static_commands   = MergeWriteCommands(g_static_commands)
+        g_static_commands = MergeWriteCommands(g_static_commands)
         g_instance_commands = MergeWriteCommands(g_instance_commands)
 
         # Write the files with the original variable names present
@@ -5375,14 +5214,15 @@ def main():
 
         # Step 11: Now write the variable bindings/assignments table.
         sys.stderr.write('writing \"ttree_assignments.txt\" file...')
-        open('ttree_assignments.txt', 'w').close() # <-- erase previous version.
+        # <-- erase previous version.
+        open('ttree_assignments.txt', 'w').close()
         WriteVarBindingsFile(g_objectdefs)
         WriteVarBindingsFile(g_objects)
 
         sys.stderr.write(' done\n')
 
     except (ValueError, InputError) as err:
-        sys.stderr.write('\n\n'+str(err)+'\n')
+        sys.stderr.write('\n\n' + str(err) + '\n')
         sys.exit(-1)
 
     return

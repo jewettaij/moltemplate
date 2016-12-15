@@ -25,21 +25,22 @@ from collections import defaultdict
 
 
 class AtomDescr:
+
     def __init__(self, setChainID, setSeqNum, setICode, setAtomID):
         self.chainID = setChainID
         self.seqNum = setSeqNum
         self.iCode = setICode
         self.atomID = setAtomID
 
-    #I plan to store this information in a python dictionary.
-    #Unfortunately, in order to use such classes as keys in python dictionaries
-    #I must define comparison operators, and a hash function.
-    #In retrospect I figured out it would have been easier just to use tuples
-    #as dictionary keys.  I suppose it was a good excercise to try to do it
-    #using python classes instead.  I'm sorry it made the code so long.
+    # I plan to store this information in a python dictionary.
+    # Unfortunately, in order to use such classes as keys in python dictionaries
+    # I must define comparison operators, and a hash function.
+    # In retrospect I figured out it would have been easier just to use tuples
+    # as dictionary keys.  I suppose it was a good excercise to try to do it
+    # using python classes instead.  I'm sorry it made the code so long.
 
     def __le__(self, other):
-        #return ((self.chainID < other.chainID) or ((self.chainID == other.chainID) and ((self.seqNum < other.seqNum) or ((self.seqNum == other.seqNum) and (self.iCode <= other.iCode)))))))
+        # return ((self.chainID < other.chainID) or ((self.chainID == other.cha
         # instead I'll exploit python's ability to compare tuples
         return (self.chainID, self.seqNum, self.iCode, self.atomID) <= (other.chainID, other.seqNum, other.iCode, other.atomID)
 
@@ -47,7 +48,8 @@ class AtomDescr:
         return (self.chainID, self.seqNum, self.iCode, self.atomID) < (other.chainID, other.seqNum, other.iCode, other.atomID)
 
     def __eq__(self, other):
-        #return ((self.chainID == x.chainID) and (self.seqNum == x.seqNum) and (self.iCode == x.iCode))
+        # return ((self.chainID == x.chainID) and (self.seqNum == x.seqNum) and
+        # (self.iCode == x.iCode))
         return (self.chainID, self.seqNum, self.iCode, self.atomID) == (other.chainID, other.seqNum, other.iCode, other.atomID)
 
     def __ne__(self, other):
@@ -75,27 +77,25 @@ class AtomDescr:
         i += ord(self.chainID)
         i *= numICodes
         i += ord(self.iCode)
-        i *=10
+        i *= 10
         i += self.atomID
         return i
-
-
 
 
 import sys
 from operator import attrgetter
 g_program_name = __file__.split('/')[-1]
 g_version_str = 0.11
-g_date_str = 2013-9-18
+g_date_str = 2013 - 9 - 18
 
 if len(sys.argv) == 1:
     use_all_residues = True
 elif len(sys.argv) == 7:
     use_all_residues = False
     first = AtomDescr(sys.argv[1], int(sys.argv[2]), sys.argv[3], 0)
-    last  = AtomDescr(sys.argv[4], int(sys.argv[5]), sys.argv[6], 2147483647)
+    last = AtomDescr(sys.argv[4], int(sys.argv[5]), sys.argv[6], 2147483647)
 else:
-    sys.stderr.write("Error("+g_program_name+"): This program requires either 0 or 6 arguments.\n"
+    sys.stderr.write("Error(" + g_program_name + "): This program requires either 0 or 6 arguments.\n"
                      "       By default, the the sequence is extracted from the entire PDB file.\n"
                      "       In that case, no arguments are required.\n"
                      "       Alternately, you can limit the selection to a single interval of\n"
@@ -112,14 +112,14 @@ atoms2lines = defaultdict(list)
 
 for line in sys.stdin:
     if (line[0:6] == "ATOM  ") or (line[0:6] == "HETATM"):
-        atomID    = int(line[6:11])
+        atomID = int(line[6:11])
         #atomType  = line[12:16]
         #altLoc    = line[16:17]
-        iCode     = line[26:27]
+        iCode = line[26:27]
         #resType   = line[17:20]
-        chainID   = line[21:22]
+        chainID = line[21:22]
         seqNumStr = line[22:26]
-        seqNum    = int(seqNumStr)
+        seqNum = int(seqNumStr)
         atomdescr = AtomDescr(chainID, int(seqNumStr), iCode, int(atomID))
         atoms2lines[atomdescr].append(line.rstrip('\n'))
     else:
@@ -130,8 +130,9 @@ atomdescrs = [atomdescr for atomdescr in atoms2lines]
 
 # Residues in PDB files are often not listed in order.
 # Consequently, we must sort the list by chainID, seqNum, and finnaly iCode:
-sequence_of_atomdescrs = sorted(atomdescrs, key=attrgetter('chainID','seqNum','iCode','atomID'))
+sequence_of_atomdescrs = sorted(atomdescrs, key=attrgetter(
+    'chainID', 'seqNum', 'iCode', 'atomID'))
 
 for atomdescr in sequence_of_atomdescrs:
     for line in atoms2lines[atomdescr]:
-        sys.stdout.write(line+'\n')
+        sys.stdout.write(line + '\n')

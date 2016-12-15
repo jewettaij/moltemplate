@@ -21,21 +21,20 @@ import gc
 from .ttree import ExtractFormattingCommands
 from .ttree_lex import SplitQuotedString, InputError, TemplateLexer
 
-g_filename    = __file__.split('/')[-1]
-g_module_name  = g_filename
+g_filename = __file__.split('/')[-1]
+g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str     = '2012-9-06'
-g_version_str  = '0.1'
+g_date_str = '2012-9-06'
+g_version_str = '0.1'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
-
 
 
 try:
 
     if (len(sys.argv) != 2):
-        raise InputError('Error running  \"'+g_program_name+'\"\n'
+        raise InputError('Error running  \"' + g_program_name + '\"\n'
                          ' Typical usage:\n'
                          ' ttree_render.py ttree_assignments.txt < file.template > file.rendered\n'
                          '\n'
@@ -55,7 +54,8 @@ try:
     # This for loop below works for most cases.
     for line in f:
         #tokens = lines.strip().split()
-        tokens = SplitQuotedString(line.strip()) # like split but handles quotes
+        # like split but handles quotes
+        tokens = SplitQuotedString(line.strip())
         if len(tokens) < 2:
             continue
         assignments[tokens[0]] = tokens[1]
@@ -84,11 +84,11 @@ try:
 
             var_name = entry
             if var_name not in assignments:
-                raise(InputError('Error('+g_program_name+')'
+                raise(InputError('Error(' + g_program_name + ')'
                                  #' at '+ErrorLeader(var_ref.src_loc.infile,
                                  #                  var_ref.src_loc.lineno)+
                                  ' unknown variable:\n'
-                                 '         \"'+var_name+'\"\n'))
+                                 '         \"' + var_name + '\"\n'))
             else:
                 var_value = assignments[var_name]
 
@@ -111,5 +111,5 @@ try:
 
 
 except (ValueError, InputError) as err:
-    sys.stderr.write('\n'+str(err)+'\n')
+    sys.stderr.write('\n' + str(err) + '\n')
     sys.exit(-1)

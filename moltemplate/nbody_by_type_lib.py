@@ -13,7 +13,8 @@ from .nbody_graph_search import *
 if sys.version < '2.7':
     sys.stderr.write('--------------------------------------------------------\n'
                      '----------------- WARNING: OLD PYTHON VERSION ----------\n'
-                     '  This program is untested on your python version ('+sys.version+').\n'
+                     '  This program is untested on your python version (' +
+                     sys.version + ').\n'
                      '  PLEASE LET ME KNOW IF THIS PROGRAM CRASHES (and upgrade python).\n'
                      '    -Andrew   2013-10-25\n'
                      '--------------------------------------------------------\n'
@@ -29,10 +30,10 @@ from .ttree_lex import MatchesPattern, MatchesAll, InputError
 def GenInteractions_int(G_system,
                         g_bond_pattern,
                         typepattern_to_coefftypes,
-                        canonical_order, #function to sort atoms and bonds
+                        canonical_order,  # function to sort atoms and bonds
                         atomtypes_int2str,
                         bondtypes_int2str,
-                        report_progress = False): #print messages to sys.stderr?
+                        report_progress=False):  # print messages to sys.stderr?
     """
     GenInteractions() automatically determines a list of interactions
     present in a system of bonded atoms (argument "G_system"),
@@ -150,22 +151,22 @@ def GenInteractions_int(G_system,
             if percent_complete <= 4:
                 old_pc = (100 * oldatomid) // G_system.GetNumVerts()
                 if percent_complete > old_pc:
-                    sys.stderr.write('  '+str(percent_complete)+'%')
+                    sys.stderr.write('  ' + str(percent_complete) + '%')
             elif percent_complete <= 8:
-                pc_d2    = (100 * startatomid) // (2*G_system.GetNumVerts())
-                oldpc_d2 = (100 * oldatomid)   // (2*G_system.GetNumVerts())
+                pc_d2 = (100 * startatomid) // (2 * G_system.GetNumVerts())
+                oldpc_d2 = (100 * oldatomid) // (2 * G_system.GetNumVerts())
                 if pc_d2 > oldpc_d2:
-                    sys.stderr.write('  '+str(percent_complete)+'%')
+                    sys.stderr.write('  ' + str(percent_complete) + '%')
             elif percent_complete <= 20:
-                pc_d4    = (100 * startatomid) // (4*G_system.GetNumVerts())
-                oldpc_d4 = (100 * oldatomid)   // (4*G_system.GetNumVerts())
+                pc_d4 = (100 * startatomid) // (4 * G_system.GetNumVerts())
+                oldpc_d4 = (100 * oldatomid) // (4 * G_system.GetNumVerts())
                 if pc_d4 > oldpc_d4:
-                    sys.stderr.write('  '+str(percent_complete)+'%')
+                    sys.stderr.write('  ' + str(percent_complete) + '%')
             else:
-                pc_d10    = (100 * startatomid) // (10*G_system.GetNumVerts())
-                oldpc_d10 = (100 * oldatomid)   // (10*G_system.GetNumVerts())
+                pc_d10 = (100 * startatomid) // (10 * G_system.GetNumVerts())
+                oldpc_d10 = (100 * oldatomid) // (10 * G_system.GetNumVerts())
                 if pc_d10 > oldpc_d10:
-                    sys.stderr.write('  '+str(percent_complete)+'%')
+                    sys.stderr.write('  ' + str(percent_complete) + '%')
 
     if report_progress:
         sys.stderr.write('  100%\n')
@@ -176,9 +177,6 @@ def GenInteractions_int(G_system,
     #abids_to_coefftypes = defaultdict(list)
     coefftype_to_atomids = OrderedDict()
     abids_to_coefftypes = OrderedDict()
-
-
-
 
     # -------------------- reporting progress -----------------------
     if report_progress:
@@ -197,15 +195,13 @@ def GenInteractions_int(G_system,
                     types_bonds_all_str.add(bondtypes_int2str[Ie])
     # ------------------ reporting progress (end) -------------------
 
-
-
     count = 0
     for typepattern, coefftype in typepattern_to_coefftypes:
 
-
         # ------------------ reporting progress -----------------------
         # The next interval of code is not technically necessary, but it makes
-        # the printed output easier to read by excluding irrelevant interactions
+        # the printed output easier to read by excluding irrelevant
+        # interactions
 
         if report_progress:
 
@@ -213,7 +209,8 @@ def GenInteractions_int(G_system,
             # are (potentially) satisfied by any of the atoms present in the system.
             # If any of the required atoms for this typepattern are not present
             # in this system, then skip to the next typepattern.
-            atoms_available_Iv = [False for Iv in range(0, g_bond_pattern.GetNumVerts())]
+            atoms_available_Iv = [False for Iv in range(
+                0, g_bond_pattern.GetNumVerts())]
             for Iv in range(0, g_bond_pattern.GetNumVerts()):
                 for type_atom_str in types_atoms_all_str:
                     if MatchesPattern(type_atom_str, typepattern[Iv]):
@@ -223,11 +220,12 @@ def GenInteractions_int(G_system,
                 if not atoms_available_Iv[Iv]:
                     atoms_available = False
 
-            bonds_available_Ie = [False for Ie in range(0, g_bond_pattern.GetNumEdges())]
+            bonds_available_Ie = [False for Ie in range(
+                0, g_bond_pattern.GetNumEdges())]
             for Ie in range(0, g_bond_pattern.GetNumEdges()):
                 for type_bond_str in types_bonds_all_str:
                     if MatchesPattern(type_bond_str,
-                                      typepattern[g_bond_pattern.GetNumVerts()+Ie]):
+                                      typepattern[g_bond_pattern.GetNumVerts() + Ie]):
                         bonds_available_Ie[Ie] = True
             bonds_available = True
             for Ie in range(0, g_bond_pattern.GetNumEdges()):
@@ -245,23 +243,20 @@ def GenInteractions_int(G_system,
                 # of atom types typically present in the system.  Otherwise
                 # hundreds of kB of irrelevant information can be printed.)
 
-                sys.stderr.write('    checking '+coefftype+' type requirements:'
+                sys.stderr.write('    checking ' + coefftype + ' type requirements:'
                                  #' (atom-types,bond-types) '
-                                 '\n     '+str(typepattern)+'\n')
+                                 '\n     ' + str(typepattern) + '\n')
 
         # ------------------ reporting progress (end) -------------------
 
-
-
-
-
         for atombondtypes, abidslist in interactions_by_type.items():
-            # express atom & bond types in a tuple of the original string format
-            types_atoms  = [atomtypes_int2str[Iv] for Iv in atombondtypes[0]]
-            types_bonds  = [bondtypes_int2str[Ie] for Ie in atombondtypes[1]]
+            # express atom & bond types in a tuple of the original string
+            # format
+            types_atoms = [atomtypes_int2str[Iv] for Iv in atombondtypes[0]]
+            types_bonds = [bondtypes_int2str[Ie] for Ie in atombondtypes[1]]
             type_strings = types_atoms + types_bonds
             # use string comparisons to check for a match with typepattern
-            if MatchesAll(type_strings, typepattern): #<-see "ttree_lex.py"
+            if MatchesAll(type_strings, typepattern):  # <-see "ttree_lex.py"
                 for abids in abidslist:
 
                     # Re-order the atoms (and bonds) in a "canonical" way.
@@ -284,7 +279,7 @@ def GenInteractions_int(G_system,
                         if coefftype in coefftype_to_atomids:
                             coefftype_to_atomids[coefftype].append(abids[0])
                         else:
-                            coefftype_to_atomids[coefftype]=[abids[0]]
+                            coefftype_to_atomids[coefftype] = [abids[0]]
                         if abids in abids_to_coefftypes:
                             abids_to_coefftypes[abids].append(coefftype)
                         else:
@@ -292,28 +287,21 @@ def GenInteractions_int(G_system,
                         count += 1
 
     if report_progress:
-        sys.stderr.write('  (found '+
-                         str(count)+' non-redundant matches)\n')
+        sys.stderr.write('  (found ' +
+                         str(count) + ' non-redundant matches)\n')
 
     return coefftype_to_atomids
-
-
-
-
-
-
 
 
 def GenInteractions_str(bond_pairs,
                         g_bond_pattern,
                         typepattern_to_coefftypes,
-                        canonical_order, #function to sort atoms and bonds
+                        canonical_order,  # function to sort atoms and bonds
                         atomids_str,
                         atomtypes_str,
                         bondids_str,
                         bondtypes_str,
-                        report_progress = False): #print messages to sys.stderr?
-
+                        report_progress=False):  # print messages to sys.stderr?
 
     assert(len(atomids_str) == len(atomtypes_str))
     assert(len(bondids_str) == len(bondtypes_str))
@@ -326,15 +314,15 @@ def GenInteractions_str(bond_pairs,
     atomtype_int = 0
     for i in range(0, len(atomids_str)):
         if atomids_str[i] in atomids_str2int:
-            raise InputError('Error: multiple atoms have the same id ('+
-                             str(atomids_str[i])+')')
+            raise InputError('Error: multiple atoms have the same id (' +
+                             str(atomids_str[i]) + ')')
         atomids_str2int[atomids_str[i]] = i
         #atomtypes_int = len(atomtypes_int)+1
         if (not (atomtypes_str[i] in atomtypes_str2int)):
             atomtypes_str2int[atomtypes_str[i]] = atomtype_int
             atomtypes_int2str.append(atomtypes_str[i])
             atomtype_int += 1
-        #atomtypes_int.append(atomtype_int)
+        # atomtypes_int.append(atomtype_int)
 
     bondids_str2int = {}
     bondtypes_str2int = {}
@@ -342,8 +330,8 @@ def GenInteractions_str(bond_pairs,
     bondtype_int = 0
     for i in range(0, len(bondids_str)):
         if bondids_str[i] in bondids_str2int:
-            raise InputError('Error: multiple bonds have the same id ('+
-                             str(bondids_str[i])+')')
+            raise InputError('Error: multiple bonds have the same id (' +
+                             str(bondids_str[i]) + ')')
         bondids_str2int[bondids_str[i]] = i
         #bondtype_int = len(bondtypes_int)+1
         if (not (bondtypes_str[i] in bondtypes_str2int)):
@@ -357,14 +345,14 @@ def GenInteractions_str(bond_pairs,
         G_system.AddVertex(iv, atomtypes_str2int[atomtypes_str[iv]])
 
     for ie in range(0, len(bond_pairs)):
-        atomid1_str  = bond_pairs[ie][0]
-        atomid2_str  = bond_pairs[ie][1]
+        atomid1_str = bond_pairs[ie][0]
+        atomid2_str = bond_pairs[ie][1]
         if (atomid1_str not in atomids_str2int):
             raise InputError('Error in Bonds Section:\n'
-                             '  '+atomid1_str+' is not defined in Atoms section\n')
+                             '  ' + atomid1_str + ' is not defined in Atoms section\n')
         if (atomid2_str not in atomids_str2int):
             raise InputError('Error in Bonds Section:\n'
-                             '  '+atomid2_str+' is not defined in Atoms section\n')
+                             '  ' + atomid2_str + ' is not defined in Atoms section\n')
         G_system.AddEdge(atomids_str2int[atomid1_str],
                          atomids_str2int[atomid2_str],
                          bondtypes_str2int[bondtypes_str[ie]])
@@ -379,14 +367,15 @@ def GenInteractions_str(bond_pairs,
     coefftype_to_atomids_str = OrderedDict()
     for coefftype, atomidss_int in coefftype_to_atomids_int.items():
         if report_progress:
-            sys.stderr.write('    processing coefftype: '+str(coefftype)+'\n')
+            sys.stderr.write('    processing coefftype: ' +
+                             str(coefftype) + '\n')
         for atomids_int in atomidss_int:
             if coefftype in coefftype_to_atomids_str:
                 coefftype_to_atomids_str[coefftype].append(
-                [atomids_str[iv] for iv in atomids_int])
+                    [atomids_str[iv] for iv in atomids_int])
             else:
                 coefftype_to_atomids_str[coefftype] = \
-                [[atomids_str[iv] for iv in atomids_int]]
-        #gc.collect()
+                    [[atomids_str[iv] for iv in atomids_int]]
+        # gc.collect()
 
     return coefftype_to_atomids_str

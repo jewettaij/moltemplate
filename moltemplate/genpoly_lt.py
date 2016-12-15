@@ -26,7 +26,6 @@
 """
 
 
-
 g_usage_msg = """
 Usage:
 
@@ -51,12 +50,9 @@ Usage:
 """
 
 
-
-
 import sys
 import random
 from math import *
-
 
 
 class InputError(Exception):
@@ -68,20 +64,21 @@ class InputError(Exception):
 
     def __init__(self, err_msg):
         self.err_msg = err_msg
+
     def __str__(self):
         return self.err_msg
+
     def __repr__(self):
         return str(self)
-
 
 
 class Settings(object):
 
     def __init__(self):
-        self.direction_orig = [1.0,0.0,0.0]
+        self.direction_orig = [1.0, 0.0, 0.0]
         self.is_closed = False
         self.connect_ends = False
-        self.delta_phi      = 0.0
+        self.delta_phi = 0.0
         self.header = 'import \"forcefield.lt\"'
         self.name_monomer = 'Monomer'
         self.name_polymer = ''
@@ -106,87 +103,95 @@ class Settings(object):
         self.impropers_atoms = []
         self.impropers_index_offsets = []
 
-
-
     def ParseArgs(self, argv):
         i = 1
         while i < len(argv):
             #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
             if argv[i].lower() == '-bond':
-                if i+3 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by 4 strings.\n')
-                #self.bonds_name.append(argv[i+1])
-                self.bonds_type.append(argv[i+1])
-                self.bonds_atoms.append((argv[i+2],
-                                         argv[i+3]))
-                self.bonds_index_offsets.append((0,1))
-                del(argv[i:i+4])
+                if i + 3 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by 4 strings.\n')
+                # self.bonds_name.append(argv[i+1])
+                self.bonds_type.append(argv[i + 1])
+                self.bonds_atoms.append((argv[i + 2],
+                                         argv[i + 3]))
+                self.bonds_index_offsets.append((0, 1))
+                del(argv[i:i + 4])
             elif argv[i].lower() == '-angle':
-                if i+7 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by 5 strings and 3 integers.\n')
-                #self.angles_name.append(argv[i+1])
-                self.angles_type.append(argv[i+1])
-                self.angles_atoms.append((argv[i+2],
-                                              argv[i+3],
-                                              argv[i+4]))
-                self.angles_index_offsets.append((int(argv[i+5]),
-                                                      int(argv[i+6]),
-                                                      int(argv[i+7])))
+                if i + 7 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 3 integers.\n')
+                # self.angles_name.append(argv[i+1])
+                self.angles_type.append(argv[i + 1])
+                self.angles_atoms.append((argv[i + 2],
+                                          argv[i + 3],
+                                          argv[i + 4]))
+                self.angles_index_offsets.append((int(argv[i + 5]),
+                                                  int(argv[i + 6]),
+                                                  int(argv[i + 7])))
                 if ((self.angles_index_offsets[-1][0] < 0) or
-                    (self.angles_index_offsets[-1][1] < 0) or
-                    (self.angles_index_offsets[-1][2] < 0)):
-                    raise InputError('Error: '+argv[i]+' indices (i1 i2 i3) must be >= 0\n')
-                del(argv[i:i+8])
+                        (self.angles_index_offsets[-1][1] < 0) or
+                        (self.angles_index_offsets[-1][2] < 0)):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' indices (i1 i2 i3) must be >= 0\n')
+                del(argv[i:i + 8])
             elif argv[i].lower() == '-dihedral':
-                if i+9 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by 6 strings and 4 integers.\n')
-                #self.dihedrals_name.append(argv[i+1])
-                self.dihedrals_type.append(argv[i+1])
-                self.dihedrals_atoms.append((argv[i+2],
-                                                 argv[i+3],
-                                                 argv[i+4],
-                                                 argv[i+5]))
-                self.dihedrals_index_offsets.append((int(argv[i+6]),
-                                                         int(argv[i+7]),
-                                                         int(argv[i+8]),
-                                                         int(argv[i+9])))
+                if i + 9 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by 6 strings and 4 integers.\n')
+                # self.dihedrals_name.append(argv[i+1])
+                self.dihedrals_type.append(argv[i + 1])
+                self.dihedrals_atoms.append((argv[i + 2],
+                                             argv[i + 3],
+                                             argv[i + 4],
+                                             argv[i + 5]))
+                self.dihedrals_index_offsets.append((int(argv[i + 6]),
+                                                     int(argv[i + 7]),
+                                                     int(argv[i + 8]),
+                                                     int(argv[i + 9])))
                 if ((self.dihedrals_index_offsets[-1][0] < 0) or
-                    (self.dihedrals_index_offsets[-1][1] < 0) or
-                    (self.dihedrals_index_offsets[-1][2] < 0) or
-                    (self.dihedrals_index_offsets[-1][3] < 0)):
-                    raise InputError('Error: '+argv[i]+' indices (i1 i2 i3 i4) must be >= 0\n')
-                del(argv[i:i+10])
+                        (self.dihedrals_index_offsets[-1][1] < 0) or
+                        (self.dihedrals_index_offsets[-1][2] < 0) or
+                        (self.dihedrals_index_offsets[-1][3] < 0)):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' indices (i1 i2 i3 i4) must be >= 0\n')
+                del(argv[i:i + 10])
             elif argv[i].lower() == '-improper':
-                if i+9 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by 6 strings and 4 integers.\n')
-                #self.impropers_name.append(argv[i+1])
-                self.impropers_type.append(argv[i+1])
-                self.impropers_atoms.append((argv[i+2],
-                                                 argv[i+3],
-                                                 argv[i+4],
-                                                 argv[i+5]))
-                self.impropers_index_offsets.append((int(argv[i+6]),
-                                                         int(argv[i+7]),
-                                                         int(argv[i+8]),
-                                                         int(argv[i+9])))
+                if i + 9 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by 6 strings and 4 integers.\n')
+                # self.impropers_name.append(argv[i+1])
+                self.impropers_type.append(argv[i + 1])
+                self.impropers_atoms.append((argv[i + 2],
+                                             argv[i + 3],
+                                             argv[i + 4],
+                                             argv[i + 5]))
+                self.impropers_index_offsets.append((int(argv[i + 6]),
+                                                     int(argv[i + 7]),
+                                                     int(argv[i + 8]),
+                                                     int(argv[i + 9])))
                 if ((self.impropers_index_offsets[-1][0] < 0) or
-                    (self.impropers_index_offsets[-1][1] < 0) or
-                    (self.impropers_index_offsets[-1][2] < 0) or
-                    (self.impropers_index_offsets[-1][3] < 0)):
-                    raise InputError('Error: '+argv[i]+' indices (i1 i2 i3 i4) must be >= 0\n')
-                del(argv[i:i+10])
+                        (self.impropers_index_offsets[-1][1] < 0) or
+                        (self.impropers_index_offsets[-1][2] < 0) or
+                        (self.impropers_index_offsets[-1][3] < 0)):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' indices (i1 i2 i3 i4) must be >= 0\n')
+                del(argv[i:i + 10])
             elif (argv[i].lower() == '-monomer-name'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a string\n')
-                self.name_monomer = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a string\n')
+                self.name_monomer = argv[i + 1]
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-sequence'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
                 try:
-                    f = open(argv[i+1], "r")
+                    f = open(argv[i + 1], "r")
                 except IOError:
-                    raise InputError('Error: file '+argv[i+1]+' could not be opened for reading\n')
+                    raise InputError(
+                        'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
                 self.name_sequence = []
                 for line_orig in f:
                     line = line_orig.strip()
@@ -197,14 +202,16 @@ class Settings(object):
                         line = line.strip()
                     if len(line) > 0:
                         self.name_sequence.append(line)
-                del(argv[i:i+2])
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-cuts'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
                 try:
-                    f = open(argv[i+1], "r")
+                    f = open(argv[i + 1], "r")
                 except IOError:
-                    raise InputError('Error: file '+argv[i+1]+' could not be opened for reading\n')
+                    raise InputError(
+                        'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
                 self.name_sequence = []
                 for line_orig in f:
                     line = line_orig.strip()
@@ -217,97 +224,98 @@ class Settings(object):
                         try:
                             self.cuts.append(int(line))
                         except ValueError:
-                            raise InputError('Error: file '+argv[i+1]+' should contain only nonnegative integers.\n')
-                del(argv[i:i+2])
+                            raise InputError(
+                                'Error: file ' + argv[i + 1] + ' should contain only nonnegative integers.\n')
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-polymer-name'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a string\n')
-                self.name_polymer = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a string\n')
+                self.name_polymer = argv[i + 1]
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-inherits'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a string\n')
-                self.inherits = argv[i+1]
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a string\n')
+                self.inherits = argv[i + 1]
                 if self.inherits.find('inherits ') == 0:
                     self.inherits = ' ' + self.inherits
                 else:
                     self.inherits = ' inherits ' + self.inherits
-                del(argv[i:i+2])
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-header'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a string (usually in quotes)\n')
-                self.header = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a string (usually in quotes)\n')
+                self.header = argv[i + 1]
+                del(argv[i:i + 2])
             elif argv[i].lower() == '-axis':
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed '+ \
-                        'by 3 numbers separated by commas (no spaces)\n')
-                self.direction_orig = map(float, argv[i+1].split(','))
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed ' +
+                                     'by 3 numbers separated by commas (no spaces)\n')
+                self.direction_orig = map(float, argv[i + 1].split(','))
+                del(argv[i:i + 2])
             elif argv[i].lower() == '-circular':
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by an argument\n' + \
+                if i + 1 >= len(argv):
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
-                if argv[i+1].lower() == 'yes':
+                if argv[i + 1].lower() == 'yes':
                     self.connect_ends = True
                     self.is_circular = True
-                elif argv[i+1].lower() == 'connected':
+                elif argv[i + 1].lower() == 'connected':
                     self.connect_ends = True
                     self.is_circular = False
-                elif argv[i+1].lower() == 'no':
+                elif argv[i + 1].lower() == 'no':
                     self.connect_ends = False
                     self.is_circular = False
                 else:
-                    raise InputError('Error: '+argv[i]+' flag should be followed by an argument\n'+\
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
-                del(argv[i:i+2])
+                del(argv[i:i + 2])
             elif argv[i].lower() == '-helix':
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a number (angle in degrees)\n')
-                self.delta_phi = float(argv[i+1])
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a number (angle in degrees)\n')
+                self.delta_phi = float(argv[i + 1])
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-box'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed '+ \
-                        'by 3 numbers separated by commas (no spaces)\n')
-                self.box_padding = map(float, argv[i+1].split(','))
+                if i + 1 >= len(argv):
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed ' +
+                                     'by 3 numbers separated by commas (no spaces)\n')
+                self.box_padding = map(float, argv[i + 1].split(','))
                 if len(self.box_padding) == 1:
                     self.box_padding = self.box_padding * 3
-                del(argv[i:i+2])
+                del(argv[i:i + 2])
 
-            #elif ((argv[i][0] == '-') and (__name__ == '__main__')):
+            # elif ((argv[i][0] == '-') and (__name__ == '__main__')):
             #
             #    raise InputError('Error('+g_program_name+'):\n'+\
             #        'Unrecogized command line argument \"'+argv[i]+\
             #        '\"\n\n'+\
             #        __doc__)
             else:
-                 i += 1
-
-
+                i += 1
 
         for b in range(0, len(self.bonds_type)):
             if len(self.bonds_type) > 1:
-                self.bonds_name.append('genpoly'+str(b+1)+'_')
+                self.bonds_name.append('genpoly' + str(b + 1) + '_')
             else:
                 self.bonds_name.append('genpoly')
         for b in range(0, len(self.angles_type)):
             if len(self.angles_type) > 1:
-                self.angles_name.append('genpoly'+str(b+1)+'_')
+                self.angles_name.append('genpoly' + str(b + 1) + '_')
             else:
                 self.angles_name.append('genpoly')
         for b in range(0, len(self.dihedrals_type)):
             if len(self.dihedrals_type) > 1:
-                self.dihedrals_name.append('genpoly'+str(b+1)+'_')
+                self.dihedrals_name.append('genpoly' + str(b + 1) + '_')
             else:
                 self.dihedrals_name.append('genpoly')
         for b in range(0, len(self.impropers_type)):
             if len(self.impropers_type) > 1:
-                self.impropers_name.append('genpoly'+str(b+1)+'_')
+                self.impropers_name.append('genpoly' + str(b + 1) + '_')
             else:
                 self.impropers_name.append('genpoly')
-
-
 
 
 class WrapPeriodic(object):
@@ -323,11 +331,12 @@ class WrapPeriodic(object):
         if i / N != 0:
             obj.bounds_err = True
         return i % N
+
     def WrapF(obj, x, L):
-        i = floor(x/L)
+        i = floor(x / L)
         if i != 0:
             obj.bounds_err = True
-        return x - i*L
+        return x - i * L
 
 
 class GenPoly(object):
@@ -362,12 +371,13 @@ class GenPoly(object):
 
         self.N = len(coords)
         if self.N < 2:
-            raise InputError("Error: Coordinate file must have at least 2 positions.\n")
+            raise InputError(
+                "Error: Coordinate file must have at least 2 positions.\n")
         # Now generate self.settings.name_sequence:
         if len(self.settings.name_sequence) != self.N:
             self.settings.name_sequence = [self.settings.name_monomer] * self.N
 
-        self.settings.cuts.append(self.N+1)
+        self.settings.cuts.append(self.N + 1)
         self.settings.cuts.sort()
         i = 0
         for j in self.settings.cuts:
@@ -381,22 +391,25 @@ class GenPoly(object):
         """
 
         self.N = len(coords)
-        self.direction_vects = [[0.0, 0.0, 0.0] for i in range(0, self.N+1)]
+        self.direction_vects = [[0.0, 0.0, 0.0] for i in range(0, self.N + 1)]
 
         if self.settings.is_closed:
             for i in range(0, self.N):
-                im1 = WrapPeriodic.Wrap(i-1, self.N)
-                ip1 = WrapPeriodic.Wrap(i+1, self.N)
+                im1 = WrapPeriodic.Wrap(i - 1, self.N)
+                ip1 = WrapPeriodic.Wrap(i + 1, self.N)
                 for d in range(0, 3):
-                    self.direction_vects[i][d] = coords[ip1][d] - coords[im1][d]
+                    self.direction_vects[i][d] = coords[
+                        ip1][d] - coords[im1][d]
         else:
-            for i in range(1, self.N-1):
+            for i in range(1, self.N - 1):
                 for d in range(0, 3):
-                    self.direction_vects[i][d] = coords[i+1][d] - coords[i-1][d]
+                    self.direction_vects[i][d] = coords[
+                        i + 1][d] - coords[i - 1][d]
 
             for d in range(0, 3):
-                self.direction_vects[0][d]   = coords[1][d]   - coords[0][d]
-                self.direction_vects[self.N-1][d] = coords[self.N-1][d] - coords[self.N-2][d]
+                self.direction_vects[0][d] = coords[1][d] - coords[0][d]
+                self.direction_vects[
+                    self.N - 1][d] = coords[self.N - 1][d] - coords[self.N - 2][d]
 
         # Optional: normalize the direction vectors
 
@@ -409,11 +422,10 @@ class GenPoly(object):
                 self.direction_vects[i][d] /= direction_len
 
         # Special case:  self.direction_vects[-1] is the direction that the original monomer
-        # in "monomer.lt" was pointing.  (By default, 1,0,0 <--> the "x" direction)
+        # in "monomer.lt" was pointing.  (By default, 1,0,0 <--> the "x"
+        # direction)
 
         self.direction_vects[-1] = self.settings.direction_orig
-
-
 
     def WriteLTFile(self, outfile):
         """ Write an moltemplate (.lt) file containing the definition of
@@ -424,7 +436,7 @@ class GenPoly(object):
 
         """
 
-        outfile.write(self.settings.header+"\n\n\n")
+        outfile.write(self.settings.header + "\n\n\n")
         if len(self.coords_multi) == 1:
             self.WritePolymer(outfile,
                               self.settings.name_polymer +
@@ -436,15 +448,15 @@ class GenPoly(object):
             outfile.write('# Definitions of individual polymers to follow\n\n')
             for i in range(0, len(self.coords_multi)):
                 self.WritePolymer(outfile,
-                                  self.settings.name_polymer + '_sub'+str(i+1)+
+                                  self.settings.name_polymer + '_sub' + str(i + 1) +
                                   self.settings.inherits,
                                   self.coords_multi[i])
             outfile.write('\n\n'
                           '# Now instantiate all the polymers (once each)\n\n')
 
             for i in range(0, len(self.coords_multi)):
-                outfile.write('polymers['+str(i)+'] = new '+
-                              self.settings.name_polymer + '_sub'+str(i+1)+'\n')
+                outfile.write('polymers[' + str(i) + '] = new ' +
+                              self.settings.name_polymer + '_sub' + str(i + 1) + '\n')
 
             if self.settings.name_polymer != '':
                 outfile.write('\n\n'
@@ -456,11 +468,6 @@ class GenPoly(object):
                     # all of the coordinates (even multiple coordinate sets)
                     self.CalcBoxBoundaries(self.coords_multi[i])
                 self.WriteBoxBoundaries()
-
-
-
-
-
 
     def WritePolymer(self,
                      outfile,
@@ -479,8 +486,6 @@ class GenPoly(object):
                           '# The line above forces all monomer subunits to share the same molecule-ID\n'
                           '# (Note: Setting the molecule-ID number is optional and is usually ignored.)\n\n\n\n')
 
-
-
         outfile.write("""
 # ------------ List of Monomers: ------------
 #
@@ -492,35 +497,33 @@ class GenPoly(object):
 
 
 """
-        )
-
-
+                      )
 
         outfile.write("push(move(0,0,0))\n")
 
-
         for i in range(0, self.N):
             #im1 = i-1
-            #if im1 < 0 or self.settings.connect_ends:
+            # if im1 < 0 or self.settings.connect_ends:
             #    if im1 < 0:
             #        im1 += self.N
             outfile.write("pop()\n")
-            outfile.write("push(rotvv("+
-                          str(self.direction_vects[i-1][0])+","+
-                          str(self.direction_vects[i-1][1])+","+
-                          str(self.direction_vects[i-1][2])+","+
-                          str(self.direction_vects[i][0])+","+
-                          str(self.direction_vects[i][1])+","+
-                          str(self.direction_vects[i][2])+"))\n")
-            # Recall that self.direction_vects[-1] = self.settings.direction_orig  (usually 1,0,0)
-            outfile.write("push(move("+
-                          str(coords[i][0])+","+
-                          str(coords[i][1])+","+
-                          str(coords[i][2])+"))\n")
+            outfile.write("push(rotvv(" +
+                          str(self.direction_vects[i - 1][0]) + "," +
+                          str(self.direction_vects[i - 1][1]) + "," +
+                          str(self.direction_vects[i - 1][2]) + "," +
+                          str(self.direction_vects[i][0]) + "," +
+                          str(self.direction_vects[i][1]) + "," +
+                          str(self.direction_vects[i][2]) + "))\n")
+            # Recall that self.direction_vects[-1] =
+            # self.settings.direction_orig  (usually 1,0,0)
+            outfile.write("push(move(" +
+                          str(coords[i][0]) + "," +
+                          str(coords[i][1]) + "," +
+                          str(coords[i][2]) + "))\n")
 
-            outfile.write("mon["+str(i)+"] = new "+
+            outfile.write("mon[" + str(i) + "] = new " +
                           self.settings.name_sequence[i] +
-                          ".rot("+str(self.settings.delta_phi*i)+",1,0,0)\n")
+                          ".rot(" + str(self.settings.delta_phi * i) + ",1,0,0)\n")
 
         assert(len(self.settings.bonds_name) ==
                len(self.settings.bonds_type) ==
@@ -532,7 +535,7 @@ class GenPoly(object):
                           "write(\"Data Bonds\") {\n")
         WrapPeriodic.bounds_err = False
         for i in range(0, self.N):
-            test=False
+            test = False
             for b in range(0, len(self.settings.bonds_type)):
                 I = i + self.settings.bonds_index_offsets[b][0]
                 J = i + self.settings.bonds_index_offsets[b][1]
@@ -542,14 +545,14 @@ class GenPoly(object):
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                outfile.write("  $bond:" + self.settings.bonds_name[b] + str(i+1))
+                outfile.write(
+                    "  $bond:" + self.settings.bonds_name[b] + str(i + 1))
                 if len(self.settings.bonds_type) > 1:
-                    outfile.write("_"+str(b+1))
-                outfile.write(" @bond:"+self.settings.bonds_type[b]+" $atom:mon["+str(I)+"]/"+self.settings.bonds_atoms[b][0]+" $atom:mon["+str(J)+"]/"+self.settings.bonds_atoms[b][1]+"\n")
+                    outfile.write("_" + str(b + 1))
+                outfile.write(" @bond:" + self.settings.bonds_type[b] + " $atom:mon[" + str(I) + "]/" + self.settings.bonds_atoms[
+                              b][0] + " $atom:mon[" + str(J) + "]/" + self.settings.bonds_atoms[b][1] + "\n")
         if len(self.settings.bonds_type) > 0:
             outfile.write("}  # write(\"Data Bonds\") {...\n\n\n")
-
-
 
         assert(len(self.settings.angles_name) ==
                len(self.settings.angles_type) ==
@@ -571,19 +574,17 @@ class GenPoly(object):
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                outfile.write("  $angle:" + self.settings.angles_name[b] + str(i+1))
+                outfile.write(
+                    "  $angle:" + self.settings.angles_name[b] + str(i + 1))
                 if len(self.settings.angles_type) > 1:
-                    outfile.write("_"+str(b+1))
-                outfile.write(" @angle:"+self.settings.angles_type[b]+
-                              " $atom:mon["+str(I)+"]/"+self.settings.angles_atoms[b][0]+
-                              " $atom:mon["+str(J)+"]/"+self.settings.angles_atoms[b][1]+
-                              " $atom:mon["+str(K)+"]/"+self.settings.angles_atoms[b][2]+
+                    outfile.write("_" + str(b + 1))
+                outfile.write(" @angle:" + self.settings.angles_type[b] +
+                              " $atom:mon[" + str(I) + "]/" + self.settings.angles_atoms[b][0] +
+                              " $atom:mon[" + str(J) + "]/" + self.settings.angles_atoms[b][1] +
+                              " $atom:mon[" + str(K) + "]/" + self.settings.angles_atoms[b][2] +
                               "\n")
         if len(self.settings.angles_type) > 0:
             outfile.write("}  # write(\"Data Angles\") {...\n\n\n")
-
-
-
 
         assert(len(self.settings.dihedrals_name) ==
                len(self.settings.dihedrals_type) ==
@@ -607,20 +608,18 @@ class GenPoly(object):
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                outfile.write("  $dihedral:" + self.settings.dihedrals_name[b] + str(i+1))
+                outfile.write("  $dihedral:" +
+                              self.settings.dihedrals_name[b] + str(i + 1))
                 if len(self.settings.dihedrals_type) > 1:
-                    outfile.write("_"+str(b+1))
-                outfile.write(" @dihedral:"+self.settings.dihedrals_type[b]+
-                              " $atom:mon["+str(I)+"]/"+self.settings.dihedrals_atoms[b][0]+
-                              " $atom:mon["+str(J)+"]/"+self.settings.dihedrals_atoms[b][1]+
-                              " $atom:mon["+str(K)+"]/"+self.settings.dihedrals_atoms[b][2]+
-                              " $atom:mon["+str(L)+"]/"+self.settings.dihedrals_atoms[b][3]+
+                    outfile.write("_" + str(b + 1))
+                outfile.write(" @dihedral:" + self.settings.dihedrals_type[b] +
+                              " $atom:mon[" + str(I) + "]/" + self.settings.dihedrals_atoms[b][0] +
+                              " $atom:mon[" + str(J) + "]/" + self.settings.dihedrals_atoms[b][1] +
+                              " $atom:mon[" + str(K) + "]/" + self.settings.dihedrals_atoms[b][2] +
+                              " $atom:mon[" + str(L) + "]/" + self.settings.dihedrals_atoms[b][3] +
                               "\n")
         if len(self.settings.dihedrals_type) > 0:
             outfile.write("}  # write(\"Data Dihedrals\") {...\n\n\n")
-
-
-
 
         assert(len(self.settings.impropers_name) ==
                len(self.settings.impropers_type) ==
@@ -644,23 +643,21 @@ class GenPoly(object):
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                outfile.write("  $improper:" + self.settings.impropers_name[b] + str(i+1))
+                outfile.write("  $improper:" +
+                              self.settings.impropers_name[b] + str(i + 1))
                 if len(self.settings.impropers_type) > 1:
-                    outfile.write("_"+str(b+1))
-                outfile.write(" @improper:"+self.settings.impropers_type[b]+
-                              " $atom:mon["+str(I)+"]/"+self.settings.impropers_atoms[b][0]+
-                              " $atom:mon["+str(J)+"]/"+self.settings.impropers_atoms[b][1]+
-                              " $atom:mon["+str(K)+"]/"+self.settings.impropers_atoms[b][2]+
-                              " $atom:mon["+str(L)+"]/"+self.settings.impropers_atoms[b][3]+
+                    outfile.write("_" + str(b + 1))
+                outfile.write(" @improper:" + self.settings.impropers_type[b] +
+                              " $atom:mon[" + str(I) + "]/" + self.settings.impropers_atoms[b][0] +
+                              " $atom:mon[" + str(J) + "]/" + self.settings.impropers_atoms[b][1] +
+                              " $atom:mon[" + str(K) + "]/" + self.settings.impropers_atoms[b][2] +
+                              " $atom:mon[" + str(L) + "]/" + self.settings.impropers_atoms[b][3] +
                               "\n")
         if len(self.settings.impropers_type) > 0:
             outfile.write("}  # write(\"Data Impropers\") {...\n\n\n")
 
         if name_polymer != '':
-            outfile.write("}  # "+name_polymer+"\n\n\n\n")
-
-
-
+            outfile.write("}  # " + name_polymer + "\n\n\n\n")
 
     def CalcBoxBoundaries(self, coords):
         for i in range(0, N):
@@ -675,8 +672,6 @@ class GenPoly(object):
                     if coords[i][d] < self.box_bounds_min[d]:
                         self.box_bounds_min[d] = coords[i][d]
 
-
-
     def WriteBoxBoundary(self, outfile):
         for d in range(0, 3):
             self.box_bounds_min[d] -= self.settings.box_padding[d]
@@ -684,31 +679,35 @@ class GenPoly(object):
         outfile.write("\n"
                       "\n"
                       "write_once(\"Data Boundary\") {\n"
-                      +str(box_bounds_min[0])+"  "+str(box_bounds_max[0])+" xlo xhi\n"
-                      +str(box_bounds_min[1])+"  "+str(box_bounds_max[1])+" ylo yhi\n"
-                      +str(box_bounds_min[2])+"  "+str(box_bounds_max[2])+" zlo zhi\n"
+                      + str(box_bounds_min[0]) + "  " +
+                      str(box_bounds_max[0]) + " xlo xhi\n"
+                      + str(box_bounds_min[1]) + "  " +
+                      str(box_bounds_max[1]) + " ylo yhi\n"
+                      + str(box_bounds_min[2]) + "  " +
+                      str(box_bounds_max[2]) + " zlo zhi\n"
                       "}\n\n\n")
 
 
 if __name__ == '__main__':
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str  = '0.03'
-        g_date_str     = '2016-11-21'
-        sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+'\n')
+        g_version_str = '0.03'
+        g_date_str = '2016-11-21'
+        sys.stderr.write(g_program_name + ' v' +
+                         g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
         infile = sys.stdin
         outfile = sys.stdout
         genpoly = GenPoly(argv)
         # Any remain arguments?
         if len(argv) > 1:
-            raise InputError('Error('+g_program_name+'):\n'+
-                             'Unrecogized command line argument \"'+argv[1]+
-                             '\"\n\n'+
+            raise InputError('Error(' + g_program_name + '):\n' +
+                             'Unrecogized command line argument \"' + argv[1] +
+                             '\"\n\n' +
                              g_usage_msg)
         genpoly.ReadCoords(infile)
         genpoly.WriteLTFile(outfile)
 
     except (ValueError, InputError) as err:
-        sys.stderr.write('\n'+str(err)+'\n')
+        sys.stderr.write('\n' + str(err) + '\n')
         sys.exit(-1)

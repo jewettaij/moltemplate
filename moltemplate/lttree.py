@@ -43,8 +43,8 @@ from .ttree_matrix_stack import AffineTransform, MultiAffineStack, LinTransform
 
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str     = '2014-12-19'
-g_version_str  = '0.75'
+g_date_str = '2014-12-19'
+g_version_str = '0.75'
 
 
 try:
@@ -53,7 +53,9 @@ except NameError:
     # Python 3
     basestring = unicode = str
 
+
 class LttreeSettings(BasicUISettings):
+
     def __init__(self,
                  user_bindings_x=None,
                  user_bindings=None,
@@ -68,17 +70,15 @@ class LttreeSettings(BasicUISettings):
         # LAMMPS-specific information.
         # The next 6 members store keep track of the different columns
         # of the "Data Atoms" section of a LAMMPS data file:
-        self.column_names = [] #<--A list of column names (optional)
-        self.ii_coords=[]      #<--A list of triplets of column indexes storing coordinate data
-        self.ii_vects=[]       #<--A list of triplets of column indexes storing directional data
-                               #   (such as dipole or ellipsoid orientations)
-        self.i_atomid=None     #<--An integer indicating which column has the atomid
-        self.i_atomtype=None   #<--An integer indicating which column has the atomtype
-        self.i_molid=None      #<--An integer indicating which column has the molid, if applicable
-        self.infile=None       # Name of the outermost file.  This is the file
-                               # which was read at the moment parsing begins.
-
-
+        self.column_names = []  # <--A list of column names (optional)
+        self.ii_coords = []  # <--A list of triplets of column indexes storing coordinate data
+        self.ii_vects = []  # <--A list of triplets of column indexes storing directional data
+        #   (such as dipole or ellipsoid orientations)
+        self.i_atomid = None  # <--An integer indicating which column has the atomid
+        self.i_atomtype = None  # <--An integer indicating which column has the atomtype
+        self.i_molid = None  # <--An integer indicating which column has the molid, if applicable
+        self.infile = None       # Name of the outermost file.  This is the file
+        # which was read at the moment parsing begins.
 
 
 def LttreeParseArgs(argv, settings, main=False):
@@ -91,95 +91,99 @@ def LttreeParseArgs(argv, settings, main=False):
     while i < len(argv):
         #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
         if ((argv[i].lower() == '-atomstyle') or
-            (argv[i].lower() == '-atom-style') or
-            (argv[i].lower() == '-atom_style')):
-            if i+1 >= len(argv):
-                raise InputError('Error('+g_program_name+'): The '+argv[i]+' flag should be followed by a LAMMPS\n'
+                (argv[i].lower() == '-atom-style') or
+                (argv[i].lower() == '-atom_style')):
+            if i + 1 >= len(argv):
+                raise InputError('Error(' + g_program_name + '): The ' + argv[i] + ' flag should be followed by a LAMMPS\n'
                                  '       atom_style name (or single quoted string containing a space-separated\n'
                                  '       list of column names such as: atom-ID atom-type q x y z molecule-ID.)\n')
-            settings.column_names = AtomStyle2ColNames(argv[i+1])
-            sys.stderr.write('\n    \"'+data_atoms+'\" column format:\n')
-            sys.stderr.write('    '+(' '.join(settings.column_names))+'\n\n')
+            settings.column_names = AtomStyle2ColNames(argv[i + 1])
+            sys.stderr.write('\n    \"' + data_atoms + '\" column format:\n')
+            sys.stderr.write(
+                '    ' + (' '.join(settings.column_names)) + '\n\n')
             settings.ii_coords = ColNames2Coords(settings.column_names)
             settings.ii_vects = ColNames2Vects(settings.column_names)
-            settings.i_atomid, settings.i_atomtype, settings.i_molid = ColNames2AidAtypeMolid(settings.column_names)
-            del(argv[i:i+2])
+            settings.i_atomid, settings.i_atomtype, settings.i_molid = ColNames2AidAtypeMolid(
+                settings.column_names)
+            del(argv[i:i + 2])
         elif (argv[i].lower() == '-icoord'):
-            if i+1 >= len(argv):
-                raise InputError('Error: '+argv[i]+' flag should be followed by list of integers\n'
+            if i + 1 >= len(argv):
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by list of integers\n'
                                  '       corresponding to column numbers for coordinates in\n'
-                                 '       the \"'+data_atoms+'\" section of a LAMMPS data file.\n')
-            ilist = argv[i+1].split()
+                                 '       the \"' + data_atoms + '\" section of a LAMMPS data file.\n')
+            ilist = argv[i + 1].split()
             if (len(ilist) % 3) != 0:
-                raise InputError('Error: '+argv[i]+' flag should be followed by list of integers.\n'
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by list of integers.\n'
                                  '       This is usually a list of 3 integers, but it can contain more.\n'
                                  '       The number of cooridnate columns must be divisible by 3,\n'
                                  '       (even if the simulation is in 2 dimensions)\n')
             settings.iaffinevects = []
-            for i in range(0, len(ilist)/3):
-                cols = [int(ilist[3*i])+1,
-                        int(ilist[3*i+1])+1,
-                        int(ilist[3*i+2])+1]
+            for i in range(0, len(ilist) / 3):
+                cols = [int(ilist[3 * i]) + 1,
+                        int(ilist[3 * i + 1]) + 1,
+                        int(ilist[3 * i + 2]) + 1]
                 settings.iaffinevects.append(cols)
-            del(argv[i:i+2])
+            del(argv[i:i + 2])
         elif (argv[i].lower() == '-ivect'):
-            if i+1 >= len(argv):
-                raise InputError('Error: '+argv[i]+' flag should be followed by list of integers\n'
+            if i + 1 >= len(argv):
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by list of integers\n'
                                  '       corresponding to column numbers for direction vectors in\n'
-                                 '       the \"'+data_atoms+'\" section of a LAMMPS data file.\n')
-            ilist = argv[i+1].split()
+                                 '       the \"' + data_atoms + '\" section of a LAMMPS data file.\n')
+            ilist = argv[i + 1].split()
             if (len(ilist) % 3) != 0:
-                raise InputError('Error: '+argv[i]+' flag should be followed by list of integers.\n'
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by list of integers.\n'
                                  '       This is usually a list of 3 integers, but it can contain more.\n'
                                  '       The number of cooridnate columns must be divisible by 3,\n'
                                  '       (even if the simulation is in 2 dimensions)\n')
             settings.ivects = []
-            for i in range(0, len(ilist)/3):
-                cols = [int(ilist[3*i])+1,
-                        int(ilist[3*i+1])+1,
-                        int(ilist[3*i+2])+1]
+            for i in range(0, len(ilist) / 3):
+                cols = [int(ilist[3 * i]) + 1,
+                        int(ilist[3 * i + 1]) + 1,
+                        int(ilist[3 * i + 2]) + 1]
                 settings.ivects.append(cols)
-            del(argv[i:i+2])
+            del(argv[i:i + 2])
         elif ((argv[i].lower() == '-iatomid') or
               (argv[i].lower() == '-iid') or
               (argv[i].lower() == '-iatom-id')):
-            if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
-                raise InputError('Error: '+argv[i]+' flag should be followed by an integer\n'
-                                 '       (>=1) indicating which column in the \"'+data_atoms+'\" section of a\n'
+            if ((i + 1 >= len(argv)) or (not str.isdigit(argv[i + 1]))):
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by an integer\n'
+                                 '       (>=1) indicating which column in the \"' +
+                                 data_atoms + '\" section of a\n'
                                  '       LAMMPS data file contains the atom id number (typically 1).\n'
                                  '       (This argument is unnecessary if you use the -atomstyle argument.)\n')
-            i_atomid = int(argv[i+1])-1
-            del(argv[i:i+2])
+            i_atomid = int(argv[i + 1]) - 1
+            del(argv[i:i + 2])
         elif ((argv[i].lower() == '-iatomtype') or
               (argv[i].lower() == '-itype') or
               (argv[i].lower() == '-iatom-type')):
-            if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
-                raise InputError('Error: '+argv[i]+' flag should be followed by an integer\n'
-                                 '       (>=1) indicating which column in the \"'+data_atoms+'\" section of a\n'
+            if ((i + 1 >= len(argv)) or (not str.isdigit(argv[i + 1]))):
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by an integer\n'
+                                 '       (>=1) indicating which column in the \"' +
+                                 data_atoms + '\" section of a\n'
                                  '       LAMMPS data file contains the atom type.\n'
                                  '       (This argument is unnecessary if you use the -atomstyle argument.)\n')
-            i_atomtype = int(argv[i+1])-1
-            del(argv[i:i+2])
+            i_atomtype = int(argv[i + 1]) - 1
+            del(argv[i:i + 2])
         elif ((argv[i].lower() == '-imolid') or
               (argv[i].lower() == '-imol') or
               (argv[i].lower() == '-imol-id') or
               (argv[i].lower() == '-imoleculeid') or
               (argv[i].lower() == '-imolecule-id')):
-            if ((i+1 >= len(argv)) or (not str.isdigit(argv[i+1]))):
-                raise InputError('Error: '+argv[i]+' flag should be followed by an integer\n'
-                                 '       (>=1) indicating which column in the \"'+data_atoms+'\" section of a\n'
+            if ((i + 1 >= len(argv)) or (not str.isdigit(argv[i + 1]))):
+                raise InputError('Error: ' + argv[i] + ' flag should be followed by an integer\n'
+                                 '       (>=1) indicating which column in the \"' +
+                                 data_atoms + '\" section of a\n'
                                  '       LAMMPS data file contains the molecule id number.\n'
                                  '       (This argument is unnecessary if you use the -atomstyle argument.)\n')
-            i_molid = int(argv[i+1])-1
-            del(argv[i:i+2])
+            i_molid = int(argv[i + 1]) - 1
+            del(argv[i:i + 2])
 
         elif (argv[i][0] == '-') and main:
-            #elif (__name__ == "__main__"):
-            raise InputError('Error('+g_program_name+'):\n'
-                             'Unrecogized command line argument \"'+argv[i]+'\"\n')
+            # elif (__name__ == "__main__"):
+            raise InputError('Error(' + g_program_name + '):\n'
+                             'Unrecogized command line argument \"' + argv[i] + '\"\n')
         else:
             i += 1
-
 
     if main:
 
@@ -195,70 +199,65 @@ def LttreeParseArgs(argv, settings, main=False):
                              '       the name of a file containing ttree template commands\n')
         elif len(argv) == 2:
             try:
-                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[1]) # Parse text from file
+                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[
+                                             1])  # Parse text from file
             except IOError:
                 sys.stderr.write('Error: unable to open file\n'
-                                 '       \"'+argv[1]+'\"\n'
+                                 '       \"' + argv[1] + '\"\n'
                                  '       for reading.\n')
                 sys.exit(1)
             del(argv[1:2])
 
         else:
             # if there are more than 2 remaining arguments,
-            problem_args = ['\"'+arg+'\"' for arg in argv[1:]]
-            raise InputError('Syntax Error('+g_program_name+'):\n\n'
+            problem_args = ['\"' + arg + '\"' for arg in argv[1:]]
+            raise InputError('Syntax Error(' + g_program_name + '):\n\n'
                              '       Problem with argument list.\n'
                              '       The remaining arguments are:\n\n'
-                             '         '+(' '.join(problem_args))+'\n\n'
+                             '         ' + (' '.join(problem_args)) + '\n\n'
                              '       (The actual problem may be earlier in the argument list.\n'
                              '       If these arguments are source files, then keep in mind\n'
                              '       that this program can not parse multiple source files.)\n'
                              '       Check the syntax of the entire argument list.\n')
 
-
-
     if len(settings.ii_coords) == 0:
         sys.stderr.write('########################################################\n'
                          '##            WARNING: atom_style unspecified         ##\n'
-                         '## --> \"'+data_atoms+'\" column data has an unknown format ##\n'
+                         '## --> \"' + data_atoms + '\" column data has an unknown format ##\n'
                          '##              Assuming atom_style = \"full\"          ##\n'
-        #                 '########################################################\n'
-        #                 '## To specify the \"'+data_atoms+'\" column format you can:      ##\n'
-        #                 '##   1) Use the -atomstyle \"STYLE\"  argument         ##\n'
-        #                 '##      where \"STYLE\" is a string indicating a LAMMPS ##\n'
-        #                 '##      atom_style, including hybrid styles.(Standard ##\n'
-        #                 '##      atom styles defined in 2011 are supported.)   ##\n'
-        #                 '##   2) Use the -atomstyle \"COL_LIST\"    argument    ##\n'
-        #                 '##      where \"COL_LIST" is a quoted list of strings  ##\n'
-        #                 '##      indicating the name of each column.           ##\n'
-        #                 '##      Names \"x\",\"y\",\"z\" are interpreted as          ##\n'
-        #                 '##      atomic coordinates. \"mux\",\"muy\",\"muz\"         ##\n'
-        #                 '##      are interpreted as direction vectors.             ##\n'
-        #                 '##   3) Use the -icoord \"cx cy cz...\" argument        ##\n'
-        #                 '##      where \"cx cy cz\" is a list of integers        ##\n'
-        #                 '##      indicating the column numbers for the x,y,z   ##\n'
-        #                 '##      coordinates of each atom.                     ##\n'
-        #                 '##   4) Use the -ivect \"cmux cmuy cmuz...\" argument   ##\n'
-        #                 '##      where \"cmux cmuy cmuz...\" is a list of        ##\n'
-        #                 '##      integers indicating the column numbers for    ##\n'
-        #                 '##      the vector that determines the direction of a ##\n'
-        #                 '##      dipole or ellipsoid (ie. a rotateable vector).##\n'
-        #                 '##      (More than one triplet can be specified. The  ##\n'
-        #                 '##       number of entries must be divisible by 3.)   ##\n'
+                         #                 '########################################################\n'
+                         #                 '## To specify the \"'+data_atoms+'\" column format you can:      ##\n'
+                         #                 '##   1) Use the -atomstyle \"STYLE\"  argument         ##\n'
+                         #                 '##      where \"STYLE\" is a string indicating a LAMMPS ##\n'
+                         #                 '##      atom_style, including hybrid styles.(Standard ##\n'
+                         #                 '##      atom styles defined in 2011 are supported.)   ##\n'
+                         #                 '##   2) Use the -atomstyle \"COL_LIST\"    argument    ##\n'
+                         #                 '##      where \"COL_LIST" is a quoted list of strings  ##\n'
+                         #                 '##      indicating the name of each column.           ##\n'
+                         #                 '##      Names \"x\",\"y\",\"z\" are interpreted as          ##\n'
+                         #                 '##      atomic coordinates. \"mux\",\"muy\",\"muz\"         ##\n'
+                         #                 '##      are interpreted as direction vectors.             ##\n'
+                         #                 '##   3) Use the -icoord \"cx cy cz...\" argument        ##\n'
+                         #                 '##      where \"cx cy cz\" is a list of integers        ##\n'
+                         #                 '##      indicating the column numbers for the x,y,z   ##\n'
+                         #                 '##      coordinates of each atom.                     ##\n'
+                         #                 '##   4) Use the -ivect \"cmux cmuy cmuz...\" argument   ##\n'
+                         #                 '##      where \"cmux cmuy cmuz...\" is a list of        ##\n'
+                         #                 '##      integers indicating the column numbers for    ##\n'
+                         #                 '##      the vector that determines the direction of a ##\n'
+                         #                 '##      dipole or ellipsoid (ie. a rotateable vector).##\n'
+                         #                 '##      (More than one triplet can be specified. The  ##\n'
+                         #                 '##       number of entries must be divisible by 3.)   ##\n'
                          '########################################################\n')
 
         # The default atom_style is "full"
         settings.column_names = AtomStyle2ColNames('full')
         settings.ii_coords = ColNames2Coords(settings.column_names)
         settings.ii_vects = ColNames2Vects(settings.column_names)
-        settings.i_atomid, settings.i_atomtype, settings.i_molid = ColNames2AidAtypeMolid(settings.column_names)
+        settings.i_atomid, settings.i_atomtype, settings.i_molid = ColNames2AidAtypeMolid(
+            settings.column_names)
 
     return
-
-
-
-
-
 
 
 def TransformAtomText(text, matrix):
@@ -279,16 +278,16 @@ def TransformAtomText(text, matrix):
         ic = line_orig.find('#')
         if ic != -1:
             line = line_orig[:ic]
-            comment = ' '+line_orig[ic:].rstrip('\n')
+            comment = ' ' + line_orig[ic:].rstrip('\n')
         else:
             line = line_orig.rstrip('\n')
             comment = ''
 
         columns = line.split()
         if len(columns) > 0:
-            if len(columns) == len(settings.column_names)+3:
+            if len(columns) == len(settings.column_names) + 3:
                 raise InputError('Error: lttree.py does not yet support integer unit-cell counters \n'
-                                 '   within the \"'+data_atoms+'\" section of a LAMMPS data file.\n'
+                                 '   within the \"' + data_atoms + '\" section of a LAMMPS data file.\n'
                                  '   Instead please add the appropriate offsets (these offsets\n'
                                  '   should be multiples of the cell size) to the atom coordinates\n'
                                  '   in the data file, and eliminate the extra columns. Then try again.\n'
@@ -298,26 +297,25 @@ def TransformAtomText(text, matrix):
                                  '       match the LAMMPS atom_style you selected.\n'
                                  '       Use the -atomstyle <style> command line argument.\n')
             x0 = [0.0, 0.0, 0.0]
-            x  = [0.0, 0.0, 0.0]
+            x = [0.0, 0.0, 0.0]
             # Atomic coordinates transform using "affine" transformations
             # (translations plus rotations [or other linear transformations])
             for cxcycz in settings.ii_coords:
-                for d in range(0,3):
+                for d in range(0, 3):
                     x0[d] = float(columns[cxcycz[d]])
                     AffineTransform(x, matrix, x0)  # x = matrix * x0 + b
-                for d in range(0,3):                #("b" is part of "matrix")
+                for d in range(0, 3):  # ("b" is part of "matrix")
                     columns[cxcycz[d]] = str(x[d])
             # Dipole moments and other direction-vectors
             # are not effected by translational movement
             for cxcycz in settings.ii_vects:
-                for d in range(0,3):
+                for d in range(0, 3):
                     x0[d] = float(columns[cxcycz[d]])
                     LinTransform(x, matrix, x0)  # x = matrix * x0
-                for d in range(0,3):
+                for d in range(0, 3):
                     columns[cxcycz[d]] = str(x[d])
         lines[i] = ' '.join(columns) + comment
     return '\n'.join(lines)
-
 
 
 def CalcCM(text_Atoms,
@@ -346,7 +344,7 @@ def CalcCM(text_Atoms,
             atomid = columns[settings.i_atomid]
             atomtype = columns[settings.i_atomtype]
             if atomtype not in types2masses[atomtype]:
-                raise InputError('Error(lttree): You have neglected to define the mass of atom type: \"'+atomtype+'\"\n'
+                raise InputError('Error(lttree): You have neglected to define the mass of atom type: \"' + atomtype + '\"\n'
                                  'Did you specify the mass of every atom type using write(\"Masses\"){}?')
             atomid2mass[atomid] = atomtype2mass[atomtype]
 
@@ -355,9 +353,9 @@ def CalcCM(text_Atoms,
         line = lines[i]
         columns = line.split()
         if len(columns) > 0:
-            if len(columns) == len(settings.column_names)+3:
+            if len(columns) == len(settings.column_names) + 3:
                 raise InputError('Error: lttree.py does not yet support integer unit-cell counters (ix, iy, iz)\n'
-                                 '   within the \"'+data_atoms+'\" section of a LAMMPS data file.\n'
+                                 '   within the \"' + data_atoms + '\" section of a LAMMPS data file.\n'
                                  '   Instead please add the appropriate offsets (these offsets\n'
                                  '   should be multiples of the cell size) to the atom coordinates\n'
                                  '   in the data file, and eliminate the extra columns. Then try again.\n'
@@ -373,21 +371,20 @@ def CalcCM(text_Atoms,
                 m = 1.0
             tot_m += m
             for cxcycz in settings.ii_coords:
-                for d in range(0,3):
+                for d in range(0, 3):
                     x[d] = float(columns[cxcycz[d]])
                     tot_x[d] += x[d]
             # Note: dipole moments and other direction vectors don't effect
             #       the center of mass. So I commented out the loop below.
-            #for cxcycz in settings.ii_vects:
+            # for cxcycz in settings.ii_vects:
             #    for d in range(0,3):
             #        v[d] = float(columns[cxcycz[d]])
         lines[i] = ' '.join(columns)
 
     xcm = [0.0, 0.0, 0.0]
-    for d in range(0,3):
+    for d in range(0, 3):
         xcm[d] = tot_x[d] / tot_m
     return xcm
-
 
 
 def _ExecCommands(command_list,
@@ -420,19 +417,18 @@ def _ExecCommands(command_list,
 
         # For debugging only
         if ((not isinstance(command, StackableCommand)) and
-            (not isinstance(command, ScopeCommand)) and
-            (not isinstance(command, WriteFileCommand))):
-            sys.stderr.write(str(command)+'\n')
-
+                (not isinstance(command, ScopeCommand)) and
+                (not isinstance(command, WriteFileCommand))):
+            sys.stderr.write(str(command) + '\n')
 
         if isinstance(command, PopCommand):
             assert(current_scope_id != None)
             if command.context_node == None:
                 command.context_node = current_scope_id
             if isinstance(command, PopRightCommand):
-                matrix_stack.PopRight(which_stack = command.context_node)
+                matrix_stack.PopRight(which_stack=command.context_node)
             elif isinstance(command, PopLeftCommand):
-                matrix_stack.PopLeft(which_stack = command.context_node)
+                matrix_stack.PopLeft(which_stack=command.context_node)
             else:
                 assert(False)
 
@@ -477,8 +473,8 @@ def _ExecCommands(command_list,
                         transform_block += '.' + transform
                         transform = transform.split('(')[0]
                         if ((transform == 'movecm') or
-                            (transform == 'rotcm') or
-                            (transform == 'scalecm')):
+                                (transform == 'rotcm') or
+                                (transform == 'scalecm')):
                             break
                 transform_blocks.append(transform_block)
 
@@ -512,7 +508,6 @@ def _ExecCommands(command_list,
                                                                    command.srcloc,
                                                                    command.context_node))
 
-
         elif isinstance(command, WriteFileCommand):
 
             # --- Throw away lines containin references to deleted variables:---
@@ -523,10 +518,9 @@ def _ExecCommands(command_list,
             for entry in command.tmpl_list:
                 if isinstance(entry, TextBlock):
                     tmpl_list.append(TextBlock(entry.text,
-                                               entry.srcloc)) #, entry.srcloc_end))
+                                               entry.srcloc))  # , entry.srcloc_end))
                 else:
                     tmpl_list.append(entry)
-
 
             #     Now throw away lines with deleted variables
 
@@ -548,12 +542,11 @@ def _ExecCommands(command_list,
 
             files_content[command.filename].append(text)
 
-
         elif isinstance(command, ScopeBegin):
 
             if isinstance(command.node, InstanceObj):
                 if ((command.node.children != None) and
-                    (len(command.node.children) > 0)):
+                        (len(command.node.children) > 0)):
                     matrix_stack.PushStack(command.node)
 
             # "command_list" is a long list of commands.
@@ -594,12 +587,12 @@ def _ExecCommands(command_list,
                                           matrix_stack.M)
 
                 for ppcommand in postprocessing_commands:
-                    matrix_stack.Pop(which_stack = command.context_node)
+                    matrix_stack.Pop(which_stack=command.context_node)
                     #(same as PopRight())
 
             if isinstance(command.node, InstanceObj):
                 if ((command.node.children != None) and
-                    (len(command.node.children) > 0)):
+                        (len(command.node.children) > 0)):
                     matrix_stack.PopStack()
 
             # "ScopeEnd"  means we're done with this class/instance.
@@ -609,7 +602,6 @@ def _ExecCommands(command_list,
             assert(False)
             # no other command types allowed at this point
 
-
     # After processing the commands in this list,
     # merge the templates with the callers template list
     for filename, tmpl_list in files_content.items():
@@ -617,7 +609,6 @@ def _ExecCommands(command_list,
             files_content[filename]
 
     return index
-
 
 
 def ExecCommands(commands,
@@ -637,8 +628,6 @@ def ExecCommands(commands,
     assert(index == len(commands))
 
 
-
-
 def WriteFiles(files_content, suffix='', write_to_stdout=True):
     for filename, str_list in files_content.items():
         if filename != None:
@@ -647,7 +636,7 @@ def WriteFiles(files_content, suffix='', write_to_stdout=True):
                 if write_to_stdout:
                     out_file = sys.stdout
             else:
-                out_file = open(filename+suffix, 'a')
+                out_file = open(filename + suffix, 'a')
             if out_file != None:
                 out_file.write(''.join(str_list))
                 if filename != '':
@@ -670,10 +659,12 @@ def main():
     """
 
     #######  Main Code Below: #######
-    sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
-    sys.stderr.write('\n(python version '+str(sys.version)+')\n')
+    sys.stderr.write(g_program_name + ' v' +
+                     g_version_str + ' ' + g_date_str + ' ')
+    sys.stderr.write('\n(python version ' + str(sys.version) + ')\n')
     if sys.version < '2.6':
-        raise InputError('Error: Alas, you must upgrade to a newer version of python.')
+        raise InputError(
+            'Error: Alas, you must upgrade to a newer version of python.')
 
     try:
 
@@ -683,10 +674,10 @@ def main():
         LttreeParseArgs(sys.argv, settings, main=True)
 
         # Data structures to store the class definitionss and instances
-        g_objectdefs = StaticObj('', None) # The root of the static tree
-                                           # has name '' (equivalent to '/')
-        g_objects    = InstanceObj('', None) # The root of the instance tree
-                                             # has name '' (equivalent to '/')
+        g_objectdefs = StaticObj('', None)  # The root of the static tree
+        # has name '' (equivalent to '/')
+        g_objects = InstanceObj('', None)  # The root of the instance tree
+        # has name '' (equivalent to '/')
 
         # A list of commands to carry out
         g_static_commands = []
@@ -739,13 +730,14 @@ def main():
 
         # Now write the variable bindings/assignments table.
         sys.stderr.write('writing \"ttree_assignments.txt\" file...')
-        open('ttree_assignments.txt', 'w').close() # <-- erase previous version.
+        # <-- erase previous version.
+        open('ttree_assignments.txt', 'w').close()
         WriteVarBindingsFile(g_objectdefs)
         WriteVarBindingsFile(g_objects)
         sys.stderr.write(' done\n')
 
     except (ValueError, InputError) as err:
-        sys.stderr.write('\n\n'+str(err)+'\n')
+        sys.stderr.write('\n\n' + str(err) + '\n')
         sys.exit(-1)
 
     return

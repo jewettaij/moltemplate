@@ -7,7 +7,7 @@ from .nbody_graph_search import Ugraph
 #       0   1
 #
 
-bond_pattern = Ugraph([(0,1)])
+bond_pattern = Ugraph([(0, 1)])
 # (Ugraph atom indices begin at 0, not 1)
 
 
@@ -25,7 +25,7 @@ def canonical_order(match):
     # match[1][0:1] contains the ID numbers for the 1 bond
     bond0 = match[1][0]
     if atom0 < atom1:
-        #return ((atom0, atom1), (bond0))  same thing as:
+        # return ((atom0, atom1), (bond0))  same thing as:
         return match
     else:
         return ((atom1, atom0), (bond0))

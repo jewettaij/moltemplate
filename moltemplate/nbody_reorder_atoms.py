@@ -22,12 +22,13 @@ if len(sys.argv) == 3:
     module_name = sys.argv[2].rstrip('.py')
 else:
     sys.stderr.write('Usage Example:\n\n'
-                     '      '+g_program_name+' Angles nbody_angles.py < angles.txt > new_angles.txt\n\n'
+                     '      ' + g_program_name + ' Angles nbody_angles.py < angles.txt > new_angles.txt\n\n'
                      '      In this example \"angles.txt\" contains only the \"Angles\" section of\n'
                      '      a LAMMPS DATA file.  (Either a text-editor, or the \n'
                      '      \"extract_lammps_data.py\" script can be used to select a section from\n'
                      '      a LAMMPS DATA file\n\n'
-                     'Error('+g_program_name+'): expected exactly one argument:\n'
+                     'Error(' + g_program_name +
+                     '): expected exactly one argument:\n'
                      '       \"Angles\",  \"Dihedrals\", or \"Impropers\"\n')
     exit(-1)
 
@@ -35,7 +36,7 @@ else:
 # nbody_angles.py, nbody_dihedrals.py, nbody_impropers.py
 # Load that now.
 
-g = __import__(module_name)  #defines g.bond_pattern, g.canonical_order
+g = __import__(module_name)  # defines g.bond_pattern, g.canonical_order
 
 # This module defines the graph representing the bond pattern for this type
 # of interaction.  (The number of vertices and edges for the graph corresponds
@@ -50,25 +51,25 @@ for line_orig in in_stream:
     if '#' in line_orig:
         ic = line.find('#')
         line = line_orig[:ic]
-        comment = ' '+line_orig[ic:].rstrip('\n')
+        comment = ' ' + line_orig[ic:].rstrip('\n')
 
     tokens = line.strip().split()
     swapped = False
-    if len(tokens) == 2+natoms:
+    if len(tokens) == 2 + natoms:
         all_integers = True
         abids_l = [[0 for i in range(0, natoms)],
                    [0 for i in range(0, nbonds)]]
         for i in range(0, natoms):
-            if not tokens[2+i].isdigit():
+            if not tokens[2 + i].isdigit():
                 all_integers = False
         if all_integers:
             for i in range(0, natoms):
-                abids_l[0][i] = int(tokens[2+i])
+                abids_l[0][i] = int(tokens[2 + i])
         else:
             for i in range(0, natoms):
-                abids_l[0][i] = tokens[2+i]
-        abids = g.canonical_order( (tuple(abids_l[0]), tuple(abids_l[1])) )
+                abids_l[0][i] = tokens[2 + i]
+        abids = g.canonical_order((tuple(abids_l[0]), tuple(abids_l[1])))
         for i in range(0, natoms):
-            tokens[2+i] = str(abids[0][i])
+            tokens[2 + i] = str(abids[0][i])
 
-    sys.stdout.write(' '.join(tokens)+comment+'\n')
+    sys.stdout.write(' '.join(tokens) + comment + '\n')

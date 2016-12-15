@@ -16,8 +16,8 @@ from .lttree_styles import *
 from .ttree_lex import ExtractCatName
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_postprocess.py'
-g_version_str  = '0.4'
-g_date_str     = '2012-12-12'
+g_version_str = '0.4'
+g_date_str = '2012-12-12'
 atom_style = 'full'
 ttree_assignments_fname = 'ttree_assignments.txt'
 defined_mols = set([])
@@ -28,34 +28,34 @@ defined_dihedrals = set([])
 defined_impropers = set([])
 
 g_no_check_msg = \
-  '(To override this error, run moltemplate using the \"-nocheck\" argument.)\n'
+    '(To override this error, run moltemplate using the \"-nocheck\" argument.)\n'
 
 if len(sys.argv) > 1:
-    for i in range(0,len(sys.argv)):
+    for i in range(0, len(sys.argv)):
         if ((sys.argv[i].lower() == '-atomstyle') or
-            (sys.argv[i].lower() == '-atom-style') or
-            (sys.argv[i].lower() == '-atom_style')):
-            if i+1 >= len(sys.argv):
-                raise InputError('Error('+g_program_name+'): The '+sys.argv[i]+' flag should be followed by a LAMMPS\n'
+                (sys.argv[i].lower() == '-atom-style') or
+                (sys.argv[i].lower() == '-atom_style')):
+            if i + 1 >= len(sys.argv):
+                raise InputError('Error(' + g_program_name + '): The ' + sys.argv[i] + ' flag should be followed by a LAMMPS\n'
                                  '       atom_style name (or single quoted string containing a space-separated\n'
                                  '       list of column names such as: atom-ID atom-type q x y z molecule-ID.)\n')
 
-            atom_style = sys.argv[i+1]
+            atom_style = sys.argv[i + 1]
         elif ((sys.argv[i].lower() == '-ttreeassignments') or
               (sys.argv[i].lower() == '-ttree-assignments') or
               (sys.argv[i].lower() == '-ttree_assignments')):
-            if i+1 >= len(sys.argv):
-                raise InputError('Error('+g_program_name+'): The '+sys.argv[i]+' flag should be followed by \n'
+            if i + 1 >= len(sys.argv):
+                raise InputError('Error(' + g_program_name + '): The ' + sys.argv[i] + ' flag should be followed by \n'
                                  '       a file containing the variable bindings created by ttree/moltemplate.\n')
-            ttree_assignments_fname = sys.argv[i+1]
+            ttree_assignments_fname = sys.argv[i + 1]
         else:
-            pass # ignore other arguments (they are intended for lttree.py)
+            pass  # ignore other arguments (they are intended for lttree.py)
 
 
 atom_column_names = AtomStyle2ColNames(atom_style)
 i_atomid = 0
 i_molid = -1
-for i in range(0,len(atom_column_names)):
+for i in range(0, len(atom_column_names)):
     if atom_column_names[i].lower() == 'atom-id':
         i_atomid = i
     elif atom_column_names[i].lower() == 'molecule-id':
@@ -73,17 +73,19 @@ i_max_column = max(i_atomid, i_molid)
 #data_impropers="Data Impropers"
 
 
-sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+'\n')
+sys.stderr.write(g_program_name + ' v' +
+                 g_version_str + ' ' + g_date_str + '\n')
 
 try:
     # ------------ defined_atoms ------------
     try:
-        f = open(data_atoms+'.template', 'r')
+        f = open(data_atoms + '.template', 'r')
     except:
-        raise InputError('Error('+g_program_name+'): Unable to open file\n'+
-                         '\"'+data_atoms+'.template\"\n'
-                         '       for reading.  (Do your files lack a \"'+data_atoms+'\" section?)\n'
-                         +g_no_check_msg+'\n')
+        raise InputError('Error(' + g_program_name + '): Unable to open file\n' +
+                         '\"' + data_atoms + '.template\"\n'
+                         '       for reading.  (Do your files lack a \"' +
+                         data_atoms + '\" section?)\n'
+                         + g_no_check_msg + '\n')
 
     for line_orig in f:
         ic = line_orig.find('#')
@@ -96,11 +98,11 @@ try:
         if len(tokens) == 0:
             pass
         elif len(tokens) <= i_max_column:
-            raise InputError('Error('+g_program_name+'): The following line from\n'
-                             '     "\"'+data_atoms+'.template\" has bad format:\n\n'
-                             +line_orig+'\n'
+            raise InputError('Error(' + g_program_name + '): The following line from\n'
+                             '     "\"' + data_atoms + '.template\" has bad format:\n\n'
+                             + line_orig + '\n'
                              '     This my probably an internal error. (Feel free to contact the developer.)\n'
-                             +g_no_check_msg+'\n')
+                             + g_no_check_msg + '\n')
         else:
             defined_atoms.add(tokens[i_atomid])
             if i_molid != -1:
@@ -108,10 +110,9 @@ try:
 
     f.close()
 
-
     # ------------ defined_bonds ------------
     try:
-        f = open(data_bonds+'.template', 'r')
+        f = open(data_bonds + '.template', 'r')
 
         for line_orig in f:
             ic = line_orig.find('#')
@@ -124,21 +125,20 @@ try:
             if len(tokens) == 0:
                 pass
             elif len(tokens) < 4:
-                raise InputError('Error('+g_program_name+'): The following line from\n'
-                                 '     "\"'+data_bonds+'.template\" has bad format:\n\n'
-                                 +line_orig+'\n'
+                raise InputError('Error(' + g_program_name + '): The following line from\n'
+                                 '     "\"' + data_bonds + '.template\" has bad format:\n\n'
+                                 + line_orig + '\n'
                                  '     This my probably an internal error. (Feel free to contact the developer.)\n'
-                                 +g_no_check_msg+'\n')
+                                 + g_no_check_msg + '\n')
             else:
                 defined_bonds.add(tokens[0])
         f.close()
     except:
-        pass # Defining bonds (stored in the data_bonds file) is optional
-
+        pass  # Defining bonds (stored in the data_bonds file) is optional
 
     # ------------ defined_angles ------------
     try:
-        f = open(data_angles+'.template', 'r')
+        f = open(data_angles + '.template', 'r')
         for line_orig in f:
             ic = line_orig.find('#')
             if ic != -1:
@@ -150,21 +150,20 @@ try:
             if len(tokens) == 0:
                 pass
             elif len(tokens) < 5:
-                raise InputError('Error('+g_program_name+'): The following line from\n'
-                                 '     "\"'+data_angles+'.template\" has bad format:\n\n'
-                                 +line_orig+'\n'
+                raise InputError('Error(' + g_program_name + '): The following line from\n'
+                                 '     "\"' + data_angles + '.template\" has bad format:\n\n'
+                                 + line_orig + '\n'
                                  '     This my probably an internal error. (Feel free to contact the developer.)\n'
-                                 +g_no_check_msg+'\n')
+                                 + g_no_check_msg + '\n')
             else:
                 defined_angles.add(tokens[0])
         f.close()
     except:
-        pass # Defining angles (stored in the data_angles file) is optional
-
+        pass  # Defining angles (stored in the data_angles file) is optional
 
     # ------------ defined_dihedrals ------------
     try:
-        f = open(data_dihedrals+'.template', 'r')
+        f = open(data_dihedrals + '.template', 'r')
         for line_orig in f:
             ic = line_orig.find('#')
             if ic != -1:
@@ -176,21 +175,21 @@ try:
             if len(tokens) == 0:
                 pass
             elif len(tokens) < 6:
-                raise InputError('Error('+g_program_name+'): The following line from\n'
-                                 '     "\"'+data_dihedrals+'.template\" has bad format:\n\n'
-                                 +line_orig+'\n'
+                raise InputError('Error(' + g_program_name + '): The following line from\n'
+                                 '     "\"' + data_dihedrals + '.template\" has bad format:\n\n'
+                                 + line_orig + '\n'
                                  '     This my probably an internal error. (Feel free to contact the developer.)\n'
-                                 +g_no_check_msg+'\n')
+                                 + g_no_check_msg + '\n')
             else:
                 defined_dihedrals.add(tokens[0])
         f.close()
     except:
-        pass #Defining dihedrals (stored in the data_dihedrals file) is optional
-
+        # Defining dihedrals (stored in the data_dihedrals file) is optional
+        pass
 
     # ------------ defined_impropers ------------
     try:
-        f = open(data_impropers+'.template', 'r')
+        f = open(data_impropers + '.template', 'r')
 
         for line_orig in f:
             ic = line_orig.find('#')
@@ -203,36 +202,35 @@ try:
             if len(tokens) == 0:
                 pass
             elif len(tokens) < 6:
-                raise InputError('Error('+g_program_name+'): The following line from\n'
-                                 '     "\"'+data_impropers+'.template\" has bad format:\n\n'
-                                 +line_orig+'\n'
+                raise InputError('Error(' + g_program_name + '): The following line from\n'
+                                 '     "\"' + data_impropers + '.template\" has bad format:\n\n'
+                                 + line_orig + '\n'
                                  '     This my probably an internal error. (Feel free to contact the developer.)\n'
-                                 +g_no_check_msg+'\n')
+                                 + g_no_check_msg + '\n')
             else:
                 defined_impropers.add(tokens[0])
         f.close()
     except:
-        pass #Defining impropers (stored in the data_impropers file) is optional
-
-
-
+        # Defining impropers (stored in the data_impropers file) is optional
+        pass
 
     # ---- Check ttree_assignments to make sure variables are defined ----
 
     try:
         f = open(ttree_assignments_fname, 'r')
     except:
-        raise InputError('Error('+g_program_name+'): Unable to open file\n'+
-                         '\"'+ttree_assignments_fname+'\"\n'
-                         '       for reading.  (Do your files lack a \"'+data_atoms+'\" section?)\n'
-                         +g_no_check_msg+'\n')
+        raise InputError('Error(' + g_program_name + '): Unable to open file\n' +
+                         '\"' + ttree_assignments_fname + '\"\n'
+                         '       for reading.  (Do your files lack a \"' +
+                         data_atoms + '\" section?)\n'
+                         + g_no_check_msg + '\n')
 
     for line_orig in f:
 
         ic = line_orig.find('#')
         if ic != -1:
             line = line_orig[:ic]
-            usage_location_str = 'near ' + line_orig[ic+1:]
+            usage_location_str = 'near ' + line_orig[ic + 1:]
         else:
             line = line_orig.rstrip('\n')
             usage_location_str = ''
@@ -257,52 +255,52 @@ try:
             # are ignored during this pass.
             i_prefix = tokens[0].find('$')
             if i_prefix != -1:
-                descr_str = tokens[0][i_prefix+1:]
+                descr_str = tokens[0][i_prefix + 1:]
                 cat_name = ExtractCatName(descr_str)
 
                 if ((cat_name == 'atom') and
-                    (tokens[0] not in defined_atoms)):
-                    raise InputError('Error('+g_program_name+'): '+usage_location_str+'\n'+
+                        (tokens[0] not in defined_atoms)):
+                    raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
                                      '      Reference to undefined $atom:\n\n'
-                                     '            '+tokens[0]+'     (<--full name)\n\n'+
-                                     '      (If that atom belongs to a molecule (or other subunit), make sure that\n'+
-                                     '       you specified the correct path which leads to it (using / and ..))\n\n'+
+                                     '            ' + tokens[0] + '     (<--full name)\n\n' +
+                                     '      (If that atom belongs to a molecule (or other subunit), make sure that\n' +
+                                     '       you specified the correct path which leads to it (using / and ..))\n\n' +
                                      g_no_check_msg)
 
                 elif ((cat_name == 'bond') and
-                    (tokens[0] not in defined_bonds)):
-                    raise InputError('Error('+g_program_name+'): '+usage_location_str+'\n'+
+                      (tokens[0] not in defined_bonds)):
+                    raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
                                      '      Reference to undefined $bond:\n\n'
-                                     '            '+tokens[0]+'     (<--full name)\n\n'+
-                                     '      (If that bond belongs to a molecule (or other subunit), make sure that\n'+
-                                     '       you specified the correct path which leads to it (using / and ..))\n\n'+
+                                     '            ' + tokens[0] + '     (<--full name)\n\n' +
+                                     '      (If that bond belongs to a molecule (or other subunit), make sure that\n' +
+                                     '       you specified the correct path which leads to it (using / and ..))\n\n' +
                                      g_no_check_msg)
 
                 elif ((cat_name == 'angle') and
-                    (tokens[0] not in defined_angles)):
-                    raise InputError('Error('+g_program_name+'): '+usage_location_str+'\n'+
-                                     '      Reference to undefined $angle:\n\n'+
-                                     '            '+tokens[0]+'     (<--full name)\n\n'+
-                                     '      (If that angle belongs to a molecule (or other subunit), make sure that\n'+
-                                     '       you specified the correct path which leads to it (using / and ..))\n\n'+
+                      (tokens[0] not in defined_angles)):
+                    raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
+                                     '      Reference to undefined $angle:\n\n' +
+                                     '            ' + tokens[0] + '     (<--full name)\n\n' +
+                                     '      (If that angle belongs to a molecule (or other subunit), make sure that\n' +
+                                     '       you specified the correct path which leads to it (using / and ..))\n\n' +
                                      g_no_check_msg)
 
                 elif ((cat_name == 'dihedral') and
-                    (tokens[0] not in defined_dihedrals)):
-                    raise InputError('Error('+g_program_name+'): '+usage_location_str+'\n\n'+
+                      (tokens[0] not in defined_dihedrals)):
+                    raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n\n' +
                                      '      Reference to undefined $dihedral:\n\n'
-                                     '            '+tokens[0]+'     (<--full name)\n\n'+
-                                     '    (If that dihedral belongs to a molecule (or other subunit), make sure that\n'+
-                                     '     you specified the correct path which leads to it (using / and ..))\n\n'+
+                                     '            ' + tokens[0] + '     (<--full name)\n\n' +
+                                     '    (If that dihedral belongs to a molecule (or other subunit), make sure that\n' +
+                                     '     you specified the correct path which leads to it (using / and ..))\n\n' +
                                      g_no_check_msg)
 
                 elif ((cat_name == 'improper') and
-                    (tokens[0] not in defined_impropers)):
-                    raise InputError('Error('+g_program_name+'): '+usage_location_str+'\n'+
+                      (tokens[0] not in defined_impropers)):
+                    raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
                                      '      Reference to undefined $improper:\n\n'
-                                     '            '+tokens[0]+'     (<--full name)\n\n'+
-                                     '    (If that improper belongs to a molecule (or other subunit), make sure that\n'+
-                                     '     you specified the correct path which leads to it (using / and ..))\n\n'+
+                                     '            ' + tokens[0] + '     (<--full name)\n\n' +
+                                     '    (If that improper belongs to a molecule (or other subunit), make sure that\n' +
+                                     '     you specified the correct path which leads to it (using / and ..))\n\n' +
                                      g_no_check_msg)
 
                 # I used to generate an error when a users defines a $mol
@@ -312,7 +310,7 @@ try:
                 # I don't think there is any real need to complain if some
                 # molecule id numbers are undefined.  LAMMPS does not care.
                 #
-                #elif ((cat_name == 'mol') and
+                # elif ((cat_name == 'mol') and
                 #    (tokens[0] not in defined_mols)):
                 #    raise InputError('Error('+g_program_name+'): '+usage_location_str+'\n'+
                 #                     '      Reference to undefined $mol (molecule-ID) variable:\n\n'
@@ -321,14 +319,12 @@ try:
                 #                     '     you specified the correct path which leads to it (using / and ..))\n\n'+
                 #                     g_no_check_msg)
 
-
     f.close()
 
-    sys.stderr.write(g_program_name+': -- No errors detected. --\n')
+    sys.stderr.write(g_program_name + ': -- No errors detected. --\n')
     exit(0)
 
 
-
 except (ValueError, InputError) as err:
-    sys.stderr.write('\n'+str(err)+'\n')
+    sys.stderr.write('\n' + str(err) + '\n')
     sys.exit(1)

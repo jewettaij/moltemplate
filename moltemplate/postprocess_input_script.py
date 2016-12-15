@@ -41,14 +41,15 @@ if len(sys.argv) > 1:
 in_stream = sys.stdin
 lines_orig += in_stream.readlines()
 
-pair_style_list=[]
+pair_style_list = []
 swap_occured = False
 warn_wildcard = False
 
-i=0
+i = 0
 while i < len(lines_orig):
     # Read the next logical line
-    # Any lines ending in '&' should be merged with the next line before breaking
+    # Any lines ending in '&' should be merged with the next line before
+    # breaking
     line_orig = ''
     while i < len(lines_orig):
         line_counter = 1 + i - num_lines_ignore
@@ -56,13 +57,14 @@ while i < len(lines_orig):
         if ((len(line_orig) < 2) or (line_orig[-2:] != '&\n')):
             break
         i += 1
-    line = line_orig.replace('&\n','\n').rstrip('\n')
+    line = line_orig.replace('&\n', '\n').rstrip('\n')
 
     comment = ''
     if '#' in line_orig:
         ic = line.find('#')
         line = line_orig[:ic]
-        comment = line_orig[ic:] # keep track of comments (put them back later)
+        # keep track of comments (put them back later)
+        comment = line_orig[ic:]
 
     tokens = line.strip().split()
     if ((len(tokens) >= 2) and (tokens[0] == 'pair_style')):
@@ -71,7 +73,7 @@ while i < len(lines_orig):
     if ((len(tokens) >= 3) and (tokens[0] == 'pair_coeff')):
 
         if ((tokens[1].isdigit() and (tokens[2].isdigit())) and
-             (int(tokens[1]) > int(tokens[2]))):
+                (int(tokens[1]) > int(tokens[2]))):
 
             swap_occured = True
             tmp = tokens[2]
@@ -81,8 +83,9 @@ while i < len(lines_orig):
             if i >= num_lines_ignore:
 
                 # polite warning:
-                sys.stderr.write('swapped pair_coeff order on line '+str(line_counter))
-                #if (fname != None):
+                sys.stderr.write(
+                    'swapped pair_coeff order on line ' + str(line_counter))
+                # if (fname != None):
                 #    sys.stderr.write(' of file \"'+fname+'\"')
                 sys.stderr.write('\n')
 
@@ -97,27 +100,32 @@ while i < len(lines_orig):
                 # and tokens[5] is either 'i' or 'j'.
                 if len(pair_style_list) > 0:
                     if ((pair_style_list[0] == 'hybrid') or
-                        (pair_style_list[0] == 'hybrid/overlay')):
-                        if ((len(tokens) > 5) and (tokens[5] == 'i') and (tokens[3][0:6]=='hbond/')):
+                            (pair_style_list[0] == 'hybrid/overlay')):
+                        if ((len(tokens) > 5) and (tokens[5] == 'i') and (tokens[3][0:6] == 'hbond/')):
                             tokens[5] = 'j'
-                            sys.stderr.write('  (and replaced \"i\" with \"j\")\n')
-                        elif ((len(tokens) > 5) and (tokens[5] == 'j') and (tokens[3][0:6]=='hbond/')):
+                            sys.stderr.write(
+                                '  (and replaced \"i\" with \"j\")\n')
+                        elif ((len(tokens) > 5) and (tokens[5] == 'j') and (tokens[3][0:6] == 'hbond/')):
                             tokens[5] = 'i'
-                            sys.stderr.write('  (and replaced \"j\" with \"i\")\n')
+                            sys.stderr.write(
+                                '  (and replaced \"j\" with \"i\")\n')
                     elif (pair_style_list[0][0:6] == 'hbond/'):
                         if ((len(tokens) > 4) and (tokens[4] == 'i')):
                             tokens[4] = 'j'
-                            sys.stderr.write('  (and replaced \"i\" with \"j\")\n')
+                            sys.stderr.write(
+                                '  (and replaced \"i\" with \"j\")\n')
                         elif ((len(tokens) > 4) and (tokens[4] == 'j')):
                             tokens[4] = 'i'
-                            sys.stderr.write('  (and replaced \"j\" with \"i\")\n')
+                            sys.stderr.write(
+                                '  (and replaced \"j\" with \"i\")\n')
 
-                sys.stdout.write((' '.join(tokens)+comment).replace('\n','&\n')+'\n')
+                sys.stdout.write(
+                    (' '.join(tokens) + comment).replace('\n', '&\n') + '\n')
 
         else:
             if ((('*' in tokens[1]) or ('*' in tokens[2]))
-                and
-                (not (('*' == tokens[1]) and ('*' == tokens[2])))):
+                    and
+                    (not (('*' == tokens[1]) and ('*' == tokens[2])))):
                 warn_wildcard = True
             if i >= num_lines_ignore:
                 sys.stdout.write(line_orig)
@@ -126,7 +134,6 @@ while i < len(lines_orig):
             sys.stdout.write(line_orig)
 
     i += 1
-
 
 
 if swap_occured:

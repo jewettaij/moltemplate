@@ -18,64 +18,77 @@ class GenError(Exception):
     An exception class containing string for error reporting.
 
     """
+
     def __init__(self, err_msg):
         self.err_msg = err_msg
+
     def __str__(self):
         return self.err_msg
+
     def __repr__(self):
         return str(self)
+
 
 class GraphError(GenError):
     """
     An exception class containing a graph and a string for error reporting.
 
     """
+
     def __init__(self, g, err_msg):
         GenError.__init__(self, err_msg)
         self.g = g
+
     def __str__(self):
         g_str = str(g)
         # If the string representation of the graph is too
         # large to fit in one screen, truncate it
         g_str_lines = g_str.split('\n')
         if (len(g_str_lines) > 12):
-            g_str_lines = g_str_lines[0:12] + [' ...(additional lines not shown)]']
+            g_str_lines = g_str_lines[0:12] + \
+                [' ...(additional lines not shown)]']
             g_str = '\n'.join(g_str_lines)
-        return 'Problem with graph:\n'+g_str+'\n'+self.err_msg
+        return 'Problem with graph:\n' + g_str + '\n' + self.err_msg
+
     def __repr__(self):
         return str(self)
 
+
 class Disconnected(GraphError):
+
     def __init__(self, g, err_msg):
         GraphError.__init__(self, g, err_msg)
+
 
 class NotUndirected(GraphError):
+
     def __init__(self, g, err_msg):
         GraphError.__init__(self, g, err_msg)
-
 
 
 class Edge(object):
-    __slots__=["start","stop","attr"]
+    __slots__ = ["start", "stop", "attr"]
+
     def __init__(self,
-                 iv_start, # edge starts here (index into vertex list)
+                 iv_start,  # edge starts here (index into vertex list)
                  iv_stop,   # edge ends here (index into vertex list)
-                 attr=None): # edges have an optional type attribute
+                 attr=None):  # edges have an optional type attribute
         self.start = iv_start
-        self.stop  = iv_stop
+        self.stop = iv_stop
         self.attr = attr
+
     def __str__(self):
-        return '('+str(self.start)+','+str(self.stop)+')'
+        return '(' + str(self.start) + ',' + str(self.stop) + ')'
+
     def __repr__(self):
         return str(self)
 
 
 class Vertex(object):
-    __slots__=["attr"]
+    __slots__ = ["attr"]
+
     def __init__(self, attr=None):
         self.attr = attr
-
-
 
 
 class Dgraph(object):
@@ -108,24 +121,27 @@ class Dgraph(object):
         if edgelist == None:
             self.verts = []
             self.edges = []
-            self.nv = 0 #integer keeps track of # of vertices = len(self.verts)
-            self.ne = 0 #integer keeps track of # of edges    = len(self.edges)
-            self.neighbors = [] # The adjacency list.
+            # integer keeps track of # of vertices = len(self.verts)
+            self.nv = 0
+            # integer keeps track of # of edges    = len(self.edges)
+            self.ne = 0
+            self.neighbors = []  # The adjacency list.
 
         else:
             # Parse the edge-list format:
-            iv_max = 0 # <-- what's the vertex with the maximum id number?
+            iv_max = 0  # <-- what's the vertex with the maximum id number?
             for i in range(0, len(edgelist)):
                 iv = edgelist[i][0]
                 jv = edgelist[i][1]
                 if ((iv < 0) or (jv < 0)):
-                    raise(GenError('Error in Dgraph.__init__: Negative vertex number pair encountered: ('+str(iv)+','+str(jv)+')'))
+                    raise(GenError(
+                        'Error in Dgraph.__init__: Negative vertex number pair encountered: (' + str(iv) + ',' + str(jv) + ')'))
                 if iv > iv_max:
                     iv_max = iv
                 if jv > iv_max:
                     iv_max = jv
 
-            self.nv = iv_max+1
+            self.nv = iv_max + 1
             self.verts = [Vertex() for iv in range(0, self.nv)]
             self.edges = []
             self.ne = 0
@@ -140,7 +156,6 @@ class Dgraph(object):
             assert(self.ne == len(self.edges))
 
             self.SortNeighborLists()
-
 
     def AddVertex(self, iv=-1, attr=None):
         """
@@ -157,20 +172,19 @@ class Dgraph(object):
         should eventually fill the range from 0 to self.nv-1.
 
         """
-        if iv == -1: # if iv unspecified, put the vertex at the end of the list
+        if iv == -1:  # if iv unspecified, put the vertex at the end of the list
             iv = self.nv
 
         if iv < self.nv:
             self.verts[iv].attr = attr
         else:
             # In case there is a gap between iv and nv, fill it with blanks
-            self.verts +=        ([Vertex()] * ((1 + iv) - self.nv))
+            self.verts += ([Vertex()] * ((1 + iv) - self.nv))
             self.neighbors += ([[]] * ((1 + iv) - self.nv))
             self.verts[iv].attr = attr
-            self.nv = iv+1
+            self.nv = iv + 1
             assert(self.nv == len(self.verts))
             assert(self.nv == len(self.neighbors))
-
 
     def AddEdge(self, iv, jv, attr=None, remove_duplicates=False):
         """
@@ -189,7 +203,6 @@ class Dgraph(object):
         self.neighbors[iv].append(self.ne)
         self.ne += 1
         assert(self.ne == len(self.edges))
-
 
     def ReorderVerts(self, vpermutation, invert=False):
         """
@@ -211,7 +224,7 @@ class Dgraph(object):
         if (invert):
             vperm = [-1 for iv in vpermutation]
             for iv in range(0, self.nv):
-                vperm[ vpermutation[iv] ] = iv
+                vperm[vpermutation[iv]] = iv
         else:
             vperm = vpermutation
 
@@ -222,7 +235,7 @@ class Dgraph(object):
 
         for ie in range(0, self.ne):
             self.edges[ie].start = vperm[self.edges[ie].start]
-            self.edges[ie].stop  = vperm[self.edges[ie].stop]
+            self.edges[ie].stop = vperm[self.edges[ie].stop]
 
         orig_neighbors = [nlist for nlist in self.neighbors]
         # self.neighbors is a 2-d array.
@@ -238,7 +251,6 @@ class Dgraph(object):
 
         # Optional:
         self.SortNeighborLists()
-
 
     def ReorderEdges(self, epermutation, invert=False):
         """
@@ -265,7 +277,7 @@ class Dgraph(object):
         if (invert):
             eperm = [-1 for ie in epermutation]
             for ie in range(0, self.ne):
-                eperm[ epermutation[ie] ] = ie
+                eperm[epermutation[ie]] = ie
         else:
             eperm = epermutation
 
@@ -282,22 +294,22 @@ class Dgraph(object):
     def SortNeighborLists(self):
         assert(self.nv == len(self.neighbors))
         for iv in range(0, self.nv):
-            #Back when self.neighbors was just a 2-dimensional list of
-            #vertex id numbers, then the following line would have worked:
+            # Back when self.neighbors was just a 2-dimensional list of
+            # vertex id numbers, then the following line would have worked:
             #  self.neighbors[iv].sort()
 
             # ugly python code alert:
-            #Unfortunately, we had to change the format of self.neighbors. Now
-            #it is a list of indices into the self.edges array ("ie" numbers).
-            #We want to sort the "ie" numbers by the vertices they point to.
-            #self.edge[ie].start should point to the current vertex (hopefully).
-            #self.edge[ie].stop should point to the vertex it's attached to.
-            #So we want to sort the ie's in self.neighbors by self.edge[ie].stop
-            #Create a temporary array of 2-tuples (ie, jv)
+            # Unfortunately, we had to change the format of self.neighbors. Now
+            # it is a list of indices into the self.edges array ("ie" numbers).
+            # We want to sort the "ie" numbers by the vertices they point to.
+            # self.edge[ie].start should point to the current vertex (hopefully).
+            # self.edge[ie].stop should point to the vertex it's attached to.
+            # So we want to sort the ie's in self.neighbors by self.edge[ie].stop
+            # Create a temporary array of 2-tuples (ie, jv)
             nlist = [(ie, self.edges[ie].stop)
                      for ie in self.neighbors[iv]]
-            self.neighbors[iv] = [ie for ie,jv in sorted(nlist,
-                                                         key=itemgetter(1))]
+            self.neighbors[iv] = [ie for ie, jv in sorted(nlist,
+                                                          key=itemgetter(1))]
 
     def FindEdge(self, istart, istop):
         """
@@ -326,7 +338,7 @@ class Dgraph(object):
         return self.ne
 
     # Commenting out.  I think it's clearer to use python's deepcopy instead
-    #def makecopy(self):
+    # def makecopy(self):
     #    new_copy = Ugraph()
     #    new_copy.verts = [vertex for vertex in self.verts]
     #    new_copy.edges = [  edge for edge   in self.edges]
@@ -334,7 +346,6 @@ class Dgraph(object):
     #    new_copy.nv = self.nv
     #    new_copy.ne = self.ne
     #    return new_copy
-
 
     def __str__(self):
         # Print the graph as a list of neighbor-lists.
@@ -347,18 +358,18 @@ class Dgraph(object):
                 je = self.neighbors[iv][j]
                 jv = self.edges[je].stop
                 l.append(str(jv))
-                if j < len(self.neighbors[iv])-1:
+                if j < len(self.neighbors[iv]) - 1:
                     l.append(', ')
                 else:
                     l.append(']')
-            if iv < self.nv-1:
+            if iv < self.nv - 1:
                 l.append(',\n  ')
             else:
                 l.append(']')
         l.append(',\n [')
         for ie in range(0, self.ne):
             l.append(str(self.edges[ie]))
-            if ie < self.ne-1:
+            if ie < self.ne - 1:
                 l.append(', ')
             else:
                 l.append('])\n')
@@ -366,10 +377,6 @@ class Dgraph(object):
 
     def __repr__(self):
         return str(self)
-
-
-
-
 
 
 class Ugraph(Dgraph):
@@ -395,8 +402,8 @@ class Ugraph(Dgraph):
         neu = self.ne
         ned = self.ne
         for ieu in range(0, self.ne):
-            iv   = self.edges[ieu].start
-            jv   = self.edges[ieu].stop
+            iv = self.edges[ieu].start
+            jv = self.edges[ieu].stop
             if iv != jv:
                 ned += 1
 
@@ -405,21 +412,21 @@ class Ugraph(Dgraph):
 
         ied_redundant = neu
         for ie in range(0, neu):
-            iv   = self.edges[ie].start
-            jv   = self.edges[ie].stop
+            iv = self.edges[ie].start
+            jv = self.edges[ie].stop
             attr = self.edges[ie].attr
             self.ieu_to_ied[ie] = ie
             self.ied_to_ieu[ie] = ie
 
             if iv != jv:
                # Then create another edge which points in the reverse direction
-                Dgraph.AddEdge(self, jv, iv, attr) # <--this increments self.ne
+                # <--this increments self.ne
+                Dgraph.AddEdge(self, jv, iv, attr)
                 self.ied_to_ieu[ied_redundant] = ie
                 ied_redundant += 1
 
         self.neu = neu
         assert(self.ne == ned)
-
 
     def AddEdge(self, iv, jv, attr=None, remove_duplicates=False):
         """
@@ -432,18 +439,16 @@ class Ugraph(Dgraph):
 
         """
 
-        self.ieu_to_ied.append( len(self.edges) )
+        self.ieu_to_ied.append(len(self.edges))
         Dgraph.AddEdge(self, iv, jv, attr, remove_duplicates)
-        self.ied_to_ieu.append( self.neu )
+        self.ied_to_ieu.append(self.neu)
         if jv != iv:
             Dgraph.AddEdge(self, jv, iv, attr, remove_duplicates)
-            self.ied_to_ieu.append( self.neu )
+            self.ied_to_ieu.append(self.neu)
         self.neu += 1
 
         assert(len(self.ieu_to_ied) == self.neu)
         assert(len(self.ied_to_ieu) == len(self.edges))
-
-
 
     def ReorderEdges(self, epermutation, invert=False):
         Dgraph.ReorderEdges(self, epermutation, invert)
@@ -452,20 +457,20 @@ class Ugraph(Dgraph):
         # self.ieu_to_ied and
         # self.ied_to_ieu lookup tables:
 
-        if (invert): # (first invert the permutation if necessary)
+        if (invert):  # (first invert the permutation if necessary)
             eperm = [-1 for ie in epermutation]
             for ie in range(0, self.ne):
-                eperm[ epermutation[ie] ] = ie
+                eperm[epermutation[ie]] = ie
         else:
             eperm = epermutation
-        #epermutation.reverse()
+        # epermutation.reverse()
 
         ieu_to_ied_orig = [ied for ied in self.ieu_to_ied]
         ied_to_ieu_orig = [ieu for ieu in self.ied_to_ieu]
 
         for ieu in range(0, self.neu):
             ied_old = ieu_to_ied_orig[ieu]
-            ied     = eperm[ied_old]
+            ied = eperm[ied_old]
             self.ieu_to_ied[ieu] = ied
         for ied_old in range(0, self.ne):
             ieu = ied_to_ieu_orig[ied_old]
@@ -474,22 +479,20 @@ class Ugraph(Dgraph):
 
         eperm = epermutation
 
-
     def LookupDirectedEdgeIdx(self, ieu):
         return self.ieu_to_ied[ieu]
-
 
     def LookupUndirectedEdgeIdx(self, ied):
         return self.ied_to_ieu[ied]
 
-    #def GetVert(self, iv):    <-- (inherited from parent)
+    # def GetVert(self, iv):    <-- (inherited from parent)
     #    return self.verts[iv]
 
     def GetEdge(self, ieu):
         ied = self.ieu_to_ied[ieu]
         return self.edges[ied]
 
-    #def GetNumVerts(self):    <-- (inherited from parent)
+    # def GetNumVerts(self):    <-- (inherited from parent)
     #    return self.nv
 
     def GetNumEdges(self):
@@ -513,7 +516,6 @@ class Ugraph(Dgraph):
         ied = Dgraph.FindEdge(self, istart, istop)
         ieu = self.LookupUndirectedEdgeIdx(ied)
         return ieu
-
 
     def CalcEdgeLookupTable(self):
         """
@@ -557,14 +559,11 @@ class Ugraph(Dgraph):
                 self.ieu_to_ied.append(ied)
 
 
-
-
 def SortVertsByDegree(g):
     vert_numneighbors = [(iv, len(g.neighbors[iv])) for iv in range(0, g.nv)]
     vert_numneighbors.sort(key=itemgetter(1))
     order = [vert_numneighbors[iv][0] for iv in range(0, g.nv)]
     g.ReorderVerts(order, invert=True)
-
 
 
 class DFS(object):
@@ -576,22 +575,24 @@ class DFS(object):
 
     def __init__(self, g):
         self.g = g
-        self.sv = 0 #integer sv keeps track of how many vertices visited so far
-        self.se = 0 #integer se keeps track of how many edges visited so far
-        self.vvisited=[False for iv in range(0, self.g.nv)] # verts visited
-        self.vorder =[Dgraph.NULL for iv in range(0, self.g.nv)] #search order
-        self.evisited=[False for ie in range(0, self.g.ne)] # edges visited
-        self.eorder =[Dgraph.NULL for ie in range(0, self.g.ne)] #search order
+        self.sv = 0  # integer sv keeps track of how many vertices visited so far
+        self.se = 0  # integer se keeps track of how many edges visited so far
+        self.vvisited = [False for iv in range(0, self.g.nv)]  # verts visited
+        self.vorder = [Dgraph.NULL for iv in range(
+            0, self.g.nv)]  # search order
+        self.evisited = [False for ie in range(0, self.g.ne)]  # edges visited
+        self.eorder = [Dgraph.NULL for ie in range(
+            0, self.g.ne)]  # search order
 
     def Reset(self):
         self.sv = 0
         self.se = 0
         for iv in range(0, self.g.nv):
             self.vvisited[iv] = False
-            self.vorder[iv]   = Dgraph.NULL
+            self.vorder[iv] = Dgraph.NULL
         for ie in range(0, self.g.ne):
             self.evisited[ie] = False
-            self.eorder[ie]   = Dgraph.NULL
+            self.eorder[ie] = Dgraph.NULL
 
     def Order(self, starting_node=0):
         """
@@ -611,11 +612,11 @@ class DFS(object):
         self.sv = 1
         self._Order(starting_node)
         if self.sv != self.g.nv:
-            raise(Disconnected(self.g, "Error(Order): "+
+            raise(Disconnected(self.g, "Error(Order): " +
                                "The input graph is not connected."))
         assert(self.se == self.g.ne)
         return ([iv for iv in self.vorder], [ie for ie in self.eorder])
-        #return self.order
+        # return self.order
 
     def _Order(self, iv):
         """
@@ -653,7 +654,7 @@ class DFS(object):
         else:
             is_cyclic = self._IsCyclic(0)
         if ((self.sv != self.g.nv) and (not is_cyclic)):
-            raise(Disconnected(self.g, "Error(IsCyclic): "+
+            raise(Disconnected(self.g, "Error(IsCyclic): " +
                                "The input graph is not connected."))
         return is_cyclic
 
@@ -682,7 +683,6 @@ class DFS(object):
 
         return False
 
-
     def _IsCyclic(self, iv):
         """
         _IsCyclic() is a recursive function which carries out a
@@ -701,7 +701,6 @@ class DFS(object):
                 return True
 
         return False
-
 
 
 class GraphMatcher(object):
@@ -727,7 +726,7 @@ class GraphMatcher(object):
 
     def __init__(self,
                  G,  # The "big" graph
-                 g): # The little graph (number of vertices in g must be <= G)
+                 g):  # The little graph (number of vertices in g must be <= G)
 
         self.G = G
         self.g = copy.deepcopy(g)
@@ -742,11 +741,10 @@ class GraphMatcher(object):
         self.eoccupiedG = [False for ie in range(0, G.ne)]
         self.G_is_too_small = False
         if ((g.nv > G.nv) or
-            (g.ne > G.ne)):
+                (g.ne > G.ne)):
             self.G_is_too_small = True
-            #raise GenErr('Error: The first argument of GraphMatcher(G,g),\n'+
+            # raise GenErr('Error: The first argument of GraphMatcher(G,g),\n'+
             #             '       must be at least as large as the second.')
-
 
         # The list self.iv_to_Iv is the mapping between the graph vertices.
         # Iv is an index into the large graph's list of vertices.
@@ -784,7 +782,6 @@ class GraphMatcher(object):
         # Initialize state
         self.Reset()
 
-
     def Reset(self):
         """Reinitializes the state of the match-search algorithm.
 
@@ -804,9 +801,7 @@ class GraphMatcher(object):
         # OPTIONAL: First, do a partial sort for the vertices in the graphs
         # based on number of edges emanating from each vertex.
         # (This is probably unnecessary for small subgraphs.)
-        #SortVertsByDegree(self.g)
-
-
+        # SortVertsByDegree(self.g)
 
     def Matches(self):
         """
@@ -825,7 +820,7 @@ class GraphMatcher(object):
         if self.G_is_too_small:
             # Then there are fewer verts and edges in G than in g.
             # Thus it is impossible for a subgraph of G to be isomorphic to g.
-            return # return no matches
+            return  # return no matches
 
         for Iv in range(0, self.G.nv):
 
@@ -845,8 +840,8 @@ class GraphMatcher(object):
             # to insure that all possible subgraphs of G
             # (which are isomorphic to g) are considered.
 
-            self.sv = 1 # we have matched one vertex already
-            self.se = 0 # we haven't matched any edges yet
+            self.sv = 1  # we have matched one vertex already
+            self.se = 0  # we haven't matched any edges yet
             for match in self.Match():
                 yield match
             self.voccupiedG[Iv] = False
@@ -869,10 +864,10 @@ class GraphMatcher(object):
             # been added to the the current match-in-progress.
             iv = self.g.edges[self.se].start
             Iv = self.iv_to_Iv[iv]
-            assert(iv < self.sv) # <-- check to verify this is so
+            assert(iv < self.sv)  # <-- check to verify this is so
 
             # The other vertex may or may not have been visited (matched) yet.
-            iv_neighbor   = self.g.edges[self.se].stop
+            iv_neighbor = self.g.edges[self.se].stop
 
             # Two cases:
             # Case 1: edge self.se points to a previously visited vertex from g
@@ -888,7 +883,7 @@ class GraphMatcher(object):
                 for Je in self.G.neighbors[Iv]:
                     Jv = self.G.edges[Je].stop
                     if ((Jv == Iv_neighbor) and
-                        (not self.eoccupiedG[Je])):
+                            (not self.eoccupiedG[Je])):
 
                         # Match edge Je from big   graph G with
                         #  edge self.se from small graph g
@@ -902,7 +897,7 @@ class GraphMatcher(object):
                         self.ie_to_Ie[self.se] = Dgraph.NULL
 
             # Case 2:
-            else: # this would mean that iv_neighbor >= self.sv
+            else:  # this would mean that iv_neighbor >= self.sv
 
                 # If iv_neighbor>=self.sv, then this edge points to to a vertex
                 # in g which has not yet been paired with a vertex from G.
@@ -939,15 +934,15 @@ class GraphMatcher(object):
         #
         # There are different ways of doing this
         # version 1:
-        #match = (self.iv_to_Iv, self.ie_to_Ie) <-return a pointer to array
+        # match = (self.iv_to_Iv, self.ie_to_Ie) <-return a pointer to array
         # version 2:
-        #match = ([Iv for Iv in self.iv_to_Iv], <-return a copy of the array
+        # match = ([Iv for Iv in self.iv_to_Iv], <-return a copy of the array
         #         [Ie for Ie in self.ie_to_Ie])
         # version 3:
         #   Recall that the vertices and edges and g have been re-ordered,
         #   so sort the list of Iv indices in the order they would be
         #   matched with the original vertices from the original graph g:
-        #match = ([self.iv_to_Iv[self.vorder_g[iv]]
+        # match = ([self.iv_to_Iv[self.vorder_g[iv]]
         #          for iv in range(0,self.g.nv)],
         #         [self.ie_to_Ie[self.eorder_g[ie]]
         #          for ie in range(0,self.g.ne)])
@@ -955,7 +950,7 @@ class GraphMatcher(object):
         #            the directed edge id list into a shorter undirected
         #            edge id list.
         match_verts = [self.iv_to_Iv[self.vorder_g[iv]]
-                       for iv in range(0,self.g.nv)]
+                       for iv in range(0, self.g.nv)]
 
         if type(self.g) is Dgraph:
             match_edges = [self.ie_to_Ie[self.eorder_g[ie]]
@@ -969,7 +964,7 @@ class GraphMatcher(object):
                 jv = self.g.edges[ie].stop
                 if iv <= jv:  # <-- avoid duplicating edges (iv,jv) and (jv,iv)
                     ieu = self.g.LookupUndirectedEdgeIdx(ie)
-                    Ie  = self.ie_to_Ie[ie]
+                    Ie = self.ie_to_Ie[ie]
                     Ieu = self.G.LookupUndirectedEdgeIdx(Ie)
                     match_edges[ieu] = Ieu
 

@@ -31,7 +31,6 @@ from . import ttree_lex
 from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 
 
-
 def LookupBondTypes(bond_types,
                     bond_ids,
                     bond_pairs,
@@ -43,7 +42,7 @@ def LookupBondTypes(bond_types,
                     prefix='',
                     suffix='',
                     bond_ids_offset=0):
-                    #report_progress = False):
+                    # report_progress = False):
     """
     LookupBondTypes() looks up bond types.
 
@@ -84,15 +83,15 @@ def LookupBondTypes(bond_types,
         if len(line) > 0:
             tokens = ttree_lex.SplitQuotedString(line)
             if ((len(tokens) <= i_atomid) or (len(tokens) <= i_atomtype)):
-                sys.stderr.write("\""+line+"\"\n")
-                raise(ttree_lex.InputError('Error not enough columns on line '+str(iv+1)+' of \"Atoms\" section.'))
+                sys.stderr.write("\"" + line + "\"\n")
+                raise(ttree_lex.InputError(
+                    'Error not enough columns on line ' + str(iv + 1) + ' of \"Atoms\" section.'))
             tokens = ttree_lex.SplitQuotedString(line)
             atomid = ttree_lex.EscCharStrToChar(tokens[i_atomid])
             atomids.append(atomid)
             atomtype = ttree_lex.EscCharStrToChar(tokens[i_atomtype])
             atomtypes.append(atomtype)
             atomids2types[atomid] = atomtype
-
 
     assert(isinstance(bond_ids, list))
     assert(isinstance(bond_types, list))
@@ -116,23 +115,25 @@ def LookupBondTypes(bond_types,
         if section_name == "Data Bonds AtomId AtomId":
             if len(tokens) == 2:
                 bondid_n = bond_ids_offset + len(bond_ids) + 1
-                bond_ids.append(prefix+str(bondid_n)+suffix)
-                bond_pairs.append( (ttree_lex.EscCharStrToChar(tokens[0]),
-                                    ttree_lex.EscCharStrToChar(tokens[1])) )
+                bond_ids.append(prefix + str(bondid_n) + suffix)
+                bond_pairs.append((ttree_lex.EscCharStrToChar(tokens[0]),
+                                   ttree_lex.EscCharStrToChar(tokens[1])))
             else:
-                raise(ttree_lex.InputError('Incorrect number of columns on line '+str(ie+1)+' of \"'+section_name+'\" section.'))
+                raise(ttree_lex.InputError('Incorrect number of columns on line ' +
+                                           str(ie + 1) + ' of \"' + section_name + '\" section.'))
 
         elif section_name == "Data Bond List":
             if len(tokens) == 3:
                 bond_ids.append(ttree_lex.EscCharStrToChar(tokens[0]))
-                bond_pairs.append( (ttree_lex.EscCharStrToChar(tokens[1]),
-                                    ttree_lex.EscCharStrToChar(tokens[2])) )
+                bond_pairs.append((ttree_lex.EscCharStrToChar(tokens[1]),
+                                   ttree_lex.EscCharStrToChar(tokens[2])))
             else:
-                raise(ttree_lex.InputError('Incorrect number of columns on line '+str(ie+1)+' of \"'+section_name+'\" section.'))
+                raise(ttree_lex.InputError('Incorrect number of columns on line ' +
+                                           str(ie + 1) + ' of \"' + section_name + '\" section.'))
 
         else:
-            raise(ttree_lex.InputError('Internal Error ('+g_program_name+'): Unknown section name: \"'+section_name+'\"'))
-
+            raise(ttree_lex.InputError('Internal Error (' + g_program_name +
+                                       '): Unknown section name: \"' + section_name + '\"'))
 
     assert(len(bond_types) == 0)
     typepattern_to_coefftypes = []
@@ -147,28 +148,26 @@ def LookupBondTypes(bond_types,
 
             if (len(tokens) != 3):
                 raise(ttree_lex.InputError('Error: Wrong number of columns in the \"Bonds By Type\" section of data file.\n'
-                                 'Offending line:\n'+
-                                 '\"'+line+'\"\n'
-                                 'Expected 3 columns\n'))
+                                           'Offending line:\n' +
+                                           '\"' + line + '\"\n'
+                                           'Expected 3 columns\n'))
 
             coefftype = ttree_lex.EscCharStrToChar(tokens[0])
             typepattern = []
 
             for typestr in tokens[1:]:
                 if ((len(typestr) >= 2) and
-                    (typestr[0] == '/') and (typestr[-1] == '/')):
+                        (typestr[0] == '/') and (typestr[-1] == '/')):
                     regex_str = typestr[1:-1]
-                    typepattern.append( re.compile(regex_str) )
+                    typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))
 
             typepattern_to_coefftypes.append([typepattern, coefftype])
 
-
-
     assert(len(bond_ids) == len(bond_pairs))
 
-    for ie in range(0,len(bond_ids)):
+    for ie in range(0, len(bond_ids)):
         bond_types.append(None)
 
     for ie in range(0, len(bond_ids)):
@@ -176,20 +175,20 @@ def LookupBondTypes(bond_types,
         (atomid1, atomid2) = bond_pairs[ie]
 
         if atomid1 not in atomids2types:
-            raise ttree_lex.InputError('Error: atom \"'+atomid1+'\" not defined in \"Data Atoms\".\n'
+            raise ttree_lex.InputError('Error: atom \"' + atomid1 + '\" not defined in \"Data Atoms\".\n'
                                        '       This usually happens when the user mistypes one of the names of the\n'
                                        '       $atoms in either a \"Data Atoms\" or \"Data Bond List\" section.\n'
                                        '       To find out where the mistake occured, search the \n'
                                        '       \"ttree_assignments.txt\" file for:\n'
-                                       '       \"'+atomid1+'\"\n')
+                                       '       \"' + atomid1 + '\"\n')
 
         if atomid2 not in atomids2types:
-            raise ttree_lex.InputError('Error: atom \"'+atomid2+'\" not defined in \"Data Atoms\".\n'
+            raise ttree_lex.InputError('Error: atom \"' + atomid2 + '\" not defined in \"Data Atoms\".\n'
                                        '       This usually happens when the user mistypes one of the names of the\n'
                                        '       $atoms in either a \"Data Atoms\" or \"Data Bond List\" section.\n'
                                        '       To find out where the mistake occured, search the \n'
                                        '       \"ttree_assignments.txt\" file for:\n'
-                                       '       \"'+atomid2+'\"\n')
+                                       '       \"' + atomid2 + '\"\n')
 
         atomtype1 = atomids2types[atomid1]
         atomtype2 = atomids2types[atomid2]
@@ -198,7 +197,7 @@ def LookupBondTypes(bond_types,
 
             # use string comparisons to check if atom types match the pattern
             if (ttree_lex.MatchesAll((atomtype1, atomtype2), typepattern) or
-                ttree_lex.MatchesAll((atomtype2, atomtype1), typepattern)):
+                    ttree_lex.MatchesAll((atomtype2, atomtype1), typepattern)):
                 # ("MatchesAll()" defined in "ttree_lex.py")
 
                 bond_types[ie] = coefftype
@@ -209,20 +208,20 @@ def LookupBondTypes(bond_types,
             atomtype1 = atomids2types[atomid1]
             atomtype2 = atomids2types[atomid2]
             raise ttree_lex.InputError('Error: No bond types defined for the bond between\n'
-                              '       atoms '+atomid1+' (type '+atomtype1+')\n'
-                              '         and '+atomid2+' (type '+atomtype2+')\n')
-
-
+                                       '       atoms ' + atomid1 +
+                                       ' (type ' + atomtype1 + ')\n'
+                                       '         and ' + atomid2 + ' (type ' + atomtype2 + ')\n')
 
 
 if __name__ == "__main__":
 
     g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-    g_date_str     = '2015-11-09'
-    g_version_str  = '0.11'
+    g_date_str = '2015-11-09'
+    g_version_str = '0.11'
 
     #######  Main Code Below: #######
-    sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
+    sys.stderr.write(g_program_name + ' v' +
+                     g_version_str + ' ' + g_date_str + ' ')
     if sys.version < '3':
         sys.stderr.write(' (python version < 3)\n')
     else:
@@ -234,12 +233,11 @@ if __name__ == "__main__":
         fname_bondsbytype = None
         section_name = 'Data Bond List'  # (This will be replaced later.)
         atom_style = 'full'
-        prefix=''
-        suffix=''
+        prefix = ''
+        suffix = ''
         bond_lack_types = False
 
         argv = [arg for arg in sys.argv]
-
 
         # Loop over the remaining arguments not processed yet.
         # These arguments are specific to the lttree.py program
@@ -248,85 +246,88 @@ if __name__ == "__main__":
         while i < len(argv):
             #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
             if ((argv[i].lower() == '-?') or
-                (argv[i].lower() == '--?') or
-                (argv[i].lower() == '-help') or
-                (argv[i].lower() == '-help')):
-                if i+1 >= len(argv):
-                    sys.stdout.write(man_page_text+'\n')
+                    (argv[i].lower() == '--?') or
+                    (argv[i].lower() == '-help') or
+                    (argv[i].lower() == '-help')):
+                if i + 1 >= len(argv):
+                    sys.stdout.write(man_page_text + '\n')
                     sys.exit(0)
 
             elif argv[i].lower() == '-atoms':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
-                                     '       text which might appear in the "Atoms" section of a LAMMPS data file.\n')
-                fname_atoms = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a file name containing lines of\n'
+                                               '       text which might appear in the "Atoms" section of a LAMMPS data file.\n')
+                fname_atoms = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-bonds':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
-                                     '       text which might appear in the "Bonds" section of a LAMMPS data file.\n')
-                fname_bond_list = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a file name containing lines of\n'
+                                               '       text which might appear in the "Bonds" section of a LAMMPS data file.\n')
+                fname_bond_list = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-bond-list':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
-                    #raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
+                    # raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing lines of\n'
                     #                 '       text which might appear in the "Bonds No Types" section of a LAMMPS data file.\n')
-                fname_bond_list = argv[i+1]
+                fname_bond_list = argv[i + 1]
                 section_name = "Data Bond List"
-                del(argv[i:i+2])
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-bondsbytype':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name\n')
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
 
-                    #raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing\n'
+                    # raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing\n'
                     #                 '       text which might appear in the "'+section_name+' By Type" section\n'
                     #                 '       of a LAMMPS data file.\n')
-                fname_bondsbytype = argv[i+1]
-                del(argv[i:i+2])
+                fname_bondsbytype = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif ((argv[i].lower() == '-atom-style') or
-                (argv[i].lower() == '-atom_style')):
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a an atom_style name.\n'
-                                     '       (Or single quoted string which includes a space-separated\n'
-                                     '       list of column names.)\n')
-                atom_style = argv[i+1]
-                del(argv[i:i+2])
+                  (argv[i].lower() == '-atom_style')):
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a an atom_style name.\n'
+                                               '       (Or single quoted string which includes a space-separated\n'
+                                               '       list of column names.)\n')
+                atom_style = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-prefix':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a prefix string\n'
-                                     '       (a string you want to appear to the left of the integer\n'
-                                     '        which counts the bonded interactions you have generated.)\n')
-                prefix = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a prefix string\n'
+                                               '       (a string you want to appear to the left of the integer\n'
+                                               '        which counts the bonded interactions you have generated.)\n')
+                prefix = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i].lower() == '-suffix':
-                if i+1 >= len(argv):
-                    raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a suffix string\n'
-                                     '       (a string you want to appear to the right of the integer\n'
-                                     '        which counts the bonded interactions you have generated.)\n')
-                prefix = argv[i+1]
-                del(argv[i:i+2])
+                if i + 1 >= len(argv):
+                    raise ttree_lex.InputError('Error: ' + argv[i] + ' flag should be followed by a suffix string\n'
+                                               '       (a string you want to appear to the right of the integer\n'
+                                               '        which counts the bonded interactions you have generated.)\n')
+                prefix = argv[i + 1]
+                del(argv[i:i + 2])
 
             elif argv[i][0] == '-':
-                raise ttree_lex.InputError('Error('+g_program_name+'):\n'
-                                 'Unrecogized command line argument \"'+argv[i]+'\"\n')
+                raise ttree_lex.InputError('Error(' + g_program_name + '):\n'
+                                           'Unrecogized command line argument \"' + argv[i] + '\"\n')
             else:
                 i += 1
 
         if len(argv) != 1:
             # if there are more than 2 remaining arguments,
-            problem_args = ['\"'+arg+'\"' for arg in argv[1:]]
-            raise ttree_lex.InputError('Syntax Error('+g_program_name+'):\n\n'
-                             '       Problem with argument list.\n'
-                             '       The remaining arguments are:\n\n'
-                             '         '+(' '.join(problem_args))+'\n\n'
-                             '       (The actual problem may be earlier in the argument list.)\n')
+            problem_args = ['\"' + arg + '\"' for arg in argv[1:]]
+            raise ttree_lex.InputError('Syntax Error(' + g_program_name + '):\n\n'
+                                       '       Problem with argument list.\n'
+                                       '       The remaining arguments are:\n\n'
+                                       '         ' +
+                                       (' '.join(problem_args)) + '\n\n'
+                                       '       (The actual problem may be earlier in the argument list.)\n')
 
         bond_types = []
         bond_ids = []
@@ -355,7 +356,7 @@ if __name__ == "__main__":
 
         assert(len(bond_types) == len(bond_ids) == len(bond_pairs))
 
-        ie=0
+        ie = 0
         N = len(bond_types)
         for ie in range(0, N):
             sys.stdout.write(bond_ids[ie] + ' ' +
@@ -363,7 +364,6 @@ if __name__ == "__main__":
                              bond_pairs[ie][0] + ' ' +
                              bond_pairs[ie][1] + '\n')
 
-
     except (ValueError, ttree_lex.InputError) as err:
-        sys.stderr.write('\n'+str(err)+'\n')
+        sys.stderr.write('\n' + str(err) + '\n')
         sys.exit(-1)
