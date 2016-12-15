@@ -53,9 +53,6 @@ except NameError:
     # Python 3
     basestring = unicode = str
 
-
-
-
 class LttreeSettings(BasicUISettings):
     def __init__(self,
                  user_bindings_x=None,
@@ -84,8 +81,7 @@ class LttreeSettings(BasicUISettings):
 
 
 
-def LttreeParseArgs(argv, settings):
-
+def LttreeParseArgs(argv, settings, main=False):
     BasicUIParseArgs(argv, settings)
 
     # Loop over the remaining arguments not processed yet.
@@ -177,7 +173,7 @@ def LttreeParseArgs(argv, settings):
             i_molid = int(argv[i+1])-1
             del(argv[i:i+2])
 
-        elif ((argv[i][0] == '-') and (__name__ == "__main__")):
+        elif (argv[i][0] == '-') and main:
             #elif (__name__ == "__main__"):
             raise InputError('Error('+g_program_name+'):\n'
                              'Unrecogized command line argument \"'+argv[i]+'\"\n')
@@ -185,7 +181,7 @@ def LttreeParseArgs(argv, settings):
             i += 1
 
 
-    if __name__ == "__main__":
+    if main:
 
         # Instantiate the lexer we will be using.
         #  (The lexer's __init__() function requires an openned file.
@@ -257,7 +253,7 @@ def LttreeParseArgs(argv, settings):
         settings.ii_vects = ColNames2Vects(settings.column_names)
         settings.i_atomid, settings.i_atomtype, settings.i_molid = ColNames2AidAtypeMolid(settings.column_names)
 
-
+    return
 
 
 
@@ -684,7 +680,7 @@ def main():
         #settings = BasicUISettings()
         #BasicUIParseArgs(sys.argv, settings)
         settings = LttreeSettings()
-        LttreeParseArgs(sys.argv, settings)
+        LttreeParseArgs(sys.argv, settings, main=True)
 
         # Data structures to store the class definitionss and instances
         g_objectdefs = StaticObj('', None) # The root of the static tree
@@ -695,7 +691,6 @@ def main():
         # A list of commands to carry out
         g_static_commands = []
         g_instance_commands = []
-
 
         BasicUI(settings,
                 g_objectdefs,

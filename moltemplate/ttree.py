@@ -5024,7 +5024,7 @@ class BasicUISettings(object):
 
 
 
-def BasicUIParseArgs(argv, settings):
+def BasicUIParseArgs(argv, settings, main=False):
     """
     BasicUIParseArgs()
     The following function contains part of the user interface for a
@@ -5117,7 +5117,7 @@ def BasicUIParseArgs(argv, settings):
             TtreeShlex.custom_path = RemoveOuterQuotes(argv[i+1])
             del(argv[i:i+2])
 
-        elif ((argv[i][0] == '-') and (__name__ == '__main__')):
+        elif (argv[i][0] == '-') and main:
             #elif (__name__ == '__main__'):
             raise InputError('Error('+g_filename+'):\n'
                              'Unrecogized command line argument \"'+argv[i]+'\"\n')
@@ -5125,7 +5125,7 @@ def BasicUIParseArgs(argv, settings):
             i += 1
 
 
-    if __name__ == '__main__':
+    if main:
 
         # Instantiate the lexer we will be using.
         #  (The lexer's __init__() function requires an openned file.
@@ -5324,7 +5324,6 @@ def main():
 
     """
 
-    #######  Main Code Below: #######
     g_program_name = g_filename
     sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
     sys.stderr.write('\n(python version '+str(sys.version)+')\n')
@@ -5332,7 +5331,7 @@ def main():
     try:
 
         settings = BasicUISettings()
-        BasicUIParseArgs(sys.argv, settings)
+        BasicUIParseArgs(sys.argv, settings, main=True)
 
 
         # Data structures to store the class definitionss and instances

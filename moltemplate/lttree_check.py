@@ -1918,11 +1918,10 @@ def CheckInFileSyntax(tmpl_list,
 
 
 
-def LttreeCheckParseArgs(argv, settings):
-
+def LttreeCheckParseArgs(argv, settings, main=False):
     LttreeParseArgs(argv, settings)
 
-    if __name__ == "__main__":
+    if main:
         # Instantiate the lexer we will be using.
         #  (The lexer's __init__() function requires an openned file.
         #   Assuming __name__ == "__main__", then the name of that file should
@@ -1969,7 +1968,7 @@ def main():
         #settings = BasicUISettings()
         #BasicUIParseArgs(sys.argv, settings)
         settings = LttreeSettings()
-        LttreeCheckParseArgs(sys.argv, settings)
+        LttreeCheckParseArgs(sys.argv, settings, main=True)
 
         # Invoke syntax checker pass:
         # This first check only checks for very simple mistakes
