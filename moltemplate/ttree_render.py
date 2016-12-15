@@ -16,10 +16,10 @@ and prints out the new (rendered) text to the standard-out.
 
 
 import sys
-from .ttree_lex import *
-from .ttree import *
 import gc
 
+from .ttree import ExtractFormattingCommands
+from .ttree_lex import SplitQuotedString, InputError, TemplateLexer
 
 g_filename    = __file__.split('/')[-1]
 g_module_name  = g_filename

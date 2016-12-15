@@ -28,9 +28,19 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 import sys
-from .ttree import *
-from .lttree_styles import *
-from .ttree_matrix_stack import *
+from collections import defaultdict
+
+from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
+    StackableCommand, PopCommand, PopRightCommand, PopLeftCommand, \
+    PushCommand, PushLeftCommand, PushRightCommand, ScopeCommand, \
+    WriteVarBindingsFile, StaticObj, InstanceObj, \
+    BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
+from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
+    TemplateLexer
+from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid, \
+    ColNames2Coords, ColNames2Vects, data_atoms, data_masses
+from .ttree_matrix_stack import AffineTransform, MultiAffineStack, LinTransform
+
 
 try:
     unicode

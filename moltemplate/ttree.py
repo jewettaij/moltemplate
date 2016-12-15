@@ -64,7 +64,9 @@ except NameError:
 # the "self.wordchars" member.  This enables better handling of unicode
 # characters by allowing a much larger variety of characters to appear
 # in words or tokens parsed by TtreeShlex.  Otherwise it is identical to shlex.
-from .ttree_lex import *
+from .ttree_lex import TtreeShlex, SplitQuotedString, EscCharStrToChar, \
+    SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildCard, InputError, \
+    ErrorLeader, OSrcLoc, TextBlock, VarRef, VarBinding, TemplateLexer
 
 
 if sys.version < '2.6':
