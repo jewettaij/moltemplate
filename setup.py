@@ -15,6 +15,7 @@ setup(
   entry_points={
     'console_scripts': [
         'ttree.py=moltemplate.ttree:main',
+        'ttree_render.py=moltemplate.ttree_render:main',
         'lttree.py=moltemplate.lttree:main',
         'lttree_check.py=moltemplate.lttree_check:main',
         'lttree_postprocess.py=moltemplate.lttree_postprocess:main',
@@ -26,9 +27,9 @@ setup(
         'remove_duplicate_atoms.py=moltemplate.remove_duplicate_atoms:main',
         'remove_duplicates_nbody.py=moltemplate.remove_duplicates_nbody:main',
         'renumber_DATA_first_column.py=moltemplate.renumber_DATA_first_column:main',
-        'ttree_render.py=moltemplate.ttree_render:main',
         'dump2data.py=moltemplate.dump2data:main',
-        'raw2data.py=moltemplate.raw2data:main']},
+        'raw2data.py=moltemplate.raw2data:main',
+        'bonds_by_type.py=moltemplate.bonds_by_type:main']},
   package_data={'moltemplate': ['force_fields/*.lt']},
   # install_requires=['numpy', 'scipy', 'biopython'],
   setup_requires=['pytest-runner'],
