@@ -29,7 +29,7 @@ setup(
         'ttree_render.py=moltemplate.ttree_render:main',
         'dump2data.py=moltemplate.dump2data:main',
         'raw2data.py=moltemplate.raw2data:main']},
-  package_data={'moltemplate': ['force_fields/*']},
+  package_data={'moltemplate': ['force_fields/*.lt']},
   # install_requires=['numpy', 'scipy', 'biopython'],
   setup_requires=['pytest-runner'],
   tests_require=['pytest', 'pandas'],
