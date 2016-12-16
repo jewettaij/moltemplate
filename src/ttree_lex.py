@@ -101,13 +101,14 @@ class TtreeShlex(object):
             self.wordchars += ('ßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ'
                                'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞ')
 
-        self.wordterminators = set([])  #WORDTERMINATORS
-        self.prev_space_terminator = '' #WORDTERMINATORS
+        self.wordterminators = set([])
+        self.prev_space_terminator = ''
         self.whitespace = ' \t\r\f\n'
         self.whitespace_split = False
         self.quotes = '\'"'
         self.escape = '\\'
         self.escapedquotes = '"'
+        self.operators = '='
         self.state = ' '
         self.pushback = deque()
         self.lineno = 1
@@ -139,12 +140,12 @@ class TtreeShlex(object):
         self.end_encountered = False
 
 
-    @staticmethod                                            #WORDTERMINATORS
-    def _belongs_to(char, include_chars, exclude_chars):     #WORDTERMINATORS
-        if ((not exclude_chars) or (len(exclude_chars)==0)): #WORDTERMINATORS
-            return char in include_chars                     #WORDTERMINATORS
-        else:                                                #WORDTERMINATORS
-            return char not in exclude_chars                 #WORDTERMINATORS
+    @staticmethod
+    def _belongs_to(char, include_chars, exclude_chars):
+        if ((not exclude_chars) or (len(exclude_chars)==0)):
+            return char in include_chars
+        else:
+            return char not in exclude_chars
 
     def push_raw_text(self, text):
         """Push a block of text onto the stack popped by the ReadLine() method. 
@@ -159,12 +160,12 @@ class TtreeShlex(object):
         """
         if self.debug >= 1:
             print("TtreeShlex: pushing token " + repr(text))
-        for c in reversed(text):                 #WORDTERMINATORS
-            self.pushback.appendleft(c)          #WORDTERMINATORS
-            if c == '\n':                        #WORDTERMINATORS
-                self.lineno -= 1                 #WORDTERMINATORS
-        if len(text) > 0:                       #WORDTERMINATORS
-            self.end_encountered = False        #WORDTERMINATORS
+        for c in reversed(text):
+            self.pushback.appendleft(c)
+            if c == '\n':
+                self.lineno -= 1
+        if len(text) > 0:
+            self.end_encountered = False
 
     def push_token(self, text):
         "Push a token onto the stack popped by the get_token method"
@@ -195,13 +196,13 @@ class TtreeShlex(object):
 
     def get_token(self):
         "Get a token from the input stream (or from stack if it's nonempty)"
-        #### #CHANGING: self.pushback is now a stack of characters, not tokens #WORDTERMINATORS
-        #### if self.pushback:                                                #WORDTERMINATORS
-        ####    tok = self.pushback.popleft()                                 #WORDTERMINATORS
-        ####    if self.debug >= 1:                                           #WORDTERMINATORS
-        ####        print("TtreeShlex: popping token " + repr(tok))             #WORDTERMINATORS
-        ####    return tok                                                    #WORDTERMINATORS
-        #### No pushback.  Get a token.                                       #WORDTERMINATORS
+        #### #CHANGING: self.pushback is now a stack of characters, not tokens
+        #### if self.pushback:
+        ####    tok = self.pushback.popleft()
+        ####    if self.debug >= 1:
+        ####        print("TtreeShlex: popping token " + repr(tok))
+        ####    return tok
+        #### No pushback.  Get a token.
         raw = self.read_token()
         # Handle inclusions
         if self.source_triggers is not None:
@@ -234,27 +235,27 @@ class TtreeShlex(object):
             else:
                 print("TtreeShlex: token=EOF")
 
-        if raw == self.eof:                #WORDTERMINATORS
-            self.end_encountered = True    #WORDTERMINATORS
+        if raw == self.eof:
+            self.end_encountered = True
 
         return raw
 
 
     def read_char(self):
-        if self.pushback:                      #WORDTERMINATORS
-            nextchar = self.pushback.popleft() #WORDTERMINATORS
-            assert((type(nextchar) is str) and (len(nextchar)==1)) #WORDTERMINATORS
-        else:                                  #WORDTERMINATORS
-            nextchar = self.instream.read(1)   #WORDTERMINATORS
+        if self.pushback:
+            nextchar = self.pushback.popleft()
+            assert((type(nextchar) is str) and (len(nextchar)==1))
+        else:
+            nextchar = self.instream.read(1)
         return nextchar
 
 
     def read_token(self):
-        self.prev_space_terminator = ''            #WORDTERMINATORS
+        self.prev_space_terminator = ''
         quoted = False
         escapedstate = ' '
         while True:
-            #### self.pushback is now a stack of characters, not tokens  #WORDTERMINATORS
+            #### self.pushback is now a stack of characters, not tokens
             nextchar = self.read_char()
             if nextchar == '\n':
                 self.lineno = self.lineno + 1
@@ -274,7 +275,7 @@ class TtreeShlex(object):
                     if self.token or (self.posix and quoted):
                         # Keep track of which whitespace 
                         # character terminated the token.
-                        self.prev_space_terminator = nextchar     #WORDTERMINATORS
+                        self.prev_space_terminator = nextchar
                         break   # emit current token
                     else:
                         continue
@@ -284,9 +285,9 @@ class TtreeShlex(object):
                 elif self.posix and nextchar in self.escape:
                     escapedstate = 'a'
                     self.state = nextchar
-                elif TtreeShlex._belongs_to(nextchar,             #WORDTERMINATORS
-                                            self.wordchars,       #WORDTERMINATORS
-                                            self.wordterminators):#WORDTERMINATORS
+                elif TtreeShlex._belongs_to(nextchar,
+                                            self.wordchars,
+                                            self.wordterminators):
                     self.token = nextchar
                     self.state = 'a'
                 elif nextchar in self.quotes:
@@ -347,7 +348,7 @@ class TtreeShlex(object):
                     if self.token or (self.posix and quoted):
                         # Keep track of which whitespace 
                         # character terminated the token.
-                        self.prev_space_terminator = nextchar     #WORDTERMINATORS
+                        self.prev_space_terminator = nextchar
                         break   # emit current token
                     else:
                         continue
@@ -359,7 +360,7 @@ class TtreeShlex(object):
                         if self.token or (self.posix and quoted):
                             # Keep track of which character(s) terminated
                             # the token (including whitespace and comments).
-                            self.prev_space_terminator = nextchar + comment_contents    #WORDTERMINATORS
+                            self.prev_space_terminator = nextchar + comment_contents
                             break   # emit current token
                         else:
                             continue
@@ -368,11 +369,11 @@ class TtreeShlex(object):
                 elif self.posix and nextchar in self.escape:
                     escapedstate = 'a'
                     self.state = nextchar
-                elif (TtreeShlex._belongs_to(nextchar,          #WORDTERMINATORS
-                                             self.wordchars,    #WORDTERMINATORS
-                                             self.wordterminators)#WORDTERMINATORS
-                      or (nextchar in self.quotes)              #WORDTERMINATORS
-                      or (self.whitespace_split)):              #WORDTERMINATORS
+                elif (TtreeShlex._belongs_to(nextchar,
+                                             self.wordchars,
+                                             self.wordterminators)
+                      or (nextchar in self.quotes)
+                      or (self.whitespace_split)):
                     self.token = self.token + nextchar
                 else:
                     self.pushback.appendleft(nextchar)
@@ -1556,6 +1557,7 @@ class TemplateLexer(TtreeShlex):
         self.wordterminators = '(){|}' + \
                                    self.whitespace + \
                                    self.quotes + \
+                                   self.operators + \
                                    self.escape + \
                                    self.commenters
         #  Note: 
