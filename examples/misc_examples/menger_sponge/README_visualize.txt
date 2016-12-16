@@ -56,19 +56,17 @@ d) Try entering these commands:
     pbc box
 
     ----- Optional ----
-    Sometimes the solvent or membrane obscures the view of the solute.
-    It can help to shift the location of the periodic boundary box 
-    To shift the box in the y direction (for example) do this:
+    Sometimes it is useful to shift the location of the periodic boundary box
+    and its contents:
 
-    pbc wrap -compound res -all -shiftcenterrel {0.0 0.15 0.0}
-    pbc box -shiftcenterrel {0.0 0.15 0.0}
+    pbc wrap -compound res -all -shiftcenterrel {0.5 0.5 0.5}
+    pbc box -shiftcenterrel {0.5 0.5 0.5}
 
     Distances are measured in units of box-length fractions, not Angstroms.
 
-    Alternately if you have a solute whose atoms are all of type 1, 
-    then you can also try this to center the box around it:
-
-    pbc wrap -sel type=1 -all -centersel type=2 -center com
+    (If you want to focus the box on a system of atoms which are all of type 1, 
+     then you can also try this to center the box around it:
+     pbc wrap -sel type=1 -all -centersel type=2 -center com)
 
 4) 
     You should check if your periodic boundary conditions are too small.
