@@ -29,6 +29,7 @@ Additional LAMMPS-specific features may be added in the future.
 
 import sys
 from collections import defaultdict
+import pkg_resources
 
 try:
     from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
@@ -90,6 +91,10 @@ class LttreeSettings(BasicUISettings):
 
 
 def LttreeParseArgs(argv, settings, main=False):
+    # By default, include force_fields provided with the package
+    argv.extend(["-importpath",
+                pkg_resources.resource_filename(__name__, 'force_fields/')])
+
     BasicUIParseArgs(argv, settings)
 
     # Loop over the remaining arguments not processed yet.
