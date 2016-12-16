@@ -268,7 +268,7 @@ def LttreeParseArgs(argv, settings, main=False):
     return
 
 
-def TransformAtomText(text, matrix):
+def TransformAtomText(text, matrix, settings):
     """ Apply transformations to the coordinates and other vector degrees
     of freedom stored in the \"Data Atoms\" section of a LAMMPS data file.
     This is the \"text\" argument.
@@ -546,7 +546,7 @@ def _ExecCommands(command_list,
             # (after it has been rendered), and apply these transformations
             # before passing them on to the caller.
             if command.filename == data_atoms:
-                text = TransformAtomText(text, matrix_stack.M)
+                text = TransformAtomText(text, matrix_stack.M, settings)
 
             files_content[command.filename].append(text)
 
@@ -592,7 +592,7 @@ def _ExecCommands(command_list,
                                                       which_stack=command.context_node)
                     files_content[data_atoms] = \
                         TransformAtomText(files_content[data_atoms],
-                                          matrix_stack.M)
+                                          matrix_stack.M, settings)
 
                 for ppcommand in postprocessing_commands:
                     matrix_stack.Pop(which_stack=command.context_node)
