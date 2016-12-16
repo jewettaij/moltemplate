@@ -21,6 +21,9 @@ A reference DATA file is needed (argument).
 # Copyright (c) 2014
 # All rights reserved.
 
+g_program_name = 'dump2data.py'
+g_date_str = '2015-8-11'
+g_version_str = 'v0.51'
 
 import sys
 from collections import defaultdict
@@ -758,11 +761,6 @@ def WriteFrameToData(out_file,
 
 
 def main():
-    g_program_name = 'dump2data.py'
-    g_date_str = '2015-8-11'
-    g_version_str = 'v0.51'
-
-    #######  Main Code Below: #######
     sys.stderr.write(g_program_name + ' ' +
                      g_version_str + ' ' + g_date_str + ' ')
     # if sys.version < '3':

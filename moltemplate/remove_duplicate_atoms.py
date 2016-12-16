@@ -11,42 +11,50 @@
 """
 
 import sys
-in_stream = sys.stdin
-f = None
-fname = None
-if len(sys.argv) == 2:
-    fname = sys.argv[1]
-    f = open(fname, 'r')
-    in_stream = f
 
-atom_ids_in_use = set([])
+def main():
+    in_stream = sys.stdin
+    f = None
+    fname = None
+    if len(sys.argv) == 2:
+        fname = sys.argv[1]
+        f = open(fname, 'r')
+        in_stream = f
 
-lines = in_stream.readlines()
+    atom_ids_in_use = set([])
 
-# Start at the end of the file and read backwards.
-# If duplicate lines exist, eliminate the ones that occur earlier in the file.
-i = len(lines)
-while i > 0:
-    i -= 1
-    line_orig = lines[i]
-    line = line_orig.rstrip('\n')
-    if '#' in line_orig:
-        ic = line.find('#')
-        line = line_orig[:ic]
+    lines = in_stream.readlines()
 
-    tokens = line.strip().split()
-    if len(tokens) > 0:
-        atom_id = tokens[0]
-        if atom_id in atom_ids_in_use:
-            del lines[i]
+    # Start at the end of the file and read backwards.
+    # If duplicate lines exist, eliminate the ones that occur earlier in the file.
+    i = len(lines)
+    while i > 0:
+        i -= 1
+        line_orig = lines[i]
+        line = line_orig.rstrip('\n')
+        if '#' in line_orig:
+            ic = line.find('#')
+            line = line_orig[:ic]
+
+        tokens = line.strip().split()
+        if len(tokens) > 0:
+            atom_id = tokens[0]
+            if atom_id in atom_ids_in_use:
+                del lines[i]
+            else:
+                atom_ids_in_use.add(atom_id)
         else:
-            atom_ids_in_use.add(atom_id)
-    else:
-        del lines[i]
+            del lines[i]
 
 
-for line in lines:
-    sys.stdout.write(line)
+    for line in lines:
+        sys.stdout.write(line)
 
-if f != None:
-    f.close()
+    if f != None:
+        f.close()
+
+    return
+
+
+if __name__ == '__main__':
+    main()

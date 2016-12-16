@@ -13,8 +13,13 @@
 
 """
 
+import sys
+from operator import attrgetter
 from collections import defaultdict
 
+g_program_name = __file__.split('/')[-1]
+g_version_str = 0.11
+g_date_str = 2013 - 9 - 18
 
 # In order to specify any amino acid in a PDB file, you must provide 3
 # identifiers:
@@ -82,57 +87,58 @@ class AtomDescr:
         return i
 
 
-import sys
-from operator import attrgetter
-g_program_name = __file__.split('/')[-1]
-g_version_str = 0.11
-g_date_str = 2013 - 9 - 18
-
-if len(sys.argv) == 1:
-    use_all_residues = True
-elif len(sys.argv) == 7:
-    use_all_residues = False
-    first = AtomDescr(sys.argv[1], int(sys.argv[2]), sys.argv[3], 0)
-    last = AtomDescr(sys.argv[4], int(sys.argv[5]), sys.argv[6], 2147483647)
-else:
-    sys.stderr.write("Error(" + g_program_name + "): This program requires either 0 or 6 arguments.\n"
-                     "       By default, the the sequence is extracted from the entire PDB file.\n"
-                     "       In that case, no arguments are required.\n"
-                     "       Alternately, you can limit the selection to a single interval of\n"
-                     "       residues from one of the chains in the PDB file.\n"
-                     "       To specify an interval, you must passing 6 arguments to this program.\n"
-                     "       This program requires a pair of residues to designate the first and\n"
-                     "       last members of the interval.  Each residue requires 3 identifiers.\n"
-                     "       Consequently the six arguments needed are:\n"
-                     "ChainID_first SeqNum_first ICode_first ChainID_last SeqNum_last ICode_last\n")
-    exit(-1)
-
-
-atoms2lines = defaultdict(list)
-
-for line in sys.stdin:
-    if (line[0:6] == "ATOM  ") or (line[0:6] == "HETATM"):
-        atomID = int(line[6:11])
-        #atomType  = line[12:16]
-        #altLoc    = line[16:17]
-        iCode = line[26:27]
-        #resType   = line[17:20]
-        chainID = line[21:22]
-        seqNumStr = line[22:26]
-        seqNum = int(seqNumStr)
-        atomdescr = AtomDescr(chainID, int(seqNumStr), iCode, int(atomID))
-        atoms2lines[atomdescr].append(line.rstrip('\n'))
+def main():
+    if len(sys.argv) == 1:
+        use_all_residues = True
+    elif len(sys.argv) == 7:
+        use_all_residues = False
+        first = AtomDescr(sys.argv[1], int(sys.argv[2]), sys.argv[3], 0)
+        last = AtomDescr(sys.argv[4], int(sys.argv[5]), sys.argv[6], 2147483647)
     else:
-        sys.stdout.write(line)
+        sys.stderr.write("Error(" + g_program_name + "): This program requires either 0 or 6 arguments.\n"
+                         "       By default, the the sequence is extracted from the entire PDB file.\n"
+                         "       In that case, no arguments are required.\n"
+                         "       Alternately, you can limit the selection to a single interval of\n"
+                         "       residues from one of the chains in the PDB file.\n"
+                         "       To specify an interval, you must passing 6 arguments to this program.\n"
+                         "       This program requires a pair of residues to designate the first and\n"
+                         "       last members of the interval.  Each residue requires 3 identifiers.\n"
+                         "       Consequently the six arguments needed are:\n"
+                         "ChainID_first SeqNum_first ICode_first ChainID_last SeqNum_last ICode_last\n")
+        exit(-1)
 
-# Extract an (unordered) list of the atomdescrs of the atoms in the sequence
-atomdescrs = [atomdescr for atomdescr in atoms2lines]
 
-# Residues in PDB files are often not listed in order.
-# Consequently, we must sort the list by chainID, seqNum, and finnaly iCode:
-sequence_of_atomdescrs = sorted(atomdescrs, key=attrgetter(
-    'chainID', 'seqNum', 'iCode', 'atomID'))
+    atoms2lines = defaultdict(list)
 
-for atomdescr in sequence_of_atomdescrs:
-    for line in atoms2lines[atomdescr]:
-        sys.stdout.write(line + '\n')
+    for line in sys.stdin:
+        if (line[0:6] == "ATOM  ") or (line[0:6] == "HETATM"):
+            atomID = int(line[6:11])
+            #atomType  = line[12:16]
+            #altLoc    = line[16:17]
+            iCode = line[26:27]
+            #resType   = line[17:20]
+            chainID = line[21:22]
+            seqNumStr = line[22:26]
+            seqNum = int(seqNumStr)
+            atomdescr = AtomDescr(chainID, int(seqNumStr), iCode, int(atomID))
+            atoms2lines[atomdescr].append(line.rstrip('\n'))
+        else:
+            sys.stdout.write(line)
+
+    # Extract an (unordered) list of the atomdescrs of the atoms in the sequence
+    atomdescrs = [atomdescr for atomdescr in atoms2lines]
+
+    # Residues in PDB files are often not listed in order.
+    # Consequently, we must sort the list by chainID, seqNum, and finnaly iCode:
+    sequence_of_atomdescrs = sorted(atomdescrs, key=attrgetter(
+        'chainID', 'seqNum', 'iCode', 'atomID'))
+
+    for atomdescr in sequence_of_atomdescrs:
+        for line in atoms2lines[atomdescr]:
+            sys.stdout.write(line + '\n')
+
+    return
+
+
+if __name__ == '__main__':
+    main()

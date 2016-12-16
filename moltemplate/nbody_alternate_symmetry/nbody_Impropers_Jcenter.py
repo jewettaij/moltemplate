@@ -1,4 +1,8 @@
-from nbody_graph_search import Ugraph
+try:
+    from ..nbody_graph_search import Ugraph
+except:
+    # not installed as a module
+    from nbody_graph_search import Ugraph
 
 #    To find 4-body "improper" interactions,
 #    (by default, most of the time), we would use this subgraph:

@@ -12,39 +12,47 @@
 """
 
 import sys
-in_stream = sys.stdin
 
-if len(sys.argv) == 2:
-    n = int(sys.argv[1])
-if (len(sys.argv) != 2) or (n < 1):
-    sys.stderr.write(
-        'Error (remove_duplicates_nbody.py): expected a positive integer argument.\n')
-    sys.exit(-1)
+def main():
+    in_stream = sys.stdin
 
-atom_ids_in_use = set([])
+    if len(sys.argv) == 2:
+        n = int(sys.argv[1])
+    if (len(sys.argv) != 2) or (n < 1):
+        sys.stderr.write(
+            'Error (remove_duplicates_nbody.py): expected a positive integer argument.\n')
+        sys.exit(-1)
 
-lines = in_stream.readlines()
+    atom_ids_in_use = set([])
 
-# Start at the end of the file and read backwards.
-# If duplicate lines exist, eliminate the ones that occur earlier in the file.
-i = len(lines)
-while i > 0:
-    i -= 1
-    line_orig = lines[i]
-    line = line_orig.rstrip('\n')
-    if '#' in line_orig:
-        ic = line.find('#')
-        line = line_orig[:ic]
+    lines = in_stream.readlines()
 
-    tokens = line.strip().split()
-    if len(tokens) == 2 + n:
-        atom_ids = tuple(tokens[2:2 + n])
-        if atom_ids in atom_ids_in_use:
+    # Start at the end of the file and read backwards.
+    # If duplicate lines exist, eliminate the ones that occur earlier in the file.
+    i = len(lines)
+    while i > 0:
+        i -= 1
+        line_orig = lines[i]
+        line = line_orig.rstrip('\n')
+        if '#' in line_orig:
+            ic = line.find('#')
+            line = line_orig[:ic]
+
+        tokens = line.strip().split()
+        if len(tokens) == 2 + n:
+            atom_ids = tuple(tokens[2:2 + n])
+            if atom_ids in atom_ids_in_use:
+                del lines[i]
+            else:
+                atom_ids_in_use.add(atom_ids)
+        elif len(tokens) == 0:
             del lines[i]
-        else:
-            atom_ids_in_use.add(atom_ids)
-    elif len(tokens) == 0:
-        del lines[i]
 
-for line in lines:
-    sys.stdout.write(line)
+    for line in lines:
+        sys.stdout.write(line)
+
+    return
+
+
+if __name__ == '__main__':
+    main()

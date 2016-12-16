@@ -1,4 +1,9 @@
-from nbody_graph_search import Ugraph
+try:
+    from ..nbody_graph_search import Ugraph
+except:
+    # not installed as a module
+    from nbody_graph_search import Ugraph
+
 
 #    To find 4-body "dihedral" interactions, we would use this subgraph:
 #

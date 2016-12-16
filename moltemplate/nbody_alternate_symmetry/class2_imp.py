@@ -1,4 +1,8 @@
-from nbody_graph_search import Ugraph
+try:
+    from ..nbody_graph_search import Ugraph
+except:
+    # not installed as a module
+    from nbody_graph_search import Ugraph
 
 # This file defines how improper interactions are generated in class2 files.
 # To use it, add "(class2_imp.py)" to the name of the "Data Impropers By Type"

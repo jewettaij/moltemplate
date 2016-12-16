@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import sys
+
 lammps_data_sections = set(['Atoms',
                             'Masses',
                             'Bonds',
@@ -91,9 +93,7 @@ def ExtractDataSection(f,
         i += 1
 
 
-if __name__ == "__main__":
-
-    import sys
+def main():
     lines = sys.stdin.readlines()
     exclude_sections = False
     if sys.argv[1] == '-n':
@@ -115,3 +115,8 @@ if __name__ == "__main__":
         for i in range(0, len(lines)):
             if i not in line_nums_exclude:
                 sys.stdout.write(lines[i])
+
+    return
+
+if __name__ == "__main__":
+    main()

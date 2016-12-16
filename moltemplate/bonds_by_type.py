@@ -22,6 +22,10 @@
 """
 
 #                     -bonds-ids-atom-pairs bonds_ids_atom_pairs.data \\
+g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
+g_date_str = '2015-11-09'
+g_version_str = '0.11'
+
 
 import sys
 
@@ -32,6 +36,7 @@ except SystemError:
     # not installed as a package
     import ttree_lex
     from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+
 
 def LookupBondTypes(bond_types,
                     bond_ids,
@@ -215,13 +220,7 @@ def LookupBondTypes(bond_types,
                                        '         and ' + atomid2 + ' (type ' + atomtype2 + ')\n')
 
 
-if __name__ == "__main__":
-
-    g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-    g_date_str = '2015-11-09'
-    g_version_str = '0.11'
-
-    #######  Main Code Below: #######
+def main():
     sys.stderr.write(g_program_name + ' v' +
                      g_version_str + ' ' + g_date_str + ' ')
     if sys.version < '3':
@@ -369,3 +368,9 @@ if __name__ == "__main__":
     except (ValueError, ttree_lex.InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
         sys.exit(-1)
+
+    return
+
+
+if __name__ == "__main__":
+    main()
