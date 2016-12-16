@@ -9,7 +9,7 @@ setup(
   author_email='jewett.aij@gmail.com',
   url='https://github.com/jewettaij/moltemplate',
   download_url='https://github.com/jewettaij/moltemplate/tarball/v2.0.4',
-  keywords=['simulation', 'lammps', 'molecule'],
+  keywords=['simulation', 'lammps', 'molecule', 'builder'],
   license='BSD 3-Clause License',
   scripts=['moltemplate/scripts/moltemplate.sh'],
   entry_points={
