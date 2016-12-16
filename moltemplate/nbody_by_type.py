@@ -137,10 +137,14 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 
 """
 
+g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
+g_date_str = '2014-12-19'
+g_version_str = '0.18'
+
+bond_pattern_module_name = ""
 
 import sys
-import os
-import inspect  # <- Needed to import modules in subdirectories (see below)
+import importlib
 
 if sys.version < '2.6':
     raise InputError('Error: Using python ' + sys.version + '\n'
@@ -349,24 +353,29 @@ def GenInteractions_files(lines_data,
                              if((len(line.strip()) > 0)and(line.strip()[0] != '#'))]
         f.close()
 
-    try:
-        # defines g.bond_pattern, g.canonical_order
-        g = __import__(src_bond_pattern)
-    except:
-        # If not found, look for it in the "nbody_alternate_symmetry" directory
-        # http://stackoverflow.com/questions/279237/import-a-module-from-a-relative-path
-        cmd_subfolder = os.path.realpath(os.path.abspath(os.path.join(os.path.split(
-            inspect.getfile(inspect.currentframe()))[0], "nbody_alternate_symmetry")))
-        if cmd_subfolder not in sys.path:
-            sys.path.insert(0, cmd_subfolder)
+    # search locations
+    package_opts = [[src_bond_pattern, __package__],
+        ['nbody_alternate_symmetry.'+src_bond_pattern, __package__]]
+
+    if __package__:
+        for i, _ in enumerate(package_opts):
+            package_opts[i][0] = '.' + package_opts[i][0]
+
+    g = None
+    for name, pkg in package_opts:
         try:
             # defines g.bond_pattern, g.canonical_order
-            g = __import__(src_bond_pattern)
-        except:
-            sys.stderr.write('Error: Unable to locate file \"' + src_bond_pattern + '\"\n'
-                             '       (Did you mispell the file name?\n'
-                             '        Check the \"nbody_alternate_symmetry/\" directory.)\n')
-            sys.exit(-1)
+            g = importlib.import_module(name, pkg)
+            break
+        except (SystemError, ImportError):
+            pass
+
+    if g is None:
+        sys.stderr.write('Error: Unable to locate file \"' +
+                         src_bond_pattern + '\"\n'
+                         '       (Did you mispell the file name?\n'
+                         '        Check the \"nbody_alternate_symmetry/\" directory.)\n')
+        sys.exit(-1)
 
     return GenInteractions_lines(lines_atoms,
                                  lines_bonds,
@@ -379,17 +388,8 @@ def GenInteractions_files(lines_data,
                                  suffix,
                                  report_progress)
 
-    return
-
 
 def main():
-    g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-    g_date_str = '2014-12-19'
-    g_version_str = '0.18'
-
-    bond_pattern_module_name = ""
-
-    #######  Main Code Below: #######
     sys.stderr.write(g_program_name + ' v' +
                      g_version_str + ' ' + g_date_str + ' ')
     if sys.version < '3':
