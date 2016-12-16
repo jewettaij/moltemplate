@@ -47,7 +47,7 @@ def IsNumber(s):
     try:
         float(s)
         return True
-    except ValueError, TypeError:
+    except (ValueError, TypeError):
         return False
 
 
