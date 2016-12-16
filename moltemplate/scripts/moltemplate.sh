@@ -31,7 +31,7 @@ fi
 
 
 # First, determine the directory in which the python scripts are located.
-# (such as ttree.py).  It could either be the directory where the script 
+# (such as ttree.py).  It could either be the directory where the script
 # file is located, OR it could be the parent of this directory.
 PY_SCR_DIR=`dirname "$0"`
 if [ ! -s "${PY_SCR_DIR}/ttree.py" ]; then
@@ -101,27 +101,14 @@ for f in $MOLTEMPLATE_FILES_NEEDED; do
 done
 IFS=$OIFS
 
-
-
-# Directory moltemplate looks for popular force-fields files:
-#IMOLPATH=""
-#if [ -n "${MOLTEMPLATE_PATH}" ]; then
-#  IMOLPATH="-importpath \"${MOLTEMPLATE_PATH}\""
-#fi
-if [ -d "${PY_SCR_DIR}/moltemplate_force_fields" ]; then
-    IMOLPATH="-importpath \"${PY_SCR_DIR}/moltemplate_force_fields\""
-else
-    IMOLPATH=""
-fi
-
 # command that invokes lttree.py
-LTTREE_COMMAND="$PYTHON_COMMAND \"${PY_SCR_DIR}/lttree.py\" ${IMOLPATH}"
+LTTREE_COMMAND="$PYTHON_COMMAND \"${PY_SCR_DIR}/lttree.py\""
 
 # command that invokes lttree_check.py
-LTTREE_CHECK_COMMAND="$PYTHON_COMMAND \"${PY_SCR_DIR}/lttree_check.py\" ${IMOLPATH}"
+LTTREE_CHECK_COMMAND="$PYTHON_COMMAND \"${PY_SCR_DIR}/lttree_check.py\""
 
 # command that invokes lttree_postprocess.py
-LTTREE_POSTPROCESS_COMMAND="$PYTHON_COMMAND \"${PY_SCR_DIR}/lttree_postprocess.py\" ${IMOLPATH}"
+LTTREE_POSTPROCESS_COMMAND="$PYTHON_COMMAND \"${PY_SCR_DIR}/lttree_postprocess.py\""
 
 
 # -----------------------------------------------------------
