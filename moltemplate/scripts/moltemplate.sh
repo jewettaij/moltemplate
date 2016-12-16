@@ -921,12 +921,12 @@ for FILE in "$data_angles_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Angles.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
-            echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
-	    echo "       It should be located in this directory:" >&2
-            echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
-            exit 4
-        fi
+        # if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
+	    #     echo "       It should be located in this directory:" >&2
+        #     echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
+        #     exit 4
+        # fi
     fi
 
     #-- Generate a file containing the list of interactions on separate lines --
@@ -1014,12 +1014,12 @@ for FILE in "$data_dihedrals_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
-            echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
-	    echo "       It should be located in this directory:" >&2
-            echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
-            exit 4
-        fi
+        # if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
+	    # echo "       It should be located in this directory:" >&2
+        #     echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
+        #     exit 4
+        # fi
     fi
 
     FILE_dihedrals_by_type2="$FILE_impropers_by_type1"
@@ -1109,12 +1109,12 @@ for FILE in "$data_impropers_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Impropers.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
-            echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
-	    echo "       It should be located in this directory:" >&2
-            echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
-            exit 4
-        fi
+        # if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
+	    # echo "       It should be located in this directory:" >&2
+        #     echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
+        #     exit 4
+        # fi
     fi
 
     FILE_impropers_by_type2="$FILE_impropers_by_type1"
