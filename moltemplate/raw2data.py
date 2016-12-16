@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .dump2data import *
+try:
+    from .dump2data import *
+except:
+    # not installed as a package
+    from dump2data import *
 
 g_program_name = 'raw2data.py'
 g_date_str = '2014-12-19'

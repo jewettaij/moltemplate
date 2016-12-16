@@ -28,8 +28,13 @@ define large systems containing this molecule.
 """
 
 import sys
-from .ttree_lex import *
-from .lttree_styles import *
+try:
+    from .ttree_lex import *
+    from .lttree_styles import *
+except SystemError:
+    # not installed as a package
+    from ttree_lex import *
+    from lttree_styles import *
 
 
 def Intify(s):

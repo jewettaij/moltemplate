@@ -18,8 +18,14 @@ and prints out the new (rendered) text to the standard-out.
 import sys
 import gc
 
-from .ttree import ExtractFormattingCommands
-from .ttree_lex import SplitQuotedString, InputError, TemplateLexer
+try:
+    from .ttree import ExtractFormattingCommands
+    from .ttree_lex import SplitQuotedString, InputError, TemplateLexer
+except SystemError:
+    # not installed as a package
+    from ttree import ExtractFormattingCommands
+    from ttree_lex import SplitQuotedString, InputError, TemplateLexer
+
 
 g_filename = __file__.split('/')[-1]
 g_module_name = g_filename

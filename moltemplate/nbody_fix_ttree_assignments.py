@@ -43,7 +43,12 @@ I wrote this python script (instead of using awk) just to handle quoted stings
 """
 
 import sys
-from .ttree_lex import SplitQuotedString, EscCharStrToChar, SafelyEncodeString, InputError
+
+try:
+    from .ttree_lex import SplitQuotedString, InputError
+except SystemError:
+    # not installed as a package
+    from ttree_lex import *
 
 g_program_name = __file__.split('/')[-1]
 

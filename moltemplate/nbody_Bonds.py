@@ -1,4 +1,8 @@
-from .nbody_graph_search import Ugraph
+try:
+    from .nbody_graph_search import Ugraph
+except SystemError:
+    # not installed as a package
+    from nbody_graph_search import Ugraph
 
 #    To find 2-body "bond" interactions, we would use this subgraph:
 #

@@ -6,9 +6,12 @@
 
 from collections import deque
 from array import array
-from .ttree_lex import InputError, ErrorLeader, OSrcLoc
-#import sys
 
+try:
+    from .ttree_lex import InputError, ErrorLeader, OSrcLoc
+except SystemError:
+    # not installed as a package
+    from ttree_lex import InputError, ErrorLeader, OSrcLoc
 
 def MultMat(dest, A, B):
     """ Multiply two matrices together. Store result in "dest".

@@ -30,16 +30,24 @@ Additional LAMMPS-specific features may be added in the future.
 import sys
 from collections import defaultdict
 
-from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
-    StackableCommand, PopCommand, PopRightCommand, PopLeftCommand, \
-    PushCommand, PushLeftCommand, PushRightCommand, ScopeCommand, \
-    WriteVarBindingsFile, StaticObj, InstanceObj, \
-    BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
-from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
-    TemplateLexer
-from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid, \
-    ColNames2Coords, ColNames2Vects, data_atoms, data_masses
-from .ttree_matrix_stack import AffineTransform, MultiAffineStack, LinTransform
+try:
+    from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
+        StackableCommand, PopCommand, PopRightCommand, PopLeftCommand, \
+        PushCommand, PushLeftCommand, PushRightCommand, ScopeCommand, \
+        WriteVarBindingsFile, StaticObj, InstanceObj, \
+        BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
+    from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
+        TemplateLexer
+    from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid, \
+        ColNames2Coords, ColNames2Vects, data_atoms, data_masses
+    from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
+        LinTransform
+except SystemError:
+    # not installed as a package
+    from ttree import *
+    from ttree_lex import *
+    from lttree_styles import *
+    from ttree_matrix_stack import *
 
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'

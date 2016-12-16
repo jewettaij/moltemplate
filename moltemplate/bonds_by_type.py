@@ -24,12 +24,14 @@
 #                     -bonds-ids-atom-pairs bonds_ids_atom_pairs.data \\
 
 import sys
-#from extract_lammps_data import *
-#from nbody_by_type_lib import GenInteractions_str
-from . import ttree_lex
-#from ttree_lex import *
-from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 
+try:
+    from . import ttree_lex
+    from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+except SystemError:
+    # not installed as a package
+    import ttree_lex
+    from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 
 def LookupBondTypes(bond_types,
                     bond_ids,

@@ -139,10 +139,6 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 
 
 import sys
-from .extract_lammps_data import *
-from .nbody_by_type_lib import GenInteractions_str
-from .ttree_lex import *
-from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
 import os
 import inspect  # <- Needed to import modules in subdirectories (see below)
 
@@ -161,6 +157,18 @@ elif sys.version < '2.7':
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
+
+try:
+    from .extract_lammps_data import *
+    from .nbody_by_type_lib import GenInteractions_str
+    from .ttree_lex import *
+    from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+except SystemError:
+    from extract_lammps_data import *
+    from nbody_by_type_lib import GenInteractions_str
+    from ttree_lex import *
+    from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+
 
 
 def GenInteractions_lines(lines_atoms,

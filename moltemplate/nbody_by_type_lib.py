@@ -8,7 +8,7 @@
 
 
 import sys
-from .nbody_graph_search import *
+
 #from collections import namedtuple
 if sys.version < '2.7':
     sys.stderr.write('--------------------------------------------------------\n'
@@ -22,8 +22,17 @@ if sys.version < '2.7':
     from ordereddict import OrderedDict
 else:
     from collections import OrderedDict
+
 from collections import defaultdict
-from .ttree_lex import MatchesPattern, MatchesAll, InputError
+
+try:
+    from .nbody_graph_search import Ugraph, GraphMatcher
+    from .ttree_lex import MatchesPattern, MatchesAll, InputError
+except SystemError:
+    # not installed as a package
+    from nbody_graph_search import Ugraph, GraphMatcher
+    from ttree_lex import MatchesPattern, MatchesAll, InputError
+
 #import gc
 
 
