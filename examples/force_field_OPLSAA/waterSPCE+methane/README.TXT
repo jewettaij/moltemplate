@@ -6,7 +6,7 @@ The methane molecules use OPLSAA force-field, but the water molecules do not.
 The methane molecules in this example use the OPLSAA force-field.
 This means that the database of force-field parameters in "oplsaa.lt"
 will be used to generate angles, dihedrals, and impropers.
-The "moltemplate_files/methane.lt" file 
+The "moltemplate_files/methane.lt" file
 contains these lines which refer to OPLSAA:
 
 import "oplsaa.lt"
@@ -20,7 +20,7 @@ interactions, atom properties and force-field parameters for water explicitly.
 
 -------- Instructions: ---------
 
-More detailed instructions on how to build LAMMPS input files and 
+More detailed instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

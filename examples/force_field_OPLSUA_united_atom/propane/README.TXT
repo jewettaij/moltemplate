@@ -11,7 +11,7 @@ IMPORTANT: This is NOT an all-atom simulation.
 
 -------- Instructions: ---------
 
-More detailed instructions on how to build LAMMPS input files and 
+More detailed instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

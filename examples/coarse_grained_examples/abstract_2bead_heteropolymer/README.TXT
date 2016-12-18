@@ -7,7 +7,7 @@ There are two types of residues, H and P.
 The R-atom for the H residue are attracted to eachother.
 All other atoms are repulsive.
 
-Instructions on how to build LAMMPS input files and 
+Instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

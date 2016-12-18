@@ -4,16 +4,16 @@ NOTE: VMD DOES NOT ALLOW YOU TO VISUALIZE SYSTEMS WITH MANY BONDS ATTACHED
 HOWEVER THIS MODEL ATTACHES APPROXIMATELY 60 BONDS TO EACH CONDENSIN ATOM.
 IN ORDER TO PULL THE CONDENSIN MONOMERS TOGETHER.  YOU MUST DELETE THOSE
 BONDS (of type "1" or "2") FROM THE "system.data" FILE BEFORE YOU CARRY
-OUT THE COMMANDS BELOW.  (...And backup your "system.data" file.  You'll need 
+OUT THE COMMANDS BELOW.  (...And backup your "system.data" file.  You'll need
 all the bonds when you run the simulations.)
 
 -------------- COLORS ---------------
 In order to show how the polymer is distributed along the length of the
 cylinder, I recommend to select the
-Graphics->Graphical Representations 
+Graphics->Graphical Representations
 menu option, and select "Index" from the "Coloring Method" pull-down menu.
 
-After doing this, you can switch from a red-white-blue scheme, to a 
+After doing this, you can switch from a red-white-blue scheme, to a
 rainbow ("jet") scheme, by selecting the Extensions->Tk Console menu option
 and loading the "vmd_colorscale_jet.tcl" file located in the "images" directory.
 -------------------------------------------
@@ -31,10 +31,10 @@ The system coordinates are initialy stored in a LAMMPS' ".data" file.
 
 The first step is to view that file.
 Then you should create a ".psf" file
-(The .psf file is necessary after you run the simulation 
+(The .psf file is necessary after you run the simulation
  for viewing trajectories.)
 
-1) Build a PSF file for use in viewing with VMD 
+1) Build a PSF file for use in viewing with VMD
 
 a) Start VMD
 b) Menu  Extensions->Tk Console
@@ -48,9 +48,9 @@ c) Enter:
 You will see a snapshot of the system on the screen.
 (presumably the initial conformation at t=0)
 
-2) 
+2)
 
-Later once you have run a simulation, 
+Later once you have run a simulation,
 to Load a trajectory in VMD:
 
   Start VMD
@@ -68,21 +68,21 @@ to Load a trajectory in VMD:
 
 
 ##################### PERIODIC BOUNDARY CONDITIONS #####################
-  If you are only simulating a single molecule and you are not 
+  If you are only simulating a single molecule and you are not
   using periodic boundary conditions, then ignore everything below.
 ########################################################################
 
    ----  A note on trajectory format: -----
-If the trajectory is the standard LAMMPS format, (aka a "DUMP" file with 
+If the trajectory is the standard LAMMPS format, (aka a "DUMP" file with
 a ".lammpstrj" extension), then it's a good idea when you run the simulation
 to tell LAMMPS you want to store the information needed for showing periodic
-boundary conditions.  (Even if you are not using periodic boundaries.  
+boundary conditions.  (Even if you are not using periodic boundaries.
 It never hurts to include a tiny bit of extra information.) To do that,
 I've been using this command in my LAMMPS scripts to create the trajectories:
 
   dump 1 all custom 5000 traj.lammpstrj id mol type x y z ix iy iz
 
-(Also: it's a good idea to use an atom_style which supports molecule-ID numbers 
+(Also: it's a good idea to use an atom_style which supports molecule-ID numbers
 so that you can assign a molecule-ID number to each atom. I think this is needed
 to wrap atom coordinates visually without breaking molecules in half. Again
 you don't need to worry about this if you are not using periodic boundaries.)
@@ -101,7 +101,7 @@ d) Try entering these commands:
 
     ----- Optional ----
     Sometimes the solvent or membrane obscures the view of the solute.
-    It can help to shift the location of the periodic boundary box 
+    It can help to shift the location of the periodic boundary box
     To shift the box in the y direction (for example) do this:
 
     pbc wrap -compound res -all -shiftcenterrel {-0.5 -0.5 -0.5}
@@ -109,19 +109,19 @@ d) Try entering these commands:
 
     Distances are measured in units of box-length fractions, not Angstroms.
 
-    Alternately if you have a solute whose atoms are all of type 1, 
+    Alternately if you have a solute whose atoms are all of type 1,
     then you can also try this to center the box around it:
 
     pbc wrap -sel type=1 -all -centersel type=2 -center com
 
-4) 
+4)
     You should check if your periodic boundary conditions are too small.
     To do that:
        select Graphics->Representations menu option
-       click on the "Periodic" tab, and 
+       click on the "Periodic" tab, and
        click on the "+x", "-x", "+y", "-y", "+z", "-z" checkboxes.
 
-5) Optional: If you like, change the atom types in the PSF file so 
+5) Optional: If you like, change the atom types in the PSF file so
    that VMD recognizes the atom types, use something like:
 
 sed -e 's/   1    1      /   C    C      /g' < system.psf > temp1.psf

@@ -36,7 +36,7 @@ with a hollow interior:
 
 In this example, we will build a periodic lattice of Menger sponges.
 
-The smallest cube subunits consist of 4 atoms of Aluminum 
+The smallest cube subunits consist of 4 atoms of Aluminum
 (arranged in a cubic FCC unit-cell for bulk Aluminum).
 This was an arbitrary choice.  The resulting construct is not stable.
 

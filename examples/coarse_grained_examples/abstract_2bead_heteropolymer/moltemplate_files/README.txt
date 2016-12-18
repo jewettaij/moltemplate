@@ -12,15 +12,15 @@
 #   Eventually, we will connect multiple "H" and "P" molecules
 #   together to form a polymer, as shown below:
 #
-#                    @HR         @HR       
-#                     |           |        
-#                   _@CA_       _@CA_      
-#       ...  -.@CA-'     `-@CA-'     `  ... 
-#               |          |               
-#              @PR         @PR              
+#                    @HR         @HR
+#                     |           |
+#                   _@CA_       _@CA_
+#       ...  -.@CA-'     `-@CA-'     `  ...
+#               |          |
+#              @PR         @PR
 #
 #   The "H" and "P" molecules both share the same type of
-#   backbone atom ("CA"), but have their own custom "r" 
+#   backbone atom ("CA"), but have their own custom "r"
 #   sidechain atoms with different properties:
 #   The "HR" atoms belonging to "H" molecules are attracted to each other.
 #   The "PR" atoms in "P" molecules are not.

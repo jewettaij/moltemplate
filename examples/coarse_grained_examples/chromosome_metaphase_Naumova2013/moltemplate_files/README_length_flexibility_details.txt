@@ -2,9 +2,9 @@
 
 The two-stage model at the end of Naumova et al Science 2013 uses the "30nm-fiber" model, whose details are (somewhat vaguely) described in the supplemental materials section.
 
-For the 10nm model, 
-    n=128000, 
-    L=200, 
+For the 10nm model,
+    n=128000,
+    L=200,
     U(alpha)=5*(1 - cos(alpha))
     bond_length=1.0     (=10nm)
     sigma=1.0 (particle radius = 10nm)
@@ -12,7 +12,7 @@ For the 10nm model,
 30nm-fiber model details:
 "The 30nm-like fiber was modeled by increasing the volume of each monomer and the amount of DNA represented by each monomer by a factor of 4.25, while keeping other parameters the same at the monomer level."
 
-I interpret this to mean that, for the 30nm model, 
+I interpret this to mean that, for the 30nm model,
     n=128000/4.25~=30117
     L=200/4.25~=47
     U(alpha)=1.17647*(1 - cos(alpha))    (5/4.25=1.17647)

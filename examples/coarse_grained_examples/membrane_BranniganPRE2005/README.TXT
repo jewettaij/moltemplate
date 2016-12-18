@@ -13,8 +13,8 @@ and:
      M.C. Watson, E.S. Penev, P.M. Welch, and F.L.H. Brown
      J. Chem. Phys. 135, 244701 (2011)
 
-As in Watson(JCP 2011), rigid bond-length constraints 
-have been replaced by harmonic bonds. 
+As in Watson(JCP 2011), rigid bond-length constraints
+have been replaced by harmonic bonds.
 
 A truncated version of this lipid (named "DLPC") has also been added.
 Unlike the original "DPPC" molecule model, "DLPC" has not been carefully
@@ -23,7 +23,7 @@ parameterized to reproduce the correct behavior in a lipid bilayer.
 
 -------------
 
-Instructions on how to build LAMMPS input files and 
+Instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

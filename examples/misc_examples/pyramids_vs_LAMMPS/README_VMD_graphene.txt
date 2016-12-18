@@ -8,9 +8,9 @@ made of graphene.  The instructions in this file explain how to build the
 graphene (representing the "ground") using VMD instead of with moltemplate.
   Why do this?
 VMD can create graphene sheets with bonds connecting neighboring carbon atoms,
-(which looks more pretty).  However, as of 2013-4-29, moltemplate currently 
-can not generate these bonds.  It does not matter physically in this case, 
-because the graphene sheet used here does not move.  It is only used as 
+(which looks more pretty).  However, as of 2013-4-29, moltemplate currently
+can not generate these bonds.  It does not matter physically in this case,
+because the graphene sheet used here does not move.  It is only used as
 scenery, to graphically represent the ground surface.
 
 Select "Extensions"->"Modeling"->"Carbon Nanotube Builder"
