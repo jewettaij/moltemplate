@@ -17,7 +17,7 @@ Example:
 
 
 import sys
-from math import *
+from math import floor
 
 # Parse the argument list:
 if len(sys.argv) <= 1:
@@ -38,7 +38,7 @@ lines = sys.stdin.readlines()
 for line in lines:
     tokens = line.split()
     if (len(tokens) > 0):
-        coords_orig.append(map(float, tokens))
+        coords_orig.append(list(map(float, tokens)))
         g_dim = len(tokens)
 
 n_orig = len(coords_orig)
