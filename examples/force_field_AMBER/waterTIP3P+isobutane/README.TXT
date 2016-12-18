@@ -2,15 +2,11 @@ The simulation consists of a mixture of isobutane and water.
 Over time (less than 1 ns), the two molecules phase-separate.
 
 The GAFF parameters are applied only to the isobutane molecule.
-(The water molecule paramters are defined explicitly in
- src/moltemplate_force_fields/tip3p_2004.lt)
+(The water molecule paramters are defined explicitly in the
+ "force_fields/tip3p_2004.lt" file distributed with moltemplate.)
 
-WARNING: THIS IS A PRELIMINARY EXAMPLE WHICH USES AMBER'S GAFF FORCE FIELD.
-         AS OF 2014-4-19, these features have not been tested.
-         THE ABILITY TO DETECT AND ASSIGN GAFF FORCE FIELD PARAMETERS
-         MOLECULES ACCORDING TO ATOM TYPE IS AN EXPERIMENTAL FEATURE
-         AND CURRENTLY PROBABLY HAS BUGS (IN THE DIHEDRALS AND IMPROPERS).
-         PLEASE REPORT BUGS AND/OR SEND CORRECTIONS.  -A 2014-4-19
+WARNING: THIS EXAMPLE HAS NOT BEEN CAREFULLY TESTED.
+         PLEASE REPORT BUGS AND/OR SEND CORRECTIONS.  -A 2016-12-16
 
 ----------------- CHARGE ----------------------
 

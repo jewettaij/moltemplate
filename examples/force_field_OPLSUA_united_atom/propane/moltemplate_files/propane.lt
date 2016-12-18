@@ -15,8 +15,8 @@ Propane inherits OPLSAA {
     $bond:CC2 $atom:CH2  $atom:CH3b
   }
 
-  # These atom types are defined in the "oplsaa.lt" file
-  # (usually located in the "src/moltemplate_force_fields/" subdirectory)
+  # These atom types are defined in the "oplsaa.lt" file (usually located
+  # in the "force_fields" subdirectory of the moltemplate distribution).
   #    @atom:10  "N-Alkane CH3- (UA)"
   #    @atom:13  "Alkanes -CH2- (UA)"
   # 

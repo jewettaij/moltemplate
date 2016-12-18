@@ -25,7 +25,7 @@ Both examples use the same force-field parameters.
 
 1)
 In this version, the force-field parameters are loaded from the "gaff.lt" file
-(located in the "src/moltemplate_force_fields/" subdirectory).
+(located in the "force_fields" subdirectory of the moltemplate distribution).
 This frees the user from the drudgery of manually specifying all of these
 force-field details for every molecule.  (However, the user must be careful
 to choose @atom-type names which match AMBER GAFF conventions,
