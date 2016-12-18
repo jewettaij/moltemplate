@@ -1,0 +1,41 @@
+# Run jobs on container-based infrastructure, can be overridden per job
+sudo: false
+
+language: python
+
+git:
+  depth: 3
+
+# cache:
+#   directories:
+#     - $HOME/.cache/pip
+
+os:
+    - linux
+    - osx
+
+python:
+    - "2.6"
+    - "2.7"
+    # - "3.4"
+    - "3.5"
+    # - "pypy"
+
+install:
+  # - source devtools/travis-ci-installcfg.sh
+  - pip install coveralls
+  - pip install .
+
+script:
+  -  coverage run --source=moltemplate py.test -v --color=yes --exitfirst --showlocals
+
+after_success:
+  - coveralls
+
+# deploy:
+#   provider: pypi
+#   user: saladi
+#   password:
+#     secure: cudBkFXgob9+FZ5ukpryWwvcSIyrK2tMSbd5eK5q6ssQr6BZeKoTe6JVHkIAQiABQbZL6AxCMRoqRNBOmu9wI8eBzwWNPCJC3rFIOThndGNWotFPetisZrsO6Ry30O08VMXH3PpaLenHGcIuOksAWycoRssyOdIT/xIx4CSJld6ShQwA+CaSfTBk0o0q7cbpY/3xmW+c5jMjzNhZH5RapR/m0bO7B6tn+p+jZM13B0CykCTopwry5goykNHonz64jCouljLvDmOVZqZa81k6pK7HwsE0BYCptbgGirwqXz5l7UQUna3HcOHJEqQl9bWqOAwr7+7crj0uHeg2lOhzYDnnzqbmjW5Dmlac3U6UZj+0R9I3HDRvmrU6qfiNIm5051bpdMlg660osxYpdIk1/3ebU8t6Qlj8PWcrBTtk4tsDsZEUi5Gp9AsyadC67el8E/12RbbePZdDD2S5JX6PUFkqy6v+VRoLTS2veyj/LX/RrelGL9+k3o4Zv4NOrO7NZyOT2z3Lz/eACYspC6PTLJTM0NZfBUwn4JFHVwIFhMt3eG9Ft4iU4/vh6gTgMYunZ/tuuRmf/APE9SJoUB0gBAzw3XFk051LGuzu/1QZqMOH5g/UEVSoFbM/sbfS4qykT0x7Di+fg8Tafn/2qOX6YTHTuqHhXsTaRFkD8e0s8lk=
+#   on:
+#     tags: true
