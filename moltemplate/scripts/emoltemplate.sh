@@ -10,7 +10,7 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="emoltemplate.sh"
-G_VERSION="1.0.3"
+G_VERSION="1.0.4"
 G_DATE="2016-12-08"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2

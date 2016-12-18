@@ -34,17 +34,22 @@ There are two ways to install moltemplate:
 
 ## Installation using pip
 
-If you are familliar with pip, then run the following command from within the directory where this README file is located:
+If you are familiar with pip, then run the following command from within the directory where this README file is located:
 
     pip install .
 
-Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, this will be done for you automatically.)  Instructions for editing your PATH are explained below.
+Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, this will be done for you automatically.)  Later, you can uninstall moltemplate using:
+
+    pip uninstall moltemplate
+
+Instructions for editing your PATH are included below.  
 
 ## Manual Installation method:
 
 Alternatively, you can edit your PATH variable manually to include
-the place where the moltemplate.sh script is located.
-Suppose the directory with this README file is located at ~/moltemplate.
+the subdirectory where the moltemplate.sh script is located.
+Suppose the directory with this README file is named ``moltemplate''
+and is located in your home directory:
 
 If you use the bash shell, typically you would edit your 
 `~/.profile`, `~/.bash_profile` or `~/.bashrc` files 
@@ -56,6 +61,7 @@ If you use the tcsh shell, typically you would edit your
 After making these changes, you may need to start a new terminal (shell) for the changes to take effect.  If you do not know what a `PATH` environment variable is and are curious, read:
     http://www.linfo.org/path_env_var.html
 (I receive this question often.)
+
 
 ### WINDOWS installation suggestions
 
