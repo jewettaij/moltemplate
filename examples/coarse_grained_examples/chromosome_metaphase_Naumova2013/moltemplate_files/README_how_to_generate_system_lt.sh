@@ -13,7 +13,7 @@
 
   # 32768 is the number of monomers in the polymer
   # (which may be different from the number of coordinates
-  # in the "coords_orig.raw" file)  This number will vary 
+  # in the "coords_orig.raw" file)  This number will vary
   # depending on how long you want the polymer to be.
   # The second argument "51" is the average interval between
   # condensin anchors (IE the "loop size" in monomers.)

@@ -1,5 +1,5 @@
 # --- Running LAMMPS ---
-# The 2 files "run.in.npt", and "run.in.nvt" are LAMMPS 
+# The 2 files "run.in.npt", and "run.in.nvt" are LAMMPS
 # input scripts which link to the input scripts and data files
 # you hopefully have created earlier with moltemplate.sh:
 #   system.in.init, system.in.settings, system.data

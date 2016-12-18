@@ -1,6 +1,6 @@
 # --- Running LAMMPS ---
 #
-# The 2 files "run.in.npt", and "run.in.nvt" are LAMMPS 
+# The 2 files "run.in.npt", and "run.in.nvt" are LAMMPS
 # input scripts which link to the input scripts and data files
 # you hopefully have created earlier with moltemplate.sh:
 #   system.in.init, system.in.settings, system.data
@@ -16,7 +16,7 @@ lmp_mpi -i run.in.nvt  # minimization and simulation at constant volume
 
 #(Note: The constant volume simulation lacks pressure equilibration. These are
 #       completely separate simulations. The results of the constant pressure
-#       simulation might be ignored when beginning the simulation at constant 
+#       simulation might be ignored when beginning the simulation at constant
 #       volume.  (This is because restart files in LAMMPS don't always work,
 #       and I was spending a lot of time trying to convince people it was a
 #       LAMMPS bug, instead of a moltemplate bug, so I disabled restart files.)

@@ -13,7 +13,7 @@
 
 lmp_mpi -i run.in.npt  # Run a simulation at constant pressure (tension)
 
-#or 
+#or
 
 lmp_mpi -i run.in.nvt  # Run a simulation at constant volume
 

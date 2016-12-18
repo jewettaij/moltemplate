@@ -6,7 +6,7 @@
 #
 # In this example, I use moltemplate to build a "DATA" file for this system.
 # (I can't think of a compelling reason to do this for simple simulations like
-# this. But this approach might be useful if you want to artificially create 
+# this. But this approach might be useful if you want to artificially create
 # unusual structures out of aluminum crystals, or mix them with other molecules.
 # I created this example in response to a user request.)
 #

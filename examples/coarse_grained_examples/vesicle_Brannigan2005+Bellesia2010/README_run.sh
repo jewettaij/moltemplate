@@ -3,7 +3,7 @@
 # The "run.in.nvt" file is a LAMMPS input script containing
 # references to the input scripts and data files
 # you hopefully have created earlier with MOLTEMPLATE and PACKMOL:
-#   system.in.init, system.in.settings, system.in.coords, system.data, 
+#   system.in.init, system.in.settings, system.in.coords, system.data,
 #   and table_int.dat
 # If not, carry out the instructions in "README_setup.sh".
 #

@@ -6,6 +6,6 @@ moltemplate.sh -a "@atom:/WatMW/mW 1" system.lt
 # (This is necessary for the pair_coeff command to work.
 #  See system.lt for details.)
 
-# Note: To get rid of the annoying "atom_style unspecified warnings, 
+# Note: To get rid of the annoying "atom_style unspecified warnings,
 # use the "-atomstyle" command line argument, as in:
 # moltemplate.sh -atomstyle full  -a "@atom:/WatMW/mW 1" system.lt
