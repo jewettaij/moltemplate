@@ -1,6 +1,7 @@
-import "tip3p_2004.lt"
-                  # <- This defines the TIP3P water molecule.  This file is
-                  #    located in the "src/moltemplate_force_fields" directory.
+
+import "tip3p_2004.lt" # <-- This defines the TIP3P water molecule.  This file
+                       #     is located in the "force_fields" subdirectory
+                       #     of the moltemplate distribution.
 
 import "isobutane.lt"  # <- defines the "Isobutane" molecule type.
 

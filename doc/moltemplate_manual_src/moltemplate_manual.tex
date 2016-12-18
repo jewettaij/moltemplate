@@ -333,19 +333,37 @@ the most up-to-date version can be downloaded at
 If you obtained moltemplate as a .tar.gz file,
 (as opposed to github), you can unpack it using:
 \begin{verbatim}
-tar -xzvf moltemplate_2016-11-21.tar.gz
+tar -xzvf moltemplate_2016-12-15.tar.gz
 \end{verbatim}
 (The date will vary from version to version.)
 Alternately, if you obtained moltemplate bundled with LAMMPS, 
 then the \textit{``moltemplate''} directory will probably be located 
 in the \textit{``tools''} subdirectory of your lammps installation.
 
-\subsubsection*{Installation Method 1}
-The \textit{``moltemplate.sh''} script and the python scripts it invokes
-are located in the \textit{``src''} subdirectory.  If necessary, move the \textit{``moltemplate''} directory to its desired location. (For the sake of this example, let's assume you move it to: \textit{``\$HOME/moltemplate''}.)  You must update your PATH environment variable to include this directory.
-%You also need to set your MOLTEMPLATE\_PATH environment variable to 
-%point to the \textit{``common''} subdirectory.
-%(Force fields and commonly used molecules will eventually be located here.)
+There are two ways to install moltemplate:
+
+\subsubsection*{Installation Method 1 (pip)}
+
+\textit{If you are familiar with pip}, then run the following command from within outermost directory:
+\begin{verbatim}
+pip install .
+\end{verbatim}
+\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)
+
+Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
+\begin{verbatim}
+pip uninstall moltemplate
+\end{verbatim}
+Instructions for updating your PATH are included below.
+
+
+\subsubsection*{Installation Method 2}
+
+Alternatively, you can edit your PATH variable manually to include
+the sudirectory where the moltemplate.sh script is located 
+(typically ``moltemplate/scripts/'').
+Suppose the directory where with the README file is named ``moltemplate''
+and is located in your home directory:
 
 If you use the \textbf{bash} shell, typically you would edit your 
 \mbox{$\sim$/.bash\_profile}, 
@@ -353,7 +371,7 @@ If you use the \textbf{bash} shell, typically you would edit your
 \mbox{$\sim$/.profile} files
 and append the following line:
 \begin{verbatim}
-export PATH="$PATH:$HOME/moltemplate/src"
+export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 \end{verbatim}
 If instead you use the \textbf{tcsh} shell, typically you would edit your 
 \mbox{$\sim$/.login}, 
@@ -361,7 +379,7 @@ If instead you use the \textbf{tcsh} shell, typically you would edit your
 \mbox{$\sim$/.tcshrc} files 
 and append the following line:
 \begin{verbatim}
-setenv PATH "$PATH:$HOME/moltemplate/src"
+setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
 \end{verbatim}
 
 
@@ -369,9 +387,6 @@ setenv PATH "$PATH:$HOME/moltemplate/src"
 \textit{Note: You may need to log out and then 
 log back in again for the changes to take effect.}
 
-
-\subsubsection*{Installation Method 2}
-An alternate way to install moltemplate is to simply copy the entire \textit{contents} of moltemplate's ``src'' subdirectory into a directory which is already in your path, such as /usr/local/bin.  (This will require admin privileges.)
 
 
 %\pagebreak

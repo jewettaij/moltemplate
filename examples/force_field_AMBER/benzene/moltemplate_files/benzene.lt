@@ -1,7 +1,8 @@
 
 import "gaff.lt"
 
-# The "gaff.lt" file is usually located in "src/moltemplate_force_fields".
+# The "gaff.lt" file is usually located in the "force_fields" 
+# subdirectory distributed with moltemplate.
 # Excerpt:
 #
 # @atom:ca    # Sp2 C in pure aromatic systems

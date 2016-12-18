@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.0.5"
-G_DATE="2016-12-16"
+G_VERSION="2.1.0"
+G_DATE="2016-12-18"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -940,8 +940,6 @@ for FILE in "$data_angles_by_type"*.template; do
             -nbodybytype "${FILE}" \
             -prefix '$/angle:bytype' > gen_angles.template.tmp; then
         exit 4
-    #WARNING: DO NOT REPLACE THIS WITH
-    #if ! $NBODY_COMMAND ...<-this sometimes causes a shell quotes-related error
     fi
 
     # ---- cleanup: ----
@@ -1036,8 +1034,6 @@ for FILE in "$data_dihedrals_by_type"*.template; do
             -nbodybytype "${FILE}" \
             -prefix '$/dihedral:bytype' > gen_dihedrals.template.tmp; then
         exit 4
-    #WARNING: DO NOT REPLACE THIS WITH
-    #if ! $NBODY_COMMAND ...<-this sometimes causes a shell quotes-related error
     fi
 
     # ---- cleanup: ----
@@ -1131,8 +1127,6 @@ for FILE in "$data_impropers_by_type"*.template; do
             -nbodybytype "${FILE}" \
             -prefix '$/improper:bytype' > gen_impropers.template.tmp; then
         exit 4
-    #WARNING: DO NOT REPLACE THIS WITH
-    #if ! $NBODY_COMMAND ...<-this sometimes causes a shell quotes-related error
     fi
 
     # ---- cleanup: ----

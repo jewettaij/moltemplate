@@ -15,8 +15,8 @@
 # Also, if you have not yet done this set your MOLTEMPLATE_PATH environment 
 # variable to access it.  (See installation instructions.)  
 # Most likely some of the files in this example (like graphene.lt, tip3p2004.lt)
-# are not in this directory, but are in the "src/moltemplate_force_fields/"
-# subdirectory.
+# are not in this directory, but are in the "force_fields" subdirectory
+# distributed with moltemplate.
 #
 # -----------------------------------------------------------
 #
