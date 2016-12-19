@@ -43,7 +43,7 @@ try:
         ColNames2Coords, ColNames2Vects, data_atoms, data_masses
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     from ttree import *
     from ttree_lex import *
@@ -92,10 +92,11 @@ class LttreeSettings(BasicUISettings):
 
 def LttreeParseArgs(argv, settings, main=False):
     # By default, include force_fields provided with the package
-    argv.extend(["-importpath",
-                pkg_resources.resource_filename(__name__, 'force_fields/')])
+    argv.extend(["-import-path",
+                 pkg_resources.resource_filename(__name__, 'force_fields/')])
 
     BasicUIParseArgs(argv, settings)
+    sys.stderr.write('PATH1='+str(settings.lex.include_path)+'\n')
 
     # Loop over the remaining arguments not processed yet.
     # These arguments are specific to the lttree.py program
@@ -198,6 +199,8 @@ def LttreeParseArgs(argv, settings, main=False):
         else:
             i += 1
 
+        sys.stderr.write('PATH2='+str(settings.lex.include_path)+'\n')
+
     if main:
 
         # Instantiate the lexer we will be using.
@@ -212,8 +215,9 @@ def LttreeParseArgs(argv, settings, main=False):
                              '       the name of a file containing ttree template commands\n')
         elif len(argv) == 2:
             try:
-                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[
-                                             1])  # Parse text from file
+                # Parse text from the file named argv[1]
+                settings.lex.instream = open(argv[1], 'r')
+                settings.lex.infile = argv[1]  
             except IOError:
                 sys.stderr.write('Error: unable to open file\n'
                                  '       \"' + argv[1] + '\"\n'
@@ -685,6 +689,7 @@ def main():
         #BasicUIParseArgs(sys.argv, settings)
         settings = LttreeSettings()
         LttreeParseArgs(sys.argv, settings, main=True)
+        sys.stderr.write('PATH3='+str(settings.lex.include_path)+'\n')
 
         # Data structures to store the class definitionss and instances
         g_objectdefs = StaticObj('', None)  # The root of the static tree

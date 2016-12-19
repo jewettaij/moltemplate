@@ -21,7 +21,7 @@ import gc
 try:
     from .ttree import ExtractFormattingCommands
     from .ttree_lex import SplitQuotedString, InputError, TemplateLexer
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     from ttree import ExtractFormattingCommands
     from ttree_lex import SplitQuotedString, InputError, TemplateLexer

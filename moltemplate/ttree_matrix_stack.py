@@ -9,7 +9,7 @@ from array import array
 
 try:
     from .ttree_lex import InputError, ErrorLeader, OSrcLoc
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     from ttree_lex import InputError, ErrorLeader, OSrcLoc
 

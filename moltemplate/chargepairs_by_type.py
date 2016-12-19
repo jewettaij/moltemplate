@@ -6,22 +6,6 @@
 # Copyright (c) 2011, Regents of the University of California
 # All rights reserved.
 
-"""
-    chargepairs_by_type.py reads a LAMMPS data file (or an excerpt of a LAMMPS)
-    data file containing bonded many-body interactions by atom type
-    (and bond type), and generates a list of atom charges in LAMMPS input
-    script format consistent with those types (to the standard out).
-
-    Typical Usage:
-
-    chargepairs_by_type.py -atoms atoms.data \\
-                           -bonds bonds.data \\
-                           -chargepairsbytype chargepairs_by_type.data \\
-                           > list_of_atom_charges.in
-
-"""
-
-#                     -bonds-ids-atom-pairs bonds_ids_atom_pairs.data \\
 
 import sys
 import re
@@ -30,7 +14,7 @@ from collections import defaultdict
 try:
     from . import ttree_lex
     from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     import ttree_lex
     from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
@@ -237,10 +221,25 @@ def LookupChargePairs(chargebyatomid,
                          str(warning_unassigned_chargepairs[1]) + '\n'
                          '---------------------------------------------------------------------------\n')
 
+def main():
+    """
+    This is is a "main module" wrapper for invoking chargepairs_by_type.py
+    as a stand alone program.  This program:
+    This program reads a LAMMPS data file (or an excerpt of a LAMMPS)
+    data file containing bonded many-body interactions by atom type
+    (and bond type), and generates a list of atom charges in LAMMPS input
+    script format consistent with those types (to the standard out).
 
-if __name__ == "__main__":
+    Typical Usage:
 
-    g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
+    chargepairs_by_type.py -atoms atoms.data \\
+                           -bonds bonds.data \\
+                           -chargepairsbytype chargepairs_by_type.data \\
+                           > list_of_atom_charges.in
+
+    """
+
+    g_program_name = __file__.split('/')[-1]  # = 'charge_pairs_by_type'
     g_date_str = '2016-10-16'
     g_version_str = '0.11'
 
@@ -386,3 +385,9 @@ if __name__ == "__main__":
     except (ValueError, ttree_lex.InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
         sys.exit(-1)
+
+
+
+if __name__ == "__main__":
+    main()
+

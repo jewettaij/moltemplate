@@ -63,7 +63,7 @@ try:
         data_bonds, data_bond_list, data_angles, data_dihedrals, data_impropers, \
         data_boundary, data_pbc, data_prefix_no_space, in_init, in_settings, \
         in_prefix
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     from ttree import *
     from lttree import *
@@ -1913,6 +1913,7 @@ def CheckInFileSyntax(tmpl_list,
 
 
 def LttreeCheckParseArgs(argv, settings, main=False):
+
     LttreeParseArgs(argv, settings)
 
     if main:
@@ -1924,10 +1925,10 @@ def LttreeCheckParseArgs(argv, settings, main=False):
             raise InputError('Error: This program requires at least one argument\n'
                              '       the name of a file containing ttree template commands\n')
         elif len(argv) == 2:
-            settings.infile = argv[1]
             try:
-                settings.lex = TemplateLexer(open(settings.infile, 'r'),
-                                             settings.infile)  # Parse text from file
+                # Parse text from the file named argv[1]
+                settings.lex.instream = open(argv[1], 'r')
+                settings.lex.infile = argv[1]  
             except IOError:
                 sys.stderr.write('Error: unable to open file\n'
                                  '       \"' + settings.infile + '\"\n'
@@ -1972,9 +1973,8 @@ def main():
         # Now read the file again.
         # This time parse it using StaticObj.ReadTemplate().
         # (This will allow us to check for deeper problems.)
-        del settings.lex
-        settings.lex = TemplateLexer(open(settings.infile, 'r'),
-                                     settings.infile)
+        # Parse text from the file named argv[1]
+        settings.lex.instream = open(settings.lex.infile, 'r')
         static_tree_root = StaticObj('', None)  # The root of the static tree
         # has name '' (equivalent to '/')
         sys.stderr.write(g_program_name +

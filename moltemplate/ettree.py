@@ -43,9 +43,25 @@ if cmd_subfolder not in sys.path:
     sys.path.insert(0, cmd_subfolder)
 
 
-from ttree import *
-from ettree_styles import *
-from ttree_matrix_stack import *
+try:
+    from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
+        StackableCommand, PopCommand, PopRightCommand, PopLeftCommand, \
+        PushCommand, PushLeftCommand, PushRightCommand, ScopeCommand, \
+        WriteVarBindingsFile, StaticObj, InstanceObj, \
+        BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
+    from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
+        TemplateLexer
+    from .ettree_styles import espt_delim_atom_fields, \
+        LinesWSlashes, SplitMultiDelims, SplitAtomLine, \
+        iEsptAtomCoords, iEsptAtomVects, iEsptAtomType, iEsptAtomID
+    from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
+        LinTransform
+except (SystemError, ValueError):
+    # not installed as a package
+    from ttree import *
+    from ttree_lex import *
+    from ettree_styles import *
+    from ttree_matrix_stack import *
 
 try:
     unicode
@@ -118,7 +134,9 @@ def EttreeParseArgs(argv, settings):
                              '       the name of a file containing ttree template commands\n')
         elif len(argv) == 2:
             try:
-                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[1]) # Parse text from file
+                # Parse text from the file named argv[1]
+                settings.lex.instream = open(argv[1], 'r')
+                settings.lex.infile = argv[1]  
             except IOError: 
                 sys.stderr.write('Error: unable to open file\n'
                                  '       \"'+argv[1]+'\"\n'
@@ -464,9 +482,7 @@ def WriteFiles(files_content, suffix='', write_to_stdout=True):
 
 
 
-
-if __name__ == "__main__":
-
+def main()
     """
     This is is a "main module" wrapper for invoking ettree.py
     as a stand alone program.  This program:
@@ -558,3 +574,7 @@ if __name__ == "__main__":
         sys.stderr.write('\n\n'+str(err)+'\n')
         sys.exit(-1)
 
+
+
+if __name__ == "__main__":
+    main()

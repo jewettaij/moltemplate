@@ -9,7 +9,7 @@
 
 try:
     from .ttree_lex import InputError
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     from ttree_lex import InputError
 

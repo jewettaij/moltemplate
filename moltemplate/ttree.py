@@ -67,7 +67,7 @@ try:
         SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildCard, \
         InputError, ErrorLeader, OSrcLoc, TextBlock, VarRef, VarBinding, \
         TemplateLexer
-except SystemError:
+except (SystemError, ValueError):
     # not installed as a package
     from ttree_lex import *
 
@@ -4866,7 +4866,10 @@ class BasicUISettings(object):
         else:
             self.user_bindings = OrderedDict()
         self.order_method = order_method
-        self.lex = lex
+        if lex == None:
+            self.lex = TemplateLexer()
+        else:
+            self.lex = lex
 
 
 def BasicUIParseArgs(argv, settings, main=False):
@@ -4951,8 +4954,8 @@ def BasicUIParseArgs(argv, settings, main=False):
         elif ((argv[i] == '-order-tree') or (argv[i] == '-order-dfs')):
             settings.order_method = 'by_tree'
             del(argv[i:i + 1])
-        elif ((argv[i] == '-importpath') or
-              (argv[i] == '-import-path') or
+        elif ((argv[i] == '-import-path') or
+              (argv[i] == '-importpath') or
               (argv[i] == '-import_path')):
             if ((i + 1 >= len(argv)) or (argv[i + 1][:1] == '-')):
                 raise InputError('Error(' + g_filename + '):\n'
@@ -4962,7 +4965,11 @@ def BasicUIParseArgs(argv, settings, main=False):
                                  argv[
                                      i] + '\" argument should be followed by the name of\n'
                                  '     an environment variable storing a path for including/importing files.\n')
-            TtreeShlex.custom_path = RemoveOuterQuotes(argv[i + 1])
+            custom_path = RemoveOuterQuotes(argv[i + 1])
+            include_path_list = custom_path.split(':')
+            for d in include_path_list:
+                if len(d) > 0:
+                    settings.lex.include_path.append(d)
             del(argv[i:i + 2])
 
         elif (argv[i][0] == '-') and main:
@@ -4987,8 +4994,9 @@ def BasicUIParseArgs(argv, settings, main=False):
                              '       the name of a file containing ttree template commands\n')
         elif len(argv) == 2:
             try:
-                settings.lex = TemplateLexer(open(argv[1], 'r'), argv[
-                                             1])  # Parse text from file
+                # Parse text from the file named argv[1]
+                settings.lex.instream = open(argv[1], 'r')
+                settings.lex.infile = argv[1]  
             except IOError:
                 sys.stderr.write('Error(' + g_filename + '):\n'
                                  '       unable to open file\n'

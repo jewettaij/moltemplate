@@ -921,9 +921,6 @@ In this example, the first transformation, ``rot()'', is applied to both ``monom
 
 
 
-
-
-
 \subsection{moltemplate.sh command line arguments:}
 \label{sec:args_table}
 %\begin{table}
@@ -947,7 +944,7 @@ Atom styles should be enclosed in quotes (").
 & 
 Read all of the atomic coordinates from an external RAW file.
 (RAW files are simple 3-column ASCII files contain X Y Z coordinates
- for every atom.  Numbers are separated by spaces, not commas.)
+ for every atom, separated by spaces.)
 \\
 \hline
 -xyz coords.xyz
@@ -1039,6 +1036,17 @@ Invoke VMD after running moltemplate to view the system you have just created.
 (VMD must be installed.  
  %This feature uses Axel Kohlmeyer's topotools plugin.
  See sections \ref{sec:vmd_topotools}, \ref{sec:vmd_advanced} for details.)
+\\
+\hline
+-import-path LOCATION
+&
+%When a user imports an .LT file, moltemplate first looks in the directory
+%where it was run, and then in the ``force\_fields'' subdirectory in the
+%moltemplate installation.  Additional directories can be appended using
+%this command.  (Multiple directories must be separated by ':' characters)
+This allows moltemplate to look for .LT files
+in other directories when using ``import''.
+%(Multiple directories must be separated by ':' characters.) 
 \\
 \hline
 \end{tabular}

@@ -73,12 +73,9 @@ class TtreeShlex(object):
 
     """
 
-    custom_path = None
-
     def __init__(self,
                  instream=None,
                  infile=None,
-                 custom_include_path=None,
                  posix=False):
         if isinstance(instream, str):
             instream = StringIO(instream)
@@ -119,22 +116,18 @@ class TtreeShlex(object):
         # files into the file being read.
         self.source_triggers = set(['source'])
         self.source_triggers_x = set([])
-        # Note: self.source_triggers_x
-        #      This is a subset of self.source_triggers.
-        #      In this case file inclusion is exclusive.
-        #      In other words, if one of these tokens
-        #      is encountered, the file is only included
-        #      if it has not been included already.
+        # self.source_triggers_x is a subset of self.source_triggers.
+        # In this case file inclusion is exclusive.
+        # In other words, the file is only included
+        # if it has not been included already.  It does this
+        # by checking if one of these tokens has been encountered.
         self.source_files_restricted = set([])
         self.include_path = []
-        if TtreeShlex.custom_path:
-            include_path_list = TtreeShlex.custom_path.split(':')
-            self.include_path += [d for d in include_path_list if len(d) > 0]
         if 'TTREE_PATH' in os.environ:
             include_path_list = os.environ['TTREE_PATH'].split(':')
             self.include_path += [d for d in include_path_list if len(d) > 0]
         if self.debug:
-            print('TtreeShlex: reading from %s, line %d'
+            sys.stderr.write('TtreeShlex: reading from %s, line %d'
                   % (self.instream, self.lineno))
         self.end_encountered = False
 
@@ -157,7 +150,7 @@ class TtreeShlex(object):
 
         """
         if self.debug >= 1:
-            print("TtreeShlex: pushing token " + repr(text))
+            sys.stderr.write("TtreeShlex: pushing token " + repr(text))
         for c in reversed(text):
             self.pushback.appendleft(c)
             if c == '\n':
@@ -179,16 +172,16 @@ class TtreeShlex(object):
         self.lineno = 1
         if self.debug:
             if newfile is not None:
-                print('TtreeShlex: pushing to file %s' % (self.infile,))
+                sys.stderr.write('TtreeShlex: pushing to file %s' % (self.infile,))
             else:
-                print('TtreeShlex: pushing to stream %s' % (self.instream,))
+                sys.stderr.write('TtreeShlex: pushing to stream %s' % (self.instream,))
 
     def pop_source(self):
         "Pop the input source stack."
         self.instream.close()
         (self.infile, self.instream, self.lineno) = self.filestack.popleft()
         if self.debug:
-            print('TtreeShlex: popping to %s, line %d'
+            sys.stderr.write('TtreeShlex: popping to %s, line %d'
                   % (self.instream, self.lineno))
         self.state = ' '
 
@@ -198,7 +191,7 @@ class TtreeShlex(object):
         #### if self.pushback:
         ####    tok = self.pushback.popleft()
         ####    if self.debug >= 1:
-        ####        print("TtreeShlex: popping token " + repr(tok))
+        ####        sys.stderr.write("TtreeShlex: popping token " + repr(tok))
         ####    return tok
         #### No pushback.  Get a token.
         raw = self.read_token()
@@ -230,9 +223,9 @@ class TtreeShlex(object):
         # Neither inclusion nor EOF
         if self.debug >= 1:
             if raw != self.eof:
-                print("TtreeShlex: token=" + repr(raw))
+                sys.stderr.write("TtreeShlex: token=" + repr(raw))
             else:
-                print("TtreeShlex: token=EOF")
+                sys.stderr.write("TtreeShlex: token=EOF")
 
         if raw == self.eof:
             self.end_encountered = True
@@ -257,7 +250,7 @@ class TtreeShlex(object):
             if nextchar == '\n':
                 self.lineno = self.lineno + 1
             if self.debug >= 3:
-                print("TtreeShlex: in state", repr(self.state),
+                sys.stderr.write("TtreeShlex: in state", repr(self.state),
                       "I see character:", repr(nextchar))
             if self.state is None:
                 self.token = ''        # past end of file
@@ -268,7 +261,7 @@ class TtreeShlex(object):
                     break
                 elif nextchar in self.whitespace:
                     if self.debug >= 2:
-                        print("TtreeShlex: I see whitespace in whitespace state")
+                        sys.stderr.write("TtreeShlex: I see whitespace in whitespace state")
                     if self.token or (self.posix and quoted):
                         # Keep track of which whitespace
                         # character terminated the token.
@@ -304,7 +297,7 @@ class TtreeShlex(object):
                 quoted = True
                 if not nextchar:      # end of file
                     if self.debug >= 2:
-                        print("TtreeShlex: I see EOF in quotes state")
+                        sys.stderr.write("TtreeShlex: I see EOF in quotes state")
                     # XXX what error should be raised here?
                     raise ValueError("Error at or before " + self.error_leader() + "\n"
                                      "      No closing quotation.")
@@ -324,7 +317,7 @@ class TtreeShlex(object):
             elif self.state in self.escape:
                 if not nextchar:      # end of file
                     if self.debug >= 2:
-                        print("TtreeShlex: I see EOF in escape state")
+                        sys.stderr.write("TtreeShlex: I see EOF in escape state")
                     # XXX what error should be raised here?
                     raise ValueError("No escaped character")
                 # In posix shells, only the quote itself or the escape
@@ -340,7 +333,7 @@ class TtreeShlex(object):
                     break
                 elif nextchar in self.whitespace:
                     if self.debug >= 2:
-                        print("TtreeShlex: I see whitespace in word state")
+                        sys.stderr.write("TtreeShlex: I see whitespace in word state")
                     self.state = ' '
                     if self.token or (self.posix and quoted):
                         # Keep track of which whitespace
@@ -375,7 +368,7 @@ class TtreeShlex(object):
                 else:
                     self.pushback.appendleft(nextchar)
                     if self.debug >= 2:
-                        print("TtreeShlex: I see punctuation in word state")
+                        sys.stderr.write("TtreeShlex: I see punctuation in word state")
                     self.state = ' '
                     if self.token:
                         break   # emit current token
@@ -387,9 +380,9 @@ class TtreeShlex(object):
             result = None
         if self.debug > 1:
             if result:
-                print("TtreeShlex: raw token=" + repr(result))
+                sys.stderr.write("TtreeShlex: raw token=" + repr(result))
             else:
-                print("TtreeShlex: raw token=EOF")
+                sys.stderr.write("TtreeShlex: raw token=EOF")
         return result
 
     def sourcehook(self, newfile):
@@ -827,7 +820,7 @@ class LineLex(TtreeShlex):
                         if spec:
                             (fname, subfile) = spec
                             if ((first_token not in self.source_triggers_x) or
-                                    (fname not in self.source_files_restricted)):
+                                (fname not in self.source_files_restricted)):
                                 self.push_source(subfile, fname)
                             if first_token in self.source_triggers_x:
                                 self.source_files_restricted.add(fname)
@@ -1621,7 +1614,7 @@ class TemplateLexer(TtreeShlex):
         the second argument.  Otherwise it is left in the text block.)
 
         """
-        #print('    ReadTemplate('+terminators+') invoked at '+self.error_leader())
+        #sys.stderr.write('    ReadTemplate('+terminators+') invoked at '+self.error_leader())
 
         # The main loop of the parser reads only one variable at time.
         # The following variables keep track of where we are in the template.
@@ -1659,7 +1652,7 @@ class TemplateLexer(TtreeShlex):
 
             nextchar = self.read_char()
 
-            #print('    ReadTemplate() nextchar=\''+nextchar+'\' at '+self.error_leader()+'  esc='+str(escaped_state)+', pvar='+str(prev_char_delim)+', paren='+str(var_paren_depth))
+            #sys.stderr.write('    ReadTemplate() nextchar=\''+nextchar+'\' at '+self.error_leader()+'  esc='+str(escaped_state)+', pvar='+str(prev_char_delim)+', paren='+str(var_paren_depth))
 
             # Count newlines:
             if nextchar in self.newline:
@@ -1900,7 +1893,7 @@ class TemplateLexer(TtreeShlex):
                 #sys.stderr.write('  parsed variable '+var_prefix+var_descr_str+var_suffix+'\n')
 
                 #sys.stdout.write('ReadTemplate() appending: ')
-                #print(var_prefix + var_descr_str + var_suffix)
+                #sys.stderr.write(var_prefix + var_descr_str + var_suffix)
 
                 del var_descr_plist
                 del var_descr_str
@@ -1962,7 +1955,7 @@ class TemplateLexer(TtreeShlex):
                 if nextchar in self.escape:
                     escaped_state = True
 
-        #print("*** TMPL_LIST0  = ***", tmpl_list)
+        #sys.stderr.write("*** TMPL_LIST0  = ***", tmpl_list)
         return tmpl_list  # <- return value stored here
 
     def GetParenExpr(self, prepend_str='', left_paren='(', right_paren=')'):
@@ -2034,6 +2027,6 @@ if __name__ == '__main__':
     while 1:
         tt = lexer.get_token()
         if tt:
-            print("Token: " + repr(tt))
+            sys.stderr.write("Token: " + repr(tt))
         else:
             break
