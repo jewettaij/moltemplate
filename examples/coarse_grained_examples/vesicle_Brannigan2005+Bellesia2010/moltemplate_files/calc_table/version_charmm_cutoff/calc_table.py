@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Calculate a table of pairwise energies and forces between "INT" atoms
-# in the lipid membrane model described in 
+# in the lipid membrane model described in
 #   Brannigan et al, Phys Rev E, 72, 011915 (2005)
 # The energy of this interaction U(r) = eps*(0.4*(sigma/r)^12 - 3.0*(sigma/r)^2)
 # I realized later this is not what we want because although energy is conserved
@@ -12,12 +12,12 @@
 # Calculate and print a
 
 def S(r, rc1, rc2, derivative=False):
-    """ 
+    """
     Calculate the switching function S(r) which decays continuously
     between 1 and 0 in the range from rc1 to rc2 (rc2>rc1):
        S(r) = (rc2^2 - r^2)^2 * (rc2^2 + 2*r^2 - 3*rc1^2) / (rc2^2-rc1^2)^3
     I'm using the same smoothing/switching cutoff function used by the CHARMM
-    force-fields.  (I'm even using the same code to implement it, taken 
+    force-fields.  (I'm even using the same code to implement it, taken
     from lammps charmm/coul/charmm pair style, rewritten in python.)
 
     """

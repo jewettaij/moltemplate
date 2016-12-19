@@ -16,14 +16,14 @@ packmol < step3_outerlayer.inp # this step builds the outer monolayer
                                # It takes ~4 hours
 
 
-# NOTE: PLEASE USE "packmol", NOT "ppackmol".  ("ppackmol" is the 
-#       parallel-version of packmol using OpemMP.  This example has NOT been 
+# NOTE: PLEASE USE "packmol", NOT "ppackmol".  ("ppackmol" is the
+#       parallel-version of packmol using OpemMP.  This example has NOT been
 #       tested with "ppackmol".  Our impression was that the "ppackmol"
 #       version is more likely to get stuck in an infinite loop. -Andrew 2015-8)
 
 
 # Step3 creates a file named "step3_outerlayer.xyz" containing the coordinates
-# in all the atoms of all the molecules.  Later we will run moltemplate.sh 
+# in all the atoms of all the molecules.  Later we will run moltemplate.sh
 # using the "-xyz ../system.xyz" command line argument.  That will instruct
 # moltemplate to look for a file named "system.xyz" in the parent directory.
 # So I rename the "step3_outerlayer.xyz" file to "system.xyz", and move it

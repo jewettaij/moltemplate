@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Calculate a table of pairwise energies and forces between "INT" atoms
-# in the lipid membrane model described in 
+# in the lipid membrane model described in
 #   Brannigan et al, Phys Rev E, 72, 011915 (2005)
 # The energy of this interaction U(r) = eps*(0.4*(sigma/r)^12 - 3.0*(sigma/r)^2)
 # However it is truncated at rc2 = 22.5 (shifted upwards to maintain continuity)

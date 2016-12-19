@@ -2,5 +2,5 @@
 # (and other auxilliary files):
 moltemplate.sh system.lt
 
-# This will generate various files with names ending in *.in* and *.data. 
+# This will generate various files with names ending in *.in* and *.data.
 

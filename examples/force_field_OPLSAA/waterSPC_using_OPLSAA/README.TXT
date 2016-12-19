@@ -1,4 +1,4 @@
-The purpose of this example is to test the density of water 
+The purpose of this example is to test the density of water
 constructed using the OPLSAA force-field.  (I think this is SPC water, not SPCE)
 
 I just wanted some kind of sanity check to make sure we are converting
@@ -8,7 +8,7 @@ The "TEST_density_estimate.txt" contains the results of that test.
 
 -------- Instructions: ---------
 
-More detailed instructions on how to build LAMMPS input files and 
+More detailed instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

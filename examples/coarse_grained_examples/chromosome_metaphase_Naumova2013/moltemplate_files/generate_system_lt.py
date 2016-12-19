@@ -50,7 +50,7 @@ if len(lines) != N:
                      "       does not match first argument ("+str(N)+")\n")
     exit(1)
 for i in range(0, N):
-    coords[i] = map(float, lines[i].split())
+    coords[i] = list(map(float, lines[i].split()))
 
 # Now calculate the box_boundaries:
 box_bounds_min = [0.0, 0.0, 0.0]
@@ -105,7 +105,7 @@ import "condensin.lt"    # <-- defines "CondensinMonomer"
 
 
 
-# Figure out which monomers are "Monomers" and which monomers are 
+# Figure out which monomers are "Monomers" and which monomers are
 # "CondensinMonomers"
 
 ic = 0 # count the number of condensins added so far
@@ -207,7 +207,7 @@ ic = 0
 for i in range(0, N-1):
     #sys.stderr.write("i="+str(i)+", ic="+str(ic)+", Nc="+str(Nc)+"\n")
 
-    # Figure out if the first atom in the bond pair 
+    # Figure out if the first atom in the bond pair
     # belongs to a regular Monomer or a CondensinMonomer
     if condensin_is_here[i]:
         sys.stdout.write("  $bond:b"+str(i+1)+" @bond:backbone $atom:condensins["+str(ic)+"]/a")
@@ -232,7 +232,7 @@ write_once("Data Angles By Type") {
 }
 
 write_once("In Settings") {
-  # Most parameters here were taken from the supplemental material of 
+  # Most parameters here were taken from the supplemental material of
   # Naumova et al. Science 2013 (simulations by Maxim Imakaev, see Supp Mat)
   #angle_coeff @angle:backbone cosine 5.0                 #<-10nm fiber
   angle_coeff @angle:backbone cosine 1.1764705882352942  #<-30nm fiber

@@ -13,7 +13,7 @@
   # However if you want to eliminate this junk from these files
   # For now, we can strip this out using ltemplify.py to build a new .lt file.
   #
-  # NOTE: If you decide to use this script, it was meant to be run it from 
+  # NOTE: If you decide to use this script, it was meant to be run it from
   # the parent directory (../)  (If you run it from somewhere else, be sure to
   # modify the "PATH_TO_DATA_FILE" and "PATH_TO_OUTPUT_TTREE" variables below.)
   #

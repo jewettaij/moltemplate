@@ -4,7 +4,7 @@ It was inspired by this paper:
     Laurent Joly, J. Chem. Phys. 135(21):214705 (2011)
 
 -------- Requirements: -------
-To run this system at constant pressure, it might help to compile LAMMPS 
+To run this system at constant pressure, it might help to compile LAMMPS
 with the optional RIGID package, and use "fix rigid" on the carbon.
 (The use of fix rigid is controversial.)  Running at NVT does not require this.
 ------------------------------
@@ -14,13 +14,13 @@ Note: To investigate the behavior from that paper, it might be a good
       the walls, and the size of the system in the X and Y directions.
 
 Note: Explicit carbon-carbon bonds:
-      In the graphene and nanotube structures, I did not try to connect the 
+      In the graphene and nanotube structures, I did not try to connect the
       carbon atoms together with bonds.  Instead we will hold these structures
-      rigid by not integrating their equations of motion. 
-      (If you want to simulate movement of the carbon atoms at high 
-       temperatures or tension, LAMMPS has 3-body/many-body LAMMPS force-fields 
-       available for simulating the behaviour of carbon in graphite. I know 
-       that you don't need to specify bonds to use these force fields.  I do 
+      rigid by not integrating their equations of motion.
+      (If you want to simulate movement of the carbon atoms at high
+       temperatures or tension, LAMMPS has 3-body/many-body LAMMPS force-fields
+       available for simulating the behaviour of carbon in graphite. I know
+       that you don't need to specify bonds to use these force fields.  I do
        not know know if these force fields work for nanotubes or graphene.)
 
 Note: Other modeling tools:
@@ -29,7 +29,7 @@ Note: Other modeling tools:
       not generate bonds automatically.  The "Nanotube Builder" and "topotools"
       plugins for for VMD can generate a nanotube with bonds in LAMMPS data
       format.  You can then convert this data file to .LT format using the
-      ltemplify.py utility and then import it into another .LT file and play 
+      ltemplify.py utility and then import it into another .LT file and play
       with it later.  (In the "cnad-cnt" example, the carbon nanotube was built
       using "Nanotube Builder" and topotools, and processed with ltemplify.py)
 
@@ -42,10 +42,10 @@ Note: Other modeling tools:
 #           real graphene or nanotube junctions, you must be more careful.
 #          To solve this problem:
 #           Moltemplate allows you to move, customize or delete individual
-#           atoms near the boundary.  You can move atoms by overwriting their 
+#           atoms near the boundary.  You can move atoms by overwriting their
 #           coordinates using additional write("Data Atoms") statements (after
 #           the walls and tube are created).  You can also change their charge.
-#          Alternately, you could start with the structure provided here, and 
+#          Alternately, you could start with the structure provided here, and
 #           relax/minimize the coordinates of the carbon atoms using LAMMPS
-#           before using it in other simulations.  
+#           before using it in other simulations.
 #          Or you could do both (customization & minimization).

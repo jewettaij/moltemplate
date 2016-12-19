@@ -4,9 +4,9 @@
 # and beta-sheet regions of the frustrated protein model described in
 #  provided in figure 8 of the supplemental materials section of:
 # AI Jewett, A Baumketner and J-E Shea, PNAS, 101 (36), 13192-13197, (2004)
-# Note that the "A" and "B" parameters were incorrectly reported to be 
+# Note that the "A" and "B" parameters were incorrectly reported to be
 # 5.4*epsilon and 6.0*epsilon.  The values used were 5.6 and 6.0 epsilon.
-# The phiA and phiB values were 57.29577951308232 degrees (1 rad) 
+# The phiA and phiB values were 57.29577951308232 degrees (1 rad)
 # and 180 degrees, respectively.  Both expA and expB were 6.0.
 #
 # To generate the table used for the alpha-helix (1 degree resolution) use this:
@@ -37,9 +37,9 @@ def F(phi, A, phiA, expA, B, phiB, expB, use_radians=False):
     conv_units = pi/180.0
     if use_radians:
         conv_units = 1.0
-    termA = (0.5*sin(0.5*(phi-phiA)*conv_units) * 
+    termA = (0.5*sin(0.5*(phi-phiA)*conv_units) *
              expA * pow(cos(0.5*(phi-phiA)*conv_units), expA-1.0))
-    termB = (0.5*sin(0.5*(phi-phiB)*conv_units) * 
+    termB = (0.5*sin(0.5*(phi-phiB)*conv_units) *
              expB * pow(cos(0.5*(phi-phiB)*conv_units), expB-1.0))
     return -conv_units*(A*termA + B*termB)
 

@@ -27,7 +27,7 @@ NOTE: The GAFF force-field DOES NOT ASSIGN ATOM CHARGE.
    To do this, type "make yes-user-misc" before compiling LAMMPS.
   http://lammps.sandia.gov/doc/Section_start.html#start_3
 
-More detailed instructions on how to build LAMMPS input files and 
+More detailed instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

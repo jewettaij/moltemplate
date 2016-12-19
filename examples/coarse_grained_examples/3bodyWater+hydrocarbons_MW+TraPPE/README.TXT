@@ -13,7 +13,7 @@ The united-atom TraPPE force field was used for the cyclododecane molecules.
 Any force-field available in LAMMPS can be used with moltemplate. New force-fields are added by end users regularly. For a current list, see:
 http://lammps.sandia.gov/doc/Section_commands.html#pair-style-potentials
 
-More detailed instructions on how to build LAMMPS input files and 
+More detailed instructions on how to build LAMMPS input files and
 run a short simulation are provided in other README files.
 
 step 1)

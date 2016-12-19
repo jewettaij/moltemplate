@@ -6,7 +6,7 @@ This example also shows how to use moltemplate in combination with PACKMOL.
  moltemplate.sh is only used to create the topology, force-field and charges,
  and PACKMOL generates the coordinates, which moltemplate reads (in "step 1").
  Moltemplate can also be used for generating atomic coordinates, especially
- for mixing many small molecules together, as we do in this example.  However 
+ for mixing many small molecules together, as we do in this example.  However
  I wanted to demonstrate how to combine PACKMOL with moltemplate.sh.
  In some other scenarios, such as protein solvation, PACKMOL does a much
  better job than moltemplate.)

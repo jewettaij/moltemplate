@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-# Calculate a table of pairwise energies and forces between atoms in the 
+# Calculate a table of pairwise energies and forces between atoms in the
 # protein and a chaperone provided in the supplemental materials section of:
 # AI Jewett, A Baumketner and J-E Shea, PNAS, 101 (36), 13192-13197, (2004)
 # This is stored in a tabulated force field with a singularity at a distance R.
 #
-# To calculate the table for interaction between 
+# To calculate the table for interaction between
 # ...the chaperone and a hydrophobic bead (2004 PNAS paper), use this table:
 #   ./calc_chaperone_table.py 1.0 1.0 6.0 0.475 0.0 5.9 1181
 # ...the chaperone and a hydrophilic bead (2004 PNAS paper), use this table:
@@ -42,7 +42,7 @@ def F(r, eps, sigma, R, h):
     term4  =  (4.0/sigma)*(pow(ixm, -5.0)  - pow(ixp, -5.0))
     product_term_b = 4.0*eps*pi*(R/r) * (0.2*term10 - 0.5*h*term4)
     return product_term_a + product_term_b
-    
+
 
 class InputError(Exception):
     """ A generic exception object containing a string for error reporting.
@@ -76,7 +76,7 @@ rcut    = rmax
 
 for i in range(0,N):
     r = rmin + i*(rmax-rmin)/(N-1)
-    U_r = U(r, epsilon, sigma, R, h) 
+    U_r = U(r, epsilon, sigma, R, h)
     F_r = F(r, epsilon, sigma, R, h)
     if subtract_Urcut:
         U_r -= U(rcut, epsilon, sigma, R, h)

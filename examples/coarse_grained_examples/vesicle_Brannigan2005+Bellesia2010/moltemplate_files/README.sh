@@ -1,5 +1,5 @@
 # This example shows how to build a multicomponent spherical vesicle.
-# The lipid bilayer is composed of two different lipids (DPPC and DLPC), 
+# The lipid bilayer is composed of two different lipids (DPPC and DLPC),
 # The vesicle contains 120 trans-membrane protein inclusions.
 #
 # ---------------- Prerequisites: ------------------
