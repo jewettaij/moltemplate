@@ -96,7 +96,6 @@ def LttreeParseArgs(argv, settings, main=False):
                  pkg_resources.resource_filename(__name__, 'force_fields/')])
 
     BasicUIParseArgs(argv, settings)
-    sys.stderr.write('PATH1='+str(settings.lex.include_path)+'\n')
 
     # Loop over the remaining arguments not processed yet.
     # These arguments are specific to the lttree.py program
@@ -199,7 +198,6 @@ def LttreeParseArgs(argv, settings, main=False):
         else:
             i += 1
 
-        sys.stderr.write('PATH2='+str(settings.lex.include_path)+'\n')
 
     if main:
 
@@ -689,7 +687,6 @@ def main():
         #BasicUIParseArgs(sys.argv, settings)
         settings = LttreeSettings()
         LttreeParseArgs(sys.argv, settings, main=True)
-        sys.stderr.write('PATH3='+str(settings.lex.include_path)+'\n')
 
         # Data structures to store the class definitionss and instances
         g_objectdefs = StaticObj('', None)  # The root of the static tree

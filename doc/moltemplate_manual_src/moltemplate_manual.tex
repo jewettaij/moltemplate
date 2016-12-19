@@ -361,24 +361,27 @@ Instructions for updating your PATH are included below.
 
 Alternatively, you can edit your PATH variable manually to include
 the sudirectory where the moltemplate.sh script is located 
-(typically ``moltemplate/scripts/'').
+(typically ``moltemplate/scripts/''), as well as
+the directory containing the most of the python scripts (``moltemplate/'').
 Suppose the directory where with the README file is named ``moltemplate''
-and is located in your home directory:
+and it is located in your home directory:
 
 If you use the \textbf{bash} shell, typically you would edit your 
 \mbox{$\sim$/.bash\_profile}, 
 \mbox{$\sim$/.bashrc}, or 
 \mbox{$\sim$/.profile} files
-and append the following line:
+and append the following lines:
 \begin{verbatim}
+export PATH="$PATH:$HOME/moltemplate/moltemplate"
 export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 \end{verbatim}
 If instead you use the \textbf{tcsh} shell, typically you would edit your 
 \mbox{$\sim$/.login}, 
 \mbox{$\sim$/.cshrc}, or 
 \mbox{$\sim$/.tcshrc} files 
-and append the following line:
+and append the following lines:
 \begin{verbatim}
+setenv PATH "$PATH:$HOME/moltemplate/moltemplate"
 setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
 \end{verbatim}
 

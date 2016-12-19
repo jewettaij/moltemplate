@@ -355,24 +355,36 @@ def GenInteractions_files(lines_data,
 
     # search locations
     package_opts = [[src_bond_pattern, __package__],
-        ['nbody_alternate_symmetry.'+src_bond_pattern, __package__]]
+                    ['nbody_alternate_symmetry.'+src_bond_pattern, __package__]]
 
     if __package__:
         for i, _ in enumerate(package_opts):
             package_opts[i][0] = '.' + package_opts[i][0]
+        package_opts.append(['.'+src_bond_pattern, __package__+'.nbody_alternate_symmetry'])
+
 
     g = None
     for name, pkg in package_opts:
         try:
             # defines g.bond_pattern, g.canonical_order
+            # some debug messages:
+            sys.stderr.write('src_bond_pattern=\"'+src_bond_pattern+'\"\n')
+            sys.stderr.write('name=\"'+str(name)+'\", pkg=\"'+str(pkg)+'\"\n')
             g = importlib.import_module(name, pkg)
             break
         except (SystemError, ImportError):
+            try:
+                sys.stderr.write('\n\n------------------DBG_GOT_HERE1-----------------\n\n')
+                g = importlib.import_module('moltemplate.nbody_alternate_symmetry.opls_imp')
+                sys.stderr.write('\n\n------------------DBG_GOT_HERE2-----------------\n\n')
+                break
+            except (SystemError, ImportError):
+                pass
             pass
 
     if g is None:
         sys.stderr.write('Error: Unable to locate file \"' +
-                         src_bond_pattern + '\"\n'
+                         src_bond_pattern + '.py\"\n'
                          '       (Did you mispell the file name?\n'
                          '        Check the \"nbody_alternate_symmetry/\" directory.)\n')
         sys.exit(-1)
