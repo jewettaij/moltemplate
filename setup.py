@@ -20,6 +20,7 @@ setup(
         'bonds_by_type.py=moltemplate.bonds_by_type:main',
         'chargepairs_by_type.py=moltemplate.chargepairs_by_type:main',
         'dump2data.py=moltemplate.dump2data:main',
+        'extract_espresso_atom_types.py=moltemplate.extract_espresso_atom_types:main',
         'extract_lammps_data.py=moltemplate.extract_lammps_data:main',
         'ettree.py=moltemplate.ettree:main',
         'genpoly.py=moltemplate.ettree:main',
