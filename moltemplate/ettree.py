@@ -135,8 +135,8 @@ def EttreeParseArgs(argv, settings):
         elif len(argv) == 2:
             try:
                 # Parse text from the file named argv[1]
-                settings.lex.instream = open(argv[1], 'r')
                 settings.lex.infile = argv[1]  
+                settings.lex.instream = open(argv[1], 'r')
             except IOError: 
                 sys.stderr.write('Error: unable to open file\n'
                                  '       \"'+argv[1]+'\"\n'

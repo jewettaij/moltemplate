@@ -1,4 +1,3 @@
-# Run this using:  ttree.py twelve_days.lt > lyrics.txt
 Msg {write() {   On the ${day}th day of Christmas, my true love gave to me:
 }
 }

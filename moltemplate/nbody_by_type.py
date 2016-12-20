@@ -373,13 +373,6 @@ def GenInteractions_files(lines_data,
             g = importlib.import_module(name, pkg)
             break
         except (SystemError, ImportError):
-            try:
-                sys.stderr.write('\n\n------------------DBG_GOT_HERE1-----------------\n\n')
-                g = importlib.import_module('moltemplate.nbody_alternate_symmetry.opls_imp')
-                sys.stderr.write('\n\n------------------DBG_GOT_HERE2-----------------\n\n')
-                break
-            except (SystemError, ImportError):
-                pass
             pass
 
     if g is None:
