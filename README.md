@@ -33,7 +33,7 @@ This directory should contain 3 folders:
 There are two ways to install moltemplate:
 
 ## Installation using pip
-
+## WARNING: This does not work yet. Please poceed to "manual installation"...
 If you are familiar with pip, then run the following command from within the directory where this README file is located:
 
     pip install .
