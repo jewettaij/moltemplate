@@ -21,10 +21,10 @@
 
 """
 
-#                     -bonds-ids-atom-pairs bonds_ids_atom_pairs.data \\
-g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-g_date_str = '2015-11-09'
-g_version_str = '0.11'
+
+g_program_name = __file__.split('/')[-1]  # = 'bonds_by_type.py'
+g_date_str = '2016-12-21'
+g_version_str = '0.12.0'
 
 
 import sys

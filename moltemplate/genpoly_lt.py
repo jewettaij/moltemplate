@@ -72,7 +72,7 @@ class InputError(Exception):
         return str(self)
 
 
-class Settings(object):
+class GPSettings(object):
 
     def __init__(self):
         self.direction_orig = [1.0, 0.0, 0.0]
@@ -353,7 +353,7 @@ class GenPoly(object):
     """
 
     def __init__(self, argv):
-        self.settings = Settings()
+        self.settings = GPSettings()
         self.settings.ParseArgs(argv)
         self.coords_multi = []  # a list-of-list-of-lists of numbers Nxnx3
         self.direction_vects = []
@@ -691,8 +691,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.03'
-        g_date_str = '2016-11-21'
+        g_version_str = '0.0.4'
+        g_date_str = '2016-12-21'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]

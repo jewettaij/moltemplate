@@ -76,8 +76,8 @@ if sys.version < '2.6':
 
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_check.py'
-g_version_str = '0.76'
-g_date_str = '2014-12-19'
+g_version_str = '0.76.0'
+g_date_str = '2016-12-21'
 
 
 # g_no_check_msg = \

@@ -5,8 +5,8 @@
 
 __author__ = 'Jason Lambert and Andrew Jewett'
 # (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)
-__version__ = '0.1'
-__date__ = '2016-11-20'
+__version__ = '0.2.0'
+__date__ = '2016-12-21'
 
 
 import sys

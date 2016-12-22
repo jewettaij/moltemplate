@@ -239,9 +239,9 @@ def main():
 
     """
 
-    g_program_name = __file__.split('/')[-1]  # = 'charge_pairs_by_type'
-    g_date_str = '2016-10-16'
-    g_version_str = '0.11'
+    g_program_name = __file__.split('/')[-1]   # = 'charge_pairs_by_type.py'
+    g_date_str = '2016-12-21'
+    g_version_str = '0.12.0'
 
     #######  Main Code Below: #######
     sys.stderr.write(g_program_name + ' v' +

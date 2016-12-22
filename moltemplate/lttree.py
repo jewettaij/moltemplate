@@ -27,6 +27,11 @@ Additional LAMMPS-specific features may be added in the future.
 
 """
 
+g_program_name = __file__.split('/')[-1]  # ='lttree.py'
+g_date_str = '2014-12-19'
+g_version_str = '0.75.0'
+
+
 import sys
 from collections import defaultdict
 import pkg_resources
@@ -50,10 +55,6 @@ except (SystemError, ValueError):
     from lttree_styles import *
     from ttree_matrix_stack import *
 
-
-g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2014-12-19'
-g_version_str = '0.75'
 
 
 try:

@@ -18,8 +18,8 @@ from operator import attrgetter
 from collections import defaultdict
 
 g_program_name = __file__.split('/')[-1]
-g_version_str = 0.11
-g_date_str = 2013 - 9 - 18
+g_version_str = '0.12.0'
+g_date_str = '2016-12-21'
 
 # In order to specify any amino acid in a PDB file, you must provide 3
 # identifiers:

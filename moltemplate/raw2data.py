@@ -8,8 +8,8 @@ except:
     from dump2data import *
 
 g_program_name = 'raw2data.py'
-g_date_str = '2014-12-19'
-g_version_str = 'v0.43'
+g_date_str = '2016-12-21'
+g_version_str = 'v0.44.0'
 
 #######  Main Code Below: #######
 def main():
