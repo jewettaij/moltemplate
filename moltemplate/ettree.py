@@ -495,8 +495,8 @@ def main()
 
     """
     g_program_name = 'ettree.py'
-    g_date_str     = '2015-10-14'
-    g_version_str  = '0.35'
+    g_date_str     = '2016-12-22'
+    g_version_str  = '0.36.0'
 
     SimpleCounter.default_n0 = 0   # counters in Espresso begin at 0, not 1
 
