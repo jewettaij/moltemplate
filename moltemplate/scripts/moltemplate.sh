@@ -756,7 +756,6 @@ fi
 
 if [ -s "$data_charge_by_bond" ]; then
     echo "Looking up partial charge contributions from bonds" >&2
-    #-- Generate a file containing bondid bondtype atomid1 atomid2 --
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/charge_by_bond.py" \
          -atom-style "$ATOM_STYLE" \
          -atoms "${data_atoms}.template" \
