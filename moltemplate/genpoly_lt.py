@@ -352,14 +352,19 @@ class GenPoly(object):
 
     """
 
-    def __init__(self, argv):
+    def __init__(self):
         self.settings = GPSettings()
-        self.settings.ParseArgs(argv)
         self.coords_multi = []  # a list-of-list-of-lists of numbers Nxnx3
         self.direction_vects = []
         self.box_bounds_min = [0.0, 0.0, 0.0]
         self.box_bounds_max = [0.0, 0.0, 0.0]
         self.N = 0
+
+    def ParseArgs(self, argv):
+        # The command above will remove arguments from argv which are
+        # understood by GPSettings.ParseArgs(argv).  
+        # The remaining arguments will be handled below.
+        self.settings.ParseArgs(argv)
 
     def ReadCoords(self, infile):
         coords = []
@@ -687,6 +692,11 @@ class GenPoly(object):
                       str(box_bounds_max[2]) + " zlo zhi\n"
                       "}\n\n\n")
 
+        outfile.write("\n# ---------------- simulation box -----------------\n"
+            
+                      "# Now define a box big enough to hold a polymer with this (initial) shape\n"
+                      ")\n\n")
+
 
 def main():
     try:
@@ -698,7 +708,8 @@ def main():
         argv = [arg for arg in sys.argv]
         infile = sys.stdin
         outfile = sys.stdout
-        genpoly = GenPoly(argv)
+        genpoly = GenPoly()
+        gennoly.ParseArgs(argv)
         # Any remain arguments?
         if len(argv) > 1:
             raise InputError('Error(' + g_program_name + '):\n' +

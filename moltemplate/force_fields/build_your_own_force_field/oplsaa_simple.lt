@@ -39,11 +39,12 @@ OPLSAA {
   } #(end of atom partial charges)
 
   # NOTE: In addition to setting atom charge by atom type, you can add
-  #    write_once("Data Charge Pairs By Type") {
+  #    write_once("Data Charge By Bond") {
   #      @atom:A @atom:B 0.05 -0.05
   #    }
-  # sections to your force-field file to define rules to assign atom
-  # charge which depend upon the other atoms that each atom is bonded to
+  # sections to your force-field file.  This defines rules to assign 
+  # incremental charges to pairs of atoms depending on who they are bonded to.
+  # (These are also called "bond_increments".)
 
 
   write_once("Data Masses") {

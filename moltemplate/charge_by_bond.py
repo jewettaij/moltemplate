@@ -27,7 +27,7 @@ def LookupChargePairs(chargebyatomid,
                       lines_atoms,
                       lines_bonds,
                       lines_bond_list,
-                      lines_chargepairsbytype,
+                      lines_chargebybond,
                       atom_style,
                       section_name,
                       prefix='',
@@ -51,7 +51,7 @@ def LookupChargePairs(chargebyatomid,
         stored in the lines_atoms variable (from the "Data Atoms" section)
 
     ...and a list of charge-pairs-as-a-function-of-atom-types
-        stored in the lines_chargepairsbytype (from the "Data Bonds By Type" section)
+        stored in the lines_chargebybond (from the "Data Bonds By Type" section)
 
     """
 
@@ -141,8 +141,8 @@ def LookupChargePairs(chargebyatomid,
     typepattern_to_chargepairs = []
     warning_unassigned_chargepairs = None
 
-    for i in range(0, len(lines_chargepairsbytype)):
-        line = lines_chargepairsbytype[i].strip()
+    for i in range(0, len(lines_chargebybond)):
+        line = lines_chargebybond[i].strip()
         if '#' in line:
             icomment = line.find('#')
             line = (line[:icomment]).strip()
@@ -234,14 +234,14 @@ def main():
 
     chargepairs_by_type.py -atoms atoms.data \\
                            -bonds bonds.data \\
-                           -chargepairsbytype chargepairs_by_type.data \\
+                           -chargebybond chargepairs_by_type.data \\
                            > list_of_atom_charges.in
 
     """
 
     g_program_name = __file__.split('/')[-1]   # = 'charge_pairs_by_type.py'
-    g_date_str = '2016-12-21'
-    g_version_str = '0.12.0'
+    g_date_str = '2016-12-22'
+    g_version_str = '0.13.0'
 
     #######  Main Code Below: #######
     sys.stderr.write(g_program_name + ' v' +
@@ -255,7 +255,7 @@ def main():
         fname_atoms = None
         fname_bonds = None
         fname_bond_list = None
-        fname_chargepairsbytype = None
+        fname_chargebybond = None
         section_name = 'Data Bond List'  # (This will be replaced later.)
         atom_style = 'full'
         prefix = ''
@@ -302,7 +302,11 @@ def main():
                 section_name = "Data Bond List"
                 del(argv[i:i + 2])
 
-            elif ((argv[i].lower() == '-chargepairsbytype') or
+            elif ((argv[i].lower() == '-chargebybond') or
+                  (argv[i].lower() == '-chargesbybond') or
+                  (argv[i].lower() == '-charge-by-bond') or
+                  (argv[i].lower() == '-charges-by-bond') or
+                  (argv[i].lower() == '-chargepairsbytype') or
                   (argv[i].lower() == '-chargepairs-by-type') or
                   (argv[i].lower() == '-charge-pairs-by-type')):
                 if i + 1 >= len(argv):
@@ -312,7 +316,7 @@ def main():
                     # raise ttree_lex.InputError('Error: '+argv[i]+' flag should be followed by a file name containing\n'
                     #                 '       text which might appear in the "'+section_name+' By Type" section\n'
                     #                 '       of a LAMMPS data file.\n')
-                fname_chargepairsbytype = argv[i + 1]
+                fname_chargebybond = argv[i + 1]
                 del(argv[i:i + 2])
 
             elif ((argv[i].lower() == '-atom-style') or
@@ -362,19 +366,19 @@ def main():
         if ((len(lines_bonds) == 0) and (len(lines_bond_list) == 0)):
             sys.stderr.write('Error(' + g_program_name + '): No bonds defined for this system\n'
                              '      (This error may be a bug in moltemplate.)\n')
-        fchargepairsbytype = open(fname_chargepairsbytype, 'r')
+        fchargebybond = open(fname_chargebybond, 'r')
         lines_atoms = fatoms.readlines()
 
-        lines_chargepairsbytype = fchargepairsbytype.readlines()
+        lines_chargebybond = fchargebybond.readlines()
         fatoms.close()
-        fchargepairsbytype.close()
+        fchargebybond.close()
         chargebyatomid = defaultdict(float)
 
         LookupChargePairs(chargebyatomid,
                           lines_atoms,
                           lines_bonds,
                           lines_bond_list,
-                          lines_chargepairsbytype,
+                          lines_chargebybond,
                           atom_style,
                           section_name)
 

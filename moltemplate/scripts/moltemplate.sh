@@ -139,7 +139,7 @@ data_pair_coeffs="Data Pair Coeffs"
 data_pairij_coeffs="Data PairIJ Coeffs"
 
 # interactions-by-type (not id. This is not part of the LAMMPS standard.)
-data_chargepairs_by_type="Data Charge Pairs By Type"
+data_charge_by_bond="Data Charge By Bond"
 data_bonds_by_type="Data Bonds By Type"
 data_angles_by_type="Data Angles By Type"
 data_dihedrals_by_type="Data Dihedrals By Type"
@@ -751,18 +751,18 @@ fi
 
 
 
-# ---------------- ChargePairs By Type ------------------
+# ---------------- Charge By Bond ------------------
 # Assign atom charge according to who they are bonded to
 
-if [ -s "$data_chargepairs_by_type" ]; then
+if [ -s "$data_charge_by_bond" ]; then
     echo "Looking up partial charge contributions from bonds" >&2
     #-- Generate a file containing bondid bondtype atomid1 atomid2 --
-    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/chargepairs_by_type.py" \
+    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/charge_by_bond.py" \
          -atom-style "$ATOM_STYLE" \
          -atoms "${data_atoms}.template" \
          -bonds "${data_bonds}.template" \
          -bond-list "${data_bond_list}.template" \
-         -chargepairsbytype "${data_chargepairs_by_type}.template" \
+         -chargebybond "${data_charge_by_bond}.template" \
          > gen_charges.template.tmp; then
         exit 4
     fi
