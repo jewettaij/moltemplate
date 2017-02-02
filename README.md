@@ -54,12 +54,16 @@ and is located in your home directory:
 If you use the bash shell, typically you would edit your 
 `~/.profile`, `~/.bash_profile` or `~/.bashrc` files 
 to contain the following lines:
+
     export PATH="$PATH:$HOME/moltemplate/moltemplate"
     export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
+
 If you use the tcsh shell, typically you would edit your 
 `~/.login`, `~/.cshrc`, or `~/.tcshrc` files to contain the following lines:
+
     setenv PATH "$PATH:$HOME/moltemplate/moltemplate"
     setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
+
 After making these changes, you may need to start a new terminal (shell) for the changes to take effect.  If you do not know what a `PATH` environment variable is and are curious, read:
     http://www.linfo.org/path_env_var.html
 (I receive this question often.)
