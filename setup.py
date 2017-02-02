@@ -16,7 +16,7 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/tarball/v2.1.1',
+  download_url='https://github.com/jewettaij/moltemplate/tarball/v2.1.2',
 
   keywords=['simulation', 'LAMMPS', 'molecule', 'builder', 'ESPResSo'],
 
