@@ -4,20 +4,28 @@ except:
     # not installed as a module
     from nbody_graph_search import Ugraph
 
+# This file defines how improper interactions are generated in OPLS.
+# To use it, add "(opls_imp.py)" to the name of the "Data Impropers By Type"
+# section, and make sure this file is located in the "common" directory.
+# For example:
+# write_once("Data Impropers By Type (opls_imp.py)") {
+#   ...
+# }
+
+
 #    To find 4-body "improper" interactions,
 #    (by default, most of the time), we would use this subgraph:
 #           0
-#           *                  1st bond connects atoms 1 and 0
-#           |              =>  2nd bond connects atoms 1 and 2
-#         _.*._                3rd bond connects atoms 1 and 3
-#       *'  1  `*
-#      2         3
+#           *                  1st bond connects atoms 2 and 0
+#           |              =>  2nd bond connects atoms 2 and 1
+#         _.*._                3rd bond connects atoms 2 and 3
+#       *'  2  `*
+#      1         3
 #
-# In OPLS, the central atom is the second atom ("1").
-# This differs from other force-fields.
-# We take this detail into account in the line below:
+# In OPLS (as implemented in TINKER .PRM files), the central atom
+# is the third atom ("2").
 
-bond_pattern = Ugraph([(1,0), (1,2), (1,3)])
+bond_pattern = Ugraph([(2,0), (2,1), (2,3)])
 
 # As with other force-fields, the improper-angle is the angle between the planes
 # defined by the first three atoms (0,1,2) and last three atoms (1,2,3).
@@ -37,7 +45,7 @@ def canonical_order(match):
     tested against the list of atom/bond ids in the matches-found-so-far,
     before it is added to the list of interactions found so far.  Note that
     the energy of an improper interactions is a function of the improper angle.
-    The improper-angle is usually defined as the angle between planes formed
+    The "improper angle" is often defined as the angle between planes formed
     by atoms 0,1,2 & 1,2,3.  (Alternately, it is sometimes defined as the
     angle between the 0,1,2 plane and atom 3.)
     This angle does not change when swapping the OUTER pair of atoms (0 and 3)

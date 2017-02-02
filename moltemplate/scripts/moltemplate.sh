@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.1.1"
-G_DATE="2016-12-18"
+G_VERSION="2.1.2"
+G_DATE="2017-2-01"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -751,52 +751,6 @@ fi
 
 
 
-# ---------------- Charge By Bond ------------------
-# Assign atom charge according to who they are bonded to
-
-if [ -s "$data_charge_by_bond" ]; then
-    echo "Looking up partial charge contributions from bonds" >&2
-    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/charge_by_bond.py" \
-         -atom-style "$ATOM_STYLE" \
-         -atoms "${data_atoms}.template" \
-         -bonds "${data_bonds}.template" \
-         -bond-list "${data_bond_list}.template" \
-         -chargebybond "${data_charge_by_bond}.template" \
-         > gen_charges.template.tmp; then
-        exit 4
-    fi
-
-    # ---- cleanup: ----
-    # ---- Create or re-build the "${in_charges}.template" file ----
-    # Instert these lines into the "${in_charges}.template" file which includes
-    # the newly generated interactions. (Note: these are in .template format)
-
-    cp gen_charges.template.tmp new_charges.template.tmp
-    if [ -s "${in_charges}.template" ]; then
-        # Then append existing "Bonds" to the end of the generated interactions
-        # (Hopefully this way they will override those interactions.)
-        cat "${in_charges}.template" >> new_charges.template.tmp
-    fi
-    mv -f new_charges.template.tmp "${in_charges}.template"
-
-    # ---- Re-build (render) the "$in_charges" file ----
-    # Now substitute these variable values (assignments) into the variable
-    # names present in the .template file.  (We want to convert the file from
-    # a .template format into an ordinary (numeric) LAMMPS data-section format.)
-    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
-         ttree_assignments.txt \
-         < "${in_charges}.template" \
-         >> "${in_charges}"; then
-        exit 6
-    fi
-    echo "" >&2
-
-    rm -f gen_charges.template.tmp new_charges.template.tmp
-
-    echo "" >&2
-fi
-
-
 
 
 # ---------------- Interactions By Type -----------------
@@ -901,7 +855,10 @@ fi
 
 
 
-for FILE in "$data_angles_by_type"*.template; do
+#for FILE in "$data_angles_by_type"*.template; do
+IFS_BACKUP="$IFS"
+IFS=$(echo -en "\n\b")
+for FILE in `ls -v "$data_angles_by_type"*.template`; do
 
     if [ ! -s "$FILE" ] || [ ! -s "$data_bonds" ]; then
         break;  # This handles with the special cases that occur when
@@ -920,10 +877,10 @@ for FILE in "$data_angles_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Angles.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        # if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        # if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
 	    #     echo "       It should be located in this directory:" >&2
-        #     echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
+        #     echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/" >&2
         #     exit 4
         # fi
     fi
@@ -984,6 +941,7 @@ for FILE in "$data_angles_by_type"*.template; do
     mv -f ttree_assignments.tmp ttree_assignments.txt
     rm -f gen_angles.template.tmp new_angles.template.tmp
 done
+IFS="$IFS_BACKUP"
 
 
 
@@ -992,7 +950,10 @@ done
 
 FILE_dihedrals_by_type1=""
 FILE_dihedrals_by_type2=""
-for FILE in "$data_dihedrals_by_type"*.template; do
+#for FILE in "$data_dihedrals_by_type"*.template; do
+IFS_BACKUP="$IFS"
+IFS=$(echo -en "\n\b")
+for FILE in `ls -v "$data_dihedrals_by_type"*.template`; do
 
     if [ ! -s "$FILE" ] || [ ! -s "$data_bonds" ]; then
         break;  # This handles with the special cases that occur when
@@ -1011,10 +972,10 @@ for FILE in "$data_dihedrals_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        # if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        # if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
 	    # echo "       It should be located in this directory:" >&2
-        #     echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
+        #     echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/" >&2
         #     exit 4
         # fi
     fi
@@ -1078,6 +1039,7 @@ for FILE in "$data_dihedrals_by_type"*.template; do
     mv -f ttree_assignments.tmp ttree_assignments.txt
     rm -f gen_dihedrals.template.tmp new_dihedrals.template.tmp
 done
+IFS="$IFS_BACKUP"
 
 
 
@@ -1085,7 +1047,10 @@ done
 
 FILE_impropers_by_type1=""
 FILE_impropers_by_type2=""
-for FILE in "$data_impropers_by_type"*.template; do
+#for FILE in "$data_impropers_by_type"*.template; do
+IFS_BACKUP="$IFS"
+IFS=$(echo -en "\n\b")
+for FILE in `ls -v "$data_impropers_by_type"*.template`; do
 
     if [ ! -s "$FILE" ] || [ ! -s "$data_bonds" ]; then
         break;  # This handles with the special cases that occur when
@@ -1104,10 +1069,10 @@ for FILE in "$data_impropers_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Impropers.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        # if [ ! -s "${PY_SCR_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        # if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
 	    # echo "       It should be located in this directory:" >&2
-        #     echo "       ${PY_SCR_DIR}/nbody_alternate_symmetry/" >&2
+        #     echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/" >&2
         #     exit 4
         # fi
     fi
@@ -1171,6 +1136,11 @@ for FILE in "$data_impropers_by_type"*.template; do
     mv -f ttree_assignments.tmp ttree_assignments.txt
     rm -f gen_impropers.template.tmp new_impropers.template.tmp
 done
+IFS="$IFS_BACKUP"
+
+
+
+
 
 
 
@@ -1306,7 +1276,7 @@ different force-field rules).  In your case, you are using rules defined here:
    "$FILE_dihedrals_by_type2"
    "$FILE_dihedrals_by_type1"
    (Files ending in .py are located here:
-    $PY_SCR_DIR/nbody_alternate_symmetry/)
+    $PY_SCR_DIR/nbody_alt_symmetry/)
 If the molecules built using these two different force-field settings are not
 connected, AND if you do NOT override force-field dihedrals with explicitly
 defined dihedrals, then you can probably ignore this warning message.  Otherwise
@@ -1361,7 +1331,7 @@ different force-field rules.)  In your case, you are using rules defined here:
    "$FILE_impropers_by_type2"
    "$FILE_impropers_by_type1"
    (Files ending in .py are located here:
-    $PY_SCR_DIR/nbody_alternate_symmetry/)
+    $PY_SCR_DIR/nbody_alt_symmetry/)
 If the molecules built using these two different force-field settings are not
 connected, AND if you do NOT override force-field imrpopers with explicitly
 defined impropers, then you can probably ignore this warning message.  Otherwise
@@ -1377,9 +1347,59 @@ EOF
 fi
 
 
+
+
+
+
+# ------------------ Charge By Bond ----------------------
+# Assign atom partial charges according to who they are bonded to
+
+if [ -s "$data_charge_by_bond" ]; then
+    echo "Looking up partial charge contributions from bonds" >&2
+    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/charge_by_bond.py" \
+         -atom-style "$ATOM_STYLE" \
+         -atoms "${data_atoms}.template" \
+         -bonds "${data_bonds}.template" \
+         -bond-list "${data_bond_list}.template" \
+         -chargebybond "${data_charge_by_bond}.template" \
+         > gen_charges.template.tmp; then
+        exit 4
+    fi
+
+    # ---- cleanup: ----
+    # ---- Create or re-build the "${in_charges}.template" file ----
+    # Instert these lines into the "${in_charges}.template" file which includes
+    # the newly generated interactions. (Note: these are in .template format)
+
+    cp gen_charges.template.tmp new_charges.template.tmp
+    if [ -s "${in_charges}.template" ]; then
+        # Then append existing "Bonds" to the end of the generated interactions
+        # (Hopefully this way they will override those interactions.)
+        cat "${in_charges}.template" >> new_charges.template.tmp
+    fi
+    mv -f new_charges.template.tmp "${in_charges}.template"
+
+    # ---- Re-build (render) the "$in_charges" file ----
+    # Now substitute these variable values (assignments) into the variable
+    # names present in the .template file.  (We want to convert the file from
+    # a .template format into an ordinary (numeric) LAMMPS data-section format.)
+    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
+         ttree_assignments.txt \
+         < "${in_charges}.template" \
+         >> "${in_charges}"; then
+        exit 6
+    fi
+    echo "" >&2
+
+    rm -f gen_charges.template.tmp new_charges.template.tmp
+
+    echo "" >&2
+fi
+
+
+
+
 # -------------------------------------------------------
-
-
 
 rm -f "$OUT_FILE_DATA"
 

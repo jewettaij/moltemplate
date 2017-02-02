@@ -29,12 +29,20 @@ def canonical_order(match):
     tested against the list of atom/bond ids in the matches-found-so-far,
     before it is added to the list of interactions found so far.
     (For example, it does not make sense to define a separate 4-body improper-
-    angle interaction between atoms 1, 2, 3, 4  AND 1, 3, 2, 4.
-    The improper-angle is usually defined as the angle between planes formed
-    by atoms 1,2,3 & 2,3,4.  Alternately, it may instead be defined as the
-    angle between the 1,2,3 plane and atom 4.  Either way, this angle does
-    not change when swapping the middle pair of atoms so we arbitrarily
-    sort them so that the second atom has a lower atomID than the third atom.)
+    angle interaction between atoms 0, 1, 2, 3  AND 0, 2, 1, 3.
+    The "improper angle" is often defined as the angle between planes formed
+    by atoms 0,1,2 & 1,2,3.  Alternately, it may instead be defined as the
+    angle between the 0,1,2 plane and atom 3.  Either way, this angle does
+    not change when swapping the middle pair of atoms (1 and 2)
+    (except for a change of sign, which does not matter since the energy functions
+     used are typically sign invariant.  Furthermore, neither of OUTER pair of atoms
+     are the central atom. There are 3!=6 ways of ordering the remaining 3 atoms.)
+    Consequently it does not make sense to define a separate 4-body improper-
+    interaction between atoms 0,1,2,3   AS WELL AS between  0,2,1,3.
+    So we sort the atoms and bonds so that the first atom has a always has
+    a lower atomID than the last atom.  (Later we will check to see if we
+    have already defined an interaction between these 4 atoms.  If not then
+    we create a new one.)
 
     """
     atom0 = match[0][0]

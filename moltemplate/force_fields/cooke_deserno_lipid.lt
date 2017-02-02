@@ -1,4 +1,9 @@
-COOKE {
+# CDlipid is a lipid model from:
+# "Tunable generic model for fluid bilayer membranes"
+# Cooke IR, Kremer K, Deserno M, Physical Review E, 2005
+# (Author: David Stelter, BU)
+
+CDlipid {
   # 3-bead model of COOKE + DESERNO
   write_once("In Init") {
     units           lj
@@ -37,4 +42,5 @@ COOKE {
     bond_coeff  @bond:B     30.0 1.5 1.0 1.0
     angle_coeff @angle:An   10.0 180
   }
-} #COOKE
+} CDlipid
+

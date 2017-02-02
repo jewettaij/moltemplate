@@ -1,7 +1,19 @@
 #! /usr/bin/env python
-#
-# The purpose of this script is to create a moltemplate lt file for the opls.
-# and oplsaa forcefields.
+
+"""
+This standalone python script can be used to convert the force-fields 
+distributed with TINKER (".prm" files) into moltemplate (".lt") format.
+
+This script has only been tested with the OPLSAA force field (oplsaa.prm).
+The full list of force-field files distributed with TINKER is available at:
+http://dasher.wustl.edu/tinker/distribution/params
+
+Other TINKER compatible force fields may not work.  (One reason for this is that
+some force fields require features, such as point-dipole polarizability, which,
+to my knowledge, have not yet been implemented in LAMMPS as of 2017-2-01.)
+
+"""
+
 
 __author__ = 'Jason Lambert and Andrew Jewett'
 # (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)

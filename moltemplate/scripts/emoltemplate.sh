@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="emoltemplate.sh"
-G_VERSION="1.0.4"
-G_DATE="2016-12-08"
+G_VERSION="1.0.5"
+G_DATE="2017-2-01"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -695,10 +695,10 @@ for FILE in "$data_angles_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Angles.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        #if [ ! -s "${MOLTEMPLATE_SCRIPT_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        #if [ ! -s "${MOLTEMPLATE_SCRIPT_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #    echo "Error: File \"$SUBGRAPH_SCRIPT\" not found.\n" >&2
 	#    echo "       It should be located in this directory:\n" >&2
-        #    echo "       ${MOLTEMPLATE_SCRIPT_DIR}/nbody_alternate_symmetry/\n" >&2
+        #    echo "       ${MOLTEMPLATE_SCRIPT_DIR}/nbody_alt_symmetry/\n" >&2
         #    exit 4
         #fi
     fi
@@ -815,10 +815,10 @@ for FILE in "$data_dihedrals_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        #if [ ! -s "${MOLTEMPLATE_SCRIPT_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        #if [ ! -s "${MOLTEMPLATE_SCRIPT_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #    echo "Error: File \"$SUBGRAPH_SCRIPT\" not found.\n" >&2
 	#    echo "       It should be located in this directory:\n" >&2
-        #    echo "       ${MOLTEMPLATE_SCRIPT_DIR}/nbody_alternate_symmetry/\n" >&2
+        #    echo "       ${MOLTEMPLATE_SCRIPT_DIR}/nbody_alt_symmetry/\n" >&2
         #    exit 4
         #fi
     fi
@@ -938,10 +938,10 @@ for FILE in "$data_impropers_by_type"*.template; do
         SUBGRAPH_SCRIPT="nbody_Impropers.py"
     else
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
-        #if [ ! -s "${MOLTEMPLATE_SCRIPT_DIR}/nbody_alternate_symmetry/$SUBGRAPH_SCRIPT" ]; then
+        #if [ ! -s "${MOLTEMPLATE_SCRIPT_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #    echo "Error: File \"$SUBGRAPH_SCRIPT\" not found.\n" >&2
 	#    echo "       It should be located in this directory:\n" >&2
-        #    echo "       ${MOLTEMPLATE_SCRIPT_DIR}/nbody_alternate_symmetry/\n" >&2
+        #    echo "       ${MOLTEMPLATE_SCRIPT_DIR}/nbody_alt_symmetry/\n" >&2
         #    exit 4
         #fi
     fi

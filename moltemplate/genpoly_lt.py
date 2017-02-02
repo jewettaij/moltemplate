@@ -32,9 +32,9 @@ Usage:
    genpoly_lt.py  \\
       [-bond btype a1 a2] \\
       [-helix deltaphi] \\
-      [-circular yes/no/connected] \\
       [-axis x,y,z] \\
       [-circular yes/no/connected] \\
+      [-dir-indices ia ib] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
       [-improper itype a1 a2 a3 a4 i1 i2 i3 i4] \\
@@ -76,7 +76,7 @@ class GPSettings(object):
 
     def __init__(self):
         self.direction_orig = [1.0, 0.0, 0.0]
-        self.is_closed = False
+        self.is_circular = False
         self.connect_ends = False
         self.delta_phi = 0.0
         self.header = 'import \"forcefield.lt\"'
@@ -84,6 +84,7 @@ class GPSettings(object):
         self.name_polymer = ''
         self.inherits = ''
         self.name_sequence = []
+        self.dir_index_offsets = (-1,1)
         self.cuts = []
         self.box_padding = None
         self.bonds_name = []
@@ -242,6 +243,8 @@ class GPSettings(object):
                     self.inherits = ' ' + self.inherits
                 else:
                     self.inherits = ' inherits ' + self.inherits
+                if self.name_polymer == '':
+                    self.name_polymer = 'Polymer'  # supply a default name
                 del(argv[i:i + 2])
             elif (argv[i].lower() == '-header'):
                 if i + 1 >= len(argv):
@@ -278,6 +281,15 @@ class GPSettings(object):
                         'Error: ' + argv[i] + ' flag should be followed by a number (angle in degrees)\n')
                 self.delta_phi = float(argv[i + 1])
                 del(argv[i:i + 2])
+            elif (argv[i].lower() == '-dir-indices'):
+                if i + 2 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by two integers\n')
+                self.dir_index_offsets = (int(argv[i + 1]), int(argv[i + 2]))
+                if self.dir_index_offsets[0] == self.dir_index_offsets[1]:
+                    raise InputError(
+                        'Error: The two numbers following ' + argv[i] + ' must not be equal.\n')
+                del(argv[i:i + 3])
             elif (argv[i].lower() == '-box'):
                 if i + 1 >= len(argv):
                     raise InputError('Error: ' + argv[i] + ' flag should be followed ' +
@@ -346,7 +358,7 @@ class GenPoly(object):
         at these positions, oriented appropriately, with bonds (and angles,
         dihedrals, etc...) connecting successive monomers together.
         By default (if settings.cuts==False) only a single polymer is created.
-        However this class create multiple polymers of different shape/length.
+        However this class can create multiple polymers of different lengths.
         The list of coordinates for each polymer are saved separately within
         the "self.coords_multi" member.
 
@@ -398,18 +410,25 @@ class GenPoly(object):
         self.N = len(coords)
         self.direction_vects = [[0.0, 0.0, 0.0] for i in range(0, self.N + 1)]
 
-        if self.settings.is_closed:
+        if self.settings.is_circular:
             for i in range(0, self.N):
-                im1 = WrapPeriodic.Wrap(i - 1, self.N)
-                ip1 = WrapPeriodic.Wrap(i + 1, self.N)
+                # By default, the direction that monomer "i" is pointing is
+                # determined by the position of the monomers before and after it
+                # (at index i-1, and i+1).  More generally, we allow the user
+                # to choose what these offsets are ("dir_index_offsets[")
+                ia = WrapPeriodic.Wrap(i + self.settings.dir_index_offsets[0],
+                                       self.N)
+                ib = WrapPeriodic.Wrap(i + self.settings.dir_index_offsets[1],
+                                       self.N)
                 for d in range(0, 3):
                     self.direction_vects[i][d] = coords[
-                        ip1][d] - coords[im1][d]
+                        ib][d] - coords[ia][d]
         else:
             for i in range(1, self.N - 1):
                 for d in range(0, 3):
                     self.direction_vects[i][d] = coords[
-                        i + 1][d] - coords[i - 1][d]
+                        i + self.settings.dir_index_offsets[1]][d] - coords[
+                            i + self.settings.dir_index_offsets[0]][d]
 
             for d in range(0, 3):
                 self.direction_vects[0][d] = coords[1][d] - coords[0][d]

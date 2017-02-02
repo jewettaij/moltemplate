@@ -1,11 +1,24 @@
+Explanation:
+
+   Generate a moltemplate file containing a definition of a Polymer 
+   molecule containing monomers located at the positions specified in 
+   "coords.raw" (a 3-column text file).  Monomers will be rotated so
+   that they point along the polymer axis direction (see "-dir-indices")
+   with an optional helical twist added (see "-helix").  Users can 
+   specify one or more bonds connecting each monomer to the next monomer
+   (see "-bond").  Similarly, 3-body and 4-body angular interactions between
+   atoms in different monomers can either be generated automatically 
+   (using the standard moltemplate "Angle By Type" rules) 
+   OR generated manually (using "-angle", "-dihedral", "-improper" arguments).
+
 Usage:
 
    genpoly_lt.py  \\
       [-bond btype a1 a2] \\
       [-helix deltaphi] \\
-      [-circular yes/no/connected] \\
       [-axis x,y,z] \\
       [-circular yes/no/connected] \\
+      [-dir-indices ia ib] \
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
       [-improper itype a1 a2 a3 a4 i1 i2 i3 i4] \\
@@ -17,14 +30,6 @@ Usage:
       [-cuts cuts.txt] \\
       [-box paddingX,paddingY,paddingZ] \\
       < coords.raw > polymer.lt
-
-Explanation:
-
-   Generate a moltemplate file containing a definition of a Polymer 
-   molecule containing monomers located at the positions specified in 
-   "coords.raw" (a 3-column text file).  Monomers will be rotated so
-   that they point in the direction connecting neighbors (r[i+1]-r[i])
-   (assuming that they point along the "x" axis initially).
 
 Arguments (optional):
 
@@ -50,6 +55,16 @@ Arguments (optional):
                            long polymer using periodic boundary conditions,
                            with the two ends are connected on opposite sides.)
 
+    -dir-indices ia ib
+             The program attempts to orient each monomer in a direction that
+             the polymer is pointing.  By default, the program will
+             orient monomer i in the direction connecting the monomers before
+             and after it (monomers i-1 and i+1).  The user can override this
+             using the -dir-indices command line argument.  The ia and ib
+             arguments are integer offsets.  To point monomer i in the direction
+             connecting it to the following monomer (i+1), use -dir-indices 0 1
+	     (For circular polymers, the indices will be wrapped appropriately.)
+
     -bond btype a1 a2
              Add a bond between successive monomers of type btype.
              between atoms named a1 and a2 (all three arguments are strings and
@@ -65,11 +80,12 @@ Arguments (optional):
              i1 i2 and i3.  (The aname atype a1, a2, a3 arguments are strings 
              containing moltemplate variable names. The standard moltemplate
              prefixes "$angle:", "@angle:", and "$atom:" should be omitted.
-             The i1, i2, i3 arguments are integers indicating the monomer
+             The i1, i2, i3 arguments are integer indices indicating the monomer
              that each atom belongs to.
                 0 corresponds to the current monomer
                 1 corresponds to the next monomer
                 2 corresponds to the following monomer, etc...
+	     (For circular polymers, the indices will be wrapped appropriately.)
              Multiple angles per monomer can be added by having:
              "-angle aname atype a1 a2 a3 i1 i2 i3" 
              appear several times in the argument list.
@@ -80,8 +96,8 @@ Arguments (optional):
              monomers i1 i2 and i3.  (The dname dtype a1, a2, a3, a4, arguments
              are strings containing moltemplate variable names. The moltemplate
              prefixes "$dihedral:", "@dihedral:", and "$atom:" should be omitted
-             The i1, i2, i3, i4 arguments are integers indicating the monomer
-             that each atom belongs to.  (See explanation above.)
+             The i1, i2, i3, i4 arguments are integer indices indicating the
+             monomer that each atom belongs to.  (See explanation above.)
              Multiple dihedrals per monomer can be added by having:
              "-dihedral dname dtype a1 a2 a3 a4 i1 i2 i3 i4" 
              appear several times in the argument list.
@@ -91,7 +107,7 @@ Arguments (optional):
              monomers i1 i2 and i3.  (The iname itype a1, a2, a3, a4, arguments
              are strings containing moltemplate variable names. The moltemplate
              prefixes "$improper:", "@improper:", and "$atom:" should be omitted
-             The i1, i2, i3, i4 arguments are integers indicating the monomer
+             The i1, i2, i3, i4 arguments are integer indices indicating the 
              that each atom belongs to.  (See explanation above.)
              Multiple impropers per monomer can be added by having:
              "-improper iname itype a1 a2 a3 a4 i1 i2 i3 i4" 
@@ -133,36 +149,36 @@ Arguments (optional):
 
     -inherits ForceFieldObject
                    "ForceFieldObject" is the name of a moltemplate object which
-		   defines any rules for creating angles, dihedrals, impropers
-		   which you want to be generated automatically.  Hopefully
-		   this is object was defined somewhere in the file that
-		   you imported using the "-header" argument.
+                   defines any rules for creating angles, dihedrals, impropers
+                   which you want to be generated automatically.  Hopefully
+                   this is object was defined somewhere in the file that
+                   you imported using the "-header" argument.
 
     -cuts cut_locations.txt
                    Cut the polymer in several places along its length.
-		   This can be useful if your goal is to create many
-		   polymers of different lenthgs.  Rather than being forced 
-		   to define a new Polymer object for each polymer, simply 
-		   cut the polymer N times along its length.  The file 
-		   "cut_locations.txt" is a text file containing a list of
-		   positive integers (one per line) indicating where you would 
-		   like the polymer to be cut.  For each integer, i, which 
-		   appears in this file, a cut is made between monomers
-		   i-1 and i (Indexing begins at 0, so a value of 1
-		   corresonds to a cut between the first and second monomers.)
-		   A separate polymer object will be created for each polymer,
-		   and an integer suffix will be added to the name, to
-		   distinguish them from eachother.  (Each of these 
-		   polymers will be part of a larger object defined by this
-		   program.  Instantiating that object will create all of the
-		   individual polymers.)
+                   This can be useful if your goal is to create many
+                   polymers of different lenthgs.  Rather than being forced 
+                   to define a new Polymer object for each polymer, simply 
+                   cut the polymer N times along its length.  The file 
+                   "cut_locations.txt" is a text file containing a list of
+                   positive integers (one per line) indicating where you would 
+                   like the polymer to be cut.  For each integer, i, which 
+                   appears in this file, a cut is made between monomers
+                   i-1 and i (Indexing begins at 0, so a value of 1
+                   corresonds to a cut between the first and second monomers.)
+                   A separate polymer object will be created for each polymer,
+                   and an integer suffix will be added to the name, to
+                   distinguish them from eachother.  (Each of these 
+                   polymers will be part of a larger object defined by this
+                   program.  Instantiating that object will create all of the
+                   individual polymers.)
 
     -box paddingX,paddingY,paddingZ
                   This will cause the program to attempt to estimate the size
-		  of the smallest rectangular box which encloses all of the
-		  coordinates in the coordinate file.  The user must supply
-		  3 comma-separated numbers (no spaces) which indicate how much
-		  extra room is needed in the x,y,z directions, at both ends.
+                  of the smallest rectangular box which encloses all of the
+                  coordinates in the coordinate file.  The user must supply
+                  3 comma-separated numbers (no spaces) which indicate how much
+                  extra room is needed in the x,y,z directions, at both ends.
 
 
 Examples:

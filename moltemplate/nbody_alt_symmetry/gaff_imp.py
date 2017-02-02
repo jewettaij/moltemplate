@@ -47,7 +47,7 @@ def canonical_order(match):
     tested against the list of atom/bond ids in the matches-found-so-far,
     before it is added to the list of interactions found so far.  Note that
     the energy of an improper interactions is a function of the improper angle.
-    The improper-angle is usually defined as the angle between planes formed
+    The "improper angle" is often defined as the angle between planes formed
     by atoms 0,1,2 & 1,2,3.  (Alternately, it is sometimes defined as the
     angle between the 0,1,2 plane and atom 3.)
     This angle does not change when swapping the OUTER pair of atoms (0 and 3)

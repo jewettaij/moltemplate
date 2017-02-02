@@ -355,12 +355,12 @@ def GenInteractions_files(lines_data,
 
     # search locations
     package_opts = [[src_bond_pattern, __package__],
-                    ['nbody_alternate_symmetry.'+src_bond_pattern, __package__]]
+                    ['nbody_alt_symmetry.'+src_bond_pattern, __package__]]
 
     if __package__:
         for i, _ in enumerate(package_opts):
             package_opts[i][0] = '.' + package_opts[i][0]
-        package_opts.append(['.'+src_bond_pattern, __package__+'.nbody_alternate_symmetry'])
+        package_opts.append(['.'+src_bond_pattern, __package__+'.nbody_alt_symmetry'])
 
 
     g = None
@@ -379,7 +379,7 @@ def GenInteractions_files(lines_data,
         sys.stderr.write('Error: Unable to locate file \"' +
                          src_bond_pattern + '.py\"\n'
                          '       (Did you mispell the file name?\n'
-                         '        Check the \"nbody_alternate_symmetry/\" directory.)\n')
+                         '        Check the \"nbody_alt_symmetry/\" directory.)\n')
         sys.exit(-1)
 
     return GenInteractions_lines(lines_atoms,
