@@ -312,6 +312,8 @@ def main():
         l_in_dihedral_coeffs = []
         l_in_improper_coeffs = []
         l_in_group = []
+        l_in_set = []
+        l_in_set_static = []
         l_in_fix_shake = []
         l_in_fix_rigid = []
         l_in_fix_poems = []
@@ -1558,6 +1560,14 @@ def main():
                                              '       Nonsensical group command:\n'
                                              '       \"' + line.strip() + '\"\n')
                         l_in_group.append(
+                            (' ' * indent) + (' '.join(tokens) + '\n'))
+
+                    elif (tokens[0] == 'set'):
+                        if (len(tokens) < 3):
+                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                             '       Nonsensical set command:\n'
+                                             '       \"' + line.strip() + '\"\n')
+                        l_in_set.append(
                             (' ' * indent) + (' '.join(tokens) + '\n'))
 
                     elif ((tokens[0] == 'fix') and (len(tokens) >= 4)):
@@ -2830,6 +2840,89 @@ def main():
                 l_in_fix_rigid[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
                 i_line += 1
 
+        # --- set ---
+
+        i_line = 0
+        while i_line < len(l_in_set):
+            line = l_in_set[i_line]
+            tokens = line.strip().split()
+            l_new_set_commands = []
+            l_new_set_static_commands = []
+            if len(tokens) < 4:
+                break
+            if tokens[1] == 'type':
+                pattern = tokens[2].split('*')
+                if pattern[0] == '':
+                    types_lo = min_needed_atomtype
+                else:
+                    types_lo = types_hi = int(pattern[0])
+                    if types_lo < min_needed_atomtype:
+                        types_lo = min_needed_atomtype
+                if len(pattern)  == 2:
+                    if pattern[1] == '':
+                        types_hi = max_needed_atomtype
+                    else:
+                        types_hi = min(int(pattern[1]), max_needed_atomtype)
+                for i in range(types_lo, types_hi+1):
+                    if i in needed_atomtypes:
+                        l_new_set_static_commands.append((' ' * indent) +
+                                                         ' '.join(tokens[0:2])+' '+
+                                                         '@atom:type'+str(i) + ' ' +
+                                                         ' '.join(tokens[3:]))
+            elif tokens[1] == 'atom':
+                pattern = tokens[2].split('*')
+                if pattern[0] == '':
+                    atomids_lo = min_needed_atomid
+                else:
+                    atomids_lo = atomids_hi = int(pattern[0])
+                    if atomids_lo < min_needed_atomid:
+                        atomids_lo = min_needed_atomid
+                if len(pattern)  == 2:
+                    if pattern[1] == '':
+                        atomids_hi = max_needed_atomid
+                    else:
+                        atomids_hi = min(int(pattern[1]), max_needed_atomid)
+                for i in range(atomids_lo, atomids_hi+1):
+                    if i in needed_atomids:
+                        l_new_set_commands.append((' ' * indent) +
+                                                  tokens[0:2].join(' ')+' '+
+                                                  str(i) + ' ' +
+                                                  tokens[3:].join(' '))
+            elif tokens[1] == 'mol':
+                pattern = tokens[2].split('*')
+                if pattern[0] == '':
+                    molids_lo = min_needed_molid
+                else:
+                    molids_lo = molids_hi = int(pattern[0])
+                    if molids_lo < min_needed_molid:
+                        molids_lo = min_needed_molid
+                if len(pattern)  == 2:
+                    if pattern[1] == '':
+                        molids_hi = max_needed_molid
+                    else:
+                        molids_hi = min(int(pattern[1]), max_needed_molid)
+                for i in range(molids_lo, molids_hi+1):
+                    if i in needed_molids:
+                        l_new_set_commands.append(tokens[0:2].join(' ')+' '+
+                                                  str(i) + ' ' +
+                                                  tokens[3:].join(' '))
+            elif tokens[0] == 'group':
+                group_name = tokens[2]
+                if group_name in groups_needed:
+                    l_new_set_static_commands = [l_in_set[i_line]]
+
+            if len(l_new_set_commands) > 0:
+                l_in_set[i_line:i_line+1] = l_new_set_commands
+                i_line += len(l_new_set_commands)
+            elif len(l_new_set_static_commands) > 0:
+                l_in_set_static += l_new_set_static_commands
+                del l_in_set[i_line]
+            else:
+                sys.stderr.write('WARNING: Ignoring line \n\"' +
+                                 l_in_set[i_line].rstrip() + '\"\n')
+                del l_in_set[i_line]
+            
+
         # --- fix shake ---
 
         i_line = 0
@@ -3390,6 +3483,22 @@ def main():
             #                 '         '+g_program_name+' contain the correct atoms.  (-Andrew 2014-10-30)\n'
             #                 '######################################################\n')
             assert(non_empty_output)
+
+        if len(l_in_set) > 0:
+            l_in_set.insert(0, ((' ' * cindent) +
+                                'write(\"' + in_settings + '\") {'))
+            l_in_set.append((' ' * cindent) + '} # end of list of \"set\" commands\n')
+            sys.stdout.write('\n')
+            sys.stdout.write((' ' * cindent) + '# list of \"set\" commands:\n')
+            sys.stdout.write('\n'.join(l_in_set))
+
+        if len(l_in_set_static) > 0:
+            l_in_set_static.insert(0, ((' ' * cindent) +
+                                       'write_once(\"' + in_settings + '\") {'))
+            l_in_set_static.append((' ' * cindent) + '} # end of list of (static) \"set\" commands\n')
+            sys.stdout.write('\n')
+            sys.stdout.write((' ' * cindent) + '# list of (static) \"set\" commands:\n')
+            sys.stdout.write('\n'.join(l_in_set_static))
 
         if len(l_in_fix_rigid) > 0:
             no_warnings = False
