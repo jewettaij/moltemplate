@@ -11,7 +11,7 @@
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.1.2"
-G_DATE="2017-2-01"
+G_DATE="2017-2-05"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -301,6 +301,11 @@ Optional arguments:
                commands to obey standard naming conventions.  The "-nocheck"
                argument bypasses these checks and eliminates these restrictions.
 
+-checkff       This cause moltemplate.sh to check to make sure that there
+               are valid angle and dihedral interactions defined for every
+               3 or 4 consecutively bonded atoms in the system
+               (defined in "Angles/Dihedrals By Type").
+
 -overlay-angles     Normally, moltemplate.sh checks to see if multiple angle
 -overlay-dihedrals  interactions are defined for the same triplet of atoms.
 -overlay-impropers  If so, it deletes the redundant ones (keeping the last one).
@@ -352,6 +357,7 @@ REMOVE_DUPLICATE_BONDS="true"
 REMOVE_DUPLICATE_ANGLES="true"
 REMOVE_DUPLICATE_DIHEDRALS="true"
 REMOVE_DUPLICATE_IMPROPERS="true"
+CHECKFF=""
 RUN_VMD_AT_END=""
 
 
@@ -380,6 +386,9 @@ while [ "$i" -lt "$ARGC" ]; do
         # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
         unset LTTREE_CHECK_COMMAND
         unset LTTREE_POSTPROCESS_COMMAND
+    elif [ "$A" = "-checkff" ]; then
+        # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
+        CHECKFF="$A"
     elif [ "$A" = "-overlay-bonds" ]; then
         # In that case, do not remove duplicate bond interactions
         unset REMOVE_DUPLICATE_BONDS
@@ -894,6 +903,7 @@ for FILE in `ls -v "$data_angles_by_type"*.template`; do
             -atoms "${data_atoms}.template" \
             -bonds "${data_bonds}.template" \
             -nbodybytype "${FILE}" \
+	    $CHECKFF \
             -prefix '$/angle:bytype' > gen_angles.template.tmp; then
         exit 4
     fi
@@ -992,6 +1002,7 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template`; do
             -atoms "${data_atoms}.template" \
             -bonds "${data_bonds}.template" \
             -nbodybytype "${FILE}" \
+	    $CHECKFF \
             -prefix '$/dihedral:bytype' > gen_dihedrals.template.tmp; then
         exit 4
     fi

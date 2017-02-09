@@ -81,7 +81,7 @@ elif sys.version < '2.7':
                      '  This program is untested on your python version (' +
                      sys.version + ').\n'
                      '  PLEASE LET ME KNOW IF THIS PROGRAM CRASHES (and upgrade python).\n'
-                     '    -Andrew   2016-9-21\n'
+                     '    -Andrew   2017-2-07\n'
                      '--------------------------------------------------------\n'
                      '--------------------------------------------------------\n')
     from ordereddict import OrderedDict
