@@ -8,6 +8,8 @@
 
 
 import sys
+from collections import defaultdict
+
 
 #from collections import namedtuple
 if sys.version < '2.7':
@@ -42,7 +44,8 @@ def GenInteractions_int(G_system,
                         canonical_order,  # function to sort atoms and bonds
                         atomtypes_int2str,
                         bondtypes_int2str,
-                        report_progress=False):  # print messages to sys.stderr?
+                        report_progress=False,  # print messages to sys.stderr?
+                        check_undefined_atomids_str = None):
     """
     GenInteractions() automatically determines a list of interactions
     present in a system of bonded atoms (argument "G_system"),
@@ -204,7 +207,56 @@ def GenInteractions_int(G_system,
                     types_bonds_all_str.add(bondtypes_int2str[Ie])
     # ------------------ reporting progress (end) -------------------
 
+
+    # ------------------ check to make sure all interactions are defined ------
+    if check_undefined_atomids_str:
+        # Checking for missing interactions is a headache.
+        # Please excuse the messy code below.
+        atomids_matched = OrderedDict()
+        # Then loop through all the interactions (tuples of atoms) found by
+        # GraphMatcher, sort the atoms and store them in dictionary
+        # (atomids_matched) which keeps track of which interactions have
+        # been defined (ie have force-field parameters assigned to them).
+        # Initialize them to False, and update as interactions are found.
+        for atombondtypes, abidslist in interactions_by_type.items():
+            for abids in abidslist:
+                abids = canonical_order(abids)
+                atomids_int = tuple(abids[0])
+
+                # NOTE TO SELF:
+                # If in the future, different interactions (type_patterns) have
+                # different symmetries, and canonical_order() varies from 
+                # interaction to interaction, then DONT loop over type_pattern:
+                # for type_pattern, coefftype in typepattern_to_coefftypes)
+                #     abids = canonical_order(abids, type_pattern)
+                # Why:  When checking for undefined interactions,
+                # we just want to make sure that SOME kind of interaction
+                # involving these atoms exists.  The gruesome details of 
+                # force-field symmetry should not enter into this.  
+                # (We certainly don't want to require that different 
+                # interactions are simultaneously present for the same set of
+                # atoms for ALL the possible different atom orderings for the
+                # different possible symmetries in the force field you are using
+                # Perhaps, in the future I should just use something like this:
+                # atomids_int = abids[0]
+                # atomids_int.sort()
+                # atomids_int = tuple(atomids_int)
+                # This would work for most molecules.
+                # I suppose that in some some bizarre molecules containing
+                # triangular or square cycles, for example, this would not
+                # distinguish all 3 angles in the triangle, for example.
+                # mistakenly thinking there was only one interaction there.
+                # But these cases are rare.)
+
+                if not atomids_int in atomids_matched:
+                    atomids_matched[atomids_int] = False
+                    # (Later on, we'll set some of these to True)
+
+    # ------------------ check to make sure all interactions are defined (end)
+
+
     count = 0
+
     for typepattern, coefftype in typepattern_to_coefftypes:
 
         # ------------------ reporting progress -----------------------
@@ -264,10 +316,10 @@ def GenInteractions_int(G_system,
             types_atoms = [atomtypes_int2str[Iv] for Iv in atombondtypes[0]]
             types_bonds = [bondtypes_int2str[Ie] for Ie in atombondtypes[1]]
             type_strings = types_atoms + types_bonds
+
             # use string comparisons to check for a match with typepattern
             if MatchesAll(type_strings, typepattern):  # <-see "ttree_lex.py"
                 for abids in abidslist:
-
                     # Re-order the atoms (and bonds) in a "canonical" way.
                     # Only add new interactions to the list after re-ordering
                     # them and checking that they have not been added earlier.
@@ -281,8 +333,13 @@ def GenInteractions_int(G_system,
                         coefftypes = abids_to_coefftypes[abids]
                         if coefftype in coefftypes:
                             redundant = True
+                   
+                    if check_undefined_atomids_str:
+                        atomids_int = tuple(abids[0])
+                        atomids_matched[atomids_int] = True
 
-                    if not redundant:
+                    if not redundant:                       
+                        
                         # (It's too bad python does not
                         #  have an Ordered defaultdict)
                         if coefftype in coefftype_to_atomids:
@@ -299,7 +356,25 @@ def GenInteractions_int(G_system,
         sys.stderr.write('  (found ' +
                          str(count) + ' non-redundant matches)\n')
 
+    if check_undefined_atomids_str:
+        for atomids_int, found_match in atomids_matched.items():
+            if not found_match:
+                atomids_str = [check_undefined_atomids_str[Iv]
+                               for Iv in atomids_int]
+                raise InputError('Error: A bonded interaction should exist between atoms:\n' +
+                                 '       ' +
+                                 (',\n       '.join(atomids_str)) + '\n' +
+                                 '       ...however no interaction between these types of atoms has been defined\n' +
+                                 '       This usually means that at least one of your atom TYPES is incorrect.\n' +
+                                 '       If this is not the case, then you can override this error message by\n' +
+                                 '       invoking moltemplate.sh without the \"-checkff\" argument.\n')
+
     return coefftype_to_atomids
+
+
+
+
+
 
 
 def GenInteractions_str(bond_pairs,
@@ -310,7 +385,8 @@ def GenInteractions_str(bond_pairs,
                         atomtypes_str,
                         bondids_str,
                         bondtypes_str,
-                        report_progress=False):  # print messages to sys.stderr?
+                        report_progress=False,  # print messages to sys.stderr?
+                        check_undefined=False):
 
     assert(len(atomids_str) == len(atomtypes_str))
     assert(len(bondids_str) == len(bondtypes_str))
@@ -372,7 +448,9 @@ def GenInteractions_str(bond_pairs,
                                                    canonical_order,
                                                    atomtypes_int2str,
                                                    bondtypes_int2str,
-                                                   report_progress)
+                                                   report_progress,
+                                                   (atomids_str if check_undefined else None))
+
     coefftype_to_atomids_str = OrderedDict()
     for coefftype, atomidss_int in coefftype_to_atomids_int.items():
         if report_progress:

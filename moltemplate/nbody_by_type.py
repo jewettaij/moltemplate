@@ -138,8 +138,8 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 """
 
 g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-g_date_str = '2016-12-21'
-g_version_str = '0.19.0'
+g_date_str = '2017-2-06'
+g_version_str = '0.20.0'
 
 bond_pattern_module_name = ""
 
@@ -184,7 +184,8 @@ def GenInteractions_lines(lines_atoms,
                           canonical_order,  # function to sort atoms and bonds
                           prefix='',
                           suffix='',
-                          report_progress=False):
+                          report_progress=False,
+                          check_undefined=False):
 
     column_names = AtomStyle2ColNames(atom_style)
     i_atomid, i_atomtype, i_molid = ColNames2AidAtypeMolid(column_names)
@@ -271,7 +272,8 @@ def GenInteractions_lines(lines_atoms,
                                                    atomtypes_str,
                                                    bondids_str,
                                                    bondtypes_str,
-                                                   report_progress)
+                                                   report_progress,
+                                                   check_undefined)
     lines_nbody_new = []
     for coefftype, atomids_list in coefftype_to_atomids_str.items():
         for atomids_found in atomids_list:
@@ -294,7 +296,8 @@ def GenInteractions_files(lines_data,
                           atom_style,
                           prefix='',
                           suffix='',
-                          report_progress=False):
+                          report_progress=False,
+                          check_undefined=False):
 
     if fname_atoms == None:
         lines_atoms = [
@@ -366,10 +369,6 @@ def GenInteractions_files(lines_data,
     g = None
     for name, pkg in package_opts:
         try:
-            # defines g.bond_pattern, g.canonical_order
-            # some debug messages:
-            sys.stderr.write('src_bond_pattern=\"'+src_bond_pattern+'\"\n')
-            sys.stderr.write('name=\"'+str(name)+'\", pkg=\"'+str(pkg)+'\"\n')
             g = importlib.import_module(name, pkg)
             break
         except (SystemError, ImportError):
@@ -391,7 +390,8 @@ def GenInteractions_files(lines_data,
                                  g.canonical_order,
                                  prefix,
                                  suffix,
-                                 report_progress)
+                                 report_progress,
+                                 check_undefined)
 
 
 def main():
@@ -411,6 +411,7 @@ def main():
         atom_style = 'full'
         prefix = ''
         suffix = ''
+        check_undefined = False
 
         argv = [arg for arg in sys.argv]
 
@@ -539,6 +540,10 @@ def main():
                 section_name_bytype = argv[i + 1]
                 del(argv[i:i + 2])
 
+            elif argv[i].lower() == '-checkff':
+                check_undefined = True
+                del(argv[i:i + 1])
+
             elif argv[i][0] == '-':
                 raise InputError('Error(' + g_program_name + '):\n'
                                  'Unrecogized command line argument \"' + argv[i] + '\"\n')
@@ -602,7 +607,8 @@ def main():
                                   atom_style,
                                   prefix,
                                   suffix,
-                                  report_progress=True)
+                                  True,
+                                  check_undefined)
 
         # Print this text to the standard out.
 
