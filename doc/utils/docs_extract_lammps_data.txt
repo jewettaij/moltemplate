@@ -1,7 +1,6 @@
 extract_lammps_data.py is a simple script which extracts sections of text from
 a LAMMPS data file.  (Of coarse, you can accomplish the same thing with a text
-editor, but this script performs the task automatically.)
-
+editor, but this script turns it into a one-line command.)
 
 Typical usage: 
 
@@ -36,7 +35,7 @@ extract_lammps_data.py "Pair Coeffs" "Bond Coeffs" "Angle Coeffs" \
 
 The following section names are allowed:
 
-"Header"                  # The header section at the beginning of the file.
+"Header"                   # The header section at the beginning of the file.
 "Atoms"
 "Masses"
 "Bonds"

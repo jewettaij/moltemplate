@@ -1,4 +1,20 @@
 #!/usr/bin/env python
+"""
+extract_lammps_data.py is a simple script which extracts sections of text from
+a LAMMPS data file.
+
+Typical usage: 
+
+extract_lammps_data.py SECTION_NAME < FILE.DATA > EXCERPT.TXT
+
+This extracts a section from a LAMMPS data file and saves it in EXCERPT.TXT.
+
+More general usage:
+
+extract_lammps_data.py [-n] SECTION_LIST < FILE.DATA > EXCERPT.TXT
+
+For more details, see "doc/utils/docs_extract_lammps_data.txt"
+"""
 
 import sys
 

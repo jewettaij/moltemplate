@@ -5,16 +5,19 @@
   #
   # Unfortunately, the system.data and system.in.settings file which are
   # created by moltemplate.sh often contain a lot of irrelevant information,
-  # such as definition of parameters for atom types defined in the force field
-  # but not present in the current system.
+  # such as definition of parameters for atom types defined in some force field
+  # file that the user is using, but not present in the system they are building
   #
   # In my experience, this extra information appears to be mostly harmless.
   # (Loading this information does not seem to slow down LAMMPS significantly.)
   # 
   # However it can make visualization difficult in VMD.  (Technically, this
   # extra information can take up megabytes of space in the system.data
-  # and system.in.settings files.  Later when you run LAMMPS, a O(n^2) sized
-  # table is generated internally to store the pair parameters for n atom types)
+  # and system.in.settings files.  Additionally, when you run LAMMPS, an O(n^2)
+  # sized table is allocated to store the parameters for interactions between 
+  # every possible pair of atom types (n atom types), and this occupies
+  # significantly more memory if n is large.  For example, the "oplsaa.lt" file
+  # and "oplsaa.prm" (TINKER-format) file both define almost 1000 atom types.)
   #
   # Usage: Invoke this script with no arguments, from a directory
   #        containing these files:
@@ -23,9 +26,9 @@
   #        parameters.  (If your files have other names, you must rename 
   #        them to match moltemplate file name conventions.)
   #
-  # DO NOT USE THIS SCRIPT ON SIMULATIONS CONTAINING MANY-BODY PAIR 
-  # STYLES, DREIDING HYDROGEN BONDS, OR NON-STANDARD AUXILIARY FILES.
-  # (This script relies on ltemplify.py, and inherits its limitations.)
+  # DO NOT USE THIS SCRIPT ON SIMULATIONS CONTAINING MANY-BODY PAIR STYLES,
+  # DREIDING-STYLE HYDROGEN BONDS, OR SIMS NEEDING NON-STANDARD AUXILIARY FILES.
+  # (This script relies on ltemplify.py and inherits its limitations.)
 
   PATH_TO_DATA_FILE="."
 
@@ -42,14 +45,25 @@
 
   # The ltemplify.py script also does not copy the boundary dimensions.
   # We must do this manually.
+  # Extract the header of the data file, reverse the order, and read lines
+  # until you have 
   # If you did NOT throw away the "Data Boundary" file usually located in
   # "moltemplate_files/output_ttree/Data Boundary"
   # then you can copy that information from this file into system.lt
 
-  PATH_TO_OUTPUT_TTREE="output_ttree"
 
+  # oops. looks like we don't need this after all
+  #function _reverse_lines {
+  #    # The following function reverses the order of lines in a file:
+  #    # (Neither "tac", nor "tail -r" have cross-platform support.)
+  #    awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }'
+  #}
+
+  echo "" >> system.lt
   echo "write_once(\"Data Boundary\") {" >> system.lt
-  cat "$PATH_TO_OUTPUT_TTREE/Data Boundary" >> system.lt
+  # Extract the periodic boundary box dimensions from the 
+  # end of the header section of the LAMMPS data file:
+  extract_lammps_data.py Header < ../system.data | awk '{if (($3=="xlo") && ($4=="xhi")) {xl=$0} if (($3=="ylo") && ($4=="yhi")) {yl=$0} if (($3=="zlo") && ($4=="zhi")) {zl=$0} if (($4=="xy") && ($5=="xz") && ($6=="yz")) {xtr=$0}} END{print xl; print yl; print zl; if (xtr!="") {print xtr}}' >> system.lt
   echo "}" >> system.lt
   echo "" >> system.lt
 
@@ -60,8 +74,7 @@
   # That's it.  The new "system.data" and system.in.* files should
   # be ready to run in LAMMPS.
 
-  # Now copy the system.data and system.in.* files to the place where
-  # you plan to run LAMMPS
+  # Now move the system.data and system.in.* files to their original location:
   mv -f system.data system.in.* ../
   cd ../
   grep "set type" system.in.settings > system.in.charges
@@ -69,7 +82,7 @@
   sed '/set type/,+1 d' < system.in.settings > system.in.settings.tmp
   mv -f system.in.settings.tmp system.in.settings
 
-  # Now delete all of the temporary files we generated
+  # Finally, delete all of the temporary files we generated
   rm -rf new_lt_file_TMP
   popd
 

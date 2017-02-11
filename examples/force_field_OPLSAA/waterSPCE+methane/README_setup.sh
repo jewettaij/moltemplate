@@ -6,7 +6,7 @@ cd moltemplate_files
 
   moltemplate.sh system.lt
 
-  # This will generate various files with names ending in *.in* and *.data.
+  # Moltemplate generates various files with names ending in *.in* and *.data.
   # Move them to the directory where you plan to run LAMMPS (in this case "../")
   mv -f system.data system.in* ../
 
@@ -22,7 +22,8 @@ cd ../
 
 # Optional:
 # Note: The system.data and system.in.settings files contain extra information
-# for atoms defined in OPLSAA which you are not using in this simulation.  This
-# is harmless, but if you to delete this information from your
-# system.in.settings and system.in.data files, follow the instructions in
-# this script: "optional_cleanup/README_remove_irrelevant_info.sh"
+# for atoms defined in OPLSAA which you are not using in this simulation.
+# This is harmless, but if you to delete this information from your
+# system.in.settings and system.in.data files, run this script:
+#
+# moltemplate_cleanup.sh
