@@ -1034,24 +1034,31 @@ Do \textit{not} check for common LAMMPS/moltemplate syntax errors.
  \textit{or} to build systems which need new non-standard LAMMPS features.)
 \\
 \hline
+-checkff &
+This forces moltemplate.sh to check that there
+are valid angle and dihedral interactions defined for every
+3 or 4 consecutively bonded atoms in the system
+(defined in "Data Angles By Type'' and ``Data Dihedrals By Type" sections).
+\\
+\hline
 -vmd &
 Invoke VMD after running moltemplate to view the system you have just created.
 (VMD must be installed.  
  %This feature uses Axel Kohlmeyer's topotools plugin.
  See sections \ref{sec:vmd_topotools}, \ref{sec:vmd_advanced} for details.)
-\\
-\hline
--import-path LOCATION
-&
+%\\
+%\hline
+%-import-path LOCATION
+%&
 %When a user imports an .LT file, moltemplate first looks in the directory
 %where it was run, and then in the ``force\_fields'' subdirectory in the
 %moltemplate installation.  Additional directories can be appended using
 %this command.  (Multiple directories must be separated by ':' characters)
-This allows moltemplate to look for .LT files
-in other directories when using ``import''.
+%This allows moltemplate to look for .LT files
+%in other directories when using ``import''.
 %(Multiple directories must be separated by ':' characters.) 
-\\
-\hline
+%\\
+%\hline
 \end{tabular}
 
 %\pagebreak
@@ -4569,6 +4576,11 @@ Optional arguments:
                and categories as well as write(file) and write_once(file) 
                commands to obey standard naming conventions.  The "-nocheck"
                argument bypasses these checks and eliminates these restrictions.
+-checkff
+                This cause moltemplate.sh to check to make sure that there
+                are valid angle and dihedral interactions defined for every
+                3 or 4 consecutively bonded atoms in the system
+                (defined in "Angles/Dihedrals By Type").
 \end{verbatim}
 
 \subsection{Manual variables assignment (``-a'' or ``-b'')}
