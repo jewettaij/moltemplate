@@ -31,8 +31,8 @@ it is manually, for all of the carbon atoms in that kind of molecule.
 
 
 __author__ = 'Andrew Jewett'
-__version__ = '0.1.0'
-__date__ = '2017-2-07'
+__version__ = '0.1.2'
+__date__ = '2017-2-13'
 
 
 import sys
@@ -57,21 +57,37 @@ doc_msg = \
     "   -file FILE_NAME      # Read force field parameters from a file\n" + \
     "   -url URL             # Read force field parameters from a file on the web\n" + \
     "   -atoms \"QUOTED LIST\" # Restrict output to a subset of atom types\n" + \
-    "   -auto                # Consider auto_equivalences in the .frc file \n"
+    "   -auto                # Consider auto_equivalences in the .frc file \n"+\
     "  Sometimes an FRC file contains multiple versions.  In that case,\n"+\
     "  you can select between them using these optional arguments:\n"+\
     "   -pair-style \"PAIRSTYLE ARGS\" # LAMMPS pair style and cutoff arg(s)\n" + \
     "   -bond-style BONDSTYLE  # desired LAMMPS bond style (default: \"class2\")\n" + \
     "   -angle-style ANGLESTYLE  # desired LAMMPS angle style\n" + \
     "   -dihedral-style DIHEDRALSTYLE  # desired LAMMPS dihedral style\n" + \
-    "   -improper-style IMPROPERSTYLE  # desired LAMMPS improper style\n"
+    "   -improper-style IMPROPERSTYLE  # desired LAMMPS improper style\n" + \
     "   -hbond-style \"HBONDTYLE ARGS\" # LAMMPS hydrogen-bond style and args\n"
 
 
+class InputError(Exception):
+    """ A generic exception object containing a string for error reporting.
+        (Raising this exception implies that the caller has provided
+         a faulty input file or argument.)
+
+    """
+
+    def __init__(self, err_msg):
+        self.err_msg = err_msg
+
+    def __str__(self):
+        return self.err_msg
+
+    def __repr__(self):
+        return str(self)
+
 
 def NSplitQuotedString(string,
-                       nmax=0,
-                       quotes='\'\"',
+                       nmax,
+                       quotes,
                        delimiters=' \t\r\f\n',
                        escape='\\',
                        comment_char='#'):
@@ -91,18 +107,19 @@ def NSplitQuotedString(string,
     for c in string:
 
         if (c in comment_char) and (not escaped_state) and (quote_state == None):
-            tokens.append(token)
+            if len(token) > 0:
+                tokens.append(token)
             return tokens
 
         elif (c in delimiters) and (not escaped_state) and (quote_state == None):
             if reading_token:
-                if (nmax > 0) and (len(tokens) < nmax-1):
-                    tokens.append(token)
+                if (nmax == 0) or (len(tokens) < nmax-1):
+                    if len(token) > 0:
+                        tokens.append(token)
                     token = ''
                     reading_token = False
                 else:
                     token += c
-
         elif c in escape:
             if escaped_state:
                 token += c
@@ -132,7 +149,7 @@ def NSplitQuotedString(string,
             reading_token = True
             escaped_state = False
 
-    if len(string) > 0:
+    if len(token) > 0:
         tokens.append(token)
     return tokens
 
@@ -145,8 +162,12 @@ def SplitQuotedString(string,
                       escape='\\',
                       comment_char='#'):
 
-    return NSplitQuotedString(string, 0,
-                              quotes, delimiters, escape, comment_char)
+    return NSplitQuotedString(string,
+                              0,
+                              quotes,
+                              delimiters,
+                              escape,
+                              comment_char)
 
 
 
@@ -198,8 +219,8 @@ def EncodeAName(s):
     #                             # of the force fields I have seen so far.
     
 
-def DeterminePriority(anames,
-                      is_auto):
+def DeterminePriority(anames):
+                      #is_auto):
     """
     scan through list of strings anames, looking for patterns of the form
     *n
@@ -207,30 +228,28 @@ def DeterminePriority(anames,
     (These patterns are used by MSI software when using "auto_equivalences"
      to look up force field parameters for bonded interactions.)
     Make sure this pattern only appears once and return n to the caller.
-    (Most likely, I'll never discover a reason to require the "is_auto" argument
-    but I keep it there for now, in case future force fields surprise me.
     At the moment it seems like regular (non-auto) equivalences have their
     priority determined where they appear in the file (later<->low priority),
     and auto_equivalences have their priority also determined by n in *n.)
     """
     n = None
     for i in range(0, len(anames)):
-        if anames[:1] == a:
+        if anames[:1] == '*':
             if n == None:
                 n = int(anames[1:])
             elif n != int(anames[1:]):
-                raise Exception('Error: Inconsistent priority integers in the following interaction:\n'
-                                '      ' + ' '.join(anames) + '\n')
+                raise InputError('Error: Inconsistent priority integers in the following interaction:\n'
+                                 '      ' + ' '.join(anames) + '\n')
     if n == None:
         return 0  # no priority numbers found. return default (0)
     return n
 
-def IsAutoInteraction(interaction_name)
+def IsAutoInteraction(interaction_name):
     return interaction_name.find('auto') == 0
 
 def EncodeInteractionName(anames, is_auto):
     if is_auto:
-        priority = DeterminePriority(anames, is_auto):
+        priority = DeterminePriority(anames, is_auto)
         return 'auto' + str(priority)+','.join(anames)
     return ','.join(anames)
 
@@ -244,7 +263,7 @@ def OOPImproperNameSort(aorig):
     assert(len(aorig) == 4)
     atom_names = map(EncodeAName, aorig)
     if atom_names[0] < atom_names[3]:
-        return (atom_names, [0:4])
+        return (atom_names, [0,1,2,3])
     else:
         return ([atom_names[3],
                  atom_names[1],
@@ -300,7 +319,7 @@ def Equivalences2ffids(lines_equivalences,
     atom2equiv_improper = OrderedDict()
     for line in lines_equivalences:
         tokens = SplitQuotedString(line.strip(),
-                                   comment_char='!>'))
+                                   comment_char='!>')
         atype = tokens[2]
         atom2equiv_pair[atype] = tokens[3]
         atom2equiv_bond[atype] = tokens[4]
@@ -342,7 +361,7 @@ def AutoEquivalences2ffids(lines_equivalences,
     atom2equiv_improper = OrderedDict()
     for line in lines_equivalences:
         tokens = SplitQuotedString(line.strip(),
-                                   comment_char='!>'))
+                                   comment_char='!>')
         atype = tokens[2]
         atom2equiv_pair[atype] = tokens[3]
         atom2equiv_bond[atype] = tokens[4]
@@ -400,7 +419,7 @@ def AutoEquivalences2ffids(lines_equivalences,
     atom2auto_e_impropercenter = OrderedDict()
     for line in lines_auto_equivalences:
         tokens = SplitQuotedString(line.strip(),
-                                   comment_char='!>'))
+                                   comment_char='!>')
         atype = tokens[2]
         atom2auto_e_pair = tokens[3]
         atom2auto_e_bondincr = tokens[4]
@@ -441,9 +460,9 @@ def main():
         sys.stderr.write(g_program_name + ", version " +
                          __version__ + ", " + __date__ + "\n")
         if sys.version < '2.6':
-            raise Exception('Error: Using python ' + sys.version + '\n' +
-                            '       Alas, your version of python is too old.\n'
-                            '       You must upgrade to a newer version of python (2.6 or later).')
+            raise InputError('Error: Using python ' + sys.version + '\n' +
+                             '       Alas, your version of python is too old.\n'
+                             '       You must upgrade to a newer version of python (2.6 or later).')
     
         if sys.version < '2.7':
             from ordereddict import OrderedDict
@@ -477,7 +496,6 @@ def main():
         bond_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/bond_harmonic.html'
         bond_style2docs['class2'] = 'http://lammps.sandia.gov/doc/bond_class2.html'
         bond_style2docs['morse'] = 'http://lammps.sandia.gov/doc/bond_morse.html'
-
         angle_style2docs = {}
         angle_style2args = defaultdict(str)
         angle_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/angle_harmonic.html'
@@ -536,24 +554,22 @@ def main():
     
             if argv[i] == '-atoms':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: the \"' + argv[i] + '\" argument should be followed by a quoted string\n'
-                                    '       which contains a space-delimited list of of a subset of atom types\n'
-                                    '       you want to use from the original force-field.\n'
-                                    '       Make sure you enclose the entire list in quotes.\n')
+                    raise InputError('Error: the \"' + argv[i] + '\" argument should be followed by a quoted string\n'
+                                     '       which contains a space-delimited list of of a subset of atom types\n'
+                                     '       you want to use from the original force-field.\n'
+                                     '       Make sure you enclose the entire list in quotes.\n')
                 type_subset = Set(argv[i + 1].strip('\"\'').strip().split())
                 del argv[i:i + 2]
     
             elif argv[i] == '-name':
                 if i + 1 >= len(argv):
-                    raise Exception(
-                        'Error: ' + argv[i] + ' flag should be followed by the name of the force-field\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by the name of the force-field\n')
                 ffname = argv[i + 1]
                 del argv[i:i + 2]
     
             elif argv[i] in ('-file', '-in-file'):
                 if i + 1 >= len(argv):
-                    raise Exception(
-                        'Error: ' + argv[i] + ' flag should be followed by the name of a force-field file\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by the name of a force-field file\n')
                 filename_in = argv[i + 1]
                 try:
                     file_in = open(filename_in, 'r')
@@ -566,15 +582,14 @@ def main():
     
             elif argv[i] == '-pair-cutoff':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: ' + argv[i] + ' flag should be followed by a number'
-                                    '       (or two numbers enclosed in a single pair of quotes)\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by a number'
+                                     '       (or two numbers enclosed in a single pair of quotes)\n')
                 pair_style_args = argv[i+1]
                 del argv[i:i + 2]
 
             elif argv[i] == '-pair-style':
                 if i + 1 >= len(argv):
-                    raise Exception(
-                        'Error: ' + argv[i] + ' flag should be followed by either \"lj/class2/coul/cut\" or \"lj/class2/coul/long\"\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by either \"lj/class2/coul/cut\" or \"lj/class2/coul/long\"\n')
                 pair_style_selected.add(argv[i + 1].split()[:1])
                 pair_style_args = argv[i + 1].split()[1:]
                 if pair_style_name.find('lj/class2/coul/long') == 0:
@@ -588,18 +603,18 @@ def main():
                     pass
                     #kspace_style = ''
                 else:
-                    raise Exception('Error: ' + argv[i] + ' ' + pair_style_name + ' not supported.\n'
-                                    '          The following pair_styles are supported:\n'
-                                    '       lj/class2/coul/cut\n'
-                                    '       lj/class2/coul/long\n'
-                                    '       lj/cut\n'
-                                    '       lj/cut/coul/long\n')
+                    raise InputError('Error: ' + argv[i] + ' ' + pair_style_name + ' not supported.\n'
+                                     '          The following pair_styles are supported:\n'
+                                     '       lj/class2/coul/cut\n'
+                                     '       lj/class2/coul/long\n'
+                                     '       lj/cut\n'
+                                     '       lj/cut/coul/long\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-bond-style':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: ' + argv[i] + ' flag should be followed by\n'
-                                    '       a compatible bond_style.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
+                                     '       a compatible bond_style.\n')
                 bond_style = argv[i + 1].split()[:1]
                 bond_styles_selected.add(bond_style)
                 bond_style2args[bond_style] = argv[i + 1].split()[1:]
@@ -613,13 +628,14 @@ def main():
                     pass
                     #bond_style_link = 'http://lammps.sandia.gov/doc/bond_class2.html'
                 else:
-                    raise Exception('Error: ' + argv[i] + ' must be followed by either \"harmonic\", \"class2\", or \"morse\".\n')
+                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                                     '       \"harmonic\", \"class2\", or \"morse\".\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-angle-style':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: ' + argv[i] + ' flag should be followed by\n'
-                                    '       a compatible angle_style.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
+                                     '       a compatible angle_style.\n')
                 angle_style = argv[i + 1].split()[:1]
                 angle_styles_selected.add(angle_style)
                 angle_style2args[angle_style] = argv[i + 1].split()[1:]
@@ -630,13 +646,14 @@ def main():
                     pass
                     #angle_style_link = 'http://lammps.sandia.gov/doc/angle_class2.html'
                 else:
-                    raise Exception('Error: ' + argv[i] + ' must be followed by either \"harmonic\" or \"class2\"\n')
+                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                                     '       \"harmonic\" or \"class2\"\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-dihedral-style':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: ' + argv[i] + ' flag should be followed by\n'
-                                    '       a compatible dihedral_style.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
+                                     '       a compatible dihedral_style.\n')
                 dihedral_style = argv[i + 1].split()[:1]
                 dihedral_styles_selected.add(dihedral_style)
                 dihedral_style2args[dihedral_style] = argv[i + 1].split()[1:]
@@ -647,13 +664,14 @@ def main():
                     pass
                     #dihedral_style_link = 'http://lammps.sandia.gov/doc/dihedral_class2.html'
                 else:
-                    raise Exception('Error: ' + argv[i] + ' must be followed by either \"harmonic\" or \"class2\"\n')
+                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                                     '       \"harmonic\" or \"class2\"\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-improper-style':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: ' + argv[i] + ' flag should be followed by\n'
-                                    '       a compatible impropoer_style.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
+                                     '       a compatible impropoer_style.\n')
                 improper_style = argv[i + 1].split()[:1]
                 improper_styles_selected.add(improper_style)
                 improper_style2args[improper_style] = argv[i + 1].split()[1:]
@@ -664,13 +682,14 @@ def main():
                     pass
                     #impropoer_style_link = 'http://lammps.sandia.gov/doc/impropoer_class2.html'
                 else:
-                    raise Exception('Error: ' + argv[i] + ' must be followed by either \"harmonic\" or \"class2\"\n')
+                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                                     '       \"harmonic\" or \"class2\"\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-hbond-style':
                 if i + 1 >= len(argv):
-                    raise Exception('Error: ' + argv[i] + ' ' + hbond_style_name + '\n'
-                                    '       should be followed by a compatible pair_style.\n')
+                    raise InputError('Error: ' + argv[i] + ' ' + hbond_style_name + '\n'
+                                     '       should be followed by a compatible pair_style.\n')
                 hbond_style_name = argv[i + 1]
                 hbond_style_link = 'http://lammps.sandia.gov/doc/pair_hbond_dreiding.html'
                 if hbond_style_name.find('none') == 0:
@@ -685,15 +704,15 @@ def main():
                     hbond_style_args = hbond_style_name[n+1:]
                     hbond_style_name = hbond_style_name[:n]
                 else:
-                    raise Exception('Error: ' + argv[i] + ' flag should be followed by either\n'
-                                    '       \"hbond/dreiding/lj\" or \"hbond/dreiding/morse"\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by either\n'
+                                     '       \"hbond/dreiding/lj\" or \"hbond/dreiding/morse"\n')
                 del argv[i:i + 2]
 
             elif argv[i] in ('-url', '-in-url'):
                 import urllib2
                 if i + 1 >= len(argv):
-                    raise Exception(
-                        'Error: ' + argv[i] + ' flag should be followed by the name of a force-field file.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by the name of a\n'
+                                     '       file containing force-field information in msi/frc format.\n')
                 url = argv[i + 1]
                 try:
                     request = urllib2.Request(url)
@@ -716,23 +735,23 @@ def main():
                 i += 1
     
         if len(argv) != 1:
-            raise Exception('Error: Unrecongized arguments: ' + ' '.join(argv[1:]) +
-                            '\n\n' + doc_msg)
+            raise InputError('Error: Unrecongized arguments: ' + ' '.join(argv[1:]) +
+                             '\n\n' + doc_msg)
 
         # Default styles:
         if len(bond_styles_selected) == 0:
-            bond_styles_selected.add(['class2'])
+            bond_styles_selected.add('class2')
         if len(angle_styles_selected) == 0:
-            angle_styles_selected.add(['class2'])
+            angle_styles_selected.add('class2')
         if len(dihedral_styles_selected) == 0:
-            dihedral_styles_selected.add(['class2'])
+            dihedral_styles_selected.add('class2')
         if len(improper_styles_selected) == 0:
-            improper_styles_selected.add(['class2'])
+            improper_styles_selected.add('class2')
         if len(pair_styles_selected) == 0:
-            pair_styles_selected.add(['lj/class2/coul/long'])
+            pair_styles_selected.add('lj/class2/coul/long')
 
         #sys.stderr.write("Reading parameter file...\n")
-    
+
         lines = file_in.readlines()
         atom2charge = OrderedDict()  # lookup charge from atom type
         atom2mass = OrderedDict()  # lookup mass from atom type
@@ -743,7 +762,7 @@ def main():
         atom2element = OrderedDict()  # Optional:
                                       # which element (eg 'C', 'O') ? (Note this
                                       # is different from atom type: 'C1', 'Oh')
-        atom2num_bonds = OrderedDict() # Optional: how many bonds emanate from
+        atom2numbonds = OrderedDict() # Optional: how many bonds emanate from
         atom2descr = OrderedDict()    # Optional: a brief description
         atom2ver = OrderedDict()  # atoms introduced in different versions of ff
         atom2ref = OrderedDict()  # reference to paper where atom introduced
@@ -752,6 +771,7 @@ def main():
 
         pair2params = OrderedDict()
         pair2style = OrderedDict()
+        pair_styles = set([])
         pair2ver = OrderedDict()
         pair2ref = OrderedDict()
 
@@ -761,19 +781,20 @@ def main():
         charge_pair_ver = OrderedDict        # which version of the force field?
         charge_pair_ref = OrderedDict        # paper introducing this chargepair
 
-        bond2param = OrderedDict()  # store a tuple with the 2-body bond
-                                    # interaction type, and its parameters
-                                    # for every type of bond
+        bond2params = OrderedDict()  # store a tuple with the 2-body bond
+                                     # interaction type, and its parameters
+                                     # for every type of bond
         bond2priority = OrderedDict() # What is the priority of this interaction?
         bond2style = OrderedDict()    # What LAMMPS bond style (formula)
                                       # is used for a given interaction?
         bond_styles = set([])         # Contains all bond styles used.
         bond2ver = OrderedDict()
         bond2ref = OrderedDict()
+        bond2r0 = OrderedDict()
 
-        angle2param = OrderedDict() # store a tuple with the 3-body angle
-                                    # interaction type, and its parameters
-                                    # for every type of angle
+        angle2params = OrderedDict() # store a tuple with the 3-body angle
+                                     # interaction type, and its parameters
+                                     # for every type of angle
 
         # http://lammps.sandia.gov/doc/angle_class2.html
         #angle2class2_a = OrderedDict()  # params for the "a" class2 terms
@@ -785,17 +806,18 @@ def main():
         angle_styles = set([])         # Contains all angle styles used.
         angle2ver = OrderedDict()
         angle2ref = OrderedDict()
+        angle2theta0 = OrderedDict()
 
         # http://lammps.sandia.gov/doc/dihedral_class2.html
-        dihedral2param = OrderedDict() # store a tuple with the 4-body dihedral
-                                       # interaction type, and its parameters
-                                       # for every type of dihedral
+        dihedral2params = OrderedDict() # store a tuple with the 4-body dihedral
+                                        # interaction type, and its parameters
+                                        # for every type of dihedral
         #dihedral2class2_d = OrderedDict() # params for the "d" class2 term
         dihedral2class2_mbt = OrderedDict() # params for the "mbt" class2 term
         dihedral2class2_ebt = OrderedDict() # params for the "ebt" class2 term
         dihedral2sym_ebt = OrderedDict()
         dihedral2class2_at = OrderedDict() # params for the "at" class2 term
-        dihedral2class2_at = OrderedDict()
+        dihedral2sym_at = OrderedDict()
         dihedral2class2_aat = OrderedDict() # params for the "aat" class2 term
         dihedral2sym_aat = OrderedDict()
         dihedral2class2_bb13 = OrderedDict() # params for the "bb13" class2 term
@@ -809,13 +831,13 @@ def main():
 
 
         # http://lammps.sandia.gov/doc/improper_class2.html
-        improper2param = OrderedDict() # store a tuple with the 4-body improper
-                                       # interaction type, and its parameters
-                                       # for every type of imporpoer
+        improper2params = OrderedDict() # store a tuple with the 4-body improper
+                                        # interaction type, and its parameters
+                                        # for every type of imporpoer
         #improper2class2_i = OrderedDict() # params for the "i" class2 term
         improper2class2_aa = OrderedDict() # params for the "aa" class2 term
 
-        improper2cross = DefaultDict(dict)
+        improper2cross = defaultdict(dict)
                            # improper2cross[imp_name][atoms] stores the 
                            # coefficient (K) for the angle-angle ("aa") 
                            # improper interactions between a pair of 
@@ -830,7 +852,7 @@ def main():
                            #   atom name is lexicographically > the last, to
                            #   eliminate redundancy and ambiguity.)
 
-        improper2sym = DefaultDict(set)
+        improper2sym = defaultdict(set)
                            # improper2sym[imp_name] indicates which subset of
                            # leaf atoms (from 0 to 2) are equivalent and can
                            # tolerate having their order rearranged without
@@ -865,12 +887,12 @@ def main():
                                      # sections used in all MSI force-fields
                                      '#atom_types',
                                      '#equivalence',
-                                     '#auto_equivalence', # cvff_auto
+                                     '#auto_equivalence',
                                      '#nonbond(9-6)',
-                                     '#nonbond(12-6)'
+                                     '#nonbond(12-6)',
                                      '#quadratic_bond',
                                      '#quartic_bond',
-                                     '#morse_bond',       # cvff
+                                     '#morse_bond',
                                      '#quadratic_angle',
                                      '#quartic_angle',
                                      '#bond-bond',
@@ -888,31 +910,51 @@ def main():
                                      '#out_of_plane-out_of_plane', # UNSUPPORTED
                                      '#torsion-torsion_1',         # UNSUPPORTED
                                      '#bond_increments',
-                                     '#hbond_definition'           # irrelevant
+                                     '#hbond_definition',          # irrelevant?
+                                     '#templates',
+                                     '#reference'
                                      ])
 
-        icol_type = icol_mass = icol_elem = icol_nbond = icol_comment = -1
+        icol_type = icol_mass = icol_elem = icol_nbonds = icol_comment = icol_ver = icol_ref = -1
 
         section_name = ''
         section_is_auto = False
 
-        sys.stderr.write("parsing file...\n")
+        sys.stderr.write("parsing file...")
 
         for iline in range(0, len(lines)):
             line = lines[iline]
+            sys.stderr.write('line=\"' + line.strip() + '\"\n')
             tokens = SplitQuotedString(line.strip(),
-                                       comment_char='!>'))
-            if (len(tokens) > 0) and (tokens[0] in allowed_section_names):
-                section_name = tokens[0]
-                section_is_auto = (tokens[-1][-5] == '_auto')
+                                       quotes='',
+                                       comment_char='>')
+            #sys.stderr.write('tokens = ' + str(tokens) + '\n')
+            if line.lstrip().find('!') == 0 and tokens[0] != '!Ver':
+                continue
+            if line.lstrip(' ').find('#') == 0:
+                sys.stderr.write('allowed_section_names = ' + str(allowed_section_names) + '\n')
+                if tokens[0] in allowed_section_names:
+                    section_name = tokens[0]
+                    section_is_auto = tokens[-1].endswith('_auto')
+                    sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
+                    continue
+                elif not tokens[0] in ('#version',
+                                       '#define'):
+                    raise InputError('Error: Line# '+str(iline) +'\n'
+                                     '       Unrecognized section name:\n'
+                                     '       \"' + tokens[0] + '\"\n')
             elif (len(tokens) == 8) and (section_name == '#equivalence'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 lines_equivalences.append(line)
             elif (len(tokens) == 12) and (section_name == '#auto_equivalence'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 lines_auto_equivalences.append(line)
-            elif (len(tokens) > 1) and (section_name == '#atom_types'):
+            elif (len(tokens) > 0) and (section_name == '#atom_types'):
                 # Different FRC files put this information in different
                 # columns.  Column order is stored in the !Ver comment line:
-                if line.strip().find('!Ver') == 0:
+                if line.lstrip().find('!Ver') == 0:
                     tokens = line.strip().split()
                     for i in range(0, len(tokens)):
                         if tokens[i].lower() == 'type':
@@ -922,48 +964,59 @@ def main():
                         elif tokens[i].lower() == 'element':
                             icol_elem = i
                         elif tokens[i].lower() == 'connections':
-                            icol_nbond = i
+                            icol_nbonds = i
                         elif tokens[i].lower() == 'comment':
                             icol_comment = i
-                        elif tokens[i].lower() == '!Ver':   #(version of ff)
+                        elif tokens[i].lower() == '!ver':   #(version of ff)
                             icol_ver = i
-                        elif tokens[i].lower() == 'Ref':
+                        elif tokens[i].lower() == 'ref':
                             icol_ref = i
-                assert(icol_ver == 0)
+                    assert(icol_ver == 0)
 
-                # "else" is not needed here because '!Ver' is a comment, 
-                # and any line beginning with '!Ver' will be ignored 
-                # when we set comment_char='!' below:
+                    if -1 in (icol_type, icol_mass):
+                        raise InputError('Error: Invalid #atom_types section.\n'
+                                         '       The meaning of each column cannot be determined.\n'
+                                         '       This file needs a valid "!Ver..." comment.\n')
+                    if icol_comment == -1:
+                        icol_comment = max(icol_type, icol_mass,
+                                           icol_elem, icol_nbonds) + 1
+
+                    sys.stderr.write('icol_ver = '+str(icol_ver)+'\n')
+                    sys.stderr.write('icol_ref = '+str(icol_ref)+'\n')
+                    sys.stderr.write('icol_mass = '+str(icol_mass)+'\n')
+                    sys.stderr.write('icol_nelem = '+str(icol_elem)+'\n')
+                    sys.stderr.write('icol_nbonds = '+str(icol_nbonds)+'\n')
+                    sys.stderr.write('icol_comment = '+str(icol_comment)+'\n')
+                    continue
 
                 tokens = map(RemoveOuterQuotes,
                              NSplitQuotedString(line.strip(),
-                                                icol_comment,
-                                                comment_char='!'))
-                if (len(tokens) > 5):
-                    if -1 in (icol_type, icol_mass):
-                        raise Exception('Error: Invalid #atom_types section.\n'
-                                        '       The meaning of each column cannot be determined.\n'
-                                        '       This file needs a valid "!Ver..." comment.\n')
-                    if icol_comment = -1:
-                        icol_comment = max(icol_type, icol_mass,
-                                           icol_elem, icol_nbond) + 1
+                                                icol_comment+1,
+                                                quotes='',
+                                                comment_char='>'))
 
+                if (len(tokens) > 4):
                     if ((len(type_subset) == 0) or (tokens[1] in type_subset)):
-                        #atom2mass[tokens[2]] = tokens[6]
+
                         atom2mass[tokens[icol_type]] = str(max(float(tokens[icol_mass]), 1.0e-06))
                         # Some atoms in cvff.prm have zero mass. Unfortunately this
                         # causes LAMMPS to crash, even if these atoms are never used,
                         # so I give the mass a non-zero value instead.
 
-                        atom2element[tokens[icol_type]] = tokens[icol_elem]
-                        atom2numbonds[tokens[icol_type]] = int(tokens[icol_nbond])
-                        atom2descr[tokens[1]] = line[51:]
+                        if icol_elem != -1:
+                            atom2element[tokens[icol_type]] = tokens[icol_elem]
+                        if icol_nbonds != -1:
+                            atom2numbonds[tokens[icol_type]] = int(tokens[icol_nbonds])
+                        atom2descr[tokens[icol_type]] = tokens[icol_comment]
                         atom2ver[tokens[icol_type]] = tokens[icol_ver]
                         atom2ref[tokens[icol_type]] = tokens[icol_ref]
-                else:
-                    raise Exception('Error: Invalid atom line:\n' + line)
+                elif len(tokens) > 0:
+                    raise InputError('Error: Invalid atom line: (line#'+str(iline)+')\n' +
+                                     '\"'+line.strip()+'\"')
 
             elif (len(tokens) > 4) and (section_name == '#nonbond(12-6)'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 pair2ver = tokens[0]
                 pair2ref = tokens[1]
                 atom_name = tokens[2]
@@ -974,6 +1027,7 @@ def main():
                 if sigma == 0.0:
                     sigma = 1.0   #(non-zero to avoid nan error later)
                 pair2style[atom_name] = 'lj/cut/long'
+                pair_styles.add('lj/cut/long')
                 pair2params[atom_name] = (str(epsilon)+' '+str(sigma))
                 pair_mixing_style = 'geometric tail yes'
                 #if pair_style_name.find('lj/cut') == 0:
@@ -981,12 +1035,15 @@ def main():
                 #    pair_mixing_style = 'geometric tail yes'
 
             elif (len(tokens) > 4) and (section_name == '#nonbond(9-6)'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 pair2ver = tokens[0]
                 pair2ref = tokens[1]
                 atom_name = tokens[2]
                 sigma = tokens[3]
                 epsilon = tokens[4]
-                pair2style[atom_name] = 'class2'
+                pair2style[atom_name] = 'lj/class2/coul/long'
+                pair_styles.add('lj/class2/coul/long')
                 pair2params[atom_name] = (epsilon+' '+sigma)
                 pair_mixing_style = 'sixthpower tail yes'
                 #if pair_style_name.find('lj/class2') == 0:
@@ -994,6 +1051,8 @@ def main():
                 #    pair_mixing_style = 'sixthpower tail yes'
 
             elif (len(tokens) > 6) and (section_name == '#bond_increments'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 charge_pair_ver = tokens[0]
                 charge_pair_ref = tokens[1]
                 atom_names = map(EncodeAName, tokens[2:4])
@@ -1006,7 +1065,9 @@ def main():
                                                    DeterminePriority(tokens[2:4]))
                 bond2chargepair[bond_name] = (delta_q[0] + ' ' + delta_q[1])
 
-            elif (len(tokens) > 6) and (section_name == '#quadratic-bond'):
+            elif (len(tokens) > 6) and (section_name == '#quadratic_bond'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 bond2ver = tokens[0]
                 bond2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
@@ -1015,12 +1076,15 @@ def main():
                                             DeterminePriority(tokens[2:4]))
                 r0 = tokens[4]
                 bond2r0[bond_name] = r0
+                sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
                 k = tokens[5]
                 r0 = tokens[6]
                 bond2style[bond_name] = 'harmonic'
                 bond2params[bond_name] = (k+' '+r0)
 
-            elif (len(tokens) > 7) and (section_name == '#quartic-bond'):
+            elif (len(tokens) > 7) and (section_name == '#quartic_bond'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 bond2ver = tokens[0]
                 bond2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
@@ -1029,13 +1093,16 @@ def main():
                                             DeterminePriority(tokens[2:4]))
                 r0 = tokens[4]
                 bond2r0[bond_name] = r0
+                sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
                 K2 = tokens[5]
                 K3 = tokens[6]
                 K4 = tokens[7]
                 bond2style[bond_name] = 'class2'
                 bond2params[bond_name] = (r0+' '+K2+' '+K3+' '+K4)
 
-            elif (len(tokens) > 7) and (section_name == '#quadratic-angle'):
+            elif (len(tokens) > 7) and (section_name == '#quadratic_angle'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 angle2ver = tokens[0]
                 angle2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
@@ -1043,13 +1110,16 @@ def main():
                 angle2priority[angle_name] = (section_is_auto, #auto-->low priority
                                               DeterminePriority(tokens[2:5]))
                 theta0 = tokens[5]
-                angle2theta0[angle_name] = theta0
                 k = tokens[6]
                 theta0 = tokens[7]
+                angle2theta0[angle_name] = theta0
+                sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
                 angle2style[angle_name] = 'harmonic'
                 angle2params[angle_name] = (k+' '+theta0)
 
-            elif (len(tokens) > 8) and (section_name == '#quartic-angle'):
+            elif (len(tokens) > 8) and (section_name == '#quartic_angle'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 angle2ver = tokens[0]
                 angle2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
@@ -1058,6 +1128,7 @@ def main():
                                               DeterminePriority(tokens[2:5]))
                 theta0 = tokens[5]
                 angle2theta0[angle_name] = theta0
+                sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
                 K2 = tokens[6]
                 K3 = tokens[7]
                 K4 = tokens[8]
@@ -1065,28 +1136,36 @@ def main():
                 angle2params[angle_name] = (theta0+' '+K2+' '+K3+' '+K4)
 
             elif (len(tokens) > 5) and (section_name == '#bond-bond'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 angle2ver = tokens[0]
                 angle2ref = tokens[1]
-                atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
+                aorig = map(EncodeAName, tokens[2:5])
+                atom_names = ReverseIfEnds(aorig)
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
                 angle2priority[angle_name] = (section_is_auto, #auto-->low priority
                                               DeterminePriority(tokens[2:5]))
                 Kbb = tokens[5]
                 bond_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:2]),
                                                     section_is_auto),
-                              EncodeInteractionName(ReverseIfEnds(aorig[2:4]),
+                              EncodeInteractionName(ReverseIfEnds(aorig[1:3]),
                                                     section_is_auto)]
+                sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
                 r0 = [bond2r0[bond_names[0]],
                       bond2r0[bond_names[1]]]
+                order_reversed = aorig[0] > aorig[-1]
                 if order_reversed:
                     r0.reverse()
                 angle2style[angle_name] = 'class2'
                 angle2class2_bb[angle_name] = (Kbb+' '+r0[0]+' '+r0[1])
 
             elif (len(tokens) > 5) and (section_name == '#bond-angle'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 angle2ver = tokens[0]
                 angle2ref = tokens[1]
-                atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
+                aorig = map(EncodeAName, tokens[2:5])
+                atom_names = ReverseIfEnds(aorig)
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
                 angle2priority[angle_name] = (section_is_auto, #auto-->low priority
                                               DeterminePriority(tokens[2:5]))
@@ -1097,10 +1176,11 @@ def main():
                     K[1] = tokens[6]
                 bond_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:2]),
                                                     section_is_auto),
-                              EncodeInteractionName(ReverseIfEnds(aorig[2:4]),
+                              EncodeInteractionName(ReverseIfEnds(aorig[1:3]),
                                                     section_is_auto)]
                 r0 = [bond2r0[bond_names[0]],
                       bond2r0[bond_names[1]]]
+                order_reversed = aorig[0] > aorig[-1]
                 if order_reversed:
                     K.reverse()
                     r0.reverse()
@@ -1108,6 +1188,8 @@ def main():
                 angle2params_ba[angle_name]= (K[0]+' '+K[0]+' '+r0[0]+' '+r0[1])
 
             elif (len(tokens) > 8) and (section_name == '#torsion_1'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1122,6 +1204,8 @@ def main():
                 dihedral2params[dihedral_name] = (K+' '+n+' '+d+' '+w)
 
             elif (len(tokens) > 7) and (section_name == '#torsion_3'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1143,6 +1227,8 @@ def main():
                                                   V3+' '+phi0_3)
 
             elif (len(tokens) > 6) and (section_name == '#middle_bond-torsion_3'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1163,11 +1249,12 @@ def main():
                                                      F3+' '+r0)
 
             elif (len(tokens) > 6) and (section_name == '#end_bond-torsion_3'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:6])
-                atom_names = ReverseIfEnd(aorig)
-                order_reversed = aorig[0] > aorig[-1]
+                atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
                 dihedral2priority[dihedral_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
@@ -1192,6 +1279,7 @@ def main():
                                                     section_is_auto)]
                 r0 = [bond2r0[bond_names[0]],
                       bond2r0[bond_names[1]]]
+                order_reversed = aorig[0] > aorig[-1]
                 if order_reversed:
                     F.reverse()
                     r0.reverse()
@@ -1209,11 +1297,12 @@ def main():
                                                    (r0[0] == r0[1]))
 
             elif (len(tokens) > 6) and (section_name == '#angle-torsion_3'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:6])
-                atom_names = ReverseIfEnd(aorig)
-                order_reversed = aorig[0] > aorig[-1]
+                atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
                 dihedral2priority[dihedral_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
@@ -1234,10 +1323,11 @@ def main():
                     F[1][2] = tokens[11]
                 angle_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:3]),
                                                      section_is_auto),
-                               EncodeInteractionName(ReverseIfEnds(aorig[0:3]),
+                               EncodeInteractionName(ReverseIfEnds(aorig[1:4]),
                                                      section_is_auto)]
                 theta0 = [angle2theta0[angle_names[0]],
                           angle2theta0[angle_names[1]]]
+                order_reversed = aorig[0] > aorig[-1]
                 if order_reversed:
                     F.reverse()
                     theta0.reverse()
@@ -1272,22 +1362,23 @@ def main():
 
 
             elif (len(tokens) > 6) and (section_name == '#angle-angle-torsion_1'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
-                aorig = map(EncodeAName, tokens[2:6]))
-                atom_names = ReverseIfEnd(aorig)
-                order_reversed = aorig[0] > aorig[-1]
+                aorig = map(EncodeAName, tokens[2:6])
+                atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
                 dihedral2priority[dihedral_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
                 Kaa = tokens[6]
                 angle_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:3]),
                                                      section_is_auto),
-                               EncodeInteractionName(ReverseIfEnds(aorig[0:3]),
+                               EncodeInteractionName(ReverseIfEnds(aorig[1:4]),
                                                      section_is_auto)]
                 theta0 = [angle2theta0[angle_names[0]],
                           angle2theta0[angle_names[1]]]
-                order_reversed == (aorig[0] > aorig[-1])
+                order_reversed = aorig[0] > aorig[-1]
                 if order_reversed:
                     angle_names.reverse()
                     theta0.reverse()
@@ -1304,11 +1395,12 @@ def main():
                     
 
             elif (len(tokens) > 6) and (section_name == '#bond-bond_1_3'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 dihedral2ver = tokens[0]
                 dihedral2ref = tokens[1]
-                aorig = map(EncodeAName, tokens[2:6]))
-                atom_names = ReverseIfEnd(aorig)
-                order_reversed = aorig[0] > aorig[-1]
+                aorig = map(EncodeAName, tokens[2:6])
+                atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
                 dihedral2priority[dihedral_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
@@ -1317,9 +1409,9 @@ def main():
                                                     section_is_auto),
                               EncodeInteractionName(atom_names[2:4],
                                                     section_is_auto)]
-                r0 = [bond2r0[bond_names[0]]
+                r0 = [bond2r0[bond_names[0]],
                       bond2r0[bond_names[1]]]
-                order_reversed == (aorig[0] > aorig[-1])
+                order_reversed = aorig[0] > aorig[-1]
                 if order_reversed:
                     bond_names.reverse()
                     r0.reverse()
@@ -1336,6 +1428,8 @@ def main():
 
 
             elif (len(tokens) > 8) and (section_name == '#out_of_plane'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 improper2ver = tokens[0]
                 improper2ref = tokens[1]
                 atom_names,  = OOPImproperNameSort(tokens[2:6])
@@ -1353,6 +1447,8 @@ def main():
                 #    improper_symmetry_subgraph = 'cenJswapIL'
 
             elif (len(tokens) > 7) and (section_name == '#wilson_out_of_plane'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 improper2ver = tokens[0]
                 improper2ref = tokens[1]
                 atom_names, = Class2ImproperNameSort(tokens[2:6])
@@ -1370,9 +1466,10 @@ def main():
                 #    improper_symmetry_subgraph = 'cenJsortIKL'
 
             elif (len(tokens) > 6) and (section_name == '#angle-angle'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 improper2ver = tokens[0]
                 improper2ref = tokens[1]
-                improper_i2cross[i] as an index
                 atom_names, = Class2ImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
                 improper2priority[improper_name] = (section_is_auto,
@@ -1382,9 +1479,13 @@ def main():
                 improper2style[improper_name] = 'class2'
 
             elif (len(tokens) > 0) and (section_name == '#out_of_plane-out_of_plane'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 display_OOP_OOP_warning = True
 
             elif (len(tokens) > 0) and (section_name == '#torsion-torsion_1'):
+                if line.lstrip().find('!') == 0:
+                    continue
                 display_torsion_torsion_1_warning = True
 
 
@@ -1398,9 +1499,9 @@ def main():
                 if tokens[2] == 'angle':
                     hbond2angle[hbondID] = tokens[3]
                 if tokens[2] == 'donors':
-                    hbond2donors[hbondID] = map(EncodeAName, tokens[2:]))
+                    hbond2donors[hbondID] = map(EncodeAName, tokens[2:])
                 if tokens[2] == 'acceptors':
-                    hbond2acceptors[hbondID] = map(EncodeAname(),tokens[2:]))
+                    hbond2acceptors[hbondID] = map(EncodeAname(),tokens[2:])
             """
 
 
@@ -1425,7 +1526,11 @@ def main():
                              '###########################################################\n')
 
 
+        sys.stderr.write(' done.\n'
+                         'building lookup tables...')
 
+        atom_types = [x[0] for x in atom2mass.items()]
+        # (atom_types is a list of keys from the atom2mass dictionary)
 
         if include_auto_equivalences:
             atom2ffid = Equivalences2ffids(lines_equivalences,
@@ -1448,12 +1553,12 @@ def main():
                     dihedral2sym_bb13[dihedral_name]):
                 if ((anames[0] == anames[3]) and
                     (anames[1] == anames[2])):
-                    raise Exception('Error: Unsupported dihedral interaction: \"@dihedral:'+str(dihedral_name)+'\"\n'
-                                        '       This interaction has symmetric atom names:\n'
-)+')\n'
-                                        '       and yet it lacks symmetry in the corresponding force field parameters.\n'
-                                        '       (If this is not a mistake in the .frc file, then ask andrew to\n'
-                                        '       fix this limitation.)\n')
+                    raise InputError('Error: Unsupported dihedral interaction: \"@dihedral:'+str(dihedral_name)+'\"\n'
+                                     '       This interaction has symmetric atom names:\n'
+                                     ', '.join(anames)+'\n'
+                                     '       and yet it lacks symmetry in the corresponding force field parameters.\n'
+                                     '       (If this is not a mistake in the .frc file, then ask andrew to\n'
+                                     '       fix this limitation.)\n')
 
 
         # Collect information from the different terms in a class2 improper:
@@ -1508,8 +1613,8 @@ def main():
             theta03 = angle2theta0[angle_name]
 
             improper2class2_aa[improper_name] = (M1 + ' ' + M2 + ' ' + M3 + ' '+
-                                                 theta01 + ' '
-                                                 theta02 + ' '
+                                                 theta01 + ' ' +
+                                                 theta02 + ' ' +
                                                  theta03)
 
             # ###### Symmetry: ######
@@ -1569,13 +1674,13 @@ def main():
                     # that "cenJsortIKL.py" should work in most cases.)
                 else:
                     if anames[i_neigh[i][0]] == anames[i_neigh[i][1]]:
-                        raise Exception('Error: Unsupported improper interaction: \"@improper:'+str(improper_name)+'\"\n'
-                                        '       This interaction has matching aton aliases:\n'
-                                        '       (@atom:'+str(anames[i_neigh[i][0]])+
-                                        ', @atom:'+str(anames[i_neigh[i][1]])+')\n'
-                                        '       and yet it lacks symmetry in the corresponding force field parameters.\n'
-                                        '       (If this is not a mistake in the .frc file, then ask andrew to\n'
-                                        '       fix this limitation.)\n')
+                        raise InputError('Error: Unsupported improper interaction: \"@improper:'+str(improper_name)+'\"\n'
+                                         '       This interaction has matching aton aliases:\n'
+                                         '       (@atom:'+str(anames[i_neigh[i][0]])+
+                                         ', @atom:'+str(anames[i_neigh[i][1]])+')\n'
+                                         '       and yet it lacks symmetry in the corresponding force field parameters.\n'
+                                         '       (If this is not a mistake in the .frc file, then ask andrew to\n'
+                                         '       fix this limitation.)\n')
 
 
 
@@ -1613,11 +1718,6 @@ def main():
 
         sys.stdout.write("# This file was generated automatically using:\n")
         sys.stdout.write("# " + g_program_name + " " + " ".join(sys.argv[1:]) + "\n")
-        sys.stdout.write("#\n"
-                         "# WARNING: The following 1-2, 1-3, and 1-4 weighting parameters were ASSUMED:\n")
-        sys.stdout.write("#          " + special_bonds_command + "\n")
-        sys.stdout.write(
-            "#          (See http://lammps.sandia.gov/doc/special_bonds.html for details)\n")
         sys.stdout.write("\n\n")
         sys.stdout.write(ffname + " {\n\n")
         
@@ -1630,6 +1730,9 @@ def main():
         for atype in atom2mass:
             sys.stdout.write("    @atom:" + atype + " " + str(atom2mass[atype]))
             sys.stdout.write("  # ")
+            if atype in atom2elem:
+                sys.stdout.write(atom2elem[atype] + ", ")
+            #sys.stdout.write(atom2descr[atype])
             sys.stdout.write("\"" + atom2descr[atype] + "\"")
             sys.stdout.write(" (")
             if atype in atom2numbonds:
@@ -1674,8 +1777,7 @@ def main():
         sys.stdout.write("\n\n\n\n")
         
         
-        sys.stdout.write("  # --------------- Non-Bonded interactions: ---------------------\n"
-                         "  # " + pair_style_link + "\n"
+        sys.stdout.write("  # --------------- Non-Bonded Interactions: ---------------------\n"
                          "  # Syntax:\n"
                          "  # pair_coeff    AtomType1    AtomType2   pair_style_name  parameters...\n\n")
         
@@ -1686,8 +1788,8 @@ def main():
             assert(atype in atom2pairtype)
         
             sys.stdout.write("    pair_coeff " +
-                             "@atom:" atom2pairtype[atype] + " " + 
-                             "@atom:" atom2pairtype[atype] + " " + 
+                             "@atom:" + atom2pairtype[atype] + " " + 
+                             "@atom:" + atom2pairtype[atype] + " " + 
                              pair2style[atype] + " " +
                              pair2params[atype] +
                              " # (ver=" + pair2ver[atype] +
@@ -1701,14 +1803,13 @@ def main():
 
 
         ################# Print Charge By Bond Interactions ##################
-        sys.stdout.write("  # ---------- Charge By Bond (a.k.a. \"bond equivalences\") ----------\n")
-        sys.stdout.write("  write_once(\"Data Charge By Bond\") {\n")
-
         charge_pair_priority_high_to_low = sorted(charge_pair_priority.items(),
                                                   key=itemgetter(1),
                                                   reverse=True)
 
         if len(charge_pair_priority_high_to_low) > 0:
+            sys.stdout.write("  # ---------- Charge By Bond (a.k.a. \"bond equivalences\") ----------\n")
+            sys.stdout.write("  write_once(\"Data Charge By Bond\") {\n")
             # Print rules for generating (2-body) "bond" interactions:
             sys.stdout.write('\n\n\n'
                              '  write_once("Charge By Bond") {\n')
@@ -1749,15 +1850,18 @@ def main():
 
 
         ################# Print 2-body Bond Interactions ##################
-        sys.stdout.write("  # --------------- Bond Interactions: ---------------------\n")
 
         bond_names_priority_high_to_low = sorted(bond2priority.items(),
                                                  key=itemgetter(1),
                                                  reverse=True)
 
         if len(bond_names_priority_high_to_low) > 0:
-            # Print rules for generating (2-body) "bond" interactions:
-            sys.stdout.write('\n\n\n'
+            sys.stdout.write("  # --------------- Bond Interactions: ---------------------\n")
+            sys.stdout.write('\n'
+                             '\n'
+                             '  # -- Rules for generating (2-body) "bond" interactions: --\n'
+                             '  #  BondType  AtomType1  AtomType2\n')
+            sys.stdout.write('\n'
                              '  write_once("Data Bonds By Type") {\n')
             for bond_name, in bond_names_priority_high_to_low:
                 if not (bond2style[bond_name] in
@@ -1787,7 +1891,13 @@ def main():
 
             # Print the force-field parameters for these bond interactions:
             sys.stdout.write('\n\n'
-                             #'  # ------- Bond Interactions: -------\n'
+                             '  # ------------ Bond Parameters: ----------\n')
+            sys.stdout.write('  # For an explanation of these parameters, visit:\n')
+            for bond_style in bond_styles:
+                if not (bond_style in bond_styles_selected):
+                    continue
+                sys.stdout.write('    # '+bond_style2docs[bond_style]+'\n')
+            sys.stdout.write('\n'
                              '  # Syntax:  \n'
                              '  # bond_coeff BondTypeName  BondStyle  parameters...\n\n')
             sys.stdout.write('\n'
@@ -1815,15 +1925,18 @@ def main():
 
 
         ################# Print 3-body Angle Interactions ##################
-        sys.stdout.write("  # --------------- (3-body) Angle Interactions: ---------------------\n")
 
         angle_names_priority_high_to_low = sorted(angle2priority.items(),
                                                   key=itemgetter(1),
                                                   reverse=True)
 
         if len(angle_names_priority_high_to_low) > 0:
-            # Print rules for generating 3-body "angle" interactions:
-            sys.stdout.write('\n\n\n'
+            sys.stdout.write("  # --------------- Angle Interactions: ---------------------\n")
+            sys.stdout.write('\n'
+                             '\n'
+                             '  # -- Rules for generating (3-body) "angle" interactions: --\n'
+                             '  #  AngleType AtomType1 AtomType2 AtomType3  [BondType1 BondType2]\n')
+            sys.stdout.write('\n'
                              '  write_once("Data Angles By Type") {\n')
             for angle_name, in angle_names_priority_high_to_low:
                 if not (angle2style[angle_name] in
@@ -1855,7 +1968,13 @@ def main():
 
             # Print the force-field parameters for these angle interactions:
             sys.stdout.write('\n\n'
-                             #'  # ------- Angle Interactions: -------\n'
+                             '  # ------- Angle Force Field Parameters: -------')
+            sys.stdout.write('  # For an explanation of these parameters, visit:\n')
+            for angle_style in angle_styles:
+                if not (angle_style in angle_styles_selected):
+                    continue
+                sys.stdout.write('    # '+angle_style2docs[angle_style]+'\n')
+            sys.stdout.write('\n'
                              '  # Syntax:  \n'
                              '  # angle_coeff AngleTypeName  AngleStyle  parameters...\n\n')
             sys.stdout.write('\n'
@@ -1870,7 +1989,7 @@ def main():
                     continue
                 sys.stdout.write('    angle_coeff @angle:'+angle_name+' '+
                                  angle2style[angle_name] +
-                                 angle2param[angle_name] + 
+                                 angle2params[angle_name] + 
                                  " # (ver=" + angle2ver[angle_name] +
                                  ", ref=" + angle2ref[angle_name] + ")\n")
                 if angle_name in angle2class2_bb:
@@ -1890,16 +2009,23 @@ def main():
                              '\n\n')
 
 
-        ################# Print 4-body Dihedral Interactions ##################
 
-        sys.stdout.write("  # --------------- (4-body) Dihedral Interactions: ---------------------\n")
+
+
+
+
+        ################# Print 4-body Dihedral Interactions ##################
 
         dihedral_names_priority_high_to_low = sorted(dihedral2priority.items(),
                                                      key=itemgetter(1),
                                                      reverse=True)
 
         if len(dihedral_names_priority_high_to_low) > 0:
-            # Print rules for generating 4-body "dihedral" interactions:
+            sys.stdout.write("  # --------------- Dihedral Interactions: ---------------------\n")
+            sys.stdout.write('\n'
+                             '\n'
+                             '  # -- Rules for generating (4-body) "dihedral" interactions: --\n'
+                             '  #  DihedralType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n\n'
                              '  write_once("Data Dihedrals By Type") {\n')
             for dihedral_name, in dihedral_names_priority_high_to_low:
@@ -1938,7 +2064,13 @@ def main():
 
             # Print the force-field parameters for these dihedral interactions:
             sys.stdout.write('\n\n'
-                             #'  # ------- Dihedral Interactions: -------\n'
+                             '  # ------- Dihedral Force Field Parameters: -------\n')
+            sys.stdout.write('  # For an explanation of these parameters, visit:\n')
+            for dihedral_style in dihedral_styles:
+                if not (dihedral_style in dihedral_styles_selected):
+                    continue
+                sys.stdout.write('    # '+dihedral_style2docs[dihedral_style]+'\n')
+            sys.stdout.write('\n'
                              '  # Syntax:  \n'
                              '  # dihedral_coeff DihedralTypeName  DihedralStyle  parameters...\n\n')
             sys.stdout.write('\n'
@@ -1953,7 +2085,7 @@ def main():
                     continue
                 sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
                                  dihedral2style[dihedral_name] +
-                                 dihedral2param[dihedral_name] +
+                                 dihedral2params[dihedral_name] +
                                  " # (ver=" + dihedral2ver[dihedral_name] +
                                  ", ref=" + dihedral2ref[dihedral_name] + ")\n")
                 if dihedral_name in dihedral2class2_mbt:
@@ -1997,15 +2129,18 @@ def main():
 
 
         ################# Print 4-body Improper Interactions ##################
-        sys.stdout.write("  # --------------- (4-body) Improper Interactions: ---------------------\n")
 
         improper_names_priority_high_to_low = sorted(improper2priority.items(),
                                                      key=itemgetter(1),
                                                      reverse=True)
 
         if len(improper_names_priority_high_to_low) > 0:
-            # Print rules for generating 4-body "improper" interactions:
-            sys.stdout.write('\n\n\n'
+            sys.stdout.write("  # --------------- Improper Interactions: ---------------------\n")
+            sys.stdout.write('\n'
+                             '\n'
+                             '  # -- Rules for generating (4-body) "improper" interactions: --\n'
+                             '  #  ImproperType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
+            sys.stdout.write('\n'
                              '  write_once("Data Impropers By Type") {\n')
             for improper_name, in improper_names_priority_high_to_low:
                 if not (improper2style[improper_name] in
@@ -2041,8 +2176,14 @@ def main():
 
             # Print the force-field parameters for these improper interactions:
             sys.stdout.write('\n\n'
-                             '  # ------- Improper Interactions: -------\n'
-                             '  # Syntax:  \n'
+                             '  # ------- Improper Force Field Parameters: -------\n')
+            sys.stdout.write('  # For an explanation of these parameters, visit:\n')
+            for improper_style in improper_styles:
+                if not (improper_style in improper_styles_selected):
+                    continue
+                sys.stdout.write('    # '+improper_style2docs[improper_style]+'\n')
+            sys.stdout.write('\n'
+                             '# Syntax:  \n'
                              '  # improper_coeff ImproperTypeName  ImproperStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
@@ -2056,7 +2197,7 @@ def main():
                     continue
                 sys.stdout.write('    improper_coeff @improper:'+improper_name+' '+
                                  improper2style[improper_name] +
-                                 improper2param[improper_name] +
+                                 improper2params[improper_name] +
                                  " # (ver=" + improper2ver[improper_name] +
                                  ", ref=" + improper2ref[improper_name] + ")\n")
                 if improper_name in improper2class2_aa:
@@ -2085,86 +2226,95 @@ def main():
         sys.stdout.write('    units real\n')
         sys.stdout.write('    atom_style full\n')
 
-        sys.stdout.write('\n'
-        sys.stdout.write('    bond_style hybrid')
-        for bond_style in bond_styles:
-            if not (bond_style in bond_styles_selected):
-                continue
-            sys.stdout.write(' ' + bond_style)
-        sys.stdout.write('\n')
-        for bond_style in bond_styles:
-            if not (bond_style in bond_styles_selected):
-                continue
-            sys.stdout.write('    # '+bond_style2docs[bond_style]+'\n')
+        if len(bond_styles) > 0:
+            sys.stdout.write('    bond_style hybrid')
+            for bond_style in bond_styles:
+                if not (bond_style in bond_styles_selected):
+                    continue
+                sys.stdout.write(' ' + bond_style)
+            sys.stdout.write('\n')
+            for bond_style in bond_styles:
+                if not (bond_style in bond_styles_selected):
+                    continue
+                sys.stdout.write('    # '+bond_style2docs[bond_style]+'\n')
+            sys.stdout.write('\n')
 
-        sys.stdout.write('\n'
-        sys.stdout.write('    angle_style hybrid')
-        for angle_style in angle_styles:
-            if not (angle_style in angle_styles_selected):
-                continue
-            sys.stdout.write(' ' + angle_style)
-        sys.stdout.write('\n')
-        for angle_style in angle_styles:
-            if not (angle_style in angle_styles_selected):
-                continue
-            sys.stdout.write('    # '+angle_style2docs[angle_style]+'\n')
-        sys.stdout.write('\n')
+        if len(angle_styles) > 0:
+            sys.stdout.write('    angle_style hybrid')
+            for angle_style in angle_styles:
+                if not (angle_style in angle_styles_selected):
+                    continue
+                sys.stdout.write(' ' + angle_style)
+            sys.stdout.write('\n')
+            for angle_style in angle_styles:
+                if not (angle_style in angle_styles_selected):
+                    continue
+                sys.stdout.write('    # '+angle_style2docs[angle_style]+'\n')
+            sys.stdout.write('\n')
 
-        sys.stdout.write('\n'
-        sys.stdout.write('    dihedral_style hybrid')
-        for dihedral_style in dihedral_styles:
-            if not (dihedral_style in dihedral_styles_selected):
-                continue
-            sys.stdout.write(' ' + dihedral_style)
-        sys.stdout.write('\n')
-        for dihedral_style in dihedral_styles:
-            if not (dihedral_style in dihedral_styles_selected):
-                continue
-            sys.stdout.write('    # '+dihedral_style2docs[dihedral_style]+'\n')
-        sys.stdout.write('\n')
+        if len(dihedral_styles) > 0:
+            sys.stdout.write('    dihedral_style hybrid')
+            for dihedral_style in dihedral_styles:
+                if not (dihedral_style in dihedral_styles_selected):
+                    continue
+                sys.stdout.write(' ' + dihedral_style)
+            sys.stdout.write('\n')
+            for dihedral_style in dihedral_styles:
+                if not (dihedral_style in dihedral_styles_selected):
+                    continue
+                sys.stdout.write('    # '+dihedral_style2docs[dihedral_style]+'\n')
+            sys.stdout.write('\n')
 
-        sys.stdout.write('\n'
-        sys.stdout.write('    improper_style hybrid')
-        for improper_style in improper_styles:
-            if not (improper_style in improper_styles_selected):
-                continue
-            sys.stdout.write(' ' + improper_style)
-        sys.stdout.write('\n')
-        for improper_style in improper_styles:
-            if not (improper_style in improper_styles_selected):
-                continue
-            sys.stdout.write('    # '+improper_style2docs[improper_style]+'\n')
-        sys.stdout.write('\n')
+        if len(improper_styles) > 0:
+            sys.stdout.write('    improper_style hybrid')
+            for improper_style in improper_styles:
+                if not (improper_style in improper_styles_selected):
+                    continue
+                sys.stdout.write(' ' + improper_style)
+            sys.stdout.write('\n')
+            for improper_style in improper_styles:
+                if not (improper_style in improper_styles_selected):
+                    continue
+                sys.stdout.write('    # '+improper_style2docs[improper_style]+'\n')
+            sys.stdout.write('\n')
 
-        sys.stdout.write('\n'
-        sys.stdout.write('    pair_style hybrid')
-        for pair_style in pair_styles:
-            if not (pair_style in pair_styles_selected):
-                continue
-            sys.stdout.write(' ' + pair_style +
-                             ' ' + pair_style_args[pair_style])
-        sys.stdout.write('\n')
-        for pair_style in pair_styles:
-            sys.stdout.write('    # '+pair_style2docs[pair_style]+'\n')
+        if len(pair_styles) > 0:
+            sys.stdout.write('    pair_style hybrid')
+            for pair_style in pair_styles:
+                if not (pair_style in pair_styles_selected):
+                    continue
+                sys.stdout.write(' ' + pair_style +
+                                 ' ' + pair_style_args[pair_style])
+            sys.stdout.write('\n')
+            for pair_style in pair_styles:
+                sys.stdout.write('    # '+pair_style2docs[pair_style]+'\n')
+            sys.stdout.write('\n')
 
         sys.stdout.write('    pair_modify mix ' + pair_mixing_style + '\n')
         sys.stdout.write('    ' + special_bonds_command + '\n')
-        sys.stdout.write(kspace_style)
+        sys.stdout.write('    ' + kspace_style + '\n')
         sys.stdout.write('  } #end of init parameters\n\n')
         sys.stdout.write('}  # ' + ffname + '\n\n')
         
         
+        sys.stdout.write("#\n"
+                         "# WARNING: The following 1-2, 1-3, and 1-4 weighting parameters were ASSUMED:\n")
+        sys.stdout.write("#          " + special_bonds_command + "\n")
+        sys.stdout.write(
+            "#          (See http://lammps.sandia.gov/doc/special_bonds.html for details)\n")
+
         #sys.stderr.write(' done.\n')
         
         if filename_in != '':
             file_in.close()
-    
-    
-    
-        
-    except Exception as err:
+
+
+
+
+    except InputError as err:
         sys.stderr.write('\n\n' + str(err) + '\n')
         sys.exit(1)
+
 
 
 if __name__ == '__main__':
