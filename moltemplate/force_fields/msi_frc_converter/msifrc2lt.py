@@ -219,16 +219,13 @@ def EncodeAName(s):
     #                             # of the force fields I have seen so far.
     
 
-def DeterminePriority(anames):
-                      #is_auto):
-    """
-    scan through list of strings anames, looking for patterns of the form
-    *n
-    where n is an integer.
-    (These patterns are used by MSI software when using "auto_equivalences"
-     to look up force field parameters for bonded interactions.)
-    Make sure this pattern only appears once and return n to the caller.
-    """
+def DetermineAutoPriority(anames):
+    #scan through list of strings anames, looking for patterns of the form
+    #*n
+    #where n is an integer.
+    #(These patterns are used by MSI software when using "auto_equivalences"
+    # to look up force field parameters for bonded interactions.)
+    #Make sure this pattern only appears once and return n to the caller.
     n = None
     for i in range(0, len(anames)):
         if anames[:1] == '*':
@@ -238,15 +235,34 @@ def DeterminePriority(anames):
                 raise InputError('Error: Inconsistent priority integers in the following interaction:\n'
                                  '      ' + ' '.join(anames) + '\n')
     if n == None:
-        return 0  # no priority numbers found. return default (0)
-    return n
+        return 0
+    else:
+        return n
+
+
+def DeterminePriority(is_auto,
+                      anames,
+                      version):
+    """
+    Determine the priority of an interaction from 
+    1) whether or not it is an "auto" interaction
+    2) what is the force-field "version" (a number)
+    3) what are the names of the atoms (for auto_equivalences only,
+       some atom "names" are wildcards followed by integers. use the integer)
+    """
+
+    if is_auto:
+        n = DetermineAutoPriority(anames)
+        return (is_auto, n)
+    else:
+        return (is_auto, version)
 
 def IsAutoInteraction(interaction_name):
     return interaction_name.find('auto') == 0
 
 def EncodeInteractionName(anames, is_auto):
     if is_auto:
-        priority = DeterminePriority(anames)
+        priority = DetermineAutoPriority(anames)
         return 'auto' + str(priority)+','.join(anames)
     return ','.join(anames)
 
@@ -1015,9 +1031,9 @@ def main():
             elif (len(tokens) > 4) and (section_name == '#nonbond(12-6)'):
                 if line.lstrip().find('!') == 0:
                     continue
-                pair2ver = tokens[0]
-                pair2ref = tokens[1]
                 atom_name = tokens[2]
+                pair2ver[atom_name] = tokens[0]
+                pair2ref[atom_name] = tokens[1]
                 A = float(tokens[3])
                 B = float(tokens[4])
                 epsilon = B*B/(4*A)
@@ -1035,9 +1051,9 @@ def main():
             elif (len(tokens) > 4) and (section_name == '#nonbond(9-6)'):
                 if line.lstrip().find('!') == 0:
                     continue
-                pair2ver = tokens[0]
-                pair2ref = tokens[1]
                 atom_name = tokens[2]
+                pair2ver[atom_name] = tokens[0]
+                pair2ref[atom_name] = tokens[1]
                 sigma = tokens[3]
                 epsilon = tokens[4]
                 pair2style[atom_name] = 'lj/class2/coul/long'
@@ -1059,19 +1075,21 @@ def main():
                     atom_names.reverse()
                     delta_q.reverse()
                 bond_name = EncodeInteractionName(atom_names, section_is_auto)
-                charge_pair_priority[bond_name] = (section_is_auto, #auto->lowest priority
-                                                   DeterminePriority(tokens[2:4]))
+                charge_pair_priority[bond_name] = DeterminePriority(section_is_auto,
+                                                                    tokens[2:4],
+                                                                    float(charge_pair_ver[bond_name]))
                 bond2chargepair[bond_name] = (delta_q[0] + ' ' + delta_q[1])
 
             elif (len(tokens) > 5) and (section_name == '#quadratic_bond'):
                 if line.lstrip().find('!') == 0:
                     continue
-                bond2ver = tokens[0]
-                bond2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
                 bond_name = EncodeInteractionName(atom_names, section_is_auto)
-                bond2priority[bond_name] = (section_is_auto, #auto->lowest priority
-                                            DeterminePriority(tokens[2:4]))
+                bond2ver[bond_name] = tokens[0]
+                bond2ref[bond_name] = tokens[1]
+                bond2priority[bond_name] = DeterminePriority(section_is_auto,
+                                                             tokens[2:4],
+                                                             float(bond2ver[bond_name]))
                 r0 = tokens[4]
                 k = tokens[5]
                 bond2r0[bond_name] = r0
@@ -1079,15 +1097,34 @@ def main():
                 bond2style[bond_name] = 'harmonic'
                 bond2params[bond_name] = (k+' '+r0)
 
+            elif (len(tokens) > 6) and (section_name == '#morse_bond'):
+                if line.lstrip().find('!') == 0:
+                    continue
+                atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
+                bond_name = EncodeInteractionName(atom_names, section_is_auto)
+                bond2ver[bond_name] = tokens[0]
+                bond2ref[bond_name] = tokens[1]
+                bond2priority[bond_name] = DeterminePriority(section_is_auto,
+                                                             tokens[2:4],
+                                                             float(bond2ver[bond_name]))
+                r0 = tokens[4]
+                D = tokens[5]
+                alpha = tokens[6]
+                bond2r0[bond_name] = r0
+                sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
+                bond2style[bond_name] = 'harmonic'
+                bond2params[bond_name] = (D+' '+alpha+' '+r0)
+
             elif (len(tokens) > 7) and (section_name == '#quartic_bond'):
                 if line.lstrip().find('!') == 0:
                     continue
-                bond2ver = tokens[0]
-                bond2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
                 bond_name = EncodeInteractionName(atom_names, section_is_auto)
-                bond2priority[bond_name] = (section_is_auto, #auto->lowest priority
-                                            DeterminePriority(tokens[2:4]))
+                bond2ver[bond_name] = tokens[0]
+                bond2ref[bond_name] = tokens[1]
+                bond2priority[bond_name] = DeterminePriority(section_is_auto,
+                                                             tokens[2:4],
+                                                             float(bond2ver[bond_name]))
                 r0 = tokens[4]
                 bond2r0[bond_name] = r0
                 sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
@@ -1100,12 +1137,13 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#quadratic_angle'):
                 if line.lstrip().find('!') == 0:
                     continue
-                angle2ver = tokens[0]
-                angle2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
-                angle2priority[angle_name] = (section_is_auto, #auto-->low priority
-                                              DeterminePriority(tokens[2:5]))
+                angle2ver[angle_name] = tokens[0]
+                angle2ref[angle_name] = tokens[1]
+                angle2priority[angle_name] = DeterminePriority(section_is_auto,
+                                                               tokens[2:5],
+                                                               float(angle2ver[angle_name]))
                 theta0 = tokens[5]
                 k = tokens[6]
                 angle2theta0[angle_name] = theta0
@@ -1116,12 +1154,13 @@ def main():
             elif (len(tokens) > 8) and (section_name == '#quartic_angle'):
                 if line.lstrip().find('!') == 0:
                     continue
-                angle2ver = tokens[0]
-                angle2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
-                angle2priority[angle_name] = (section_is_auto, #auto-->low priority
-                                              DeterminePriority(tokens[2:5]))
+                angle2ver[angle_name] = tokens[0]
+                angle2ref[angle_name] = tokens[1]
+                angle2priority[angle_name] = DeterminePriority(section_is_auto,
+                                                               tokens[2:5],
+                                                               float(angle2ver[angle_name]))
                 theta0 = tokens[5]
                 angle2theta0[angle_name] = theta0
                 sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
@@ -1134,13 +1173,14 @@ def main():
             elif (len(tokens) > 5) and (section_name == '#bond-bond'):
                 if line.lstrip().find('!') == 0:
                     continue
-                angle2ver = tokens[0]
-                angle2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:5])
                 atom_names = ReverseIfEnds(aorig)
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
-                angle2priority[angle_name] = (section_is_auto, #auto-->low priority
-                                              DeterminePriority(tokens[2:5]))
+                angle2ver[angle_name] = tokens[0]
+                angle2ref[angle_name] = tokens[1]
+                angle2priority[angle_name] = DeterminePriority(section_is_auto,
+                                                               tokens[2:5],
+                                                               float(angle2ver[angle_name]))
                 Kbb = tokens[5]
                 bond_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:2]),
                                                     section_is_auto),
@@ -1158,13 +1198,14 @@ def main():
             elif (len(tokens) > 5) and (section_name == '#bond-angle'):
                 if line.lstrip().find('!') == 0:
                     continue
-                angle2ver = tokens[0]
-                angle2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:5])
                 atom_names = ReverseIfEnds(aorig)
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
-                angle2priority[angle_name] = (section_is_auto, #auto-->low priority
-                                              DeterminePriority(tokens[2:5]))
+                angle2ver[angle_name] = tokens[0]
+                angle2ref[angle_name] = tokens[1]
+                angle2priority[angle_name] = DeterminePriority(section_is_auto,
+                                                               tokens[2:5],
+                                                               float(angle2ver[angle_name]))
                 K=['','']
                 K[0] = tokens[5]
                 K[1] = K[0]
@@ -1186,12 +1227,13 @@ def main():
             elif (len(tokens) > 8) and (section_name == '#torsion_1'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 K = tokens[6]
                 n = tokens[7]
                 d = tokens[8]
@@ -1202,12 +1244,13 @@ def main():
             elif (len(tokens) > 7) and (section_name == '#torsion_3'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 V1 = tokens[6]
                 phi0_1 = tokens[7]
                 V2 = phi0_2 = V3 = phi0_3 = '0.0'
@@ -1225,12 +1268,13 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#middle_bond-torsion_3'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 F1 = tokens[6]
                 F2 = F3 = '0.0'
                 if len(tokens) > 7:
@@ -1247,13 +1291,14 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#end_bond-torsion_3'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:6])
                 atom_names = ReverseIfEnds(aorig)
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 F = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
                 F[0][0] = tokens[6]
                 if len(tokens) > 7:
@@ -1295,13 +1340,14 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#angle-torsion_3'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:6])
                 atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 F = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
                 F[0][0] = tokens[6]
                 if len(tokens) > 7:
@@ -1360,13 +1406,14 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#angle-angle-torsion_1'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:6])
                 atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 Kaa = tokens[6]
                 angle_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:3]),
                                                      section_is_auto),
@@ -1393,13 +1440,14 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#bond-bond_1_3'):
                 if line.lstrip().find('!') == 0:
                     continue
-                dihedral2ver = tokens[0]
-                dihedral2ref = tokens[1]
                 aorig = map(EncodeAName, tokens[2:6])
                 atom_names = ReverseIfEnds(aorig)
                 dihedral_name = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2priority[dihedral_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                dihedral2ver[dihedral_name] = tokens[0]
+                dihedral2ref[dihedral_name] = tokens[1]
+                dihedral2priority[dihedral_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(dihedral2ver[dihedral_name]))
                 Kbb = tokens[6]
                 bond_names = [EncodeInteractionName(atom_names[0:2],
                                                     section_is_auto),
@@ -1426,12 +1474,13 @@ def main():
             elif (len(tokens) > 8) and (section_name == '#out_of_plane'):
                 if line.lstrip().find('!') == 0:
                     continue
-                improper2ver = tokens[0]
-                improper2ref = tokens[1]
                 atom_names,_ignore  = OOPImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
-                improper2priority[improper_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                improper2ver[improper_name] = tokens[0]
+                improper2ref[improper_name] = tokens[1]
+                improper2priority[improper_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(improper2ver[improper_name]))
                 K = tokens[6]
                 n = tokens[7]
                 chi0 = tokens[8]
@@ -1445,13 +1494,14 @@ def main():
             elif (len(tokens) > 7) and (section_name == '#wilson_out_of_plane'):
                 if line.lstrip().find('!') == 0:
                     continue
-                improper2ver = tokens[0]
-                improper2ref = tokens[1]
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
                 atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
-                improper2priority[improper_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                improper2ver[improper_name] = tokens[0]
+                improper2ref[improper_name] = tokens[1]
+                improper2priority[improper_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(improper2ver[improper_name]))
                 K = tokens[6]
                 chi0 = tokens[7]
                 improper2style[improper_name] = 'class2'
@@ -1465,12 +1515,13 @@ def main():
             elif (len(tokens) > 6) and (section_name == '#angle-angle'):
                 if line.lstrip().find('!') == 0:
                     continue
-                improper2ver = tokens[0]
-                improper2ref = tokens[1]
                 atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
-                improper2priority[improper_name] = (section_is_auto,
-                                                    DeterminePriority(tokens[2:6]))
+                improper2ver[improper_name] = tokens[0]
+                improper2ref[improper_name] = tokens[1]
+                improper2priority[improper_name] = DeterminePriority(section_is_auto,
+                                                                     tokens[2:6],
+                                                                     float(improper2ver[improper_name]))
                 K = tokens[6]
                 improper2cross[improper_name][ImCrossTermID(atom_names)] = K
                 improper2style[improper_name] = 'class2'
