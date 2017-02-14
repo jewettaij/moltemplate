@@ -1186,7 +1186,7 @@ def main():
                                                     section_is_auto),
                               EncodeInteractionName(ReverseIfEnds(aorig[1:3]),
                                                     section_is_auto)]
-                sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
+                #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
                 r0 = [bond2r0[bond_names[0]],
                       bond2r0[bond_names[1]]]
                 order_reversed = aorig[0] > aorig[-1]
