@@ -228,9 +228,6 @@ def DeterminePriority(anames):
     (These patterns are used by MSI software when using "auto_equivalences"
      to look up force field parameters for bonded interactions.)
     Make sure this pattern only appears once and return n to the caller.
-    At the moment it seems like regular (non-auto) equivalences have their
-    priority determined where they appear in the file (later<->low priority),
-    and auto_equivalences have their priority also determined by n in *n.)
     """
     n = None
     for i in range(0, len(anames)):
@@ -249,7 +246,7 @@ def IsAutoInteraction(interaction_name):
 
 def EncodeInteractionName(anames, is_auto):
     if is_auto:
-        priority = DeterminePriority(anames, is_auto)
+        priority = DeterminePriority(anames)
         return 'auto' + str(priority)+','.join(anames)
     return ','.join(anames)
 
@@ -286,9 +283,9 @@ def Class2ImproperNameSort(aorig):
     z = zip([atom_names[0], atom_names[2], atom_names[3]],
             [0,2,3])
     z.sort()
-    l = [z[0][0], atom_names[1], z[2][0], z[3][0]]
-    p = [z[0][1], 1, z[2][1], z[3][1]]
-    return (l,p)
+    l = [z[0][0], atom_names[1], z[1][0], z[2][0]]
+    p = [z[0][1], 1, z[1][1], z[2][1]]
+    return (l, p)
 
 
 def ImCrossTermIDs(atom_names):
@@ -932,7 +929,8 @@ def main():
             if line.lstrip().find('!') == 0 and tokens[0] != '!Ver':
                 continue
             if line.lstrip(' ').find('#') == 0:
-                sys.stderr.write('allowed_section_names = ' + str(allowed_section_names) + '\n')
+                #sys.stderr.write('allowed_section_names = ' +
+                #                 str(allowed_section_names) + '\n')
                 if tokens[0] in allowed_section_names:
                     section_name = tokens[0]
                     section_is_auto = tokens[-1].endswith('_auto')
@@ -1065,7 +1063,7 @@ def main():
                                                    DeterminePriority(tokens[2:4]))
                 bond2chargepair[bond_name] = (delta_q[0] + ' ' + delta_q[1])
 
-            elif (len(tokens) > 6) and (section_name == '#quadratic_bond'):
+            elif (len(tokens) > 5) and (section_name == '#quadratic_bond'):
                 if line.lstrip().find('!') == 0:
                     continue
                 bond2ver = tokens[0]
@@ -1075,10 +1073,9 @@ def main():
                 bond2priority[bond_name] = (section_is_auto, #auto->lowest priority
                                             DeterminePriority(tokens[2:4]))
                 r0 = tokens[4]
+                k = tokens[5]
                 bond2r0[bond_name] = r0
                 sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
-                k = tokens[5]
-                r0 = tokens[6]
                 bond2style[bond_name] = 'harmonic'
                 bond2params[bond_name] = (k+' '+r0)
 
@@ -1100,7 +1097,7 @@ def main():
                 bond2style[bond_name] = 'class2'
                 bond2params[bond_name] = (r0+' '+K2+' '+K3+' '+K4)
 
-            elif (len(tokens) > 7) and (section_name == '#quadratic_angle'):
+            elif (len(tokens) > 6) and (section_name == '#quadratic_angle'):
                 if line.lstrip().find('!') == 0:
                     continue
                 angle2ver = tokens[0]
@@ -1111,7 +1108,6 @@ def main():
                                               DeterminePriority(tokens[2:5]))
                 theta0 = tokens[5]
                 k = tokens[6]
-                theta0 = tokens[7]
                 angle2theta0[angle_name] = theta0
                 sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
                 angle2style[angle_name] = 'harmonic'
@@ -1432,7 +1428,7 @@ def main():
                     continue
                 improper2ver = tokens[0]
                 improper2ref = tokens[1]
-                atom_names,  = OOPImproperNameSort(tokens[2:6])
+                atom_names,_ignore  = OOPImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
                 improper2priority[improper_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
@@ -1451,7 +1447,8 @@ def main():
                     continue
                 improper2ver = tokens[0]
                 improper2ref = tokens[1]
-                atom_names, = Class2ImproperNameSort(tokens[2:6])
+                sys.stderr.write('tokens = ' + str(tokens) + '\n')
+                atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
                 improper2priority[improper_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
@@ -1470,7 +1467,7 @@ def main():
                     continue
                 improper2ver = tokens[0]
                 improper2ref = tokens[1]
-                atom_names, = Class2ImproperNameSort(tokens[2:6])
+                atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
                 improper2priority[improper_name] = (section_is_auto,
                                                     DeterminePriority(tokens[2:6]))
