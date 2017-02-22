@@ -482,9 +482,18 @@ for i in range(len(equiv)):
             if line.split() != nonbond[-1]:
                 nonbond.append(line.split())
 for i in range(len(nonbond)):
+    atom1name = None
+    atom2name = None
     # Cross Terms + Diagonal, normal
+    for j in range(len(equiv)):
+        if nonbond[i][0] == equiv[j][0]:
+            atom1name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][0], equiv[j][1], equiv[j][2], equiv[j][3], equiv[j][4])
+        if nonbond[i][1] == equiv[j][0]:
+            atom2name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][1], equiv[j][1], equiv[j][2], equiv[j][3], equiv[j][4])
+    #foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
+    #        (nonbond[i][0], nonbond[i][1], pstyle, float(nonbond[i][2])*econv, float(nonbond[i][2])*lconv))
     foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
-            (nonbond[i][0], nonbond[i][1], pstyle, float(nonbond[i][2])*econv, float(nonbond[i][2])*lconv))
+            (atom1name, atom2name, pstyle, float(nonbond[i][2])*econv, float(nonbond[i][2])*lconv))
     foutput.write(' # %s-%s\n' % (nonbond[i][0], nonbond[i][1]))
 foutput.write('  } # end of nonbonded parameters\n\n')
 
