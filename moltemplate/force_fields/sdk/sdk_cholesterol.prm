@@ -1,0 +1,107 @@
+#
+#  SDK interaction parameters using sdk.92172.tmp
+#  converted by sdk.pl v1.0, August 31, 2014 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.3.7 or higher
+#
+
+# Force field definition
+
+ITEM	DEFINE
+
+FFNAME	SDK
+FFTYPE	COARSE
+VERSION	1.0
+CREATED	Oct 2014
+LENGTH	ANGSTROM
+ENERGY	KCAL/MOL
+DENSITY	G/CC
+MIX	NONE
+NBONDED	1
+INNER	9
+CUTOFF	12
+PAIR14	OFF
+ANGLE	WARN
+TORSION	IGNORE
+
+ITEM	END
+
+# Literature references
+
+ITEM	REFERENCES
+
+# year	volume	page	journal
+
+2015	143	243144	J. Phys. Chem. B
+
+ITEM	END
+
+# Masses
+
+ITEM	MASS
+
+# type	mass	ncons	charge	cite	comment
+C2T	
+CM2	
+CM2R	
+CMDB	
+CMB	
+CMR	
+CMR5	
+CTB	
+CTBA	
+CTBB	
+OAB	
+#CM	42.0804	2	0	1	>CCC<
+
+ITEM	END
+
+# Typing equivalences
+
+ITEM	EQUIVALENCE
+
+# type	pair	bond	angle	torsion	improper
+C2T	C2T	C2T	C2T	C2T	C2T
+CM2	CM2	CM2	CM2	CM2	CM2
+CM2R	CM2R	CM2R	CM2R	CM2R	CM2R
+CMDB	CMDB	CMDB	CMDB	CMDB	CMDB
+CMB	CMB	CMB	CMB	CMB	CMB
+CMR	CMR	CMR	CMR	CMR	CMR
+CMR5	CMR5	CMR5	CMR5	CMR5	CMR5
+CTB	CTB	CTB	CTB	CTB	CTB
+CTBA	CTBA	CTBA	CTBA	CTBA	CTBA
+CTBB	CTBB	CTBB	CTBB	CTBB	CTBB
+OAB	OAB	OAB	OAB	OAB	OAB
+
+ITEM	END
+
+# Nonbonded parameters
+
+ITEM	NONBOND
+
+# type1	type2	sigma	epsilon	m	n
+
+
+#CM	CM	4.506	0.42	9	6
+
+ITEM	END
+
+# Bond parameters
+
+ITEM	BOND
+
+# type1	type2	k	l0
+
+#CM	CM	6.16	3.64
+
+ITEM	END
+
+# Angle parameters
+
+ITEM	ANGLE
+
+# type1	type2	type3	k	theta0
+
+#CM	CM	CM	1.19	173
+
+ITEM	END
+
