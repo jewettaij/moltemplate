@@ -39,19 +39,18 @@ ITEM	END
 
 ITEM	MASS
 
-# type	mass	ncons	charge	cite	comment
-C2T	
-CM2	
-CM2R	
-CMDB	
-CMB	
-CMR	
-CMR5	
-CTB	
-CTBA	
-CTBB	
-OAB	
-#CM	42.0804	2	0	1	>CCC<
+# type	mass	ncons	charge
+C2T	43.09	0	0
+CM2	28.05	0	0
+CM2R	28.05	0	0
+CMDB	39.06	0	0
+CMB	40.06	0	0
+CMR	41.07	0	0
+CMR5	41.07	0	0
+CTB	42.08	0	0
+CTBA	27.05	0	0
+CTBB	27.05	0	0
+OAB	30.03	0	0
 
 ITEM	END
 
