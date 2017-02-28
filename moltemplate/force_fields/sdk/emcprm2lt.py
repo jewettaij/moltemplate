@@ -548,9 +548,11 @@ if angle_flag:
     foutput.write('    # ----- Angles -----\n')
     for i in range(len(angle)):
         if (len(angle[i]) > 5): # Check if extra data in angle array
-            astyle == angle[i][5]
-        foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f\n' %
-                (angle[i][0], angle[i][1], angle[i][2], astyle, float(angle[i][3])*aeconv, float(angle[i][4])))
+            foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f\n' %
+                    (angle[i][0], angle[i][1], angle[i][2], str(angle[i][5]), float(angle[i][3])*aeconv, float(angle[i][4])))
+        else:
+            foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f\n' %
+                    (angle[i][0], angle[i][1], angle[i][2], astyle, float(angle[i][3])*aeconv, float(angle[i][4])))
     foutput.write('  }\n\n')
     foutput.write('  write_once("Data Angles By Type") {\n')
     for i in range(len(angle)):
