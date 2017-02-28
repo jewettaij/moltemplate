@@ -544,6 +544,9 @@ if angle_flag:
     if astyle == '':
         print 'Warning: no angle potential provided, assuming harmonic'
         astyle == 'harmonic'
+    else if astyle == 'hybrid':
+        print 'Warning: hybrid angle style specified, reading prm file for angle type'
+        astyle == angle[i][5]
     foutput.write('  write_once("In Settings") {\n')
     foutput.write('    # ----- Angles -----\n')
     for i in range(len(angle)):
