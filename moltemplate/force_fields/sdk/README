@@ -48,3 +48,9 @@ OAB     -CH-OH          Ring A
 
 See the provided reference for details on the CG cholesterol topology. 
 A 5-10 timestep is used when using cholesterol.
+
+Several limiations, due to missing parameters:
+-use of cholesterol with type "NH" is not possible.
+-use of cholesterol with type "PHE" is not possible.
+
+---
