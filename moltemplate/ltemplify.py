@@ -37,8 +37,8 @@ except (SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.52.0'
-g_date_str = '2016-12-21'
+g_version_str = '0.53.0'
+g_date_str = '2017-2-09'
 
 def Intify(s):
     if s.isdigit():

@@ -1,4 +1,4 @@
-  # moltemplate_cleanup.sh
+  # cleanup_moltemplate.sh
   # This script attempts to remove irrelevant information from LAMMPS 
   # input scripts and data files (such as extra, unneeded atom types 
   # and force field parameters).

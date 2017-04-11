@@ -32,7 +32,7 @@ setup(
   ],
 
   scripts=['moltemplate/scripts/moltemplate.sh',
-           'moltemplate/scripts/moltemplate_cleanup.sh',
+           'moltemplate/scripts/cleanup_moltemplate.sh',
            'moltemplate/scripts/emoltemplate.sh'],
 
   entry_points={

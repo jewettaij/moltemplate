@@ -31,4 +31,4 @@ cd ../
 # This is harmless, but if you to delete this information from your
 # system.in.settings and system.in.data files, run this script:
 #
-# moltemplate_cleanup.sh
+# cleanup_moltemplate.sh

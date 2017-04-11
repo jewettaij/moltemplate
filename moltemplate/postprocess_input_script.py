@@ -66,7 +66,7 @@ def main():
             ic = line.find('#')
             line = line_orig[:ic]
             # keep track of comments (put them back later)
-            comment = line_orig[ic:]
+            comment = line_orig[ic:].rstrip()
 
         tokens = line.strip().split()
         if ((len(tokens) >= 2) and (tokens[0] == 'pair_style')):
@@ -75,7 +75,7 @@ def main():
         if ((len(tokens) >= 3) and (tokens[0] == 'pair_coeff')):
 
             if ((tokens[1].isdigit() and (tokens[2].isdigit())) and
-                    (int(tokens[1]) > int(tokens[2]))):
+                (int(tokens[1]) > int(tokens[2]))):
 
                 swap_occured = True
                 tmp = tokens[2]
@@ -126,8 +126,8 @@ def main():
 
             else:
                 if ((('*' in tokens[1]) or ('*' in tokens[2]))
-                        and
-                        (not (('*' == tokens[1]) and ('*' == tokens[2])))):
+                    and
+                    (not (('*' == tokens[1]) and ('*' == tokens[2])))):
                     warn_wildcard = True
                 if i >= num_lines_ignore:
                     sys.stdout.write(line_orig)

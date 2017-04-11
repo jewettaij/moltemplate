@@ -2,9 +2,8 @@
 
 moltemplate.sh twelve_days.lt
 
-# "moltemplate.sh" invokes a python script named "ttree.py"
-# which is a hierarchical template renderer.
-# (The same thing should happen if you use:  ttree.py twelve_days.lt)
+# Moltemplate is a hierarchical template renderer.  It can be used
+# to create other kinds of text files which are not related to LAMMPS.
 #
 # Happy holidays
 # -andrew 2016-12-20

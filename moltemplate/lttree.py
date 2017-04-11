@@ -28,8 +28,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2014-12-19'
-g_version_str = '0.75.0'
+g_date_str = '2017-4-11'
+g_version_str = '0.76.0'
 
 
 import sys
@@ -87,11 +87,9 @@ class LttreeSettings(BasicUISettings):
         self.i_atomid = None  # <--An integer indicating which column has the atomid
         self.i_atomtype = None  # <--An integer indicating which column has the atomtype
         self.i_molid = None  # <--An integer indicating which column has the molid, if applicable
-        self.infile = None       # Name of the outermost file.  This is the file
-        # which was read at the moment parsing begins.
 
 
-def LttreeParseArgs(argv, settings, main=False):
+def LttreeParseArgs(argv, settings, main=False, show_warnings=True):
     # By default, include force_fields provided with the package
     argv.extend(["-import-path",
                  pkg_resources.resource_filename(__name__, 'force_fields/')])
@@ -192,7 +190,7 @@ def LttreeParseArgs(argv, settings, main=False):
             i_molid = int(argv[i + 1]) - 1
             del(argv[i:i + 2])
 
-        elif (argv[i][0] == '-') and main:
+        elif (argv[i].find('-') == 0) and main:
             # elif (__name__ == "__main__"):
             raise InputError('Error(' + g_program_name + '):\n'
                              'Unrecogized command line argument \"' + argv[i] + '\"\n')
@@ -236,7 +234,7 @@ def LttreeParseArgs(argv, settings, main=False):
                              '       that this program can not parse multiple source files.)\n'
                              '       Check the syntax of the entire argument list.\n')
 
-    if len(settings.ii_coords) == 0:
+    if len(settings.ii_coords) == 0 and show_warnings:
         sys.stderr.write('########################################################\n'
                          '##            WARNING: atom_style unspecified         ##\n'
                          '## --> \"' + data_atoms + '\" column data has an unknown format ##\n'
@@ -687,7 +685,8 @@ def main():
         #settings = BasicUISettings()
         #BasicUIParseArgs(sys.argv, settings)
         settings = LttreeSettings()
-        LttreeParseArgs(sys.argv, settings, main=True)
+        LttreeParseArgs([arg for arg in sys.argv],  #(deep copy of sys.argv)
+                        settings, main=True, show_warnings=True)
 
         # Data structures to store the class definitionss and instances
         g_objectdefs = StaticObj('', None)  # The root of the static tree
