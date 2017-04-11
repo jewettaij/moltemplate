@@ -32,12 +32,12 @@ it is manually, for all of the carbon atoms in that kind of molecule.
 
 __author__ = 'Andrew Jewett'
 __version__ = '0.1.2'
-__date__ = '2017-2-13'
+__date__ = '2017-3-16'
 
 
 import sys
 import os
-from sets import Set
+
 from collections import defaultdict, OrderedDict
 from operator import itemgetter
 from math import *
@@ -57,7 +57,6 @@ doc_msg = \
     "   -file FILE_NAME      # Read force field parameters from a file\n" + \
     "   -url URL             # Read force field parameters from a file on the web\n" + \
     "   -atoms \"QUOTED LIST\" # Restrict output to a subset of atom types\n" + \
-    "   -auto                # Consider auto_equivalences in the .frc file \n"+\
     "  Sometimes an FRC file contains multiple versions.  In that case,\n"+\
     "  you can select between them using these optional arguments:\n"+\
     "   -pair-style \"PAIRSTYLE ARGS\" # LAMMPS pair style and cutoff arg(s)\n" + \
@@ -66,6 +65,10 @@ doc_msg = \
     "   -dihedral-style DIHEDRALSTYLE  # desired LAMMPS dihedral style\n" + \
     "   -improper-style IMPROPERSTYLE  # desired LAMMPS improper style\n" + \
     "   -hbond-style \"HBONDTYLE ARGS\" # LAMMPS hydrogen-bond style and args\n"
+
+
+#   "   -auto                # Consider auto_equivalences in the .frc file \n"+\
+
 
 
 class InputError(Exception):
@@ -260,9 +263,21 @@ def DeterminePriority(is_auto,
 def IsAutoInteraction(interaction_name):
     return interaction_name.find('auto') == 0
 
-def EncodeInteractionName(anames, is_auto):
+def EncodeInteractionName(anames,
+                          is_auto = None):
+    if is_auto == None:
+        is_auto = False
+        # Is the line containing anames from an "_auto" section of 
+        # the FRC file?  (I am trying to infer this from whether or 
+        # not any of the atom names are followed by the '_' character.)
+        for s in anames:  
+            if ((len(s)>0) and (s[-1] == '_')):
+                is_auto = True
     if is_auto:
         priority = DetermineAutoPriority(anames)
+        # (If an atom name is a wildcard '*' followed by 
+        #  an integer, DetermineAutoPriority() will return 
+        #  that integer.  Otherwise it will return '')
         return 'auto' + str(priority)+','.join(anames)
     return ','.join(anames)
 
@@ -311,9 +326,96 @@ def ImCrossTermIDs(atom_names):
 
 
 
+
+
+def DoAtomsMatchPattern(anames, pattern):
+    """ 
+    Check whether the list of atom names "anames" matches "pattern"
+    (Both arguments are lists of strings, but some of the strings 
+    in pattern may contain wildcard characters followed by 
+    "priority" numbers.  Matches with lower priority numbers are
+    given preference whenever multiple distinct matches are found.
+    (Note: This function does not check patterns in reverse order.)
+    """
+    #sys.stderr.write('DEBUG: checking whether '+str(anames)+' matches '+str(pattern)+'\n')
+    assert(len(anames) == len(pattern))
+    matched = True
+    for d in range(0, len(pattern)):
+        if (pattern[d] == anames[d]) or (pattern[d][0] == '*'):
+            if pattern[d][0] == '*':
+                priority = int(pattern[d][1:])
+            else:
+                priority = 0
+        else:
+            matched = False
+    if matched:
+        #sys.stderr.write('DEBUG: '+str(anames)+' matches '+str(pattern)+'\n')
+        return priority
+    else:
+        return None
+
+
+def LookupBondLength(a1, a2,
+                     atom2equiv_bond,
+                     bond2r0,
+                     atom2auto_bond,
+                     bond2r0_auto):
+    """ 
+    Try to find bond parameters between atoms whose original
+    atom names (without equivalences) are a1 and a2.
+    Then return both the equilibrium bond length for that bond,
+    as well as the equivalent atom names used to lookup that bond.
+    (These could be stored in either atom2equiv_bond or atom2auto_bond.)
+    If a match was not found, return None.
+    """
+    return_val = None
+    anames = (atom2equiv_bond[a1], atom2equiv_bond[a2])
+    bond_name = EncodeInteractionName(ReverseIfEnds(anames))
+    if bond_name in bond2r0:
+        return_val = (bond2r0[bond_name], [anames[0], anames[1]])
+    # If no bond between these atoms is defined, 
+    # check the bonds in the _auto section(s)
+    # This is a lot messier.
+    elif ((a1 in atom2auto_bond) and (a2 in atom2auto_bond)):
+        anames = [atom2auto_bond[a1], atom2auto_bond[a2]]
+        # Because _auto interactions can contain wildcards,
+        # there can be multiple entries in bond2r0_auto[]
+        # for the same list of atom names, and we have to
+        # consider all of them, and pick the one with the
+        # most priority (ie. whose priority number is lowest).
+        # (Note: The MSI file format uses low priority numbers
+        #  to indicate high priority.  Somewhat confusing.)
+        HUGE_VAL = 2000000000
+        best_priority = HUGE_VAL
+        pattern = ['','']
+        for (pattern[0],pattern[1]), r0 in bond2r0_auto.items():
+            priority = DoAtomsMatchPattern(anames, pattern)
+            if (priority != None) and (priority < best_priority):
+                best_priority = priority
+                return_val = (r0, [anames[0], anames[1]])
+            anames.reverse() # now check of the atoms in reverse order match
+            priority = DoAtomsMatchPattern(anames, pattern)
+            if (priority != None) and (priority < best_priority):
+                best_priority = priority
+                return_val = (r0, [anames[1], anames[0]]) #preserve atom order
+        #if return_val != None:
+        #    sys.stderr.write('DEBUG: For atoms '+str((a1,a2))+' ... bond_length, batom_names = '+str(return_val)+'\n')
+    return return_val
+
+
+                              
+
+
+
+
+
 def Equivalences2ffids(lines_equivalences,
                        atom_types,
-                       atom2equiv_pair):
+                       atom2equiv_pair,
+                       atom2equiv_bond,
+                       atom2equiv_angle,
+                       atom2equiv_dihedral,
+                       atom2equiv_improper):
     """
     This function reads a list of lines containing "equivalences" and
     "auto_equivalences" from an MSI-formatted .FRC file.
@@ -325,14 +427,23 @@ def Equivalences2ffids(lines_equivalences,
     This function returns a dictionary that converts the original atom type name
     into these strings.
     """
-    #atom2equiv_pair = OrderedDict()   <-- now it's an argument
-    atom2equiv_bond = OrderedDict()
-    atom2equiv_angle = OrderedDict()
-    atom2equiv_dihedral = OrderedDict()
-    atom2equiv_improper = OrderedDict()
     for line in lines_equivalences:
-        tokens = SplitQuotedString(line.strip(),
-                                   comment_char='!>')
+        #tokens = SplitQuotedString(line.strip(),
+        #                           comment_char='!>')
+
+        # skip past both '!' and '>' characters
+        ic1 = line.find('!')
+        ic = ic1
+        ic2 = line.find('>')
+        if ic2 != -1 and ic2 < ic1:
+            ic = ic2
+        if ic != -1:
+            line = line[:ic]
+        else:
+            line = line.rstrip('\n')
+        tokens = line.strip().split()
+        #sys.stderr.write('DEBUG Equivalences2ffids():\n'
+        #                 '      tokens = '+str(tokens)+'\n')
         atype = tokens[2]
         atom2equiv_pair[atype] = tokens[3]
         atom2equiv_bond[atype] = tokens[4]
@@ -354,10 +465,24 @@ def Equivalences2ffids(lines_equivalences,
 
 
 
+
 def AutoEquivalences2ffids(lines_equivalences,
                            lines_auto_equivalences,
                            atom_types,
-                           atom2equiv_pair):
+                           atom2equiv_pair,
+                           atom2equiv_bond,
+                           atom2equiv_angle,
+                           atom2equiv_dihedral,
+                           atom2equiv_improper,
+                           atom2auto_pair,
+                           atom2auto_bondincr,
+                           atom2auto_bond,
+                           atom2auto_angleend,
+                           atom2auto_anglecenter,
+                           atom2auto_dihedralend,
+                           atom2auto_dihedralcenter,
+                           atom2auto_improperend,
+                           atom2auto_impropercenter):
     """
     This function is a variant of Equivalences2ffids() which also considers
     "auto_equivalences".
@@ -367,21 +492,13 @@ def AutoEquivalences2ffids(lines_equivalences,
     moltemplate will search for patterns contained in these strings to decide
     which type of interaction to generate.
     """
-    #atom2equiv_pair = OrderedDict()   <- (now this is an argument)
-    atom2equiv_bond = OrderedDict()
-    atom2equiv_angle = OrderedDict()
-    atom2equiv_dihedral = OrderedDict()
-    atom2equiv_improper = OrderedDict()
-    for line in lines_equivalences:
-        tokens = SplitQuotedString(line.strip(),
-                                   comment_char='!>')
-        atype = tokens[2]
-        atom2equiv_pair[atype] = tokens[3]
-        atom2equiv_bond[atype] = tokens[4]
-        atom2equiv_angle[atype] = tokens[5]
-        atom2equiv_dihedral[atype] = tokens[6]
-        atom2equiv_improper[atype] = tokens[7]
-
+    Equivalences2ffids(lines_equivalences,
+                       atom_types,
+                       atom2equiv_pair,
+                       atom2equiv_bond,
+                       atom2equiv_angle,
+                       atom2equiv_dihedral,
+                       atom2equiv_improper)
 
     # ------ The following lines are for processing "auto_equivalences" -----
     #
@@ -421,28 +538,33 @@ def AutoEquivalences2ffids(lines_equivalences,
     #   These parameters are intended as temporary patches, to allow
     #   you to begin calculations immediately."
 
-    atom2auto_e_pair = OrderedDict()
-    atom2auto_e_bondincr = OrderedDict()
-    atom2auto_e_bond = OrderedDict()
-    atom2auto_e_angleend = OrderedDict()
-    atom2auto_e_anglecenter = OrderedDict()
-    atom2auto_e_dihedralend = OrderedDict()
-    atom2auto_e_dihedralcenter = OrderedDict()
-    atom2auto_e_improperend = OrderedDict()
-    atom2auto_e_impropercenter = OrderedDict()
     for line in lines_auto_equivalences:
-        tokens = SplitQuotedString(line.strip(),
-                                   comment_char='!>')
+        #tokens = SplitQuotedString(line.strip(),
+        #                           comment_char='!>')
+
+        # skip past both '!' and '>' characters
+        ic1 = line.find('!')
+        ic = ic1
+        ic2 = line.find('>')
+        if ic2 != -1 and ic2 < ic1:
+            ic = ic2
+        if ic != -1:
+            line = line[:ic]
+        else:
+            line = line.rstrip('\n')
+        tokens = line.strip().split()
+        #sys.stderr.write('DEBUG Equivalences2ffids():\n'
+        #                 '      tokens = '+str(tokens)+'\n')
         atype = tokens[2]
-        atom2auto_e_pair = tokens[3]
-        atom2auto_e_bondincr = tokens[4]
-        atom2auto_e_bond = tokens[5]
-        atom2auto_e_angleend[atype] = tokens[6]
-        atom2auto_e_anglecenter[atype] = tokens[7]
-        atom2auto_e_dihedralend[atype] = tokens[8]
-        atom2auto_e_dihedralcenter[atype] = tokens[9]
-        atom2auto_e_improperend[atype] = tokens[10]
-        atom2auto_e_impropercenter[atype] = tokens[11]
+        atom2auto_pair[atype] = tokens[3]
+        atom2auto_bondincr[atype] = tokens[4]
+        atom2auto_bond[atype] = tokens[5]
+        atom2auto_angleend[atype] = tokens[6]
+        atom2auto_anglecenter[atype] = tokens[7]
+        atom2auto_dihedralend[atype] = tokens[8]
+        atom2auto_dihedralcenter[atype] = tokens[9]
+        atom2auto_improperend[atype] = tokens[10]
+        atom2auto_impropercenter[atype] = tokens[11]
 
     atom2ffid = OrderedDict()
     for atom in atom_types:
@@ -452,15 +574,17 @@ def AutoEquivalences2ffids(lines_equivalences,
                            ',a'+atom2equiv_angle.get(atom,'') + 
                            ',d'+atom2equiv_dihedral.get(atom,'') + 
                            ',i'+atom2equiv_improper.get(atom,'') + 
-                           #',ap'+atom2auto_e_pair.get(atom,'') + 
-                           ',aq'+atom2auto_e_bondincr.get(atom,'') + 
-                           ',ab'+atom2auto_e_bond.get(atom,'') + 
-                           ',aae'+atom2auto_e_angleend.get(atom,'') + 
-                           ',aac'+atom2auto_e_anglecenter.get(atom,'') + 
-                           ',ade'+atom2auto_e_dihedralend.get(atom,'') + 
-                           ',adc'+atom2auto_e_dihedralcenter.get(atom,'') + 
-                           ',aie'+atom2auto_e_improperend.get(atom,'') + 
-                           ',aic'+atom2auto_e_impropercenter.get(atom,''))
+                           #',ap'+atom2auto_pair.get(atom,'') + 
+                           #',aq'+atom2auto_bondincr.get(atom,'') + 
+                           #',ab'+atom2auto_bond.get(atom,'') + 
+                           ',aae'+atom2auto_angleend.get(atom,'') + 
+                           ',aac'+atom2auto_anglecenter.get(atom,'') + 
+                           ',ade'+atom2auto_dihedralend.get(atom,'') + 
+                           ',adc'+atom2auto_dihedralcenter.get(atom,'') + 
+                           ',aie'+atom2auto_improperend.get(atom,'') + 
+                           ',aic'+atom2auto_impropercenter.get(atom,'') +
+                           ''
+                          )
     return atom2ffid
 
 
@@ -489,39 +613,40 @@ def main():
     
         # defaults:
         ffname = 'BIOSYM_MSI_FORCE_FIELD'
-        type_subset = Set([])
+        type_subset = set([])
         filename_in = ''
         file_in = sys.stdin
-        include_auto_equivalences = False
+        include_auto_equivalences = True
         #pair_style_name = 'lj/class2/coul/long'
         #pair_style_params = "10.0 10.0"
         pair_style2docs = {}
         pair_style2args = defaultdict(str)
-        pair_style2docs['lj/cut/long'] = 'http://lammps.sandia.gov/doc/pair_lj.html'
-        pair_style2args['lj/cut/long'] = '10.0'
+        pair_style2docs['lj/cut/coul/long'] = 'http://lammps.sandia.gov/doc/pair_lj.html'
+        pair_style2args['lj/cut/coul/long'] = '10.0'
         pair_style2docs['lj/class2/coul/long'] = 'http://lammps.sandia.gov/doc/pair_class2.html'
         pair_style2args['lj/class2/coul/long'] = '10.0'
         pair_style2docs['lj/class2/coul/cut'] = 'http://lammps.sandia.gov/doc/pair_class2.html'
         pair_style2args['lj/class2/coul/cut'] = '10.0'
 
         bond_style2docs = {}
-        bond_style2args = defaultdict(str)
+        #bond_style2args = defaultdict(str)
         bond_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/bond_harmonic.html'
         bond_style2docs['class2'] = 'http://lammps.sandia.gov/doc/bond_class2.html'
         bond_style2docs['morse'] = 'http://lammps.sandia.gov/doc/bond_morse.html'
+
         angle_style2docs = {}
-        angle_style2args = defaultdict(str)
+        #angle_style2args = defaultdict(str)
         angle_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/angle_harmonic.html'
         angle_style2docs['class2'] = 'http://lammps.sandia.gov/doc/angle_class2.html'
 
         dihedral_style2docs = {}
-        dihedral_style2args = defaultdict(str)
+        #dihedral_style2args = defaultdict(str)
         dihedral_style2docs['charmm'] = 'http://lammps.sandia.gov/doc/dihedral_charmm.html'
         dihedral_style2docs['class2'] = 'http://lammps.sandia.gov/doc/dihedral_class2.html'
         dihedral_symmetry_subgraph = ''  # default
 
         improper_style2docs = {}
-        improper_style2args = defaultdict(str)
+        #improper_style2args = defaultdict(str)
         improper_style2docs['cvff'] = 'http://lammps.sandia.gov/doc/improper_cvff.html'
         improper_style2docs['class2'] = 'http://lammps.sandia.gov/doc/improper_class2.html'
         improper_symmetry_subgraph = 'cenJsortIKL'
@@ -571,7 +696,7 @@ def main():
                                      '       which contains a space-delimited list of of a subset of atom types\n'
                                      '       you want to use from the original force-field.\n'
                                      '       Make sure you enclose the entire list in quotes.\n')
-                type_subset = Set(argv[i + 1].strip('\"\'').strip().split())
+                type_subset = set(argv[i + 1].strip('\"\'').strip().split())
                 del argv[i:i + 2]
     
             elif argv[i] == '-name':
@@ -628,75 +753,76 @@ def main():
                 if i + 1 >= len(argv):
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
                                      '       a compatible bond_style.\n')
-                bond_style = argv[i + 1].split()[:1]
-                bond_styles_selected.add(bond_style)
-                bond_style2args[bond_style] = argv[i + 1].split()[1:]
-                if bond_style_name.find('harmonic') == 0:
-                    pass
-                    #bond_style_link = 'http://lammps.sandia.gov/doc/bond_harmonic.html'
-                elif bond_style_name.find('morse') == 0:
-                    pass
-                    #bond_style_link = 'http://lammps.sandia.gov/doc/bond_morse.html'
-                elif bond_style_name.find('class2') == 0:
-                    pass
-                    #bond_style_link = 'http://lammps.sandia.gov/doc/bond_class2.html'
-                else:
-                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
-                                     '       \"harmonic\", \"class2\", or \"morse\".\n')
+                bond_styles = argv[i + 1].split(',')
+                for bond_style in bond_styles:
+                    bond_styles_selected.add(bond_style)
+                #bond_style2args[bond_style] = argv[i + 1].split()[1:]
+                #if bond_style_name.find('harmonic') == 0:
+                #    pass
+                #    #bond_style_link = 'http://lammps.sandia.gov/doc/bond_harmonic.html'
+                #elif bond_style_name.find('morse') == 0:
+                #    pass
+                #    #bond_style_link = 'http://lammps.sandia.gov/doc/bond_morse.html'
+                #elif bond_style_name.find('class2') == 0:
+                #    pass
+                #    #bond_style_link = 'http://lammps.sandia.gov/doc/bond_class2.html'
+                #else:
+                #    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                #                     '       \"harmonic\", \"class2\", or \"morse\".\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-angle-style':
                 if i + 1 >= len(argv):
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
                                      '       a compatible angle_style.\n')
-                angle_style = argv[i + 1].split()[:1]
-                angle_styles_selected.add(angle_style)
-                angle_style2args[angle_style] = argv[i + 1].split()[1:]
-                if angle_style_name.find('harmonic') == 0:
-                    pass
-                    #angle_style_link = 'http://lammps.sandia.gov/doc/angle_harmonic.html'
-                elif angle_style_name.find('class2') == 0:
-                    pass
-                    #angle_style_link = 'http://lammps.sandia.gov/doc/angle_class2.html'
-                else:
-                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
-                                     '       \"harmonic\" or \"class2\"\n')
+                angle_styles = argv[i + 1].split(',')
+                for angle_style in bond_styles:
+                    angle_styles_selected.add(bond_style)
+                #if angle_style_name.find('harmonic') == 0:
+                #    pass
+                #    #angle_style_link = 'http://lammps.sandia.gov/doc/angle_harmonic.html'
+                #elif angle_style_name.find('class2') == 0:
+                #    pass
+                #    #angle_style_link = 'http://lammps.sandia.gov/doc/angle_class2.html'
+                #else:
+                #    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                #                     '       \"harmonic\" or \"class2\"\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-dihedral-style':
                 if i + 1 >= len(argv):
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
                                      '       a compatible dihedral_style.\n')
-                dihedral_style = argv[i + 1].split()[:1]
-                dihedral_styles_selected.add(dihedral_style)
-                dihedral_style2args[dihedral_style] = argv[i + 1].split()[1:]
-                if dihedral_style_name.find('charmm') == 0:
-                    pass
-                    #dihedral_style_link = 'http://lammps.sandia.gov/doc/dihedral_charmm.html'
-                elif dihedral_style_name.find('class2') == 0:
-                    pass
-                    #dihedral_style_link = 'http://lammps.sandia.gov/doc/dihedral_class2.html'
-                else:
-                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
-                                     '       \"harmonic\" or \"class2\"\n')
+                dihedral_styles = argv[i + 1].split(',')
+                for dihedral_style in bond_styles:
+                    dihedral_styles_selected.add(bond_style)
+                #if dihedral_style_name.find('charmm') == 0:
+                #    pass
+                #    #dihedral_style_link = 'http://lammps.sandia.gov/doc/dihedral_charmm.html'
+                #elif dihedral_style_name.find('class2') == 0:
+                #    pass
+                #    #dihedral_style_link = 'http://lammps.sandia.gov/doc/dihedral_class2.html'
+                #else:
+                #    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                #                     '       \"harmonic\" or \"class2\"\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-improper-style':
                 if i + 1 >= len(argv):
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by\n'
                                      '       a compatible impropoer_style.\n')
-                improper_style = argv[i + 1].split()[:1]
-                improper_styles_selected.add(improper_style)
-                improper_style2args[improper_style] = argv[i + 1].split()[1:]
-                if impropoer_style_name.find('harmonic') == 0:
-                    pass
-                    #impropoer_style_link = 'http://lammps.sandia.gov/doc/impropoer_harmonic.html'
-                elif impropoer_style_name.find('class2') == 0:
-                    pass
-                    #impropoer_style_link = 'http://lammps.sandia.gov/doc/impropoer_class2.html'
-                else:
-                    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
-                                     '       \"harmonic\" or \"class2\"\n')
+                improper_styles = argv[i + 1].split(',')
+                for improper_style in bond_styles:
+                    improper_styles_selected.add(bond_style)
+                #if impropoer_style_name.find('harmonic') == 0:
+                #    pass
+                #    #impropoer_style_link = 'http://lammps.sandia.gov/doc/impropoer_harmonic.html'
+                #elif impropoer_style_name.find('class2') == 0:
+                #    pass
+                #    #impropoer_style_link = 'http://lammps.sandia.gov/doc/impropoer_class2.html'
+                #else:
+                #    raise InputError('Error: ' + argv[i] + ' must be followed by either:\n'
+                #                     '       \"harmonic\" or \"class2\"\n')
                 del argv[i:i + 2]
 
             elif argv[i] == '-hbond-style':
@@ -735,9 +861,9 @@ def main():
                     sys.exit(1)
                 del argv[i:i + 2]
     
-            elif argv[i] == '-auto':
-                include_auto_equivalences = True
-                del argv[i:i + 1]
+            #elif argv[i] == '-auto':
+            #    include_auto_equivalences = True
+            #    del argv[i:i + 1]
     
             elif argv[i] in ('-help', '--help', '-?', '--?'):
                 sys.stderr.write(doc_msg)
@@ -768,10 +894,44 @@ def main():
         lines = file_in.readlines()
         atom2charge = OrderedDict()  # lookup charge from atom type
         atom2mass = OrderedDict()  # lookup mass from atom type
+        # equivalences lookup
         atom2ffid = OrderedDict()  # lookup "force-field-ID" a string containing
                                    # equivalences to lookup bonded interactions
-        atom2pairtype = OrderedDict() # lookup the equivalent symbol used for
-                                      # looking up pair interactions
+        atom2equiv_pair = OrderedDict() # lookup the equivalent symbol used for
+                                        # looking up pair interactions
+        atom2equiv_bond = OrderedDict()
+        atom2equiv_angle = OrderedDict()
+        atom2equiv_dihedral = OrderedDict()
+        atom2equiv_improper = OrderedDict()
+        # inverse equivalences lookup
+        equiv_pair2atom = defaultdict(set)
+        equiv_bond2atom = defaultdict(set)
+        equiv_angle2atom = defaultdict(set)
+        equiv_dihedral2atom = defaultdict(set)
+        equiv_improper2atom = defaultdict(set)
+
+        # auto equivalences lookup
+        atom2auto_pair = OrderedDict()
+        atom2auto_bondincr = OrderedDict()
+        atom2auto_bond = OrderedDict()
+        atom2auto_angleend = OrderedDict()
+        atom2auto_anglecenter = OrderedDict()
+        atom2auto_dihedralend = OrderedDict()
+        atom2auto_dihedralcenter = OrderedDict()
+        atom2auto_improperend = OrderedDict()
+        atom2auto_impropercenter = OrderedDict()
+        # inverse auto equivalences lookup
+        auto_pair2atom = defaultdict(set)
+        auto_bondincr2atom = defaultdict(set)
+        auto_bond2atom = defaultdict(set)
+        auto_angleend2atom = defaultdict(set)
+        auto_anglecenter2atom = defaultdict(set)
+        auto_dihedralend2atom = defaultdict(set)
+        auto_dihedralcenter2atom = defaultdict(set)
+        auto_improperend2atom = defaultdict(set)
+        auto_impropercenter2atom = defaultdict(set)
+
+
         atom2element = OrderedDict()  # Optional:
                                       # which element (eg 'C', 'O') ? (Note this
                                       # is different from atom type: 'C1', 'Oh')
@@ -804,6 +964,7 @@ def main():
         bond2ver = OrderedDict()
         bond2ref = OrderedDict()
         bond2r0 = OrderedDict()
+        bond2r0_auto = OrderedDict()
 
         angle2params = OrderedDict() # store a tuple with the 3-body angle
                                      # interaction type, and its parameters
@@ -820,6 +981,7 @@ def main():
         angle2ver = OrderedDict()
         angle2ref = OrderedDict()
         angle2theta0 = OrderedDict()
+        angle2theta0_auto = OrderedDict()
 
         # http://lammps.sandia.gov/doc/dihedral_class2.html
         dihedral2params = OrderedDict() # store a tuple with the 4-body dihedral
@@ -925,7 +1087,8 @@ def main():
                                      '#bond_increments',
                                      '#hbond_definition',          # irrelevant?
                                      '#templates',
-                                     '#reference'
+                                     '#reference',
+                                     '#end'
                                      ])
 
         icol_type = icol_mass = icol_elem = icol_nbonds = icol_comment = icol_ver = icol_ref = -1
@@ -933,7 +1096,7 @@ def main():
         section_name = ''
         section_is_auto = False
 
-        sys.stderr.write("parsing file...")
+        sys.stderr.write("parsing file pass1: look for atom types and equivalences...")
 
         for iline in range(0, len(lines)):
             line = lines[iline]
@@ -1008,6 +1171,7 @@ def main():
                                                 icol_comment+1,
                                                 quotes='',
                                                 comment_char='>'))
+                tokens = list(tokens)
 
                 if (len(tokens) > 4):
                     if ((len(type_subset) == 0) or (tokens[1] in type_subset)):
@@ -1024,11 +1188,136 @@ def main():
                         atom2descr[tokens[icol_type]] = tokens[icol_comment]
                         atom2ver[tokens[icol_type]] = tokens[icol_ver]
                         atom2ref[tokens[icol_type]] = tokens[icol_ref]
+
                 elif len(tokens) > 0:
                     raise InputError('Error: Invalid atom line: (line#'+str(iline)+')\n' +
                                      '\"'+line.strip()+'\"')
 
-            elif (len(tokens) > 4) and (section_name == '#nonbond(12-6)'):
+        atom_types = [x for x in atom2mass]
+
+        # Now construct the lookup tables and inverse tables
+        # we will need to understand the remainder of the file:
+        if not include_auto_equivalences:
+            atom2ffid = Equivalences2ffids(lines_equivalences,
+                                           atom_types,
+                                           atom2equiv_pair,
+                                           atom2equiv_bond,
+                                           atom2equiv_angle,
+                                           atom2equiv_dihedral,
+                                           atom2equiv_improper)
+        else:
+            atom2ffid = AutoEquivalences2ffids(lines_equivalences,
+                                               lines_auto_equivalences,
+                                               atom_types,
+                                               atom2equiv_pair,
+                                               atom2equiv_bond,
+                                               atom2equiv_angle,
+                                               atom2equiv_dihedral,
+                                               atom2equiv_improper,
+                                               atom2auto_pair,
+                                               atom2auto_bondincr,
+                                               atom2auto_bond,
+                                               atom2auto_angleend,
+                                               atom2auto_anglecenter,
+                                               atom2auto_dihedralend,
+                                               atom2auto_dihedralcenter,
+                                               atom2auto_improperend,
+                                               atom2auto_impropercenter)
+
+        for a,e in atom2equiv_pair.items():
+            equiv_pair2atom[e].add(a)
+        for a,e in atom2equiv_bond.items():
+            equiv_bond2atom[e].add(a)
+        for a,e in atom2equiv_angle.items():
+            equiv_angle2atom[e].add(a)
+        for a,e in atom2equiv_dihedral.items():
+            equiv_dihedral2atom[e].add(a)
+        for a,e in atom2equiv_improper.items():
+            equiv_improper2atom[e].add(a)
+
+        # the inverse lookup for '*' matches all atom types
+        for a in atom_types:
+            equiv_pair2atom['*'].add(a)
+            equiv_bond2atom['*'].add(a)
+            equiv_angle2atom['*'].add(a)
+            equiv_dihedral2atom['*'].add(a)
+            equiv_improper2atom['*'].add(a)
+
+        for a,e in atom2auto_pair.items():
+            auto_pair2atom[e].add(a)
+        for a,e in atom2auto_bondincr.items():
+            auto_bondincr2atom[e].add(a)
+        for a,e in atom2auto_bond.items():
+            auto_bond2atom[e].add(a)
+        for a,e in atom2auto_angleend.items():
+            auto_angleend2atom[e].add(a)
+            #auto_angle[0][e].add(a)
+            #auto_angle[2][e].add(a)
+        for a,e in atom2auto_anglecenter.items():
+            auto_anglecenter2atom[e].add(a)
+            #auto_angle[1][e].add(a)
+        for a,e in atom2auto_dihedralend.items():
+            auto_dihedralend2atom[e].add(a)
+            #auto_dihedral2atom[0][e].add(a)
+            #auto_dihedral2atom[3][e].add(a)
+        for a,e in atom2auto_dihedralcenter.items():
+            auto_dihedralcenter2atom[e].add(a)
+            #auto_dihedral2atom[1][e].add(a)
+            #auto_dihedral2atom[2][e].add(a)
+        for a,e in atom2auto_improperend.items():
+            auto_improperend2atom[e].add(a)
+        for a,e in atom2auto_impropercenter.items():
+            auto_impropercenter2atom[e].add(a)
+
+        # the inverse lookup for '*' matches all atom types
+        for a in atom_types:
+            auto_pair2atom['*'].add(a)
+            auto_bondincr2atom['*'].add(a)
+            auto_bond2atom['*'].add(a)
+            auto_angleend2atom['*'].add(a)
+            auto_anglecenter2atom['*'].add(a)
+            auto_dihedralend2atom['*'].add(a)
+            auto_dihedralcenter2atom['*'].add(a)
+            auto_improperend2atom['*'].add(a)
+            auto_impropercenter2atom['*'].add(a)
+
+
+
+
+
+
+
+
+        sys.stderr.write("parsing file pass2: look for bonds, bond_increments and nonbonded (pair) interactions...")
+
+        for iline in range(0, len(lines)):
+            line = lines[iline]
+            sys.stderr.write('line=\"' + line.strip() + '\"\n')
+            tokens = SplitQuotedString(line.strip(),
+                                       quotes='',
+                                       comment_char='>')
+            #sys.stderr.write('tokens = ' + str(tokens) + '\n')
+            if line.lstrip().find('!') == 0 and tokens[0] != '!Ver':
+                continue
+            if line.lstrip(' ').find('#') == 0:
+                #sys.stderr.write('allowed_section_names = ' +
+                #                 str(allowed_section_names) + '\n')
+                if (tokens[0] in allowed_section_names):
+                    section_name = tokens[0]
+                    section_is_auto = tokens[-1].endswith('_auto')
+                    sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
+                    continue
+                elif (not tokens[0] in ('#version','#define')):
+                    raise InputError('Error: Line# '+str(iline) +'\n'
+                                     '       Unrecognized section name:\n'
+                                     '       \"' + tokens[0] + '\"\n')
+
+            elif ((len(tokens) > 4) and (section_name == '#nonbond(12-6)')
+                  and (pair_styles_selected & set(['lj','lj/cut','lj/cut/coul/long',
+                                                   'lj/cut/coul/cut','lj/cut/coul/debye',
+                                                   'lj/cut/coul/dsf','lj/cut/coul/msm',
+                                                   '12-6','nonbond(12-6)']))):
+
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_name = tokens[2]
@@ -1040,15 +1329,16 @@ def main():
                 sigma = pow(B/A, 1.0/6)
                 if sigma == 0.0:
                     sigma = 1.0   #(non-zero to avoid nan error later)
-                pair2style[atom_name] = 'lj/cut/long'
-                pair_styles.add('lj/cut/long')
+                pair2style[atom_name] = 'lj/cut/coul/long'
+                pair_styles.add('lj/cut/coul/long')
                 pair2params[atom_name] = (str(epsilon)+' '+str(sigma))
                 pair_mixing_style = 'geometric tail yes'
                 #if pair_style_name.find('lj/cut') == 0:
                 #    pair2params[atom_name] = (str(epsilon)+' '+str(sigma))
                 #    pair_mixing_style = 'geometric tail yes'
 
-            elif (len(tokens) > 4) and (section_name == '#nonbond(9-6)'):
+            elif ((len(tokens) > 4) and (section_name == '#nonbond(9-6)')
+                  and (pair_styles_selected & set(['class2','9-6','nonbond(9-6)']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_name = tokens[2]
@@ -1080,7 +1370,8 @@ def main():
                                                                     float(charge_pair_ver[bond_name]))
                 bond2chargepair[bond_name] = (delta_q[0] + ' ' + delta_q[1])
 
-            elif (len(tokens) > 5) and (section_name == '#quadratic_bond'):
+            elif ((len(tokens) > 5) and (section_name == '#quadratic_bond')
+                  and (bond_styles_selected & set(['harmonic','quadratic','quadratic_bond']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
@@ -1092,12 +1383,17 @@ def main():
                                                              float(bond2ver[bond_name]))
                 r0 = tokens[4]
                 k = tokens[5]
-                bond2r0[bond_name] = r0
-                sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
+                if not section_is_auto:
+                    bond2r0[bond_name] = r0
+                    sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
+                else:
+                    bond2r0_auto[(atom_names[0], atom_names[1])] = r0
+                    sys.stderr.write('bond2r0_auto['+str(atom_names)+'] = ' + str(r0) + '\n')
                 bond2style[bond_name] = 'harmonic'
                 bond2params[bond_name] = (k+' '+r0)
 
-            elif (len(tokens) > 6) and (section_name == '#morse_bond'):
+            elif ((len(tokens) > 6) and (section_name == '#morse_bond')
+                  and (bond_styles_selected & set(['morse','morse_bond']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
@@ -1110,12 +1406,18 @@ def main():
                 r0 = tokens[4]
                 D = tokens[5]
                 alpha = tokens[6]
-                bond2r0[bond_name] = r0
-                sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
-                bond2style[bond_name] = 'harmonic'
+                sys.stderr.write('DEBUG: morse: atom_names = '+str(atom_names)+'\n')
+                if not section_is_auto:
+                    bond2r0[bond_name] = r0
+                    sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
+                else:
+                    bond2r0_auto[(atom_names[0], atom_names[1])] = r0
+                    sys.stderr.write('bond2r0_auto['+str(atom_names)+'] = ' + str(r0) + '\n')
+                bond2style[bond_name] = 'morse'
                 bond2params[bond_name] = (D+' '+alpha+' '+r0)
 
-            elif (len(tokens) > 7) and (section_name == '#quartic_bond'):
+            elif ((len(tokens) > 7) and (section_name == '#quartic_bond')
+                  and (bond_styles_selected & set(['class2','quartic','quartic_bond']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:4]))
@@ -1126,15 +1428,46 @@ def main():
                                                              tokens[2:4],
                                                              float(bond2ver[bond_name]))
                 r0 = tokens[4]
-                bond2r0[bond_name] = r0
-                sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
+                if not section_is_auto:
+                    bond2r0[bond_name] = r0
+                    sys.stderr.write('bond2r0['+bond_name+'] = ' + str(r0) + '\n')
+                else:
+                    bond2r0_auto[(atom_names[0], atom_names[1])] = r0
+                    sys.stderr.write('bond2r0_auto['+str(atom_names)+'] = ' + str(r0) + '\n')
                 K2 = tokens[5]
                 K3 = tokens[6]
                 K4 = tokens[7]
                 bond2style[bond_name] = 'class2'
                 bond2params[bond_name] = (r0+' '+K2+' '+K3+' '+K4)
 
-            elif (len(tokens) > 6) and (section_name == '#quadratic_angle'):
+
+        sys.stderr.write("parsing file pass3: look for (3-body) angle interactions...")
+
+        for iline in range(0, len(lines)):
+            line = lines[iline]
+            sys.stderr.write('line=\"' + line.strip() + '\"\n')
+            tokens = SplitQuotedString(line.strip(),
+                                       quotes='',
+                                       comment_char='>')
+            #sys.stderr.write('tokens = ' + str(tokens) + '\n')
+            if line.lstrip().find('!') == 0 and tokens[0] != '!Ver':
+                continue
+            if line.lstrip(' ').find('#') == 0:
+                #sys.stderr.write('allowed_section_names = ' +
+                #                 str(allowed_section_names) + '\n')
+                if (tokens[0] in allowed_section_names):
+                    section_name = tokens[0]
+                    section_is_auto = tokens[-1].endswith('_auto')
+                    sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
+                    continue
+                elif (not tokens[0] in ('#version','#define')):
+                    raise InputError('Error: Line# '+str(iline) +'\n'
+                                     '       Unrecognized section name:\n'
+                                     '       \"' + tokens[0] + '\"\n')
+
+
+            elif ((len(tokens) > 6) and (section_name == '#quadratic_angle')
+                  and (angle_styles_selected & set(['harmonic','quadratic','quadratic_angle']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
@@ -1146,12 +1479,17 @@ def main():
                                                                float(angle2ver[angle_name]))
                 theta0 = tokens[5]
                 k = tokens[6]
-                angle2theta0[angle_name] = theta0
-                sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
+                if not section_is_auto:
+                    angle2theta0[angle_name] = theta0
+                    sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
+                else:
+                    angle2theta_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
+                    sys.stderr.write('angle2theta0_auto['+str(atom_names)+'] = ' + str(theta0) + '\n')
                 angle2style[angle_name] = 'harmonic'
                 angle2params[angle_name] = (k+' '+theta0)
 
-            elif (len(tokens) > 8) and (section_name == '#quartic_angle'):
+            elif ((len(tokens) > 8) and (section_name == '#quartic_angle')
+                  and (angle_styles_selected & set(['class2','quartic','quartic_angle']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
@@ -1162,44 +1500,147 @@ def main():
                                                                tokens[2:5],
                                                                float(angle2ver[angle_name]))
                 theta0 = tokens[5]
-                angle2theta0[angle_name] = theta0
-                sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
+                if not section_is_auto:
+                    angle2theta0[angle_name] = theta0
+                    sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
+                else:
+                    angle2theta_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
+                    sys.stderr.write('angle2theta0_auto['+str(atom_names)+'] = ' + str(theta0) + '\n')
                 K2 = tokens[6]
                 K3 = tokens[7]
                 K4 = tokens[8]
                 angle2style[angle_name] = 'class2'
                 angle2params[angle_name] = (theta0+' '+K2+' '+K3+' '+K4)
 
-            elif (len(tokens) > 5) and (section_name == '#bond-bond'):
-                if line.lstrip().find('!') == 0:
-                    continue
-                aorig = map(EncodeAName, tokens[2:5])
-                atom_names = ReverseIfEnds(aorig)
-                angle_name = EncodeInteractionName(atom_names, section_is_auto)
-                angle2ver[angle_name] = tokens[0]
-                angle2ref[angle_name] = tokens[1]
-                angle2priority[angle_name] = DeterminePriority(section_is_auto,
-                                                               tokens[2:5],
-                                                               float(angle2ver[angle_name]))
-                Kbb = tokens[5]
-                bond_names = [EncodeInteractionName(ReverseIfEnds(aorig[0:2]),
-                                                    section_is_auto),
-                              EncodeInteractionName(ReverseIfEnds(aorig[1:3]),
-                                                    section_is_auto)]
-                #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
-                r0 = [bond2r0[bond_names[0]],
-                      bond2r0[bond_names[1]]]
-                order_reversed = aorig[0] > aorig[-1]
-                if order_reversed:
-                    r0.reverse()
-                angle2style[angle_name] = 'class2'
-                angle2class2_bb[angle_name] = (Kbb+' '+r0[0]+' '+r0[1])
 
-            elif (len(tokens) > 5) and (section_name == '#bond-angle'):
+            elif ((len(tokens) > 5) and (section_name == '#bond-bond')
+                  and (angle_styles_selected & set(['class2','quartic','quartic_angle']))):
+                if line.lstrip().find('!') == 0:
+                    continue
+                version = float(tokens[0])
+                reference = tokens[1]
                 if line.lstrip().find('!') == 0:
                     continue
                 aorig = map(EncodeAName, tokens[2:5])
                 atom_names = ReverseIfEnds(aorig)
+                Kbb = tokens[5]
+
+                atom_combos = [set([]), set([]), set([])]
+
+                #*#atom_priorities = [{}, {}, {}]
+                #*#atom_priorities[i][atom_name] = priority of i'th atom in interaction
+
+                # We must consider every possible combination of atom types
+                # which satisfy BOTH angle_equivalences and bond_equivalences.
+                # ...AND we must consider BOTH regular AND auto equivalences.
+                # For each combination generate a separate @angle interaction.
+                # (I fear this will make the resulting .LT file large.)
+
+                # Use different auto equivalence lookup tables for different
+                # atoms in the interaction. (ie the "center" and "end" atoms)
+                auto_angle2atom = [auto_angleend2atom,
+                                   auto_anglecenter2atom,
+                                   auto_angleend2atom]
+
+                for i in range(0, 3):
+                    angle_atom_name = atom_names[i]
+                    sys.stderr.write('DEBUG: angle_atom_name = '+angle_atom_name+'\n')
+                    if not section_is_auto:
+                        assert(angle_atom_name[-1] != '_')
+                        # assume regular equivalences when looking up atom types
+                        sys.stderr.write('DEBUG: equiv_angle2atom['+angle_atom_name+'] = '+
+                                         str(equiv_angle2atom[angle_atom_name])+'\n')
+                        for a in equiv_angle2atom[angle_atom_name]:
+                            atom_combos[i].add(a)
+                    else:
+                        assert((angle_atom_name[-1] == '_') or (ange_atom_name[0] == '*'))
+                        # assume "auto" equivalences when looking up atom types
+                        sys.stderr.write('DEBUG: auto_angle2atom['+str(i)+']['+angle_atom_name+'] = \n'
+                                         '       '+str(equiv_angle2atom[i][angle_atom_name])+'\n')
+                        for a in auto_angle2atom[i][angle_atom_name]:
+                            atom_combos[i].add(a)
+
+                found_at_least_one = False
+                #*#for a1, a1priority in atom_priorities[0].items():
+                #*#    for a2, a2priority in atom_priorities[1].items():
+                #*#        for a3, a3priority in atom_priorities[2].items():
+                for a1 in atom_combos[0]:
+                    for a2 in atom_combos[1]:
+                        for a3 in atom_combos[2]:
+                            #sys.stderr.write('atom2auto_bond = '+str(atom2auto_bond)+'\n')
+                            bond_data1 = LookupBondLength(a1, a2,
+                                                          atom2equiv_bond,
+                                                          bond2r0,
+                                                          atom2auto_bond,
+                                                          bond2r0_auto)
+                            if bond_data1 != None:
+                                # Save time by only continuing if a bond was
+                                # found between a1 and a2
+                                bond_data2 = LookupBondLength(a2, a3,
+                                                              atom2equiv_bond,
+                                                              bond2r0,
+                                                              atom2auto_bond,
+                                                              bond2r0_auto)
+                            if (bond_data1 and bond_data2):
+                                #bond lengths:
+                                r0s = [0.0, 0.0]
+                                #equivalent atom names used to lookup the bonds:
+                                batoms = [['', ''], ['', '']]
+                                r0s[0], batoms[0] = bond_data1
+                                r0s[1], batoms[1] = bond_data2
+                                found_at_least_one = True
+                                order_reversed = aorig[0] > aorig[-1]
+                                if order_reversed:
+                                    r0s.reverse()
+                                    batoms.reverse()
+                                    batoms[0].reverse()
+                                    batoms[1].reverse()
+                                angle_name = EncodeInteractionName(atom_names +
+                                                                   batoms[0] + batoms[1],
+                                                                   #+ [str(r0s[0]),
+                                                                   #   str(r0s[1])],
+                                                                   section_is_auto)
+                                #sys.stderr.write('DEBUG: (a1,a2,a3) = '+str((a1,a2,a3))+', '
+                                #                 ' (b11,b12,b21,b22) = '+str(batoms)+'\n')
+                                angle2ver[angle_name] = version
+                                angle2ref[angle_name] = reference
+                                angle2style[angle_name] = 'class2'
+                                angle2class2_bb[angle_name] = (Kbb+' '+r0[0]+' '+r0[1])
+                                angle2priority[angle_name] = DeterminePriority(section_is_auto,
+                                                                               aorig,
+                                                                               float(angle2ver[angle_name]))
+                                sys.stderr.write('DEBUG: bond-bond r0 ('+angle_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                sys.stderr.write('DEBUG: num_angle_coeffs = len(angle2class2_bb) = '+str(len(angle2class2_bb))+'\n')
+                                #angle2priority[angle_name] = (section_is_auto,
+                                #                              -version,
+                                #                              max((atom_priorities[0][a1],
+                                #                                   atom_priorities[1][a2],
+                                #                                   atom_priorities[2][a3])))
+                                #(Note:  large batom_priority number <==> low priority
+                                # Only one of the atom priority numbers should be > 0)
+
+
+                            
+
+
+                #sys.stderr.write('DEBUG: number of interactions = '+str(len(angle2class2_bb))+'\n')
+                if not found_at_least_one:
+                    #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
+                    #                 '       '+str(atom_names)+'\n')
+                    sys.stderr.write('WARNING: Undefied bond length for '
+                                     #'         '+
+                                     'bond-bond interaction: '+
+                                     ' '.join(atom_names)+'\n')
+                #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
+
+
+            elif ((len(tokens) > 5) and (section_name == '#bond-angle')
+                  and (angle_styles_selected & set(['class2','quartic','quartic_angle']))):
+                if line.lstrip().find('!') == 0:
+                    continue
+                aorig = map(EncodeAName, tokens[2:5])
+                atom_names = ReverseIfEnds(aorig)
+                CONTINUEHERE
                 angle_name = EncodeInteractionName(atom_names, section_is_auto)
                 angle2ver[angle_name] = tokens[0]
                 angle2ref[angle_name] = tokens[1]
@@ -1224,7 +1665,33 @@ def main():
                 angle2style[angle_name] = 'class2'
                 angle2params_ba[angle_name]= (K[0]+' '+K[0]+' '+r0[0]+' '+r0[1])
 
-            elif (len(tokens) > 8) and (section_name == '#torsion_1'):
+
+        sys.stderr.write("parsing file pass4: look for dihedrals(torsions) and impropers(out_of_plane)...")
+
+        for iline in range(0, len(lines)):
+            line = lines[iline]
+            sys.stderr.write('line=\"' + line.strip() + '\"\n')
+            tokens = SplitQuotedString(line.strip(),
+                                       quotes='',
+                                       comment_char='>')
+            #sys.stderr.write('tokens = ' + str(tokens) + '\n')
+            if line.lstrip().find('!') == 0 and tokens[0] != '!Ver':
+                continue
+            if line.lstrip(' ').find('#') == 0:
+                #sys.stderr.write('allowed_section_names = ' +
+                #                 str(allowed_section_names) + '\n')
+                if (tokens[0] in allowed_section_names):
+                    section_name = tokens[0]
+                    section_is_auto = tokens[-1].endswith('_auto')
+                    sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
+                    continue
+                elif (not tokens[0] in ('#version','#define')):
+                    raise InputError('Error: Line# '+str(iline) +'\n'
+                                     '       Unrecognized section name:\n'
+                                     '       \"' + tokens[0] + '\"\n')
+
+            elif ((len(tokens) > 8) and (section_name == '#torsion_1')
+                  and (dihedral_styles_selected & set(['charmm','torsion_1']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1241,7 +1708,9 @@ def main():
                 dihedral2style[dihedral_name] = 'charmm'
                 dihedral2params[dihedral_name] = (K+' '+n+' '+d+' '+w)
 
-            elif (len(tokens) > 7) and (section_name == '#torsion_3'):
+
+            elif ((len(tokens) > 7) and (section_name == '#torsion_3')
+                  and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1265,7 +1734,8 @@ def main():
                                                   V2+' '+phi0_2+' '+
                                                   V3+' '+phi0_3)
 
-            elif (len(tokens) > 6) and (section_name == '#middle_bond-torsion_3'):
+            elif ((len(tokens) > 6) and (section_name == '#middle_bond-torsion_3')
+                  and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1288,7 +1758,8 @@ def main():
                 dihedral2params_mbt[dihedral_name]= (F1+' '+F2+' '+
                                                      F3+' '+r0)
 
-            elif (len(tokens) > 6) and (section_name == '#end_bond-torsion_3'):
+            elif ((len(tokens) > 6) and (section_name == '#end_bond-torsion_3')
+                  and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 aorig = map(EncodeAName, tokens[2:6])
@@ -1337,7 +1808,8 @@ def main():
                                                    (F[0][2] == F[1][2]) and
                                                    (r0[0] == r0[1]))
 
-            elif (len(tokens) > 6) and (section_name == '#angle-torsion_3'):
+            elif ((len(tokens) > 6) and (section_name == '#angle-torsion_3')
+                  and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 aorig = map(EncodeAName, tokens[2:6])
@@ -1403,7 +1875,8 @@ def main():
                     
 
 
-            elif (len(tokens) > 6) and (section_name == '#angle-angle-torsion_1'):
+            elif ((len(tokens) > 6) and (section_name == '#angle-angle-torsion_1')
+                  and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 aorig = map(EncodeAName, tokens[2:6])
@@ -1437,7 +1910,8 @@ def main():
                 #    dihedral2sym_aat[dihedral_name] = (theta0[0] == theta0[1])
                     
 
-            elif (len(tokens) > 6) and (section_name == '#bond-bond_1_3'):
+            elif ((len(tokens) > 6) and (section_name == '#bond-bond_1_3')
+                  and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 aorig = map(EncodeAName, tokens[2:6])
@@ -1471,7 +1945,8 @@ def main():
                 #    dihedral2sym_bb13[dihedral_name] = (r0[0] == r0[1])
 
 
-            elif (len(tokens) > 8) and (section_name == '#out_of_plane'):
+            elif ((len(tokens) > 8) and (section_name == '#out_of_plane')
+                   and (improper_styles_selected & set(['cvff','out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names,_ignore  = OOPImproperNameSort(tokens[2:6])
@@ -1491,7 +1966,8 @@ def main():
                 #    improper2params[improper_name] = (Kchi+' '+n+' '+chi0)
                 #    improper_symmetry_subgraph = 'cenJswapIL'
 
-            elif (len(tokens) > 7) and (section_name == '#wilson_out_of_plane'):
+            elif ((len(tokens) > 7) and (section_name == '#wilson_out_of_plane')
+                  and (improper_styles_selected & set(['class2','wilson_out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
@@ -1512,7 +1988,8 @@ def main():
                 #    improper2class2_i[improper_name] = (K+' '+chi0)
                 #    improper_symmetry_subgraph = 'cenJsortIKL'
 
-            elif (len(tokens) > 6) and (section_name == '#angle-angle'):
+            elif ((len(tokens) > 6) and (section_name == '#angle-angle')
+                  and (improper_styles_selected & set(['class2','wilson_out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
@@ -1576,19 +2053,6 @@ def main():
 
         sys.stderr.write(' done.\n'
                          'building lookup tables...')
-
-        atom_types = [x[0] for x in atom2mass.items()]
-        # (atom_types is a list of keys from the atom2mass dictionary)
-
-        if include_auto_equivalences:
-            atom2ffid = Equivalences2ffids(lines_equivalences,
-                                           atom_types,
-                                           atom2pairtype)
-        else:
-            atom2ffid = AutoEquivalences2ffids(lines_equivalences,
-                                               lines_auto_equivalences,
-                                               atom_types,
-                                               atom2pairtype)
 
         # Collect information from the different terms in a class2 dihedral:
         # http://lammps.sandia.gov/doc/dihedral_class2.html
@@ -1833,11 +2297,11 @@ def main():
                         
         for atype in pair2params:
             assert(atype in pair2style)
-            assert(atype in atom2pairtype)
+            assert(atype in atom2equiv_pair)
         
             sys.stdout.write("    pair_coeff " +
-                             "@atom:" + atom2pairtype[atype] + " " + 
-                             "@atom:" + atom2pairtype[atype] + " " + 
+                             "@atom:" + atom2equiv_pair[atype] + " " + 
+                             "@atom:" + atom2equiv_pair[atype] + " " + 
                              pair2style[atype] + " " +
                              pair2params[atype] +
                              " # (ver=" + pair2ver[atype] +
