@@ -34,7 +34,7 @@ thermo        200  # time interval for printing out "thermo" data
 
 velocity all create 1.1 12345
 
-fix fxlan all langevin  1.1  1.1  1.0   48279
+fix fxlan all langevin  1.1  1.1  50.0   48279
 fix fxnph all nph x 0 0 1000 y 0 0 1000 couple xy
 
 # Note: The temperature is 1.1*ε

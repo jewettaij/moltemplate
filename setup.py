@@ -4,8 +4,6 @@ setup(
 
   name='moltemplate',
 
-  version='2.1.2',
-
   packages=['moltemplate', 'moltemplate/nbody_alt_symmetry'],
 
   description='A general cross-platform text-based molecule builder for LAMMPS',
@@ -16,7 +14,7 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/tarball/v2.1.2',
+  download_url='https://github.com/jewettaij/moltemplate/tarball/v2.2.1',
 
   keywords=['simulation', 'LAMMPS', 'molecule', 'builder', 'ESPResSo'],
 
@@ -26,9 +24,11 @@ setup(
 
   license='BSD',
 
-  classifiers=['License :: OSI Approved :: BSD License',
+  classifiers=['Environment :: Console',
+               'License :: OSI Approved :: BSD License',
                'Operating System :: MacOS :: MacOS X',
-               'Operating System :: POSIX :: Linux'
+               'Operating System :: POSIX :: Linux',
+               'Operating System :: Microsoft :: Windows'
   ],
 
   scripts=['moltemplate/scripts/moltemplate.sh',

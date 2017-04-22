@@ -17,9 +17,15 @@ Graphene {
     #              i       j                             epsilon     sigma
     pair_coeff  @atom:C @atom:C  lj/cut/coul/long       0.068443     3.407
     
-    # These Lennard-Jones parameters come from
+    # The Lennard-Jones parameters above were chosen to realistically model
+    # the interaction between graphene and water
     #  R. Saito, R. Matsuo, T. Kimura, G. Dresselhaus, M.S. Dresselhaus,
     #  Chem Phys Lett, 348:187 (2001)
+    # NOTE: If you want to simulate movement of the carbon atoms, then you must
+    # choose a more appropriate force field for the carbon atoms, such as
+    # AIREBO or Tersoff.   You can do this by editing the "pair_coeff" above.
+    # (The paper by C.F. Cornwell, C.R. Welch, J. Chem. Phys. (2011), Vol 134,
+    #  demonstrates how to use the AIREBO potential in LAMMPS.)
 
     # Define a group consisting of only carbon atoms in graphene molecules
     group Cgraphene type @atom:C
