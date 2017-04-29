@@ -427,11 +427,20 @@ def LookupRestAngle(a1, a2, a3,
     angle_name = EncodeInteractionName(ReverseIfEnds(anames))
     if angle_name in angle2theta0:
         return_val = (angle2theta0[angle_name], [anames[0], anames[1], anames[2]])
+
     # If no angle between these atoms is defined, 
     # check the angles in the _auto section(s)
     # This is a lot messier.
-    elif ((a1 in atom2auto_angle[0]) and (a2 in atom2auto_angle[1]) and (a3 in atom2auto_angle[2])):
-        anames = [atom2auto_angle[0][a1], atom2auto_angle[1][a2], atom2auto_angle[2][a3]]
+    elif ((a1 in atom2auto_angle[0]) and
+          (a2 in atom2auto_angle[1]) and
+          (a3 in atom2auto_angle[2])):
+
+        anames = [atom2auto_angle[0][a1],
+                  atom2auto_angle[1][a2],
+                  atom2auto_angle[2][a3]]
+        #sys.stderr.write('DEBUG: LookupRestAngle(): a1,a2,a3=('+
+        #                 a1+','+a2+','+a3+'), anames='+str(anames)+'\n')
+
         # Because _auto interactions can contain wildcards,
         # there can be multiple entries in angle2theta0_auto[]
         # for the same list of atom names, and we have to
@@ -1299,10 +1308,15 @@ def main():
         # the inverse lookup for '*' matches all atom types
         for a in atom_types:
             equiv_pair2atom['*'].add(a)
+            equiv_pair2atom['X'].add(a)
             equiv_bond2atom['*'].add(a)
+            equiv_bond2atom['X'].add(a)
             equiv_angle2atom['*'].add(a)
+            equiv_angle2atom['X'].add(a)
             equiv_dihedral2atom['*'].add(a)
+            equiv_dihedral2atom['X'].add(a)
             equiv_improper2atom['*'].add(a)
+            equiv_improper2atom['X'].add(a)
 
         for a,e in atom2auto_pair.items():
             auto_pair2atom[e].add(a)
@@ -1333,14 +1347,23 @@ def main():
         # the inverse lookup for '*' matches all atom types
         for a in atom_types:
             auto_pair2atom['*'].add(a)
+            auto_pair2atom['X'].add(a)
             auto_bondincr2atom['*'].add(a)
+            auto_bondincr2atom['X'].add(a)
             auto_bond2atom['*'].add(a)
+            auto_bond2atom['X'].add(a)
             auto_angleend2atom['*'].add(a)
+            auto_angleend2atom['X'].add(a)
             auto_anglecenter2atom['*'].add(a)
+            auto_anglecenter2atom['X'].add(a)
             auto_dihedralend2atom['*'].add(a)
+            auto_dihedralend2atom['X'].add(a)
             auto_dihedralcenter2atom['*'].add(a)
+            auto_dihedralcenter2atom['X'].add(a)
             auto_improperend2atom['*'].add(a)
+            auto_improperend2atom['X'].add(a)
             auto_impropercenter2atom['*'].add(a)
+            auto_impropercenter2atom['X'].add(a)
 
 
 
@@ -1373,6 +1396,7 @@ def main():
                                      '       Unrecognized section name:\n'
                                      '       \"' + tokens[0] + '\"\n')
 
+
             elif ((len(tokens) > 4) and (section_name == '#nonbond(12-6)')
                   and (pair_styles_selected & set(['lj','lj/cut','lj/cut/coul/long',
                                                    'lj/cut/coul/cut','lj/cut/coul/debye',
@@ -1398,6 +1422,7 @@ def main():
                 #    pair2params[atom_name] = (str(epsilon)+' '+str(sigma))
                 #    pair_mixing_style = 'geometric tail yes'
 
+
             elif ((len(tokens) > 4) and (section_name == '#nonbond(9-6)')
                   and (pair_styles_selected & set(['class2','9-6','nonbond(9-6)']))):
                 if line.lstrip().find('!') == 0:
@@ -1415,6 +1440,7 @@ def main():
                 #    pair2params[atom_name] = (epsilon+' '+sigma)
                 #    pair_mixing_style = 'sixthpower tail yes'
 
+
             elif (len(tokens) > 6) and (section_name == '#bond_increments'):
                 if line.lstrip().find('!') == 0:
                     continue
@@ -1430,6 +1456,7 @@ def main():
                                                                     tokens[2:4],
                                                                     float(charge_pair_ver[bond_name]))
                 bond2chargepair[bond_name] = (delta_q[0] + ' ' + delta_q[1])
+
 
             elif ((len(tokens) > 5) and (section_name == '#quadratic_bond')
                   and (bond_styles_selected & set(['harmonic','quadratic','quadratic_bond']))):
@@ -1452,6 +1479,7 @@ def main():
                     sys.stderr.write('bond2r0_auto['+str(atom_names)+'] = ' + str(r0) + '\n')
                 bond2style[bond_name] = 'harmonic'
                 bond2params[bond_name] = (k+' '+r0)
+
 
             elif ((len(tokens) > 6) and (section_name == '#morse_bond')
                   and (bond_styles_selected & set(['morse','morse_bond']))):
@@ -1532,8 +1560,7 @@ def main():
 
 
 
-            elif ((len(tokens) > 6) and (section_name == '#quadratic_angle')
-                  and (angle_styles_selected & set(['harmonic','quadratic','quadratic_angle']))):
+            elif (len(tokens) > 6) and (section_name == '#quadratic_angle'):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
@@ -1549,12 +1576,20 @@ def main():
                     angle2theta0[angle_name] = theta0
                     sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
                 else:
-                    angle2theta_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
+                    angle2theta0_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
                     sys.stderr.write('angle2theta0_auto['+str(atom_names)+'] = ' + str(theta0) + '\n')
-                angle2style[angle_name] = 'harmonic'
-                angle2params[angle_name] = (k+' '+theta0)
-
-
+                if (angle_styles_selected & set(['harmonic',
+                                                 'quadratic',
+                                                 'quadratic_angle'])):
+                    angle2style[angle_name] = 'harmonic'
+                    angle2params[angle_name] = (k+' '+theta0)
+                elif (angle_styles_selected & set(['class2',
+                                                   'quartic',
+                                                   'quartic_angle'])):
+                    # Then this is a special case of the class2 angle where
+                    # the (theta-theta0)^3 and (theta-theta0)^4 terms = 0
+                    angle2style[angle_name] = 'class2'
+                    angle2params[angle_name] = (theta0+' '+k+' 0 0')
 
 
 
@@ -1574,7 +1609,7 @@ def main():
                     angle2theta0[angle_name] = theta0
                     sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
                 else:
-                    angle2theta_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
+                    angle2theta0_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
                     sys.stderr.write('angle2theta0_auto['+str(atom_names)+'] = ' + str(theta0) + '\n')
                 K2 = tokens[6]
                 K3 = tokens[7]
@@ -1587,7 +1622,10 @@ def main():
 
 
 
-
+            """
+            CONTINUEHERE
+            THIS CODE WORKS AND WE NEED IT BUT WHILE DEBUGGING
+            I WANT TO SKIP OVER IT (because this loop is slow)
 
             elif ((len(tokens) > 5) and
                   (section_name in ('#bond-bond', '#bond-angle')) and
@@ -1606,6 +1644,9 @@ def main():
                 K[1] = K[0]
                 if len(tokens) > 6:
                     K[1] = tokens[6]
+
+                num_angle_coeffs_bb = 0
+                num_angle_coeffs_ba = 0
 
                 atom_combos = [set([]), set([]), set([])]
 
@@ -1697,11 +1738,17 @@ def main():
                                 angle2priority[angle_name] = DeterminePriority(section_is_auto,
                                                                                aorig,
                                                                                float(angle2ver[angle_name]))
-                                sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+angle_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
                                 if section_name == '#bond-bond':
-                                    sys.stderr.write('DEBUG: num_angle_coeffs = len(angle2class2_bb) = '+str(len(angle2class2_bb))+'\n')
+                                    if num_angle_coeffs_bb < len(angle2class2_bb):
+                                        sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+angle_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                        sys.stderr.write('DEBUG: num_angle_coeffs_bb = len(angle2class2_bb) = '+str(len(angle2class2_bb))+'\n')
+                                    num_angle_coeffs_bb = len(angle2class2_bb):
                                 else:
-                                    sys.stderr.write('DEBUG: num_angle_coeffs = len(angle2class2_ba) = '+str(len(angle2class2_ba))+'\n')
+                                    if num_angle_coeffs_ba < len(angle2class2_ba):
+                                        sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+angle_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                        sys.stderr.write('DEBUG: num_angle_coeffs_ba = len(angle2class2_ba) = '+str(len(angle2class2_ba))+'\n')
+                                    num_angle_coeffs_ba = len(angle2class2_ba):
+                                num_angle_coeffs_ba = len(angle2class2_ba)
                                 #angle2priority[angle_name] = (section_is_auto,
                                 #                              -version,
                                 #                              max((atom_priorities[0][a1],
@@ -1710,10 +1757,6 @@ def main():
                                 #(Note:  large batom_priority number <==> low priority
                                 # Only one of the atom priority numbers should be > 0)
 
-
-
-
-                #sys.stderr.write('DEBUG: number of interactions = '+str(len(angle2class2_bb))+'\n')
                 if not found_at_least_one:
                     #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
                     #                 '       '+str(atom_names)+'\n')
@@ -1723,7 +1766,7 @@ def main():
                                      ' '.join(atom_names)+'\n')
                 #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
 
-
+                """
 
 
 
@@ -1764,8 +1807,7 @@ def main():
 
 
 
-            elif ((len(tokens) > 8) and (section_name == '#torsion_1')
-                  and (dihedral_styles_selected & set(['charmm','torsion_1']))):
+            elif (len(tokens) > 8) and (section_name == '#torsion_1'):
                 if line.lstrip().find('!') == 0:
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
@@ -1779,14 +1821,17 @@ def main():
                 n = tokens[7]
                 d = tokens[8]
                 w = '0.0'  #ignore: this is only used by the CHARMM force field
-                dihedral2style[dihedral_name] = 'charmm'
-                dihedral2params[dihedral_name] = (K+' '+n+' '+d+' '+w)
 
-
-
-
-
-
+                if (dihedral_styles_selected & set(['charmm','torsion_1'])):
+                    dihedral2style[dihedral_name] = 'charmm'
+                    dihedral2params[dihedral_name] = (K+' '+n+' '+d+' '+w)
+                elif (dihedral_styles_selected & set(['class2','torsion_3'])):
+                    # Then this is a special case of the class2 angle
+                    # lacking the higher terms in the Fourier series
+                    dihedral2style[dihedral_name] = 'class2'
+                    dihedral2params[dihedral_name] = (K+' '+d+' '+
+                                                      '0 0 '+
+                                                      '0 0')
 
 
 
@@ -1844,6 +1889,7 @@ def main():
                 if len(tokens) > 8:
                     F3 = tokens[8]
 
+                num_dihedral2class2_mbt = 0
 
                 atom_combos = [set([]), set([]), set([]), set([])]
 
@@ -1915,11 +1961,13 @@ def main():
                                 dihedral2ver[dihedral_name] = version
                                 dihedral2ref[dihedral_name] = reference
                                 dihedral2style[dihedral_name] = 'class2'
-                                sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                if len(dihedral2class2_mbt) > num_dihedral2class2_mbt:
+                                    sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                    sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_mbt) = '+str(len(dihedral2class2_mbt))+'\n')
+                                num_dihedral2class2_mbt = len(dihedral2class2_mbt)
                                 dihedral2class2_mbt[dihedral_name]= (F1+' '+F2+' '+
                                                                      F3+' '+r0)
                                 #(CONTINUEHERE: missing dihedral2sym_mbt?)
-                                sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_mbt) = '+str(len(dihedral2class2_mbt))+'\n')
 
 
 
@@ -1974,6 +2022,8 @@ def main():
                     assert(False)
 
 
+                num_dihedral2class2_ebt = 0
+                num_dihedral2class2_ba13 = 0
 
                 atom_combos = [set([]), set([]), set([]), set([])]
 
@@ -2066,7 +2116,6 @@ def main():
                                     dihedral2ver[dihedral_name] = version
                                     dihedral2ref[dihedral_name] = reference
                                     dihedral2style[dihedral_name] = 'class2'
-                                    sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
                                     if section_name == '#end_bond-torsion_3':
                                         dihedral2style[dihedral_name] = 'class2'
                                         dihedral2class2_ebt[dihedral_name]= (F[0][0] + ' ' +
@@ -2080,13 +2129,19 @@ def main():
                                                                            (F[0][1] == F[1][1]) and
                                                                            (F[0][2] == F[1][2]) and
                                                                            (r0[0] == r0[1]))
-                                        sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_ebt) = '+str(len(dihedral2class2_ebt))+'\n')
+                                        if len(dihedral2class2_ebt) > num_dihedral2class2_ebt:
+                                            sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                            sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_ebt) = '+str(len(dihedral2class2_ebt))+'\n')
+                                        num_dihedral2class2_ebt = len(dihedral2class2_ebt)
                                     elif section_name == '#bond-angle-1-3':
                                         dihedral2class2_bb13[dihedral_name] = (Kbb + ' ' +
                                                                                r0[0] + ' ' +
                                                                                r0[1])
                                         dihedral2sym_bb13[dihedral_name] = (r0[0] == r0[1])
-                                        sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_ba13) = '+str(len(dihedral2class2_ba13))+'\n')
+                                        if len(dihedral2class2_ba13) > num_dihedral2class2_ba13:
+                                            sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
+                                            sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_ba13) = '+str(len(dihedral2class2_ba13))+'\n')
+                                        num_dihedral2class2_ba13 = len(dihedral2class2_ba13)
                                     else:
                                         assert(False)
 
@@ -2157,6 +2212,8 @@ def main():
                     assert(False)
 
 
+                num_dihedral2class2_at = 0
+                num_dihedral2class2_aat = 0
 
                 atom_combos = [set([]), set([]), set([]), set([])]
 
@@ -2204,7 +2261,6 @@ def main():
                         for a3 in atom_combos[2]:
                             for a4 in atom_combos[3]:
 
-                                #sys.stderr.write('atom2auto_angle = '+str(atom2auto_angle)+'\n')
                                 angle_data1 = LookupRestAngle(a1, a2, a3,
                                                               atom2equiv_angle,
                                                               angle2theta0,
@@ -2247,15 +2303,14 @@ def main():
                                             assert(False)
                                     dihedral_name = EncodeInteractionName(atom_names +
                                                                           aatoms[0] + aatoms[1],
-                                                                          #+ [str(r0s[0]),
-                                                                          #   str(r0s[1])],
+                                                                          #+ [str(theta0s[0]),
+                                                                          #   str(theta0s[1])],
                                                                           section_is_auto)
                                     #sys.stderr.write('DEBUG: (a1,a2,a3,a4) = '+str((a1,a2,a3,a4))+', '
                                     #                 ' (b11,b12,b21,b22) = '+str(batoms)+'\n')
                                     dihedral2ver[dihedral_name] = version
                                     dihedral2ref[dihedral_name] = reference
                                     dihedral2style[dihedral_name] = 'class2'
-                                    sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
 
                                     if section_name == '#angle-torsion_3':
                                         dihedral2class2_at[dihedral_name]= (F[0][0] + ' ' +
@@ -2284,7 +2339,10 @@ def main():
                                         #                                      (F[0][1] == F[1][1]) and
                                         #                                      (F[0][2] == F[1][2]) and
                                         #                                      (theta0[0] == theta0[1]))
-                                        sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_at) = '+str(len(dihedral2class2_at))+'\n')
+                                        if len(dihedral2class2_at) > num_dihedral2class2_at:
+                                            sys.stderr.write('DEBUG: '+section_name[1:]+' theta0 ('+dihedral_name+') = ('+theta0s[0]+', '+theta0s[1]+')\n')
+                                            sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_at) = '+str(len(dihedral2class2_at))+'\n')
+                                        num_dihedral2class2_at = len(dihedral2class2_at)
 
                                     elif section_name == '#angle-angle-torsion_1':
                                         dihedral2class2_aat[dihedral_name]= (Kaa+' '+
@@ -2296,7 +2354,10 @@ def main():
                                         #                                         theta0[0]+' '+
                                         #                                         theta0[1])
                                         #    dihedral2sym_aat[dihedral_name] = (theta0[0] == theta0[1])
-                                        sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_aat) = '+str(len(dihedral2class2_aat))+'\n')
+                                        if len(dihedral2class2_aat) > num_dihedral2class2_aat:
+                                            sys.stderr.write('DEBUG: '+section_name[1:]+' theta0 ('+dihedral_name+') = ('+theta0s[0]+', '+theta0s[1]+')\n')
+                                            sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_aat) = '+str(len(dihedral2class2_aat))+'\n')
+                                        num_dihedral2class2_aat = len(dihedral2class2_aat)
                                     else:
                                         assert(False)
 
