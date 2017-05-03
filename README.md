@@ -79,7 +79,7 @@ https://msdn.microsoft.com/en-us/commandline/wsl/install_guide
 
 https://sourceforge.net/p/lammps/mailman/message/32599824/
 
-To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will probably not work.)  Popular text editors include: nano, emacs, vim, gedit, xemacs, vi, jove.  A longer list can be found here:
+To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will probably not work.)  Popular text editors include: Notepad++, Atom, nano, emacs, vim, gedit, xemacs, vi, jove.  A longer list can be found here:
 https://en.wikipedia.org/wiki/List_of_text_editors
 
 ## License
