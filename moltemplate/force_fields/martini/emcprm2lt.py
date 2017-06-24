@@ -34,6 +34,10 @@ def helpme():
     print 'emcprm2lt.py file1 file2 --bond-style=harmonic --angle-style=harmonic'
     print ''
 
+def Abort():
+    print 'Aborting...'
+    sys.exit()
+
 def WriteInit():
 # Write generic LAMMPS settings, likely need additional on a per-ff basis
     foutput.write('  write_once("In Init") {\n')
@@ -143,10 +147,6 @@ def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
             deconv = 1
         if improp_flag:
             ieconv = 1
-
-def Abort():
-    print 'Aborting...'
-    sys.exit()
 
 
 ### Parse input ###
@@ -487,9 +487,9 @@ for i in range(len(nonbond)):
     # Cross Terms + Diagonal, normal
     for j in range(len(equiv)):
         if nonbond[i][0] == equiv[j][0]:
-            atom1name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][0], equiv[j][1], equiv[j][2], equiv[j][3], equiv[j][4])
+            atom1name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][0], equiv[j][2], equiv[j][3], equiv[j][4], equiv[j][5])
         if nonbond[i][1] == equiv[j][0]:
-            atom2name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][1], equiv[j][1], equiv[j][2], equiv[j][3], equiv[j][4])
+            atom2name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][1], equiv[j][2], equiv[j][3], equiv[j][4], equiv[j][5])
     #foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
     #        (nonbond[i][0], nonbond[i][1], pstyle, float(nonbond[i][2])*econv, float(nonbond[i][2])*lconv))
     foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
