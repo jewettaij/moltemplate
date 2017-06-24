@@ -23,7 +23,7 @@ CDlipid {
     pair_coeff  @atom:H @atom:T table tabulated_potential.dat HEAD_TAIL
         # (Note: The "HEAD_TAIL" table is the same as the "HEAD_HEAD" table.)
     pair_coeff  @atom:T @atom:T table tabulated_potential.dat TAIL_TAIL_Wc_1.5
-    bond_coeff  @bond:B    fene      30.0 1.5 1.0 1.0
+    bond_coeff  @bond:B    fene      30.0 1.5 0.0 0.0
     angle_coeff @angle:An  harmonic  10.0 180
   }
   write("Data Atoms") {
