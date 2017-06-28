@@ -510,7 +510,7 @@ for i in range(len(bond)):
 foutput.write('  }\n\n')
 foutput.write('  write_once("Data Bonds By Type") {\n')
 for i in range(len(bond)):
-    foutput.write('    @bond:%s-%s @atom:*_b%s_a*_d*_i* @atom:*_b%s_a*_d*_i*' %
+    foutput.write('    @bond:%s-%s @atom:*_b%s_a*_d*_i* @atom:*_b%s_a*_d*_i*\n' %
             (bond[i][0], bond[i][1], bond[i][0], bond[i][1]))
 foutput.write('  } # end of bonds\n\n')
 
