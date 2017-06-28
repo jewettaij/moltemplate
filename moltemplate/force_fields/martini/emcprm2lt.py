@@ -120,7 +120,7 @@ def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
             if astyle == '' or astyle == 'harmonic':
                 aeconv = econv
             elif astyle == 'cosine/squared':
-                aeconv = econv
+                aeconv = econv / 2
             else:
                 print 'Cannot find angle potential type, use manual units'
                 Abort()
@@ -506,10 +506,11 @@ foutput.write('    # ----- Bonds -----\n')
 for i in range(len(bond)):
     foutput.write('    bond_coeff @bond:%s-%s %s %f %f\n' %
             (bond[i][0], bond[i][1], bstyle, float(bond[i][2])*beconv, float(bond[i][3])*lconv))
+    foutput.write(' # %s-%s\n' % (bond[i][0], bond[i][1]))
 foutput.write('  }\n\n')
 foutput.write('  write_once("Data Bonds By Type") {\n')
 for i in range(len(bond)):
-    foutput.write('    @bond:%s-%s @atom:*_b%s_a*_d*_i* @atom:*_b%s_a*_d*_i*\n' %
+    foutput.write('    @bond:%s-%s @atom:*_b%s_a*_d*_i* @atom:*_b%s_a*_d*_i*' %
             (bond[i][0], bond[i][1], bond[i][0], bond[i][1]))
 foutput.write('  } # end of bonds\n\n')
 
@@ -521,8 +522,9 @@ if angle_flag:
     foutput.write('  write_once("In Settings") {\n')
     foutput.write('    # ----- Angles -----\n')
     for i in range(len(angle)):
-        foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f\n' %
+        foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f' %
                 (angle[i][0], angle[i][1], angle[i][2], astyle, float(angle[i][3])*aeconv, float(angle[i][4])))
+        foutput.write(' # %s-%s-%s\n' % (angle[i][0], angle[i][1], angle[i][2]))
     foutput.write('  }\n\n')
     foutput.write('  write_once("Data Angles By Type") {\n')
     for i in range(len(angle)):

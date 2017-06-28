@@ -1969,193 +1969,193 @@ MARTINI {
   write_once("In Settings") {
     # ----- Bonds -----
     bond_coeff @bond:C1-C1 harmonic 1.493787 4.700000
+ # C1-C1
     bond_coeff @bond:C1-C3 harmonic 1.493787 4.700000
+ # C1-C3
     bond_coeff @bond:C1-C4 harmonic 1.493787 4.700000
+ # C1-C4
     bond_coeff @bond:C1-Na harmonic 1.493787 4.700000
+ # C1-Na
     bond_coeff @bond:C1-Na1 harmonic 1.493787 4.700000
+ # C1-Na1
     bond_coeff @bond:C1-Na2 harmonic 1.493787 4.700000
+ # C1-Na2
     bond_coeff @bond:C1-P5 harmonic 1.493787 4.700000
+ # C1-P5
     bond_coeff @bond:C2-C4 harmonic 1.493787 4.700000
+ # C2-C4
     bond_coeff @bond:C3-P1 harmonic 1.493787 4.700000
+ # C3-P1
     bond_coeff @bond:C4-C4 harmonic 1.493787 4.700000
+ # C4-C4
     bond_coeff @bond:C4-Na harmonic 1.493787 4.700000
+ # C4-Na
     bond_coeff @bond:Na-Na harmonic 1.493787 3.700000
+ # Na-Na
     bond_coeff @bond:Na-Na1 harmonic 1.493787 3.700000
+ # Na-Na1
     bond_coeff @bond:Na-Na2 harmonic 1.493787 3.700000
+ # Na-Na2
     bond_coeff @bond:Na-Qa harmonic 1.493787 4.700000
+ # Na-Qa
     bond_coeff @bond:Na-Qa1 harmonic 1.493787 3.700000
+ # Na-Qa1
     bond_coeff @bond:Na-Qa2 harmonic 1.493787 3.700000
+ # Na-Qa2
     bond_coeff @bond:Na1-Qa harmonic 1.493787 3.700000
+ # Na1-Qa
     bond_coeff @bond:Na2-Qa harmonic 1.493787 3.700000
+ # Na2-Qa
     bond_coeff @bond:P1-P5 harmonic 1.493787 3.700000
+ # P1-P5
     bond_coeff @bond:P4-Qa harmonic 1.493787 3.700000
+ # P4-Qa
     bond_coeff @bond:P5-Qa harmonic 1.493787 4.700000
+ # P5-Qa
     bond_coeff @bond:P5-Qa1 harmonic 1.493787 3.700000
+ # P5-Qa1
     bond_coeff @bond:P5-Qa2 harmonic 1.493787 3.700000
+ # P5-Qa2
     bond_coeff @bond:Q0-Qa harmonic 1.493787 4.700000
+ # Q0-Qa
     bond_coeff @bond:Qa-Qd harmonic 1.493787 4.700000
+ # Qa-Qd
     bond_coeff @bond:C1-C1 harmonic 1.493787 4.700000
+ # C1-C1
     bond_coeff @bond:C1-C3 harmonic 1.493787 4.700000
+ # C1-C3
     bond_coeff @bond:C1-Na harmonic 1.493787 4.700000
+ # C1-Na
     bond_coeff @bond:C1-SC12 harmonic 1.493787 4.250000
+ # C1-SC12
     bond_coeff @bond:C1-SC17 harmonic 1.493787 4.250000
+ # C1-SC17
     bond_coeff @bond:Na-SC1 harmonic 1.493787 4.700000
+ # Na-SC1
     bond_coeff @bond:Qa-SC111 harmonic 1.493787 4.250000
+ # Qa-SC111
     bond_coeff @bond:SC1-SC11 harmonic 23.900600 3.410000
+ # SC1-SC11
     bond_coeff @bond:SC1-SC13 harmonic 23.900600 2.030000
+ # SC1-SC13
     bond_coeff @bond:SC1-SC15 harmonic 23.900600 2.420000
+ # SC1-SC15
     bond_coeff @bond:SC1-SC16 harmonic 23.900600 2.940000
+ # SC1-SC16
     bond_coeff @bond:SC1-SC17 harmonic 23.900600 4.060000
+ # SC1-SC17
     bond_coeff @bond:SC1-SC18 harmonic 23.900600 2.030000
+ # SC1-SC18
     bond_coeff @bond:SC1-SC3 harmonic 23.900600 2.600000
+ # SC1-SC3
     bond_coeff @bond:SC1-SC32 harmonic 23.900600 3.460000
+ # SC1-SC32
     bond_coeff @bond:SC1-SP1 harmonic 23.900600 2.420000
+ # SC1-SP1
     bond_coeff @bond:SC11-SC12 harmonic 23.900600 5.440000
+ # SC11-SC12
     bond_coeff @bond:SC11-SC13 harmonic 23.900600 2.130000
+ # SC11-SC13
     bond_coeff @bond:SC11-SC14 harmonic 23.900600 2.940000
+ # SC11-SC14
     bond_coeff @bond:SC11-SC31 harmonic 23.900600 2.720000
+ # SC11-SC31
     bond_coeff @bond:SC11-SP1 harmonic 23.900600 6.040000
+ # SC11-SP1
     bond_coeff @bond:SC110-SC3 harmonic 23.900600 2.600000
+ # SC110-SC3
     bond_coeff @bond:SC110-SP1 harmonic 23.900600 2.420000
+ # SC110-SP1
     bond_coeff @bond:SC110-SP11 harmonic 23.900600 3.410000
+ # SC110-SP11
     bond_coeff @bond:SC111-SC112 harmonic 23.900600 3.680000
+ # SC111-SC112
     bond_coeff @bond:SC111-SP11 harmonic 23.900600 5.440000
+ # SC111-SP11
     bond_coeff @bond:SC111-SP12 harmonic 23.900600 4.060000
+ # SC111-SP12
     bond_coeff @bond:SC112-SP1 harmonic 23.900600 2.030000
+ # SC112-SP1
     bond_coeff @bond:SC112-SP11 harmonic 23.900600 2.130000
+ # SC112-SP11
     bond_coeff @bond:SC12-SC13 harmonic 23.900600 3.680000
+ # SC12-SC13
     bond_coeff @bond:SC12-SC14 harmonic 23.900600 4.060000
+ # SC12-SC14
     bond_coeff @bond:SC14-SC31 harmonic 23.900600 3.460000
+ # SC14-SC31
     bond_coeff @bond:SC15-SC16 harmonic 23.900600 3.410000
+ # SC15-SC16
     bond_coeff @bond:SC15-SC3 harmonic 23.900600 2.600000
+ # SC15-SC3
     bond_coeff @bond:SC16-SC17 harmonic 23.900600 5.440000
+ # SC16-SC17
     bond_coeff @bond:SC16-SC18 harmonic 23.900600 2.130000
+ # SC16-SC18
     bond_coeff @bond:SC16-SC19 harmonic 23.900600 6.040000
+ # SC16-SC19
     bond_coeff @bond:SC16-SC32 harmonic 23.900600 2.720000
+ # SC16-SC32
     bond_coeff @bond:SC17-SC18 harmonic 23.900600 3.680000
+ # SC17-SC18
     bond_coeff @bond:SC19-SC32 harmonic 23.900600 4.930000
+ # SC19-SC32
     bond_coeff @bond:SC31-SP1 harmonic 23.900600 4.930000
+ # SC31-SP1
     bond_coeff @bond:SC33-SP1 harmonic 23.900600 4.930000
+ # SC33-SP1
     bond_coeff @bond:SC33-SP11 harmonic 23.900600 2.720000
+ # SC33-SP11
     bond_coeff @bond:SC33-SP12 harmonic 23.900600 3.460000
+ # SC33-SP12
     bond_coeff @bond:SP1-SP11 harmonic 23.900600 6.040000
+ # SP1-SP11
     bond_coeff @bond:SP11-SP12 harmonic 23.900600 2.940000
+ # SP11-SP12
   }
 
   write_once("Data Bonds By Type") {
-    @bond:C1-C1 @atom:*_bC1_a*_d*_i* @atom:*_bC1_a*_d*_i*
-    @bond:C1-C3 @atom:*_bC1_a*_d*_i* @atom:*_bC3_a*_d*_i*
-    @bond:C1-C4 @atom:*_bC1_a*_d*_i* @atom:*_bC4_a*_d*_i*
-    @bond:C1-Na @atom:*_bC1_a*_d*_i* @atom:*_bNa_a*_d*_i*
-    @bond:C1-Na1 @atom:*_bC1_a*_d*_i* @atom:*_bNa1_a*_d*_i*
-    @bond:C1-Na2 @atom:*_bC1_a*_d*_i* @atom:*_bNa2_a*_d*_i*
-    @bond:C1-P5 @atom:*_bC1_a*_d*_i* @atom:*_bP5_a*_d*_i*
-    @bond:C2-C4 @atom:*_bC2_a*_d*_i* @atom:*_bC4_a*_d*_i*
-    @bond:C3-P1 @atom:*_bC3_a*_d*_i* @atom:*_bP1_a*_d*_i*
-    @bond:C4-C4 @atom:*_bC4_a*_d*_i* @atom:*_bC4_a*_d*_i*
-    @bond:C4-Na @atom:*_bC4_a*_d*_i* @atom:*_bNa_a*_d*_i*
-    @bond:Na-Na @atom:*_bNa_a*_d*_i* @atom:*_bNa_a*_d*_i*
-    @bond:Na-Na1 @atom:*_bNa_a*_d*_i* @atom:*_bNa1_a*_d*_i*
-    @bond:Na-Na2 @atom:*_bNa_a*_d*_i* @atom:*_bNa2_a*_d*_i*
-    @bond:Na-Qa @atom:*_bNa_a*_d*_i* @atom:*_bQa_a*_d*_i*
-    @bond:Na-Qa1 @atom:*_bNa_a*_d*_i* @atom:*_bQa1_a*_d*_i*
-    @bond:Na-Qa2 @atom:*_bNa_a*_d*_i* @atom:*_bQa2_a*_d*_i*
-    @bond:Na1-Qa @atom:*_bNa1_a*_d*_i* @atom:*_bQa_a*_d*_i*
-    @bond:Na2-Qa @atom:*_bNa2_a*_d*_i* @atom:*_bQa_a*_d*_i*
-    @bond:P1-P5 @atom:*_bP1_a*_d*_i* @atom:*_bP5_a*_d*_i*
-    @bond:P4-Qa @atom:*_bP4_a*_d*_i* @atom:*_bQa_a*_d*_i*
-    @bond:P5-Qa @atom:*_bP5_a*_d*_i* @atom:*_bQa_a*_d*_i*
-    @bond:P5-Qa1 @atom:*_bP5_a*_d*_i* @atom:*_bQa1_a*_d*_i*
-    @bond:P5-Qa2 @atom:*_bP5_a*_d*_i* @atom:*_bQa2_a*_d*_i*
-    @bond:Q0-Qa @atom:*_bQ0_a*_d*_i* @atom:*_bQa_a*_d*_i*
-    @bond:Qa-Qd @atom:*_bQa_a*_d*_i* @atom:*_bQd_a*_d*_i*
-    @bond:C1-C1 @atom:*_bC1_a*_d*_i* @atom:*_bC1_a*_d*_i*
-    @bond:C1-C3 @atom:*_bC1_a*_d*_i* @atom:*_bC3_a*_d*_i*
-    @bond:C1-Na @atom:*_bC1_a*_d*_i* @atom:*_bNa_a*_d*_i*
-    @bond:C1-SC12 @atom:*_bC1_a*_d*_i* @atom:*_bSC12_a*_d*_i*
-    @bond:C1-SC17 @atom:*_bC1_a*_d*_i* @atom:*_bSC17_a*_d*_i*
-    @bond:Na-SC1 @atom:*_bNa_a*_d*_i* @atom:*_bSC1_a*_d*_i*
-    @bond:Qa-SC111 @atom:*_bQa_a*_d*_i* @atom:*_bSC111_a*_d*_i*
-    @bond:SC1-SC11 @atom:*_bSC1_a*_d*_i* @atom:*_bSC11_a*_d*_i*
-    @bond:SC1-SC13 @atom:*_bSC1_a*_d*_i* @atom:*_bSC13_a*_d*_i*
-    @bond:SC1-SC15 @atom:*_bSC1_a*_d*_i* @atom:*_bSC15_a*_d*_i*
-    @bond:SC1-SC16 @atom:*_bSC1_a*_d*_i* @atom:*_bSC16_a*_d*_i*
-    @bond:SC1-SC17 @atom:*_bSC1_a*_d*_i* @atom:*_bSC17_a*_d*_i*
-    @bond:SC1-SC18 @atom:*_bSC1_a*_d*_i* @atom:*_bSC18_a*_d*_i*
-    @bond:SC1-SC3 @atom:*_bSC1_a*_d*_i* @atom:*_bSC3_a*_d*_i*
-    @bond:SC1-SC32 @atom:*_bSC1_a*_d*_i* @atom:*_bSC32_a*_d*_i*
-    @bond:SC1-SP1 @atom:*_bSC1_a*_d*_i* @atom:*_bSP1_a*_d*_i*
-    @bond:SC11-SC12 @atom:*_bSC11_a*_d*_i* @atom:*_bSC12_a*_d*_i*
-    @bond:SC11-SC13 @atom:*_bSC11_a*_d*_i* @atom:*_bSC13_a*_d*_i*
-    @bond:SC11-SC14 @atom:*_bSC11_a*_d*_i* @atom:*_bSC14_a*_d*_i*
-    @bond:SC11-SC31 @atom:*_bSC11_a*_d*_i* @atom:*_bSC31_a*_d*_i*
-    @bond:SC11-SP1 @atom:*_bSC11_a*_d*_i* @atom:*_bSP1_a*_d*_i*
-    @bond:SC110-SC3 @atom:*_bSC110_a*_d*_i* @atom:*_bSC3_a*_d*_i*
-    @bond:SC110-SP1 @atom:*_bSC110_a*_d*_i* @atom:*_bSP1_a*_d*_i*
-    @bond:SC110-SP11 @atom:*_bSC110_a*_d*_i* @atom:*_bSP11_a*_d*_i*
-    @bond:SC111-SC112 @atom:*_bSC111_a*_d*_i* @atom:*_bSC112_a*_d*_i*
-    @bond:SC111-SP11 @atom:*_bSC111_a*_d*_i* @atom:*_bSP11_a*_d*_i*
-    @bond:SC111-SP12 @atom:*_bSC111_a*_d*_i* @atom:*_bSP12_a*_d*_i*
-    @bond:SC112-SP1 @atom:*_bSC112_a*_d*_i* @atom:*_bSP1_a*_d*_i*
-    @bond:SC112-SP11 @atom:*_bSC112_a*_d*_i* @atom:*_bSP11_a*_d*_i*
-    @bond:SC12-SC13 @atom:*_bSC12_a*_d*_i* @atom:*_bSC13_a*_d*_i*
-    @bond:SC12-SC14 @atom:*_bSC12_a*_d*_i* @atom:*_bSC14_a*_d*_i*
-    @bond:SC14-SC31 @atom:*_bSC14_a*_d*_i* @atom:*_bSC31_a*_d*_i*
-    @bond:SC15-SC16 @atom:*_bSC15_a*_d*_i* @atom:*_bSC16_a*_d*_i*
-    @bond:SC15-SC3 @atom:*_bSC15_a*_d*_i* @atom:*_bSC3_a*_d*_i*
-    @bond:SC16-SC17 @atom:*_bSC16_a*_d*_i* @atom:*_bSC17_a*_d*_i*
-    @bond:SC16-SC18 @atom:*_bSC16_a*_d*_i* @atom:*_bSC18_a*_d*_i*
-    @bond:SC16-SC19 @atom:*_bSC16_a*_d*_i* @atom:*_bSC19_a*_d*_i*
-    @bond:SC16-SC32 @atom:*_bSC16_a*_d*_i* @atom:*_bSC32_a*_d*_i*
-    @bond:SC17-SC18 @atom:*_bSC17_a*_d*_i* @atom:*_bSC18_a*_d*_i*
-    @bond:SC19-SC32 @atom:*_bSC19_a*_d*_i* @atom:*_bSC32_a*_d*_i*
-    @bond:SC31-SP1 @atom:*_bSC31_a*_d*_i* @atom:*_bSP1_a*_d*_i*
-    @bond:SC33-SP1 @atom:*_bSC33_a*_d*_i* @atom:*_bSP1_a*_d*_i*
-    @bond:SC33-SP11 @atom:*_bSC33_a*_d*_i* @atom:*_bSP11_a*_d*_i*
-    @bond:SC33-SP12 @atom:*_bSC33_a*_d*_i* @atom:*_bSP12_a*_d*_i*
-    @bond:SP1-SP11 @atom:*_bSP1_a*_d*_i* @atom:*_bSP11_a*_d*_i*
-    @bond:SP11-SP12 @atom:*_bSP11_a*_d*_i* @atom:*_bSP12_a*_d*_i*
-  } # end of bonds
+    @bond:C1-C1 @atom:*_bC1_a*_d*_i* @atom:*_bC1_a*_d*_i*    @bond:C1-C3 @atom:*_bC1_a*_d*_i* @atom:*_bC3_a*_d*_i*    @bond:C1-C4 @atom:*_bC1_a*_d*_i* @atom:*_bC4_a*_d*_i*    @bond:C1-Na @atom:*_bC1_a*_d*_i* @atom:*_bNa_a*_d*_i*    @bond:C1-Na1 @atom:*_bC1_a*_d*_i* @atom:*_bNa1_a*_d*_i*    @bond:C1-Na2 @atom:*_bC1_a*_d*_i* @atom:*_bNa2_a*_d*_i*    @bond:C1-P5 @atom:*_bC1_a*_d*_i* @atom:*_bP5_a*_d*_i*    @bond:C2-C4 @atom:*_bC2_a*_d*_i* @atom:*_bC4_a*_d*_i*    @bond:C3-P1 @atom:*_bC3_a*_d*_i* @atom:*_bP1_a*_d*_i*    @bond:C4-C4 @atom:*_bC4_a*_d*_i* @atom:*_bC4_a*_d*_i*    @bond:C4-Na @atom:*_bC4_a*_d*_i* @atom:*_bNa_a*_d*_i*    @bond:Na-Na @atom:*_bNa_a*_d*_i* @atom:*_bNa_a*_d*_i*    @bond:Na-Na1 @atom:*_bNa_a*_d*_i* @atom:*_bNa1_a*_d*_i*    @bond:Na-Na2 @atom:*_bNa_a*_d*_i* @atom:*_bNa2_a*_d*_i*    @bond:Na-Qa @atom:*_bNa_a*_d*_i* @atom:*_bQa_a*_d*_i*    @bond:Na-Qa1 @atom:*_bNa_a*_d*_i* @atom:*_bQa1_a*_d*_i*    @bond:Na-Qa2 @atom:*_bNa_a*_d*_i* @atom:*_bQa2_a*_d*_i*    @bond:Na1-Qa @atom:*_bNa1_a*_d*_i* @atom:*_bQa_a*_d*_i*    @bond:Na2-Qa @atom:*_bNa2_a*_d*_i* @atom:*_bQa_a*_d*_i*    @bond:P1-P5 @atom:*_bP1_a*_d*_i* @atom:*_bP5_a*_d*_i*    @bond:P4-Qa @atom:*_bP4_a*_d*_i* @atom:*_bQa_a*_d*_i*    @bond:P5-Qa @atom:*_bP5_a*_d*_i* @atom:*_bQa_a*_d*_i*    @bond:P5-Qa1 @atom:*_bP5_a*_d*_i* @atom:*_bQa1_a*_d*_i*    @bond:P5-Qa2 @atom:*_bP5_a*_d*_i* @atom:*_bQa2_a*_d*_i*    @bond:Q0-Qa @atom:*_bQ0_a*_d*_i* @atom:*_bQa_a*_d*_i*    @bond:Qa-Qd @atom:*_bQa_a*_d*_i* @atom:*_bQd_a*_d*_i*    @bond:C1-C1 @atom:*_bC1_a*_d*_i* @atom:*_bC1_a*_d*_i*    @bond:C1-C3 @atom:*_bC1_a*_d*_i* @atom:*_bC3_a*_d*_i*    @bond:C1-Na @atom:*_bC1_a*_d*_i* @atom:*_bNa_a*_d*_i*    @bond:C1-SC12 @atom:*_bC1_a*_d*_i* @atom:*_bSC12_a*_d*_i*    @bond:C1-SC17 @atom:*_bC1_a*_d*_i* @atom:*_bSC17_a*_d*_i*    @bond:Na-SC1 @atom:*_bNa_a*_d*_i* @atom:*_bSC1_a*_d*_i*    @bond:Qa-SC111 @atom:*_bQa_a*_d*_i* @atom:*_bSC111_a*_d*_i*    @bond:SC1-SC11 @atom:*_bSC1_a*_d*_i* @atom:*_bSC11_a*_d*_i*    @bond:SC1-SC13 @atom:*_bSC1_a*_d*_i* @atom:*_bSC13_a*_d*_i*    @bond:SC1-SC15 @atom:*_bSC1_a*_d*_i* @atom:*_bSC15_a*_d*_i*    @bond:SC1-SC16 @atom:*_bSC1_a*_d*_i* @atom:*_bSC16_a*_d*_i*    @bond:SC1-SC17 @atom:*_bSC1_a*_d*_i* @atom:*_bSC17_a*_d*_i*    @bond:SC1-SC18 @atom:*_bSC1_a*_d*_i* @atom:*_bSC18_a*_d*_i*    @bond:SC1-SC3 @atom:*_bSC1_a*_d*_i* @atom:*_bSC3_a*_d*_i*    @bond:SC1-SC32 @atom:*_bSC1_a*_d*_i* @atom:*_bSC32_a*_d*_i*    @bond:SC1-SP1 @atom:*_bSC1_a*_d*_i* @atom:*_bSP1_a*_d*_i*    @bond:SC11-SC12 @atom:*_bSC11_a*_d*_i* @atom:*_bSC12_a*_d*_i*    @bond:SC11-SC13 @atom:*_bSC11_a*_d*_i* @atom:*_bSC13_a*_d*_i*    @bond:SC11-SC14 @atom:*_bSC11_a*_d*_i* @atom:*_bSC14_a*_d*_i*    @bond:SC11-SC31 @atom:*_bSC11_a*_d*_i* @atom:*_bSC31_a*_d*_i*    @bond:SC11-SP1 @atom:*_bSC11_a*_d*_i* @atom:*_bSP1_a*_d*_i*    @bond:SC110-SC3 @atom:*_bSC110_a*_d*_i* @atom:*_bSC3_a*_d*_i*    @bond:SC110-SP1 @atom:*_bSC110_a*_d*_i* @atom:*_bSP1_a*_d*_i*    @bond:SC110-SP11 @atom:*_bSC110_a*_d*_i* @atom:*_bSP11_a*_d*_i*    @bond:SC111-SC112 @atom:*_bSC111_a*_d*_i* @atom:*_bSC112_a*_d*_i*    @bond:SC111-SP11 @atom:*_bSC111_a*_d*_i* @atom:*_bSP11_a*_d*_i*    @bond:SC111-SP12 @atom:*_bSC111_a*_d*_i* @atom:*_bSP12_a*_d*_i*    @bond:SC112-SP1 @atom:*_bSC112_a*_d*_i* @atom:*_bSP1_a*_d*_i*    @bond:SC112-SP11 @atom:*_bSC112_a*_d*_i* @atom:*_bSP11_a*_d*_i*    @bond:SC12-SC13 @atom:*_bSC12_a*_d*_i* @atom:*_bSC13_a*_d*_i*    @bond:SC12-SC14 @atom:*_bSC12_a*_d*_i* @atom:*_bSC14_a*_d*_i*    @bond:SC14-SC31 @atom:*_bSC14_a*_d*_i* @atom:*_bSC31_a*_d*_i*    @bond:SC15-SC16 @atom:*_bSC15_a*_d*_i* @atom:*_bSC16_a*_d*_i*    @bond:SC15-SC3 @atom:*_bSC15_a*_d*_i* @atom:*_bSC3_a*_d*_i*    @bond:SC16-SC17 @atom:*_bSC16_a*_d*_i* @atom:*_bSC17_a*_d*_i*    @bond:SC16-SC18 @atom:*_bSC16_a*_d*_i* @atom:*_bSC18_a*_d*_i*    @bond:SC16-SC19 @atom:*_bSC16_a*_d*_i* @atom:*_bSC19_a*_d*_i*    @bond:SC16-SC32 @atom:*_bSC16_a*_d*_i* @atom:*_bSC32_a*_d*_i*    @bond:SC17-SC18 @atom:*_bSC17_a*_d*_i* @atom:*_bSC18_a*_d*_i*    @bond:SC19-SC32 @atom:*_bSC19_a*_d*_i* @atom:*_bSC32_a*_d*_i*    @bond:SC31-SP1 @atom:*_bSC31_a*_d*_i* @atom:*_bSP1_a*_d*_i*    @bond:SC33-SP1 @atom:*_bSC33_a*_d*_i* @atom:*_bSP1_a*_d*_i*    @bond:SC33-SP11 @atom:*_bSC33_a*_d*_i* @atom:*_bSP11_a*_d*_i*    @bond:SC33-SP12 @atom:*_bSC33_a*_d*_i* @atom:*_bSP12_a*_d*_i*    @bond:SP1-SP11 @atom:*_bSP1_a*_d*_i* @atom:*_bSP11_a*_d*_i*    @bond:SP11-SP12 @atom:*_bSP11_a*_d*_i* @atom:*_bSP12_a*_d*_i*  } # end of bonds
 
   write_once("In Settings") {
     # ----- Angles -----
-    angle_coeff @angle:C1-C1-C1 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C1-C3 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C1-Na cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C1-Na1 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C1-Na2 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C1-P5 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C3-C1 cosine/squared 10.755270 120.000000
-    angle_coeff @angle:C1-C3-P1 cosine/squared 10.755270 180.000000
-    angle_coeff @angle:C1-C4-C41 cosine/squared 10.755270 120.000000
-    angle_coeff @angle:C1-C4-C42 cosine/squared 10.755270 120.000000
-    angle_coeff @angle:C1-C41-C4 cosine/squared 2.390060 100.000000
-    angle_coeff @angle:C1-C42-C4 cosine/squared 2.390060 100.000000
-    angle_coeff @angle:C1-Na-Qa cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-Na-Qa1 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-Na-Qa2 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-Na1-Qa cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-Na2-Qa cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-P5-Qa cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C2-C4-C4 cosine/squared 10.755270 120.000000
-    angle_coeff @angle:C4-C4-C4 cosine/squared 2.390060 100.000000
-    angle_coeff @angle:C4-C4-Na cosine/squared 2.390060 100.000000
-    angle_coeff @angle:C4-Na-Qa cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C41-C1-Na cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C42-C1-Na cosine/squared 5.975150 180.000000
-    angle_coeff @angle:Na-Na-Qa cosine/squared 5.975150 120.000000
-    angle_coeff @angle:Na-Na-Qa1 cosine/squared 5.975150 120.000000
-    angle_coeff @angle:Na-Na-Qa2 cosine/squared 5.975150 120.000000
-    angle_coeff @angle:Na-Na1-Qa cosine/squared 5.975150 120.000000
-    angle_coeff @angle:Na-Na2-Qa cosine/squared 5.975150 120.000000
-    angle_coeff @angle:P1-P5-Qa cosine/squared 5.975150 120.000000
-    angle_coeff @angle:C1-C1-C3 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-C3-C1 cosine/squared 10.755270 120.000000
-    angle_coeff @angle:C1-Na-SC19 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-SC12-SC11 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C1-SC17-SC16 cosine/squared 5.975150 180.000000
-    angle_coeff @angle:C3-C1-Na cosine/squared 5.975150 180.000000
-    angle_coeff @angle:Qa-SC111-SP11 cosine/squared 5.975150 180.000000
+    angle_coeff @angle:C1-C1-C1 cosine/squared 2.987575 180.000000 # C1-C1-C1
+    angle_coeff @angle:C1-C1-C3 cosine/squared 2.987575 180.000000 # C1-C1-C3
+    angle_coeff @angle:C1-C1-Na cosine/squared 2.987575 180.000000 # C1-C1-Na
+    angle_coeff @angle:C1-C1-Na1 cosine/squared 2.987575 180.000000 # C1-C1-Na1
+    angle_coeff @angle:C1-C1-Na2 cosine/squared 2.987575 180.000000 # C1-C1-Na2
+    angle_coeff @angle:C1-C1-P5 cosine/squared 2.987575 180.000000 # C1-C1-P5
+    angle_coeff @angle:C1-C3-C1 cosine/squared 5.377635 120.000000 # C1-C3-C1
+    angle_coeff @angle:C1-C3-P1 cosine/squared 5.377635 180.000000 # C1-C3-P1
+    angle_coeff @angle:C1-C4-C41 cosine/squared 5.377635 120.000000 # C1-C4-C41
+    angle_coeff @angle:C1-C4-C42 cosine/squared 5.377635 120.000000 # C1-C4-C42
+    angle_coeff @angle:C1-C41-C4 cosine/squared 1.195030 100.000000 # C1-C41-C4
+    angle_coeff @angle:C1-C42-C4 cosine/squared 1.195030 100.000000 # C1-C42-C4
+    angle_coeff @angle:C1-Na-Qa cosine/squared 2.987575 180.000000 # C1-Na-Qa
+    angle_coeff @angle:C1-Na-Qa1 cosine/squared 2.987575 180.000000 # C1-Na-Qa1
+    angle_coeff @angle:C1-Na-Qa2 cosine/squared 2.987575 180.000000 # C1-Na-Qa2
+    angle_coeff @angle:C1-Na1-Qa cosine/squared 2.987575 180.000000 # C1-Na1-Qa
+    angle_coeff @angle:C1-Na2-Qa cosine/squared 2.987575 180.000000 # C1-Na2-Qa
+    angle_coeff @angle:C1-P5-Qa cosine/squared 2.987575 180.000000 # C1-P5-Qa
+    angle_coeff @angle:C2-C4-C4 cosine/squared 5.377635 120.000000 # C2-C4-C4
+    angle_coeff @angle:C4-C4-C4 cosine/squared 1.195030 100.000000 # C4-C4-C4
+    angle_coeff @angle:C4-C4-Na cosine/squared 1.195030 100.000000 # C4-C4-Na
+    angle_coeff @angle:C4-Na-Qa cosine/squared 2.987575 180.000000 # C4-Na-Qa
+    angle_coeff @angle:C41-C1-Na cosine/squared 2.987575 180.000000 # C41-C1-Na
+    angle_coeff @angle:C42-C1-Na cosine/squared 2.987575 180.000000 # C42-C1-Na
+    angle_coeff @angle:Na-Na-Qa cosine/squared 2.987575 120.000000 # Na-Na-Qa
+    angle_coeff @angle:Na-Na-Qa1 cosine/squared 2.987575 120.000000 # Na-Na-Qa1
+    angle_coeff @angle:Na-Na-Qa2 cosine/squared 2.987575 120.000000 # Na-Na-Qa2
+    angle_coeff @angle:Na-Na1-Qa cosine/squared 2.987575 120.000000 # Na-Na1-Qa
+    angle_coeff @angle:Na-Na2-Qa cosine/squared 2.987575 120.000000 # Na-Na2-Qa
+    angle_coeff @angle:P1-P5-Qa cosine/squared 2.987575 120.000000 # P1-P5-Qa
+    angle_coeff @angle:C1-C1-C3 cosine/squared 2.987575 180.000000 # C1-C1-C3
+    angle_coeff @angle:C1-C3-C1 cosine/squared 5.377635 120.000000 # C1-C3-C1
+    angle_coeff @angle:C1-Na-SC19 cosine/squared 2.987575 180.000000 # C1-Na-SC19
+    angle_coeff @angle:C1-SC12-SC11 cosine/squared 2.987575 180.000000 # C1-SC12-SC11
+    angle_coeff @angle:C1-SC17-SC16 cosine/squared 2.987575 180.000000 # C1-SC17-SC16
+    angle_coeff @angle:C3-C1-Na cosine/squared 2.987575 180.000000 # C3-C1-Na
+    angle_coeff @angle:Qa-SC111-SP11 cosine/squared 2.987575 180.000000 # Qa-SC111-SP11
   }
 
   write_once("Data Angles By Type") {
