@@ -504,7 +504,7 @@ if bstyle == '':
 foutput.write('  write_once("In Settings") {\n')
 foutput.write('    # ----- Bonds -----\n')
 for i in range(len(bond)):
-    foutput.write('    bond_coeff @bond:%s-%s %s %f %f\n' %
+    foutput.write('    bond_coeff @bond:%s-%s %s %f %f' %
             (bond[i][0], bond[i][1], bstyle, float(bond[i][2])*beconv, float(bond[i][3])*lconv))
     foutput.write(' # %s-%s\n' % (bond[i][0], bond[i][1]))
 foutput.write('  }\n\n')
