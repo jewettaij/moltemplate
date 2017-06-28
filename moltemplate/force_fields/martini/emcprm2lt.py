@@ -493,7 +493,7 @@ for i in range(len(nonbond)):
     #foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
     #        (nonbond[i][0], nonbond[i][1], pstyle, float(nonbond[i][2])*econv, float(nonbond[i][2])*lconv))
     foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
-            (atom1name, atom2name, pstyle, float(nonbond[i][2])*econv, float(nonbond[i][2])*lconv))
+            (atom1name, atom2name, pstyle, float(nonbond[i][3])*econv, float(nonbond[i][2])*lconv))
     foutput.write(' # %s-%s\n' % (nonbond[i][0], nonbond[i][1]))
 foutput.write('  } # end of nonbonded parameters\n\n')
 
