@@ -34,6 +34,10 @@ def helpme():
     print 'emcprm2lt.py file1 file2 --bond-style=harmonic --angle-style=harmonic'
     print ''
 
+def Abort():
+    print 'Aborting...'
+    sys.exit()
+
 def WriteInit():
 # Write generic LAMMPS settings, likely need additional on a per-ff basis
     foutput.write('  write_once("In Init") {\n')
@@ -116,6 +120,8 @@ def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
             if astyle == '' or astyle == 'harmonic':
                 aeconv = econv
             elif astyle == 'cosine/squared':
+                aeconv = econv / 2
+            elif astyle == 'sdk':
                 aeconv = econv
             else:
                 print 'Cannot find angle potential type, use manual units'
@@ -143,10 +149,6 @@ def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
             deconv = 1
         if improp_flag:
             ieconv = 1
-
-def Abort():
-    print 'Aborting...'
-    sys.exit()
 
 
 ### Parse input ###
@@ -511,9 +513,9 @@ for i in range(len(nonbond)):
     # Cross Terms + Diagonal, normal
     for j in range(len(equiv)):
         if nonbond[i][0] == equiv[j][0]:
-            atom1name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][0], equiv[j][1], equiv[j][2], equiv[j][3], equiv[j][4])
+            atom1name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][0], equiv[j][2], equiv[j][3], equiv[j][4], equiv[j][5])
         if nonbond[i][1] == equiv[j][0]:
-            atom2name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][1], equiv[j][1], equiv[j][2], equiv[j][3], equiv[j][4])
+            atom2name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][1], equiv[j][2], equiv[j][3], equiv[j][4], equiv[j][5])
     if atom1name == None or atom2name == None:
         print atom1name, atom2name, nonbond[i]
         print 'Error: Atom in Nonbonded Pairs not found in Equivalences'
@@ -530,8 +532,9 @@ if bstyle == '':
 foutput.write('  write_once("In Settings") {\n')
 foutput.write('    # ----- Bonds -----\n')
 for i in range(len(bond)):
-    foutput.write('    bond_coeff @bond:%s-%s %s %f %f\n' %
+    foutput.write('    bond_coeff @bond:%s-%s %s %f %f' %
             (bond[i][0], bond[i][1], bstyle, float(bond[i][2])*beconv, float(bond[i][3])*lconv))
+    foutput.write(' # %s-%s\n' % (bond[i][0], bond[i][1]))
 foutput.write('  }\n\n')
 foutput.write('  write_once("Data Bonds By Type") {\n')
 for i in range(len(bond)):
@@ -548,11 +551,13 @@ if angle_flag:
     foutput.write('    # ----- Angles -----\n')
     for i in range(len(angle)):
         if (len(angle[i]) > 5): # Check if extra data in angle array
-            foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f\n' %
+            foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f' %
                     (angle[i][0], angle[i][1], angle[i][2], str(angle[i][5]), float(angle[i][3])*aeconv, float(angle[i][4])))
+            foutput.write(' # %s-%s-%s\n' % (angle[i][0], angle[i][1], angle[i][2]))
         else:
-            foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f\n' %
+            foutput.write('    angle_coeff @angle:%s-%s-%s %s %f %f' %
                     (angle[i][0], angle[i][1], angle[i][2], astyle, float(angle[i][3])*aeconv, float(angle[i][4])))
+            foutput.write(' # %s-%s-%s\n' % (angle[i][0], angle[i][1], angle[i][2]))
     foutput.write('  }\n\n')
     foutput.write('  write_once("Data Angles By Type") {\n')
     for i in range(len(angle)):
