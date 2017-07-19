@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.2.1"
-G_DATE="2017-4-11"
+G_VERSION="2.3.0"
+G_DATE="2017-7-18"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -218,6 +218,7 @@ $data_ellipsoids
 $data_lines
 $data_triangles
 $data_boundary
+$data_header
 $data_bonds_by_type*
 ${data_angles_by_type}*
 ${data_dihedrals_by_type}*
@@ -374,8 +375,8 @@ for A in "$@"; do
 done
 
 TTREE_ARGS=""
-ATOM_STYLE=""
-ATOM_STYLE_ARG=""
+ATOM_STYLE="full"
+ATOM_STYLE_ARG="-atomstyle \"$ATOM_STYLE\""
 
 i=0
 while [ "$i" -lt "$ARGC" ]; do
@@ -604,8 +605,6 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
     fi
 done
-
-
 
 
 if [ -z "$ATOM_STYLE" ]; then
@@ -1155,7 +1154,6 @@ IFS="$IFS_BACKUP"
 
 
 
-
 if [ -n "$LTTREE_POSTPROCESS_COMMAND" ]; then
     echo "" >&2
     if ! eval $LTTREE_POSTPROCESS_COMMAND $TTREE_ARGS; then
@@ -1479,6 +1477,14 @@ echo "" >> "$OUT_FILE_DATA"
 
 
 
+if [ -s "$data_header" ]; then
+  cat "$data_header" >> "$OUT_FILE_DATA"
+  echo "" >> "$OUT_FILE_DATA"
+fi
+
+
+
+
 # --- PERIODIC BOUNDARY CONDITIONS ---
 
 # Note: If there is a "$data_boundary" file present, it overrides any settings
@@ -1607,14 +1613,6 @@ else
     #echo "a,b,c,alpha,beta,gamma = $BOXSIZE_A,$BOXSIZE_B,$BOXSIZE_C,$ALPHA,$BETA,$GAMMA"
 fi
 echo "" >> "$OUT_FILE_DATA"
-
-
-
-
-if [ -s "$data_header" ]; then
-  cat "$data_header" >> "$OUT_FILE_DATA"
-  echo "" >> "$OUT_FILE_DATA"
-fi
 
 
 if [ -s "$data_masses" ]; then
@@ -2133,7 +2131,7 @@ echo "" >> $OUT_FILE_INPUT_SCRIPT
 
 if [ ! -z $RUN_VMD_AT_END ]; then
 
-    echo "topo readlammpsdata $OUT_FILE_DATA full" > vmd_viz_moltemplate.tcl.tmp
+    echo "topo readlammpsdata $OUT_FILE_DATA $ATOM_STYLE" > vmd_viz_moltemplate.tcl.tmp
     bn=`basename $OUT_FILE_DATA .data`
     echo "animate write psf $bn.psf" >> vmd_viz_moltemplate.tcl.tmp
     vmd -e vmd_viz_moltemplate.tcl.tmp

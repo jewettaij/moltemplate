@@ -17,8 +17,8 @@ to my knowledge, have not yet been implemented in LAMMPS as of 2017-2-01.)
 
 __author__ = 'Jason Lambert and Andrew Jewett'
 # (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)
-__version__ = '0.2.0'
-__date__ = '2016-12-21'
+__version__ = '0.2.1'
+__date__ = '2017-17-18'
 
 
 import sys
@@ -447,7 +447,8 @@ def main():
         sys.stdout.write("  write_once(\"In Settings\") {\n")
         for atype in atom2vdw_e:
             assert(atype in atom2vdw_s)
-            assert(atype in atom2ffid)
+            if not (atype in atom2ffid):
+                continue
         
             sys.stdout.write("    pair_coeff " +
                              "@atom:" + atype + "_b" + atom2ffid[atype] + "_a" + atom2ffid[

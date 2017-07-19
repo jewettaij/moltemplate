@@ -7,7 +7,14 @@ This is only part of the SDK force field and is to be used for lipids only. Only
 Shinoda et al. J. Phys. Chem. B, Vol. 114, No. 20, 2010
 http://dx.doi.org/10.1021/jp9107206
 
-are used. This works for any topology built using the following types:
+are used.
+
+NOTE: We extracted the parameters from that publication from the files 
+distributed with the "EMC" tool.  If you use these files, please also cite:
+P. J. in ‘t Veld and G. C. Rutledge, Macromolecules 2003, 36, 7358.
+
+
+This works for any topology built using the following types:
 
 Name    Structure         Charge
 NC      -CH2CH2-N-(CH3)3  +1

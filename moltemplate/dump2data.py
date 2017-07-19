@@ -86,19 +86,29 @@ class DataSettings(AtomStyleSettings):
 
 
 # Atom Styles in LAMMPS as of 2011-7-29
-g_style_map = {'angle':    ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
-               'atomic':   ['atom-ID', 'atom-type', 'x', 'y', 'z'],
-               'bond':     ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
-               'charge':   ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z'],
-               'colloid':  ['atom-ID', 'atom-type', 'x', 'y', 'z'],
-               'dipole':   ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z', 'mux', 'muy', 'muz'],
-               'electron': ['atom-ID', 'atom-type', 'q', 'spin', 'eradius', 'x', 'y', 'z'],
+g_style_map = {'angle':     ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
+               'atomic':    ['atom-ID', 'atom-type', 'x', 'y', 'z'],
+               'body':      ['atom-ID', 'atom-type', 'bodyflag', 'mass', 'x', 'y', 'z'],
+               'bond':      ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
+               'charge':    ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z'],
+               'dipole':    ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z', 'mux', 'muy', 'muz'],
+               'dpd':       ['atom-ID', 'atom-type', 'theta', 'x', 'y', 'z'],
+               'electron':  ['atom-ID', 'atom-type', 'q', 'spin', 'eradius', 'x', 'y', 'z'],
                'ellipsoid': ['atom-ID', 'atom-type', 'x', 'y', 'z', 'quatw', 'quati', 'quatj', 'quatk'],
-               'full':     ['atom-ID', 'molecule-ID', 'atom-type', 'q', 'x', 'y', 'z'],
-               'granular': ['atom-ID', 'atom-type', 'diameter', 'density', 'x', 'y', 'z'],
+               'full':      ['atom-ID', 'molecule-ID', 'atom-type', 'q', 'x', 'y', 'z'],
+               'line':      ['atom-ID', 'molecule-ID', 'atom-type', 'lineflag', 'density', 'x', 'y', 'z'],
+               'meso':      ['atom-ID', 'atom-type', 'rho', 'e', 'cv', 'x', 'y', 'z'],
                'molecular': ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
-               'peri':     ['atom-ID', 'atom-type', 'volume', 'density', 'x', 'y', 'z'],
-               'hybrid':   ['atom-ID', 'atom-type', 'x', 'y', 'z']}
+               'peri':      ['atom-ID', 'atom-type', 'volume', 'density', 'x', 'y', 'z'],
+               'smd':       ['atom-ID', 'atom-type', 'molecule-ID' 'volume', 'mass', 'kernel-radius', 'contact-radius', 'x', 'y', 'z'],
+               'sphere':    ['atom-ID', 'atom-type', 'diameter', 'density', 'x', 'y', 'z'],
+               'template':  ['atom-ID', 'molecule-ID', 'template-index', 'template-atom', 'atom-type', 'x', 'y', 'z'],
+               'tri':       ['atom-ID', 'molecule-ID', 'atom-type', 'triangleflag', 'density', 'x', 'y', 'z'],
+               'wavepacket': ['atom-ID', 'atom-type', 'charge', 'spin', 'eradius', 'etag', 'cs_re', 'cs_im', 'x', 'y', 'z'],
+               'hybrid':    ['atom-ID', 'atom-type', 'x', 'y', 'z'],
+               # The following styles were removed from LAMMPS as of 2012-3
+               'colloid':   ['atom-ID', 'atom-type', 'x', 'y', 'z'],
+               'granular':  ['atom-ID', 'atom-type', 'diameter', 'density', 'x', 'y', 'z']}
 
 
 def AtomStyle2ColNames(atom_style_string):
@@ -111,6 +121,7 @@ def AtomStyle2ColNames(atom_style_string):
     atom_style = atom_style_args[0]
 
     hybrid_args = atom_style_args[1:]
+
     if (atom_style not in g_style_map):
         if (len(atom_style_args) >= 2):
             # If the atom_style_string includes at least 2 words, then we

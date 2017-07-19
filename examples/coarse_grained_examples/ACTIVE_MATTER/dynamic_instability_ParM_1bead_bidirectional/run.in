@@ -1,0 +1,191 @@
+# PREREQUISITES:
+#
+#     You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#     (See README_setup.sh for details)
+
+# -- Init Section --
+
+include system.in.init
+boundary p p p
+
+# -- Atom Definition Section --
+
+read_data system.data &
+          extra/bond/per/atom 10 &
+          extra/angle/per/atom 20 &
+          extra/special/per/atom 100
+
+# -- Settings Section --
+
+include system.in.settings
+include system.in.transitions
+comm_modify cutoff 10
+
+# -- Run Section --
+
+include confinement_box_L=176_Lmax=200_K=100.in
+
+#fix fxbal all balance 10 1.03 shift x 20 1.03
+
+#fix fxBreakAB all bond/break/auto 10  1  0.01 prob 0.01 12345
+
+timestep        0.025
+#neighbor 100 multi
+#neighbor 20 bin
+neighbor 10 bin
+
+dump            dmAll all custom 100 traj.lammpstrj id mol type x y z ix iy iz
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+#thermo          10000  # time interval for printing out "thermo" data
+thermo          200  # time interval for printing out "thermo" data
+
+group gMobile union all all
+
+# Integrate the equations of motion:
+#                        kB*Tstart   kB*Tstop   tdamp      randomseed
+#fix fxlan all langevin   0.5961621   0.596162   50.0     123456
+#fix fxnve all nve
+fix fxlan gMobile langevin   0.5961621   0.596162   100.0     123456
+fix fxnve gMobile nve
+mass * 1000.0            # (Play with this number. Mass too small->instability.)
+
+
+
+
+# I decided to save .DATA files frequently during the simulation in order
+# to be able to use VMD to visualize the system (at these times).
+# (I don't really need all these DATA files now that I am using OVITO instead.)
+
+run             5000
+write_data  system_t=5000.data
+
+run             5000
+write_data  system_t=10000.data
+
+run             10000
+write_data  system_t=20000.data
+
+run             20000
+write_data  system_t=40000.data
+
+run             20000
+write_data  system_t=60000.data
+
+run             20000
+write_data  system_t=80000.data
+
+run             20000
+write_data  system_t=100000.data
+
+run             20000
+write_data  system_t=120000.data
+
+run             20000
+write_data  system_t=140000.data
+
+run             20000
+write_data  system_t=160000.data
+
+run             20000
+write_data  system_t=180000.data
+
+run             20000
+write_data  system_t=200000.data
+
+run             20000
+write_data  system_t=220000.data
+
+run             30000
+write_data  system_t=250000.data
+
+run             50000
+write_data  system_t=300000.data
+
+run             50000
+write_data  system_t=350000.data
+
+run             50000
+write_data  system_t=400000.data
+
+run             50000
+write_data  system_t=450000.data
+
+run             50000
+write_data  system_t=500000.data
+
+run             50000
+write_data  system_t=550000.data
+
+run             50000
+write_data  system_t=600000.data
+
+run             50000
+write_data  system_t=650000.data
+
+run             50000
+write_data  system_t=700000.data
+
+run             50000
+write_data  system_t=750000.data
+
+run             50000
+write_data  system_t=800000.data
+
+run             50000
+write_data  system_t=850000.data
+
+run             50000
+write_data  system_t=900000.data
+
+run             50000
+write_data  system_t=950000.data
+
+run             50000
+write_data  system_t=1000000.data
+
+run             100000
+write_data  system_t=1100000.data
+
+run             100000
+write_data  system_t=1200000.data
+
+run             100000
+write_data  system_t=1300000.data
+
+run             100000
+write_data  system_t=1400000.data
+
+run             100000
+write_data  system_t=1500000.data
+
+run             100000
+write_data  system_t=1600000.data
+
+run             100000
+write_data  system_t=1700000.data
+
+run             100000
+write_data  system_t=1800000.data
+
+run             100000
+write_data  system_t=1900000.data
+
+run             100000
+write_data  system_t=2000000.data
+
+run             200000
+write_data  system_t=2200000.data
+
+run             200000
+write_data  system_t=2400000.data
+
+run             200000
+write_data  system_t=2600000.data
+
+run             200000
+write_data  system_t=2800000.data
+
+run             200000
+write_data  system_t=3000000.data

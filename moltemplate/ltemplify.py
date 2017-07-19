@@ -37,8 +37,8 @@ except (SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.53.0'
-g_date_str = '2017-2-09'
+g_version_str = '0.53.1'
+g_date_str = '2017-6-08'
 
 def Intify(s):
     if s.isdigit():
@@ -3119,16 +3119,16 @@ def main():
             sys.stdout.write(mol_name + ' {\n')
 
         if len(l_in_init) > 0:
-            sys.stdout.write('\n### LAMMPS commands for initialization\n'
-                             '### (These can be overridden later.)\n\n')
+            sys.stdout.write('\n  ### LAMMPS commands for initialization\n'
+                             '  ### (These can be overridden later.)\n\n')
             l_in_init.insert(0, (' ' * cindent) +
                              'write_once(\"' + in_init + '\") {\n')
             l_in_init.append((' ' * cindent) + '}\n')
             sys.stdout.write('\n')
             sys.stdout.write(''.join(l_in_init))
         if len(l_in_settings) > 0:
-            sys.stdout.write('\n### LAMMPS commands for settings\n'
-                             '### (These can be overridden later.)\n\n')
+            sys.stdout.write('\n  ### LAMMPS commands for settings\n'
+                             '  ### (These can be overridden later.)\n\n')
             l_in_settings.insert(0, (' ' * cindent) +
                                  'write_once(\"' + in_settings + '\") {\n')
             l_in_settings.append((' ' * cindent) + '}\n')
@@ -3265,7 +3265,7 @@ def main():
             non_empty_output = True
 
         if non_empty_output:
-            sys.stdout.write('\n\n### DATA sections\n\n')
+            sys.stdout.write('\n\n  ### DATA sections\n\n')
 
         if len(l_data_masses) > 0:
             l_data_masses.insert(0, (' ' * cindent) +

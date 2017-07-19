@@ -2067,7 +2067,6 @@ class StaticObj(object):
                 self.namespaces.append(stnode)
 
             elif cmd_token == 'category':
-
                 cat_name = lex.get_token()
 
                 cat_count_start = 1
@@ -2107,6 +2106,7 @@ class StaticObj(object):
                                                  '       Error near ' + lex.error_leader() + '\n'
                                                  '       \"' + cmd_token + ' ' + cat_name + '...\" has too many arguments,\n'
                                                  '       or lacks a close-paren \')\'.\n')
+
                 else:
                     lex.push_token(open_paren)
 
