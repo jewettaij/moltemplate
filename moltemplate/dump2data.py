@@ -22,8 +22,8 @@ A reference DATA file is needed (argument).
 # All rights reserved.
 
 g_program_name = 'dump2data.py'
-g_date_str = '2016-12-21'
-g_version_str = '0.52.0'
+g_date_str = '2017-7-27'
+g_version_str = '0.53.0'
 
 import sys
 from collections import defaultdict
@@ -677,29 +677,32 @@ def WriteFrameToData(out_file,
                         # In principle, depending on the atom_style,
                         # there could be multiple vectors per atom.
                         for I in range(0, len(data_settings.ii_vects)):
-                            vxvyvz = vects[atomid][I]
-                            i_vx = data_settings.ii_vects[I][0]
-                            i_vy = data_settings.ii_vects[I][1]
-                            i_vz = data_settings.ii_vects[I][2]
-                            if ((i_vx >= len(tokens)) or
+                            if atomid in vects:
+                                vxvyvz = vects[atomid][I]
+                                assert((type(vxvyvz) is tuple) and
+                                       (len(vxvyvz) == 3))
+                                i_vx = data_settings.ii_vects[I][0]
+                                i_vy = data_settings.ii_vects[I][1]
+                                i_vz = data_settings.ii_vects[I][2]
+                                if ((i_vx >= len(tokens)) or
                                     (i_vy >= len(tokens)) or
                                     (i_vz >= len(tokens))):
-                                raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
-                                                 '       Specify the atom_style using -atomstyle style.\n')
-                            if ((vxvyvz == None) or
-                                    (type(vxvyvz) is not tuple)):
-                                assert(data_settings.column_names[
-                                       i_vx] not in dump_column_names)
-                                raise InputError('Error(dump2data): You have a vector coordinate in your DATA file named \"' + data_settings.column_names[i_vx] + '\"\n'
-                                                 '       However there are no columns with this name in your DUMP file\n'
-                                                 '       (or the column was not in the expected place).\n'
-                                                 '       Hence, the atom styles in the dump and data files do not match.')
+                                    raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
+                                                     '       Specify the atom_style using -atomstyle style.\n')
 
-                            # Replace the vector components with numbers
-                            # from the dump file
-                            tokens[i_vx] = vxvyvz[0]
-                            tokens[i_vy] = vxvyvz[1]
-                            tokens[i_vz] = vxvyvz[2]
+                                # Replace the vector components with numbers
+                                # from the dump file
+                                tokens[i_vx] = vxvyvz[0]
+                                tokens[i_vy] = vxvyvz[1]
+                                tokens[i_vz] = vxvyvz[2]
+
+                            else:
+                                if data_settings.column_names[
+                                        i_vx] not in dump_column_names:
+                                    raise InputError('Error(dump2data): You have a vector coordinate in your DATA file named \"' + data_settings.column_names[i_vx] + '\"\n'
+                                                     '       However there are no columns with this name in your DUMP file\n'
+                                                     '       (or the column was not in the expected place).\n'
+                                                     '       Hence, the atom styles in the dump and data files do not match.')
 
                         # Now loop over the coordinates of each atom.
                         # for I in range(0,len(data_settings.ii_coords)):
@@ -717,8 +720,8 @@ def WriteFrameToData(out_file,
                         i_y = data_settings.i_coords[1]
                         i_z = data_settings.i_coords[2]
                         if ((i_x >= len(tokens)) or
-                                (i_y >= len(tokens)) or
-                                (i_z >= len(tokens))):
+                            (i_y >= len(tokens)) or
+                            (i_z >= len(tokens))):
                             raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
                                              '       Specify the atom_style using -atomstyle style.\n')
                         # Replace the coordinates with coordinates from
@@ -828,8 +831,7 @@ def main():
         finished_reading_frame = False
         read_last_frame = False
 
-        #in_coord_file = open('traj_nvt.lammpstrj','r')
-        #in_coord_file = open('deleteme.lammpstrj','r')
+        #in_coord_file = open('tmp_atom_coords.dat','r')
         in_coord_file = sys.stdin
 
         while True:
@@ -1082,7 +1084,7 @@ def main():
 
                     frame_velocities[atomid] = [vx, vy, vz]
 
-                    # Ugly detail:
+                    # NOTE:
                     # There can be multiple "vects" associated with each atom
                     # (for example, dipole moments, ellipsoid directions, etc..)
 

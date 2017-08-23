@@ -143,7 +143,9 @@ g_version_str = '0.20.0'
 
 bond_pattern_module_name = ""
 
+import os
 import sys
+sys.path.append(os.getcwd())
 import importlib
 
 if sys.version < '2.6':

@@ -48,9 +48,9 @@ def main():
         finished_reading_frame = False
         read_last_frame = False
 
-        #in_coord_file = open('traj.raw','r')
         #in_coord_file = open('tmp_atom_coords.dat','r')
         in_coord_file = sys.stdin
+
         read_last_frame = False
         while True:
 

@@ -8,9 +8,11 @@
 
 """
 
-import sys
 from operator import itemgetter
 import importlib
+import os
+import sys
+sys.path.append(os.getcwd())
 
 g_program_name = __file__.split('/')[-1]
 
@@ -40,7 +42,7 @@ def main():
 
     # search locations
     package_opts = [[module_name, __package__],
-        ['nbody_alternate_symmetry.'+module_name, __package__]]
+                    ['nbody_alt_symmetry.'+module_name, __package__]]
 
     if __package__:
         for i, _ in enumerate(package_opts):

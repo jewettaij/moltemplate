@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.3.0"
-G_DATE="2017-7-18"
+G_VERSION="2.3.6"
+G_DATE="2017-8-07"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -313,6 +313,14 @@ Optional arguments:
 -overlay-bonds     (It does the same thing for bonds, dihedrals, and impropers.)
                     Use these options to prevent that behavoir.
 
+-angle-symmetry file.py     Normally moltemplate.sh reorders the atoms in each
+-dihedral-symmetry file.py  angle, dihedral, improper, and bond interaction.
+-improper-symmetry file.py  TO TURN OFF ATOM REORDERING, SET file.py to "NONE"
+-bond-symmetry file.py      You can override the rules that moltemplate.sh uses
+                            by supplying a file (file.py) with symmetry rules.
+                            See nbody_Dihedrals.py, nbody_Impropers.py (in the
+                            moltemplate directory) to learn the file format.
+
 EOF
 )
 
@@ -422,6 +430,62 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         #echo "  (extracting coordinates from \"$RAW_FILE\")" >&2
         awk '{if (NF==3) {print $0}}' < "$RAW_FILE" > "$tmp_atom_coords"
+
+    elif [ "$A" = "-bond-symmetry" ]; then
+        # Change the atom ordering rules in a 2-body bonded interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_BONDS="bonds_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_BONDS=$A
+	fi
+
+    elif [ "$A" = "-angle-symmetry" ]; then
+        # Change the atom ordering rules in a 3-body "angle" interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_ANGLES="angles_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_ANGLES=$A
+	fi
+
+    elif [ "$A" = "-dihedral-symmetry" ]; then
+        # Change the atom ordering rules in a 4-body "dihedral" interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_DIHEDRALS="dihedrals_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_DIHEDRALS=$A
+	fi
+
+    elif [ "$A" = "-improper-symmetry" ]; then
+        # Change the atom ordering rules in a 4-body "improper" interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_IMPROPERS="impropers_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_IMPROPERS=$A
+	fi
 
     elif [ "$A" = "-xyz" ]; then
         if [ "$i" -eq "$ARGC" ]; then
@@ -881,6 +945,13 @@ for FILE in `ls -v "$data_angles_by_type"*.template`; do
     SUBGRAPH_SCRIPT=`echo "$FILE" | awk '/\(.*\)/ {print $0}' | cut -d'(' -f2-| cut -d')' -f 1`
     # Example: (continued) SUBGRAPH_SCRIPT should equal "gaff_angle.py"
 
+    # The user can also override this choice:
+    if [ -n "$SUBGRAPH_SCRIPT_ANGLES" ]; then
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_ANGLES"
+    elif [ -n "$SUBGRAPH_SCRIPT" ]; then
+        SUBGRAPH_SCRIPT_ANGLES="$SUBGRAPH_SCRIPT"
+    fi
+
     if [ -z "$SUBGRAPH_SCRIPT" ]; then
         SUBGRAPH_SCRIPT="nbody_Angles.py"
     else
@@ -976,6 +1047,13 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template`; do
     # Example: FILE="Data Dihedrals By Type (gaff_dih.py)"
     SUBGRAPH_SCRIPT=`echo "$FILE" | awk '/\(.*\)/ {print $0}' | cut -d'(' -f2-| cut -d')' -f 1`
     # Example: (continued) SUBGRAPH_SCRIPT should equal "gaff_dih.py"
+
+    # The user can also override this choice:
+    if [ -n "$SUBGRAPH_SCRIPT_DIHEDRALS" ]; then
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_DIHEDRALS"
+    elif [ -n "$SUBGRAPH_SCRIPT" ]; then
+        SUBGRAPH_SCRIPT_DIHEDRALS="$SUBGRAPH_SCRIPT"
+    fi
 
     if [ -z "$SUBGRAPH_SCRIPT" ]; then
         SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
@@ -1074,6 +1152,13 @@ for FILE in `ls -v "$data_impropers_by_type"*.template`; do
     # Example: FILE="Data Impropers By Type (gaff_impr.py)"
     SUBGRAPH_SCRIPT=`echo "$FILE" | awk '/\(.*\)/ {print $0}' | cut -d'(' -f2-| cut -d')' -f 1`
     # Example: (continued) SUBGRAPH_SCRIPT should equal "gaff_impr.py"
+
+    # The user can also override this choice:
+    if [ -n "$SUBGRAPH_SCRIPT_IMPROPERS" ]; then
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_IMPROPERS"
+    elif [ -n "$SUBGRAPH_SCRIPT" ]; then
+        SUBGRAPH_SCRIPT_IMPROPERS="$SUBGRAPH_SCRIPT"
+    fi
 
     if [ -z "$SUBGRAPH_SCRIPT" ]; then
         SUBGRAPH_SCRIPT="nbody_Impropers.py"
@@ -1180,10 +1265,14 @@ fi
 
 
 if [ -s "${data_bonds}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Bonds.py"
+    if [ -n "$SUBGRAPH_SCRIPT_BONDS" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_BONDS"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_BONDS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Bonds \
-	                     nbody_Bonds.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_bonds}" \
                              > "${data_bonds}.tmp"; then
             ERR_INTERNAL
@@ -1214,10 +1303,14 @@ fi
 
 
 if [ -s "${data_angles}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Angles.py"
+    if [ -n "$SUBGRAPH_SCRIPT_ANGLES" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_ANGLES"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_ANGLES ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Angles \
-	                     nbody_Angles.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_angles}" \
                              > "${data_angles}.tmp"; then
             ERR_INTERNAL
@@ -1246,10 +1339,14 @@ fi
 
 
 if [ -s "${data_dihedrals}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
+    if [ -n "$SUBGRAPH_SCRIPT_DIHEDRALS" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_DIHEDRALS"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_DIHEDRALS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Dihedrals \
-	                     nbody_Dihedrals.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_dihedrals}" \
                              > "${data_dihedrals}.tmp"; then
             ERR_INTERNAL
@@ -1301,10 +1398,14 @@ fi
 
 
 if [ -s "${data_impropers}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Impropers.py"
+    if [ -n "$SUBGRAPH_SCRIPT_IMPROPERS" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_IMPROPERS"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_IMPROPERS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Impropers \
-	                     nbody_Impropers.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_impropers}" \
                              > "${data_impropers}.tmp"; then
             ERR_INTERNAL
