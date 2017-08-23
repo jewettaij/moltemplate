@@ -4,6 +4,8 @@
 \setlength{\textheight}{23cm}
 \setlength{\topmargin}{-0.8cm}
 %\documentclass[11pt]{article}
+\usepackage{textcomp}
+\newcommand{\textapprox}{\raisebox{0.5ex}{\texttildelow}}
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{color}
@@ -218,7 +220,7 @@ which can be read by moltemplate.
   %Many other tools exist (not covered here) which can convert file formats 
   %used by other molecular dynamics software programs into LAMMPS format.
 
-\subsection*{Online examples}
+\subsection*{Examples}
 
   %When using ``moltemplate.sh'' it does not hurt to have 
   %a modest familiarity LAMMPS and it's file formats,
@@ -246,18 +248,11 @@ LAMMPS and visualize your results.
 Section \ref{sec:tutorial} contains a brief tutorial
 which explains how to build a box of water using moltemplate and 
 visualize initial conformation, run LAMMPS, and then visualize the trajectory. 
-In addition, many complete working examples 
-(with images and readme files) are available online 
-  (at \url{http://moltemplate.org})
-which can be downloaded and modified.  
-(These examples are also located in the ``tools/moltemplate/examples'' 
- subdirectory bundled with LAMMPS.)
-  %These examples are included with the main moltemplate download.
-%(See download instructions below.)
-%(which can be downloaded from the official moltemplate web site 
-%at \url{http://www.moltemplate.org}). 
-%They are more complex than the examples 
-%explained here in this manual. 
+Several complete working examples (with images and readme files)
+which can be downloaded and modified are available online at:
+\url{http://moltemplate.org/visual_examples.html}
+A more comprehensive list of examples is included in
+the ``examples/'' subdirectory distributed with moltemplate.  
 %The official LAMMPS examples and user manual
 %are also a valuable reference.
 These examples are a good starting point for learning LAMMPS and moltemplate.
@@ -331,9 +326,9 @@ under the terms of the open-source 3-clause BSD license.
 the most up-to-date version can be downloaded at
 \url{http://www.moltemplate.org}
 If you obtained moltemplate as a .tar.gz file,
-(as opposed to github), you can unpack it using:
+(as opposed to github or pip), you can unpack it using:
 \begin{verbatim}
-tar -xzvf moltemplate_2017-4-11.tar.gz
+tar -xzvf moltemplate_2017-8-22.tar.gz
 \end{verbatim}
 (The date will vary from version to version.)
 Alternately, if you obtained moltemplate bundled with LAMMPS, 
@@ -348,21 +343,32 @@ There are two ways to install moltemplate:
 \begin{verbatim}
 pip install .
 \end{verbatim}
-\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)
-
-Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
+\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)  If you receive an error regarding permissions, then run pip this way instead:
+\begin{verbatim}
+pip install . --user
+\end{verbatim}
+Make sure that your default pip install bin directory is in your PATH.  (This is usually something like \textapprox/.local/bin/ or \textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
 \begin{verbatim}
 pip uninstall moltemplate
 \end{verbatim}
-Instructions for updating your PATH are included below.
+
+\textit{If you continue to run into difficulty}, try installing moltemplate into a temporary virtual environment by installing ``virtualenv'', downloading moltemplate (to ``\textapprox/moltemplate'' in the example below), and running these commands:
+\begin{verbatim}
+cd ~/moltemplate
+virtualenv venv
+source venv/bin/activate
+pip install .
+   #(now do something useful with moltemplate...)
+\end{verbatim}
+You will have to ``run source \textapprox/moltemplate/venv/bin/activate'' beforehand whenver you want to run moltemplate.  If all this fails, then try installing moltemplate by manually updating your \$PATH environment variable.  Instructions for doing that are included below.
 
 
 \subsubsection*{Installation Method 2}
 
 Alternatively, you can edit your PATH variable manually to include
-the sudirectory where the moltemplate.sh script is located 
-(typically ``moltemplate/scripts/''), as well as
-the directory containing the most of the python scripts (``moltemplate/'').
+the subdirectory where the moltemplate.sh script is located 
+(typically ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
+the directory containing the most of the python scripts (``\textapprox/moltemplate/moltemplate/'').
 Suppose the directory where with the README file is named ``moltemplate''
 and it is located in your home directory:
 
@@ -390,6 +396,17 @@ setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
 \textit{Note: You may need to log out and then 
 log back in again for the changes to take effect.}
 
+
+\subsubsection*{WINDOWS installation suggestions}
+
+You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  If you are using Windows 10 or later, try installing the "Windows Subsystem for Linux (WSL)"
+\url{https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/}
+For more details, see the WSL FAQ:
+\url{https://msdn.microsoft.com/en-us/commandline/wsl/faq}
+If you are using an older version of windows, try following the tutorial written by Yanqing Fu instead:
+\url{https://sourceforge.net/p/lammps/mailman/message/32599824/}
+
+To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: nano, ne, emacs, vim, and jove.  (Unfortunately, as of 2017-5-17, graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
 
 
 %\pagebreak
