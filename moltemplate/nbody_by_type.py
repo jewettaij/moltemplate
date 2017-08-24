@@ -513,7 +513,7 @@ def main():
                                      '       (See nbody_Dihedrals.py for example.)\n')
                 bond_pattern_module_name = argv[i + 1]
                 # If the file name ends in ".py", then strip off this suffix.
-                # For some reason, the next line does not work:
+                # The next line does not work.  Too lazy to care why.
                 # bond_pattern_module_name=bond_pattern_module_name.rstrip('.py')
                 # Do this instead
                 pc = bond_pattern_module_name.rfind('.py')
@@ -578,8 +578,8 @@ def main():
                              '       (The actual problem may be earlier in the argument list.)\n')
 
         if ((section_name == '') or
-                (section_name_bytype == '') or
-                (bond_pattern_module_name == '')):
+            (section_name_bytype == '') or
+            (bond_pattern_module_name == '')):
             raise InputError('Syntax Error(' + g_program_name + '):\n\n'
                              '       You have not defined the following arguments:\n'
                              '       -section name\n'

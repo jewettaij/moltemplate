@@ -508,7 +508,7 @@ for i in range(len(nonbond)):
     atom1name = None
     atom2name = None
     stylename = pstyle
-    if pstyle == 'lj/sdk' or 'lj/sdk/coul/long':
+    if pstyle == 'lj/sdk' or pstyle == 'lj/sdk/coul/long':
         stylename = 'lj%s_%s' % (nonbond[i][4], nonbond[i][5])
     # Cross Terms + Diagonal, normal
     for j in range(len(equiv)):

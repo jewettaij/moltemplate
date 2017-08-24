@@ -78,6 +78,7 @@ SP12	SP1	SP12	SP12	SP12	SP12
 ITEM	END
 
 # Bond parameters
+# To change the bond stiffness, edit the "k" parameter
 
 ITEM	BOND
 

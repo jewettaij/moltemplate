@@ -22,8 +22,8 @@ except (SystemError, ValueError):
     from ttree_lex import ExtractCatName
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_postprocess.py'
-g_version_str = '0.5.0'
-g_date_str = '2016-12-21'
+g_version_str = '0.5.1'
+g_date_str = '2017-8-23'
 
 def main():
     atom_style = 'full'
