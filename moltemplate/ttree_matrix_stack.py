@@ -8,11 +8,18 @@ import random, math
 from collections import deque
 from array import array
 
+#try:
+#    from StringIO import StringIO
+#except ImportError:
+#    from io import StringIO
+
 try:
     from .ttree_lex import InputError, ErrorLeader, OSrcLoc
 except (SystemError, ValueError):
     # not installed as a package
     from ttree_lex import InputError, ErrorLeader, OSrcLoc
+
+
 
 def MultMat(dest, A, B):
     """ Multiply two matrices together. Store result in "dest".
@@ -585,6 +592,34 @@ class AffineStack(object):
             # #     AffineCompose(Mtmp, moveCmBack, Mdest)
             # #     CopyMat(Mdest, Mtmp)
 
+            #elif transform_str.find('read_xyz(') == 0:
+            #    i_paren_close = transform_str.find(')')
+            #    if i_paren_close == -1:
+            #        i_paren_close = len(transform_str)
+            #    args = transform_str[4:i_paren_close].split(',')
+            #    if (len(args) != 1):
+            #        raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+            #                         '       Invalid command: \"' + transform_str + '\"\n'
+            #                         '       This command expects the name of a file in XYZ format.\n')
+            #    file_name = args[0]
+            #    if (not file_name in coord_files):
+            #        f = open(file_name, 'r')
+            #        f.close()
+            #        f.readline() # skip the first 2 lines
+            #        f.readline() # of an .xyz file (header)
+            #        for line in f:
+            #            tokens = line.split()
+            #            if (len(tokens) != 3) and (len(tokens) != 0):
+            #                raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+            #                                 '       Invalid command: \"' + transform_str + '\"\n'
+            #                                 '       This command expects the name of a file in XYZ format.\n')
+            #            crds.append((float(tokens[0]),
+            #                         float(tokens[1]),
+            #                         float(tokens[2]))
+            #        self.coord_files[file_name] = crds
+            #    else:
+            #        crds = self.coord_files[file_name]
+
             else:
                 raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
                                  '       Unknown transformation command: \"' + transform_str + '\"\n')
@@ -601,6 +636,7 @@ class MultiAffineStack(object):
         self.stacks = None
         self.M = None
         self.error_if_substack_empty = False
+        self.coord_files = {}
         self.Clear()
 
     def Clear(self):
@@ -610,6 +646,7 @@ class MultiAffineStack(object):
         self.stacks = deque([])
         self.M = self.tot_stack.M
         self.error_if_substack_empty = False
+        self.coord_files = {}
 
     def _Update(self):
         self.tot_stack.Clear()

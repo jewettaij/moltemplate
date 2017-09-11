@@ -487,8 +487,8 @@ def _ExecCommands(command_list,
                         transform_block += '.' + transform
                         transform = transform.split('(')[0]
                         if ((transform == 'movecm') or
-                                (transform == 'rotcm') or
-                                (transform == 'scalecm')):
+                            (transform == 'rotcm') or
+                            (transform == 'scalecm')):
                             break
                 transform_blocks.append(transform_block)
 

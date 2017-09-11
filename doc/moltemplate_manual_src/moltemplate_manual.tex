@@ -57,7 +57,13 @@
   %(which is distributed with moltemplate).
   %These were created to supplement the moltemplate documentation.
 
+\subsubsection*{Warning: This manual does not explain how to run ``active-matter'' simulations or use all-atom force fields.}
+Numerous examples have been included with moltemplate 
+to demonstrate how to use moltemplate for these specific applications.
+
 \section{Introduction}
+
+
 
 Moltemplate is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
 LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build even larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
@@ -940,7 +946,6 @@ In this example, the first transformation, ``rot()'', is applied to both ``monom
 
 
 
-
 \subsection{moltemplate.sh command line arguments:}
 \label{sec:args_table}
 %\begin{table}
@@ -1092,6 +1097,12 @@ Invoke VMD after running moltemplate to view the system you have just created.
 \end{tabular}
 & 
 Normally moltemplate.sh reorders the atoms in each bond, angle, dihedral, and improper interaction before writing them to the DATA file in order to help avoid duplicate interactions between the same atoms if listed in different but equivalent orders.  Sometimes this is undesirable.  \textit{\textbf{To disable this behavior, set ``file.py'' to ``None''.}}  You can also manually choose alternate symmetry rules for unusual force fields. (Such as class2 force fields, dihedral\_style spherical, etc...  For an example of the file format for ``file.py'', see the ``nbody\_Impropers.py'' file.)
+\\
+\hline
+-allow-wildcards &
+Allow the user of ``*'' and ``?'' characters within
+``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
+and ``improper\_coeff'' commands.
 \\
 \hline
 \end{tabular}
@@ -3984,10 +3995,8 @@ starting moltemplate and kill the process if it's memory usage exceeds 80\%.
 
 \textbf{3)} Limited support for non-point-like atoms:
 
-As of 2014-12-09, only the ``full'', ``angle'', ``atomic'', ``charge'',
-and ``molecular'' styles have been tested.  
-The ``dipole'' atom style \textit{is} fully supported 
-but it has not been tested.
+As of 2017-8-31, only the ``full'', ``angle'', ``atomic'', ``charge'',
+``sphere'', ``dipole'', and ``molecular'' styles have been tested.  
 Non-point-like atoms like ``ellipsoid'', ``tri'', ``line'' 
 \textit{should} also work with moltemplate. 
 However these objects
@@ -4027,28 +4036,36 @@ Please let me know if it is not working.
 
 \textbf{6)} Inconsistent support for wildcard characters (``*'' and ``?'') 
 \label{sec:wildcard_bug}
-   As of 2014-1-28,
-   the wildcard character ``*''
+   The wildcard character ``*''
    is interpreted differently in different parts of an LT file.
    Wildcard characters work reliably and are used for \textit{string}
-   pattern matching when inside any of the \textit{``By Type''} sections 
+   pattern matching when inside
+   ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'', ``improper\_coeff'',
+   and most ``pair\_coeff'' commands,
+   as well as any of the \textit{``By Type''} sections 
    in an LT file (such as
    \textit{``Data Angles By Type''}, 
    \textit{``Data Dihedrals By Type''}, and 
    \textit{``Data Impropers By Type''}).
-   However these characters are interpreted differently when they appear
-   in \textit{pair\_coeff}, \textit{bond\_coeff}, \textit{angle\_coeff}
-   \textit{dihedral\_coeff}, and \textit{improper\_coeff} commands 
-   (and their corresponding \textit{``Coeff''} sections of a data file).
-   LAMMPS interprets ``*'' characters appearing in any of the
-   \textit{coeff} commands as \textit{numeric} wildcard characters.
+   However these wildcard characters \textit{do not}
+   within pair\_coeff commands that require \textit{more}
+   than 2 atom types as arguments.
+   (such as ``pair\_style hbond/dreiding/lj''.
+    However manybody pair\_styles which use ``pair\_coeff * *''
+    notation work fine.)
+   As of 2017-8-31, wildcard characters (``*'', ``?'') also fail to work inside
+   \textit{``bond\_modify''} commands, and other commands used for running
+   active matter simulations. (Such commands are typically located within the
+   \textit{``write\_once("In Transitions")''} section of an .LT file.)
+   LAMMPS interprets ``*'' characters appearing here as
+   \textit{numeric ranges}, and their behavior depends on the
+   integers which moltemplate assigns to these variables,
+   \textit{not} the \textit{names} of the variables.
+   (See the official documentation for bond\_modify, and bond\_coeff
+    commands to see how ``*'' characters are interpreted.
    This can lead to unintended side-effects and is discouraged.
-   So please avoid ``*'' characters in any of the 
-   \textit{``coeff''} commands 
-    (eg \textit{pair\_coeff, bond\_coeff, angle\_coeff, 
-     dihedral\_coeff, improper\_coeff}).
-   The ``*'' character can be safely used in array brackets, \textit{[*]}, 
-   or in the \textit{``By Type''} sections.
+   The ``*'' character can be safely used in array brackets, \textit{[*]}, or in
+   the varios \textit{``\_coeff''} commands and \textit{``By Type''} sections.
    (See section \ref{sec:array_wildcards_intro} 
     and appendix \ref{sec:nbody_by_type}.)
 

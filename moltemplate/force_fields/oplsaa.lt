@@ -1,6 +1,17 @@
-# This file contains OPLSAA parameters and rules for creating
-# angle, dihedral, and improper interactions according to OPLSAA conventions.
-# These parameters are taken from those distributed with BOSS Version 4.8.
+# This file contains OPLSAA parameters and rules for creating angle, dihedral,
+# and improper interactions according to OPLSAA conventions, taken from
+# "OPLS All-Atom Parameters for Organic Molecules, Ions, 
+#  Peptides & Nucleic Acids, July 2008" and distributed with BOSS Version 4.8.
+# This file was generated automatically (on 2017-7-18) using this script:
+#
+# tinkerparm2lt.py -name OPLSAA -file oplsaa.prm -dihedral-style opls
+#
+# The oplsaa.prm file was downloaded from the TINKER website
+# https://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
+# (Additional conversion details are explained at the end of this file.)
+# Urey-Bradley parameters are not included, and a quadratic energy function
+# is used (rather than a cosine) for the improper interactions (in order
+# to take advantage of available GPU acceleration in LAMMPS at this time).
 #
 # USAGE: You can create molecules using this force-field this way:
 #
@@ -1847,7 +1858,6 @@ OPLSAA {
     @atom:905 15.999
     @atom:906 12.011
   } #(end of atom masses)
-
 
   # ---------- EQUIVALENCE CATEGORIES for bonded interaction lookup ----------
   #   Each type of atom has a separate ID used for looking up bond parameters
@@ -8138,14 +8148,45 @@ OPLSAA {
   # improper_coeff ImproperTypeName  ImproperStyle  parameters
 
   write_once("In Settings") {
-    improper_coeff @improper:X-X-3-4 harmonic 10.5 180.0
-    improper_coeff @improper:X-X-3-52 harmonic 10.5 180.0
-    improper_coeff @improper:X-X-24-X harmonic 2.5 180.0
-    improper_coeff @improper:X-X-47-X harmonic 15.0 180.0
-    improper_coeff @improper:X-X-48-X harmonic 2.5 180.0
+    # The following force field parameters were converted from
+    # the tinker parameter file (oplsaa.prm) and then edited by hand:
+    # Thanks to David Huang (adelaide.edu.au) for the corrections:
+ 
+    improper_coeff @improper:X-X-3-4 harmonic 10.5 180.0  # (moltemplate)
+    # <==> "imptors 0 0 3 4  21.000 180.0 2" in oplsaa.prm (tinker)
+    # <==> "define improper_O_C_X_Y 180.0 43.93200 2" in oplsaa.ff (gromacs)
+
+    improper_coeff @improper:X-X-3-52 harmonic 10.5 180.0  # (moltemplate)
+    # <==> "imptors 0 0 3 52  21.000 180.0 2" in oplsaa.prm (tinker)
+    # <==> "define improper_O_C_X_Y 180.0 43.93200 2" in oplsaa.ff (gromacs)
+
+    improper_coeff @improper:X-X-24-X harmonic 1.0 180.0  # (moltemplate)
+    # <==> "imptors 0 0 24 0  5.000 180.0 2" in oplsaa.prm (tinker) - INCORRECT?
+    # <==> "define improper_Z_N_X_Y 180.0 4.18400 2" in oplsaa.ff (gromacs)
+
+    improper_coeff @improper:X-X-47-X harmonic 15.0 180.0  # (moltemplate)
+    # <==> "imptors 0 0 47 0  30.000 180.0 2" in oplsaa.prm (tinker)
+    # <==> "define improper_Z_CM_X_Y 180.0 62.76000 2" in oplsaa.ff (gromacs)
+
+    improper_coeff @improper:X-X-48-X harmonic 1.1 180.0  # (moltemplate)
+    # <==> "imptors 0 0 48 0  5.000 180.0 2" in oplsaa.prm (tinker) - INCORRECT?
+    # <==> "define improper_Z_CA_X_Y 180.0 4.60240 2" in oplsaa.ff (gromacs)
+
+    # --- As of 2017-9-06, I am unsure if I should add these rules: ----
+    #improper_coeff @improper:24_24_X_24 harmonic 10.5 180.0
+    # <==> "define improper_N2_X_N2_N2 180.0 43.93200" in oplsaa.ff (gromacs)
+    # <==> no corresponding line found in oplsaa.prm (tinker)
+    #
+    # improper_coeff @improper:X_103_102_102 harmonic 10.5 180.0
+    # - or ? -
+    # improper_coeff @improper:X_102_103_103 harmonic 10.5 180.0
+    # <==> "define improper_X_NO_ON_NO 180.0 43.93200" in oplsaa.ff (gromacs)
+    # <==> no corresponding line found in oplsaa.prm (tinker)
+
   } #(end of improper_coeffs)
 
-  # Rules for creating dihedral interactions according to atom type:
+
+  # Rules for creating improper interactions according to atom type:
   #   ImproperTypeName   AtomType1    AtomType2       AtomType3       AtomType4
   #   (* = wildcard)
   write_once("Data Impropers By Type (opls_imp.py)") {
@@ -8155,8 +8196,6 @@ OPLSAA {
     @improper:X-X-47-X @atom:* @atom:* @atom:*_b*_a*_d*_i47 @atom:*
     @improper:X-X-48-X @atom:* @atom:* @atom:*_b*_a*_d*_i48 @atom:*
   } #(end of impropers by type)
-
-
 
 
   # --------   (descriptive comment)   --------
@@ -8989,19 +9028,11 @@ OPLSAA {
 
 
 
-############################### NOTES ####################################
+
+############################### DETAILS ###################################
 #
-# This file was generated (on 2017-7-18) using this script:
-#
-# tinkerparm2lt.py -name OPLSAA -file oplsaa.prm -dihedral-style opls
-#
-# The oplsaa.prm file was downloaded from the TINKER website
-# https://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
-# (You can build a smaller version of this file by editing the oplsaa.prm
-#  file and deleting the lines beginning with "atom" that you don't need,
-#  and subsequently running tinkerparm2lt.py on the new file.  This can
-#  help reduce the number of atom types, which can help with visualization,
-#  and in some cases may also improve performance.)
+# This file was generated using the tinkerparm2lt.py script
+# as explained in the comments at the top of this file.
 #
 # The following 1-2, 1-3, and 1-4 weighting parameters were ASSUMED:
 # special_bonds lj/coul 0.0 0.0 0.5
@@ -9015,4 +9046,10 @@ OPLSAA {
 #          the hydrogen atoms have been absorbed into the heavy atoms, and the
 #          force-field modified accordingly.  (Hopefully, moltemplate will 
 #          complain if you attempt to bond these atoms to hydrogen atoms.)
+#
+# (You can build a smaller version of this file by editing the oplsaa.prm
+#  file and deleting the lines beginning with "atom" that you don't need,
+#  and subsequently running tinkerparm2lt.py on the new file.  This can
+#  help reduce the number of atom types, which can help with visualization,
+#  and in some cases may also improve performance.)
 ##########################################################################

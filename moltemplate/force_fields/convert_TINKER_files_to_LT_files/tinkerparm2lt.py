@@ -142,6 +142,8 @@ def main():
         dihedral_style_link = "http://lammps.sandia.gov/doc/dihedral_fourier.html"
         improper_style_name = "harmonic"
         improper_style_link = "http://lammps.sandia.gov/doc/improper_harmonic.html"
+        #improper_style_name = "cvff"
+        #improper_style_link = "http://lammps.sandia.gov/doc/improper_cvff.html"
         special_bonds_command = "special_bonds lj/coul 0.0 0.0 0.5"
         mixing_style = "geometric"
         contains_united_atoms = False
@@ -604,7 +606,7 @@ def main():
         sys.stdout.write("  } #(end of improper_coeffs)\n\n")
         
         
-        sys.stdout.write("  # Rules for creating dihedral interactions according to atom type:\n"
+        sys.stdout.write("  # Rules for creating improper interactions according to atom type:\n"
                          "  #   ImproperTypeName   AtomType1    AtomType2       AtomType3       AtomType4\n"
                          "  #   (* = wildcard)\n")
         
