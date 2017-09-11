@@ -15,7 +15,7 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.3.8.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.4.0.zip',
 
   version='2.4.0',
 
