@@ -38,7 +38,6 @@ setup(
                'Programming Language :: Unix Shell',
                'Topic :: Scientific/Engineering :: Chemistry',
                'Topic :: Scientific/Engineering :: Physics',
-               'Topic :: Scientific/Engineering :: Biology',
                'Topic :: Multimedia :: Graphics :: 3D Modeling',
                'Intended Audience :: Science/Research'],
 
