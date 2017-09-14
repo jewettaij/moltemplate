@@ -104,8 +104,8 @@ def main():
         finished_reading_frame = False
         read_last_frame = False
 
-        #in_coord_file = open('tmp_atom_coords.dat','r')
         in_coord_file = sys.stdin
+        #in_coord_file = open('tmp_atom_coords.dat','r')
 
         read_last_frame = False
         while True:
@@ -117,11 +117,13 @@ def main():
             if line == '':  # if EOF
                 break
 
+            #frame_vects = defaultdict(list)
             frame_coords = defaultdict(list)
             while line.strip() != '':
                 n_crds = len(frame_coords)
                 #sys.stdout.write("n_crds="+str(n_crds)+": \""+line.strip()+"\"\n")
                 frame_coords[frame_atom_order[n_crds]] = line.split()
+                #frame_vects[frame_atom_order[n_crds]] = ['0.0','0.0','0.0']
                 line = in_coord_file.readline()
 
             # Check to see if there are any blank lines at this location in the file
@@ -147,6 +149,7 @@ def main():
                              None,
                              misc_settings,
                              data_settings,
+                             None,
                              frame_natoms,
                              frame_coords,
                              frame_coords_ixiyiz,
