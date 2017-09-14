@@ -8172,16 +8172,20 @@ OPLSAA {
     # <==> "imptors 0 0 48 0  5.000 180.0 2" in oplsaa.prm (tinker) - INCORRECT?
     # <==> "define improper_Z_CA_X_Y 180.0 4.60240 2" in oplsaa.ff (gromacs)
 
-    # --- As of 2017-9-06, I am unsure if I should add these rules: ----
-    #improper_coeff @improper:24_24_X_24 harmonic 10.5 180.0
+    improper_coeff @improper:55_55_X_55 harmonic 10.5 180.0
     # <==> "define improper_N2_X_N2_N2 180.0 43.93200" in oplsaa.ff (gromacs)
     # <==> no corresponding line found in oplsaa.prm (tinker)
-    #
-    # improper_coeff @improper:X_103_102_102 harmonic 10.5 180.0
-    # - or ? -
-    # improper_coeff @improper:X_102_103_103 harmonic 10.5 180.0
-    # <==> "define improper_X_NO_ON_NO 180.0 43.93200" in oplsaa.ff (gromacs)
-    # <==> no corresponding line found in oplsaa.prm (tinker)
+
+    # --- As of 2017-9-13, I am unsure if I should add this rule: ----
+    # The gromacs file for oplsaa include the following line:
+    # "define improper_X_NO_ON_NO 180.0 43.93200" in oplsaa.ff (gromacs)
+    # but there is no corresponding line found in oplsaa.prm (tinker)
+    # and there is no corresponding line from opls-a.prm (emc (BASF))
+    # I'm not sure what the "NO" and "ON" correspond to.  If I had to guess,
+    # the corresponding moltemplate line might be one of these two choices:
+    # improper_coeff @improper:X_103_102_102 harmonic 10.5 180.0  ?
+    # improper_coeff @improper:X_102_103_103 harmonic 10.5 180.0  ?
+    # but I'd prefer to leave this out.
 
   } #(end of improper_coeffs)
 
@@ -8195,6 +8199,7 @@ OPLSAA {
     @improper:X-X-24-X @atom:* @atom:* @atom:*_b*_a*_d*_i24 @atom:*
     @improper:X-X-47-X @atom:* @atom:* @atom:*_b*_a*_d*_i47 @atom:*
     @improper:X-X-48-X @atom:* @atom:* @atom:*_b*_a*_d*_i48 @atom:*
+    @improper:55_55_X_55 @atom:*_b*_a*_d*_i55 @atom:*_b*_a*_d*_i55 @atom:* @atom:*_b*_a*_d*_i55
   } #(end of impropers by type)
 
 
