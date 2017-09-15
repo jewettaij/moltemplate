@@ -58,8 +58,10 @@
   %These were created to supplement the moltemplate documentation.
 
 \subsubsection*{Warning: This manual does not explain how to run ``active-matter'' simulations or use all-atom force fields.}
-Numerous examples have been included with moltemplate 
-to demonstrate how to use moltemplate for these specific applications.
+However numerous examples and README files are available to
+demonstrate how to run these kinds of simulations.
+Downloading these examples is \textit{highly recommended}.
+(See section \ref{sec:installation}.)
 
 \section{Introduction}
 
@@ -326,57 +328,84 @@ under the terms of the open-source 3-clause BSD license.
 
 
 \section{Installation}
-
-\subsection*{Obtaining Moltemplate}
-\textit{If you don't already have moltemplate},
-the most up-to-date version can be downloaded at
-\url{http://www.moltemplate.org}
-If you obtained moltemplate as a .tar.gz file,
-(as opposed to github or pip), you can unpack it using:
-\begin{verbatim}
-tar -xzvf moltemplate_2017-8-22.tar.gz
-\end{verbatim}
-(The date will vary from version to version.)
-Alternately, if you obtained moltemplate bundled with LAMMPS, 
-then the \textit{``moltemplate''} directory will probably be located 
-in the \textit{``tools''} subdirectory of your lammps installation.
+\label{sec:installation}
 
 There are two ways to install moltemplate:
 
 \subsubsection*{Installation Method 1 (pip)}
 
-\textit{If you are familiar with pip}, then run the following command from within outermost directory:
+\textit{If you are familiar with pip}, you can install
+moltemplate by typing following command in the terminal/shell:
+  %from within outermost directory:
 \begin{verbatim}
-pip install .
+pip install moltemplate
 \end{verbatim}
-\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)  If you receive an error regarding permissions, then run pip this way instead:
+%\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)
+If you receive an error regarding permissions, then run pip this way instead:
 \begin{verbatim}
-pip install . --user
+pip install moltemplate --user
 \end{verbatim}
 Make sure that your default pip install bin directory is in your PATH.  (This is usually something like \textapprox/.local/bin/ or \textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
 \begin{verbatim}
 pip uninstall moltemplate
 \end{verbatim}
 
-\textit{If you continue to run into difficulty}, try installing moltemplate into a temporary virtual environment by installing ``virtualenv'', downloading moltemplate (to ``\textapprox/moltemplate'' in the example below), and running these commands:
+\textit{Note: There are is a large variety of detailed moltemplate examples
+which will be omitted if you install moltemplate this way.
+\textbf{Downloading the examples is strongly recommended.}}
+You can do this either by using git:
 \begin{verbatim}
-cd ~/moltemplate
+git clone https://github.com/jewettaij/moltemplate ~/moltemplate
+\end{verbatim}
+or by visiting the \url{http://www.moltemplate.org} web site.
+They will be in the ``examples'' subdirectory.)
+
+\textit{If you run into difficulty with pip}, then try installing
+moltemplate into a temporary virtual environment
+by installing ``virtualenv'',
+%downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
+and running these commands:
+\begin{verbatim}
+mkdir ~/moltemplate_v
+cd ~/moltemplate_v
 virtualenv venv
 source venv/bin/activate
-pip install .
+pip install moltemplate
    #(now do something useful with moltemplate...)
 \end{verbatim}
-You will have to ``run source \textapprox/moltemplate/venv/bin/activate'' beforehand whenver you want to run moltemplate.  If all this fails, then try installing moltemplate by manually updating your \$PATH environment variable.  Instructions for doing that are included below.
+You will have to ``run source \textapprox/moltemplate\_v/venv/bin/activate'' beforehand whenver you want to run moltemplate again.  If all this fails, then try installing moltemplate by manually updating your \$PATH environment variable.  Instructions for doing that are included below.
 
 
 \subsubsection*{Installation Method 2}
 
-Alternatively, you can edit your PATH variable manually to include
+Alternatively, you can download the moltemplate files and edit your
+PATH variable manually to include
 the subdirectory where the moltemplate.sh script is located 
 (typically ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
-the directory containing the most of the python scripts (``\textapprox/moltemplate/moltemplate/'').
-Suppose the directory where with the README file is named ``moltemplate''
-and it is located in your home directory:
+the directory containing the most of the python scripts
+(``\textapprox/moltemplate/moltemplate/'').
+In that case, the directory where with the README file is named ``moltemplate''
+and it is located in your home directory.
+
+\subsection*{Obtaining Moltemplate}
+The most up-to-date version of moltemplate can be downloaded using git.
+\begin{verbatim}
+git clone https://github.com/jewettaij/moltemplate ~/moltemplate
+\end{verbatim}
+Later, you can update to the latest version of moltemplate using:
+\begin{verbatim}
+git pull
+\end{verbatim}
+Alternatively, you can also download moltemplate as a .tar.gz archive from
+\url{http://www.moltemplate.org}
+and can unpack it using:
+\begin{verbatim}
+tar -xzvf moltemplate_2017-8-22.tar.gz
+\end{verbatim}
+(The date will vary from version to version.)
+Somewhat older versions of moltemplate are also bundled with the LAMMPS 
+source code and are located in the \textit{``tools''} subdirectory.
+
 
 If you use the \textbf{bash} shell, typically you would edit your 
 \mbox{$\sim$/.bash\_profile}, 
@@ -415,7 +444,7 @@ If you are using an older version of windows, try following the tutorial written
 To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: nano, ne, emacs, vim, and jove.  (Unfortunately, as of 2017-5-17, graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
 
 
-%\pagebreak
+\pagebreak
 \section{Quick reference \textit{(skip on first reading)}}
 
 \section*{
@@ -1108,7 +1137,7 @@ and ``improper\_coeff'' commands.
 \end{tabular}
 
 
-%\pagebreak
+\pagebreak
 
 
 

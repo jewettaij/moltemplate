@@ -15,9 +15,9 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.4.1.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.4.2.zip',
 
-  version='2.4.1',
+  version='2.4.2',
 
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],
@@ -65,6 +65,7 @@ setup(
         'nbody_reorder_atoms.py=moltemplate.nbody_reorder_atoms:main',
         'pdbsort.py=moltemplate.pdbsort:main',
         'postprocess_input_script.py=moltemplate.postprocess_input_script:main',
+        'postprocess_coeffs.py=moltemplate.postprocess_coeffs:main',
         'raw2data.py=moltemplate.raw2data:main',
         'remove_duplicate_atoms.py=moltemplate.remove_duplicate_atoms:main',
         'remove_duplicates_nbody.py=moltemplate.remove_duplicates_nbody:main',
