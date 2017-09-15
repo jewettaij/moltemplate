@@ -1,7 +1,7 @@
 from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
     StackableCommand, PopCommand, PopRightCommand, PopLeftCommand, \
     PushCommand, PushLeftCommand, PushRightCommand, ScopeCommand, \
-    WriteVarBindingsFile, StaticObj, InstanceObj, ExtractFormattingCommands \
+    WriteVarBindingsFile, StaticObj, InstanceObj, ExtractFormattingCommands, \
     BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
 from .ttree_lex import TtreeShlex, split, LineLex, SplitQuotedString, \
     EscCharStrToChar, SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, \
