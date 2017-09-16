@@ -319,10 +319,10 @@ def Class2ImproperNameSort(aorig):
     return (l, p)
 
 
-def ImCrossTermIDs(atom_names):
+def ImCrossTermID(atom_names):
     if atom_names[0] <= atom_names[3]:
-        cross_name = (atom_name[0]+','+atom_name[1]+','+
-                      atom_name[2]+','+atom_name[3])
+        cross_name = (atom_names[0]+','+atom_names[1]+','+
+                      atom_names[2]+','+atom_names[3])
 
 
 
@@ -679,6 +679,7 @@ def main():
         type_subset = set([])
         filename_in = ''
         file_in = sys.stdin
+        #file_in = open('compass_published.frc','r')  #CONTINUEHERE
         include_auto_equivalences = True
         #pair_style_name = 'lj/class2/coul/long'
         #pair_style_params = "10.0 10.0"
@@ -1988,7 +1989,7 @@ def main():
 
             elif ((len(tokens) > 6) and
                   (section_name in ('#end_bond-torsion_3',
-                                    '#bond-angle-1-3')) and
+                                    '#bond-bond_1_3')) and
                   (dihedral_styles_selected &
                    set(['class2', 'torsion_3']))):
                 if line.lstrip().find('!') == 0:
@@ -2016,14 +2017,14 @@ def main():
                         F[1][1] = tokens[10]
                     if len(tokens) > 11:
                         F[1][2] = tokens[11]
-                elif section_name == '#bond-angle-1-3':
+                elif section_name == '#bond-bond_1_3':
                     Kbb = tokens[6]
                 else:
                     assert(False)
 
 
                 num_dihedral2class2_ebt = 0
-                num_dihedral2class2_ba13 = 0
+                num_dihedral2class2_bb13 = 0
 
                 atom_combos = [set([]), set([]), set([]), set([])]
 
@@ -2107,10 +2108,10 @@ def main():
                                         else:
                                             assert(False)
                                     dihedral_name = EncodeInteractionName(atom_names +
-                                                                       batoms[0] + batoms[1],
-                                                                       #+ [str(r0s[0]),
-                                                                       #   str(r0s[1])],
-                                                                       section_is_auto)
+                                                                          batoms[0] + batoms[1],
+                                                                          #+ [str(r0s[0]),
+                                                                          #   str(r0s[1])],
+                                                                          section_is_auto)
                                     #sys.stderr.write('DEBUG: (a1,a2,a3,a4) = '+str((a1,a2,a3,a4))+', '
                                     #                 ' (b11,b12,b21,b22) = '+str(batoms)+'\n')
                                     dihedral2ver[dihedral_name] = version
@@ -2133,15 +2134,15 @@ def main():
                                             sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
                                             sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_ebt) = '+str(len(dihedral2class2_ebt))+'\n')
                                         num_dihedral2class2_ebt = len(dihedral2class2_ebt)
-                                    elif section_name == '#bond-angle-1-3':
+                                    elif section_name == '#bond-bond_1_3':
                                         dihedral2class2_bb13[dihedral_name] = (Kbb + ' ' +
                                                                                r0[0] + ' ' +
                                                                                r0[1])
                                         dihedral2sym_bb13[dihedral_name] = (r0[0] == r0[1])
-                                        if len(dihedral2class2_ba13) > num_dihedral2class2_ba13:
+                                        if len(dihedral2class2_bb13) > num_dihedral2class2_bb13:
                                             sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+dihedral_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
-                                            sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_ba13) = '+str(len(dihedral2class2_ba13))+'\n')
-                                        num_dihedral2class2_ba13 = len(dihedral2class2_ba13)
+                                            sys.stderr.write('DEBUG: num_dihedral_coeffs = len(dihedral2class2_bb13) = '+str(len(dihedral2class2_bb13))+'\n')
+                                        num_dihedral2class2_bb13 = len(dihedral2class2_bb13)
                                     else:
                                         assert(False)
 
