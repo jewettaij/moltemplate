@@ -260,6 +260,24 @@ def DeterminePriority(is_auto,
     else:
         return (is_auto, version)
 
+def DetermineNumericPriority(is_auto,
+                             anames,
+                             version):
+    """
+    Determine the priority of an interaction from 
+    1) whether or not it is an "auto" interaction
+    2) what is the force-field "version" (a number)
+    3) what are the names of the atoms (for auto_equivalences only,
+       some atom "names" are wildcards followed by integers. use the integer)
+    """
+
+    if is_auto:
+        n = DetermineAutoPriority(anames)
+        return n
+    else:
+        return version
+
+
 def IsAutoInteraction(interaction_name):
     return interaction_name.find('auto') == 0
 
@@ -1743,9 +1761,9 @@ def main():
                 dihedral2ver_sh[dihedral_name_sh] = tokens[0]
                 dihedral2ref_sh[dihedral_name_sh] = tokens[1]
                 dihedral2priority_sh[dihedral_name_sh] = \
-                    DeterminePriority(section_is_auto,
-                                      tokens[2:6],
-                                      float(dihedral2ver_sh[dihedral_name_sh]))
+                    DetermineNumericPriority(section_is_auto,
+                                             tokens[2:6],
+                                             float(dihedral2ver_sh[dihedral_name_sh]))
                 V1 = tokens[6]
                 phi0_1 = tokens[7]
                 V2 = phi0_2 = V3 = phi0_3 = '0.0'
@@ -1787,9 +1805,10 @@ def main():
                 dihedral2style_sh[dihedral_name_sh] = 'class2'
                 dihedral2class2_mbt_sh[dihedral_name_sh] = [F for F in Fmbt]
                 dihedral2ver_mbt_sh[dihedral_name_sh] = version
-                #dihedral2priority_sh[dihedral_name_sh] = DeterminePriority(section_is_auto,
-                #                                                        tokens[2:6],
-                #                                                        float(dihedral2ver[dihedral_name_sh]))
+                #dihedral2priority_sh[dihedral_name_sh] =
+                #    DetermineNumericPriority(section_is_auto,
+                #                             tokens[2:6],
+                #                             float(dihedral2ver[dihedral_name_sh]))
 
 
 
@@ -2144,14 +2163,16 @@ def main():
                             Kbb = angle2class2_bb_sh[angle_name_sh]
                             Kba = angle2class2_ba_sh[angle_name_sh]
                             angle2class2_bb[angle_name_full] = (Kbb+' '+r0s[0]+' '+r0s[1])
-                            angle2priority_bb = DeterminePriority(is_auto,
-                                                                  batoms[0] + batoms[1],
-                                                                  angle2class2ver_bb_sh[angle_name_sh])
+                            angle2priority_bb = \
+                                DetermineNumericPriority(is_auto,
+                                                         batoms[0] + batoms[1],
+                                                         angle2class2ver_bb_sh[angle_name_sh])
                             angle2class2_ba[angle_name_full] = (Kba[0]+' '+Kba[1]+' '+r0s[0]+' '+r0s[1])
                             angle2sym_ba = (r0s[0] == r0s[1])
-                            angle2priority_ba = DeterminePriority(is_auto,
-                                                                  batoms[0] + batoms[1],
-                                                                  angle2class2ver_ba_sh[angle_name_sh])
+                            angle2priority_ba = \
+                                DetermineNumericPriority(is_auto,
+                                                         batoms[0] + batoms[1],
+                                                         angle2class2ver_ba_sh[angle_name_sh])
                             version = max((angle2ver_sh[angle_name_sh],
                                            angle2class2ver_bb_sh[angle_name_sh],
                                            angle2class2ver_ba_sh[angle_name_sh]))
@@ -2161,9 +2182,10 @@ def main():
                             #                      aorig,
                             #                      float(angle2ver[angle_name]))
                             angle2priority[angle_name_full] = \
-                               max((angle2class2priority[angle_name_sh],
-                                    angle2class2priority_bb,
-                                    angle2class2priority_ba))
+                               (is_auto,
+                                angle2class2priority[angle_name_sh],
+                                angle2class2priority_bb,
+                                angle2class2priority_ba)
 
                             if num_angle_coeffs < len(angle2class2_bb):
                                 sys.stderr.write('DEBUG: '+section_name[1:]+' r0 ('+angle_name+') = ('+r0s[0]+', '+r0s[1]+')\n')
@@ -2364,9 +2386,10 @@ def main():
                             Fmbt = dihedral2class2_mbt_sh[dihedral_name_sh]
                             dihedral2class2_mbt[dihedral_name_full] = \
                                (Fmbt[0]+' '+Fmbt[1]+' '+Fmbt[2]+' '+r0s[1])
-                            dihedral2priority_mbt = DeterminePriority(is_auto,
-                                                                      batoms[1],
-                                                                      dihedral2class2ver_mbt[dihedral_name_sh])
+                            dihedral2priority_mbt = \
+                                DetermineNumericPriority(is_auto,
+                                                         batoms[1],
+                                                         float(dihedral2class2ver_mbt[dihedral_name_sh]))
 
                             # "ebt" terms:
                             Febt = dihedral2class2_ebt_sh[dihedral_name_sh]
@@ -2381,9 +2404,10 @@ def main():
                                                 (Febt[0][1] == Febt[1][1]) and
                                                 (Febt[0][2] == Febt[1][2]) and
                                                 (r0s[0] == r0s[2]))
-                            dihedral2priority_ebt = DeterminePriority(is_auto,
-                                                                      batoms[0] + batoms[2],
-                                                                      dihedral2class2ver_ebt[dihedral_name_sh])
+                            dihedral2priority_ebt = \
+                                DetermineNumericPriority(is_auto,
+                                                         batoms[0] + batoms[2],
+                                                         float(dihedral2class2ver_ebt[dihedral_name_sh]))
 
                             #(Note:  large atom_priority number <==> low priority
                             # Only one of the atom priority numbers should be > 0)
@@ -2392,9 +2416,10 @@ def main():
                             Kbb13 = dihedral2class2_bb13_sh[dihedral_name_sh]
                             dihedral2class2_bb13[dihedral_name_full] = (Kbb13+' '+r0s[0]+' '+r0s[2])
                             dihedral2sym_bb13 = (r0s[0] == r0s[2])
-                            dihedral2priority_bb13 = DeterminePriority(is_auto,
-                                                                       batoms[0] + batoms[2],
-                                                                       dihedral2class2ver_bb13[dihedral_name_sh])
+                            dihedral2priority_bb13 = \
+                                DetermineNumericPriority(is_auto,
+                                                         batoms[0] + batoms[2],
+                                                         float(dihedral2class2ver_bb13[dihedral_name_sh]))
 
 
                             ########### "at" and "aat" terms ###########
@@ -2413,19 +2438,19 @@ def main():
                                                (Fat[0][1] == Fat[1][1]) and
                                                (Fat[0][2] == Fat[1][2]) and
                                                (theta0[0] == theta0[1]))
-                            dihedral2priority_at = DeterminePriority(is_auto,
-                                                                     aatoms[0] + aatoms[1],
-                                                                     dihedral2class2ver_at[dihedral_name_sh])
+                            dihedral2priority_at = \
+                                DetermineNumericPriority(is_auto,
+                                                         aatoms[0] + aatoms[1],
+                                                         float(dihedral2class2ver_at[dihedral_name_sh]))
                             # "aat" terms:
                             Kaat = dihedral2class2_aat_sh[dihedral_name_sh]
                             dihedral2class2_aat[dihedral_name_full] = \
-                                               (Kaat+' '+
-                                                theta0s[0]+' '+
-                                                theta0s[1])
+                                               (Kaat+' '+theta0s[0]+' '+theta0s[1])
                             dihedral2sym_aat[dihedral_name_full] = (theta0[0] == theta0[1])
-                            dihedral2priority_aat = DeterminePriority(is_auto,
-                                                                      aatoms[0] + aatoms[1],
-                                                                      dihedral2class2ver_aat[dihedral_name_sh])
+                            dihedral2priority_aat = \
+                                DetermineNumericPriority(is_auto,
+                                                         aatoms[0] + aatoms[1],
+                                                         float(dihedral2class2ver_aat[dihedral_name_sh]))
 
                             if len(dihedral2class2_ebt) > num_dihedral2class2:
                                 sys.stderr.write('DEBUG: dihedral['+dihedral_name_full+']:\n'
@@ -2444,12 +2469,13 @@ def main():
 
                         dihedral2class2ver[dihedral_name_full] = version
                         dihedral2priority[dihedral_name_full] = \
-                            max((dihedral2class2priority[dihedral_name_sh],
-                                 dihedral2class2priority_mbt,
-                                 dihedral2class2priority_ebt,
-                                 dihedral2class2priority_bb13,
-                                 dihedral2class2priority_at,
-                                 dihedral2class2priority_aat)
+                            (is_auto,
+                             dihedral2class2priority[dihedral_name_sh],
+                             dihedral2class2priority_mbt,
+                             dihedral2class2priority_ebt,
+                             dihedral2class2priority_bb13,
+                             dihedral2class2priority_at,
+                             dihedral2class2priority_aat)
 
                         num_dihedral2class2 = len(dihedral2class2_ebt)
 
