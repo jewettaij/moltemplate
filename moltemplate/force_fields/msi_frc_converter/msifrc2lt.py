@@ -1855,7 +1855,7 @@ def main():
                 reference = tokens[1]
                 if line.lstrip().find('!') == 0:
                     continue
-                aorig = map(EncodeAName, tokens[2:5])
+                aorig = map(EncodeAName, tokens[2:6])
                 atom_names = ReverseIfEnds(aorig)
 
                 Fmbt = [tokens[6], '0.0', '0.0']
@@ -2355,17 +2355,17 @@ def main():
             #*#        for a3, a3priority in atom_priorities[2].items():
             #*#            for a4, a3priority in atom_priorities[3].items():
             for a1 in atom_combos[0]:
-                #sys.stderr.write('atom2auto_bond = '+str(atom2auto_bond)+'\n')
-                bond_data12 = LookupBondLength(a1, a2,
-                                               atom2equiv_bond,
-                                               bond2r0,
-                                               atom2auto_bond,
-                                               bond2r0_auto)
-                if bond_data12 == None:
-                    # Save time by only continuing if a bond was
-                    # found between a1 and a2
-                    continue
                 for a2 in atom_combos[1]:
+                    #sys.stderr.write('atom2auto_bond = '+str(atom2auto_bond)+'\n')
+                    bond_data12 = LookupBondLength(a1, a2,
+                                                   atom2equiv_bond,
+                                                   bond2r0,
+                                                   atom2auto_bond,
+                    bond2r0_auto)
+                    if bond_data12 == None:
+                        # Save time by only continuing if a bond was
+                        # found between a1 and a2
+                        continue
                     for a3 in atom_combos[2]:
                         bond_data23 = LookupBondLength(a2, a3,
                                                        atom2equiv_bond,
@@ -2384,7 +2384,7 @@ def main():
                                                          atom2auto_anglecenter,
                                                          atom2auto_anglecenter],
                                                         angle2theta0_auto)
-                        if angle_data123 != None:
+                        if angle_data123 == None:
                             # Save time by only continuing if a angle was
                             # found between a1, a2, a3
                             continue
@@ -2415,7 +2415,7 @@ def main():
                                                              atom2auto_anglecenter,
                                                              atom2auto_anglecenter],
                                                             angle2theta0_auto)
-                            if angle_data234 != None:
+                            if angle_data234 == None:
                                 # Save time by only continuing if a angle was
                                 # found between a2, a3, a4
                                 continue
@@ -2471,13 +2471,18 @@ def main():
                             dihedral2priority_mbt = \
                                 DetermineNumericPriority(is_auto,
                                                          batoms[1],
-                                                         float(dihedral2ver_mbt[dihedral_name_sh]))
+                                                         float(dihedral2ver_mbt_sh[dihedral_name_sh]))
 
                             # "ebt" terms:
                             if dihedral_name_sh in dihedral2class2_ebt_sh:
                                 Febt = dihedral2class2_ebt_sh[dihedral_name_sh]
+                                dihedral2sym_ebt = ((Febt[0][0] == Febt[1][0]) and
+                                                    (Febt[0][1] == Febt[1][1]) and
+                                                    (Febt[0][2] == Febt[1][2]) and
+                                                    (r0s[0] == r0s[2]))
                             else:
                                 Febt = [['0.0','0.0','0.0'], ['0.0','0.0','0.0']]
+                                dihedral2sym_ebt = True
                             dihedral2class2_ebt[dihedral_name_full]= (Febt[0][0] + ' ' +
                                                                       Febt[0][1] + ' ' +
                                                                       Febt[0][2] + ' ' +
@@ -2485,14 +2490,10 @@ def main():
                                                                       Febt[1][1] + ' ' +
                                                                       Febt[1][2] + ' ' +
                                                                       r0s[0]+' '+r0s[2])
-                            dihedral2sym_ebt = ((Febt[0][0] == Febt[1][0]) and
-                                                (Febt[0][1] == Febt[1][1]) and
-                                                (Febt[0][2] == Febt[1][2]) and
-                                                (r0s[0] == r0s[2]))
                             dihedral2priority_ebt = \
                                 DetermineNumericPriority(is_auto,
                                                          batoms[0] + batoms[2],
-                                                         float(dihedral2ver_ebt[dihedral_name_sh]))
+                                                         float(dihedral2ver_ebt_sh[dihedral_name_sh]))
 
                             #(Note:  large atom_priority number <==> low priority
                             # Only one of the atom priority numbers should be > 0)
@@ -2500,22 +2501,28 @@ def main():
                             # "bb13" terms:
                             if dihedral_name_sh in dihedral2class2_bb13_sh:
                                 Kbb13 = dihedral2class2_bb13_sh[dihedral_name_sh]
+                                dihedral2sym_bb13 = (r0s[0] == r0s[2])
                             else:
                                 Kbb13 = '0.0'
+                                dihedral2sym_bb13 = True
                             dihedral2class2_bb13[dihedral_name_full] = (Kbb13+' '+r0s[0]+' '+r0s[2])
-                            dihedral2sym_bb13 = (r0s[0] == r0s[2])
                             dihedral2priority_bb13 = \
                                 DetermineNumericPriority(is_auto,
                                                          batoms[0] + batoms[2],
-                                                         float(dihedral2ver_bb13[dihedral_name_sh]))
+                                                         float(dihedral2ver_bb13_sh[dihedral_name_sh]))
 
 
                             ########### "at" and "aat" terms ###########
                             # "at" terms:
                             if dihedral_name_sh in dihedral2class2_at_sh:
                                 Fat = dihedral2class2_at_sh[dihedral_name_sh]
+                                dihedral2sym_at = ((Fat[0][0] == Fat[1][0]) and
+                                                   (Fat[0][1] == Fat[1][1]) and
+                                                   (Fat[0][2] == Fat[1][2]) and
+                                                   (theta0[0] == theta0[1]))
                             else:
                                 Fat = [['0.0','0.0','0.0'], ['0.0','0.0','0.0']]
+                                dihedral2sym_at = True
                             dihedral2class2_at[dihedral_name_full] = \
                                 (Fat[0][0] + ' ' +
                                  Fat[0][1] + ' ' +
@@ -2525,26 +2532,23 @@ def main():
                                  Fat[1][2] + ' ' +
                                  theta0s[0] + ' ' +
                                  theta0s[1])
-                            dihedral2sym_at = ((Fat[0][0] == Fat[1][0]) and
-                                               (Fat[0][1] == Fat[1][1]) and
-                                               (Fat[0][2] == Fat[1][2]) and
-                                               (theta0[0] == theta0[1]))
                             dihedral2priority_at = \
                                 DetermineNumericPriority(is_auto,
                                                          aatoms[0] + aatoms[1],
-                                                         float(dihedral2ver_at[dihedral_name_sh]))
+                                                         float(dihedral2ver_at_sh[dihedral_name_sh]))
                             # "aat" terms:
                             if dihedral_name_sh in dihedral2class2_aat_sh:
                                 Kaat = dihedral2class2_aat_sh[dihedral_name_sh]
+                                dihedral2sym_aat = (theta0[0] == theta0[1])
                             else:
                                 Kaat = '0.0'
+                                dihedral2sym_aat = True
                             dihedral2class2_aat[dihedral_name_full] = \
                                         (Kaat+' '+theta0s[0]+' '+theta0s[1])
-                            dihedral2sym_aat[dihedral_name_full] = (theta0[0] == theta0[1])
                             dihedral2priority_aat = \
                                 DetermineNumericPriority(is_auto,
                                                          aatoms[0] + aatoms[1],
-                                                         float(dihedral2ver_aat[dihedral_name_sh]))
+                                                         float(dihedral2ver_aat_sh[dihedral_name_sh]))
 
                             if len(dihedral2params) > num_dihedrals:
                                 sys.stderr.write('DEBUG: dihedral['+dihedral_name_full+']:\n'
@@ -2554,41 +2558,41 @@ def main():
                                                  +theta0s[0]+','+theta0s[1]+') \n')
                                 sys.stderr.write('DEBUG: num_dihedrals = len(dihedral2params) = '
                                                  +str(len(dihedral2params))+'\n')
-                        version = max((dihedral2ver_sh[dihedral_name_sh],
-                                       dihedral2ver_mbt_sh[dihedral_name_sh],
-                                       dihedral2ver_ebt_sh[dihedral_name_sh],
-                                       dihedral2ver_bb13_sh[dihedral_name_sh],
-                                       dihedral2ver_at_sh[dihedral_name_sh],
-                                       dihedral2ver_aat_sh[dihedral_name_sh]))
+                            version = max((dihedral2ver_sh[dihedral_name_sh],
+                                           dihedral2ver_mbt_sh[dihedral_name_sh],
+                                           dihedral2ver_ebt_sh[dihedral_name_sh],
+                                           dihedral2ver_bb13_sh[dihedral_name_sh],
+                                           dihedral2ver_at_sh[dihedral_name_sh],
+                                           dihedral2ver_aat_sh[dihedral_name_sh]))
 
-                        dihedral2ver[dihedral_name_full] = version
-                        dihedral2priority[dihedral_name_full] = \
-                            (1,
-                             is_auto,
-                             dihedral2priority_sh[dihedral_name_sh],
-                             dihedral2priority_mbt,
-                             dihedral2priority_ebt,
-                             dihedral2priority_bb13,
-                             dihedral2priority_at,
-                             dihedral2priority_aat)
+                            dihedral2ver[dihedral_name_full] = version
+                            dihedral2priority[dihedral_name_full] = \
+                                (1,
+                                 is_auto,
+                                 dihedral2priority_sh[dihedral_name_sh],
+                                 dihedral2priority_mbt,
+                                 dihedral2priority_ebt,
+                                 dihedral2priority_bb13,
+                                 dihedral2priority_at,
+                                 dihedral2priority_aat)
 
-                        num_dihedrals = len(dihedral2params)
+                            num_dihedrals = len(dihedral2params)
 
-                        if ((not (dihedral2sym_ebt and
-                                  #dihedral2sym_mbt and
-                                  # (note: symmetry doesn't make sense for mbt)
-                                  dihedral2sym_at and
-                                  dihedral2sym_aat and
-                                  dihedral2sym_bb13))
-                            and
-                            ((atom_names[0] == atom_names[3]) and
-                             (atom_names[1] == atom_names[2]))):
-                            raise InputError('Error: Unsupported dihedral interaction: \"@dihedral:'+str(dihedral_name_sh)+'\"\n'
-                                             '       This interaction has symmetric atom names:\n'
-                                             ', '.join(atom_names)+'\n'
-                                             '       and yet it lacks symmetry in the corresponding force field parameters.\n'
-                                             '       (If this is not a mistake in the .frc file, then explain\n'
-                                             '        why to andrew so he can fix this.)\n')
+                            if ((not (dihedral2sym_ebt and
+                                      #dihedral2sym_mbt and
+                                      # (note: symmetry doesn't make sense for mbt)
+                                      dihedral2sym_at and
+                                      dihedral2sym_aat and
+                                      dihedral2sym_bb13))
+                                and
+                                ((atom_names[0] == atom_names[3]) and
+                                 (atom_names[1] == atom_names[2]))):
+                                raise InputError('Error: Unsupported dihedral interaction: \"@dihedral:'+str(dihedral_name_sh)+'\"\n'
+                                                 '       This interaction has symmetric atom names:\n'+
+                                                 ', '.join(atom_names)+'\n'+
+                                                 '       and yet it lacks symmetry in the corresponding force field parameters.\n'+
+                                                 '       (If this is not a mistake in the .frc file, then explain\n'+
+                                                 '        why to andrew so he can fix this.)\n')
 
 
             #sys.stderr.write('DEBUG: number of interactions = '+str(len(dihedral2class2_bb))+'\n')
@@ -2597,7 +2601,7 @@ def main():
                 #                 '       '+str(atom_names)+'\n')
                 sys.stderr.write('WARNING: Undefined bond length (r0) or rest angle (theta0) for\n'+
                                  #'         '+
-                                 + ' dihedral interaction between these atoms: ' +
+                                 ' dihedral interaction between these atoms: ' +
                                  ' '.join(atom_names)+'\n')
                 #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
 
@@ -3113,23 +3117,36 @@ def main():
                     continue
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(angle_name)]
+                bnames = [anames[3:5], anames[5,7]]
+                # (NOTE TO SELF:
+                #  If these assertions fail, then try checking if they are
+                #  all either the same, or '*'.  If they are then just replace '*'
+                #  everwhere that atom appears with the most restrictive name.)
+
+                assert(bnames[0][1] == bnames[1][0])
                 # Did the user ask us to include "auto" interactions?
                 if IsAutoInteraction(angle_name):
                     if include_auto_equivalences:
                         sys.stdout.write('    @angle:' + angle_name + ' ' +
-                                         ' @atom:*,aq*,ab*,aae' + anames[0] +
+                                         ' @atom:*,aq*,ab'+bnames[0][0]+',aae' + anames[0] +
                                          ',aac*,ade*,adc*,aie*,aic*' +
-                                         ' @atom:*,aq*,ab*,aae*,aac'+anames[1] +
+                                         ' @atom:*,aq*,ab'+bnames[0][1]+',aae*,aac'+anames[1] +
                                          ',ade*,adc*,aie*,aic*' +
-                                         ' @atom:*,aq*,ab*,aae' + anames[2] +
+                                         ' @atom:*,aq*,ab'+bnames[1][1]+',aae' + anames[2] +
                                          ',aac*,ade*,adc*,aie*,aic*' +
                                          '\n')
                     else:
                         continue
                 else:
                     sys.stdout.write('    @angle:' + angle_name + ' ' +
-                                     ' @atom:*,b*,a' + anames[0] + ',d*,i* ' +
-                                     ' @atom:*,b*,a' + anames[1] + ',d*,i* ' +
+                                     #' @atom:*,b*,a' + anames[0] + ',d*,i* ' +
+                                     #' @atom:*,b*,a' + anames[1] + ',d*,i* ' +
+                                     #' @atom:*,b*,a' + anames[2] + ',d*,i* ' +
+                                     #' @bond:'+bnames[0][0]+','+bnames[0][1]+' '
+                                     #' @bond:'+bnames[1][0]+','+bnames[1][1]+'\n'
+                                     ' @atom:*,b'+bnames[0][0]+',a'+anames[0]+',d*,i* ' +
+                                     ' @atom:*,b'+bnames[0][1]+',a'+anames[1]+',d*,i* ' +
+                                     ' @atom:*,b'+bnames[1][1]+',a'+anames[2]+',d*,i*'
                                      '\n')
 
             sys.stdout.write('  }  # end of "Data Angles By Type" section\n'
@@ -3203,30 +3220,70 @@ def main():
                     continue
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(dihedral_name)]
+                bnames = [anames[4:6], anames[6,8], anames[8,10]]
+                assert(bnames[0][1] == bnames[1][0])
+                assert(bnames[1][1] == bnames[2][0])
+                ang_names = [anames[10:13], anames[13:16]]
+                assert(ang_names[0][1] == ang_names[1][0])
+                assert(ang_names[0][2] == ang_names[1][1])
+                # (NOTE TO SELF:
+                #  If these assertions fail, then try checking if they are
+                #  all either the same, or '*'.  If they are then just replace '*'
+                #  everwhere that atom appears with the most restrictive name.)
+
                 # Did the user ask us to include "auto" interactions?
-                if IsAutoInteraction(dihedral_name):
-                    if include_auto_equivalences:
-                        sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade'
-                                         + anames[0] +
-                                         ',adc*,aie*,aic*' +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc'
-                                         + anames[1] +
-                                         ',aie*,aic*' +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc'
-                                         + anames[2] +
-                                         ',aie*,aic*' +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade'
-                                         + anames[3] +
-                                         ',adc*,aie*,aic*' +
-                                         '\n')
+                if dihedral2style[dihedral_name] != 'class2':
+                    if IsAutoInteraction(dihedral_name):
+                        if include_auto_equivalences:
+                            sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'
+                                             + anames[0] +
+                                             ',adc*,aie*,aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc'
+                                             + anames[1] +
+                                             ',aie*,aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc'
+                                             + anames[2] +
+                                             ',aie*,aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'
+                                             + anames[3] +
+                                             ',adc*,aie*,aic*' +
+                                             '\n')
+                        else:
+                            continue
                     else:
-                        continue
+                        sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                                         ' @atom:*,b*,a*,d' + anames[0] + ',i* ' +
+                                         ' @atom:*,b*,a*,d' + anames[1] + ',i* ' +
+                                         ' @atom:*,b*,a*,d' + anames[2] + ',i* ' +
+                                         ' @atom:*,b*,a*,d' + anames[3] + ',i* ' +
+                                         '\n')
                 else:
-                    sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
-                                     ' @atom:*,b*,a*,d' + anames[0] + ',i* ' +
-                                     ' @atom:*,b*,a*,d' + anames[1] + ',i* ' +
-                                     '\n')
+                    if IsAutoInteraction(dihedral_name):
+                        if include_auto_equivalences:
+                            sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                                             ' @atom:*,aq*,ab'+bnames[0][0]+',aae'+ang_names[0][0]+',aac*,ade'
+                                             + anames[0] +
+                                             ',adc*,aie*,aic*' +
+                                             ' @atom:*,aq*,ab'+bnames[0][1]+',aae'+ang_names[1][0]+',aac'+ang_names[0][1]+',ade*,adc'
+                                             + anames[1] +
+                                             ',aie*,aic*' +
+                                             ' @atom:*,aq*,ab'+bnames[1][0]+',aae'+ang_names[0][2]+',aac'+ang_names[1][1]+',ade*,adc'
+                                             + anames[2] +
+                                             ',aie*,aic*' +
+                                             ' @atom:*,aq*,ab'+bnames[1][1]+',aae'+ang_names[1][2]+',aac*,ade'
+                                             + anames[3] +
+                                             ',adc*,aie*,aic*' +
+                                             '\n')
+                        else:
+                            continue
+                    else:
+                        sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                                         ' @atom:*,b'+bnames[0][0]+',a'+ang_names[0][0]+',d' + anames[0] + ',i* ' +
+                                         ' @atom:*,b'+bnames[0][1]+',a'+ang_names[0][1]+',d' + anames[1] + ',i* ' +
+                                         ' @atom:*,b'+bnames[1][0]+',a'+ang_names[1][1]+',d' + anames[2] + ',i* ' +
+                                         ' @atom:*,b'+bnames[1][1]+',a'+ang_names[1][2]+',d' + anames[3] + ',i* ' +
+                                         '\n')
 
             sys.stdout.write('  }  # end of "Data Dihedrals By Type" section\n'
                              '\n')
@@ -3317,28 +3374,61 @@ def main():
                     continue
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(improper_name)]
+                ang_names = [anames[5:8],anames[8:11],anames[11:14]]
+                assert(ang_names[0][1] == ang_names[1][1] == ang_names[2][1])
+                assert(ang_names[0][2] == ang_names[1][0])
+                assert(ang_names[1][2] == ang_names[2][0])
+                assert(ang_names[2][2] == ang_names[0][0])
+                # (NOTE TO SELF:
+                #  If these assertions fail, then try checking if they are
+                #  all either the same, or '*'.  If they are then just replace '*'
+                #  everwhere that atom appears with the most restrictive name.)
+
                 # Did the user ask us to include "auto" interactions?
-                if IsAutoInteraction(improper_name):
-                    if include_auto_equivalences:
-                        sys.stdout.write('    @improper:' + improper_name +' '+
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
-                                         + anames[0] + ',aic*' +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic'
-                                         + anames[1] +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
-                                         + anames[2] + ',aic*' +
-                                         ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
-                                         + anames[3] + ',aic*' +
-                                         '\n')
+                if improper2style[improper_name] != 'class2':
+                    if IsAutoInteraction(improper_name):
+                        if include_auto_equivalences:
+                            sys.stdout.write('    @improper:' + improper_name +' '+
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
+                                             + anames[0] + ',aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic'
+                                             + anames[1] +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
+                                             + anames[2] + ',aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
+                                             + anames[3] + ',aic*' +
+                                             '\n')
+                        else:
+                            continue
                     else:
-                        continue
+                        sys.stdout.write('    @improper:' + improper_name + ' ' +
+                                         ' @atom:*,b*,a*,d*,i' + anames[0] + 
+                                         ' @atom:*,b*,a*,d*,i' + anames[1] +
+                                         ' @atom:*,b*,a*,d*,i' + anames[2] +
+                                         ' @atom:*,b*,a*,d*,i' + anames[3] +
+                                         '\n')
                 else:
-                    sys.stdout.write('    @improper:' + improper_name + ' ' +
-                                     ' @atom:*,b*,a*,d*,i' + anames[0] + 
-                                     ' @atom:*,b*,a*,d*,i' + anames[1] +
-                                     ' @atom:*,b*,a*,d*,i' + anames[2] +
-                                     ' @atom:*,b*,a*,d*,i' + anames[3] +
-                                     '\n')
+                    if IsAutoInteraction(improper_name):
+                        if include_auto_equivalences:
+                            sys.stdout.write('    @improper:' + improper_name +' '+
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[0][0]+',adc*,aie'
+                                             + anames[0] + ',aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac'+ang_names[0][1]+',ade*,adc*,aie*,aic'
+                                             + anames[1] +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[1][0]+',adc*,aie'
+                                             + anames[2] + ',aic*' +
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[2][0]+',adc*,aie'
+                                             + anames[3] + ',aic*' +
+                                             '\n')
+                        else:
+                            continue
+                    else:
+                        sys.stdout.write('    @improper:' + improper_name + ' ' +
+                                         ' @atom:*,b*,a'+ang_names[0][0]+',d*,i' + anames[0] + 
+                                         ' @atom:*,b*,a'+ang_names[0][1]+',d*,i' + anames[1] +
+                                         ' @atom:*,b*,a'+ang_names[1][0]+',d*,i' + anames[2] +
+                                         ' @atom:*,b*,a'+ang_names[2][0]+',d*,i' + anames[3] +
+                                         '\n')
 
             sys.stdout.write('  }  # end of "Data Impropers By Type" section\n'
                              '\n')
