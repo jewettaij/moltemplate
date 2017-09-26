@@ -1083,6 +1083,7 @@ def main():
         angle2priority_sh = OrderedDict()
         angle2style = OrderedDict()    # What LAMMPS angle style (formula)
                                        # is used for a given interaction?
+        angle2style_sh = OrderedDict()
         angle_styles = set([])         # Contains all angle styles used.
         angle2ref = OrderedDict()
         angle2ver = OrderedDict()
@@ -1119,6 +1120,7 @@ def main():
         dihedral2priority_sh = OrderedDict()
         dihedral2style = OrderedDict()    # What LAMMPS dihedral style (formula)
                                           # is used for a given interaction?
+        dihedral2style_sh = OrderedDict()
         dihedral_styles = set([])         # Contains all dihedral styles used.
         dihedral2ref = OrderedDict()
         dihedral2ver = OrderedDict()
@@ -1171,10 +1173,11 @@ def main():
         improper2priority_sh = OrderedDict()
         improper2style = OrderedDict()    # What LAMMPS improper style (formula)
                                           # is used for a given interaction?
+        improper2style_sh = OrderedDict()
         improper_styles = set([])         # Contains all improper styles used.
         improper2ver = OrderedDict()
-        improper2ref = OrderedDict()
         improper2ver_sh = OrderedDict()
+        improper2ref = OrderedDict()
         improper2ref_sh = OrderedDict()
         improper2ver_aa_sh = OrderedDict()        
         improper2ref_aa_sh = OrderedDict()        
@@ -1672,8 +1675,8 @@ def main():
                                                    'quartic_angle'])):
                     # Then this is a special case of the class2 angle where
                     # the (theta-theta0)^3 and (theta-theta0)^4 terms = 0
-                    angle2style[angle_name] = 'class2'
-                    angle2params[angle_name] = (theta0+' '+k+' 0 0')
+                    angle2style_sh[angle_name] = 'class2'
+                    angle2params_sh[angle_name] = (theta0+' '+k+' 0 0')
 
 
 
@@ -1683,18 +1686,18 @@ def main():
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:5]))
                 angle_name_sh = EncodeInteractionName(atom_names, section_is_auto)
-                angle2ver_sh[angle_name_sh] = tokens[0]
-                angle2ver_bb_sh[angle_name_sh] = tokens[0]
-                angle2ver_ba_sh[angle_name_sh] = tokens[0]
-                angle2ref_sh[angle_name_sh] = tokens[1]
+                version = tokens[0]
+                reference = tokens[1]
+                angle2ver_sh[angle_name_sh] = version
+                angle2ref_sh[angle_name_sh] = reference
                 angle2priority_sh[angle_name_sh] = \
                     DetermineNumericPriority(section_is_auto,
                                              tokens[2:5],
                                              float(angle2ver_sh[angle_name_sh]))
-                angle2priority[angle_name_sh] = \
-                    (0,
-                     section_is_auto,
-                     angle2priority_sh[angle_name_sh])
+                #angle2priority[angle_name_sh] = \
+                #    (0,
+                #     section_is_auto,
+                #     angle2priority_sh[angle_name_sh])
                 theta0 = tokens[5]
                 if not section_is_auto:
                     angle2theta0[angle_name_sh] = theta0
@@ -1705,8 +1708,16 @@ def main():
                 K2 = tokens[6]
                 K3 = tokens[7]
                 K4 = tokens[8]
-                angle2style[angle_name_sh] = 'class2'
+                angle2style_sh[angle_name_sh] = 'class2'
                 angle2params_sh[angle_name_sh] = [theta0, K2, K3, K4]
+                if not angle_name_sh in angle2class2_bb_sh:
+                    angle2class2_bb_sh[angle_name_sh] = '0.0'          # default value
+                    angle2ver_bb_sh[angle_name_sh] = version           # default value
+                    angle2ref_bb_sh[angle_name_sh] = reference         # default value
+                if not angle_name_sh in angle2class2_ba_sh:
+                    angle2class2_ba_sh[angle_name_sh] = ['0.0', '0.0'] # default value
+                    angle2ver_ba_sh[angle_name_sh] = version           # default value
+                    angle2ref_ba_sh[angle_name_sh] = reference         # default value
 
             elif ((len(tokens) > 5) and
                   (section_name in ('#bond-bond', '#bond-angle')) and
@@ -1714,7 +1725,7 @@ def main():
                    set(['class2', 'quartic', 'quartic_angle']))):
                 if line.lstrip().find('!') == 0:
                     continue
-                version = float(tokens[0])
+                version = tokens[0]
                 reference = tokens[1]
                 if line.lstrip().find('!') == 0:
                     continue
@@ -1737,6 +1748,11 @@ def main():
                     angle2class2_ba_sh[angle_name_sh] = [k for k in K]
                     angle2ver_ba_sh[angle_name_sh] = version
                     angle2ref_ba_sh[angle_name_sh] = reference
+                if not angle_name_sh in angle2params_sh:
+                    angle2params_sh[angle_name_sh] = ['0.0', '0.0', '0.0', '0.0']  # default value
+                    angle2ver_sh[angle_name_sh] = version
+                    angle2ref_sh[angle_name_sh] = reference
+                    angle2priority_sh[angle_name_sh] = 0.0
 
 
 
@@ -1817,21 +1833,16 @@ def main():
                     continue
                 atom_names = ReverseIfEnds(map(EncodeAName, tokens[2:6]))
                 dihedral_name_sh = EncodeInteractionName(atom_names, section_is_auto)
-                dihedral2ver_sh[dihedral_name_sh] = tokens[0]
-                dihedral2ver_mbt_sh[dihedral_name_sh] = tokens[0]
-                dihedral2ver_ebt_sh[dihedral_name_sh] = tokens[0]
-                dihedral2ver_bb13_sh[dihedral_name_sh] = tokens[0]
-                dihedral2ver_at_sh[dihedral_name_sh] = tokens[0]
-                dihedral2ver_aat_sh[dihedral_name_sh] = tokens[0]
-                dihedral2ref_sh[dihedral_name_sh] = tokens[1]
+                version = tokens[0]
+                reference = tokens[1]
                 dihedral2priority_sh[dihedral_name_sh] = \
                     DetermineNumericPriority(section_is_auto,
                                              tokens[2:6],
-                                             float(dihedral2ver_sh[dihedral_name_sh]))
-                dihedral2priority[dihedral_name_sh] = \
-                    (0,
-                     section_is_auto,
-                     dihedral2priority_sh[dihedral_name_sh])
+                                             float(version))
+                #dihedral2priority[dihedral_name_sh] = \
+                #    (0,
+                #     section_is_auto,
+                #     dihedral2priority_sh[dihedral_name_sh])
                 V1 = tokens[6]
                 phi0_1 = tokens[7]
                 V2 = phi0_2 = V3 = phi0_3 = '0.0'
@@ -1841,8 +1852,32 @@ def main():
                 if len(tokens) > 11:
                     V3 = tokens[10]
                     phi0_3 = tokens[11]
-                dihedral2style[dihedral_name_sh] = 'class2'
+                dihedral2style_sh[dihedral_name_sh] = 'class2'
+                dihedral2ver_sh[dihedral_name_sh] = version
+                dihedral2ref_sh[dihedral_name_sh] = reference
                 dihedral2params_sh[dihedral_name_sh] = [V1, phi0_1, V2, phi0_2, V3, phi0_3]
+                # default values for cross terms:
+                if not dihedral_name_sh in dihedral2class2_mbt_sh:
+                    dihedral2class2_mbt_sh[dihedral_name_sh] = ['0.0','0.0','0.0']  # default value
+                    dihedral2ver_mbt_sh[dihedral_name_sh] = version
+                    dihedral2ref_mbt_sh[dihedral_name_sh] = reference
+                if not dihedral_name_sh in dihedral2class2_ebt_sh:
+                    dihedral2class2_ebt_sh[dihedral_name_sh] = [['0.0','0.0','0.0'],['0.0','0.0','0.0']] # default value
+                    dihedral2ver_ebt_sh[dihedral_name_sh] = version
+                    dihedral2ref_ebt_sh[dihedral_name_sh] = reference
+                if not dihedral_name_sh in dihedral2class2_bb13_sh:
+                    dihedral2class2_bb13_sh[dihedral_name_sh] = '0.0' # default value
+                    dihedral2ver_bb13_sh[dihedral_name_sh] = version
+                    dihedral2ref_bb13_sh[dihedral_name_sh] = reference
+                if not dihedral_name_sh in dihedral2class2_at_sh:
+                    dihedral2class2_at_sh[dihedral_name_sh] = [['0.0','0.0','0.0'],['0.0','0.0','0.0']] # default value
+                    dihedral2ver_at_sh[dihedral_name_sh] = version
+                    dihedral2ref_at_sh[dihedral_name_sh] = reference
+                if not dihedral_name_sh in dihedral2class2_aat_sh:
+                    dihedral2class2_aat_sh[dihedral_name_sh] = '0.0' # default value
+                    dihedral2ver_aat_sh[dihedral_name_sh] = version
+                    dihedral2ref_aat_sh[dihedral_name_sh] = reference
+
 
 
 
@@ -1851,7 +1886,7 @@ def main():
                   and (dihedral_styles_selected & set(['class2','torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
-                version = float(tokens[0])
+                version = tokens[0]
                 reference = tokens[1]
                 if line.lstrip().find('!') == 0:
                     continue
@@ -1872,6 +1907,11 @@ def main():
                 dihedral2class2_mbt_sh[dihedral_name_sh] = [F for F in Fmbt]
                 dihedral2ver_mbt_sh[dihedral_name_sh] = version
                 dihedral2ref_mbt_sh[dihedral_name_sh] = reference
+                if not dihedral_name_sh in dihedral2params_sh:
+                    dihedral2params_sh[dihedral_name_sh] = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0']
+                    dihedral2ver_sh[dihedral_name_sh] = version
+                    dihedral2ref_sh[dihedral_name_sh] = reference
+                    dihedral2priority_sh[dihedral_name_sh] = 0.0
 
 
 
@@ -1883,7 +1923,7 @@ def main():
                    set(['class2', 'torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
-                version = float(tokens[0])
+                version = tokens[0]
                 reference = tokens[1]
                 if line.lstrip().find('!') == 0:
                     continue
@@ -1925,6 +1965,11 @@ def main():
                     dihedral2ref_bb13_sh[dihedral_name_sh] = reference
                 else:
                     assert(False)
+                if not dihedral_name_sh in dihedral2params_sh:
+                    dihedral2params_sh[dihedral_name_sh] = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0']
+                    dihedral2ver_sh[dihedral_name_sh] = version
+                    dihedral2ref_sh[dihedral_name_sh] = reference
+                    dihedral2priority_sh[dihedral_name_sh] = 0.0
 
 
 
@@ -1942,7 +1987,7 @@ def main():
                    set(['class2', 'torsion_3']))):
                 if line.lstrip().find('!') == 0:
                     continue
-                version = float(tokens[0])
+                version = tokens[0]
                 reference = tokens[1]
                 if line.lstrip().find('!') == 0:
                     continue
@@ -1975,7 +2020,7 @@ def main():
                         Fat.reverse()
                         Fat[0].reverse()
                         Fat[1].reverse()
-                    dihedral2class2_at_sh = [ [F_ij for F_ij in F_i] for F_i in Fat] #deep copy of Fat
+                    dihedral2class2_at_sh[dihedral_name_sh] = [ [F_ij for F_ij in F_i] for F_i in Fat] #deep copy of Fat
                     dihedral2ver_at_sh[dihedral_name_sh] = version
                     dihedral2ref_at_sh[dihedral_name_sh] = reference
                 elif section_name == '#angle-angle-torsion_1':
@@ -1985,6 +2030,12 @@ def main():
                     dihedral2ref_aat_sh[dihedral_name_sh] = reference
                 else:
                     assert(False)
+
+                if not dihedral_name_sh in dihedral2params_sh:
+                    dihedral2params_sh[dihedral_name_sh] = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0'] # default value
+                    dihedral2ver_sh[dihedral_name_sh] = version
+                    dihedral2ref_sh[dihedral_name_sh] = reference
+                    dihedral2priority_sh[dihedral_name_sh] = 0.0
 
 
 
@@ -2027,27 +2078,32 @@ def main():
                   and (improper_styles_selected and set(['class2','wilson_out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
+                improper_symmetry_subgraph = 'cenJsortIKL'
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
                 atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
                 improper_name_sh = EncodeInteractionName(atom_names, section_is_auto)
-                improper2ver_sh[improper_name_sh] = tokens[0]
-                improper2ver_aa_sh[improper_name_sh] = tokens[0]
-                improper2ref_sh[improper_name_sh] = tokens[1]
+                version = tokens[0]
+                reference = tokens[1]
+                improper2ver_sh[improper_name_sh] = version
+                improper2ref_sh[improper_name_sh] = reference
                 improper2priority_sh[improper_name_sh] = \
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:6],
                                               float(improper2ver_sh[improper_name_sh]))
-                improper2priority[improper_name_sh] = \
-                    (0,
-                     section_is_auto,
-                     improper2priority_sh[improper_name_sh])
+                #improper2priority[improper_name_sh] = \
+                #    (0,
+                #     section_is_auto,
+                #     improper2priority_sh[improper_name_sh])
                 K = tokens[6]
                 chi0 = tokens[7]
-                improper2style[improper_name_sh] = 'class2'
+                improper2style_sh[improper_name_sh] = 'class2'
                 improper2params_sh[improper_name_sh] = [K, chi0]
-                improper2params[improper_name_sh] = K + ' ' + chi0
-                improper2class2_aa[improper_name_sh] = '0.0 0.0 0.0 0.0 0.0 0.0' #(default)
-                improper_symmetry_subgraph = 'cenJsortIKL'
+                #improper2params[improper_name_sh] = K + ' ' + chi0
+                # default values for cross terms:
+                if not improper_name_sh in improper2class2_aa_sh:
+                    improper2class2_aa_sh[improper_name_sh] = '0.0' #(default)
+                    improper2ver_sh[improper_name_sh] = version
+                    improper2ref_sh[improper_name_sh] = reference
 
             elif ((len(tokens) > 6) and (section_name == '#angle-angle')
                   and (improper_styles_selected and set(['class2','wilson_out_of_plane']))):
@@ -2060,7 +2116,12 @@ def main():
                 K = tokens[6]
                 #improper2class2_aa_sh[improper_name_sh] = K
                 improper2cross[improper_name_sh][ImCrossTermID(atom_names)] = K
-                improper2style[improper_name_sh] = 'class2'
+                improper2style_sh[improper_name_sh] = 'class2'
+                if not improper_name_sh in improper2params_sh:
+                    improper2params_sh[improper_name_sh] = ['0.0', '0.0']
+                    improper2ver_sh[improper_name_sh] = version
+                    improper2ref_sh[improper_name_sh] = reference
+                    improper2priority_sh[improper_name_sh] = 0.0
 
             elif (len(tokens) > 0) and (section_name == '#out_of_plane-out_of_plane'):
                 if line.lstrip().find('!') == 0:
@@ -2090,23 +2151,23 @@ def main():
 
 
         if display_OOP_OOP_warning:
-            sys.stderr.write('###########################################################\n'
-                             'WARNING\n'
-                             '      ALL \"out-of-plane_out-of_plane\" INTERACTIONS ARE IGNORED.\n'
-                             '      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
-                             '      \"out-of-plane_out-of_plane\" interactions are not yet supported in LAMMPS\n'
-                             '      (...as of 2017-2-07)  There is no way that moltemplate can produce\n'
-                             '      LAMMPS compatible parameter files for these interactions.\n'
+            sys.stdout.write('###########################################################\n'
+                             '# WARNING\n'
+                             '#      ALL \"out-of-plane_out-of_plane\" INTERACTIONS ARE IGNORED.\n'
+                             '#      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
+                             '#      \"out-of-plane_out-of_plane\" interactions are not yet supported in LAMMPS\n'
+                             '#      (...as of 2017-2-07)  There is no way that moltemplate can produce\n'
+                             '#      LAMMPS compatible parameter files for these interactions.\n'
                              '###########################################################\n')
 
         if display_torsion_torsion_1_warning:
-            sys.stderr.write('###########################################################\n'
-                             'WARNING\n'
-                             '      ALL \"torsion_torsion_1\" INTERACTIONS ARE IGNORED.\n'
-                             '      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
-                             '      \"torsion_torsion_1\" interactions are not yet supported in LAMMPS\n'
-                             '      (...as of 2017-2-07)  There is no way that moltemplate can produce\n'
-                             '      LAMMPS compatible parameter files for these interactions.\n'
+            sys.stdout.write('###########################################################\n'
+                             '# WARNING\n'
+                             '#      ALL \"torsion_torsion_1\" INTERACTIONS ARE IGNORED.\n'
+                             '#      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
+                             '#      \"torsion_torsion_1\" interactions are not yet supported in LAMMPS\n'
+                             '#      (...as of 2017-2-07)  There is no way that moltemplate can produce\n'
+                             '#      LAMMPS compatible parameter files for these interactions.\n'
                              '###########################################################\n')
 
 
@@ -2221,21 +2282,26 @@ def main():
                         r0s[0], batoms[0] = bond_data1
                         r0s[1], batoms[1] = bond_data2
                         found_at_least_one = True
-                        angle_name_full = EncodeInteractionName(atom_names +
-                                                                batoms[0] + batoms[1],
+                        angle_name_full = angle_name_sh + ',' + \
+                                          EncodeInteractionName(batoms[0] + batoms[1],
                                                                 #+ [str(r0s[0]),
                                                                 #   str(r0s[1])],
                                                                 section_is_auto)
                         #sys.stderr.write('DEBUG: (a1,a2,a3) = '+str((a1,a2,a3))+', '
                         #                 ' (b11,b12,b21,b22) = '+str(batoms)+'\n')
-                        angle2ref[angle_name_full] = reference
-                        angle2style[angle_name_full] = 'class2'
+                        angle2ref_sh[angle_name_full] = reference
+                        angle2style_sh[angle_name_full] = 'class2'
                         theta0_K_params = angle2params_sh[angle_name_sh]
                         angle2params[angle_name_full] = ' '.join(theta0_K_params)
                         if angle_name_sh in angle2class2_bb_sh:
                             Kbb = angle2class2_bb_sh[angle_name_sh]
-                        else:
+                            assert(angle_name_sh in angle2ver_bb_sh)
+                            assert(angle_name_sh in angle2ref_bb_sh)
+                        else:    #(use default values)
                             Kbb = '0.0'
+                            angle2class2_bb_sh[angle_name_sh] = Kbb
+                            angle2ver_bb_sh[angle_name_sh] = angle2ver_sh[angle_name_sh]
+                            angle2ref_bb_sh[angle_name_sh] = angle2ref_sh[angle_name_sh]
                         angle2class2_bb[angle_name_full] = (Kbb+' '+r0s[0]+' '+r0s[1])
                         angle2priority_bb = \
                             DetermineNumericPriority(is_auto,
@@ -2243,8 +2309,13 @@ def main():
                                                      float(angle2ver_bb_sh[angle_name_sh]))
                         if angle_name_sh in angle2class2_ba_sh:
                             Kba = angle2class2_ba_sh[angle_name_sh]
-                        else:
+                            assert(angle_name_sh in angle2ver_ba_sh)
+                            assert(angle_name_sh in angle2ref_ba_sh)
+                        else:    #(use default values)
                             Kba = ['0.0', '0.0']
+                            angle2class2_ba_sh[angle_name_sh] = Kba
+                            angle2ver_ba_sh[angle_name_sh] = angle2ver_sh[angle_name_sh]
+                            angle2ref_ba_sh[angle_name_sh] = angle2ref_sh[angle_name_sh]
                         angle2class2_ba[angle_name_full] = (Kba[0]+' '+Kba[1]+' '+r0s[0]+' '+r0s[1])
                         angle2sym_ba = (r0s[0] == r0s[1])
                         angle2priority_ba = \
@@ -2255,6 +2326,8 @@ def main():
                                        angle2ver_bb_sh[angle_name_sh],
                                        angle2ver_ba_sh[angle_name_sh]))
                         angle2ver[angle_name_full] = version
+                        angle2ref[angle_name_full] = angle2ref_sh[angle_name_sh]
+                        angle2style[angle_name_full] = 'class2'
                         angle2priority[angle_name_full] = \
                             (1,
                              is_auto,
@@ -2283,7 +2356,7 @@ def main():
             if not found_at_least_one:
                 #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
                 #                 '       '+str(atom_names)+'\n')
-                sys.stderr.write('WARNING: Undefied bond length for ' +
+                sys.stdout.write('# WARNING: Undefied bond length for ' +
                                  #'         '+
                                  section_name[1:] + ' interaction: ' +
                                  ' '.join(atom_names)+'\n')
@@ -2361,7 +2434,7 @@ def main():
                                                    atom2equiv_bond,
                                                    bond2r0,
                                                    atom2auto_bond,
-                    bond2r0_auto)
+                                                   bond2r0_auto)
                     if bond_data12 == None:
                         # Save time by only continuing if a bond was
                         # found between a1 and a2
@@ -2435,7 +2508,7 @@ def main():
                                 aatoms[1].reverse()
 
                             #if is_auto:
-                            dihedral_name_full = dihedral_name_sh + \
+                            dihedral_name_full = dihedral_name_sh + ',' + \
                                 EncodeInteractionName(batoms[0] + batoms[1] + batoms[2] +
                                                       aatoms[0] + aatoms[1],
                                                       False)
@@ -2444,7 +2517,7 @@ def main():
                             #    assert(batoms[1][1] == batoms[2][0])
                             #    assert(aatoms[0][1] == aatoms[1][0])
                             #    assert(aatoms[0][2] == aatoms[1][1])
-                            #    dihedral_name_full = dihedral_name_sh + 
+                            #    dihedral_name_full = dihedral_name_sh + ',' + \
                             #        EncodeInteractionName([batoms[0][0], batoms[0][1]
                             #                               batoms[2][0], batoms[2][1],
                             #                               aatoms[0][0], aatoms[0][1],
@@ -2466,6 +2539,9 @@ def main():
                                 Fmbt = dihedral2class2_mbt_sh[dihedral_name_sh]
                             else:
                                 Fmbt = ['0.0', '0.0', '0.0']
+                                dihedral2class2_mbt_sh[dihedral_name_sh] = Fmbt
+                                dihedral2ver_mbt_sh[dihedral_name_sh] = dihedral2ver_sh[dihedral_name_sh]
+                                dihedral2ref_mbt_sh[dihedral_name_sh] = dihedral2ref_sh[dihedral_name_sh]
                             dihedral2class2_mbt[dihedral_name_full] = \
                                (Fmbt[0]+' '+Fmbt[1]+' '+Fmbt[2]+' '+r0s[1])
                             dihedral2priority_mbt = \
@@ -2478,10 +2554,13 @@ def main():
                                 Febt = dihedral2class2_ebt_sh[dihedral_name_sh]
                                 dihedral2sym_ebt = ((Febt[0][0] == Febt[1][0]) and
                                                     (Febt[0][1] == Febt[1][1]) and
-                                                    (Febt[0][2] == Febt[1][2]) and
-                                                    (r0s[0] == r0s[2]))
+                                                    (Febt[0][2] == Febt[1][2]))
+                                                    #and (r0s[0] == r0s[2]))
                             else:
                                 Febt = [['0.0','0.0','0.0'], ['0.0','0.0','0.0']]
+                                dihedral2class2_ebt_sh[dihedral_name_sh] = Febt
+                                dihedral2ver_ebt_sh[dihedral_name_sh] = dihedral2ver_sh[dihedral_name_sh]
+                                dihedral2ref_ebt_sh[dihedral_name_sh] = dihedral2ref_sh[dihedral_name_sh]
                                 dihedral2sym_ebt = True
                             dihedral2class2_ebt[dihedral_name_full]= (Febt[0][0] + ' ' +
                                                                       Febt[0][1] + ' ' +
@@ -2501,10 +2580,15 @@ def main():
                             # "bb13" terms:
                             if dihedral_name_sh in dihedral2class2_bb13_sh:
                                 Kbb13 = dihedral2class2_bb13_sh[dihedral_name_sh]
-                                dihedral2sym_bb13 = (r0s[0] == r0s[2])
+                                #dihedral2sym_bb13 = (r0s[0] == r0s[2])
+                                dihedral2sym_bb13 = True
                             else:
                                 Kbb13 = '0.0'
+                                dihedral2class2_bb13_sh[dihedral_name_sh] = Kbb13
+                                dihedral2ver_bb13_sh[dihedral_name_sh] = dihedral2ver_sh[dihedral_name_sh]
+                                dihedral2ref_bb13_sh[dihedral_name_sh] = dihedral2ref_sh[dihedral_name_sh]
                                 dihedral2sym_bb13 = True
+
                             dihedral2class2_bb13[dihedral_name_full] = (Kbb13+' '+r0s[0]+' '+r0s[2])
                             dihedral2priority_bb13 = \
                                 DetermineNumericPriority(is_auto,
@@ -2518,10 +2602,13 @@ def main():
                                 Fat = dihedral2class2_at_sh[dihedral_name_sh]
                                 dihedral2sym_at = ((Fat[0][0] == Fat[1][0]) and
                                                    (Fat[0][1] == Fat[1][1]) and
-                                                   (Fat[0][2] == Fat[1][2]) and
-                                                   (theta0[0] == theta0[1]))
+                                                   (Fat[0][2] == Fat[1][2]))
+                                                   #and (theta0[0] == theta0[1]))
                             else:
                                 Fat = [['0.0','0.0','0.0'], ['0.0','0.0','0.0']]
+                                dihedral2class2_at_sh[dihedral_name_sh] = Fat
+                                dihedral2ver_at_sh[dihedral_name_sh] = dihedral2ver_sh[dihedral_name_sh]
+                                dihedral2ref_at_sh[dihedral_name_sh] = dihedral2ref_sh[dihedral_name_sh]
                                 dihedral2sym_at = True
                             dihedral2class2_at[dihedral_name_full] = \
                                 (Fat[0][0] + ' ' +
@@ -2539,9 +2626,13 @@ def main():
                             # "aat" terms:
                             if dihedral_name_sh in dihedral2class2_aat_sh:
                                 Kaat = dihedral2class2_aat_sh[dihedral_name_sh]
-                                dihedral2sym_aat = (theta0[0] == theta0[1])
+                                #dihedral2sym_aat = (theta0[0] == theta0[1])
+                                dihedral2sym_aat = True
                             else:
                                 Kaat = '0.0'
+                                dihedral2class2_aat_sh[dihedral_name_sh] = Kaat
+                                dihedral2ver_aat_sh[dihedral_name_sh] = dihedral2ver_sh[dihedral_name_sh]
+                                dihedral2ref_aat_sh[dihedral_name_sh] = dihedral2ref_sh[dihedral_name_sh]
                                 dihedral2sym_aat = True
                             dihedral2class2_aat[dihedral_name_full] = \
                                         (Kaat+' '+theta0s[0]+' '+theta0s[1])
@@ -2565,7 +2656,9 @@ def main():
                                            dihedral2ver_at_sh[dihedral_name_sh],
                                            dihedral2ver_aat_sh[dihedral_name_sh]))
 
+                            dihedral2style[dihedral_name_full] = 'class2'
                             dihedral2ver[dihedral_name_full] = version
+                            dihedral2ref[dihedral_name_full] = dihedral2ref_sh[dihedral_name_sh]
                             dihedral2priority[dihedral_name_full] = \
                                 (1,
                                  is_auto,
@@ -2599,7 +2692,7 @@ def main():
             if not found_at_least_one:
                 #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
                 #                 '       '+str(atom_names)+'\n')
-                sys.stderr.write('WARNING: Undefined bond length (r0) or rest angle (theta0) for\n'+
+                sys.stdout.write('# WARNING: Undefined bond length (r0) or rest angle (theta0) for\n'+
                                  #'         '+
                                  ' dihedral interaction between these atoms: ' +
                                  ' '.join(atom_names)+'\n')
@@ -2612,8 +2705,8 @@ def main():
 
 
 
-
-       ############ POST-PROCESSING IMPROPERS ###########
+        """
+        ############ POST-PROCESSING IMPROPERS ###########
 
 
 
@@ -2673,30 +2766,30 @@ def main():
             atom_names = ExtractANames(improper_name_sh)            # names of all 4 atoms
             lnames = [atom_names[0], atom_names[2], atom_names[3]]  # names of "leaf" atoms
 
-            #M1     = improper2cross[improper_name][ 2 ]
-            #M2     = improper2cross[improper_name][ 0 ]
-            #M3     = improper2cross[improper_name][ 3 ]
+            #M1     = improper2cross[improper_name_sh][ 2 ]
+            #M2     = improper2cross[improper_name_sh][ 0 ]
+            #M3     = improper2cross[improper_name_sh][ 3 ]
             try:
-                M1 = improper2cross[improper_name][ImCrossTermID([atom_names[0],
-                                                                  atom_names[1],
-                                                                  atom_names[2],
-                                                                  atom_names[3]])]
+                M1 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[0],
+                                                                     atom_names[1],
+                                                                     atom_names[2],
+                                                                     atom_names[3]])]
             except KeyError:
                 M1 = 0.0
 
             try:
-                M2 = improper2cross[improper_name][ImCrossTermID([atom_names[2],
-                                                                  atom_names[1],
-                                                                  atom_names[0],
-                                                                  atom_names[3]])]
+                M2 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[2],
+                                                                     atom_names[1],
+                                                                     atom_names[0],
+                                                                     atom_names[3]])]
             except KeyError:
                 M2 = 0.0
 
             try:
-                M3 = improper2cross[improper_name][ImCrossTermID([atom_names[0],
-                                                                  atom_names[1],
-                                                                  atom_names[3],
-                                                                  atom_names[2]])]
+                M3 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[0],
+                                                                     atom_names[1],
+                                                                     atom_names[3],
+                                                                     atom_names[2]])]
             except KeyError:
                 M3 = 0.0
 
@@ -2741,9 +2834,9 @@ def main():
                                           atom_names[ 1 ],
                                           atom_names[ [0,2,3][i] ],
                                           atom_names[ i_neigh[i][1] ]])
-                M[i] = float(improper2cross[improper_name][imTermID])
+                M[i] = float(improper2cross[improper_name_sh][imTermID])
                 #i_leaf = [0,2,3][i]
-                #M[i] = float(improper2cross[improper_name][ i_leaf ])
+                #M[i] = float(improper2cross[improper_name_sh][ i_leaf ])
                 angle_name_l = ReverseIfEnds([atom_names[i_neigh[i][0]],
                                               atom_names[i],
                                               atom_names[i_neigh[i][1]]])
@@ -2755,15 +2848,15 @@ def main():
                     (theta0[ i_neigh[i][1] ] == theta0[ i_neigh[i][1] ])):
                     # Then it is safe to swap the order of these two atoms in
                     # the list of atoms when looking up force-field parameters
-                    improper2sym[improper_name].add(i_neigh[i][0])
-                    improper2sym[improper_name].add(i_neigh[i][1])
+                    improper2sym[improper_name_sh].add(i_neigh[i][0])
+                    improper2sym[improper_name_sh].add(i_neigh[i][1])
                     # Later, I can use these to decide whether or not I need to
                     # change the default script with symmetry rules. (I'm hoping
                     # that "cenJsortIKL.py" should work in most cases.)
                     # CONTINUEHERE: FIGURE OUT WHETHER TO WORRY ABOUT improper2sym
                 else:
                     if atom_names[i_neigh[i][0]] == atom_names[i_neigh[i][1]]:
-                        raise InputError('Error: Unsupported improper interaction: \"@improper:'+str(improper_name)+'\"\n'
+                        raise InputError('Error: Unsupported improper interaction: \"@improper:'+str(improper_name_sh)+'\"\n'
                                          '       This interaction has matching aton aliases:\n'
                                          '       (@atom:'+str(atom_names[i_neigh[i][0]])+
                                          ', @atom:'+str(atom_names[i_neigh[i][1]])+')\n'
@@ -2841,6 +2934,9 @@ def main():
                             angle_name_l = ReverseIfEnds[aatoms[2]]
                             angle_name = EncodeInteractionName(angle_name_l, is_auto)
 
+                            improper_name_full = improper_name_sh + ',' + \
+                                EncodeInteractionName(aatoms[0] + aatoms[1] + aatoms[2],
+                                                      False)
 
 
                             #if improper_name_sh in improper2param_sh[improper_name_sh]:
@@ -2857,7 +2953,9 @@ def main():
                                     (str(M1)+' '+str(M2)+' '+str(M3)+' '+
                                      str(theta0s[0])+' '+str(theta0s[1])+' '+str(theta0s[2]))
                             else:
-                                improper2class2_aa[improper_name_full] = ('0.0 0.0 0.0 0.0 0.0 0.0')
+                                improper2class2_aa[improper_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0'
+                                improper2ver_aa_sh[improper_name_sh] = improper2ver_sh[improper_name_sh]
+                                improper2ref_aa_sh[improper_name_sh] = improper2ref_sh[improper_name_sh]
 
                         version = max((improper2ver_sh[improper_name_sh],
                                        improper2ver_aa_sh[improper_name_sh]))
@@ -2867,12 +2965,18 @@ def main():
                                                      aatoms[0] + aatoms[1] + aatoms[2],
                                                      float(improper2ver_aat[improper_name_sh]))
 
+                        improper2style[improper_name_full] = 'class2'
+                        improper2ref[improper_name_full] = improper2ref_sh[improper_name_sh]
                         improper2ver[improper_name_full] = version
                         improper2priority[improper_name_full] = \
                             (1,
                              is_auto,
                              improper2class2priority[improper_name_sh],
                              improper2class2priority_aa)
+        """
+
+
+
 
 
 
@@ -2903,8 +3007,8 @@ def main():
         for atype in atom2mass:
             sys.stdout.write("    @atom:" + atype + " " + str(atom2mass[atype]))
             sys.stdout.write("  # ")
-            if atype in atom2elem:
-                sys.stdout.write(atom2elem[atype] + ", ")
+            if atype in atom2element:
+                sys.stdout.write(atom2element[atype] + ", ")
             #sys.stdout.write(atom2descr[atype])
             sys.stdout.write("\"" + atom2descr[atype] + "\"")
             sys.stdout.write(" (")
@@ -2976,17 +3080,18 @@ def main():
 
 
         ################# Print Charge By Bond Interactions ##################
-        charge_pair_priority_high_to_low = sorted(charge_pair_priority.items(),
-                                                  key=itemgetter(1),
-                                                  reverse=True)
+        charge_pair_priority_low_to_high = [x[0] for x in
+                                            sorted([x for x in reversed(charge_pair_priority.items())],
+                                                   key=itemgetter(1),
+                                                   reverse=False)]
 
-        if len(charge_pair_priority_high_to_low) > 0:
+        if len(charge_pair_priority) > 0:
             sys.stdout.write("  # ---------- Charge By Bond (a.k.a. \"bond equivalences\") ----------\n")
             sys.stdout.write("  write_once(\"Data Charge By Bond\") {\n")
             # Print rules for generating (2-body) "bond" interactions:
             sys.stdout.write('\n\n\n'
                              '  write_once("Charge By Bond") {\n')
-            for bond_name, in charge_pair_priority_high_to_low:
+            for (bond_name,) in charge_pair_priority_low_to_high:
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(bond_name)]
                 # Did the user ask us to include "auto" interactions?
@@ -3024,11 +3129,12 @@ def main():
 
         ################# Print 2-body Bond Interactions ##################
 
-        bond_names_priority_high_to_low = sorted(bond2priority.items(),
-                                                 key=itemgetter(1),
-                                                 reverse=True)
+        bond_names_priority_low_to_high = [x[0] for x in
+                                           sorted([x for x in reversed(bond2priority.items())],
+                                                  key=itemgetter(1),
+                                                  reverse=False)]
 
-        if len(bond_names_priority_high_to_low) > 0:
+        if len(bond2priority) > 0:
             sys.stdout.write("  # --------------- Bond Interactions: ---------------------\n")
             sys.stdout.write('\n'
                              '\n'
@@ -3036,7 +3142,7 @@ def main():
                              '  #  BondType  AtomType1  AtomType2\n')
             sys.stdout.write('\n'
                              '  write_once("Data Bonds By Type") {\n')
-            for bond_name, in bond_names_priority_high_to_low:
+            for bond_name in bond_names_priority_low_to_high:
                 if not (bond2style[bond_name] in
                         bond_styles_selected):
                     continue
@@ -3075,7 +3181,7 @@ def main():
                              '  # bond_coeff BondTypeName  BondStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for bond_name, in bond_names_priority_high_to_low:
+            for bond_name in bond_names_priority_low_to_high:
                 if not (bond2style[bond_name] in
                         bond_styles_selected):
                     continue
@@ -3084,7 +3190,7 @@ def main():
                     (not include_auto_equivalences)):
                     continue
                 sys.stdout.write('    bond_coeff @bond:'+bond_name+' '+
-                                 bond2style[bond_name] +
+                                 bond2style[bond_name] + ' ' +
                                  bond2params[bond_name] +
                                  " # (ver=" + bond2ver[bond_name] +
                                  ", ref=" +bond2ref[bond_name] + ")\n")
@@ -3099,11 +3205,12 @@ def main():
 
         ################# Print 3-body Angle Interactions ##################
 
-        angle_names_priority_high_to_low = sorted(angle2priority.items(),
-                                                  key=itemgetter(1),
-                                                  reverse=True)
+        angle_names_priority_low_to_high = [x[0] for x in
+                                            sorted([x for x in reversed(angle2priority.items())],
+                                                   key=itemgetter(1),
+                                                   reverse=False)]
 
-        if len(angle_names_priority_high_to_low) > 0:
+        if len(angle2priority) > 0:
             sys.stdout.write("  # --------------- Angle Interactions: ---------------------\n")
             sys.stdout.write('\n'
                              '\n'
@@ -3111,23 +3218,33 @@ def main():
                              '  #  AngleType AtomType1 AtomType2 AtomType3  [BondType1 BondType2]\n')
             sys.stdout.write('\n'
                              '  write_once("Data Angles By Type") {\n')
-            for angle_name, in angle_names_priority_high_to_low:
+            for angle_name in angle_names_priority_low_to_high:
                 if not (angle2style[angle_name] in
                         angle_styles_selected):
                     continue
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(angle_name)]
-                bnames = [anames[3:5], anames[5,7]]
+                #if (len(anames) == 3) and angle2style[angle_name] == 'class2':
+                #    continue
+                bnames = [anames[3:5], anames[5:7]]
+                assert(bnames[0][1] == bnames[1][0])
                 # (NOTE TO SELF:
                 #  If these assertions fail, then try checking if they are
                 #  all either the same, or '*'.  If they are then just replace '*'
                 #  everwhere that atom appears with the most restrictive name.)
 
-                assert(bnames[0][1] == bnames[1][0])
+                # Optional: Shorten the angle name since some of the bnames are redundant:
+                is_auto = IsAutoInteraction(angle_name)
+                anm = map(EncodeAName, anames)
+                angle_name_abbr = EncodeInteractionName(anm[0:3]+
+                                                        #[bnames[0][0],bnames[0][1], bnames[1][1]],
+                                                        [anm[3],anm[4],anm[6]],
+                                                        is_auto)
+
                 # Did the user ask us to include "auto" interactions?
                 if IsAutoInteraction(angle_name):
                     if include_auto_equivalences:
-                        sys.stdout.write('    @angle:' + angle_name + ' ' +
+                        sys.stdout.write('    @angle:' + angle_name_abbr + ' ' +
                                          ' @atom:*,aq*,ab'+bnames[0][0]+',aae' + anames[0] +
                                          ',aac*,ade*,adc*,aie*,aic*' +
                                          ' @atom:*,aq*,ab'+bnames[0][1]+',aae*,aac'+anames[1] +
@@ -3138,7 +3255,7 @@ def main():
                     else:
                         continue
                 else:
-                    sys.stdout.write('    @angle:' + angle_name + ' ' +
+                    sys.stdout.write('    @angle:' + angle_name_abbr + ' ' +
                                      #' @atom:*,b*,a' + anames[0] + ',d*,i* ' +
                                      #' @atom:*,b*,a' + anames[1] + ',d*,i* ' +
                                      #' @atom:*,b*,a' + anames[2] + ',d*,i* ' +
@@ -3165,7 +3282,17 @@ def main():
                              '  # angle_coeff AngleTypeName  AngleStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for angle_name, in angle_names_priority_high_to_low:
+            for angle_name in angle_names_priority_low_to_high:
+                anames = ['*' if x=='X' else x
+                          for x in ExtractANames(angle_name)]
+                #if (len(anames) == 3) and angle2style[angle_name] == 'class2':
+                #    continue
+                # Optional: Shorten the angle name since some of the anames are redundant:
+                anm = map(EncodeAName, anames)
+                angle_name_abbr = EncodeInteractionName(anm[0:3]+
+                                                        #[bnames[0][0],bnames[0][1], bnames[1][1]],
+                                                        [anm[3],anm[4],anm[6]],
+                                                        is_auto)
                 if not (angle2style[angle_name] in
                         angle_styles_selected):
                     continue
@@ -3173,21 +3300,21 @@ def main():
                 if (IsAutoInteraction(angle_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    angle_coeff @angle:'+angle_name+' '+
-                                 angle2style[angle_name] +
+                sys.stdout.write('    angle_coeff @angle:'+angle_name_abbr+' '+
+                                 angle2style[angle_name] + ' ' +
                                  angle2params[angle_name] + 
                                  " # (ver=" + angle2ver[angle_name] +
                                  ", ref=" + angle2ref[angle_name] + ")\n")
                 if angle_name in angle2class2_bb:
-                    sys.stdout.write('    angle_coeff @angle:'+angle_name+' '+
-                                     'bb ' + 
+                    sys.stdout.write('    angle_coeff @angle:'+angle_name_abbr+' '+
+                                     'bb ' + angle2style[angle_name] + ' ' + 
                                      angle2class2_bb[angle_name] +
                                      " # (ver=" + angle2ver[angle_name] +
                                      ", ref=" + angle2ref[angle_name] + ")\n")
 
                     assert(angle_name in angle2class2_ba)
-                    sys.stdout.write('    angle_coeff @angle:'+angle_name+' '+
-                                     'ba ' + 
+                    sys.stdout.write('    angle_coeff @angle:'+angle_name_abbr+' '+
+                                     'ba ' + angle2style[angle_name] + ' ' + 
                                      angle2class2_ba[angle_name] +
                                      " # (ver=" + angle2ver[angle_name] +
                                      ", ref=" + angle2ref[angle_name] + ")\n")
@@ -3202,11 +3329,12 @@ def main():
 
         ################# Print 4-body Dihedral Interactions ##################
 
-        dihedral_names_priority_high_to_low = sorted(dihedral2priority.items(),
-                                                     key=itemgetter(1),
-                                                     reverse=True)
+        dihedral_names_priority_low_to_high = [x[0] for x in
+                                               sorted([x for x in reversed(dihedral2priority.items())],
+                                                      key=itemgetter(1),
+                                                      reverse=False)]
 
-        if len(dihedral_names_priority_high_to_low) > 0:
+        if len(dihedral_names_priority_low_to_high) > 0:
             sys.stdout.write('  # --------------- Dihedral Interactions: ---------------------\n')
             sys.stdout.write('\n'
                              '\n'
@@ -3214,13 +3342,15 @@ def main():
                              '  #  DihedralType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n\n'
                              '  write_once("Data Dihedrals By Type") {\n')
-            for dihedral_name, in dihedral_names_priority_high_to_low:
+            for dihedral_name in dihedral_names_priority_low_to_high:
                 if not (dihedral2style[dihedral_name] in
                         dihedral_styles_selected):
                     continue
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(dihedral_name)]
-                bnames = [anames[4:6], anames[6,8], anames[8,10]]
+                #if (len(anames) == 4) and dihedral2style[dihedral_name] == 'class2':
+                #    continue
+                bnames = [anames[4:6], anames[6:8], anames[8:10]]
                 assert(bnames[0][1] == bnames[1][0])
                 assert(bnames[1][1] == bnames[2][0])
                 ang_names = [anames[10:13], anames[13:16]]
@@ -3231,11 +3361,22 @@ def main():
                 #  all either the same, or '*'.  If they are then just replace '*'
                 #  everwhere that atom appears with the most restrictive name.)
 
+                # Optional: Shorten the angle name since some of the bnames are redundant:
+                is_auto = IsAutoInteraction(dihedral_name)
+                anm = map(EncodeAName, anames)
+                dihedral_name_abbr = EncodeInteractionName(anm[0:4]+
+                                                           #[bnames[0][0],bnames[0][1], bnames[1][1], bnames[2][1]]
+                                                           [anm[4],anm[5],anm[7],anm[9]]+
+                                                           #[ang_names[0][0],ang_names[0][1],ang_names[0][2],ang_names[1][2]]
+                                                           [anm[10],anm[11],anm[12],anm[15]],
+                                                            is_auto)
+                if dihedral_name_abbr.find('*') != -1:
+                    print(dihedral_name)
                 # Did the user ask us to include "auto" interactions?
                 if dihedral2style[dihedral_name] != 'class2':
                     if IsAutoInteraction(dihedral_name):
                         if include_auto_equivalences:
-                            sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                            sys.stdout.write('    @dihedral:' + dihedral_name_abbr + ' ' +
                                              ' @atom:*,aq*,ab*,aae*,aac*,ade'
                                              + anames[0] +
                                              ',adc*,aie*,aic*' +
@@ -3252,7 +3393,7 @@ def main():
                         else:
                             continue
                     else:
-                        sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                        sys.stdout.write('    @dihedral:' + dihedral_name_abbr + ' ' +
                                          ' @atom:*,b*,a*,d' + anames[0] + ',i* ' +
                                          ' @atom:*,b*,a*,d' + anames[1] + ',i* ' +
                                          ' @atom:*,b*,a*,d' + anames[2] + ',i* ' +
@@ -3261,7 +3402,7 @@ def main():
                 else:
                     if IsAutoInteraction(dihedral_name):
                         if include_auto_equivalences:
-                            sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                            sys.stdout.write('    @dihedral:' + dihedral_name_abbr + ' ' +
                                              ' @atom:*,aq*,ab'+bnames[0][0]+',aae'+ang_names[0][0]+',aac*,ade'
                                              + anames[0] +
                                              ',adc*,aie*,aic*' +
@@ -3278,7 +3419,7 @@ def main():
                         else:
                             continue
                     else:
-                        sys.stdout.write('    @dihedral:' + dihedral_name + ' ' +
+                        sys.stdout.write('    @dihedral:' + dihedral_name_abbr + ' ' +
                                          ' @atom:*,b'+bnames[0][0]+',a'+ang_names[0][0]+',d' + anames[0] + ',i* ' +
                                          ' @atom:*,b'+bnames[0][1]+',a'+ang_names[0][1]+',d' + anames[1] + ',i* ' +
                                          ' @atom:*,b'+bnames[1][0]+',a'+ang_names[1][1]+',d' + anames[2] + ',i* ' +
@@ -3301,7 +3442,19 @@ def main():
                              '  # dihedral_coeff DihedralTypeName  DihedralStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for dihedral_name, in dihedral_names_priority_high_to_low:
+            for dihedral_name in dihedral_names_priority_low_to_high:
+                anames = ['*' if x=='X' else x
+                          for x in ExtractANames(dihedral_name)]
+                #if (len(anames) == 4) and dihedral2style[dihedral_name] == 'class2':
+                #    continue
+                # Optional: Shorten the angle name since some of the bnames are redundant:
+                anm = map(EncodeAName, anames)
+                dihedral_name_abbr = EncodeInteractionName(anm[0:4]+
+                                                           #[bnames[0][0],bnames[0][1], bnames[1][1], bnames[2][1]]
+                                                           [anm[4],anm[5],anm[7],anm[9]]+
+                                                           #[ang_names[0][0],ang_names[0][1],ang_names[0][2],ang_names[1][2]]
+                                                           [anm[10],anm[11],anm[12],anm[15]],
+                                                            is_auto)
                 if not (dihedral2style[dihedral_name] in
                         dihedral_styles_selected):
                     continue
@@ -3309,41 +3462,41 @@ def main():
                 if (IsAutoInteraction(dihedral_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
-                                 dihedral2style[dihedral_name] +
+                sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
+                                 dihedral2style[dihedral_name] + ' ' +
                                  dihedral2params[dihedral_name] +
                                  " # (ver=" + dihedral2ver[dihedral_name] +
                                  ", ref=" + dihedral2ref[dihedral_name] + ")\n")
                 if dihedral_name in dihedral2class2_mbt:
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
-                                     'mbt ' + 
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
+                                     'mbt ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_mbt[dihedral_name] +
                                      " # (ver=" + dihedral2ver[dihedral_name] +
                                      ", ref=" + dihedral2ref[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_ebt)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
-                                     'ebt ' + 
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
+                                     'ebt ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_ebt[dihedral_name] +
                                      " # (ver=" + dihedral2ver[dihedral_name] +
                                      ", ref=" + dihedral2ref[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_at)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
-                                     'at ' + 
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
+                                     'at ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_at[dihedral_name] +
                                      " # (ver=" + dihedral2ver[dihedral_name] +
                                      ", ref=" + dihedral2ref[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_aat)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
-                                     'aat ' + 
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
+                                     'aat ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_aat[dihedral_name] +
                                      " # (ver=" + dihedral2ver[dihedral_name] +
                                      ", ref=" + dihedral2ref[dihedral_name] + ")\n")
                     assert(dihedral_name in dihedral2class2_bb13)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name+' '+
-                                     'bb13 ' + 
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
+                                     'bb13 ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_bb13[dihedral_name] +
                                      " # (ver=" + dihedral2ver[dihedral_name] +
                                      ", ref=" + dihedral2ref[dihedral_name] + ")\n")
@@ -3356,11 +3509,12 @@ def main():
 
         ################# Print 4-body Improper Interactions ##################
 
-        improper_names_priority_high_to_low = sorted(improper2priority.items(),
-                                                     key=itemgetter(1),
-                                                     reverse=True)
+        improper_names_priority_low_to_high = [x[0] for x in
+                                               sorted([x for x in reversed(improper2priority.items())],
+                                                      key=itemgetter(1),
+                                                      reverse=False)]
 
-        if len(improper_names_priority_high_to_low) > 0:
+        if len(improper_names_priority_low_to_high) > 0:
             sys.stdout.write("  # --------------- Improper Interactions: ---------------------\n")
             sys.stdout.write('\n'
                              '\n'
@@ -3368,13 +3522,15 @@ def main():
                              '  #  ImproperType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n'
                              '  write_once("Data Impropers By Type") {\n')
-            for improper_name, in improper_names_priority_high_to_low:
+            for improper_name in improper_names_priority_low_to_high:
                 if not (improper2style[improper_name] in
                         improper_styles_selected):
                     continue
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(improper_name)]
-                ang_names = [anames[5:8],anames[8:11],anames[11:14]]
+                #if (len(anames) == 4) and improper2style[improper_name] == 'class2':
+                #    continue
+                ang_names = [anames[4:7],anames[7:10],anames[10:13]]
                 assert(ang_names[0][1] == ang_names[1][1] == ang_names[2][1])
                 assert(ang_names[0][2] == ang_names[1][0])
                 assert(ang_names[1][2] == ang_names[2][0])
@@ -3384,11 +3540,21 @@ def main():
                 #  all either the same, or '*'.  If they are then just replace '*'
                 #  everwhere that atom appears with the most restrictive name.)
 
+                # Optional: Shorten the angle name since some of the bnames are redundant:
+                is_auto = IsAutoInteraction(improper_name)
+                anm = map(EncodeAName, anames)
+                improper_name_abbr = EncodeInteractionName(anm[0:4]+
+                                                           #[ang_names[0][0],ang_names[0][1],
+                                                           # ang_names[1][0],ang_names[2][0]]
+                                                           [anm[4],anm[5],
+                                                            anm[7],anm[10]],
+                                                            is_auto)
+
                 # Did the user ask us to include "auto" interactions?
                 if improper2style[improper_name] != 'class2':
                     if IsAutoInteraction(improper_name):
                         if include_auto_equivalences:
-                            sys.stdout.write('    @improper:' + improper_name +' '+
+                            sys.stdout.write('    @improper:' + improper_name_abbr +' '+
                                              ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
                                              + anames[0] + ',aic*' +
                                              ' @atom:*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic'
@@ -3401,7 +3567,7 @@ def main():
                         else:
                             continue
                     else:
-                        sys.stdout.write('    @improper:' + improper_name + ' ' +
+                        sys.stdout.write('    @improper:' + improper_name_abbr + ' ' +
                                          ' @atom:*,b*,a*,d*,i' + anames[0] + 
                                          ' @atom:*,b*,a*,d*,i' + anames[1] +
                                          ' @atom:*,b*,a*,d*,i' + anames[2] +
@@ -3410,7 +3576,7 @@ def main():
                 else:
                     if IsAutoInteraction(improper_name):
                         if include_auto_equivalences:
-                            sys.stdout.write('    @improper:' + improper_name +' '+
+                            sys.stdout.write('    @improper:' + improper_name_abbr +' ' +
                                              ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[0][0]+',adc*,aie'
                                              + anames[0] + ',aic*' +
                                              ' @atom:*,aq*,ab*,aae*,aac'+ang_names[0][1]+',ade*,adc*,aie*,aic'
@@ -3423,7 +3589,7 @@ def main():
                         else:
                             continue
                     else:
-                        sys.stdout.write('    @improper:' + improper_name + ' ' +
+                        sys.stdout.write('    @improper:' + improper_name_abbr + ' ' +
                                          ' @atom:*,b*,a'+ang_names[0][0]+',d*,i' + anames[0] + 
                                          ' @atom:*,b*,a'+ang_names[0][1]+',d*,i' + anames[1] +
                                          ' @atom:*,b*,a'+ang_names[1][0]+',d*,i' + anames[2] +
@@ -3446,7 +3612,20 @@ def main():
                              '  # improper_coeff ImproperTypeName  ImproperStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for improper_name, in improper_names_priority_high_to_low:
+            for improper_name in improper_names_priority_low_to_high:
+                anames = ['*' if x=='X' else x
+                          for x in ExtractANames(improper_name)]
+                #if (len(anames) == 4) and improper2style[improper_name] == 'class2':
+                #    continue
+                # Optional: Shorten the angle name since some of the bnames are redundant:
+                is_auto = IsAutoInteraction(improper_name)
+                anm = map(EncodeAName, anames)
+                improper_name_abbr = EncodeInteractionName(anm[0:4]+
+                                                           #[ang_names[0][0],ang_names[0][1],
+                                                           # ang_names[1][0],ang_names[2][0]]
+                                                           [anm[4],anm[5],
+                                                            anm[7],anm[10]],
+                                                            is_auto)
                 if not (improper2style[improper_name] in
                         improper_styles_selected):
                     continue
@@ -3454,14 +3633,14 @@ def main():
                 if (IsAutoInteraction(improper_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    improper_coeff @improper:'+improper_name+' '+
-                                 improper2style[improper_name] +
+                sys.stdout.write('    improper_coeff @improper:'+improper_name_abbr+' '+
+                                 improper2style[improper_name] + ' ' +
                                  improper2params[improper_name] +
                                  " # (ver=" + improper2ver[improper_name] +
                                  ", ref=" + improper2ref[improper_name] + ")\n")
                 if improper_name in improper2class2_aa:
-                    sys.stdout.write('    improper_coeff @improper:'+improper_name+' '+
-                                     'aa ' + 
+                    sys.stdout.write('    improper_coeff @improper:'+improper_name_abbr+' '+
+                                     'aa ' + improper2style[improper_name] + ' ' + 
                                      improper2class2_aa[improper_name] +
                                      " # (ver=" + improper2ver_aa[improper_name] +
                                      ", ref=" + improper2ref[improper_name] + ")\n")
