@@ -233,12 +233,12 @@ def DetermineAutoPriority(anames):
     for i in range(0, len(anames)):
         if anames[:1] == '*':
             if n == None:
-                n = int(anames[1:])
-            elif n != int(anames[1:]):
+                n = float(anames[1:])
+            elif n != float(anames[1:]):
                 raise InputError('Error: Inconsistent priority integers in the following interaction:\n'
                                  '      ' + ' '.join(anames) + '\n')
     if n == None:
-        return 0
+        return 0.0
     else:
         return n
 
@@ -259,7 +259,7 @@ def DetermineAutoPriority(anames):
 #        n = DetermineAutoPriority(anames)
 #        return (is_auto, n)
 #    else:
-#        return (is_auto, version)
+#        return (is_auto, -version)
 
 
 def DetermineNumericPriority(is_auto,
@@ -276,7 +276,7 @@ def DetermineNumericPriority(is_auto,
         n = DetermineAutoPriority(anames)
         return n
     else:
-        return version
+        return -float(version)
 
 
 def IsAutoInteraction(interaction_name):
@@ -304,6 +304,7 @@ def ExtractANames(interaction_name):
     if IsAutoInteraction(interaction_name):
         return interaction_name[5:].split(',')
     return interaction_name.split(',')
+
 
 
 def OOPImproperNameSort(aorig):
@@ -336,6 +337,22 @@ def Class2ImproperNameSort(aorig):
     l = [z[0][0], atom_names[1], z[1][0], z[2][0]]
     p = [z[0][1], 1, z[1][1], z[2][1]]
     return (l, p)
+
+def Parity(p):
+    """ compute the parity of a permutation (thanks Weeble) """
+    permutation = list(p)
+    length = len(permutation)
+    elements_seen = [False] * length
+    cycles = 0
+    for index, already_seen in enumerate(elements_seen):
+        if already_seen:
+            continue
+        cycles += 1
+        current = index
+        while not elements_seen[current]:
+            elements_seen[current] = True
+            current = permutation[current]
+    return (length-cycles) % 2 == 0
 
 
 def ImCrossTermID(atom_names):
@@ -2051,6 +2068,7 @@ def main():
                    and (improper_styles_selected & set(['cvff','out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
+                aorig = map(EncodeAName, tokens[2:6])
                 atom_names,_ignore  = OOPImproperNameSort(tokens[2:6])
                 improper_name_sh = EncodeInteractionName(atom_names, section_is_auto)
                 improper2ver[improper_name_sh] = tokens[0]
@@ -2078,12 +2096,31 @@ def main():
                   and (improper_styles_selected and set(['class2','wilson_out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
+
+                #improper_symmetry_subgraph = 'dihedrals_nosym'
                 improper_symmetry_subgraph = 'cenJsortIKL'
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
-                atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
-                improper_name_sh = EncodeInteractionName(atom_names, section_is_auto)
+
                 version = tokens[0]
                 reference = tokens[1]
+                aorig = map(EncodeAName, tokens[2:6])
+
+                # To avoid redundancy, it is necessary to order the atoms
+                # in the interaction so that two equivalent ways of ordering
+                # the atoms in an improper interaction do not get misinterpreted
+                # as two different types of improper interactions.  So we sort
+                # the 3 "leaf" atoms surrounding the central "hub" by name.
+
+                atom_names, permutation = Class2ImproperNameSort(tokens[2:6])
+
+                # This will effect the formula for the energy.
+                # (specifically the "chi0" parameter)
+                # When we lookup the various cross-term interactions for that
+                # same improper interaction, we will be sure to sort them
+                # in the same way to make sure those interactions are
+                # associated with the same improper interaction.
+
+                improper_name_sh = EncodeInteractionName(atom_names, section_is_auto)
                 improper2ver_sh[improper_name_sh] = version
                 improper2ref_sh[improper_name_sh] = reference
                 improper2priority_sh[improper_name_sh] = \
@@ -2096,32 +2133,65 @@ def main():
                 #     improper2priority_sh[improper_name_sh])
                 K = tokens[6]
                 chi0 = tokens[7]
+
+                if Parity(permutation) != 0:
+                    # Each time the order of a pair of atoms is swapped in
+                    # the interaction, all 3 of the "X" (chi) angles change sign
+                    # The formula for the ordinary term in the improper
+                    # interaction is Ei = K*((Xijkl + Xkjli + Xljik)/3 - chi0)^2
+                    # This formula is invariant if we change the sign of all
+                    # Xijkl, Xkjli, Xljik, chi0
+                    # Hence, we can account for a change in atom order by
+                    # changing the sign of the "chi0" parameter.
+                    # We calculate the "Parity" of the permutation (ie whether
+                    # the permutation has an even or odd number of swaps)
+                    # and multiply chi0 by -1 for each swap.
+                    # It's not clear if this is necessary since in practice
+                    # the "chi0" parameter is usually zero.
+
+                    chi0 = str(-1.0*float(chi0))  # same as ('-' + chi0)
+
                 improper2style_sh[improper_name_sh] = 'class2'
                 improper2params_sh[improper_name_sh] = [K, chi0]
                 #improper2params[improper_name_sh] = K + ' ' + chi0
                 # default values for cross terms:
                 if not improper_name_sh in improper2class2_aa_sh:
                     improper2class2_aa_sh[improper_name_sh] = '0.0' #(default)
-                    improper2ver_sh[improper_name_sh] = version
-                    improper2ref_sh[improper_name_sh] = reference
+                    improper2ver_aa_sh[improper_name_sh] = version
+                    improper2ref_aa_sh[improper_name_sh] = reference
+                    # Initially, set all of the angle-angle cross terms to zero
+                    # Start with the first cross term between aorig[0],aorig[1],aorig[2] & aorig[2],aorig[1],aorig[3]
+                    improper2cross[improper_name_sh][ImCrossTermID([aorig[0],aorig[1],aorig[2],aorig[3]])] = '0.0'
+                    # ...then cyclically permute the 3 "leaf" atoms (aorig[0], aorig[2], aorig[3]) around the "hub" atom (aorig[1])
+                    improper2cross[improper_name_sh][ImCrossTermID([aorig[2],aorig[1],aorig[3],aorig[0]])] = '0.0'
+                    improper2cross[improper_name_sh][ImCrossTermID([aorig[3],aorig[1],aorig[0],aorig[2]])] = '0.0'
 
             elif ((len(tokens) > 6) and (section_name == '#angle-angle')
                   and (improper_styles_selected and set(['class2','wilson_out_of_plane']))):
                 if line.lstrip().find('!') == 0:
                     continue
-                atom_names,_ignore = Class2ImproperNameSort(tokens[2:6])
+                version = tokens[0]
+                reference = tokens[1]
+                aorig = map(EncodeAName, tokens[2:6])
+                atom_names, permutation = Class2ImproperNameSort(tokens[2:6])
                 improper_name_sh = EncodeInteractionName(atom_names, section_is_auto)
-                improper2ver_aa_sh[improper_name_sh] = tokens[0]
-                improper2ref_aa_sh[improper_name_sh] = tokens[1]
+                improper2ver_aa_sh[improper_name_sh] = version
+                improper2ref_aa_sh[improper_name_sh] = reference
                 K = tokens[6]
-                #improper2class2_aa_sh[improper_name_sh] = K
-                improper2cross[improper_name_sh][ImCrossTermID(atom_names)] = K
                 improper2style_sh[improper_name_sh] = 'class2'
                 if not improper_name_sh in improper2params_sh:
                     improper2params_sh[improper_name_sh] = ['0.0', '0.0']
                     improper2ver_sh[improper_name_sh] = version
                     improper2ref_sh[improper_name_sh] = reference
                     improper2priority_sh[improper_name_sh] = 0.0
+                if not improper_name_sh in improper2cross:
+                    # then initialize all of the cross terms to zero
+                    improper2cross[improper_name_sh][ImCrossTermID([aorig[0],aorig[1],aorig[2],aorig[3]])] = '0.0'
+                    # ...then cyclically permute the 3 "leaf" atoms (aorig[0], aorig[2], aorig[3]) around the "hub" atom (aorig[1])
+                    improper2cross[improper_name_sh][ImCrossTermID([aorig[2],aorig[1],aorig[3],aorig[0]])] = '0.0'
+                    improper2cross[improper_name_sh][ImCrossTermID([aorig[3],aorig[1],aorig[0],aorig[2]])] = '0.0'
+                #improper2class2_aa_sh[improper_name_sh] = K   (not needed)
+                improper2cross[improper_name_sh][ImCrossTermID(aorig)] = K
 
             elif (len(tokens) > 0) and (section_name == '#out_of_plane-out_of_plane'):
                 if line.lstrip().find('!') == 0:
@@ -2180,7 +2250,6 @@ def main():
 
 
 
-
         """
          --- these next few lines of code appear to be unnecessary.
          --- I'll probably delete them eventually
@@ -2197,8 +2266,15 @@ def main():
             sys.stdout.write('  }   # (DREIDING style H-bond parameters)\n\n\n')
         """
 
+
+
+
+
+
         sys.stderr.write(" done.\n")
         sys.stderr.write("Trying all combinations of atom types...")
+
+
 
 
 
@@ -2458,7 +2534,7 @@ def main():
                                                          atom2auto_anglecenter],
                                                         angle2theta0_auto)
                         if angle_data123 == None:
-                            # Save time by only continuing if a angle was
+                            # Save time by only continuing if an angle was
                             # found between a1, a2, a3
                             continue
 
@@ -2489,7 +2565,7 @@ def main():
                                                              atom2auto_anglecenter],
                                                             angle2theta0_auto)
                             if angle_data234 == None:
-                                # Save time by only continuing if a angle was
+                                # Save time by only continuing if an angle was
                                 # found between a2, a3, a4
                                 continue
 
@@ -2769,29 +2845,30 @@ def main():
             #M1     = improper2cross[improper_name_sh][ 2 ]
             #M2     = improper2cross[improper_name_sh][ 0 ]
             #M3     = improper2cross[improper_name_sh][ 3 ]
-            try:
-                M1 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[0],
-                                                                     atom_names[1],
-                                                                     atom_names[2],
-                                                                     atom_names[3]])]
-            except KeyError:
-                M1 = 0.0
 
-            try:
-                M2 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[2],
-                                                                     atom_names[1],
-                                                                     atom_names[0],
-                                                                     atom_names[3]])]
-            except KeyError:
-                M2 = 0.0
+            #try:
+            M1 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[0],
+                                                                 atom_names[1],
+                                                                 atom_names[2],
+                                                                 atom_names[3]])]
+            #except KeyError:
+            #    M1 = '0.0'
 
-            try:
-                M3 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[0],
-                                                                     atom_names[1],
-                                                                     atom_names[3],
-                                                                     atom_names[2]])]
-            except KeyError:
-                M3 = 0.0
+            #try:
+            M2 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[2],
+                                                                 atom_names[1],
+                                                                 atom_names[0],
+                                                                 atom_names[3]])]
+            #except KeyError:
+            #    M2 = '0.0'
+
+            #try:
+            M3 = improper2cross[improper_name_sh][ImCrossTermID([atom_names[0],
+                                                                 atom_names[1],
+                                                                 atom_names[3],
+                                                                 atom_names[2]])]
+            #except KeyError:
+            #    M3 = '0.0'
 
 
 
@@ -2857,7 +2934,7 @@ def main():
                 else:
                     if atom_names[i_neigh[i][0]] == atom_names[i_neigh[i][1]]:
                         raise InputError('Error: Unsupported improper interaction: \"@improper:'+str(improper_name_sh)+'\"\n'
-                                         '       This interaction has matching aton aliases:\n'
+                                         '       This interaction has matching atom aliases:\n'
                                          '       (@atom:'+str(atom_names[i_neigh[i][0]])+
                                          ', @atom:'+str(atom_names[i_neigh[i][1]])+')\n'
                                          '       and yet it lacks symmetry in the corresponding force field parameters.\n'
@@ -2891,48 +2968,74 @@ def main():
                             #  I wish the author had chosen the M1,M2,M3, T1,T2,T3 order in more
                             #  symmetric way, or at least in a way that makes more sense to me.)
 
-                            theta0s = [0.0, 0.0, 0.0]
+                            theta0s = ['0.0', '0.0', '0.0']
                             aatoms = [['', '',''], ['', '',''], ['', '', '']]
                             #angle_name_l = ReverseIfEnds([atom_names[0], atom_names[1], atom_names[2]])
                             #angle_name = EncodeInteractionName(angle_name_l, is_auto)
                             #theta01 = angle2theta0[angle_name]
-                            theta0s[0], aatoms[0] = LookupRestAngle(a1, a2, a3,
-                                                                    atom2equiv_angle,
-                                                                    angle2theta0,
-                                                                    [atom2auto_improperend,
-                                                                     atom2auto_impropercenter,
-                                                                     atom2auto_improperend],
-                                                                    angle2theta0_auto)
-                            angle_name_l = ReverseIfEnds(aatoms[0])
-                            angle_name = EncodeInteractionName(angle_name_l[0], is_auto)
+                            angle_data = LookupRestAngle(a1, a2, a3,
+                                                         atom2equiv_angle,
+                                                         angle2theta0,
+                                                         [atom2auto_improperend,
+                                                          atom2auto_impropercenter,
+                                                          atom2auto_improperend],
+                                                         angle2theta0_auto)
+                            if angle_data == None:
+                                # Save time by only continuing if an angle was
+                                # found between a1, a2, a3
+                                continue
+                            theta0s[0], aatoms[0] = angle_data
+
+                            #angle_name_l = ReverseIfEnds(aatoms[0])
+                            #angle_name = EncodeInteractionName(angle_name_l[0], is_auto)
 
 
-                            #angle_name_l = ReverseIfEnds([atom_names[0], atom_names[1], atom_names[3]])
-                            #angle_name = EncodeInteractionName(angle_name_l, is_auto)
                             #theta02 = angle2theta0[angle_name]
-                            theta0s[1], aatoms[1] = LookupRestAngle(a1, a2, a4,
-                                                                    atom2equiv_angle,
-                                                                    angle2theta0,
-                                                                    [atom2auto_improperend,
-                                                                     atom2auto_impropercenter,
-                                                                     atom2auto_improperend],
-                                                                    angle2theta0_auto)
-                            angle_name_l = ReverseIfEnds(aatoms[1])
-                            angle_name = EncodeInteractionName(angle_name_l, is_auto)
+                            angle_data = LookupRestAngle(a1, a2, a4,
+                                                         atom2equiv_angle,
+                                                         angle2theta0,
+                                                         [atom2auto_improperend,
+                                                          atom2auto_impropercenter,
+                                                          atom2auto_improperend],
+                                                         angle2theta0_auto)
+                            if angle_data == None:
+                                # Save time by only continuing if an angle was
+                                # found between a1, a2, a4
+                                continue
+                            theta0s[1], aatoms[1] = angle_data
 
-
-                            #angle_name_l = ReverseIfEnds([atom_names[2], atom_names[1], atom_names[3]])
+                            #angle_name_l = ReverseIfEnds(aatoms[1])
                             #angle_name = EncodeInteractionName(angle_name_l, is_auto)
+
+
                             #theta03 = angle2theta0[angle_name]
-                            theta0s[2], aatoms[2] = LookupRestAngle(a3, a2, a4,
-                                                                    atom2equiv_angle,
-                                                                    angle2theta0,
-                                                                    [atom2auto_improperend,
-                                                                     atom2auto_impropercenter,
-                                                                     atom2auto_improperend],
-                                                                    angle2theta0_auto)
-                            angle_name_l = ReverseIfEnds(aatoms[2])
-                            angle_name = EncodeInteractionName(angle_name_l, is_auto)
+                            angle_data = LookupRestAngle(a3, a2, a4,
+                                                         atom2equiv_angle,
+                                                         angle2theta0,
+                                                         [atom2auto_improperend,
+                                                          atom2auto_impropercenter,
+                                                          atom2auto_improperend],
+                                                         angle2theta0_auto)
+                            if angle_data == None:
+                                # Save time by only continuing if an angle was
+                                # found between a2, a2, a4
+                                continue
+                            theta0s[2], aatoms[2] = angle_data
+
+
+                            # The following asserts checks that the two theta0s
+                            # are defined whenever the corresponding M is defined.
+                            # (Note: The order is LAMMPS-implementation specific.
+                            #  See http://lammps.sandia.gov/doc/improper_class2.html)
+                            assert((float(theta0s[0]) != 0) or (float(M1) == 0))
+                            assert((float(theta0s[2]) != 0) or (float(M1) == 0))
+                            assert((float(theta0s[0]) != 0) or (float(M2) == 0))
+                            assert((float(theta0s[1]) != 0) or (float(M2) == 0))
+                            assert((float(theta0s[1]) != 0) or (float(M3) == 0))
+                            assert((float(theta0s[2]) != 0) or (float(M3) == 0))
+
+                            #angle_name_l = ReverseIfEnds(aatoms[2])
+                            #angle_name = EncodeInteractionName(angle_name_l, is_auto)
 
                             improper_name_full = improper_name_sh + ',' + \
                                 EncodeInteractionName(aatoms[0] + aatoms[1] + aatoms[2],
@@ -2944,18 +3047,14 @@ def main():
                             #else:
                             #    improper2params[improper_name_full] = '0.0 0.0'
 
-                            #improper2class2_aa[improper_name] = [M1, M2, M3,
-                            #                                     theta0s[0],
-                            #                                     theta0s[1],
-                            #                                     theta0s[2]]
-                            if improper_name_sh in improper2class2_aa_sh:
-                                improper2class2_aa[improper_name_full] = \
-                                    (str(M1)+' '+str(M2)+' '+str(M3)+' '+
-                                     str(theta0s[0])+' '+str(theta0s[1])+' '+str(theta0s[2]))
-                            else:
-                                improper2class2_aa[improper_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0'
-                                improper2ver_aa_sh[improper_name_sh] = improper2ver_sh[improper_name_sh]
-                                improper2ref_aa_sh[improper_name_sh] = improper2ref_sh[improper_name_sh]
+                            #if improper_name_sh in improper2cross:
+                            improper2class2_aa[improper_name_full] = \
+                                (str(M1)+' '+str(M2)+' '+str(M3)+' '+
+                                 str(theta0s[0])+' '+str(theta0s[1])+' '+str(theta0s[2]))
+                            #else:
+                            #    improper2class2_aa[improper_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0'
+                            #    improper2ver_aa_sh[improper_name_sh] = improper2ver_sh[improper_name_sh]
+                            #    improper2ref_aa_sh[improper_name_sh] = improper2ref_sh[improper_name_sh]
 
                         version = max((improper2ver_sh[improper_name_sh],
                                        improper2ver_aa_sh[improper_name_sh]))
@@ -3080,10 +3179,10 @@ def main():
 
 
         ################# Print Charge By Bond Interactions ##################
-        charge_pair_priority_low_to_high = [x[0] for x in
+        charge_pair_priority_high_to_low = [x[0] for x in
                                             sorted([x for x in reversed(charge_pair_priority.items())],
                                                    key=itemgetter(1),
-                                                   reverse=False)]
+                                                   reverse=True)]
 
         if len(charge_pair_priority) > 0:
             sys.stdout.write("  # ---------- Charge By Bond (a.k.a. \"bond equivalences\") ----------\n")
@@ -3091,7 +3190,7 @@ def main():
             # Print rules for generating (2-body) "bond" interactions:
             sys.stdout.write('\n\n\n'
                              '  write_once("Charge By Bond") {\n')
-            for (bond_name,) in charge_pair_priority_low_to_high:
+            for (bond_name,) in charge_pair_priority_high_to_low:
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(bond_name)]
                 # Did the user ask us to include "auto" interactions?
@@ -3129,10 +3228,10 @@ def main():
 
         ################# Print 2-body Bond Interactions ##################
 
-        bond_names_priority_low_to_high = [x[0] for x in
+        bond_names_priority_high_to_low = [x[0] for x in
                                            sorted([x for x in reversed(bond2priority.items())],
                                                   key=itemgetter(1),
-                                                  reverse=False)]
+                                                  reverse=True)]
 
         if len(bond2priority) > 0:
             sys.stdout.write("  # --------------- Bond Interactions: ---------------------\n")
@@ -3142,7 +3241,7 @@ def main():
                              '  #  BondType  AtomType1  AtomType2\n')
             sys.stdout.write('\n'
                              '  write_once("Data Bonds By Type") {\n')
-            for bond_name in bond_names_priority_low_to_high:
+            for bond_name in bond_names_priority_high_to_low:
                 if not (bond2style[bond_name] in
                         bond_styles_selected):
                     continue
@@ -3181,7 +3280,7 @@ def main():
                              '  # bond_coeff BondTypeName  BondStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for bond_name in bond_names_priority_low_to_high:
+            for bond_name in bond_names_priority_high_to_low:
                 if not (bond2style[bond_name] in
                         bond_styles_selected):
                     continue
@@ -3205,10 +3304,10 @@ def main():
 
         ################# Print 3-body Angle Interactions ##################
 
-        angle_names_priority_low_to_high = [x[0] for x in
+        angle_names_priority_high_to_low = [x[0] for x in
                                             sorted([x for x in reversed(angle2priority.items())],
                                                    key=itemgetter(1),
-                                                   reverse=False)]
+                                                   reverse=True)]
 
         if len(angle2priority) > 0:
             sys.stdout.write("  # --------------- Angle Interactions: ---------------------\n")
@@ -3218,7 +3317,7 @@ def main():
                              '  #  AngleType AtomType1 AtomType2 AtomType3  [BondType1 BondType2]\n')
             sys.stdout.write('\n'
                              '  write_once("Data Angles By Type") {\n')
-            for angle_name in angle_names_priority_low_to_high:
+            for angle_name in angle_names_priority_high_to_low:
                 if not (angle2style[angle_name] in
                         angle_styles_selected):
                     continue
@@ -3282,7 +3381,7 @@ def main():
                              '  # angle_coeff AngleTypeName  AngleStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for angle_name in angle_names_priority_low_to_high:
+            for angle_name in angle_names_priority_high_to_low:
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(angle_name)]
                 #if (len(anames) == 3) and angle2style[angle_name] == 'class2':
@@ -3329,12 +3428,12 @@ def main():
 
         ################# Print 4-body Dihedral Interactions ##################
 
-        dihedral_names_priority_low_to_high = [x[0] for x in
+        dihedral_names_priority_high_to_low = [x[0] for x in
                                                sorted([x for x in reversed(dihedral2priority.items())],
                                                       key=itemgetter(1),
-                                                      reverse=False)]
+                                                      reverse=True)]
 
-        if len(dihedral_names_priority_low_to_high) > 0:
+        if len(dihedral_names_priority_high_to_low) > 0:
             sys.stdout.write('  # --------------- Dihedral Interactions: ---------------------\n')
             sys.stdout.write('\n'
                              '\n'
@@ -3342,7 +3441,7 @@ def main():
                              '  #  DihedralType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n\n'
                              '  write_once("Data Dihedrals By Type") {\n')
-            for dihedral_name in dihedral_names_priority_low_to_high:
+            for dihedral_name in dihedral_names_priority_high_to_low:
                 if not (dihedral2style[dihedral_name] in
                         dihedral_styles_selected):
                     continue
@@ -3442,7 +3541,7 @@ def main():
                              '  # dihedral_coeff DihedralTypeName  DihedralStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for dihedral_name in dihedral_names_priority_low_to_high:
+            for dihedral_name in dihedral_names_priority_high_to_low:
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(dihedral_name)]
                 #if (len(anames) == 4) and dihedral2style[dihedral_name] == 'class2':
@@ -3509,12 +3608,12 @@ def main():
 
         ################# Print 4-body Improper Interactions ##################
 
-        improper_names_priority_low_to_high = [x[0] for x in
+        improper_names_priority_high_to_low = [x[0] for x in
                                                sorted([x for x in reversed(improper2priority.items())],
                                                       key=itemgetter(1),
-                                                      reverse=False)]
+                                                      reverse=True)]
 
-        if len(improper_names_priority_low_to_high) > 0:
+        if len(improper_names_priority_high_to_low) > 0:
             sys.stdout.write("  # --------------- Improper Interactions: ---------------------\n")
             sys.stdout.write('\n'
                              '\n'
@@ -3522,7 +3621,7 @@ def main():
                              '  #  ImproperType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n'
                              '  write_once("Data Impropers By Type") {\n')
-            for improper_name in improper_names_priority_low_to_high:
+            for improper_name in improper_names_priority_high_to_low:
                 if not (improper2style[improper_name] in
                         improper_styles_selected):
                     continue
@@ -3612,7 +3711,7 @@ def main():
                              '  # improper_coeff ImproperTypeName  ImproperStyle  parameters...\n\n')
             sys.stdout.write('\n'
                              '  write_once("In Settings") {\n')
-            for improper_name in improper_names_priority_low_to_high:
+            for improper_name in improper_names_priority_high_to_low:
                 anames = ['*' if x=='X' else x
                           for x in ExtractANames(improper_name)]
                 #if (len(anames) == 4) and improper2style[improper_name] == 'class2':
