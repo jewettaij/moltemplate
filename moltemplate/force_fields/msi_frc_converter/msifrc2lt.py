@@ -2705,7 +2705,7 @@ def main():
 
 
 
-        """
+
         ############ POST-PROCESSING IMPROPERS ###########
 
 
@@ -2754,7 +2754,7 @@ def main():
                     for a in equiv_improper2atom[improper_atom_name]:
                         atom_combos[i].add(a)
                 else:
-                    assert((improper_atom_name[-1] == '_') or (ange_atom_name[0] == '*'))
+                    assert((improper_atom_name[-1] == '_') or (angle_atom_name[0] == '*'))
                     # assume "auto" equivalences when looking up atom types
                     sys.stderr.write('DEBUG: auto_improper2atom['+str(i)+']['+improper_atom_name+'] = \n'
                                      '       '+str(equiv_improper2atom[i][improper_atom_name])+'\n')
@@ -2835,17 +2835,17 @@ def main():
                                           atom_names[ [0,2,3][i] ],
                                           atom_names[ i_neigh[i][1] ]])
                 M[i] = float(improper2cross[improper_name_sh][imTermID])
-                #i_leaf = [0,2,3][i]
-                #M[i] = float(improper2cross[improper_name_sh][ i_leaf ])
-                angle_name_l = ReverseIfEnds([atom_names[i_neigh[i][0]],
-                                              atom_names[i],
-                                              atom_names[i_neigh[i][1]]])
-                angle_name = EncodeInteractionName(angle_name_l, is_auto)
-                theta0[i] = float(angle2theta0[angle_name])
+                ##i_leaf = [0,2,3][i]
+                ##M[i] = float(improper2cross[improper_name_sh][ i_leaf ])
+                #angle_name_l = ReverseIfEnds([atom_names[i_neigh[i][0]],
+                #                              atom_names[ 1 ],
+                #                              atom_names[i_neigh[i][1]]])
+                #angle_name = EncodeInteractionName(angle_name_l, is_auto)
+                #theta0[i] = float(angle2theta0[angle_name])
 
             for i in range(0, 3):
-                if ((M[i_neigh[i][0]] == M[i_neigh[i][1]]) and
-                    (theta0[ i_neigh[i][1] ] == theta0[ i_neigh[i][1] ])):
+                if (M[ noti3[i][0] ] == M[ noti3[i][1] ]):
+                    #and (theta0[ noti3[i][0] ] == theta0[ noti3[i][1] ])):
                     # Then it is safe to swap the order of these two atoms in
                     # the list of atoms when looking up force-field parameters
                     improper2sym[improper_name_sh].add(i_neigh[i][0])
@@ -2903,8 +2903,8 @@ def main():
                                                                      atom2auto_impropercenter,
                                                                      atom2auto_improperend],
                                                                     angle2theta0_auto)
-                            angle_name_l = ReverseIfEnds[aatoms[0]]
-                            angle_name = EncodeInteractionName(angle_name_l, is_auto)
+                            angle_name_l = ReverseIfEnds(aatoms[0])
+                            angle_name = EncodeInteractionName(angle_name_l[0], is_auto)
 
 
                             #angle_name_l = ReverseIfEnds([atom_names[0], atom_names[1], atom_names[3]])
@@ -2917,7 +2917,7 @@ def main():
                                                                      atom2auto_impropercenter,
                                                                      atom2auto_improperend],
                                                                     angle2theta0_auto)
-                            angle_name_l = ReverseIfEnds[aatoms[1]]
+                            angle_name_l = ReverseIfEnds(aatoms[1])
                             angle_name = EncodeInteractionName(angle_name_l, is_auto)
 
 
@@ -2931,7 +2931,7 @@ def main():
                                                                      atom2auto_impropercenter,
                                                                      atom2auto_improperend],
                                                                     angle2theta0_auto)
-                            angle_name_l = ReverseIfEnds[aatoms[2]]
+                            angle_name_l = ReverseIfEnds(aatoms[2])
                             angle_name = EncodeInteractionName(angle_name_l, is_auto)
 
                             improper_name_full = improper_name_sh + ',' + \
@@ -2939,10 +2939,10 @@ def main():
                                                       False)
 
 
-                            #if improper_name_sh in improper2param_sh[improper_name_sh]:
-                            improper2param[improper_name_full] = ' '.join(improper2param_sh[improper_name_sh])
+                            #if improper_name_sh in improper2params_sh[improper_name_sh]:
+                            improper2params[improper_name_full] = ' '.join(improper2params_sh[improper_name_sh])
                             #else:
-                            #    improper2param[improper_name_full] = '0.0 0.0'
+                            #    improper2params[improper_name_full] = '0.0 0.0'
 
                             #improper2class2_aa[improper_name] = [M1, M2, M3,
                             #                                     theta0s[0],
@@ -2960,10 +2960,10 @@ def main():
                         version = max((improper2ver_sh[improper_name_sh],
                                        improper2ver_aa_sh[improper_name_sh]))
 
-                        improper2priority_aat = \
+                        improper2priority_aa = \
                             DetermineNumericPriority(is_auto,
                                                      aatoms[0] + aatoms[1] + aatoms[2],
-                                                     float(improper2ver_aat[improper_name_sh]))
+                                                     float(improper2ver_aa_sh[improper_name_sh]))
 
                         improper2style[improper_name_full] = 'class2'
                         improper2ref[improper_name_full] = improper2ref_sh[improper_name_sh]
@@ -2971,9 +2971,9 @@ def main():
                         improper2priority[improper_name_full] = \
                             (1,
                              is_auto,
-                             improper2class2priority[improper_name_sh],
-                             improper2class2priority_aa)
-        """
+                             improper2priority_sh[improper_name_sh],
+                             improper2priority_aa)
+
 
 
 
