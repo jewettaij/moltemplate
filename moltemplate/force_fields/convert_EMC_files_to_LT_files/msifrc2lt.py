@@ -459,9 +459,9 @@ def LookupBondLength(a1, a2,
 
 def LookupRestAngle(a1, a2, a3,
                     atom2equiv_angle,
-                    angle2theta0,
+                    angle2theta0_sh,
                     atom2auto_angle,
-                    angle2theta0_auto):
+                    angle2theta0_auto_sh):
     """ 
     Try to find angle parameters between atoms whose original atom
     names (without equivalences) are a1, a2, and a3.  Then return
@@ -473,8 +473,8 @@ def LookupRestAngle(a1, a2, a3,
     return_val = None
     anames = (atom2equiv_angle[a1], atom2equiv_angle[a2], atom2equiv_angle[a3])
     angle_name = EncodeInteractionName(ReverseIfEnds(anames))
-    if angle_name in angle2theta0:
-        return_val = (angle2theta0[angle_name], [anames[0], anames[1], anames[2]])
+    if angle_name in angle2theta0_sh:
+        return_val = (angle2theta0_sh[angle_name], [anames[0], anames[1], anames[2]])
 
     # If no angle between these atoms is defined, 
     # check the angles in the _auto section(s)
@@ -490,7 +490,7 @@ def LookupRestAngle(a1, a2, a3,
         #                 a1+','+a2+','+a3+'), anames='+str(anames)+'\n')
 
         # Because _auto interactions can contain wildcards,
-        # there can be multiple entries in angle2theta0_auto[]
+        # there can be multiple entries in angle2theta0_auto_sh[]
         # for the same list of atom names, and we have to
         # consider all of them, and pick the one with the
         # most priority (ie. whose priority number is lowest).
@@ -499,7 +499,7 @@ def LookupRestAngle(a1, a2, a3,
         HUGE_VAL = 2000000000
         best_priority = HUGE_VAL
         pattern = ['','','']
-        for (pattern[0],pattern[1],pattern[2]), theta0 in angle2theta0_auto.items():
+        for (pattern[0],pattern[1],pattern[2]), theta0 in angle2theta0_auto_sh.items():
             priority = DoAtomsMatchPattern(anames, pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
@@ -728,7 +728,7 @@ def main():
         filename_in = ''
         #file_in = sys.stdin
         file_in = open('compass_published.frc','r')  #CONTINUEHERE
-        include_auto_equivalences = True
+        include_auto_equivalences = False
         #pair_style_name = 'lj/class2/coul/long'
         #pair_style_params = "10.0 10.0"
         pair_style2docs = {}
@@ -980,9 +980,9 @@ def main():
                     sys.exit(1)
                 del argv[i:i + 2]
     
-            #elif argv[i] == '-auto':
-            #    include_auto_equivalences = True
-            #    del argv[i:i + 1]
+            elif argv[i] == '-auto':
+                include_auto_equivalences = True
+                del argv[i:i + 1]
     
             elif argv[i] in ('-help', '--help', '-?', '--?'):
                 sys.stderr.write(doc_msg)
@@ -1106,12 +1106,16 @@ def main():
         angle2ver = OrderedDict()
         angle2ref_sh = OrderedDict()
         angle2ver_sh = OrderedDict()
+        angle2ver_bb = OrderedDict()
         angle2ver_bb_sh = OrderedDict()
+        angle2ref_bb = OrderedDict()
         angle2ref_bb_sh = OrderedDict()
+        angle2ver_ba = OrderedDict()
         angle2ver_ba_sh = OrderedDict()
+        angle2ref_ba = OrderedDict()
         angle2ref_ba_sh = OrderedDict()
-        angle2theta0 = OrderedDict()
-        angle2theta0_auto = OrderedDict()
+        angle2theta0_sh = OrderedDict()
+        angle2theta0_auto_sh = OrderedDict()
 
         # http://lammps.sandia.gov/doc/dihedral_class2.html
         dihedral2params = OrderedDict() # store a tuple with the 4-body dihedral
@@ -1143,15 +1147,25 @@ def main():
         dihedral2ver = OrderedDict()
         dihedral2ver_sh = OrderedDict()
         dihedral2ref_sh = OrderedDict()
+        dihedral2ver_mbt = OrderedDict()
         dihedral2ver_mbt_sh = OrderedDict()
+        dihedral2ref_mbt = OrderedDict()
         dihedral2ref_mbt_sh = OrderedDict()
+        dihedral2ver_ebt = OrderedDict()
         dihedral2ver_ebt_sh = OrderedDict()
+        dihedral2ref_ebt = OrderedDict()
         dihedral2ref_ebt_sh = OrderedDict()
+        dihedral2ver_at = OrderedDict()
         dihedral2ver_at_sh = OrderedDict()
+        dihedral2ref_at = OrderedDict()
         dihedral2ref_at_sh = OrderedDict()
+        dihedral2ver_aat = OrderedDict()
         dihedral2ver_aat_sh = OrderedDict()
+        dihedral2ref_aat = OrderedDict()
         dihedral2ref_aat_sh = OrderedDict()
+        dihedral2ver_bb13 = OrderedDict()
         dihedral2ver_bb13_sh = OrderedDict()
+        dihedral2ref_bb13 = OrderedDict()
         dihedral2ref_bb13_sh = OrderedDict()
 
 
@@ -1196,8 +1210,10 @@ def main():
         improper2ver_sh = OrderedDict()
         improper2ref = OrderedDict()
         improper2ref_sh = OrderedDict()
-        improper2ver_aa_sh = OrderedDict()        
-        improper2ref_aa_sh = OrderedDict()        
+        improper2ver_aa = OrderedDict()
+        improper2ver_aa_sh = OrderedDict()
+        improper2ref_aa = OrderedDict()
+        improper2ref_aa_sh = OrderedDict()
 
 
         # Warn users if force field contains terms which cannot yet
@@ -1677,11 +1693,11 @@ def main():
                 theta0 = tokens[5]
                 k = tokens[6]
                 if not section_is_auto:
-                    angle2theta0[angle_name] = theta0
-                    sys.stderr.write('angle2theta0['+angle_name+'] = ' + str(theta0) + '\n')
+                    angle2theta0_sh[angle_name] = theta0
+                    sys.stderr.write('angle2theta0_sh['+angle_name+'] = ' + str(theta0) + '\n')
                 else:
-                    angle2theta0_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
-                    sys.stderr.write('angle2theta0_auto['+str(atom_names)+'] = ' + str(theta0) + '\n')
+                    angle2theta0_auto_sh[(atom_names[0], atom_names[1], atom_names[2])] = theta0
+                    sys.stderr.write('angle2theta0_auto_sh['+str(atom_names)+'] = ' + str(theta0) + '\n')
                 if (angle_styles_selected & set(['harmonic',
                                                  'quadratic',
                                                  'quadratic_angle'])):
@@ -1717,11 +1733,11 @@ def main():
                 #     angle2priority_sh[angle_name_sh])
                 theta0 = tokens[5]
                 if not section_is_auto:
-                    angle2theta0[angle_name_sh] = theta0
-                    sys.stderr.write('angle2theta0['+angle_name_sh+'] = ' + str(theta0) + '\n')
+                    angle2theta0_sh[angle_name_sh] = theta0
+                    sys.stderr.write('angle2theta0_sh['+angle_name_sh+'] = ' + str(theta0) + '\n')
                 else:
-                    angle2theta0_auto[(atom_names[0], atom_names[1], atom_names[2])] = theta0
-                    sys.stderr.write('angle2theta0_auto['+str(atom_names)+'] = ' + str(theta0) + '\n')
+                    angle2theta0_auto_sh[(atom_names[0], atom_names[1], atom_names[2])] = theta0
+                    sys.stderr.write('angle2theta0_auto_sh['+str(atom_names)+'] = ' + str(theta0) + '\n')
                 K2 = tokens[6]
                 K3 = tokens[7]
                 K4 = tokens[8]
@@ -2097,8 +2113,8 @@ def main():
                 if line.lstrip().find('!') == 0:
                     continue
 
-                #improper_symmetry_subgraph = 'dihedrals_nosym'
-                improper_symmetry_subgraph = 'cenJsortIKL'
+                improper_symmetry_subgraph = 'dihedrals_nosym'
+                #improper_symmetry_subgraph = 'cenJsortIKL'
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
 
                 version = tokens[0]
@@ -2383,6 +2399,9 @@ def main():
                             DetermineNumericPriority(is_auto,
                                                      batoms[0] + batoms[1],
                                                      float(angle2ver_bb_sh[angle_name_sh]))
+                        angle2ver_bb[angle_name_full] = angle2ver_bb_sh[angle_name_sh]
+                        angle2ref_bb[angle_name_full] = angle2ref_bb_sh[angle_name_sh]
+
                         if angle_name_sh in angle2class2_ba_sh:
                             Kba = angle2class2_ba_sh[angle_name_sh]
                             assert(angle_name_sh in angle2ver_ba_sh)
@@ -2398,6 +2417,9 @@ def main():
                             DetermineNumericPriority(is_auto,
                                                      batoms[0] + batoms[1],
                                                      angle2ver_ba_sh[angle_name_sh])
+                        angle2ver_ba[angle_name_full] = angle2ver_ba_sh[angle_name_sh]
+                        angle2ref_ba[angle_name_full] = angle2ref_ba_sh[angle_name_sh]
+
                         version = max((angle2ver_sh[angle_name_sh],
                                        angle2ver_bb_sh[angle_name_sh],
                                        angle2ver_ba_sh[angle_name_sh]))
@@ -2528,11 +2550,11 @@ def main():
 
                         angle_data123 = LookupRestAngle(a1, a2, a3,
                                                         atom2equiv_angle,
-                                                        angle2theta0,
+                                                        angle2theta0_sh,
                                                         [atom2auto_angleend,
                                                          atom2auto_anglecenter,
                                                          atom2auto_anglecenter],
-                                                        angle2theta0_auto)
+                                                        angle2theta0_auto_sh)
                         if angle_data123 == None:
                             # Save time by only continuing if an angle was
                             # found between a1, a2, a3
@@ -2559,11 +2581,11 @@ def main():
 
                             angle_data234 = LookupRestAngle(a2, a3, a4,
                                                             atom2equiv_angle,
-                                                            angle2theta0,
+                                                            angle2theta0_sh,
                                                             [atom2auto_angleend,
                                                              atom2auto_anglecenter,
                                                              atom2auto_anglecenter],
-                                                            angle2theta0_auto)
+                                                            angle2theta0_auto_sh)
                             if angle_data234 == None:
                                 # Save time by only continuing if an angle was
                                 # found between a2, a3, a4
@@ -2624,6 +2646,8 @@ def main():
                                 DetermineNumericPriority(is_auto,
                                                          batoms[1],
                                                          float(dihedral2ver_mbt_sh[dihedral_name_sh]))
+                            dihedral2ver_mbt[dihedral_name_full] = dihedral2ver_mbt_sh[dihedral_name_sh]
+                            dihedral2ref_mbt[dihedral_name_full] = dihedral2ref_mbt_sh[dihedral_name_sh]
 
                             # "ebt" terms:
                             if dihedral_name_sh in dihedral2class2_ebt_sh:
@@ -2649,6 +2673,8 @@ def main():
                                 DetermineNumericPriority(is_auto,
                                                          batoms[0] + batoms[2],
                                                          float(dihedral2ver_ebt_sh[dihedral_name_sh]))
+                            dihedral2ver_ebt[dihedral_name_full] = dihedral2ver_ebt_sh[dihedral_name_sh]
+                            dihedral2ref_ebt[dihedral_name_full] = dihedral2ref_ebt_sh[dihedral_name_sh]
 
                             #(Note:  large atom_priority number <==> low priority
                             # Only one of the atom priority numbers should be > 0)
@@ -2670,6 +2696,8 @@ def main():
                                 DetermineNumericPriority(is_auto,
                                                          batoms[0] + batoms[2],
                                                          float(dihedral2ver_bb13_sh[dihedral_name_sh]))
+                            dihedral2ver_bb13[dihedral_name_full] = dihedral2ver_bb13_sh[dihedral_name_sh]
+                            dihedral2ref_bb13[dihedral_name_full] = dihedral2ref_bb13_sh[dihedral_name_sh]
 
 
                             ########### "at" and "aat" terms ###########
@@ -2699,6 +2727,10 @@ def main():
                                 DetermineNumericPriority(is_auto,
                                                          aatoms[0] + aatoms[1],
                                                          float(dihedral2ver_at_sh[dihedral_name_sh]))
+                            dihedral2ver_at[dihedral_name_full] = dihedral2ver_at_sh[dihedral_name_sh]
+                            dihedral2ref_at[dihedral_name_full] = dihedral2ref_at_sh[dihedral_name_sh]
+
+
                             # "aat" terms:
                             if dihedral_name_sh in dihedral2class2_aat_sh:
                                 Kaat = dihedral2class2_aat_sh[dihedral_name_sh]
@@ -2716,6 +2748,9 @@ def main():
                                 DetermineNumericPriority(is_auto,
                                                          aatoms[0] + aatoms[1],
                                                          float(dihedral2ver_aat_sh[dihedral_name_sh]))
+                            dihedral2ver_aat[dihedral_name_full] = dihedral2ver_aat_sh[dihedral_name_sh]
+                            dihedral2ref_aat[dihedral_name_full] = dihedral2ref_aat_sh[dihedral_name_sh]
+
 
                             if len(dihedral2params) > num_dihedrals:
                                 sys.stderr.write('DEBUG: dihedral['+dihedral_name_full+']:\n'
@@ -2918,7 +2953,7 @@ def main():
                 #                              atom_names[ 1 ],
                 #                              atom_names[i_neigh[i][1]]])
                 #angle_name = EncodeInteractionName(angle_name_l, is_auto)
-                #theta0[i] = float(angle2theta0[angle_name])
+                #theta0[i] = float(angle2theta0_sh[angle_name])
 
             for i in range(0, 3):
                 if (M[ noti3[i][0] ] == M[ noti3[i][1] ]):
@@ -2972,14 +3007,14 @@ def main():
                             aatoms = [['', '',''], ['', '',''], ['', '', '']]
                             #angle_name_l = ReverseIfEnds([atom_names[0], atom_names[1], atom_names[2]])
                             #angle_name = EncodeInteractionName(angle_name_l, is_auto)
-                            #theta01 = angle2theta0[angle_name]
+                            #theta01 = angle2theta0_sh[angle_name]
                             angle_data = LookupRestAngle(a1, a2, a3,
                                                          atom2equiv_angle,
-                                                         angle2theta0,
+                                                         angle2theta0_sh,
                                                          [atom2auto_improperend,
                                                           atom2auto_impropercenter,
                                                           atom2auto_improperend],
-                                                         angle2theta0_auto)
+                                                         angle2theta0_auto_sh)
                             if angle_data == None:
                                 # Save time by only continuing if an angle was
                                 # found between a1, a2, a3
@@ -2989,15 +3024,14 @@ def main():
                             #angle_name_l = ReverseIfEnds(aatoms[0])
                             #angle_name = EncodeInteractionName(angle_name_l[0], is_auto)
 
-
-                            #theta02 = angle2theta0[angle_name]
+                            #theta02 = angle2theta0_sh[angle_name]
                             angle_data = LookupRestAngle(a1, a2, a4,
                                                          atom2equiv_angle,
-                                                         angle2theta0,
+                                                         angle2theta0_sh,
                                                          [atom2auto_improperend,
                                                           atom2auto_impropercenter,
                                                           atom2auto_improperend],
-                                                         angle2theta0_auto)
+                                                         angle2theta0_auto_sh)
                             if angle_data == None:
                                 # Save time by only continuing if an angle was
                                 # found between a1, a2, a4
@@ -3008,14 +3042,14 @@ def main():
                             #angle_name = EncodeInteractionName(angle_name_l, is_auto)
 
 
-                            #theta03 = angle2theta0[angle_name]
+                            #theta03 = angle2theta0_sh[angle_name]
                             angle_data = LookupRestAngle(a3, a2, a4,
                                                          atom2equiv_angle,
-                                                         angle2theta0,
+                                                         angle2theta0_sh,
                                                          [atom2auto_improperend,
                                                           atom2auto_impropercenter,
                                                           atom2auto_improperend],
-                                                         angle2theta0_auto)
+                                                         angle2theta0_auto_sh)
                             if angle_data == None:
                                 # Save time by only continuing if an angle was
                                 # found between a2, a2, a4
@@ -3056,14 +3090,16 @@ def main():
                             #    improper2ver_aa_sh[improper_name_sh] = improper2ver_sh[improper_name_sh]
                             #    improper2ref_aa_sh[improper_name_sh] = improper2ref_sh[improper_name_sh]
 
-                        version = max((improper2ver_sh[improper_name_sh],
-                                       improper2ver_aa_sh[improper_name_sh]))
-
                         improper2priority_aa = \
                             DetermineNumericPriority(is_auto,
                                                      aatoms[0] + aatoms[1] + aatoms[2],
                                                      float(improper2ver_aa_sh[improper_name_sh]))
+                        improper2ver_aa[improper_name_full] = improper2ver_aa_sh[improper_name_sh]
+                        improper2ref_aa[improper_name_full] = improper2ref_aa_sh[improper_name_sh]
 
+
+                        version = max((improper2ver_sh[improper_name_sh],
+                                       improper2ver_aa_sh[improper_name_sh]))
                         improper2style[improper_name_full] = 'class2'
                         improper2ref[improper_name_full] = improper2ref_sh[improper_name_sh]
                         improper2ver[improper_name_full] = version
@@ -3408,15 +3444,15 @@ def main():
                     sys.stdout.write('    angle_coeff @angle:'+angle_name_abbr+' '+
                                      'bb ' + angle2style[angle_name] + ' ' + 
                                      angle2class2_bb[angle_name] +
-                                     " # (ver=" + angle2ver[angle_name] +
-                                     ", ref=" + angle2ref[angle_name] + ")\n")
+                                     " # (ver=" + angle2ver_bb[angle_name] +
+                                     ", ref=" + angle2ref_bb[angle_name] + ")\n")
 
                     assert(angle_name in angle2class2_ba)
                     sys.stdout.write('    angle_coeff @angle:'+angle_name_abbr+' '+
                                      'ba ' + angle2style[angle_name] + ' ' + 
                                      angle2class2_ba[angle_name] +
-                                     " # (ver=" + angle2ver[angle_name] +
-                                     ", ref=" + angle2ref[angle_name] + ")\n")
+                                     " # (ver=" + angle2ver_ba[angle_name] +
+                                     ", ref=" + angle2ref_ba[angle_name] + ")\n")
             sys.stdout.write('  }  # end of angle_coeff commands\n'
                              '\n\n')
 
@@ -3570,35 +3606,35 @@ def main():
                     sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
                                      'mbt ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_mbt[dihedral_name] +
-                                     " # (ver=" + dihedral2ver[dihedral_name] +
-                                     ", ref=" + dihedral2ref[dihedral_name] + ")\n")
+                                     " # (ver=" + dihedral2ver_mbt[dihedral_name] +
+                                     ", ref=" + dihedral2ref_mbt[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_ebt)
                     sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
                                      'ebt ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_ebt[dihedral_name] +
-                                     " # (ver=" + dihedral2ver[dihedral_name] +
-                                     ", ref=" + dihedral2ref[dihedral_name] + ")\n")
+                                     " # (ver=" + dihedral2ver_ebt[dihedral_name] +
+                                     ", ref=" + dihedral2ref_ebt[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_at)
                     sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
                                      'at ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_at[dihedral_name] +
-                                     " # (ver=" + dihedral2ver[dihedral_name] +
-                                     ", ref=" + dihedral2ref[dihedral_name] + ")\n")
+                                     " # (ver=" + dihedral2ver_at[dihedral_name] +
+                                     ", ref=" + dihedral2ref_at[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_aat)
                     sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
                                      'aat ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_aat[dihedral_name] +
-                                     " # (ver=" + dihedral2ver[dihedral_name] +
-                                     ", ref=" + dihedral2ref[dihedral_name] + ")\n")
+                                     " # (ver=" + dihedral2ver_aat[dihedral_name] +
+                                     ", ref=" + dihedral2ref_aat[dihedral_name] + ")\n")
                     assert(dihedral_name in dihedral2class2_bb13)
                     sys.stdout.write('    dihedral_coeff @dihedral:'+dihedral_name_abbr+' '+
                                      'bb13 ' + dihedral2style[dihedral_name] + ' ' + 
                                      dihedral2class2_bb13[dihedral_name] +
-                                     " # (ver=" + dihedral2ver[dihedral_name] +
-                                     ", ref=" + dihedral2ref[dihedral_name] + ")\n")
+                                     " # (ver=" + dihedral2ver_bb13[dihedral_name] +
+                                     ", ref=" + dihedral2ref_bb13[dihedral_name] + ")\n")
             sys.stdout.write('  }  # end of dihedral_coeff commands\n'
                              '\n\n')
 
@@ -3630,10 +3666,15 @@ def main():
                 #if (len(anames) == 4) and improper2style[improper_name] == 'class2':
                 #    continue
                 ang_names = [anames[4:7],anames[7:10],anames[10:13]]
+                # atom orderings are LAMMPS implementation specific.  See:
+                # http://lammps.sandia.gov/doc/improper_class2.html
+                #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
+                #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
+                #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
                 assert(ang_names[0][1] == ang_names[1][1] == ang_names[2][1])
-                assert(ang_names[0][2] == ang_names[1][0])
-                assert(ang_names[1][2] == ang_names[2][0])
-                assert(ang_names[2][2] == ang_names[0][0])
+                assert(ang_names[0][0] == ang_names[1][0])
+                assert(ang_names[1][2] == ang_names[2][2])
+                assert(ang_names[2][0] == ang_names[0][2])
                 # (NOTE TO SELF:
                 #  If these assertions fail, then try checking if they are
                 #  all either the same, or '*'.  If they are then just replace '*'
@@ -3643,10 +3684,10 @@ def main():
                 is_auto = IsAutoInteraction(improper_name)
                 anm = map(EncodeAName, anames)
                 improper_name_abbr = EncodeInteractionName(anm[0:4]+
-                                                           #[ang_names[0][0],ang_names[0][1],
-                                                           # ang_names[1][0],ang_names[2][0]]
-                                                           [anm[4],anm[5],
-                                                            anm[7],anm[10]],
+                                                           #[ang_names[0][0],ang_names[0][1],ang_names[0][2],
+                                                           # ang_names[1][2]]
+                                                           [anm[4],anm[5],anm[6],
+                                                            anm[9]],
                                                             is_auto)
 
                 # Did the user ask us to include "auto" interactions?
@@ -3680,9 +3721,9 @@ def main():
                                              + anames[0] + ',aic*' +
                                              ' @atom:*,aq*,ab*,aae*,aac'+ang_names[0][1]+',ade*,adc*,aie*,aic'
                                              + anames[1] +
-                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[1][0]+',adc*,aie'
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[0][1]+',adc*,aie'
                                              + anames[2] + ',aic*' +
-                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[2][0]+',adc*,aie'
+                                             ' @atom:*,aq*,ab*,aae*,aac*,ade'+ang_names[2][2]+',adc*,aie'
                                              + anames[3] + ',aic*' +
                                              '\n')
                         else:
@@ -3691,8 +3732,8 @@ def main():
                         sys.stdout.write('    @improper:' + improper_name_abbr + ' ' +
                                          ' @atom:*,b*,a'+ang_names[0][0]+',d*,i' + anames[0] + 
                                          ' @atom:*,b*,a'+ang_names[0][1]+',d*,i' + anames[1] +
-                                         ' @atom:*,b*,a'+ang_names[1][0]+',d*,i' + anames[2] +
-                                         ' @atom:*,b*,a'+ang_names[2][0]+',d*,i' + anames[3] +
+                                         ' @atom:*,b*,a'+ang_names[0][2]+',d*,i' + anames[2] +
+                                         ' @atom:*,b*,a'+ang_names[1][2]+',d*,i' + anames[3] +
                                          '\n')
 
             sys.stdout.write('  }  # end of "Data Impropers By Type" section\n'
