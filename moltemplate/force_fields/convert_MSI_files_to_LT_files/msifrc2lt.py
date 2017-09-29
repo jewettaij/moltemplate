@@ -761,11 +761,13 @@ def main():
         bond_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/bond_harmonic.html'
         bond_style2docs['class2'] = 'http://lammps.sandia.gov/doc/bond_class2.html'
         bond_style2docs['morse'] = 'http://lammps.sandia.gov/doc/bond_morse.html'
+        bond_symmetry_subgraph = ''  # default
 
         angle_style2docs = {}
         #angle_style2args = defaultdict(str)
         angle_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/angle_harmonic.html'
         angle_style2docs['class2'] = 'http://lammps.sandia.gov/doc/angle_class2.html'
+        angle_symmetry_subgraph = ''  # default
 
         dihedral_style2docs = {}
         #dihedral_style2args = defaultdict(str)
@@ -809,6 +811,9 @@ def main():
         hbond_style_link = ''
         hbond_style_args = ''
 
+        lines_templates = []
+        lines_references = defaultdict(list)
+        lines_warnings = []
         
     
         argv = [arg for arg in sys.argv]
@@ -1303,6 +1308,7 @@ def main():
                 if tokens[0] in allowed_section_names:
                     section_name = tokens[0]
                     section_is_auto = tokens[-1].endswith('_auto')
+                    tokens_after_section_name = tokens[1:]
                     sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
                     continue
                 elif not tokens[0] in ('#version',
@@ -1509,6 +1515,7 @@ def main():
                 if (tokens[0] in allowed_section_names):
                     section_name = tokens[0]
                     section_is_auto = tokens[-1].endswith('_auto')
+                    tokens_after_section_name = tokens[1:]
                     sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
                     continue
                 elif (not tokens[0] in ('#version','#define')):
@@ -1694,6 +1701,7 @@ def main():
                 if (tokens[0] in allowed_section_names):
                     section_name = tokens[0]
                     section_is_auto = tokens[-1].endswith('_auto')
+                    tokens_after_section_name = tokens[1:]
                     sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
                     continue
                 elif (not tokens[0] in ('#version','#define')):
@@ -1849,6 +1857,7 @@ def main():
                 if (tokens[0] in allowed_section_names):
                     section_name = tokens[0]
                     section_is_auto = tokens[-1].endswith('_auto')
+                    tokens_after_section_name = tokens[1:]
                     sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
                     continue
                 elif (not tokens[0] in ('#version','#define')):
@@ -2155,8 +2164,8 @@ def main():
                 if line.lstrip().find('!') == 0:
                     continue
                 improper_styles.add('class2')
-                improper_symmetry_subgraph = 'dihedrals_nosym'
-                #improper_symmetry_subgraph = 'cenJsortIKL'
+                #improper_symmetry_subgraph = 'dihedrals_nosym'  (<--no)
+                improper_symmetry_subgraph = 'cenJsortIKL'
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
 
                 version = tokens[0]
@@ -2262,6 +2271,20 @@ def main():
                     continue
                 display_torsion_torsion_1_warning = True
 
+            elif section_name == '#templates':
+                #if line.lstrip().find('!') == 0:
+                #    continue
+                lines_templates.append(line)
+
+            elif section_name == '#reference':
+                if line.lstrip().find('!') == 0:
+                    continue
+                if len(tokens_after_section_name) > 0:
+                    ref_number = int(tokens_after_section_name[0])
+                if len(line.strip()) > 0:
+                    lines_references[ref_number].append(line)
+
+
 
             """
              --- these next few lines of code appear to be unnecessary.
@@ -2280,7 +2303,7 @@ def main():
 
 
         if display_OOP_OOP_warning:
-            sys.stdout.write('###########################################################\n'
+            lines_warnings.append('###########################################################\n'
                              '# WARNING\n'
                              '#      ALL \"out-of-plane_out-of_plane\" INTERACTIONS ARE IGNORED.\n'
                              '#      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
@@ -2290,7 +2313,7 @@ def main():
                              '###########################################################\n')
 
         if display_torsion_torsion_1_warning:
-            sys.stdout.write('###########################################################\n'
+            lines_warnings.append('###########################################################\n'
                              '# WARNING\n'
                              '#      ALL \"torsion_torsion_1\" INTERACTIONS ARE IGNORED.\n'
                              '#      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
@@ -2497,10 +2520,8 @@ def main():
             if not found_at_least_one:
                 #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
                 #                 '       '+str(atom_names)+'\n')
-                sys.stdout.write('# WARNING: Undefied bond length for ' +
-                                 #'         '+
-                                 section_name[1:] + ' interaction: ' +
-                                 ' '.join(atom_names)+'\n')
+                lines_warnings.append('# WARNING: Undefied bond length for angle interaction: ' +
+                                      ' '.join(atom_names)+'\n')
             #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
 
 
@@ -2846,10 +2867,9 @@ def main():
             if not found_at_least_one:
                 #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
                 #                 '       '+str(atom_names)+'\n')
-                sys.stdout.write('# WARNING: Undefined bond length (r0) or rest angle (theta0) for\n'+
-                                 #'         '+
-                                 '# dihedral interaction between these atoms: ' +
-                                 ' '.join(atom_names)+'\n')
+                lines_warnings.append('# WARNING: Undefined bond length (r0) or rest angle (theta0) for\n'+
+                                      '#          the dihedral interaction between: ' +
+                                      ' '.join(atom_names)+'\n')
                 #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
 
 
@@ -3325,7 +3345,10 @@ def main():
                              '  # -- Rules for generating (2-body) "bond" interactions: --\n'
                              '  #  BondType  AtomType1  AtomType2\n')
             sys.stdout.write('\n'
-                             '  write_once("Data Bonds By Type") {\n')
+                             '  write_once("Data Bonds By Type')
+            if bond_symmetry_subgraph != '':
+                sys.stdout.write(' ('+bond_symmetry_subgraph+')')
+            sys.stdout.write('") {\n')
             for bond_name in bond_names_priority_high_to_low:
                 if not (bond2style[bond_name] in
                         bond_styles_selected):
@@ -3401,7 +3424,10 @@ def main():
                              '  # -- Rules for generating (3-body) "angle" interactions: --\n'
                              '  #  AngleType AtomType1 AtomType2 AtomType3  [BondType1 BondType2]\n')
             sys.stdout.write('\n'
-                             '  write_once("Data Angles By Type") {\n')
+                             '  write_once("Data Angles By Type')
+            if angle_symmetry_subgraph != '':
+                sys.stdout.write(' ('+angle_symmetry_subgraph+')')
+            sys.stdout.write('") {\n')
             for angle_name in angle_names_priority_high_to_low:
                 if not (angle2style[angle_name] in
                         angle_styles_selected):
@@ -3525,7 +3551,10 @@ def main():
                              '  # -- Rules for generating (4-body) "dihedral" interactions: --\n'
                              '  #  DihedralType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n\n'
-                             '  write_once("Data Dihedrals By Type") {\n')
+                             '  write_once("Data Dihedrals By Type')
+            if dihedral_symmetry_subgraph != '':
+                sys.stdout.write(' ('+dihedral_symmetry_subgraph+')')
+            sys.stdout.write('") {\n')
             for dihedral_name in dihedral_names_priority_high_to_low:
                 if not (dihedral2style[dihedral_name] in
                         dihedral_styles_selected):
@@ -3705,7 +3734,10 @@ def main():
                              '  # -- Rules for generating (4-body) "improper" interactions: --\n'
                              '  #  ImproperType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]\n')
             sys.stdout.write('\n'
-                             '  write_once("Data Impropers By Type") {\n')
+                             '  write_once("Data Impropers By Type')
+            if improper_symmetry_subgraph != '':
+                sys.stdout.write(' ('+improper_symmetry_subgraph+')')
+            sys.stdout.write('") {\n')
             for improper_name in improper_names_priority_high_to_low:
                 if not (improper2style[improper_name] in
                         improper_styles_selected):
@@ -3930,7 +3962,31 @@ def main():
         sys.stdout.write("#          (See http://lammps.sandia.gov/doc/special_bonds.html for details)\n")
 
         #sys.stderr.write(' done.\n')
-        
+
+
+        if len(lines_templates) > 0:
+            sys.stdout.write('\n\n\n\n'
+                             '# ---- templates from the original .frc file used for atom type selection: ---\n')
+            for line in lines_templates:
+                sys.stdout.write('# '+line)
+
+        if len(lines_references) > 0:
+            sys.stdout.write('\n\n\n\n'
+                             '# ---- references from the original .frc file: ----\n')
+            for ref_number,lines in sorted(lines_references.items()):
+                sys.stdout.write('# reference '+str(ref_number)+'\n')
+                for line in lines:
+                    sys.stdout.write('# '+line)
+                sys.stdout.write('\n')
+
+
+        if len(lines_warnings) > 0:
+            sys.stdout.write('\n\n\n\n'
+                             '# ---- additional warnings: ----\n')
+            for line in lines_warnings:
+                sys.stdout.write(line)
+
+
         if filename_in != '':
             file_in.close()
 

@@ -1,5 +1,5 @@
 # This file was generated automatically using:
-# msifrc2lt.py -name COMPASS < compass_published.frc > compass_published.lt
+#   msifrc2lt.py -name COMPASS < compass_published.frc > compass_published.lt
 
 
 COMPASS {
@@ -3409,7 +3409,7 @@ COMPASS {
   # -- Rules for generating (4-body) "improper" interactions: --
   #  ImproperType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]
 
-  write_once("Data Impropers By Type") {
+  write_once("Data Impropers By Type (cenJsortIKL)") {
     @improper:c4,c4,c4,c4,c4,c4,c4,c4  @atom:*,p*,b*,ac4,d*,ic4 @atom:*,p*,b*,ac4,d*,ic4 @atom:*,p*,b*,ac4,d*,ic4 @atom:*,p*,b*,ac4,d*,ic4
     @improper:c3a,c4,h1,h1,c3a,c4,h1,h1  @atom:*,p*,b*,ac3a,d*,ic3a @atom:*,p*,b*,ac4,d*,ic4 @atom:*,p*,b*,ah1,d*,ih1 @atom:*,p*,b*,ah1,d*,ih1
     @improper:c4,c4,h1,o2,c4,c4,h1,o2  @atom:*,p*,b*,ac4,d*,ic4 @atom:*,p*,b*,ac4,d*,ic4 @atom:*,p*,b*,ah1,d*,ih1 @atom:*,p*,b*,ao2,d*,io2
@@ -3577,46 +3577,412 @@ COMPASS {
 
 }  # COMPASS
 
-
-
+#
 # WARNING: The following 1-2, 1-3, and 1-4 weighting parameters were ASSUMED:
 #          special_bonds lj/coul 0.0 0.0 1.0 dihedral yes
 #          (See http://lammps.sandia.gov/doc/special_bonds.html for details)
-# WARNING: Undefied bond length for reference interaction: h1 o2z si4
-# WARNING: Undefied bond length for reference interaction: c4 n3 p4=
-# WARNING: Undefied bond length for reference interaction: h1 n3 p4=
-# WARNING: Undefied bond length for reference interaction: c4 o2 p4=
-# WARNING: Undefied bond length for reference interaction: h1 o2 p4=
-# WARNING: Undefied bond length for reference interaction: c3a p4= n3
-# WARNING: Undefied bond length for reference interaction: h1 p4= n3
-# WARNING: Undefied bond length for reference interaction: n2= p4= n3
-# WARNING: Undefied bond length for reference interaction: n3 p4= n3
-# WARNING: Undefied bond length for reference interaction: n3 p4= o2
+
+
+
+
+# ---- templates from the original .frc file used for atom type selection: ---
+# 
+# type: ?
+#   template: (>*)
+# end_type
+# 
+# type: ar
+#   template: (>Ar)
+# end_type
+# 
+# type:c1o
+#   template: [>C[~O]]
+# end_type
+# 
+# type:c2=
+#   template: [>C[~*][~*]]
+# end_type
+# 
+# type:c3'
+#     template: (>C (~O) (~*) (~*))
+#     atom_test:1
+#         hybridization:sp2
+#     end_test
+#     atom_test:3
+#         allowed_elements: C, H
+#     end_test
+#     atom_test:4
+#         allowed_elements: O, N
+#     end_test
+# end_type
+# 
+# type:c3a
+#   template:(>C(~*)(~*)(~*))
+#   atom_test:1
+#     hybridization: SP2
+#     aromaticity:AROMATIC
+#   end_test
+# end_type
+# 
+# type:c3a
+#   template: [>C(-*)(:*)(:*)]
+#   atom_test:1
+#     hybridization:SP2
+#     aromaticity:NON_AROMATIC
+#   end_test
+# end_type
+# 
+# type:c4
+#   template: (>C(-*)(-*)(-*)(-*))
+#   atom_test:1
+#         hybridization:SP3
+#   end_test
+# end_type
+# 
+# type:c41o
+#   template: [>C(-O(-*))(-H)(-H)(-H)]
+#   atom_test:1
+#         hybridization:SP3
+#   end_test
+#   atom_test:3
+#     allowed_elements:C,H
+# end_type
+# 
+# type: c43
+#   template: (>C(-H)(-*)(-*)(-*))
+#   atom_test:1
+#         hybridization:SP3
+#   atom_test:3
+#     disallowed_elements:H
+#   atom_test:4
+#     disallowed_elements:H
+#   atom_test:5
+#     disallowed_elements:H
+#   end_test
+# end_type
+# 
+# type:c43o
+#   template: [>C(-O(-H))(-H)(-C)(-C)]
+#   atom_test:1
+#         hybridization:SP3
+#   end_test
+# end_type
+# 
+# type: c44
+#   template: (>C(-*)(-*)(-*)(-*))
+#   atom_test:1
+#         hybridization:SP3
+#   atom_test:2
+#     disallowed_elements:H
+#   atom_test:3
+#     disallowed_elements:H
+#   atom_test:4
+#     disallowed_elements:H
+#   atom_test:5
+#     disallowed_elements:H
+#   end_test
+# end_type
+# 
+# type: c4o
+#   template: (>C(-O)(-*)(-*)(-*))
+#   atom_test:1
+#         hybridization:SP3
+#   end_test
+# end_type
+# 
+# type: c4z
+#   template: (>C(-N(~N(~N)))(-*)(-*)(-*))
+#   atom_test:1
+#         hybridization:SP3
+#   end_test
+# end_type
+# 
+# type:h1
+#   template: (>H (-*) )
+#   atom_test:2
+#     allowed_elements:C,Si
+#   end_test
+# end_type
+# 
+# type:h1h
+#   template: [>H[-H]]
+# end_type
+# 
+# type:h1o
+#   template: (>H(-*))
+#   atom_test:2
+#     allowed_elements:O,N,F
+#   end_test
+# end_type
+# 
+# type: he
+#   template: (>He)
+# end_type
+# 
+# type: kr
+#   template: (>Kr)
+# end_type
+# 
+# type:n1n
+#   template: [>N[~N]]
+# end_type
+# 
+# type:n1o
+#   template: [>N[~O]]
+# end_type
+# 
+# type:n1z
+#   template: [>N[~N[~N(~*)]]]
+# end_type
+# 
+# type:n2=
+#   template: [>N(~*)(~*)]
+# end_type
+# 
+# type:n2o
+#   template: [>N[~O][~O]]
+# end_type
+# 
+# type:n2t
+#   template: [>N[~N][~N(~*)]]
+# end_type
+# 
+# type:n2z
+#   template: (>N[~N[~N]](~*))
+# end_type
+# 
+# type: n3m
+#   template: (>N(-C[=O])(-C)(-C))
+#   atom_test:1
+#         hybridization:SP3
+#   end_test
+# end_type
+# 
+# type: n3o
+#   template: (>N[~O][~O](~O(~C)))
+# end_type
+# 
+# type: ne
+#   template: (>Ne)
+# end_type
+# 
+# type:o1=
+#   template: (>O(~*))
+#   atom_test:2
+#     allowed_elements:N,S,C
+#   end_test
+# end_type
+# 
+# type:o1=*
+#   template: [>O[~C[~O]]]
+# end_type
+# 
+# type:o12
+#   template: [>O[~N[~O](~*)]]
+# end_type
+# 
+# type:o1c
+#   template: [>O[~C]]
+# end_type
+# 
+# type:o1n
+#   template: [>O[~N]]
+# end_type
+# 
+# type:o1o
+#   template: [>O[~O]]
+# end_type
+# 
+# type:o2
+#   template: [>O(~*)(~*)]
+# end_type
+# 
+# type:o2e
+#   template: [>O(-C)(-C)]
+#    atom_test: 1
+#        aromaticity:NON_AROMATIC
+#    end_test
+# end_type
+# 
+# type:o2h
+#   template: (>O[-H](~*))
+# end_type
+# 
+# type:o2n
+#   template: (>O[~N[~O][~O]](~C))
+# end_type
+# 
+# type:o2s
+#   template: (>O[~C[~O](~*)](~C))
+# end_type
+# 
+# type: o2z
+#    template: (>O(-Si)(-*) )
+#    atom_test: 3
+#        allowed_elements: Si, H 
+#    end_test
+# end_type
+# 
+# type: p4=
+#    template: (>P(~*)(~*)(~*)(~*))
+# end_type
+# 
+# type:s1=
+#   template: [>S[~C[~S]]]
+# end_type
+# 
+# type:s2=
+#   template: [>S[~O][~O]]
+# end_type
+# 
+# type: si4
+#    template: (>Si(-*)(-*)(-*)(-*))
+# end_type
+# 
+# type: si4c
+#    template: (>Si(-O)(-*)(-*)(-*))
+#    atom_test: 3
+#        allowed_elements: O, C
+#    end_test
+#    atom_test: 4
+#        allowed_elements: O, C
+#    end_test
+#    atom_test: 5
+#        allowed_elements: O, C
+#    end_test
+# end_type
+# 
+# type: xe
+#   template: (>Xe)
+# end_type
+# 
+# precedence:
+# (?
+#   (ar)
+#   (c1o)
+#   (c2=)
+#   (c3a) (c3')
+#   (c4 (c43 (c43o)) (c44) (c4o(c41o)) (c4z) )
+#   (h1) (h1h) (h1o)
+#   (he)
+#   (kr)
+#   (n1n) (n1o) (n1z)
+#   (n2= (n2o) (n2t) (n2z) )
+#   (n3m) (n3o)
+#   (ne)
+#   (o1= (o1=*) (o12) (o1c) (o1n) ) (o1o)
+#   (o2 (o2e(o2s)) (o2h) (o2n) (o2z) )
+#   (p4=)
+#   (s1=)
+#   (s2=)
+#   (si4 (si4c) )
+#   (xe)
+# )
+# end_precedence
+# 
+# 
+# 
+
+
+
+
+# ---- references from the original .frc file: ----
+# reference 1
+# @Author tester
+# @Date 01-Jun-09
+# Barebones compass for aromatic & aliphatic hydrocarbons from H. Sun JCP B102, 7361-2 (1998)
+# This file created by Materials Design, Inc. (www.materialsdesign.com) Please realize that
+# we neither support this version, nor make any warranty as to the correctness of the parameters.
+# We have checked the numbers against the literature, but of course there may still be errors,
+# including errors of interpretation. Also, the current version of COMPASS may well be different 
+# that that originally published.
+# If you have comments or suggestions, feel free to email Paul Saxe at psaxe (at) materialsdesign.com
+
+# reference 2
+# @Author tester
+# @Date 27-Jun-09
+# Parameters for siloxanes from Sun/Rigby Spectrochim. Acta A53, 1301-23 (1997) (o2 later renamed to o2z)
+
+# reference 3
+# @Author tester
+# @Date 27-Jun-09
+# Parameters for ethers and alcohols from Rigby/Sun/Eichinger Polym. Int. 44, 311-330 (1997)
+
+# reference 4
+# @Author tester
+# @Date 30-Jun-09
+# Parameters for phosphazenes from Comput. Theor. Polym. Sci. 8, 229-246 (1998)
+
+# reference 5
+# @Author tester
+# @Date 28-Jun-09
+# Parameters for He,Ne,Ar,Kr,Xe,H2,O2,N2,NO,CO,CO2,NO2,CS2,SO2 from JPC B104, 4951-7 (2000)
+
+# reference 6
+# @Author tester
+# @Date 29-Jun-09
+# Parameters for nitrate esters from JPC B104, 2477-89 (2000)
+
+# reference 7
+# @Author tester
+# @Date 30-Jun-09
+# Parameters for Ultem (imides) from Polymer 43, 599-607 (2002)
+
+# reference 8
+# @Author tester
+# @Date 30-Jun-09
+# Parameters for 2y and 3y alcohols from Fluid Phase Equilibria 217, 77-87 (2004)
+
+# reference 9
+# @Author tester
+# @Date 30-Jun-09
+# Parameters for aliphatic azides from J. Comput. Chem. 25, 61-71 (2004)
+
+# reference 10
+# @Author tester
+# @Date 02-Jul-09
+# Ref 2 missing -C-Si- params; assume values from Macromols 28, 701-712 (1995) (see pcff)
+
+
+
+
+
+# ---- additional warnings: ----
+# WARNING: Undefied bond length for angle interaction: h1 o2z si4
+# WARNING: Undefied bond length for angle interaction: c4 n3 p4=
+# WARNING: Undefied bond length for angle interaction: h1 n3 p4=
+# WARNING: Undefied bond length for angle interaction: c4 o2 p4=
+# WARNING: Undefied bond length for angle interaction: h1 o2 p4=
+# WARNING: Undefied bond length for angle interaction: c3a p4= n3
+# WARNING: Undefied bond length for angle interaction: h1 p4= n3
+# WARNING: Undefied bond length for angle interaction: n2= p4= n3
+# WARNING: Undefied bond length for angle interaction: n3 p4= n3
+# WARNING: Undefied bond length for angle interaction: n3 p4= o2
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: c4 si4 o2z h1
+#          the dihedral interaction between: c4 si4 o2z h1
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 o2z si4 h1
+#          the dihedral interaction between: h1 o2z si4 h1
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 o2z si4 o2z
+#          the dihedral interaction between: h1 o2z si4 o2z
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 n3 p4= h1
+#          the dihedral interaction between: h1 n3 p4= h1
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 n3 p4= n2=
+#          the dihedral interaction between: h1 n3 p4= n2=
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 n3 p4= o2
+#          the dihedral interaction between: h1 n3 p4= o2
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 o2 p4= h1
+#          the dihedral interaction between: h1 o2 p4= h1
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 o2 p4= n2=
+#          the dihedral interaction between: h1 o2 p4= n2=
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: h1 o2 p4= o2
+#          the dihedral interaction between: h1 o2 p4= o2
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: X o2 p4= X
+#          the dihedral interaction between: X o2 p4= X
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: X c3a n2= X
+#          the dihedral interaction between: X c3a n2= X
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: X n3 p4= X
+#          the dihedral interaction between: X n3 p4= X
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: c4 c4 n3o o1=
+#          the dihedral interaction between: c4 c4 n3o o1=
 # WARNING: Undefined bond length (r0) or rest angle (theta0) for
-# dihedral interaction between these atoms: c3' n3m c3' o1
+#          the dihedral interaction between: c3' n3m c3' o1
