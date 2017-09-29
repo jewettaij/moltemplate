@@ -3196,9 +3196,6 @@ def main():
         sys.stdout.write("\n\n")
         sys.stdout.write(ffname + " {\n\n")
         
-        sys.stdout.write("  # Below we will use lammps \"set\" command to assign atom charges\n"
-                         "  # by atom type.  http://lammps.sandia.gov/doc/set.html\n\n")
-        
         sys.stdout.write("\n"
                          "  #        AtomType    Mass     # \"Description\" (version, reference)\n\n")
         sys.stdout.write("  write_once(\"Data Masses\") {\n")

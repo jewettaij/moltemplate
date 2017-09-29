@@ -1,12 +1,17 @@
 # This file was generated automatically using:
 #   msifrc2lt.py -name COMPASS < compass_published.frc > compass_published.lt
 
+#   This is an incomplete version of the COMPASS force field based on available
+# public sources.  Parameters for some common chemical groups are missing
+# (for example, the NH2 amine group).  The commercial version of COMPASS is 
+# much larger and presumably includes more up to date parameters and parameters
+# for a wider range of atom types and molecule types.  (However files
+# containing those force field parameters are not publicly available.)
+#
+#   This file has been graciously made available by Materials Design Inc.
+
 
 COMPASS {
-
-  # Below we will use lammps "set" command to assign atom charges
-  # by atom type.  http://lammps.sandia.gov/doc/set.html
-
 
   #        AtomType    Mass     # "Description" (version, reference)
 
