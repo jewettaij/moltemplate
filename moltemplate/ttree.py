@@ -64,7 +64,7 @@ except NameError:
 # in words or tokens parsed by TtreeShlex.  Otherwise it is identical to shlex.
 try:
     from .ttree_lex import TtreeShlex, SplitQuotedString, EscCharStrToChar, \
-        SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildCard, \
+        SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildcard, \
         InputError, ErrorLeader, OSrcLoc, TextBlock, VarRef, VarBinding, \
         TemplateLexer
 except (SystemError, ValueError):
@@ -81,7 +81,7 @@ elif sys.version < '2.7':
                      '  This program is untested on your python version (' +
                      sys.version + ').\n'
                      '  PLEASE LET ME KNOW IF THIS PROGRAM CRASHES (and upgrade python).\n'
-                     '    -Andrew   2017-2-07\n'
+                     '    -Andrew   2016-9-21\n'
                      '--------------------------------------------------------\n'
                      '--------------------------------------------------------\n')
     from ordereddict import OrderedDict
@@ -1519,7 +1519,7 @@ def DescrToCatLeafNodes(descr_str,
 
         elif (create_missing_nodes and
               ((i_last_ptkn == len(leaf_ptkns) - 1) or
-               HasWildCard('/'.join(leaf_ptkns)))):
+               HasWildcard('/'.join(leaf_ptkns)))):
 
             # elif (create_missing_nodes and
             #      (i_last_ptkn == len(leaf_ptkns)-1)):
@@ -1951,9 +1951,9 @@ class StaticObj(object):
                 break
 
             if ((cmd_token == 'write') or
-                    (cmd_token == 'write_once') or
-                    (cmd_token == 'create_var') or
-                    (cmd_token == 'replace')):
+                (cmd_token == 'write_once') or
+                (cmd_token == 'create_var') or
+                (cmd_token == 'replace')):
                 open_paren = lex.get_token()
 
                 #print('Parse():     open_paren=\"'+open_paren+'\"')
@@ -1980,7 +1980,14 @@ class StaticObj(object):
                     tmpl_filename = None
                     # This means: define the template without attaching
                     # a file name to it. (IE., don't write the contents
-                    # of what's enclosed in the curly brackets { } to a file.)
+                    # of what's enclosed in the curly brackets { } to a file.
+                    # Why?
+                    # "create_var" commands are implemented as "write() {...}"
+                    # commands (containing one or more variables) which
+                    # never get written to a file or the terminal. Parsing
+                    # the contents of the curly brackets defines the variables 
+                    # inside in the same way as parsing the text inside an
+                    # ordinary "write() {...}" command.
 
                 if (cmd_token == 'replace'):
                     tmpl_filename = "ttree_replacements.txt"
@@ -2067,7 +2074,6 @@ class StaticObj(object):
                 self.namespaces.append(stnode)
 
             elif cmd_token == 'category':
-
                 cat_name = lex.get_token()
 
                 cat_count_start = 1
@@ -2107,6 +2113,7 @@ class StaticObj(object):
                                                  '       Error near ' + lex.error_leader() + '\n'
                                                  '       \"' + cmd_token + ' ' + cat_name + '...\" has too many arguments,\n'
                                                  '       or lacks a close-paren \')\'.\n')
+
                 else:
                     lex.push_token(open_paren)
 
@@ -4259,7 +4266,7 @@ def AutoAssignVals(cat_node,
                     # category counter without incrementing it.
                     var_binding.value = str(cat.counter.query())
 
-                elif HasWildCard(var_binding.full_name):
+                elif HasWildcard(var_binding.full_name):
                     #   -- The wildcard hack ---
                     # Variables containing * or ? characters in their names
                     # are not allowed.  These are not variables, but patterns
@@ -4634,7 +4641,7 @@ def WriteVarBindingsFile(node):
 
                 # Now omit variables whos names contain "*" or "?"
                 # (these are actually not variables, but wildcard patterns)
-                if not HasWildCard(var_binding.full_name):
+                if not HasWildcard(var_binding.full_name):
                     if len(var_binding.refs) > 0:
                         usage_example = '       #' +\
                             ErrorLeader(var_binding.refs[0].srcloc.infile,
@@ -5036,7 +5043,7 @@ def BasicUI(settings,
 
     # Parsing, and compiling is a multi-pass process.
 
-    # Step 1: Read in the StaticObj (class) defintions, without checking
+    # Step 1: Read in the StaticObj (class) definitions, without checking
     # whether or not the instance_children refer to valid StaticObj types.
     sys.stderr.write('parsing the class definitions...')
     static_tree_root.Parse(settings.lex)

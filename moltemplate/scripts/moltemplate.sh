@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.1.2"
-G_DATE="2017-2-05"
+G_VERSION="2.4.3"
+G_DATE="2017-9-14"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -218,6 +218,7 @@ $data_ellipsoids
 $data_lines
 $data_triangles
 $data_boundary
+$data_header
 $data_bonds_by_type*
 ${data_angles_by_type}*
 ${data_dihedrals_by_type}*
@@ -312,6 +313,14 @@ Optional arguments:
 -overlay-bonds     (It does the same thing for bonds, dihedrals, and impropers.)
                     Use these options to prevent that behavoir.
 
+-angle-symmetry file.py     Normally moltemplate.sh reorders the atoms in each
+-dihedral-symmetry file.py  angle, dihedral, improper, and bond interaction.
+-improper-symmetry file.py  TO TURN OFF ATOM REORDERING, SET file.py to "NONE"
+-bond-symmetry file.py      You can override the rules that moltemplate.sh uses
+                            by supplying a file (file.py) with symmetry rules.
+                            See nbody_Dihedrals.py, nbody_Impropers.py (in the
+                            moltemplate directory) to learn the file format.
+
 EOF
 )
 
@@ -374,8 +383,8 @@ for A in "$@"; do
 done
 
 TTREE_ARGS=""
-ATOM_STYLE=""
-ATOM_STYLE_ARG=""
+ATOM_STYLE="full"
+ATOM_STYLE_ARG="-atomstyle \"$ATOM_STYLE\""
 
 i=0
 while [ "$i" -lt "$ARGC" ]; do
@@ -386,6 +395,13 @@ while [ "$i" -lt "$ARGC" ]; do
         # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
         unset LTTREE_CHECK_COMMAND
         unset LTTREE_POSTPROCESS_COMMAND
+    elif [ "$A" = "-allow-wildcards" ]; then
+        # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
+	if [ -z "$LTTREE_CHECK_ARGS" ]; then
+            LTTREE_CHECK_ARGS="\"$A\""
+        else
+            LTTREE_CHECK_ARGS="${LTTREE_CHECK_ARGS} \"$A\""
+        fi
     elif [ "$A" = "-checkff" ]; then
         # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
         CHECKFF="$A"
@@ -421,6 +437,62 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         #echo "  (extracting coordinates from \"$RAW_FILE\")" >&2
         awk '{if (NF==3) {print $0}}' < "$RAW_FILE" > "$tmp_atom_coords"
+
+    elif [ "$A" = "-bond-symmetry" ]; then
+        # Change the atom ordering rules in a 2-body bonded interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_BONDS="bonds_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_BONDS=$A
+	fi
+
+    elif [ "$A" = "-angle-symmetry" ]; then
+        # Change the atom ordering rules in a 3-body "angle" interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_ANGLES="angles_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_ANGLES=$A
+	fi
+
+    elif [ "$A" = "-dihedral-symmetry" ]; then
+        # Change the atom ordering rules in a 4-body "dihedral" interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_DIHEDRALS="dihedrals_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_DIHEDRALS=$A
+	fi
+
+    elif [ "$A" = "-improper-symmetry" ]; then
+        # Change the atom ordering rules in a 4-body "improper" interaction:
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+	if [ "$A" = "NONE" ]; then
+            SUBGRAPH_SCRIPT_IMPROPERS="impropers_nosym.py"
+	else
+            SUBGRAPH_SCRIPT_IMPROPERS=$A
+	fi
 
     elif [ "$A" = "-xyz" ]; then
         if [ "$i" -eq "$ARGC" ]; then
@@ -606,8 +678,6 @@ while [ "$i" -lt "$ARGC" ]; do
 done
 
 
-
-
 if [ -z "$ATOM_STYLE" ]; then
   #echo '########################################################' >&2
   #echo '##            WARNING: atom_style unspecified         ##' >&2
@@ -615,6 +685,7 @@ if [ -z "$ATOM_STYLE" ]; then
   #echo '########################################################' >&2
   ATOM_STYLE="full"
 fi
+
 
 
 
@@ -638,15 +709,13 @@ rm -f "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_
 
 
 
-
 # If checking is not disabled, then first check for common spelling errors.
 
 if [ -n "$LTTREE_CHECK_COMMAND" ]; then
-    if ! eval $LTTREE_CHECK_COMMAND $TTREE_ARGS; then
+    if ! eval $LTTREE_CHECK_COMMAND $TTREE_ARGS $LTTREE_CHECK_ARGS; then
         exit 1
     fi
 fi
-
 
 #   --- Run ttree. ---
 #
@@ -882,6 +951,13 @@ for FILE in `ls -v "$data_angles_by_type"*.template`; do
     SUBGRAPH_SCRIPT=`echo "$FILE" | awk '/\(.*\)/ {print $0}' | cut -d'(' -f2-| cut -d')' -f 1`
     # Example: (continued) SUBGRAPH_SCRIPT should equal "gaff_angle.py"
 
+    # The user can also override this choice:
+    if [ -n "$SUBGRAPH_SCRIPT_ANGLES" ]; then
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_ANGLES"
+    elif [ -n "$SUBGRAPH_SCRIPT" ]; then
+        SUBGRAPH_SCRIPT_ANGLES="$SUBGRAPH_SCRIPT"
+    fi
+
     if [ -z "$SUBGRAPH_SCRIPT" ]; then
         SUBGRAPH_SCRIPT="nbody_Angles.py"
     else
@@ -977,6 +1053,13 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template`; do
     # Example: FILE="Data Dihedrals By Type (gaff_dih.py)"
     SUBGRAPH_SCRIPT=`echo "$FILE" | awk '/\(.*\)/ {print $0}' | cut -d'(' -f2-| cut -d')' -f 1`
     # Example: (continued) SUBGRAPH_SCRIPT should equal "gaff_dih.py"
+
+    # The user can also override this choice:
+    if [ -n "$SUBGRAPH_SCRIPT_DIHEDRALS" ]; then
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_DIHEDRALS"
+    elif [ -n "$SUBGRAPH_SCRIPT" ]; then
+        SUBGRAPH_SCRIPT_DIHEDRALS="$SUBGRAPH_SCRIPT"
+    fi
 
     if [ -z "$SUBGRAPH_SCRIPT" ]; then
         SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
@@ -1076,6 +1159,13 @@ for FILE in `ls -v "$data_impropers_by_type"*.template`; do
     SUBGRAPH_SCRIPT=`echo "$FILE" | awk '/\(.*\)/ {print $0}' | cut -d'(' -f2-| cut -d')' -f 1`
     # Example: (continued) SUBGRAPH_SCRIPT should equal "gaff_impr.py"
 
+    # The user can also override this choice:
+    if [ -n "$SUBGRAPH_SCRIPT_IMPROPERS" ]; then
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_IMPROPERS"
+    elif [ -n "$SUBGRAPH_SCRIPT" ]; then
+        SUBGRAPH_SCRIPT_IMPROPERS="$SUBGRAPH_SCRIPT"
+    fi
+
     if [ -z "$SUBGRAPH_SCRIPT" ]; then
         SUBGRAPH_SCRIPT="nbody_Impropers.py"
     else
@@ -1152,7 +1242,30 @@ IFS="$IFS_BACKUP"
 
 
 
+# Deal with wildcard characters ('*', '?') in "_coeff" commands
+# appearing in any LAMMPS input scripts generated by moltemplate.
+# Replace them with explicit variable names.  Do this before rendering
+#if [ -s "${in_settings}.template" ]; then
+echo "expanding wildcards in \"_coeff\" commands" >&2
+#ls "${in_prefix}"*.template 2> /dev/null | while read file_name; do
+for file_name in "${in_prefix}"*.template; do
+    echo "expanding wildcards in \"_coeff\" commands in \"$file_name\"" >&2
+    if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
+        ERR_INTERNAL
+    fi
+    mv -f "${file_name}.tmp" "$file_name"
+    # Now reassign integers to these variables
+    bn=`basename "$file_name" .template`
+    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
+           ttree_assignments.txt \
+           < "$file_name" \
+           > "$bn"; then
+        exit 6
+    fi
+done
+#fi
 
+    #exit 1
 
 
 
@@ -1182,10 +1295,14 @@ fi
 
 
 if [ -s "${data_bonds}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Bonds.py"
+    if [ -n "$SUBGRAPH_SCRIPT_BONDS" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_BONDS"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_BONDS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Bonds \
-	                     nbody_Bonds.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_bonds}" \
                              > "${data_bonds}.tmp"; then
             ERR_INTERNAL
@@ -1216,10 +1333,14 @@ fi
 
 
 if [ -s "${data_angles}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Angles.py"
+    if [ -n "$SUBGRAPH_SCRIPT_ANGLES" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_ANGLES"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_ANGLES ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Angles \
-	                     nbody_Angles.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_angles}" \
                              > "${data_angles}.tmp"; then
             ERR_INTERNAL
@@ -1248,10 +1369,14 @@ fi
 
 
 if [ -s "${data_dihedrals}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
+    if [ -n "$SUBGRAPH_SCRIPT_DIHEDRALS" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_DIHEDRALS"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_DIHEDRALS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Dihedrals \
-	                     nbody_Dihedrals.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_dihedrals}" \
                              > "${data_dihedrals}.tmp"; then
             ERR_INTERNAL
@@ -1303,10 +1428,14 @@ fi
 
 
 if [ -s "${data_impropers}" ]; then
+    SUBGRAPH_SCRIPT="nbody_Impropers.py"
+    if [ -n "$SUBGRAPH_SCRIPT_IMPROPERS" ]; then
+	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_IMPROPERS"
+    fi
     if [ ! -z $REMOVE_DUPLICATE_IMPROPERS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Impropers \
-	                     nbody_Impropers.py \
+	                     "$SUBGRAPH_SCRIPT" \
                              < "${data_impropers}" \
                              > "${data_impropers}.tmp"; then
             ERR_INTERNAL
@@ -1409,7 +1538,6 @@ fi
 
 
 
-
 # -------------------------------------------------------
 
 rm -f "$OUT_FILE_DATA"
@@ -1475,6 +1603,14 @@ if [ -n "$NIMPROPERTYPES" ]; then
     echo "     $NIMPROPERTYPES  improper types" >> "$OUT_FILE_DATA"
 fi
 echo "" >> "$OUT_FILE_DATA"
+
+
+
+
+if [ -s "$data_header" ]; then
+  cat "$data_header" >> "$OUT_FILE_DATA"
+  echo "" >> "$OUT_FILE_DATA"
+fi
 
 
 
@@ -1609,14 +1745,6 @@ fi
 echo "" >> "$OUT_FILE_DATA"
 
 
-
-
-if [ -s "$data_header" ]; then
-  cat "$data_header" >> "$OUT_FILE_DATA"
-  echo "" >> "$OUT_FILE_DATA"
-fi
-
-
 if [ -s "$data_masses" ]; then
     echo "Masses" >> "$OUT_FILE_DATA"
     echo "" >> "$OUT_FILE_DATA"
@@ -1645,6 +1773,7 @@ if [ -n "$PAIR_COEFFS_IN_DATA" ]; then
         echo "WARNING: no pair coeffs have been set!" >&2
     fi
 fi
+
 
 
 if [ -s "$data_bond_coeffs" ]; then
@@ -1846,6 +1975,7 @@ fi
 
 
 
+
 rm -f $OUT_FILE_INPUT_SCRIPT
 
 if [ -s "$in_init" ]; then
@@ -1893,7 +2023,7 @@ if [ -s "$tmp_atom_coords" ]; then
 
     # Copy the coordinates in $tmp_atom_coords into $OUT_FILE_DATA
     rm -f "$OUT_FILE_COORDS"
-    if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/raw2data.py" $ATOM_STYLE_ARG "$OUT_FILE_DATA" < "$tmp_atom_coords" > "$OUT_FILE_COORDS"; then
+    if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/raw2data.py -ignore-atom-id " $ATOM_STYLE_ARG "$OUT_FILE_DATA" < "$tmp_atom_coords" > "$OUT_FILE_COORDS"; then
         ERR_INTERNAL
     fi
     mv -f "$OUT_FILE_COORDS" "$OUT_FILE_DATA"
@@ -1964,6 +2094,7 @@ IFS=$OIFS
 
 # N_data_prefix=`expr length "$data_prefix"` <-- not posix compliant. AVOID
 N_data_prefix=${#data_prefix}  #<-- works even if $data_prefix contains spaces
+#for file_name in "${data_prefix}"*; do
 ls "${data_prefix}"* 2> /dev/null | while read file_name; do
     #If using bash:
     #SECTION_NAME="${file_name:$N_data_prefix}"
@@ -1981,6 +2112,7 @@ ls "${data_prefix}"* 2> /dev/null | while read file_name; do
     mv -f "$file_name" output_ttree/
 done
 
+					  
 
 if [ -e "$data_prefix_no_space" ]; then
     echo "" >> "$OUT_FILE_DATA"
@@ -1999,8 +2131,13 @@ if [ -e "$OUT_FILE_DATA" ]; then
 fi
 
 
+
+
+
+
 #N_in_prefix=`expr length "$in_prefix"` <-- not posix compliant. AVOID.
 N_in_prefix=${#in_prefix}  #<-- works even if $in_prefix contains spaces
+#for file_name in "${in_prefix}"*; do
 ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     #If using bash:
     #SECTION_NAME="${file_name:$N_in_prefix}"
@@ -2075,17 +2212,29 @@ for file_name in "$OUT_FILE_INIT" "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_SETTINGS";
 done
 
 
-ls "${in_prefix}"* 2> /dev/null | while read file_name; do
+# Process any custom input script files created by the user afterwards
+#ls "${OUT_FILE_INPUT_SCRIPT}"* 2> /dev/null | while read file_name; do
+for file_name in "${OUT_FILE_INPUT_SCRIPT}."*; do
+    if [ "$file_name" = "$OUT_FILE_INIT" ] || [ $file_name = "$OUT_FILE_INPUT_SCRIPT" ] || [ $file_name = "$OUT_FILE_SETTINGS" ]; then
+        continue
+    fi
+    if [[ "$file_name" == *.tmp ]]; then
+	continue
+    fi
+    if [[ "$file_name" == *.template ]]; then
+	continue
+    fi
     echo "postprocessing file \"$file_name\"" >&2
-    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_input_script.py" input_scripts_so_far.tmp < "$file_name" > "$file_name".tmp; then
+    if ! $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_input_script.py" input_scripts_so_far.tmp < "$file_name" > "$file_name.tmp"; then
         ERR_INTERNAL
     fi
     echo "" >&2
-    mv "$file_name".tmp "$file_name"
+    mv "$file_name.tmp" "$file_name"
     cat "$file_name" >> input_scripts_so_far.tmp
 done
 
 rm -f input_scripts_so_far.tmp
+
 
 
 
@@ -2133,7 +2282,7 @@ echo "" >> $OUT_FILE_INPUT_SCRIPT
 
 if [ ! -z $RUN_VMD_AT_END ]; then
 
-    echo "topo readlammpsdata $OUT_FILE_DATA full" > vmd_viz_moltemplate.tcl.tmp
+    echo "topo readlammpsdata $OUT_FILE_DATA $ATOM_STYLE" > vmd_viz_moltemplate.tcl.tmp
     bn=`basename $OUT_FILE_DATA .data`
     echo "animate write psf $bn.psf" >> vmd_viz_moltemplate.tcl.tmp
     vmd -e vmd_viz_moltemplate.tcl.tmp

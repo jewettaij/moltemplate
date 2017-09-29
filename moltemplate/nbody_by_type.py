@@ -138,12 +138,14 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 """
 
 g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-g_date_str = '2016-12-21'
-g_version_str = '0.19.0'
+g_date_str = '2017-2-06'
+g_version_str = '0.20.0'
 
 bond_pattern_module_name = ""
 
+import os
 import sys
+sys.path.append(os.getcwd())
 import importlib
 
 if sys.version < '2.6':
@@ -184,7 +186,8 @@ def GenInteractions_lines(lines_atoms,
                           canonical_order,  # function to sort atoms and bonds
                           prefix='',
                           suffix='',
-                          report_progress=False):
+                          report_progress=False,
+                          check_undefined=False):
 
     column_names = AtomStyle2ColNames(atom_style)
     i_atomid, i_atomtype, i_molid = ColNames2AidAtypeMolid(column_names)
@@ -271,7 +274,8 @@ def GenInteractions_lines(lines_atoms,
                                                    atomtypes_str,
                                                    bondids_str,
                                                    bondtypes_str,
-                                                   report_progress)
+                                                   report_progress,
+                                                   check_undefined)
     lines_nbody_new = []
     for coefftype, atomids_list in coefftype_to_atomids_str.items():
         for atomids_found in atomids_list:
@@ -294,7 +298,8 @@ def GenInteractions_files(lines_data,
                           atom_style,
                           prefix='',
                           suffix='',
-                          report_progress=False):
+                          report_progress=False,
+                          check_undefined=False):
 
     if fname_atoms == None:
         lines_atoms = [
@@ -366,10 +371,6 @@ def GenInteractions_files(lines_data,
     g = None
     for name, pkg in package_opts:
         try:
-            # defines g.bond_pattern, g.canonical_order
-            # some debug messages:
-            sys.stderr.write('src_bond_pattern=\"'+src_bond_pattern+'\"\n')
-            sys.stderr.write('name=\"'+str(name)+'\", pkg=\"'+str(pkg)+'\"\n')
             g = importlib.import_module(name, pkg)
             break
         except (SystemError, ImportError):
@@ -391,7 +392,8 @@ def GenInteractions_files(lines_data,
                                  g.canonical_order,
                                  prefix,
                                  suffix,
-                                 report_progress)
+                                 report_progress,
+                                 check_undefined)
 
 
 def main():
@@ -411,6 +413,7 @@ def main():
         atom_style = 'full'
         prefix = ''
         suffix = ''
+        check_undefined = False
 
         argv = [arg for arg in sys.argv]
 
@@ -510,7 +513,7 @@ def main():
                                      '       (See nbody_Dihedrals.py for example.)\n')
                 bond_pattern_module_name = argv[i + 1]
                 # If the file name ends in ".py", then strip off this suffix.
-                # For some reason, the next line does not work:
+                # The next line does not work.  Too lazy to care why.
                 # bond_pattern_module_name=bond_pattern_module_name.rstrip('.py')
                 # Do this instead
                 pc = bond_pattern_module_name.rfind('.py')
@@ -538,6 +541,10 @@ def main():
 
                 section_name_bytype = argv[i + 1]
                 del(argv[i:i + 2])
+
+            elif argv[i].lower() == '-checkff':
+                check_undefined = True
+                del(argv[i:i + 1])
 
             elif argv[i][0] == '-':
                 raise InputError('Error(' + g_program_name + '):\n'
@@ -571,8 +578,8 @@ def main():
                              '       (The actual problem may be earlier in the argument list.)\n')
 
         if ((section_name == '') or
-                (section_name_bytype == '') or
-                (bond_pattern_module_name == '')):
+            (section_name_bytype == '') or
+            (bond_pattern_module_name == '')):
             raise InputError('Syntax Error(' + g_program_name + '):\n\n'
                              '       You have not defined the following arguments:\n'
                              '       -section name\n'
@@ -602,7 +609,8 @@ def main():
                                   atom_style,
                                   prefix,
                                   suffix,
-                                  report_progress=True)
+                                  True,
+                                  check_undefined)
 
         # Print this text to the standard out.
 

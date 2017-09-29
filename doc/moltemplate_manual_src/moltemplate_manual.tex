@@ -4,6 +4,8 @@
 \setlength{\textheight}{23cm}
 \setlength{\topmargin}{-0.8cm}
 %\documentclass[11pt]{article}
+\usepackage{textcomp}
+\newcommand{\textapprox}{\raisebox{0.5ex}{\texttildelow}}
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{color}
@@ -55,7 +57,15 @@
   %(which is distributed with moltemplate).
   %These were created to supplement the moltemplate documentation.
 
+\subsubsection*{Warning: This manual does not explain how to run ``active-matter'' simulations or use all-atom force fields.}
+However numerous examples and README files are available to
+demonstrate how to run these kinds of simulations.
+Downloading these examples is \textit{highly recommended}.
+(See section \ref{sec:installation}.)
+
 \section{Introduction}
+
+
 
 Moltemplate is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
 LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build even larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
@@ -218,7 +228,7 @@ which can be read by moltemplate.
   %Many other tools exist (not covered here) which can convert file formats 
   %used by other molecular dynamics software programs into LAMMPS format.
 
-\subsection*{Online examples}
+\subsection*{Examples}
 
   %When using ``moltemplate.sh'' it does not hurt to have 
   %a modest familiarity LAMMPS and it's file formats,
@@ -246,18 +256,11 @@ LAMMPS and visualize your results.
 Section \ref{sec:tutorial} contains a brief tutorial
 which explains how to build a box of water using moltemplate and 
 visualize initial conformation, run LAMMPS, and then visualize the trajectory. 
-In addition, many complete working examples 
-(with images and readme files) are available online 
-  (at \url{http://moltemplate.org})
-which can be downloaded and modified.  
-(These examples are also located in the ``tools/moltemplate/examples'' 
- subdirectory bundled with LAMMPS.)
-  %These examples are included with the main moltemplate download.
-%(See download instructions below.)
-%(which can be downloaded from the official moltemplate web site 
-%at \url{http://www.moltemplate.org}). 
-%They are more complex than the examples 
-%explained here in this manual. 
+Several complete working examples (with images and readme files)
+which can be downloaded and modified are available online at:
+\url{http://moltemplate.org/visual_examples.html}
+A more comprehensive list of examples is included in
+the ``examples/'' subdirectory distributed with moltemplate.  
 %The official LAMMPS examples and user manual
 %are also a valuable reference.
 These examples are a good starting point for learning LAMMPS and moltemplate.
@@ -325,46 +328,82 @@ under the terms of the open-source 3-clause BSD license.
 
 
 \section{Installation}
-
-\subsection*{Obtaining Moltemplate}
-\textit{If you don't already have moltemplate},
-the most up-to-date version can be downloaded at
-\url{http://www.moltemplate.org}
-If you obtained moltemplate as a .tar.gz file,
-(as opposed to github), you can unpack it using:
-\begin{verbatim}
-tar -xzvf moltemplate_2016-12-15.tar.gz
-\end{verbatim}
-(The date will vary from version to version.)
-Alternately, if you obtained moltemplate bundled with LAMMPS, 
-then the \textit{``moltemplate''} directory will probably be located 
-in the \textit{``tools''} subdirectory of your lammps installation.
+\label{sec:installation}
 
 There are two ways to install moltemplate:
 
 \subsubsection*{Installation Method 1 (pip)}
 
-\textit{If you are familiar with pip}, then run the following command from within outermost directory:
+\textit{If you are familiar with pip}, you can install
+moltemplate by typing following command in the terminal/shell:
+  %from within outermost directory:
 \begin{verbatim}
-pip install .
+pip install moltemplate
 \end{verbatim}
-\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)
-
-Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
+%\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)
+If you receive an error regarding permissions, then run pip this way instead:
+\begin{verbatim}
+pip install moltemplate --user
+\end{verbatim}
+Make sure that your default pip install bin directory is in your PATH.  (This is usually something like \textapprox/.local/bin/ or \textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
 \begin{verbatim}
 pip uninstall moltemplate
 \end{verbatim}
-Instructions for updating your PATH are included below.
+
+\textit{Note: There are is a large variety of detailed moltemplate examples
+which will be omitted if you install moltemplate this way.
+\textbf{Downloading the examples is strongly recommended.}}
+You can do this either by using git:
+\begin{verbatim}
+git clone https://github.com/jewettaij/moltemplate ~/moltemplate
+\end{verbatim}
+or by visiting the \url{http://www.moltemplate.org} web site.
+They will be in the ``examples'' subdirectory.)
+
+\textit{If you run into difficulty with pip}, then try installing
+moltemplate into a temporary virtual environment
+by installing ``virtualenv'',
+%downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
+and running these commands:
+\begin{verbatim}
+mkdir ~/moltemplate_v
+cd ~/moltemplate_v
+virtualenv venv
+source venv/bin/activate
+pip install moltemplate
+   #(now do something useful with moltemplate...)
+\end{verbatim}
+You will have to ``run source \textapprox/moltemplate\_v/venv/bin/activate'' beforehand whenver you want to run moltemplate again.  If all this fails, then try installing moltemplate by manually updating your \$PATH environment variable.  Instructions for doing that are included below.
 
 
 \subsubsection*{Installation Method 2}
 
-Alternatively, you can edit your PATH variable manually to include
-the sudirectory where the moltemplate.sh script is located 
-(typically ``moltemplate/scripts/''), as well as
-the directory containing the most of the python scripts (``moltemplate/'').
-Suppose the directory where with the README file is named ``moltemplate''
-and it is located in your home directory:
+Alternatively, you can download the moltemplate files and edit your
+PATH variable manually to include
+the subdirectory where the moltemplate.sh script is located 
+(typically ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
+the directory containing the most of the python scripts
+(``\textapprox/moltemplate/moltemplate/'').
+
+\subsection*{Obtaining Moltemplate}
+The most up-to-date version of moltemplate can be downloaded using git.
+\begin{verbatim}
+git clone https://github.com/jewettaij/moltemplate ~/moltemplate
+\end{verbatim}
+Later, you can update to the latest version of moltemplate using:
+\begin{verbatim}
+git pull
+\end{verbatim}
+Alternatively, you can also download moltemplate as a .tar.gz archive from
+\url{http://www.moltemplate.org}
+and can unpack it using:
+\begin{verbatim}
+tar -xzvf moltemplate_2017-8-22.tar.gz
+\end{verbatim}
+(The date will vary from version to version.)
+Somewhat older versions of moltemplate are also bundled with the LAMMPS 
+source code and are located in the \textit{``tools''} subdirectory.
+
 
 If you use the \textbf{bash} shell, typically you would edit your 
 \mbox{$\sim$/.bash\_profile}, 
@@ -391,8 +430,19 @@ setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
 log back in again for the changes to take effect.}
 
 
+\subsubsection*{WINDOWS installation suggestions}
 
-%\pagebreak
+You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  If you are using Windows 10 or later, try installing the "Windows Subsystem for Linux (WSL)"
+\url{https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/}
+For more details, see the WSL FAQ:
+\url{https://msdn.microsoft.com/en-us/commandline/wsl/faq}
+If you are using an older version of windows, try following the tutorial written by Yanqing Fu instead:
+\url{https://sourceforge.net/p/lammps/mailman/message/32599824/}
+
+To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: nano, ne, emacs, vim, and jove.  (Unfortunately, as of 2017-5-17, graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
+
+
+\pagebreak
 \section{Quick reference \textit{(skip on first reading)}}
 
 \section*{
@@ -923,7 +973,6 @@ In this example, the first transformation, ``rot()'', is applied to both ``monom
 
 
 
-
 \subsection{moltemplate.sh command line arguments:}
 \label{sec:args_table}
 %\begin{table}
@@ -1038,7 +1087,7 @@ Do \textit{not} check for common LAMMPS/moltemplate syntax errors.
 This forces moltemplate.sh to check that there
 are valid angle and dihedral interactions defined for every
 3 or 4 consecutively bonded atoms in the system
-(defined in "Angles By Type'' and ``Dihedrals By Type" sections).
+(defined in "Data Angles By Type'' and ``Data Dihedrals By Type" sections).
 \\
 \hline
 -vmd &
@@ -1046,8 +1095,8 @@ Invoke VMD after running moltemplate to view the system you have just created.
 (VMD must be installed.  
  %This feature uses Axel Kohlmeyer's topotools plugin.
  See sections \ref{sec:vmd_topotools}, \ref{sec:vmd_advanced} for details.)
-%\\
-%\hline
+\\
+\hline
 %-import-path LOCATION
 %&
 %When a user imports an .LT file, moltemplate first looks in the directory
@@ -1061,7 +1110,32 @@ Invoke VMD after running moltemplate to view the system you have just created.
 %\hline
 \end{tabular}
 
-%\pagebreak
+\begin{tabular}[h]{l|p{10cm}}
+\hline
+\begin{tabular}[t]{l}
+-dihedral-sym file.py
+\\
+-improper-sym file.py
+\\
+-bond-symmetry file.py
+\\
+-angle-symmetry file.py
+\\
+\end{tabular}
+& 
+Normally moltemplate.sh reorders the atoms in each bond, angle, dihedral, and improper interaction before writing them to the DATA file in order to help avoid duplicate interactions between the same atoms if listed in different but equivalent orders.  Sometimes this is undesirable.  \textit{\textbf{To disable this behavior, set ``file.py'' to ``None''.}}  You can also manually choose alternate symmetry rules for unusual force fields. (Such as class2 force fields, dihedral\_style spherical, etc...  For an example of the file format for ``file.py'', see the ``nbody\_Impropers.py'' file.)
+\\
+\hline
+-allow-wildcards &
+Allow the user of ``*'' and ``?'' characters within
+``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
+and ``improper\_coeff'' commands.
+\\
+\hline
+\end{tabular}
+
+
+\pagebreak
 
 
 
@@ -3948,10 +4022,8 @@ starting moltemplate and kill the process if it's memory usage exceeds 80\%.
 
 \textbf{3)} Limited support for non-point-like atoms:
 
-As of 2014-12-09, only the ``full'', ``angle'', ``atomic'', ``charge'',
-and ``molecular'' styles have been tested.  
-The ``dipole'' atom style \textit{is} fully supported 
-but it has not been tested.
+As of 2017-8-31, only the ``full'', ``angle'', ``atomic'', ``charge'',
+``sphere'', ``dipole'', and ``molecular'' styles have been tested.  
 Non-point-like atoms like ``ellipsoid'', ``tri'', ``line'' 
 \textit{should} also work with moltemplate. 
 However these objects
@@ -3991,28 +4063,36 @@ Please let me know if it is not working.
 
 \textbf{6)} Inconsistent support for wildcard characters (``*'' and ``?'') 
 \label{sec:wildcard_bug}
-   As of 2014-1-28,
-   the wildcard character ``*''
+   The wildcard character ``*''
    is interpreted differently in different parts of an LT file.
    Wildcard characters work reliably and are used for \textit{string}
-   pattern matching when inside any of the \textit{``By Type''} sections 
+   pattern matching when inside
+   ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'', ``improper\_coeff'',
+   and most ``pair\_coeff'' commands,
+   as well as any of the \textit{``By Type''} sections 
    in an LT file (such as
    \textit{``Data Angles By Type''}, 
    \textit{``Data Dihedrals By Type''}, and 
    \textit{``Data Impropers By Type''}).
-   However these characters are interpreted differently when they appear
-   in \textit{pair\_coeff}, \textit{bond\_coeff}, \textit{angle\_coeff}
-   \textit{dihedral\_coeff}, and \textit{improper\_coeff} commands 
-   (and their corresponding \textit{``Coeff''} sections of a data file).
-   LAMMPS interprets ``*'' characters appearing in any of the
-   \textit{coeff} commands as \textit{numeric} wildcard characters.
+   However these wildcard characters \textit{do not}
+   within pair\_coeff commands that require \textit{more}
+   than 2 atom types as arguments.
+   (such as ``pair\_style hbond/dreiding/lj''.
+    However manybody pair\_styles which use ``pair\_coeff * *''
+    notation work fine.)
+   As of 2017-8-31, wildcard characters (``*'', ``?'') also fail to work inside
+   \textit{``bond\_modify''} commands, and other commands used for running
+   active matter simulations. (Such commands are typically located within the
+   \textit{``write\_once("In Transitions")''} section of an .LT file.)
+   LAMMPS interprets ``*'' characters appearing here as
+   \textit{numeric ranges}, and their behavior depends on the
+   integers which moltemplate assigns to these variables,
+   \textit{not} the \textit{names} of the variables.
+   (See the official documentation for bond\_modify, and bond\_coeff
+    commands to see how ``*'' characters are interpreted.
    This can lead to unintended side-effects and is discouraged.
-   So please avoid ``*'' characters in any of the 
-   \textit{``coeff''} commands 
-    (eg \textit{pair\_coeff, bond\_coeff, angle\_coeff, 
-     dihedral\_coeff, improper\_coeff}).
-   The ``*'' character can be safely used in array brackets, \textit{[*]}, 
-   or in the \textit{``By Type''} sections.
+   The ``*'' character can be safely used in array brackets, \textit{[*]}, or in
+   the varios \textit{``\_coeff''} commands and \textit{``By Type''} sections.
    (See section \ref{sec:array_wildcards_intro} 
     and appendix \ref{sec:nbody_by_type}.)
 

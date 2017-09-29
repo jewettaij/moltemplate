@@ -486,12 +486,12 @@ class GenPoly(object):
                 outfile.write('\n\n'
                               '}  # ' + self.settings.name_polymer + '\n\n')
 
-            if self.settings.box_padding != None:
-                for i in range(0, len(self.coords_multi)):
-                    # calculate the box big enough to collectively enclose
-                    # all of the coordinates (even multiple coordinate sets)
-                    self.CalcBoxBoundaries(self.coords_multi[i])
-                self.WriteBoxBoundaries()
+        if self.settings.box_padding != None:
+            for i in range(0, len(self.coords_multi)):
+                # calculate the box big enough to collectively enclose
+                # all of the coordinates (even multiple coordinate sets)
+                self.CalcBoxBoundaries(self.coords_multi[i])
+            self.WriteBoxBoundaries(outfile)
 
     def WritePolymer(self,
                      outfile,
@@ -684,6 +684,7 @@ class GenPoly(object):
             outfile.write("}  # " + name_polymer + "\n\n\n\n")
 
     def CalcBoxBoundaries(self, coords):
+        N = len(coords)
         for i in range(0, N):
             for d in range(0, 3):
                 if not self.box_bounds_min:
@@ -696,39 +697,36 @@ class GenPoly(object):
                     if coords[i][d] < self.box_bounds_min[d]:
                         self.box_bounds_min[d] = coords[i][d]
 
-    def WriteBoxBoundary(self, outfile):
+    def WriteBoxBoundaries(self, outfile):
         for d in range(0, 3):
             self.box_bounds_min[d] -= self.settings.box_padding[d]
             self.box_bounds_max[d] += self.settings.box_padding[d]
-        outfile.write("\n"
-                      "\n"
-                      "write_once(\"Data Boundary\") {\n"
-                      + str(box_bounds_min[0]) + "  " +
-                      str(box_bounds_max[0]) + " xlo xhi\n"
-                      + str(box_bounds_min[1]) + "  " +
-                      str(box_bounds_max[1]) + " ylo yhi\n"
-                      + str(box_bounds_min[2]) + "  " +
-                      str(box_bounds_max[2]) + " zlo zhi\n"
-                      "}\n\n\n")
-
         outfile.write("\n# ---------------- simulation box -----------------\n"
             
                       "# Now define a box big enough to hold a polymer with this (initial) shape\n"
-                      ")\n\n")
+                      "\n\n"
+                      "write_once(\"Data Boundary\") {\n"
+                      + str(self.box_bounds_min[0]) + "  " +
+                      str(self.box_bounds_max[0]) + " xlo xhi\n"
+                      + str(self.box_bounds_min[1]) + "  " +
+                      str(self.box_bounds_max[1]) + " ylo yhi\n"
+                      + str(self.box_bounds_min[2]) + "  " +
+                      str(self.box_bounds_max[2]) + " zlo zhi\n"
+                      "}\n\n\n")
 
 
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.0.4'
-        g_date_str = '2016-12-21'
+        g_version_str = '0.0.5'
+        g_date_str = '2017-4-14'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
         infile = sys.stdin
         outfile = sys.stdout
         genpoly = GenPoly()
-        gennoly.ParseArgs(argv)
+        genpoly.ParseArgs(argv)
         # Any remain arguments?
         if len(argv) > 1:
             raise InputError('Error(' + g_program_name + '):\n' +

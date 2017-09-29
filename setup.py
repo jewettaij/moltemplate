@@ -4,9 +4,8 @@ setup(
 
   name='moltemplate',
 
-  version='2.1.2',
-
-  packages=['moltemplate', 'moltemplate/nbody_alt_symmetry'],
+  packages=['moltemplate',
+            'moltemplate.nbody_alt_symmetry'],
 
   description='A general cross-platform text-based molecule builder for LAMMPS',
 
@@ -16,9 +15,13 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/tarball/v2.1.2',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.4.3.zip',
 
-  keywords=['simulation', 'LAMMPS', 'molecule', 'builder', 'ESPResSo'],
+  version='2.4.3',
+
+  keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
+            'ESPResSo'],
+            
 
   # BSD 3-Clause License:
   # - http://choosealicense.com/licenses/bsd-3-clause
@@ -26,12 +29,20 @@ setup(
 
   license='BSD',
 
-  classifiers=['License :: OSI Approved :: BSD License',
+  classifiers=['Environment :: Console',
+               'License :: OSI Approved :: BSD License',
                'Operating System :: MacOS :: MacOS X',
-               'Operating System :: POSIX :: Linux'
-  ],
+               'Operating System :: POSIX :: Linux',
+               'Operating System :: Microsoft :: Windows',
+               'Programming Language :: Python',
+               'Programming Language :: Unix Shell',
+               'Topic :: Scientific/Engineering :: Chemistry',
+               'Topic :: Scientific/Engineering :: Physics',
+               'Topic :: Multimedia :: Graphics :: 3D Modeling',
+               'Intended Audience :: Science/Research'],
 
   scripts=['moltemplate/scripts/moltemplate.sh',
+           'moltemplate/scripts/cleanup_moltemplate.sh',
            'moltemplate/scripts/emoltemplate.sh'],
 
   entry_points={
@@ -54,16 +65,16 @@ setup(
         'nbody_reorder_atoms.py=moltemplate.nbody_reorder_atoms:main',
         'pdbsort.py=moltemplate.pdbsort:main',
         'postprocess_input_script.py=moltemplate.postprocess_input_script:main',
+        'postprocess_coeffs.py=moltemplate.postprocess_coeffs:main',
         'raw2data.py=moltemplate.raw2data:main',
         'remove_duplicate_atoms.py=moltemplate.remove_duplicate_atoms:main',
         'remove_duplicates_nbody.py=moltemplate.remove_duplicates_nbody:main',
-        'renumber_DATA_first_column.py=moltemplate.renumber_DATA_first_column:main',
-        'tinkerparm2lt.py=moltemplate.tinkerparm2lt.py']},
+        'renumber_DATA_first_column.py=moltemplate.renumber_DATA_first_column:main']},
 
   package_data={'moltemplate': ['force_fields/*.lt']},
-  # install_requires=['numpy', 'scipy', 'biopython'],
+  # install_requires=['numpy', 'scipy'],
   setup_requires=['pytest-runner'],
-  tests_require=['pytest', 'pandas'],
+  tests_require=['pytest'],
   zip_safe=True,
   include_package_data=True
 )

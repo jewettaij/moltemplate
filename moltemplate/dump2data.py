@@ -22,8 +22,8 @@ A reference DATA file is needed (argument).
 # All rights reserved.
 
 g_program_name = 'dump2data.py'
-g_date_str = '2016-12-21'
-g_version_str = '0.52.0'
+g_date_str = '2017-9-12'
+g_version_str = '0.54.1'
 
 import sys
 from collections import defaultdict
@@ -86,19 +86,29 @@ class DataSettings(AtomStyleSettings):
 
 
 # Atom Styles in LAMMPS as of 2011-7-29
-g_style_map = {'angle':    ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
-               'atomic':   ['atom-ID', 'atom-type', 'x', 'y', 'z'],
-               'bond':     ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
-               'charge':   ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z'],
-               'colloid':  ['atom-ID', 'atom-type', 'x', 'y', 'z'],
-               'dipole':   ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z', 'mux', 'muy', 'muz'],
-               'electron': ['atom-ID', 'atom-type', 'q', 'spin', 'eradius', 'x', 'y', 'z'],
+g_style_map = {'angle':     ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
+               'atomic':    ['atom-ID', 'atom-type', 'x', 'y', 'z'],
+               'body':      ['atom-ID', 'atom-type', 'bodyflag', 'mass', 'x', 'y', 'z'],
+               'bond':      ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
+               'charge':    ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z'],
+               'dipole':    ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z', 'mux', 'muy', 'muz'],
+               'dpd':       ['atom-ID', 'atom-type', 'theta', 'x', 'y', 'z'],
+               'electron':  ['atom-ID', 'atom-type', 'q', 'spin', 'eradius', 'x', 'y', 'z'],
                'ellipsoid': ['atom-ID', 'atom-type', 'x', 'y', 'z', 'quatw', 'quati', 'quatj', 'quatk'],
-               'full':     ['atom-ID', 'molecule-ID', 'atom-type', 'q', 'x', 'y', 'z'],
-               'granular': ['atom-ID', 'atom-type', 'diameter', 'density', 'x', 'y', 'z'],
+               'full':      ['atom-ID', 'molecule-ID', 'atom-type', 'q', 'x', 'y', 'z'],
+               'line':      ['atom-ID', 'molecule-ID', 'atom-type', 'lineflag', 'density', 'x', 'y', 'z'],
+               'meso':      ['atom-ID', 'atom-type', 'rho', 'e', 'cv', 'x', 'y', 'z'],
                'molecular': ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z'],
-               'peri':     ['atom-ID', 'atom-type', 'volume', 'density', 'x', 'y', 'z'],
-               'hybrid':   ['atom-ID', 'atom-type', 'x', 'y', 'z']}
+               'peri':      ['atom-ID', 'atom-type', 'volume', 'density', 'x', 'y', 'z'],
+               'smd':       ['atom-ID', 'atom-type', 'molecule-ID' 'volume', 'mass', 'kernel-radius', 'contact-radius', 'x', 'y', 'z'],
+               'sphere':    ['atom-ID', 'atom-type', 'diameter', 'density', 'x', 'y', 'z'],
+               'template':  ['atom-ID', 'molecule-ID', 'template-index', 'template-atom', 'atom-type', 'x', 'y', 'z'],
+               'tri':       ['atom-ID', 'molecule-ID', 'atom-type', 'triangleflag', 'density', 'x', 'y', 'z'],
+               'wavepacket': ['atom-ID', 'atom-type', 'charge', 'spin', 'eradius', 'etag', 'cs_re', 'cs_im', 'x', 'y', 'z'],
+               'hybrid':    ['atom-ID', 'atom-type', 'x', 'y', 'z'],
+               # The following styles were removed from LAMMPS as of 2012-3
+               'colloid':   ['atom-ID', 'atom-type', 'x', 'y', 'z'],
+               'granular':  ['atom-ID', 'atom-type', 'diameter', 'density', 'x', 'y', 'z']}
 
 
 def AtomStyle2ColNames(atom_style_string):
@@ -111,6 +121,7 @@ def AtomStyle2ColNames(atom_style_string):
     atom_style = atom_style_args[0]
 
     hybrid_args = atom_style_args[1:]
+
     if (atom_style not in g_style_map):
         if (len(atom_style_args) >= 2):
             # If the atom_style_string includes at least 2 words, then we
@@ -573,6 +584,7 @@ def WriteFrameToData(out_file,
                      descr_str,
                      misc_settings,
                      data_settings,
+                     dump_column_names,
                      natoms,
                      coords,
                      coords_ixiyiz,
@@ -666,29 +678,33 @@ def WriteFrameToData(out_file,
                         # In principle, depending on the atom_style,
                         # there could be multiple vectors per atom.
                         for I in range(0, len(data_settings.ii_vects)):
-                            vxvyvz = vects[atomid][I]
                             i_vx = data_settings.ii_vects[I][0]
                             i_vy = data_settings.ii_vects[I][1]
                             i_vz = data_settings.ii_vects[I][2]
-                            if ((i_vx >= len(tokens)) or
+                            if atomid in vects:
+                                vxvyvz = vects[atomid][I]
+                                assert((type(vxvyvz) is tuple) and
+                                       (len(vxvyvz) == 3))
+                                if ((i_vx >= len(tokens)) or
                                     (i_vy >= len(tokens)) or
                                     (i_vz >= len(tokens))):
-                                raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
-                                                 '       Specify the atom_style using -atomstyle style.\n')
-                            if ((vxvyvz == None) or
-                                    (type(vxvyvz) is not tuple)):
-                                assert(data_settings.column_names[
-                                       i_vx] not in dump_column_names)
-                                raise InputError('Error(dump2data): You have a vector coordinate in your DATA file named \"' + data_settings.column_names[i_vx] + '\"\n'
-                                                 '       However there are no columns with this name in your DUMP file\n'
-                                                 '       (or the column was not in the expected place).\n'
-                                                 '       Hence, the atom styles in the dump and data files do not match.')
+                                    raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
+                                                     '       Specify the atom_style using -atomstyle style.\n')
 
-                            # Replace the vector components with numbers
-                            # from the dump file
-                            tokens[i_vx] = vxvyvz[0]
-                            tokens[i_vy] = vxvyvz[1]
-                            tokens[i_vz] = vxvyvz[2]
+                                # Replace the vector components with numbers
+                                # from the dump file
+                                tokens[i_vx] = vxvyvz[0]
+                                tokens[i_vy] = vxvyvz[1]
+                                tokens[i_vz] = vxvyvz[2]
+
+                            else:
+                                if (dump_column_names and
+                                    (data_settings.column_names[
+                                        i_vx] not in dump_column_names)):
+                                    raise InputError('Error(dump2data): You have a vector coordinate in your DATA file named \"' + data_settings.column_names[i_vx] + '\"\n'
+                                                     '       However there are no columns with this name in your DUMP file\n'
+                                                     '       (or the column was not in the expected place).\n'
+                                                     '       Hence, the atom styles in the dump and data files do not match.')
 
                         # Now loop over the coordinates of each atom.
                         # for I in range(0,len(data_settings.ii_coords)):
@@ -706,8 +722,8 @@ def WriteFrameToData(out_file,
                         i_y = data_settings.i_coords[1]
                         i_z = data_settings.i_coords[2]
                         if ((i_x >= len(tokens)) or
-                                (i_y >= len(tokens)) or
-                                (i_z >= len(tokens))):
+                            (i_y >= len(tokens)) or
+                            (i_z >= len(tokens))):
                             raise InputError('Error(dump2data): Atom style incompatible with data file.\n'
                                              '       Specify the atom_style using -atomstyle style.\n')
                         # Replace the coordinates with coordinates from
@@ -817,8 +833,7 @@ def main():
         finished_reading_frame = False
         read_last_frame = False
 
-        #in_coord_file = open('traj_nvt.lammpstrj','r')
-        #in_coord_file = open('deleteme.lammpstrj','r')
+        #in_coord_file = open('tmp_atom_coords.dat','r')
         in_coord_file = sys.stdin
 
         while True:
@@ -1071,7 +1086,7 @@ def main():
 
                     frame_velocities[atomid] = [vx, vy, vz]
 
-                    # Ugly detail:
+                    # NOTE:
                     # There can be multiple "vects" associated with each atom
                     # (for example, dipole moments, ellipsoid directions, etc..)
 
@@ -1260,6 +1275,7 @@ def main():
                                          descr_str,
                                          misc_settings,
                                          data_settings,
+                                         dump_column_names,
                                          frame_natoms,
                                          frame_coords,
                                          frame_coords_ixiyiz,

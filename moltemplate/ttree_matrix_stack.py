@@ -4,14 +4,22 @@
 # Copyright (c) 2012, Regents of the University of California
 # All rights reserved.
 
+import random, math
 from collections import deque
 from array import array
+
+#try:
+#    from StringIO import StringIO
+#except ImportError:
+#    from io import StringIO
 
 try:
     from .ttree_lex import InputError, ErrorLeader, OSrcLoc
 except (SystemError, ValueError):
     # not installed as a package
     from ttree_lex import InputError, ErrorLeader, OSrcLoc
+
+
 
 def MultMat(dest, A, B):
     """ Multiply two matrices together. Store result in "dest".
@@ -269,6 +277,75 @@ class AffineStack(object):
             #    AffineCompose(Mtmp, M, Mdest)
             #    CopyMat(Mdest, Mtmp)
 
+            elif transform_str.find('move_rand(') == 0:
+                i_paren_close = transform_str.find(')')
+                if i_paren_close == -1:
+                    i_paren_close = len(transform_str)
+                args = transform_str[10:i_paren_close].split(',')
+
+                seed = 1
+                if len(args) in (2,4,7):
+                    seed = int(args[0])
+                random.seed(seed)
+                if len(args) == 1:
+                    sigma = float(args[1])
+                    x = random.gauss(0.0, sigma)
+                    y = random.gauss(0.0, sigma)
+                    z = random.gauss(0.0, sigma)
+                elif len(args) == 2:
+                    # seed = int(args[0])  this was already handled above
+                    sigma = float(args[1])
+                    x = random.gauss(0.0, sigma)
+                    y = random.gauss(0.0, sigma)
+                    z = random.gauss(0.0, sigma)
+                elif len(args) == 3:
+                    x = random.gauss(0.0, float(args[0]))
+                    y = random.gauss(0.0, float(args[1]))
+                    z = random.gauss(0.0, float(args[2]))
+                elif len(args) == 4:
+                    # seed = int(args[0])   this was already handled above
+                    x = random.gauss(0.0, float(args[1]))
+                    y = random.gauss(0.0, float(args[2]))
+                    z = random.gauss(0.0, float(args[3]))
+                elif len(args) == 6:
+                    x_min = float(args[0])
+                    x_max = float(args[1])
+                    y_min = float(args[2])
+                    y_max = float(args[3])
+                    z_min = float(args[4])
+                    z_max = float(args[5])
+                    x = x_min + (x_max - x_min)*(random.random()-0.5)
+                    y = y_min + (y_max - y_min)*(random.random()-0.5)
+                    z = z_min + (z_max - z_min)*(random.random()-0.5)
+                        
+                elif len(args) == 7:
+                    # seed = int(args[0])  this was already handled above
+                    x_min = float(args[1])
+                    x_max = float(args[2])
+                    y_min = float(args[3])
+                    y_max = float(args[4])
+                    z_min = float(args[5])
+                    z_max = float(args[6])
+                    x = x_min + (x_max - x_min)*(random.random()-0.5)
+                    y = y_min + (y_max - y_min)*(random.random()-0.5)
+                    z = z_min + (z_max - z_min)*(random.random()-0.5)
+                else:
+                    raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+                                     '       Invalid command: \"' + transform_str + '\"\n'
+                                     '       This command requires either 1, 2, 3, 4, 6 or 7 numerical arguments.  Either:\n'
+                                     '           move_rand(gauss_sigma) or\n'
+                                     '           move_rand(seed, gauss_sigma) or\n'
+                                     '           move_rand(gauss_sigma_x, gauss_sigma_y, gauss_sigma_z) or\n'
+                                     '           move_rand(seed, gauss_sigma_x, gauss_sigma_y, gauss_sigma_z) or\n'
+                                     '           move_rand(x_min, x_max, y_min, y_max, z_min, z_max) or\n'
+                                     '           move_rand(seed, x_min, x_max, y_min, y_max, z_min, z_max)\n')
+
+                M = [[1.0, 0.0, 0.0, x],
+                     [0.0, 1.0, 0.0, y],
+                     [0.0, 0.0, 1.0, z]]
+                AffineCompose(Mtmp, M, Mdest)
+                CopyMat(Mdest, Mtmp)
+
             elif transform_str.find('rot(') == 0:
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
@@ -342,6 +419,65 @@ class AffineStack(object):
             # #                   [0.0, 0.0, 1.0, xcm[2]]]
             # #     AffineCompose(Mtmp, moveCmBack, Mdest)
             # #     CopyMat(Mdest, Mtmp)
+
+            elif transform_str.find('rot_rand(') == 0:
+                i_paren_close = transform_str.find(')')
+                if i_paren_close == -1:
+                    i_paren_close = len(transform_str)
+                args = transform_str[9:i_paren_close].split(',')
+
+                seed = 1
+                if len(args) in (2,6):
+                    seed = int(args[0])
+                random.seed(seed)
+                raxis = [0.0, 0.0, 0.0]
+                if len(args) < 5:
+                    # choose a random rotation axis
+                    raxis_len = 0.0
+                    while (not ((0.01<raxis_len) and (raxis_len <= 1.0))):
+                        raxis = [-1+2.0*(random.random()-0.5) for d in range(0,3)]
+                        raxis_len = math.sqrt(raxis[0]**2 + raxis[1]**2 + raxis[2]**2)
+                    for d in range(0,3):
+                        raxis[d] /= raxis_len
+                if len(args) == 0:
+                    angle_min = angle_max = 2*math.pi
+                elif len(args) == 1:
+                    angle_min = 0.0
+                    angle_max = float(args[0]) * math.pi / 180.0,
+                elif len(args) == 5:
+                    angle_min = float(args[0])
+                    angle_max = float(args[1])
+                    raxis[0]  = float(args[2])
+                    raxis[1]  = float(args[3])
+                    raxis[2]  = float(args[4])
+                elif len(args) == 6:
+                    seed      = int(args[0])
+                    angle_min = float(args[1])
+                    angle_max = float(args[2])
+                    raxis[0]  = float(args[3])
+                    raxis[1]  = float(args[4])
+                    raxis[2]  = float(args[5])
+                else:
+                    raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+                                     '       Invalid command: \"' + transform_str + '\"\n'
+                                     '       This command requires either 0, 1, 2, 5 or 6 numerical arguments. Either:\n'
+                                     '           rot_rand()  or \n'
+                                     '           rot_rand(delta_angle)  or \n'
+                                     '           rot_rand(seed, delta_angle)  or \n'
+                                     '           rot_rand(angle_min, angle_max, axisX, axisY, axiZ) or\n'
+                                     '           rot_rand(seed, angle_min, angle_max, axisX, axisY, axiZ)')
+
+                angle = angle_min + (angle_max - angle_min)*(random.random() - 0.5)
+
+                M[0][3] = 0.0  # RotMatAXYZ() only modifies 3x3 submatrix of M
+                M[1][3] = 0.0  # The remaining final column must be zeroed by hand
+                M[2][3] = 0.0
+                RotMatAXYZ(M,
+                           angle,
+                           raxis[0], raxis[1], raxis[2])
+                AffineCompose(Mtmp, M, Mdest)
+                CopyMat(Mdest, Mtmp)
+
 
             elif transform_str.find('rotvv(') == 0:
                 i_paren_close = transform_str.find(')')
@@ -456,6 +592,34 @@ class AffineStack(object):
             # #     AffineCompose(Mtmp, moveCmBack, Mdest)
             # #     CopyMat(Mdest, Mtmp)
 
+            #elif transform_str.find('read_xyz(') == 0:
+            #    i_paren_close = transform_str.find(')')
+            #    if i_paren_close == -1:
+            #        i_paren_close = len(transform_str)
+            #    args = transform_str[4:i_paren_close].split(',')
+            #    if (len(args) != 1):
+            #        raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+            #                         '       Invalid command: \"' + transform_str + '\"\n'
+            #                         '       This command expects the name of a file in XYZ format.\n')
+            #    file_name = args[0]
+            #    if (not file_name in coord_files):
+            #        f = open(file_name, 'r')
+            #        f.close()
+            #        f.readline() # skip the first 2 lines
+            #        f.readline() # of an .xyz file (header)
+            #        for line in f:
+            #            tokens = line.split()
+            #            if (len(tokens) != 3) and (len(tokens) != 0):
+            #                raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+            #                                 '       Invalid command: \"' + transform_str + '\"\n'
+            #                                 '       This command expects the name of a file in XYZ format.\n')
+            #            crds.append((float(tokens[0]),
+            #                         float(tokens[1]),
+            #                         float(tokens[2]))
+            #        self.coord_files[file_name] = crds
+            #    else:
+            #        crds = self.coord_files[file_name]
+
             else:
                 raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
                                  '       Unknown transformation command: \"' + transform_str + '\"\n')
@@ -472,6 +636,7 @@ class MultiAffineStack(object):
         self.stacks = None
         self.M = None
         self.error_if_substack_empty = False
+        self.coord_files = {}
         self.Clear()
 
     def Clear(self):
@@ -481,6 +646,7 @@ class MultiAffineStack(object):
         self.stacks = deque([])
         self.M = self.tot_stack.M
         self.error_if_substack_empty = False
+        self.coord_files = {}
 
     def _Update(self):
         self.tot_stack.Clear()
@@ -608,9 +774,6 @@ class MultiAffineStack(object):
 
     def PopLeft(self, which_stack=None):
         self.Pop(which_stack, right_not_left=True)
-
-
-import math
 
 
 def ScaleMat(dest, scale):
