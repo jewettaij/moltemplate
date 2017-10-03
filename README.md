@@ -3,7 +3,8 @@ Moltemplate
 
 ##  Description
 
-Moltemplate is a cross-platform text-based molecule builder for LAMMPS.
+Moltemplate is a general cross-platform text-based molecule builder for LAMMPS
+and ESPResSo.  Moltemplate was intended for building custom coarse-grained molecular models, but it can be used to prepare realistic all-atom simulations as well.  It currently supports the OPLS, COMPASS, AMBER(GAFF), MARTINI, SDK, and TraPPE(1998) force fields.
 
 ## Typical usage
 
