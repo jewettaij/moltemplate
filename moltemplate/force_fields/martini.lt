@@ -15,8 +15,11 @@
 #
 # Adapted from EMC by Pieter J. in 't Veld
 # Originally written as, FFNAME:MARTINI STYLE:COARSE VERSION:V2.0 on Feb 2014
+# "emcprm2lt.py" was written by David Stelter.
+
 
 MARTINI {
+
   write_once("Data Masses") {
     @atom:BP4 72.000000 # BP4
     @atom:C1 72.000000 # C1
@@ -2219,4 +2222,6 @@ MARTINI {
     pair_style hybrid lj/gromacs/coul/gromacs 9.000000 12.000000
     special_bonds lj/coul 0.0 0.0 0.0
   } # end init
+
 } # MARTINI
+

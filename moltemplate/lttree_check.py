@@ -93,8 +93,8 @@ if sys.version < '2.6':
 
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_check.py'
-g_version_str = '0.79.0'
-g_date_str = '2017-9-10'
+g_version_str = '0.80.1'
+g_date_str = '2017-10-01'
 
 
 # g_no_check_msg = \
@@ -1954,11 +1954,14 @@ def LttreeCheckParseArgs(argv, settings, main=False, show_warnings=True):
         if len(argv) == 1:
             raise InputError('Error: This program requires at least one argument\n'
                              '       the name of a file containing ttree template commands\n')
-        settings.allow_wildcards = False
+        settings.allow_wildcards = True
         i = 1
         while i < len(argv):
             if argv[i].lower() in ('-allow-wildcards', '-allowwildcards'):
                 settings.allow_wildcards = True
+                del argv[i:i+1]
+            elif argv[i].lower() in ('-forbid-wildcards', '-forbidwildcards'):
+                settings.allow_wildcards = False
                 del argv[i:i+1]
             else:
                 i += 1
@@ -2120,6 +2123,9 @@ def main():
                     has_wildcard = HasWildcard(bond_binding.full_name)
                     if has_wildcard:
                         bond_types_have_wildcards = True
+            for nd, bond_binding in bond_bindings.items():
+                if not nd.IsDeleted():
+                    #has_wildcard = HasWildcard(bond_binding.full_name)
                     if ((not (bond_binding in bond_coeffs_defined)) and
                         #(not has_wildcard) and
                         (not bond_types_have_wildcards) and
@@ -2158,6 +2164,9 @@ def main():
                     has_wildcard = HasWildcard(angle_binding.full_name)
                     if has_wildcard:
                         angle_types_have_wildcards = True
+            for nd, angle_binding in angle_bindings.items():
+                if not nd.IsDeleted():
+                    #has_wildcard = HasWildcard(angle_binding.full_name)
                     if ((not (angle_binding in angle_coeffs_defined)) and
                         #(not has_wildcard)) and
                         (not angle_types_have_wildcards) and
@@ -2198,6 +2207,9 @@ def main():
                     has_wildcard = HasWildcard(dihedral_binding.full_name)
                     if has_wildcard:
                         dihedral_types_have_wildcards = True
+            for nd, dihedral_binding in dihedral_bindings.items():
+                if not nd.IsDeleted():
+                    #has_wildcard = HasWildcard(dihedral_binding.full_name)
                     if ((not (dihedral_binding in dihedral_coeffs_defined)) and
                         #(not has_wildcard) and
                         (not dihedral_types_have_wildcards) and
@@ -2237,6 +2249,9 @@ def main():
                     has_wildcard = HasWildcard(improper_binding.full_name)
                     if has_wildcard:
                         improper_types_have_wildcards = True
+            for nd, improper_binding in improper_bindings.items():
+                if not nd.IsDeleted():
+                    #has_wildcard = HasWildcard(improper_binding.full_name)
                     if ((not (improper_binding in improper_coeffs_defined)) and
                         #(not has_wildcard) and
                         (not improper_types_have_wildcards) and
@@ -2276,6 +2291,9 @@ def main():
                     has_wildcard = HasWildcard(atom_binding.full_name)
                     if has_wildcard:
                         atom_types_have_wildcards = True
+            for nd, atom_binding in atom_bindings.items():
+                if not nd.IsDeleted():
+                    #has_wildcard = HasWildcard(atom_binding.full_name)
                     if ((not ((atom_binding, atom_binding)
                               in
                               pair_coeffs_defined)) and

@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.4.3"
-G_DATE="2017-9-14"
+G_VERSION="2.5.0"
+G_DATE="2017-10-03"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -223,6 +223,7 @@ $data_bonds_by_type*
 ${data_angles_by_type}*
 ${data_dihedrals_by_type}*
 ${data_impropers_by_type}*
+$data_charge_by_bond
 $in_init
 $in_settings
 EOF
@@ -396,6 +397,13 @@ while [ "$i" -lt "$ARGC" ]; do
         unset LTTREE_CHECK_COMMAND
         unset LTTREE_POSTPROCESS_COMMAND
     elif [ "$A" = "-allow-wildcards" ]; then
+        # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
+	if [ -z "$LTTREE_CHECK_ARGS" ]; then
+            LTTREE_CHECK_ARGS="\"$A\""
+        else
+            LTTREE_CHECK_ARGS="${LTTREE_CHECK_ARGS} \"$A\""
+        fi
+    elif [ "$A" = "-forbid-wildcards" ]; then
         # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
 	if [ -z "$LTTREE_CHECK_ARGS" ]; then
             LTTREE_CHECK_ARGS="\"$A\""
@@ -932,7 +940,8 @@ fi
 
 
 
-
+FILE_angles_by_type1=""
+FILE_angles_by_type2=""
 #for FILE in "$data_angles_by_type"*.template; do
 IFS_BACKUP="$IFS"
 IFS=$(echo -en "\n\b")
@@ -969,6 +978,9 @@ for FILE in `ls -v "$data_angles_by_type"*.template`; do
         #     exit 4
         # fi
     fi
+
+    FILE_angles_by_type2="$FILE_angles_by_type1"
+    FILE_angles_by_type1="$FILE"
 
     #-- Generate a file containing the list of interactions on separate lines --
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_by_type.py" \
@@ -1073,7 +1085,7 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template`; do
         # fi
     fi
 
-    FILE_dihedrals_by_type2="$FILE_impropers_by_type1"
+    FILE_dihedrals_by_type2="$FILE_dihedrals_by_type1"
     FILE_dihedrals_by_type1="$FILE"
 
     #-- Generate a file containing the list of interactions on separate lines --
@@ -1365,7 +1377,32 @@ if [ -s "${data_angles}" ]; then
         ERR_INTERNAL
     fi
     mv -f "${data_angles}.tmp" "${data_angles}"
+
+    if  [ ! -z $FILE_angles_by_type2 ]; then
+	MSG_MULTIPLE_ANGLE_RULES=$(cat <<EOF
+#############################################################################
+WARNING:
+  It appears as though multiple conflicting rules were used to generate
+ANGLE interactions.  (This can occur when combining molecules built with
+different force-field rules).  In your case, you are using rules defined here:
+   "$FILE_angles_by_type2"
+   "$FILE_angles_by_type1"
+   (Files ending in .py are located here:
+    $PY_SCR_DIR/nbody_alt_symmetry/)
+If the molecules built using these two different force-field settings are not
+connected, AND if you do NOT override force-field angles with explicitly
+defined angles, then you can probably ignore this warning message.  Otherwise
+please check the list of angle interactions to make sure they are correct!
+(It might help to build a much smaller system using the same molecule types.)
+#############################################################################
+
+EOF
+)
+	echo "$MSG_MULTIPLE_ANGLE_RULES" >&2
+    fi
 fi
+
+
 
 
 if [ -s "${data_dihedrals}" ]; then
@@ -1485,7 +1522,6 @@ EOF
     fi
 
 fi
-
 
 
 
@@ -1745,6 +1781,9 @@ fi
 echo "" >> "$OUT_FILE_DATA"
 
 
+
+
+
 if [ -s "$data_masses" ]; then
     echo "Masses" >> "$OUT_FILE_DATA"
     echo "" >> "$OUT_FILE_DATA"
@@ -1975,7 +2014,6 @@ fi
 
 
 
-
 rm -f $OUT_FILE_INPUT_SCRIPT
 
 if [ -s "$in_init" ]; then
@@ -2053,6 +2091,7 @@ fi
 
 
 
+
 # ############## CLEAN UP ################
 
 # A lot of files have been created along the way.
@@ -2084,6 +2123,7 @@ for file in $MOLTEMPLATE_TEMP_FILES; do
     fi
 done
 IFS=$OIFS
+
 
 
 

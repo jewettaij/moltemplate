@@ -37,8 +37,8 @@ except (SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.53.1'
-g_date_str = '2017-6-08'
+g_version_str = '0.54.0'
+g_date_str = '2017-10-03'
 
 def Intify(s):
     if s.isdigit():
@@ -2885,9 +2885,9 @@ def main():
                 for i in range(atomids_lo, atomids_hi+1):
                     if i in needed_atomids:
                         l_new_set_commands.append((' ' * indent) +
-                                                  tokens[0:2].join(' ')+' '+
+                                                  ' '.join(tokens[0:2])+' '+
                                                   str(i) + ' ' +
-                                                  tokens[3:].join(' '))
+                                                  ' '.join(tokens[3:]))
             elif tokens[1] == 'mol':
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
@@ -2903,9 +2903,9 @@ def main():
                         molids_hi = min(int(pattern[1]), max_needed_molid)
                 for i in range(molids_lo, molids_hi+1):
                     if i in needed_molids:
-                        l_new_set_commands.append(tokens[0:2].join(' ')+' '+
+                        l_new_set_commands.append(' '.join(tokens[0:2])+' '+
                                                   str(i) + ' ' +
-                                                  tokens[3:].join(' '))
+                                                  ' '.join(tokens[3:]))
             elif tokens[0] == 'group':
                 group_name = tokens[2]
                 if group_name in groups_needed:

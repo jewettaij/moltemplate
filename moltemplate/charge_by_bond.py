@@ -6,6 +6,10 @@
 # Copyright (c) 2011, Regents of the University of California
 # All rights reserved.
 
+g_program_name = __file__.split('/')[-1]   # = 'charge_by_bond.py'
+g_date_str = '2017-10-03'
+g_version_str = '0.14.0'
+
 
 import sys
 import re
@@ -23,6 +27,7 @@ except (SystemError, ValueError):
 
 def LookupChargePairs(chargebyatomid,
                       # bond_ids,
+                      # bond_types,
                       # bond_pairs,
                       lines_atoms,
                       lines_bonds,
@@ -137,7 +142,7 @@ def LookupChargePairs(chargebyatomid,
     #    else:
     #        raise(ttree_lex.InputError('Incorrect number of columns on line '+str(ie+1)+' of \"'+section_name+'\" section.'))
 
-    assert(len(bond_types) == 0)
+    #assert(len(bond_types) == 0)
     typepattern_to_chargepairs = []
     warning_unassigned_chargepairs = None
 
@@ -191,18 +196,20 @@ def LookupChargePairs(chargebyatomid,
         atomtype1 = atomids2types[atomid1]
         atomtype2 = atomids2types[atomid2]
 
+        found = False
         for typepattern, chargepair in typepattern_to_chargepairs:
             # use string comparisons to check if atom types match the pattern
             if ttree_lex.MatchesAll((atomtype1, atomtype2), typepattern):
                 # ("MatchesAll()" defined in "ttree_lex.py")
                 chargebyatomid[atomid1] += chargepair[0]
                 chargebyatomid[atomid2] += chargepair[1]
+                found = True
             elif ttree_lex.MatchesAll((atomtype2, atomtype1), typepattern):
                 chargebyatomid[atomid1] += chargepair[1]
                 chargebyatomid[atomid2] += chargepair[0]
-            else:
-                if not warning_unassigned_chargepairs:
-                    warning_unassigned_chargepairs = (atomid1, atomid2)
+                found = True
+        if (not found) and (not warning_unassigned_chargepairs):
+            warning_unassigned_chargepairs = (atomid1, atomid2)
 
     if warning_unassigned_chargepairs:
         sys.stderr.write('---------------------------------------------------------------------------\n'
@@ -238,10 +245,6 @@ def main():
                            > list_of_atom_charges.in
 
     """
-
-    g_program_name = __file__.split('/')[-1]   # = 'charge_pairs_by_type.py'
-    g_date_str = '2016-12-22'
-    g_version_str = '0.13.0'
 
     #######  Main Code Below: #######
     sys.stderr.write(g_program_name + ' v' +
@@ -344,7 +347,7 @@ def main():
                                        (' '.join(problem_args)) + '\n\n'
                                        '       (The actual problem may be earlier in the argument list.)\n')
 
-        bond_types = []
+        #bond_types = []
         fatoms = open(fname_atoms, 'r')
         lines_bonds = []
         lines_bond_list = []
