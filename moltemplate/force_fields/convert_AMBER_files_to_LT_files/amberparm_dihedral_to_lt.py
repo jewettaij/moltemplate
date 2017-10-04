@@ -29,7 +29,9 @@ for i in range(0, len(lines_gaff)):
                 # ...I THINK (?).  (Very confusing.  See documentation below...)
     dn = float(tokens[2])
     n = int(float(tokens[3]))
-    comments='   # '+(' '.join(tokens[4:]))
+    comments=' '.join(tokens[4:])
+    if len(comments.strip()) > 0:
+        comments = '    # ' + comments
     in_dihedral_coeffs.append([dihedraltype, Kn, n, dn, comments])
     #print(Kn, n, dn)
 

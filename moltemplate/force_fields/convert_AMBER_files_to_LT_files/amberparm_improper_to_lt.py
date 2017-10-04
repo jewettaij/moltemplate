@@ -31,11 +31,13 @@ for i in range(0, len(lines_gaff)):
     dn = float(tokens[1])
     n = int(float(tokens[2]))
     comments=' '.join(tokens[3:])
+    if len(comments.strip()) > 0:
+        comments = '    # ' + comments
 
     if (dn < 0.001):
-        sys.stdout.write('    improper_coeff '+impropertype+' '+improper_style_name+' '+str(Kn)+' 1 '+str(n)+'   # '+comments+'\n')
+        sys.stdout.write('    improper_coeff '+impropertype+' '+improper_style_name+' '+str(Kn)+' 1 '+str(n)+comments+'\n')
     elif (179.999 < abs(dn) < 180.001):
-        sys.stdout.write('    improper_coeff '+impropertype+' '+improper_style_name+' '+str(Kn)+' -1 '+str(n)+'   # '+comments+'\n')
+        sys.stdout.write('    improper_coeff '+impropertype+' '+improper_style_name+' '+str(Kn)+' -1 '+str(n)+comments+'\n')
     else:
         sys.stderr.write('Error: Illegal bondImproper parameters:\n'
                          '       As of 2013-8-03, LAMMPS doens hot have an improper style\n'

@@ -21,7 +21,11 @@ for i in range(0, len(lines_gaff)):
     keq = tokens[0]
     req = tokens[1]
     comments=' '.join(tokens[2:])
-    sys.stdout.write('    bond_coeff '+bondtype+' '+bond_style_name+' '+keq+' '+req+'   # '+comments+'\n')
+    sys.stdout.write('    bond_coeff '+bondtype+' '+bond_style_name+' '+keq+' '+req)
+    if len(comments.strip()) > 0:
+        sys.stdout.write('   # '+comments)
+    sys.stdout.write('\n')
+
 
 sys.stdout.write('  } # (end of bond_coeffs)\n')
 sys.stdout.write('\n')

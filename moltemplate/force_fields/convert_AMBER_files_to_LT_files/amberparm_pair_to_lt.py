@@ -51,7 +51,11 @@ for i in range(0, len(lines_gaff)):
     sig=str(float(tokens[1])*2.0*pow(2.0, (-1.0/6.0)))
     eps=tokens[2]
     comments=' '.join(tokens[3:])
-    sys.stdout.write('    pair_coeff @atom:'+atype+' @atom:'+atype+' '+pair_style+' '+eps+' '+sig+'   # '+comments+'\n')
+    sys.stdout.write('    pair_coeff @atom:'+atype+' @atom:'+atype+' '+pair_style+' '+eps+' '+sig)
+    if len(comments.strip()) > 0:
+        sys.stdout.write('   # '+comments)
+    sys.stdout.write('\n')
+
 
 sys.stdout.write('  } # (end of pair_coeffs)\n')
 sys.stdout.write('\n')

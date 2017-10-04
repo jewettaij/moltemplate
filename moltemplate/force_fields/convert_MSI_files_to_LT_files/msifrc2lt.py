@@ -295,8 +295,8 @@ def IsAutoAtom(atom_name):
 
 
 def EncodeInteractionName(anames,
-                          is_auto = None):
-    if is_auto == None:
+                          is_auto = False):
+    if is_auto == False:
         is_auto = False
         # Is the line containing anames from an "_auto" section of 
         # the FRC file?  (I am trying to infer this from whether or 
@@ -3256,28 +3256,28 @@ def main():
                         
         for atype in pair2params:
             assert(atype in pair2style)
-            if IsAutoAtom(atype):
+            if include_auto_equivalences:
                 assert(atype in atom2auto_pair)
                 if include_auto_equivalences:
                     sys.stdout.write('    pair_coeff @atom:*,ap' + atom2auto_pair[atype] +
                                      ',aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic*' +
                                      ' @atom:*,ap' + atom2auto_pair[atype] +
-                                     ',aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic*' +
-                                     pair2style[atype] + " " +
+                                     ',aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic*  ' +
+                                     pair2style[atype] + ' ' +
                                      pair2params[atype] +
-                                     "  # (ver=" + pair2ver[atype] +
-                                     ", ref=" +pair2ref[atype] + ")\n")
+                                     '  # (ver=' + pair2ver[atype] +
+                                     ', ref=' +pair2ref[atype] + ')\n')
                 else:
                     continue
             else:
                 assert(atype in atom2equiv_pair)
                 sys.stdout.write('    pair_coeff ' +
-                                 "@atom:*,p" + atom2equiv_pair[atype] + ',b*,a*,d*,i* ' + 
-                                 "@atom:*,p" + atom2equiv_pair[atype] + ',b*,a*,d*,i* ' + 
-                                 pair2style[atype] + " " +
+                                 '@atom:*,p' + atom2equiv_pair[atype] + ',b*,a*,d*,i* ' + 
+                                 '@atom:*,p' + atom2equiv_pair[atype] + ',b*,a*,d*,i*  ' + 
+                                 pair2style[atype] + '  ' +
                                  pair2params[atype] +
-                                 "  # (ver=" + pair2ver[atype] +
-                                 ", ref=" +pair2ref[atype] + ")\n")
+                                 '  # (ver=' + pair2ver[atype] +
+                                 ', ref=' +pair2ref[atype] + ')\n')
         sys.stdout.write("  } #(end of pair_coeffs)\n\n\n\n")
         
 
@@ -3392,7 +3392,7 @@ def main():
                 if (IsAutoInteraction(bond_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    bond_coeff @bond:'+bond_name+' '+
+                sys.stdout.write('    bond_coeff @bond:'+bond_name+'  '+
                                  bond2style[bond_name] + ' ' +
                                  bond2params[bond_name] +
                                  "  # (ver=" + bond2ver[bond_name] +
@@ -3505,21 +3505,21 @@ def main():
                 if (IsAutoInteraction(angle_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    angle_coeff @angle:'+ang_name_abbr+' '+
+                sys.stdout.write('    angle_coeff @angle:'+ang_name_abbr+'  '+
                                  angle2style[angle_name] + ' ' +
                                  angle2params[angle_name] + 
                                  "  # (ver=" + angle2ver[angle_name] +
                                  ", ref=" + angle2ref[angle_name] + ")\n")
                 if angle_name in angle2class2_bb:
-                    sys.stdout.write('    angle_coeff @angle:'+ang_name_abbr+' '+
-                                     ' ' + angle2style[angle_name] + ' bb ' +
+                    sys.stdout.write('    angle_coeff @angle:'+ang_name_abbr+'  '+
+                                     angle2style[angle_name] + ' bb ' +
                                      angle2class2_bb[angle_name] +
                                      "  # (ver=" + angle2ver_bb[angle_name] +
                                      ", ref=" + angle2ref_bb[angle_name] + ")\n")
 
                     assert(angle_name in angle2class2_ba)
-                    sys.stdout.write('    angle_coeff @angle:'+ang_name_abbr+' '+
-                                     ' ' + angle2style[angle_name] + ' ba ' +
+                    sys.stdout.write('    angle_coeff @angle:'+ang_name_abbr+'  '+
+                                     angle2style[angle_name] + ' ba ' +
                                      angle2class2_ba[angle_name] +
                                      "  # (ver=" + angle2ver_ba[angle_name] +
                                      ", ref=" + angle2ref_ba[angle_name] + ")\n")
@@ -3670,41 +3670,41 @@ def main():
                 if (IsAutoInteraction(dihedral_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+' '+
+                sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+'  '+
                                  dihedral2style[dihedral_name] + ' ' +
                                  dihedral2params[dihedral_name] +
                                  "  # (ver=" + dihedral2ver[dihedral_name] +
                                  ", ref=" + dihedral2ref[dihedral_name] + ")\n")
                 if dihedral_name in dihedral2class2_mbt:
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+' '+
-                                     ' ' + dihedral2style[dihedral_name] + ' mbt ' +
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+'  '+
+                                     dihedral2style[dihedral_name] + ' mbt ' +
                                      dihedral2class2_mbt[dihedral_name] +
                                      "  # (ver=" + dihedral2ver_mbt[dihedral_name] +
                                      ", ref=" + dihedral2ref_mbt[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_ebt)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+' '+
-                                     ' ' + dihedral2style[dihedral_name] + ' ebt ' +
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+'  '+
+                                     dihedral2style[dihedral_name] + ' ebt ' +
                                      dihedral2class2_ebt[dihedral_name] +
                                      "  # (ver=" + dihedral2ver_ebt[dihedral_name] +
                                      ", ref=" + dihedral2ref_ebt[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_at)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+' '+
-                                     ' ' + dihedral2style[dihedral_name] + ' at ' +
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+'  '+
+                                     dihedral2style[dihedral_name] + ' at ' +
                                      dihedral2class2_at[dihedral_name] +
                                      "  # (ver=" + dihedral2ver_at[dihedral_name] +
                                      ", ref=" + dihedral2ref_at[dihedral_name] + ")\n")
 
                     assert(dihedral_name in dihedral2class2_aat)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+' '+
-                                     ' ' + dihedral2style[dihedral_name] + ' aat ' +
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+'  '+
+                                     dihedral2style[dihedral_name] + ' aat ' +
                                      dihedral2class2_aat[dihedral_name] +
                                      "  # (ver=" + dihedral2ver_aat[dihedral_name] +
                                      ", ref=" + dihedral2ref_aat[dihedral_name] + ")\n")
                     assert(dihedral_name in dihedral2class2_bb13)
-                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+' '+
-                                     ' ' + dihedral2style[dihedral_name] + ' bb13 ' +
+                    sys.stdout.write('    dihedral_coeff @dihedral:'+dih_name_abbr+'  '+
+                                     dihedral2style[dihedral_name] + ' bb13 ' +
                                      dihedral2class2_bb13[dihedral_name] +
                                      "  # (ver=" + dihedral2ver_bb13[dihedral_name] +
                                      ", ref=" + dihedral2ref_bb13[dihedral_name] + ")\n")
@@ -3849,14 +3849,14 @@ def main():
                 if (IsAutoInteraction(improper_name) and
                     (not include_auto_equivalences)):
                     continue
-                sys.stdout.write('    improper_coeff @improper:'+imp_name_abbr+' '+
-                                 improper2style[improper_name] + ' ' +
+                sys.stdout.write('    improper_coeff @improper:'+imp_name_abbr+'  '+
+                                 improper2style[improper_name] + '  ' +
                                  improper2params[improper_name] +
                                  "  # (ver=" + improper2ver[improper_name] +
                                  ", ref=" + improper2ref[improper_name] + ")\n")
                 if improper_name in improper2class2_aa:
-                    sys.stdout.write('    improper_coeff @improper:'+imp_name_abbr+' '+
-                                     ' ' + improper2style[improper_name] + ' aa ' +
+                    sys.stdout.write('    improper_coeff @improper:'+imp_name_abbr+'  '+
+                                     improper2style[improper_name] + ' aa ' +
                                      improper2class2_aa[improper_name] +
                                      "  # (ver=" + improper2ver_aa[improper_name] +
                                      ", ref=" + improper2ref[improper_name] + ")\n")
