@@ -282,15 +282,41 @@ def DetermineNumericPriority(is_auto,
         return -float(version)
 
 
+def IsAutoAtom(atom_name):
+    return atom_name[-1:] == '_'
+
+
+#def PossibleAutoAtom(atom_name):
+#    """ Auto-equivalences are alternate atom names used in "auto" 
+#    interactions. (These are low priority interactions used as a
+#    last resort when the interaction parameters could not be located
+#    by any other means).  Each atom is given an alternate name which
+#    is used in this kind of interaction.  These names typically end
+#    '_' followed by an optional integer.  Example "auto" atom names
+#    are 'c3m_' and 'c=_3'.  Unfortunately some ordinary atom names
+#    also end in an integer preceeded by a _ character. But they
+#    never end in a '_' character.  Here we check for both."""
+#
+#    i = atom_name.rfind('_')
+#    if (i == -1) or str.isdigit(atom_name[i:]):
+#        return True
+#    return False   
+
+
+
 def IsAutoInteraction(interaction_name):
     return interaction_name.find('auto') == 0
 
 
-def IsAutoAtom(atom_name):
-    if ((len(atom_name)>0) and (atom_name[-1] == '_')):
-        return True
-    else:
-        return False   
+#def IsAutoInteraction(interaction_name):
+#    anames = ExtractAtomNames(interaction_name)
+#    for a in anames:
+#        if IsAutoAtom(a):
+#            return True
+#        if not PossibleAutoAtom(a):
+#            return False
+#    return True
+
 
 
 
@@ -309,14 +335,16 @@ def EncodeInteractionName(anames,
         # (If an atom name is a wildcard '*' followed by 
         #  an integer, DetermineAutoPriority() will return 
         #  that integer.  Otherwise it will return '')
-        return 'auto' + str(priority)+','.join(anames)
+        #return str(priority)+'auto'+','.join(anames)
+        return 'auto'+','.join(anames)
+
     return ','.join(anames)
 
 
 
 def ExtractANames(interaction_name):
     if IsAutoInteraction(interaction_name):
-        return interaction_name[5:].split(',')
+        return interaction_name[4:].split(',')
     return interaction_name.split(',')
 
 
@@ -745,8 +773,8 @@ def main():
         ffname = 'BIOSYM_MSI_FORCE_FIELD'
         type_subset = set([])
         filename_in = ''
-        #file_in = sys.stdin
-        file_in = open('compass_published.frc','r')  #CONTINUEHERE
+        file_in = sys.stdin
+        #file_in = open('pcff_repaired.frc','r')  #CONTINUEHERE
         include_auto_equivalences = False
         #pair_style_name = 'lj/class2/coul/long'
         #pair_style_params = "10.0 10.0"
@@ -1889,6 +1917,7 @@ def main():
                 K = tokens[6]
                 n = tokens[7]
                 d = tokens[8]
+
                 w = '0.0'  #ignore: this is only used by the CHARMM force field
 
                 if (dihedral_styles_selected & set(['charmm','torsion_1'])):
@@ -2477,7 +2506,7 @@ def main():
                             angle2ver_ba_or[ang_name_orig] = angle2ver_or[ang_name_orig]
                             angle2ref_ba_or[ang_name_orig] = angle2ref_or[ang_name_orig]
                         angle2class2_ba[ang_name_full] = (Kba[0]+' '+Kba[1]+' '+r0s[0]+' '+r0s[1])
-                        angle2sym_ba = (r0s[0] == r0s[1])
+                        angle2sym_ba = (Kba[0] == Kba[1])
                         angle2priority_ba = \
                             DetermineNumericPriority(is_auto,
                                                      batoms[0] + batoms[1],
@@ -2889,7 +2918,7 @@ def main():
             assert(imp_name_orig in improper2params_or)
             #assert(imp_name_orig in improper2class2_aa_or)
 
-            is_auto = (dih_name_orig.find('auto_') == 0)
+            is_auto = (imp_name_orig.find('auto') == 0)
 
             atom_names = ExtractANames(imp_name_orig) 
 
@@ -2911,10 +2940,10 @@ def main():
             # Use different auto equivalence lookup tables for different
             # atoms in the interaction. (ie the "center" and "end" atoms)
                            
-            auto_improper2atom = [atom2auto_improperend,
-                                  atom2auto_impropercenter,
-                                  atom2auto_improperend,
-                                  atom2auto_improperend]
+            auto_improper2atom = [auto_improperend2atom,
+                                  auto_impropercenter2atom,
+                                  auto_improperend2atom,
+                                  auto_improperend2atom]
 
             for i in range(0, 4):
                 improper_atom_name = atom_names[i]
@@ -2927,10 +2956,10 @@ def main():
                     for a in equiv_improper2atom[improper_atom_name]:
                         atom_combos[i].add(a)
                 else:
-                    assert((improper_atom_name[-1] == '_') or (angle_atom_name[0] == '*'))
+                    assert((improper_atom_name[-1] == '_') or (improper_atom_name[0] == 'X'))
                     # assume "auto" equivalences when looking up atom types
                     sys.stderr.write('DEBUG: auto_improper2atom['+str(i)+']['+improper_atom_name+'] = \n'
-                                     '       '+str(equiv_improper2atom[i][improper_atom_name])+'\n')
+                                     '       '+str(auto_improper2atom[i][improper_atom_name])+'\n')
                     for a in auto_improper2atom[i][improper_atom_name]:
                         atom_combos[i].add(a)
 
@@ -3044,44 +3073,51 @@ def main():
             #*#    for a2, a2priority in atom_priorities[1].items():
             #*#        for a3, a3priority in atom_priorities[2].items():
             #*#            for a4, a3priority in atom_priorities[3].items():
-            for a1 in atom_combos[0]:
-                for a2 in atom_combos[1]:
-                    for a3 in atom_combos[2]:
-                        for a4 in atom_combos[3]:
-                            # Collect information from the different terms in a class2 improper:
-                            # http://lammps.sandia.gov/doc/improper_class2.html
+            for a1 in sorted(list(atom_combos[0])):
+                for a2 in sorted(list(atom_combos[1])):
+                    sys.stderr.write('DEBUG: improper '+imp_name_orig+' substitutions: '+a1+','+a2+',...\n')
+                    for a3 in sorted(list(atom_combos[2])):
+                        #(Note: sorting "atom_combos" makes it faster and easier
+                        # to follow the loop's progress. This nested loop can be very slow.)
+                        theta0s = ['0.0', '0.0', '0.0']
+                        aatoms = [['', '',''], ['', '',''], ['', '', '']]
+                        # Collect information from the different terms in a class2 improper:
+                        # http://lammps.sandia.gov/doc/improper_class2.html
 
-                            # Loop over the neighbors of the central atom in each improper
-                            # interaction and collect all the Mi and Ti parameters. Collect 
-                            # them in the order they appear in the formula for the Eaa
-                            # term as it appears in the documentation for improper_style class2:
-                            # 
-                            #    http://lammps.sandia.gov/doc/improper_class2.html
-                            #
-                            # Eaa = M1 (Tijk - T0)(Tkjl - T2) +   #common leaf node: k (index 2)
-                            #       M2 (Tijk - T0)(Tijl - T1) +   #common leaf node: i (index 0)
-                            #       M3 (Tijl - T1)(Tkjl - T2)     #common leaf node: l (index 3)
-                            # (I'm trying to match the variable names used in this web page
-                            #  I wish the author had chosen the M1,M2,M3, T1,T2,T3 order in more
-                            #  symmetric way, or at least in a way that makes more sense to me.)
+                        # Loop over the neighbors of the central atom in each improper
+                        # interaction and collect all the Mi and Ti parameters. Collect 
+                        # them in the order they appear in the formula for the Eaa
+                        # term as it appears in the documentation for improper_style class2:
+                        # 
+                        #    http://lammps.sandia.gov/doc/improper_class2.html
+                        #
+                        # Eaa = M1 (Tijk - T0)(Tkjl - T2) +   #common leaf node: k (index 2)
+                        #       M2 (Tijk - T0)(Tijl - T1) +   #common leaf node: i (index 0)
+                        #       M3 (Tijl - T1)(Tkjl - T2)     #common leaf node: l (index 3)
+                        # (I'm trying to match the variable names used in this web page
+                        #  I wish the author had chosen the M1,M2,M3, T1,T2,T3 order in more
+                        #  symmetric way, or at least in a way that makes more sense to me.)
 
-                            theta0s = ['0.0', '0.0', '0.0']
-                            aatoms = [['', '',''], ['', '',''], ['', '', '']]
-                            #angle_name_l = SortByEnds([atom_names[0], atom_names[1], atom_names[2]])
-                            #angle_name = EncodeInteractionName(angle_name_l, is_auto)
-                            #theta01 = angle2theta0_or[angle_name]
-                            angle_data = LookupRestAngle(a1, a2, a3,
-                                                         atom2equiv_angle,
-                                                         angle2theta0_or,
-                                                         [atom2auto_improperend,
-                                                          atom2auto_impropercenter,
-                                                          atom2auto_improperend],
-                                                         angle2theta0_auto_or)
-                            if angle_data == None:
-                                # Save time by only continuing if an angle was
+                        #angle_name_l = SortByEnds([atom_names[0], atom_names[1], atom_names[2]])
+                        #angle_name = EncodeInteractionName(angle_name_l, is_auto)
+                        #theta01 = angle2theta0_or[angle_name]
+                        angle_data = LookupRestAngle(a1, a2, a3,
+                                                     atom2equiv_angle,
+                                                     angle2theta0_or,
+                                                     [atom2auto_improperend,
+                                                      atom2auto_impropercenter,
+                                                      atom2auto_improperend],
+                                                     angle2theta0_auto_or)
+                        if angle_data == None:
+                            # Save time by only continuing if an angle was
                                 # found between a1, a2, a3
-                                continue
-                            theta0s[0], aatoms[0] = angle_data
+                            continue
+                        theta0s[0], aatoms[0] = angle_data
+
+
+                        for a4 in sorted(list(atom_combos[3])):
+                            theta0s[1] = theta0s[2] = '0.0'
+                            aatoms[1] = aatoms[2] = ['', '','']
 
                             #angle_name_l = SortByEnds(aatoms[0])
                             #angle_name = EncodeInteractionName(angle_name_l[0], is_auto)
@@ -3171,6 +3207,14 @@ def main():
                              improper2priority_or[imp_name_orig],
                              improper2priority_aa)
 
+                        if len(improper2params) > num_impropers:
+                            sys.stderr.write('DEBUG: improper['+imp_name_full+']:\n'
+                                             'theta0 = ('
+                                             +theta0s[0]+','+theta0s[1]+','+theta0s[2]+')\n')
+                            sys.stderr.write('DEBUG: num_impropers = len(improper2params) = '
+                                             +str(len(improper2params))+'\n')
+                            num_impropers = len(improper2params)
+
 
 
 
@@ -3256,7 +3300,7 @@ def main():
                         
         for atype in pair2params:
             assert(atype in pair2style)
-            if include_auto_equivalences:
+            if IsAutoInteraction(bond_name):
                 assert(atype in atom2auto_pair)
                 if include_auto_equivalences:
                     sys.stdout.write('    pair_coeff @atom:*,ap' + atom2auto_pair[atype] +
@@ -3432,44 +3476,82 @@ def main():
                           for x in ExtractANames(angle_name)]
                 #if (len(anames) == 3) and angle2style[angle_name] == 'class2':
                 #    continue
-                bnames = [anames[3:5], anames[5:7]]
-                assert(bnames[0][1] == bnames[1][0])
-                # (NOTE TO SELF:
-                #  If these assertions fail, then try checking if they are
-                #  all either the same, or '*'.  If they are then just replace '*'
-                #  everwhere that atom appears with the most restrictive name.)
+                bnames = [[a for a in map(EncodeAName, anames[3:5])],
+                          [a for a in map(EncodeAName, anames[5:7])]]
+                #anm = [a for a in map(EncodeAName, anames)]
 
-                # Optional: Shorten the angle name since some of the bnames are redundant:
-                is_auto = IsAutoInteraction(angle_name)
-                anm = [a for a in map(EncodeAName, anames)]
-                ang_name_abbr = EncodeInteractionName(anm[0:3]+
-                                                      [anm[3],anm[4],anm[6]],
-                                                      is_auto)
+                angle_is_auto = IsAutoInteraction(angle_name):
+                bond_is_auto1 = IsAutoInteraction(bnames[0][0]+','+bnames[0][1])
+                bond_is_auto2 = IsAutoInteraction(bnames[1][0]+','+bnames[1][1])
 
-                # Did the user ask us to include "auto" interactions?
-                if IsAutoInteraction(angle_name):
-                    if include_auto_equivalences:
-                        sys.stdout.write('    @angle:' + ang_name_abbr + ' ' +
-                                         ' @atom:*,ap*,aq*,ab'+bnames[0][0]+',aae' + anames[0] +
-                                         ',aac*,ade*,adc*,aie*,aic*' +
-                                         ' @atom:*,ap*,aq*,ab'+bnames[0][1]+',aae*,aac'+anames[1] +
-                                         ',ade*,adc*,aie*,aic*' +
-                                         ' @atom:*,ap*,aq*,ab'+bnames[1][1]+',aae' + anames[2] +
-                                         ',aac*,ade*,adc*,aie*,aic*' +
-                                         '\n')
-                    else:
-                        continue
-                else:
+                # Can we ignore "auto" interactions?
+                # (If so, life here is much easier)
+                if ((not include_auto_equivalences) or
+                    (not (angle_is_auto or bond_is_auto1 or bond_is_auto2))):
+
+                    assert(bnames[0][1] == bnames[1][0])
+                    # Optional: Shorten the angle name since some of the bnames are redundant:
+                    ang_name_abbr = EncodeInteractionName(anm[0:3]+
+                                                          #[anm[3],anm[4],anm[6]],
+                                                          [bnames[0][0],bnames[0][1],bnames[1][1]],
+                                                          angle_is_auto)
                     sys.stdout.write('    @angle:' + ang_name_abbr + ' ' +
-                                     #' @atom:*,p*,b*,a' + anames[0] + ',d*,i* ' +
-                                     #' @atom:*,p*,b*,a' + anames[1] + ',d*,i* ' +
-                                     #' @atom:*,p*,b*,a' + anames[2] + ',d*,i* ' +
-                                     #' @bond:'+bnames[0][0]+','+bnames[0][1]+' '
-                                     #' @bond:'+bnames[1][0]+','+bnames[1][1]+'\n'
                                      ' @atom:*,p*,b'+bnames[0][0]+',a'+anames[0]+',d*,i* ' +
                                      ' @atom:*,p*,b'+bnames[0][1]+',a'+anames[1]+',d*,i* ' +
                                      ' @atom:*,p*,b'+bnames[1][1]+',a'+anames[2]+',d*,i*'
                                      '\n')
+                else:
+                    # Consider "auto" interactions and "auto" atom equivalences
+                    ang_name_abbr = angle_name  #(full name)
+                    sys.stdout.write('    @angle:' + ang_name_abbr + ' ')
+
+                    bshared = 'b*'    #(default. overidden below)
+                    abshared = 'ab*'  #(default. overidden below)
+
+                    if angle_is_auto:
+                        a1 = a2 = a3 = 'a*'
+                        aa1 = 'aae' + anames[0] + ',aac*'
+                        aa2 = 'aae*,aac*' + anames[1]
+                        aa3 = 'aae' + anames[2] + ',aac*'
+                    else:
+                        a1 = 'a' + anames[0]
+                        a2 = 'a' + anames[1]
+                        a3 = 'a' + anames[2]
+                        aa1 = aa2 = aa3 = 'aae*,aac*'
+
+                    if not bond_is_auto1:
+                        b11 = 'b' + bnames[0][0]     #(bond atom equivalent name)
+                        b12 = 'b' + bnames[0][1]     #(bond atom equivalent name)
+                        bshared = 'b' + bnames[0][1] #(bond atom equivalent name)
+                        ab11 = ab12 = 'ab*'
+                    else:
+                        b11 = b12 = 'b*'
+                        ab11 = 'ab' + bnames[0][0]     #(auto bond atom name)
+                        ab12 = 'ab' + bnames[0][1]     #(auto bond atom name)
+                        abshared = 'ab' + bnames[0][1] #(auto bond atom name)
+                    # print atom 1 information:
+                    sys.stdout.write(' @atom:*,p*,'+b11+a1+',d*,i*,' +
+                                     'ap*,aq*,'+ab11+aa11+
+                                     ',ade*,adc*,aie*,aic*')
+                    if not bond_is_auto2:
+                        b21 = 'b' + bnames[1][0]  #(bond atom equivalent name)
+                        b22 = 'b' + bnames[1][1]  #(bond atom equivalent name)
+                        bshared = 'b' + bnames[1][0]
+                        ab21 = ab22 = 'ab*'
+                    else:
+                        b21 = b22 = 'b*'
+                        ab21 = 'ab' + bnames[1][0]  #(auto bond atom name)
+                        ab22 = 'ab' + bnames[1][1]  #(auto bond atom name)
+                        abshared = 'ab' + bnames[1][0]
+                    # print atom 2 information:
+                    sys.stdout.write(' @atom:*,p*,'+bshared+a2+',d*,i*,' +
+                                     'ap*,aq*,'+abshared+aa2+
+                                     ',ade*,adc*,aie*,aic*')
+                    # print atom 3 information:
+                    sys.stdout.write(' @atom:*,p*,'+b21+a3+',d*,i*,' +
+                                     'ap*,aq*,'+ab21+aa22+
+                                     ',ade*,adc*,aie*,aic*')
+                    sys.stdout.write('\n')
 
             sys.stdout.write('  }  # end of "Data Angles By Type" section\n'
                              '\n')
