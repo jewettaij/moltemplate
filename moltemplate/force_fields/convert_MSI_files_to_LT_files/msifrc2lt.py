@@ -467,7 +467,9 @@ def LookupBondLength(a1, a2,
     anames = (atom2equiv_bond[a1], atom2equiv_bond[a2])
     bond_name = EncodeInteractionName(SortByEnds(anames))
     if bond_name in bond2r0:
-        return_val = (bond2r0[bond_name], [anames[0], anames[1]])
+        return_val = (bond2r0[bond_name],
+                      [anames[0], anames[1]],
+                      False)
     # If no bond between these atoms is defined, 
     # check the bonds in the _auto section(s)
     # This is a lot messier.
@@ -487,12 +489,12 @@ def LookupBondLength(a1, a2,
             priority = DoAtomsMatchPattern(anames, pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
-                return_val = (r0, [anames[0], anames[1]])
+                return_val = (r0, [anames[0], anames[1]], True)
             anames.reverse() # now check of the atoms in reverse order match
             priority = DoAtomsMatchPattern(anames, pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
-                return_val = (r0, [anames[1], anames[0]]) #preserve atom order
+                return_val = (r0, [anames[1], anames[0]], True) #preserve atom order
         #if return_val != None:
         #    sys.stderr.write('DEBUG: For atoms '+str((a1,a2))+' ... bond_length, batom_names = '+str(return_val)+'\n')
     return return_val
@@ -521,7 +523,9 @@ def LookupRestAngle(a1, a2, a3,
     anames = (atom2equiv_angle[a1], atom2equiv_angle[a2], atom2equiv_angle[a3])
     angle_name = EncodeInteractionName(SortByEnds(anames))
     if angle_name in angle2theta0_or:
-        return_val = (angle2theta0_or[angle_name], [anames[0], anames[1], anames[2]])
+        return_val = (angle2theta0_or[angle_name],
+                      [anames[0], anames[1], anames[2]],
+                      False)
 
     # If no angle between these atoms is defined, 
     # check the angles in the _auto section(s)
@@ -550,12 +554,16 @@ def LookupRestAngle(a1, a2, a3,
             priority = DoAtomsMatchPattern(anames, pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
-                return_val = (theta0, [anames[0], anames[1], anames[2]])
+                return_val = (theta0,
+                              [anames[0], anames[1], anames[2]],
+                              True)
             anames.reverse() # now check of the atoms in reverse order match
             priority = DoAtomsMatchPattern(anames, pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
-                return_val = (theta0, [anames[2], anames[1], anames[0]]) #preserve atom order
+                return_val = (theta0,
+                              [anames[2], anames[1], anames[0]], #preserve atom order
+                              True)
         #if return_val != None:
         #    sys.stderr.write('DEBUG: For atoms '+str((a1,a2))+' ... rest_angle, anames = '+str(return_val)+'\n')
     return return_val
@@ -773,8 +781,8 @@ def main():
         ffname = 'BIOSYM_MSI_FORCE_FIELD'
         type_subset = set([])
         filename_in = ''
-        file_in = sys.stdin
-        #file_in = open('pcff_repaired.frc','r')  #CONTINUEHERE
+        #file_in = sys.stdin
+        file_in = open('pcff_repaired.frc','r')  #CONTINUEHERE
         include_auto_equivalences = False
         #pair_style_name = 'lj/class2/coul/long'
         #pair_style_params = "10.0 10.0"
@@ -2463,16 +2471,25 @@ def main():
                                                       bond2r0_auto)
                         if bond_data2 == None:
                             continue
+
                         #bond lengths:
                         r0s = [0.0, 0.0]
                         #equivalent atom names used to lookup the bonds:
                         batoms = [['', ''], ['', '']]
-                        r0s[0], batoms[0] = bond_data1
-                        r0s[1], batoms[1] = bond_data2
+                        #were "auto" equivalences needed to lookup the bond length?
+                        b_is_auto = [False, False]
+                        r0s[0], batoms[0], b_is_auto[0] = bond_data1
+                        r0s[1], batoms[1], b_is_auto[1] = bond_data2
                         found_at_least_one = True
-                        ang_name_full = ang_name_orig + ',' + \
-                                        EncodeInteractionName(batoms[0] + batoms[1],
-                                                              section_is_auto)
+                        order_reversed = aorig[0] > aorig[-1]
+                        if order_reversed:
+                            batoms.reverse()
+                            batoms[0].reverse()
+                            batoms[1].reverse()
+                            b_is_auto.reverse()
+                        ang_name_full = (ang_name_orig + ',' + 
+                                         EncodeInteractionName(batoms[0], b_is_auto[0]) + ',' +
+                                         EncodeInteractionName(batoms[1], b_is_auto[1]))
                         #sys.stderr.write('DEBUG: (a1,a2,a3) = '+str((a1,a2,a3))+', '
                         #                 ' (b11,b12,b21,b22) = '+str(batoms)+'\n')
                         angle2ref_or[ang_name_full] = reference
@@ -2555,7 +2572,7 @@ def main():
 
 
 
-
+        """
         ############ POST-PROCESSING DIHEDRALS ###########
 
 
@@ -2667,9 +2684,12 @@ def main():
                             r0s = [0.0, 0.0, 0,0]
                             #equivalent atom names used to lookup the bonds:
                             batoms = [['', ''], ['', ''], ['','']]
-                            r0s[0], batoms[0] = bond_data12
-                            r0s[1], batoms[1] = bond_data23
-                            r0s[2], batoms[2] = bond_data34
+                            #are these bond interactions "auto" interactions?
+                            #were "auto" equivalences needed to lookup the bond length?
+                            b_is_auto = [False, False, False]
+                            r0s[0], batoms[0], b_is_auto[0] = bond_data12
+                            r0s[1], batoms[1], b_is_auto[1] = bond_data23
+                            r0s[2], batoms[2], b_is_auto[2] = bond_data34
 
                             angle_data234 = LookupRestAngle(a2, a3, a4,
                                                             atom2equiv_angle,
@@ -2687,21 +2707,31 @@ def main():
                             theta0s = [0.0, 0.0]
                             #equivalent atom names used to lookup angles:
                             aatoms = [['', '',''], ['', '','']]
-                            theta0s[0], aatoms[0] = angle_data123
-                            theta0s[1], aatoms[1] = angle_data234
+                            #were "auto" equivalences needed to lookup the bond-angle?
+                            a_is_auto = [False, False]
+                            theta0s[0], aatoms[0], a_is_auto[0] = angle_data123
+                            theta0s[1], aatoms[1], a_is_auto[1] = angle_data234
                             found_at_least_one = True
                             order_reversed = aorig[0] > aorig[-1]
                             if order_reversed:
+                                batoms.reverse()
+                                batoms[0].reverse()
+                                batoms[1].reverse()
+                                batoms[2].reverse()
+                                b_is_auto.reverse()
                                 theta0s.reverse()
                                 aatoms.reverse()
                                 aatoms[0].reverse()
                                 aatoms[1].reverse()
+                                a_is_auto.reverse()
 
                             #if is_auto:
-                            dih_name_full = dih_name_orig + ',' + \
-                                EncodeInteractionName(batoms[0] + batoms[1] + batoms[2] +
-                                                      aatoms[0] + aatoms[1],
-                                                      False)
+                            dih_name_full = (dih_name_orig + ',' + 
+                                             EncodeInteractionName(batoms[0], b_is_auto[0]) + ',' +
+                                             EncodeInteractionName(batoms[1], b_is_auto[1]) + ',' +
+                                             EncodeInteractionName(batoms[2], b_is_auto[2]) + ',' +
+                                             EncodeInteractionName(aatoms[0], a_is_auto[0]) + ',' +
+                                             EncodeInteractionName(aatoms[1], a_is_auto[1]))
                             #else:
                             #    assert(batoms[0][1] == batoms[1][0])
                             #    assert(batoms[1][1] == batoms[2][0])
@@ -3081,6 +3111,8 @@ def main():
                         # to follow the loop's progress. This nested loop can be very slow.)
                         theta0s = ['0.0', '0.0', '0.0']
                         aatoms = [['', '',''], ['', '',''], ['', '', '']]
+                        #were "auto" equivalences needed to lookup the bond-angle?
+                        a_is_auto = [False, False, False]
                         # Collect information from the different terms in a class2 improper:
                         # http://lammps.sandia.gov/doc/improper_class2.html
 
@@ -3112,7 +3144,7 @@ def main():
                             # Save time by only continuing if an angle was
                                 # found between a1, a2, a3
                             continue
-                        theta0s[0], aatoms[0] = angle_data
+                        theta0s[0], aatoms[0], a_is_auto[0] = angle_data
 
 
                         for a4 in sorted(list(atom_combos[3])):
@@ -3134,7 +3166,7 @@ def main():
                                 # Save time by only continuing if an angle was
                                 # found between a1, a2, a4
                                 continue
-                            theta0s[1], aatoms[1] = angle_data
+                            theta0s[1], aatoms[1], a_is_auto[1] = angle_data
 
                             #angle_name_l = SortByEnds(aatoms[1])
                             #angle_name = EncodeInteractionName(angle_name_l, is_auto)
@@ -3150,9 +3182,9 @@ def main():
                                                          angle2theta0_auto_or)
                             if angle_data == None:
                                 # Save time by only continuing if an angle was
-                                # found between a2, a2, a4
+                                # found between a3, a2, a4
                                 continue
-                            theta0s[2], aatoms[2] = angle_data
+                            theta0s[2], aatoms[2], a_is_auto[2] = angle_data
 
 
                             # The following asserts checks that the two theta0s
@@ -3169,10 +3201,11 @@ def main():
                             #angle_name_l = SortByEnds(aatoms[2])
                             #angle_name = EncodeInteractionName(angle_name_l, is_auto)
 
-                            imp_name_full = imp_name_orig + ',' + \
-                                EncodeInteractionName(aatoms[0] + aatoms[1] + aatoms[2],
-                                                      False)
 
+                            imp_name_full = (imp_name_orig + ',' + 
+                                             EncodeInteractionName(aatoms[0], a_is_auto[0]) + ',' +
+                                             EncodeInteractionName(aatoms[1], a_is_auto[1]) + ',' +
+                                             EncodeInteractionName(aatoms[2], a_is_auto[2]))
 
                             #if imp_name_orig in improper2params_or[imp_name_orig]:
                             improper2params[imp_name_full] = ' '.join(improper2params_or[imp_name_orig])
@@ -3216,7 +3249,7 @@ def main():
                             num_impropers = len(improper2params)
 
 
-
+        """
 
 
 
@@ -3480,7 +3513,7 @@ def main():
                           [a for a in map(EncodeAName, anames[5:7])]]
                 #anm = [a for a in map(EncodeAName, anames)]
 
-                angle_is_auto = IsAutoInteraction(angle_name):
+                angle_is_auto = IsAutoInteraction(angle_name)
                 bond_is_auto1 = IsAutoInteraction(bnames[0][0]+','+bnames[0][1])
                 bond_is_auto2 = IsAutoInteraction(bnames[1][0]+','+bnames[1][1])
 
