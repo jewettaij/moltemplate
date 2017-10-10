@@ -2616,7 +2616,7 @@ def main():
 
 
 
-        """
+
         ############ POST-PROCESSING DIHEDRALS ###########
 
 
@@ -3287,7 +3287,7 @@ def main():
                             num_impropers = len(improper2params)
 
 
-        """
+
 
 
 
@@ -3594,13 +3594,13 @@ def main():
                         abshared = 'ab*'  #(default. overidden below)
 
                         if angle_is_auto:
-                            a1 = a2 = a3 = 'a*'
-                            aa1 = 'aae' + anames[0] + ',aac*'
-                            aa2 = 'aae*,aac*' + anames[1]
-                            aa3 = 'aae' + anames[2] + ',aac*'
+                            a1 = a2 = a3 = 'a*'                #Then, dont use regular equivalences for these atoms.
+                            aa1 = 'aae' + anames[0] + ',aac*'  #Instead use the corresponding "auto" equivalence names
+                            aa2 = 'aae*,aac*' + anames[1]      #for these atoms. (There are different auto equivalence names depending
+                            aa3 = 'aae' + anames[2] + ',aac*'  #on if the atom appears in the center (c) or end(e) of the 3-body angle)
                         else:
-                            a1 = 'a' + anames[0]
-                            a2 = 'a' + anames[1]
+                            a1 = 'a' + anames[0]               #In this case, use use (regular) equivalence names
+                            a2 = 'a' + anames[1]               #for these atoms
                             a3 = 'a' + anames[2]
                             aa1 = aa2 = aa3 = 'aae*,aac*'
 
@@ -3621,14 +3621,14 @@ def main():
                         if not bond_is_auto2:
                             b21 = 'b' + bnames[1][0]  #(bond atom equivalent name)
                             b22 = 'b' + bnames[1][1]  #(bond atom equivalent name)
-                            assert((bshared == 'b*' or (bshared == 'b' + bnames[1][0]))
+                            assert((bshared == 'b*') or (bshared == 'b' + bnames[1][0]))
                             bshared = 'b' + bnames[1][0]
                             ab21 = ab22 = 'ab*'
                         else:
                             b21 = b22 = 'b*'
                             ab21 = 'ab' + bnames[1][0]  #(auto bond atom name)
                             ab22 = 'ab' + bnames[1][1]  #(auto bond atom name)
-                            assert((abshared == 'ab*' or (abshared == 'ab' + bnames[1][0]))
+                            assert((abshared == 'ab*') or (abshared == 'ab' + bnames[1][0]))
                             abshared = 'ab' + bnames[1][0]
                         # print atom 2 information:
                         sys.stdout.write(' @atom:*,p*,'+bshared+a2+',d*,i*,' +
@@ -3735,107 +3735,6 @@ def main():
 
 
 
-
-
-
-
-
-            """
-
-
-
-
-            for dihedral_name in dih_names_priority_high_to_low:
-                if not (dihedral2style[dihedral_name] in
-                        dihedral_styles_selected):
-                    continue
-                anames = ['*' if x=='X' else x
-                          for x in ExtractANames(dihedral_name)]
-                bnames = [anames[4:6], anames[6:8], anames[8:10]]
-                assert(bnames[0][1] == bnames[1][0])
-                assert(bnames[1][1] == bnames[2][0])
-                ang_names = [anames[10:13], anames[13:16]]
-                assert(ang_names[0][1] == ang_names[1][0])
-                assert(ang_names[0][2] == ang_names[1][1])
-
-                # Optional: Shorten the angle name since some of the bnames are redundant:
-                is_auto = IsAutoInteraction(dihedral_name)
-                anm = [a for a in map(EncodeAName, anames)]
-                dih_name_abbr[dihedral_name] = EncodeInteractionName(anm[0:4]+
-                                               #[bnames[0][0],bnames[0][1], bnames[1][1], bnames[2][1]]
-                                               [anm[4],anm[5],anm[7],anm[9]]+
-                                               #[ang_names[0][0],ang_names[0][1],ang_names[0][2],ang_names[1][2]]
-                                               [anm[10],anm[11],anm[12],anm[15]],
-                                               is_auto)
-                if dih_name_abbr[dihedral_name].find('*') != -1:
-                    print(dihedral_name)
-                # Did the user ask us to include "auto" interactions?
-                if dihedral2style[dihedral_name] != 'class2':
-                    if IsAutoInteraction(dihedral_name):
-                        if include_auto_equivalences:
-                            sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade'
-                                             + anames[0] +
-                                             ',adc*,aie*,aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade*,adc'
-                                             + anames[1] +
-                                             ',aie*,aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade*,adc'
-                                             + anames[2] +
-                                             ',aie*,aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade'
-                                             + anames[3] +
-                                             ',adc*,aie*,aic*' +
-                                             '\n')
-                        else:
-                            continue
-                    else:
-                        sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
-                                         ' @atom:*,p*,b*,a*,d' + anames[0] + ',i* ' +
-                                         ' @atom:*,p*,b*,a*,d' + anames[1] + ',i* ' +
-                                         ' @atom:*,p*,b*,a*,d' + anames[2] + ',i* ' +
-                                         ' @atom:*,p*,b*,a*,d' + anames[3] + ',i* ' +
-                                         '\n')
-                else:
-                    if IsAutoInteraction(dihedral_name):
-                        if include_auto_equivalences:
-                            sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
-                                             ' @atom:*,ap*,aq*,ab'+bnames[0][0]+',aae'+ang_names[0][0]+',aac*,ade'
-                                             + anames[0] +
-                                             ',adc*,aie*,aic*' +
-                                             ' @atom:*,ap*,aq*,ab'+bnames[0][1]+',aae'+ang_names[1][0]+',aac'+ang_names[0][1]+',ade*,adc'
-                                             + anames[1] +
-                                             ',aie*,aic*' +
-                                             ' @atom:*,ap*,aq*,ab'+bnames[1][0]+',aae'+ang_names[0][2]+',aac'+ang_names[1][1]+',ade*,adc'
-                                             + anames[2] +
-                                             ',aie*,aic*' +
-                                             ' @atom:*,ap*,aq*,ab'+bnames[1][1]+',aae'+ang_names[1][2]+',aac*,ade'
-                                             + anames[3] +
-                                             ',adc*,aie*,aic*' +
-                                             '\n')
-                        else:
-                            continue
-                    else:
-                        sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
-                                         ' @atom:*,p*,b'+bnames[0][0]+',a'+ang_names[0][0]+',d' + anames[0] + ',i* ' +
-                                         ' @atom:*,p*,b'+bnames[0][1]+',a'+ang_names[0][1]+',d' + anames[1] + ',i* ' +
-                                         ' @atom:*,p*,b'+bnames[1][0]+',a'+ang_names[1][1]+',d' + anames[2] + ',i* ' +
-                                         ' @atom:*,p*,b'+bnames[1][1]+',a'+ang_names[1][2]+',d' + anames[3] + ',i* ' +
-                                         '\n')
-
-            """        
-
-
-
-
-
-
-
-
-
-
-
-
             for dihedral_name in dih_names_priority_high_to_low:
                 if not (dihedral2style[dihedral_name] in
                         dihedral_styles_selected):
@@ -3887,10 +3786,10 @@ def main():
                     else:
                         dih_name_abbr[dihedral_name] = dihedral_name
                         sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
-                                         ' @atom:*,p*,b*,a*,d'+anames[0]+',d*,i* ' +
-                                         ' @atom:*,p*,b*,a*,d'+anames[1]+',d*,i* ' +
-                                         ' @atom:*,p*,b*,a*,d'+anames[2]+',d*,i* '
-                                         ' @atom:*,p*,b*,a*,d'+anames[3]+',d*,i*' +
+                                         ' @atom:*,p*,b*,a*,d'+anames[0]+',i* ' +
+                                         ' @atom:*,p*,b*,a*,d'+anames[1]+',i* ' +
+                                         ' @atom:*,p*,b*,a*,d'+anames[2]+',i* '
+                                         ' @atom:*,p*,b*,a*,d'+anames[3]+',i*' +
                                          '\n')
                 else:
                     # Consider "auto" interactions and "auto" atom equivalences
@@ -3899,23 +3798,36 @@ def main():
 
                     if dihedral2style[dihedral_name] == 'class2':
 
-                        bshared1 = 'b*'    #(default. overidden below)
-                        bshared2 = 'b*'    #(default. overidden below)
-                        abshared1 = 'ab*'  #(default. overidden below)
-                        abshared2 = 'ab*'  #(default. overidden below)
+                        # equivalent names of atoms shared by more than one bond:
+                        # (names ending in * mean they were unspecified for this 
+                        #  dihedral interaction.  By default, this is the case.)
+                        bshared1 = 'b*'       #(default. overidden below)
+                        bshared2 = 'b*'       #(default. overidden below)
+                        abshared1 = 'ab*'     #(default. overidden below)
+                        abshared2 = 'ab*'     #(default. overidden below)
+
+                        # equivalent names of atoms shared by more than one angle interaction:
+                        # (names ending in * mean they were unspecified for this 
+                        #  dihedral interaction.  By default, this is the case.)
+                        ashared1 = 'a*'       #(default. overidden below)
+                        ashared2 = 'a*'       #(default. overidden below)
+                        aac_shared1 = 'aac*'  #(default. overidden below)
+                        aae_shared1 = 'aae*'  #(default. overidden below)
+                        aac_shared2 = 'aac*'  #(default. overidden below)
+                        aae_shared2 = 'aae*'  #(default. overidden below)
 
                         if dihedral_is_auto:
-                            a1 = a2 = a3 = a4 = 'a*'
-                            aa1 = 'ade' + anames[0] + ',adc*'
-                            aa2 = 'ade*,adc*' + anames[1]
-                            aa3 = 'ade*,adc*' + anames[1]
-                            aa4 = 'ade' + anames[2] + ',adc*'
+                            d1 = d2 = d3 = d4 = 'd*'           #Then, dont use regular equivalences for these atoms.
+                            ad1 = 'ade' + anames[0] + ',adc*'  #Instead use the corresponding "auto"
+                            ad2 = 'ade*,adc*' + anames[1]      #equivalence names for these atoms.
+                            ad3 = 'ade*,adc*' + anames[1]      #(There are different auto equivalence names depending upon
+                            ad4 = 'ade' + anames[2] + ',adc*'  # if the atom appears in the center (c) or end(e) of the dihedral)
                         else:
-                            a1 = 'a' + anames[0]
-                            a2 = 'a' + anames[1]
-                            a3 = 'a' + anames[2]
-                            a4 = 'a' + anames[3]
-                            aa1 = aa2 = aa3 = aa4 = 'ade*,adc*'
+                            d1 = 'd' + anames[0]               # In this case, use use (regular) equivalence names
+                            d2 = 'd' + anames[1]               # for these atoms
+                            d3 = 'd' + anames[2]
+                            d4 = 'd' + anames[3]
+                            ad1 = ad2 = ad3 = ad4 = 'ade*,adc*'
 
                         if not bond_is_auto1:
                             b11 = 'b' + bnames[0][0]      #(bond atom equivalent name)
@@ -3959,16 +3871,16 @@ def main():
                             abshared2 = 'ab' + bnames[2][0] #(auto bond atom name)
 
                         if not angle_is_auto1:
-                            b11 = 'a' + ang_names[0][0]      #(angle atom equivalent name)
-                            b12 = 'a' + ang_names[0][1]      #(angle atom equivalent name)
-                            b13 = 'a' + ang_names[0][2]      #(angle atom equivalent name)
+                            a11 = 'a' + ang_names[0][0]      #(angle atom equivalent name)
+                            a12 = 'a' + ang_names[0][1]      #(angle atom equivalent name)
+                            a13 = 'a' + ang_names[0][2]      #(angle atom equivalent name)
                             ashared1 = 'a' + ang_names[0][1] #(angle atom equivalent name)
                             ashared2 = 'a' + ang_names[0][2] #(angle atom equivalent name)
                             aa11 = 'aae*'
                             aa12 = 'aac*'
                             aa13 = 'aae*'
                         else:
-                            b11 = b12 = b13 = 'b*'
+                            a11 = a12 = a13 = 'a*'
                             aa11 = 'ae' + ang_names[0][0]      #(auto angle atom name)
                             aa12 = 'ac' + ang_names[0][1]      #(auto angle atom name)
                             aa13 = 'ae' + ang_names[0][2]      #(auto angle atom name)
@@ -3976,9 +3888,9 @@ def main():
                             aae_shared2 = 'aae' + ang_names[0][2] #(auto angle atom name)
 
                         if not angle_is_auto2:
-                            b21 = 'a' + ang_names[1][0]      #(angle atom equivalent name)
-                            b22 = 'a' + ang_names[1][1]      #(angle atom equivalent name)
-                            b23 = 'a' + ang_names[1][2]      #(angle atom equivalent name)
+                            a21 = 'a' + ang_names[1][0]      #(angle atom equivalent name)
+                            a22 = 'a' + ang_names[1][1]      #(angle atom equivalent name)
+                            a23 = 'a' + ang_names[1][2]      #(angle atom equivalent name)
                             assert((ashared1 == 'a*' or (ashared1 == 'a' + ang_names[1][0]))
                             ashared1 = 'a' + ang_names[1][0] #(angle atom equivalent name)
                             assert((ashared2 == 'a*' or (ashared2 == 'a' + ang_names[1][1]))
@@ -3987,28 +3899,33 @@ def main():
                             aa22 = 'aac*'
                             aa23 = 'aae*'
                         else:
-                            b11 = b12 = b13 = 'b*'
-                            aa11 = 'ae' + ang_names[0][0]        #(auto angle atom name)
-                            aa12 = 'ac' + ang_names[0][1]        #(auto angle atom name)
-                            aa13 = 'ae' + ang_names[0][2]        #(auto angle atom name)
-                            aae_shared1 = 'aac' + ang_names[1][0] #(auto angle atom name)
+                            a21 = a22 = a23 = 'a*'
+                            aa21 = 'ae' + ang_names[1][0]        #(auto angle atom name)
+                            aa22 = 'ac' + ang_names[1][1]        #(auto angle atom name)
+                            aa23 = 'ae' + ang_names[1][2]        #(auto angle atom name)
+                            aae_shared1 = 'aae' + ang_names[1][0] #(auto angle atom name)
                             aac_shared2 = 'aac' + ang_names[1][1] #(auto angle atom name)
 
 
                         # print atom 1 information:
-                        sys.stdout.write(' @atom:*,p*,'+b11+a1+',d*,i*,' +
-                                         'ap*,aq*,'+ab11+aa1+
-                                         ',ade*,adc*,aie*,aic*')
+                        sys.stdout.write(' @atom:*,p*,'+b11+','+a11+','+d1+',i*,' +
+                                         'ap*,aq*,'+ab11+','+aa11+',aac*,' +
+                                         aad1+',aie*,aic*')
                         # print atom 2 information:
-                        sys.stdout.write(' @atom:*,p*,'+bshared+a2+',d*,i*,' +
-                                         'ap*,aq*,'+abshared+aa2+
-                                         ',ade*,adc*,aie*,aic*')
+                        sys.stdout.write(' @atom:*,p*,'+bshared1+','+ashared1+','+d2+',i*,' +
+                                         'ap*,aq*,'+abshared1+','+aae_shared1+','+aac_shared1+',' +
+                                         aad2+',aie*,aic*')
                         # print atom 3 information:
-                        sys.stdout.write(' @atom:*,p*,'+b21+a3+',d*,i*,' +
-                                         'ap*,aq*,'+ab21+aa3+
-                                         ',ade*,adc*,aie*,aic*')
+                        sys.stdout.write(' @atom:*,p*,'+bshared2+','+ashared2+','+d3+',i*,' +
+                                         'ap*,aq*,'+abshared2+','+aae_shared2+','+aac_shared2+',' +
+                                         aad3+',aie*,aic*')
+                        # print atom 4 information:
+                        sys.stdout.write(' @atom:*,p*,'+b32+','+a23+','+d4+',i*,' +
+                                         'ap*,aq*,'+ab32+','+aa23+',aac*,' +
+                                         aad4+',aie*,aic*')
                         sys.stdout.write('\n')
                     else:
+                        assert(dihedral_is_auto)  #(so we should use "auto" equivalence names for these atoms)
                         sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
                                          ' @atom:*,p*,b*,d*,i*,' +
                                          'ap*,aq*,ab*,ae*,ac*,ade'+anames[0]+',adc*,aie*,aic* '
@@ -4019,14 +3936,6 @@ def main():
                                          ' @atom:*,p*,b*,d*,i*,' +
                                          'ap*,aq*,ab*,ae*,ac*,ade'+anames[3]+',adc*,aie*,aic* '
                                          '\n')
-
-
-
-
-
-
-
-
 
 
 
