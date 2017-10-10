@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.5.0"
-G_DATE="2017-10-03"
+G_VERSION="2.5.2"
+G_DATE="2017-10-09"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -544,11 +544,23 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         #echo "  (extracting coordinates from \"$PDB_FILE\")" >&2
         if grep -q '^ATOM  \|^HETATM' "$PDB_FILE"; then
+	    # Extract the coordinates from the PDB file:
+
+	    # COMMENTING OUT ("pdbsort.py")
+            # I used to sort the PDB file by (ChainID,SeqNum,InsertCode)
+	    # and then extract the coordinates from the file.
+	    # This turned out to be inconvenient for users.  Instead
+	    # just read the coordinates in the order they appear in the file.
+	    # OLD CODE:
             # Extract the coords from the "ATOM" records in the PDB file
-            if ! $PYTHON_COMMAND "${PY_SCR_DIR}/pdbsort.py" < "$PDB_FILE" \
-                | awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' > "$tmp_atom_coords"; then
-                ERR_INTERNAL
-            fi
+            #if ! $PYTHON_COMMAND "${PY_SCR_DIR}/pdbsort.py" < "$PDB_FILE" \
+            #    | awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' > "$tmp_atom_coords"; then
+            #    ERR_INTERNAL
+            #fi
+	    # NEW CODE (USE THIS INSTEAD):
+            awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' \
+		< "$PDB_FILE" \
+		> "$tmp_atom_coords"
         else
             echo "$SYNTAX_MSG" >&2
             echo "-----------------------" >&2
