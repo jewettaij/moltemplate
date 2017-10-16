@@ -1,9 +1,9 @@
 #! /usr/bin/env python
 
 """
-This standalone python script can be used to convert the force-fields in MSI
-format (.FRC files, a.k.a. "BIOSYM", "DISCOVERY" format)
-...into MOLTEMPLATE/LAMMPS format (.LT format).
+This standalone python script can be used to convert force-field data 
+in FRC files (a.k.a. "MSI", "Accelrys", "BIOSYM", "DISCOVERY" files)
+...into MOLTEMPLATE/LAMMPS compatible format (.LT files).
 
 Once converted into moltemplate (.LT) format, users can use these files with 
 MOLTEMPLATE to prepare LAMMPS simulations of molecules using these force fields 
@@ -14,7 +14,7 @@ directory which is distributed with LAMMPS.
 
 Limitations:
 
-Currently (2017-2) this script ignores the "template" information in .FRC files.
+Currently (2017-10) this script ignores the "template" information in .FRC files.
 When defining a new type of molecule, the user must carefully choose the
 complete atom type for each type of atom in the molecule.  In other words,
 MOLTEMPLATE will not attempt to determine (from local context) whether 
@@ -31,8 +31,8 @@ it is manually, for all of the carbon atoms in that kind of molecule.
 
 
 __author__ = 'Andrew Jewett'
-__version__ = '0.1.21'
-__date__ = '2017-10-06'
+__version__ = '0.2.1'
+__date__ = '2017-10-15'
 
 
 import sys
@@ -196,12 +196,21 @@ def SortByEnds(l_orig):
 #def Repl(tokens, a, b):
 #    return [(b if x==a else x) for x in tokens]
 
+def DecodeAName(s):
+    if s.find('auto') == 0:
+        s = s[4:]
+    if s == 'X': # special case: deal with strings like  'X'
+        return '*'
+    return s
+
 
 def EncodeAName(s):
     """
     Handle * characters in MSI atom names
     """
 
+    if s.find('auto') == 0:
+        s = s[4:]
     # If the atom name begins with *, then it is a wildcard
     if s[:1] == '*': # special case: deal with strings like  *7
         return 'X'   # These have special meaning.  Throw away the integer.
@@ -237,8 +246,9 @@ def DetermineAutoPriority(anames):
      to look up force field parameters for bonded interactions.
      The higher the integer, the lower the priority.
      For details, see "Forcefield based simulations" PDF, Cerius2, p 87)
-    Wildcards not followed by integers receive a very low priority (high number).
-    If a wildcard exists which is not followed by an integer ('*'), return HUGE_VAL.
+    Ordinary wildcards ('*' characters not followed by integers) have the
+    lowest possible priority.  (Each time a '*' string appears in the
+    list of arguments, the priority value increases by HUGE_VAL.)
     """
 
     # This is terrible code.
@@ -454,7 +464,7 @@ def ImCrossTermID(atom_names):
 
 
 
-def DoAtomsMatchPattern(anames, pattern):
+def AtomsMatchPattern(anames, pattern):
     """ 
     Check whether the list of atom names "anames" matches "pattern"
     (Both arguments are lists of strings, but some of the strings 
@@ -518,16 +528,16 @@ def LookupBondLength(a1, a2,
         best_priority = HUGE_VAL
         pattern = ['','']
         for (pattern[0],pattern[1]), r0 in bond2r0_auto.items():
-            priority = DoAtomsMatchPattern(anames, pattern)
+            priority = AtomsMatchPattern(anames, pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
-                return_val = (r0, [anames[0], anames[1]], True)
-            anames.reverse() # now check of the atoms in reverse order match
-            priority = DoAtomsMatchPattern(anames, pattern)
+                return_val = (r0, anames, True)
+            # try again with the atom type names in reverse order
+            priority = AtomsMatchPattern([anames[1],anames[0]], pattern)
             if ((priority != None) and
                 (priority < best_priority)):  #(note: low priority numbers = high priority)
                 best_priority = priority
-                return_val = (r0, [anames[1], anames[0]], True) #preserve atom order
+                return_val = (r0, anames, True)
         #if return_val != None:
         #    sys.stderr.write('DEBUG: For atoms '+str((a1,a2))+' ... bond_length, batom_names = '+str(return_val)+'\n')
     return return_val
@@ -539,7 +549,7 @@ def LookupBondLength(a1, a2,
 
 
 
-def LookupRestAngle(a1, a2, a3,
+def LookupBondAngle(a1, a2, a3,
                     atom2equiv_angle,
                     angle2theta0_or,
                     atom2auto_angle,
@@ -570,7 +580,7 @@ def LookupRestAngle(a1, a2, a3,
         anames = [atom2auto_angle[0][a1],
                   atom2auto_angle[1][a2],
                   atom2auto_angle[2][a3]]
-        #sys.stderr.write('DEBUG: LookupRestAngle(): a1,a2,a3=('+
+        #sys.stderr.write('DEBUG: LookupBondAngle(): a1,a2,a3=('+
         #                 a1+','+a2+','+a3+'), anames='+str(anames)+'\n')
 
         # Because _auto interactions can contain wildcards,
@@ -581,25 +591,21 @@ def LookupRestAngle(a1, a2, a3,
         # (Note: The MSI file format uses low priority numbers
         #  to indicate high priority.  Somewhat confusing.)
         HUGE_VAL = 2000000000
-        best_priority = HUGE_VAL
+        best_priority = HUGE_VAL  # (ie. low priority)
         pattern = ['','','']
         for (pattern[0],pattern[1],pattern[2]), theta0 in angle2theta0_auto_or.items():
-            priority = DoAtomsMatchPattern(anames, pattern)
+            priority = AtomsMatchPattern(anames, pattern)
             if ((priority != None) and
                 (priority < best_priority)):  #(note: low priority numbers = high priority)
                 best_priority = priority
-                return_val = (theta0,
-                              [anames[0], anames[1], anames[2]],
-                              True)
-            anames.reverse() # now check of the atoms in reverse order match
-            priority = DoAtomsMatchPattern(anames, pattern)
+                return_val = (theta0, anames, True)
+            # try again with the atom type names in reverse order
+            priority = AtomsMatchPattern([anames[2],anames[1],anames[0]], pattern)
             if (priority != None) and (priority < best_priority):
                 best_priority = priority
-                return_val = (theta0,
-                              [anames[2], anames[1], anames[0]], #preserve atom order
-                              True)
+                return_val = (theta0, anames, True)
         #if return_val != None:
-        #    sys.stderr.write('DEBUG: For atoms '+str((a1,a2))+' ... rest_angle, anames = '+str(return_val)+'\n')
+        #    sys.stderr.write('DEBUG: For atoms '+str((a1,a2,a3))+' ... rest_angle, anames = '+str(return_val)+'\n')
     return return_val
 
 
@@ -815,8 +821,8 @@ def main():
         ffname = 'BIOSYM_MSI_FORCE_FIELD'
         type_subset = set([])
         filename_in = ''
-        #file_in = sys.stdin
-        file_in = open('pcff_repaired.frc','r')  #CONTINUEHERE
+        file_in = sys.stdin
+        #file_in = open('pcff_repaired.frc','r')  #CONTINUEHERE
         include_auto_equivalences = False
         #pair_style_name = 'lj/class2/coul/long'
         #pair_style_params = "10.0 10.0"
@@ -1315,7 +1321,7 @@ def main():
 
 
         # Warn users if force field contains terms which cannot yet
-        # be simulated with LAMMPS (as of 2017-2-07)
+        # be simulated with LAMMPS (as of 2017-10-13)
         display_OOP_OOP_warning = False
         display_torsion_torsion_1_warning = False
 
@@ -1977,9 +1983,6 @@ def main():
                     dihedral_styles.add('class2')
                     dihedral2style[dihedral_name] = 'class2'
                     dihedral2params_or[dihedral_name] = [K,d,0,0,0,0]
-                      #= (K+' '+d+' '+
-                      #    '0 0 '+'0 0')
-
 
 
 
@@ -2390,7 +2393,7 @@ def main():
                              '#      ALL \"out-of-plane_out-of_plane\" INTERACTIONS ARE IGNORED.\n'
                              '#      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
                              '#      \"out-of-plane_out-of_plane\" interactions are not yet supported in LAMMPS\n'
-                             '#      (...as of 2017-2-07)  There is no way that moltemplate can produce\n'
+                                  '#      (...as of 2017-10-13)  There is no way that moltemplate can produce\n'
                              '#      LAMMPS compatible parameter files for these interactions.\n'
                              '###########################################################\n')
 
@@ -2400,7 +2403,7 @@ def main():
                              '#      ALL \"torsion_torsion_1\" INTERACTIONS ARE IGNORED.\n'
                              '#      CHECK THAT THESE TERMS ARE NEGLEGIBLY SMALL.\n'
                              '#      \"torsion_torsion_1\" interactions are not yet supported in LAMMPS\n'
-                             '#      (...as of 2017-2-07)  There is no way that moltemplate can produce\n'
+                                  '#      (...as of 2017-10-13)  There is no way that moltemplate can produce\n'
                              '#      LAMMPS compatible parameter files for these interactions.\n'
                              '###########################################################\n')
 
@@ -2504,6 +2507,7 @@ def main():
                                                   bond2r0_auto)
                     if bond_data1 == None: # Save time by continuing only if a
                         continue           # bond was defined between a1 and a2
+
                     #for a3 in atom_combos[2]:
                     for a3 in sorted(list(atom_combos[2])):
                         bond_data2 = LookupBondLength(a2, a3,
@@ -2522,7 +2526,6 @@ def main():
                         b_is_auto = [False, False]
                         r0s[0], batoms[0], b_is_auto[0] = bond_data1
                         r0s[1], batoms[1], b_is_auto[1] = bond_data2
-                        found_at_least_one = True
                         order_reversed = aorig[0] > aorig[-1]
                         if order_reversed:
                             batoms.reverse()
@@ -2606,11 +2609,31 @@ def main():
                                              '        why to andrew so he can fix this.)\n')
 
 
+                        found_at_least_one = True
+
+
             if not found_at_least_one:
-                #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
-                #                 '       '+str(atom_names)+'\n')
-                lines_warnings.append('# WARNING: Undefied bond length for angle interaction: ' +
+                lines_warnings.append('# WARNING: Undefined bond length (r0) in angle: ' +
                                       ' '.join(atom_names)+'\n')
+                # Then we were unable to define cross terms for this interaction
+                # because at least one of the bond lengths could not be determined.
+                # This usually occurs because most of the .FRC files which are
+                # in circulation are incomplete.  We have to handle this gracefully.
+                ang_name_full = (ang_name_orig + ',X,X,X,X,X,X')
+                version = angle2ver_or[ang_name_orig]
+                reference = angle2ref_or[ang_name_orig]
+                angle2ref[ang_name_full] = reference
+                angle2ver[ang_name_full] = version
+                angle2style[ang_name_full] = 'class2'
+                angle2params[ang_name_full] = ' '.join(angle2params_or[ang_name_orig])
+                # substitute zeros for all the cross term interactions
+                angle2priority[ang_name_full] = angle2priority_or[ang_name_orig]
+                angle2class2_bb[ang_name_full] = '0.0 1.0 1.0'
+                angle2ref_bb[ang_name_full] = reference
+                angle2ver_bb[ang_name_full] = version
+                angle2class2_ba[ang_name_full] = '0.0 0.0 1.0 1.0'
+                angle2ref_ba[ang_name_full] = reference
+                angle2ver_ba[ang_name_full] = version
             #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
 
 
@@ -2700,7 +2723,7 @@ def main():
                             # found between a2 and a3
                             continue
 
-                        angle_data123 = LookupRestAngle(a1, a2, a3,
+                        angle_data123 = LookupBondAngle(a1, a2, a3,
                                                         atom2equiv_angle,
                                                         angle2theta0_or,
                                                         [atom2auto_angleend,
@@ -2736,7 +2759,7 @@ def main():
                             r0s[1], batoms[1], b_is_auto[1] = bond_data23
                             r0s[2], batoms[2], b_is_auto[2] = bond_data34
 
-                            angle_data234 = LookupRestAngle(a2, a3, a4,
+                            angle_data234 = LookupBondAngle(a2, a3, a4,
                                                             atom2equiv_angle,
                                                             angle2theta0_or,
                                                             [atom2auto_angleend,
@@ -2756,7 +2779,6 @@ def main():
                             a_is_auto = [False, False]
                             theta0s[0], aatoms[0], a_is_auto[0] = angle_data123
                             theta0s[1], aatoms[1], a_is_auto[1] = angle_data234
-                            found_at_least_one = True
                             order_reversed = aorig[0] > aorig[-1]
                             if order_reversed:
                                 batoms.reverse()
@@ -2788,8 +2810,6 @@ def main():
                             #                               aatoms[0][0], aatoms[0][1],
                             #                               aatoms[0][2], aatoms[1][0]],
                             #                               False)
-
-                            found_at_least_one = True
 
                             ########### Fourier terms ###########
                             #if dih_name_orig in dihedral2param_or:
@@ -2830,12 +2850,13 @@ def main():
                                 dihedral2ref_ebt_or[dih_name_orig] = dihedral2ref_or[dih_name_orig]
                                 dihedral2sym_ebt = True
                             dihedral2class2_ebt[dih_name_full]= (Febt[0][0] + ' ' +
-                                                                      Febt[0][1] + ' ' +
-                                                                      Febt[0][2] + ' ' +
-                                                                      Febt[1][0] + ' ' +
-                                                                      Febt[1][1] + ' ' +
-                                                                      Febt[1][2] + ' ' +
-                                                                      r0s[0]+' '+r0s[2])
+                                                                 Febt[0][1] + ' ' +
+                                                                 Febt[0][2] + ' ' +
+                                                                 Febt[1][0] + ' ' +
+                                                                 Febt[1][1] + ' ' +
+                                                                 Febt[1][2] + ' ' +
+                                                                 r0s[0]+' '+r0s[2])
+
                             dihedral2priority_ebt = \
                                 DetermineNumericPriority(is_auto,
                                                          batoms[0] + batoms[2],
@@ -2889,7 +2910,7 @@ def main():
                                  Fat[1][1] + ' ' +
                                  Fat[1][2] + ' ' +
                                  theta0s[0] + ' ' +
-                                 theta0s[1])
+                                 theta0s[1])                            
                             dihedral2priority_at = \
                                 DetermineNumericPriority(is_auto,
                                                          aatoms[0] + aatoms[1],
@@ -2917,7 +2938,6 @@ def main():
                                                          float(dihedral2ver_aat_or[dih_name_orig]))
                             dihedral2ver_aat[dih_name_full] = dihedral2ver_aat_or[dih_name_orig]
                             dihedral2ref_aat[dih_name_full] = dihedral2ref_aat_or[dih_name_orig]
-
 
                             if len(dihedral2params) > num_dihedrals:
                                 sys.stderr.write('DEBUG: dihedral['+dih_name_full+']:\n'
@@ -2965,16 +2985,47 @@ def main():
                                                  '       (If this is not a mistake in the .frc file, then explain\n'+
                                                  '        why to andrew so he can fix this.)\n')
 
+                            found_at_least_one = True
+
 
             #sys.stderr.write('DEBUG: number of interactions = '+str(len(dihedral2class2_bb))+'\n')
             if not found_at_least_one:
-                #raise InputError('Error: Undefined bonds for bond-bond interactions:\n'
-                #                 '       '+str(atom_names)+'\n')
-                lines_warnings.append('# WARNING: Undefined bond length (r0) or rest angle (theta0) for\n'+
-                                      '#          the dihedral interaction between: ' +
+                lines_warnings.append('# WARNING: Undefined bond length (r0) or rest angle (theta0) in dihedral: ' +
+                                      #'#          the dihedral interaction between: ' +
                                       ' '.join(atom_names)+'\n')
-                #sys.stderr.write('bond_names = ' + str(bond_names) + '\n')
+                # Then we were unable to define cross terms for this interaction because
+                # at least one of the bond lengths or bond angles could not be determined.
+                # This usually occurs because most of the .FRC files which are
+                # in circulation are incomplete.  We have to handle this gracefully.
+                dih_name_full = (dih_name_orig + ',X,X,X,X,X,X,X,X,X,X,X,X')
+                reference = dihedral2ref_or[dih_name_orig]
+                version = dihedral2ver_or[dih_name_orig]
+                dihedral2ref[dih_name_full] = reference
+                dihedral2ver[dih_name_full] = version
+                dihedral2style[dih_name_full] = 'class2'
+                dihedral2priority[dih_name_full] = dihedral2priority_or[dih_name_orig]
+                dihedral2params[dih_name_full] = ' '.join(dihedral2params_or[dih_name_orig])
+                # substitute zeros for all the cross term interactions
 
+                dihedral2class2_mbt[dih_name_full] = '0.0 0.0 0.0 1.0'
+                dihedral2ref_mbt[dih_name_full] = reference
+                dihedral2ver_mbt[dih_name_full] = version
+
+                dihedral2class2_ebt[dih_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0'
+                dihedral2ref_ebt[dih_name_full] = reference
+                dihedral2ver_ebt[dih_name_full] = version
+
+                dihedral2class2_bb13[dih_name_full] = '0.0 1.0 1.0'
+                dihedral2ref_bb13[dih_name_full] = reference
+                dihedral2ver_bb13[dih_name_full] = version
+
+                dihedral2class2_at[dih_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0'
+                dihedral2ref_at[dih_name_full] = reference
+                dihedral2ver_at[dih_name_full] = version
+
+                dihedral2class2_aat[dih_name_full] = '0.0 120.0 120.0'
+                dihedral2ref_aat[dih_name_full] = reference
+                dihedral2ver_aat[dih_name_full] = version
 
 
 
@@ -3046,25 +3097,25 @@ def main():
 
             #try:
             M1 = improper2cross[imp_name_orig][ImCrossTermID([atom_names[0],
-                                                                 atom_names[1],
-                                                                 atom_names[2],
-                                                                 atom_names[3]])]
+                                                              atom_names[1],
+                                                              atom_names[2],
+                                                              atom_names[3]])]
             #except KeyError:
             #    M1 = '0.0'
 
             #try:
             M2 = improper2cross[imp_name_orig][ImCrossTermID([atom_names[2],
-                                                                 atom_names[1],
-                                                                 atom_names[0],
-                                                                 atom_names[3]])]
+                                                              atom_names[1],
+                                                              atom_names[0],
+                                                              atom_names[3]])]
             #except KeyError:
             #    M2 = '0.0'
 
             #try:
             M3 = improper2cross[imp_name_orig][ImCrossTermID([atom_names[0],
-                                                                 atom_names[1],
-                                                                 atom_names[3],
-                                                                 atom_names[2]])]
+                                                              atom_names[1],
+                                                              atom_names[3],
+                                                              atom_names[2]])]
             #except KeyError:
             #    M3 = '0.0'
 
@@ -3171,7 +3222,7 @@ def main():
                         #angle_name_l = SortByEnds([atom_names[0], atom_names[1], atom_names[2]])
                         #angle_name = EncodeInteractionName(angle_name_l, is_auto)
                         #theta01 = angle2theta0_or[angle_name]
-                        angle_data = LookupRestAngle(a1, a2, a3,
+                        angle_data = LookupBondAngle(a1, a2, a3,
                                                      atom2equiv_angle,
                                                      angle2theta0_or,
                                                      [atom2auto_improperend,
@@ -3193,7 +3244,7 @@ def main():
                             #angle_name = EncodeInteractionName(angle_name_l[0], is_auto)
 
                             #theta02 = angle2theta0_or[angle_name]
-                            angle_data = LookupRestAngle(a1, a2, a4,
+                            angle_data = LookupBondAngle(a1, a2, a4,
                                                          atom2equiv_angle,
                                                          angle2theta0_or,
                                                          [atom2auto_improperend,
@@ -3211,7 +3262,7 @@ def main():
 
 
                             #theta03 = angle2theta0_or[angle_name]
-                            angle_data = LookupRestAngle(a3, a2, a4,
+                            angle_data = LookupBondAngle(a3, a2, a4,
                                                          atom2equiv_angle,
                                                          angle2theta0_or,
                                                          [atom2auto_improperend,
@@ -3287,6 +3338,29 @@ def main():
                             num_impropers = len(improper2params)
 
 
+                        found_at_least_one = True
+
+
+            if not found_at_least_one:
+                lines_warnings.append('# WARNING: Undefined rest angle (theta0) in improper: ' +
+                                      #'#          the improper interaction between: ' +
+                                      ' '.join(atom_names)+'\n')
+                # Then we were unable to define cross terms for this interaction because
+                # at least one of the equilibrium rest angles could not be determined.
+                # This usually occurs because most of the .FRC files which are
+                # in circulation are incomplete.  We have to handle this gracefully.
+                imp_name_full = (imp_name_orig + ',X,X,X,X,X,X,X,X,X')
+                reference = improper2ref_or[imp_name_orig]
+                version = improper2ver_or[imp_name_orig]
+                improper2ref[imp_name_full] = reference
+                improper2ver[imp_name_full] = version
+                improper2params[imp_name_full] = ' '.join(improper2params_or[imp_name_orig])
+                improper2style[imp_name_full] = 'class2'
+                improper2priority[imp_name_full] = improper2priority_or[imp_name_orig]
+                # substitute zeros for the cross term interactions
+                improper2class2_aa[imp_name_full] = '0.0 0.0 0.0 120.0 120.0 120.0'
+                improper2ref_aa[imp_name_full] = reference
+                improper2ver_aa[imp_name_full] = version
 
 
 
@@ -3551,11 +3625,11 @@ def main():
 
                 angle_is_auto = IsAutoInteraction(angle_name)
                 if angle2style[angle_name] == 'class2':
-                    anm = [a for a in map(EncodeAName, anames)]
-                    bnames = [[a for a in map(EncodeAName, anames[3:5])],
-                              [a for a in map(EncodeAName, anames[5:7])]]
-                    bond_is_auto1 = IsAutoInteraction(bnames[0][0]+','+bnames[0][1])
-                    bond_is_auto2 = IsAutoInteraction(bnames[1][0]+','+bnames[1][1])
+                    anm = [a for a in map(DecodeAName, anames)]
+                    bnames = [[a for a in map(DecodeAName, anames[3:5])],
+                              [a for a in map(DecodeAName, anames[5:7])]]
+                    bond_is_auto1 = IsAutoInteraction(anames[3])
+                    bond_is_auto2 = IsAutoInteraction(anames[5])
 
                 if ((angle_is_auto or bond_is_auto1 or bond_is_auto2) and
                     (not include_auto_equivalences)):
@@ -3567,10 +3641,11 @@ def main():
                     if angle2style[angle_name] == 'class2':
                         assert(bnames[0][1] == bnames[1][0])
                         # Optional: Shorten the angle name since some of the atom's bond names are redundant:
-                        ang_name_abbr[angle_name] = EncodeInteractionName(anm[0:3]+
-                                                        #[anm[3],anm[4],anm[6]],
-                                                        [bnames[0][0],bnames[0][1],bnames[1][1]],
-                                                        angle_is_auto)
+                        ang_name_abbr[angle_name] = EncodeInteractionName(map(EncodeAName,
+                                                                              anm[0:3] +
+                                                                              #[anm[3],anm[4],anm[6]],
+                                                                              [bnames[0][0],bnames[0][1],bnames[1][1]]),
+                                                                              angle_is_auto)
                         sys.stdout.write('    @angle:' + ang_name_abbr[angle_name] + ' ' +
                                          ' @atom:*,p*,b'+bnames[0][0]+',a'+anames[0]+',d*,i* ' +
                                          ' @atom:*,p*,b'+bnames[0][1]+',a'+anames[1]+',d*,i* ' +
@@ -3615,8 +3690,8 @@ def main():
                             ab12 = 'ab' + bnames[0][1]     #(auto bond atom name)
                             abshared = 'ab' + bnames[0][1] #(auto bond atom name)
                         # print atom 1 information:
-                        sys.stdout.write(' @atom:*,p*,'+b11+a1+',d*,i*,' +
-                                         'ap*,aq*,'+ab11+aa1+
+                        sys.stdout.write(' @atom:*,p*,'+b11+','+a1+',d*,i*,' +
+                                         'ap*,aq*,'+ab11+','+aa1+
                                          ',ade*,adc*,aie*,aic*')
                         if not bond_is_auto2:
                             b21 = 'b' + bnames[1][0]  #(bond atom equivalent name)
@@ -3631,22 +3706,22 @@ def main():
                             assert((abshared == 'ab*') or (abshared == 'ab' + bnames[1][0]))
                             abshared = 'ab' + bnames[1][0]
                         # print atom 2 information:
-                        sys.stdout.write(' @atom:*,p*,'+bshared+a2+',d*,i*,' +
-                                         'ap*,aq*,'+abshared+aa2+
+                        sys.stdout.write(' @atom:*,p*,'+bshared+','+a2+',d*,i*,' +
+                                         'ap*,aq*,'+abshared+','+aa2+
                                          ',ade*,adc*,aie*,aic*')
                         # print atom 3 information:
-                        sys.stdout.write(' @atom:*,p*,'+b21+a3+',d*,i*,' +
-                                         'ap*,aq*,'+ab21+aa3+
+                        sys.stdout.write(' @atom:*,p*,'+b22+','+a3+',d*,i*,' +
+                                         'ap*,aq*,'+ab22+','+aa3+
                                          ',ade*,adc*,aie*,aic*')
                         sys.stdout.write('\n')
                     else:
                         sys.stdout.write('    @angle:' + ang_name_abbr[angle_name] + ' ' +
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae'+anames[0]+'ac*,ade*,adc*,aie*,aic* '
+                                         'ap*,aq*,ab*,aae'+anames[0]+'aac*,ade*,adc*,aie*,aic* '
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae*,ac'+anames[1]+',ade*,adc*,aie*,aic* '
+                                         'ap*,aq*,ab*,aae*,aac'+anames[1]+',ade*,adc*,aie*,aic* '
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae'+anames[2]+'ac*,ade*,adc*,aie*,aic* '
+                                         'ap*,aq*,ab*,aae'+anames[2]+'aac*,ade*,adc*,aie*,aic* '
                                          '\n')
 
                 assert(ang_name_abbr[angle_name] not in ang_name_abbr_used)
@@ -3744,14 +3819,17 @@ def main():
 
                 dihedral_is_auto = IsAutoInteraction(dihedral_name)
                 if dihedral2style[dihedral_name] == 'class2':
-                    anm = [a for a in map(EncodeAName, anames)]
-                    bnames = [anames[4:6], anames[6:8], anames[8:10]]
-                    bond_is_auto1 = IsAutoInteraction(bnames[0][0]+','+bnames[0][1])
-                    bond_is_auto2 = IsAutoInteraction(bnames[1][0]+','+bnames[1][1])
-                    bond_is_auto3 = IsAutoInteraction(bnames[2][0]+','+bnames[2][1])
-                    ang_names = [anames[10:13], anames[13:16]]
-                    angle_is_auto1 = IsAutoInteraction(ang_names[0][0]+','+ang_names[0][1]+','+ang_names[0][2])
-                    angle_is_auto2 = IsAutoInteraction(ang_names[1][0]+','+ang_names[2][1]+','+ang_names[3][2])
+                    anm = [a for a in map(DecodeAName, anames)]
+                    bnames = [[a for a in map(DecodeAName, anames[4:6])],
+                              [a for a in map(DecodeAName, anames[6:8])],
+                              [a for a in map(DecodeAName, anames[8:10])]]
+                    bond_is_auto1 = IsAutoInteraction(anames[4])
+                    bond_is_auto2 = IsAutoInteraction(anames[6])
+                    bond_is_auto3 = IsAutoInteraction(anames[8])
+                    ang_names = [[a for a in map(DecodeAName, anames[10:13])],
+                                 [a for a in map(DecodeAName, anames[13:16])]]
+                    angle_is_auto1 = IsAutoInteraction(anames[10])
+                    angle_is_auto2 = IsAutoInteraction(anames[13])
 
                 if ((dihedral_is_auto or
                      angle_is_auto1 or angle_is_auto2 or 
@@ -3770,17 +3848,24 @@ def main():
                         assert(bnames[1][1] == bnames[2][0])
                         assert(ang_names[0][1] == ang_names[1][0])
                         assert(ang_names[0][2] == ang_names[1][1])
+
                         # Optional: Shorten the dihedral name since some of the atom's bond names are redundant:
-                        dih_name_abbr[dihedral_name] = EncodeInteractionName(anm[0:4]+
-                                               #[bnames[0][0],bnames[0][1], bnames[1][1], bnames[2][1]]
-                                               [anm[4],anm[5],anm[7],anm[9]]+
-                                               #[ang_names[0][0],ang_names[0][1],ang_names[0][2],ang_names[1][2]]
-                                               [anm[10],anm[11],anm[12],anm[15]],
-                                               is_auto)
+                        dih_name_abbr[dihedral_name] = EncodeInteractionName(map(EncodeAName,
+                                                                                 anm[0:4] +
+                                                                                 #[bnames[0][0], bnames[0][1],
+                                                                                 # bnames[1][1], bnames[2][1]]
+                                                                                 [anm[4],anm[5],anm[7],anm[9]]+
+                                                                                 #[ang_names[0][0],
+                                                                                 # ang_names[0][1],
+                                                                                 # ang_names[0][2],
+                                                                                 # ang_names[1][2]]
+                                                                                 [anm[10],anm[11],anm[12],anm[15]]),
+                                                                             is_auto)
+
                         sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
                                          ' @atom:*,p*,b'+bnames[0][0]+',a'+ang_names[0][0]+',d'+anames[0]+',i* ' +
                                          ' @atom:*,p*,b'+bnames[0][1]+',a'+ang_names[0][1]+',d'+anames[1]+',i* ' +
-                                         ' @atom:*,p*,b'+bnames[1][1]+',a'+ang_names[0][2]+',d'+anames[2]+',i*'
+                                         ' @atom:*,p*,b'+bnames[1][1]+',a'+ang_names[0][2]+',d'+anames[2]+',i* '
                                          ' @atom:*,p*,b'+bnames[2][1]+',a'+ang_names[1][2]+',d'+anames[3]+',i*'
                                          '\n')
                     else:
@@ -3862,11 +3947,11 @@ def main():
                             b32 = 'b' + bnames[2][1]      #(bond atom equivalent name)
                             assert((bshared2 == 'b*') or (bshared2 == 'b' + bnames[2][0]))
                             bshared2 = 'b' + bnames[2][0] #(bond atom equivalent name)
-                            ab21 = ab22 = 'ab*'
+                            ab31 = ab32 = 'ab*'
                         else:
-                            b21 = b22 = 'b*'
-                            ab21 = 'ab' + bnames[2][0]      #(auto bond atom name)
-                            ab22 = 'ab' + bnames[2][1]      #(auto bond atom name)
+                            b31 = b32 = 'b*'
+                            ab31 = 'ab' + bnames[2][0]      #(auto bond atom name)
+                            ab32 = 'ab' + bnames[2][1]      #(auto bond atom name)
                             assert((abshared2 == 'ab*') or (abshared2 == 'ab' + bnames[2][0]))
                             abshared2 = 'ab' + bnames[2][0] #(auto bond atom name)
 
@@ -3876,65 +3961,65 @@ def main():
                             a13 = 'a' + ang_names[0][2]      #(angle atom equivalent name)
                             ashared1 = 'a' + ang_names[0][1] #(angle atom equivalent name)
                             ashared2 = 'a' + ang_names[0][2] #(angle atom equivalent name)
-                            aa11 = 'aae*'
-                            aa12 = 'aac*'
-                            aa13 = 'aae*'
+                            aa11 = 'aae*,aac*'
+                            aa12 = 'aae*,aac*'
+                            aa13 = 'aae*,aac*'
                         else:
                             a11 = a12 = a13 = 'a*'
-                            aa11 = 'ae' + ang_names[0][0]      #(auto angle atom name)
-                            aa12 = 'ac' + ang_names[0][1]      #(auto angle atom name)
-                            aa13 = 'ae' + ang_names[0][2]      #(auto angle atom name)
-                            aac_shared1 = 'aac' + ang_names[0][1] #(auto angle atom name)
-                            aae_shared2 = 'aae' + ang_names[0][2] #(auto angle atom name)
+                            aa11 = 'aae'+ang_names[0][0]+'aac*'  #(auto angle atom name)
+                            aa12 = 'aae*,aac'+ang_names[0][1]    #(auto angle atom name)
+                            aa13 = 'aae'+ang_names[0][2]+'aac*'  #(auto angle atom name)
+                            aac_shared1 = 'aac'+ang_names[0][1]  #(auto angle atom name)
+                            aae_shared2 = 'aae'+ang_names[0][2]  #(auto angle atom name)
 
                         if not angle_is_auto2:
                             a21 = 'a' + ang_names[1][0]      #(angle atom equivalent name)
                             a22 = 'a' + ang_names[1][1]      #(angle atom equivalent name)
                             a23 = 'a' + ang_names[1][2]      #(angle atom equivalent name)
-                            assert((ashared1 == 'a*' or (ashared1 == 'a' + ang_names[1][0]))
+                            assert((ashared1 == 'a*') or (ashared1 == 'a' + ang_names[1][0]))
                             ashared1 = 'a' + ang_names[1][0] #(angle atom equivalent name)
-                            assert((ashared2 == 'a*' or (ashared2 == 'a' + ang_names[1][1]))
+                            assert((ashared2 == 'a*') or (ashared2 == 'a' + ang_names[1][1]))
                             ashared2 = 'a' + ang_names[1][1] #(angle atom equivalent name)
-                            aa21 = 'aae*'
-                            aa22 = 'aac*'
-                            aa23 = 'aae*'
+                            aa21 = 'aae*,aac*'
+                            aa22 = 'aae*,aac*'
+                            aa23 = 'aae*,aac*'
                         else:
                             a21 = a22 = a23 = 'a*'
-                            aa21 = 'ae' + ang_names[1][0]        #(auto angle atom name)
-                            aa22 = 'ac' + ang_names[1][1]        #(auto angle atom name)
-                            aa23 = 'ae' + ang_names[1][2]        #(auto angle atom name)
-                            aae_shared1 = 'aae' + ang_names[1][0] #(auto angle atom name)
-                            aac_shared2 = 'aac' + ang_names[1][1] #(auto angle atom name)
+                            aa21 = 'aae'+ang_names[1][0]+',aac*'  #(auto angle atom name)
+                            aa22 = 'aae*,aac'+ang_names[1][1]     #(auto angle atom name)
+                            aa23 = 'aae'+ang_names[1][2]+',aac*'  #(auto angle atom name)
+                            aae_shared1 = 'aae'+ang_names[1][0]   #(auto angle atom name)
+                            aac_shared2 = 'aac'+ang_names[1][1]   #(auto angle atom name)
 
 
                         # print atom 1 information:
                         sys.stdout.write(' @atom:*,p*,'+b11+','+a11+','+d1+',i*,' +
-                                         'ap*,aq*,'+ab11+','+aa11+',aac*,' +
-                                         aad1+',aie*,aic*')
+                                         'ap*,aq*,'+ab11+','+aa11+',' +
+                                         ad1+',aie*,aic*')
                         # print atom 2 information:
                         sys.stdout.write(' @atom:*,p*,'+bshared1+','+ashared1+','+d2+',i*,' +
                                          'ap*,aq*,'+abshared1+','+aae_shared1+','+aac_shared1+',' +
-                                         aad2+',aie*,aic*')
+                                         ad2+',aie*,aic*')
                         # print atom 3 information:
                         sys.stdout.write(' @atom:*,p*,'+bshared2+','+ashared2+','+d3+',i*,' +
                                          'ap*,aq*,'+abshared2+','+aae_shared2+','+aac_shared2+',' +
-                                         aad3+',aie*,aic*')
+                                         ad3+',aie*,aic*')
                         # print atom 4 information:
                         sys.stdout.write(' @atom:*,p*,'+b32+','+a23+','+d4+',i*,' +
-                                         'ap*,aq*,'+ab32+','+aa23+',aac*,' +
-                                         aad4+',aie*,aic*')
+                                         'ap*,aq*,'+ab32+','+aa23+',' +
+                                         ad4+',aie*,aic*')
                         sys.stdout.write('\n')
                     else:
                         assert(dihedral_is_auto)  #(so we should use "auto" equivalence names for these atoms)
                         sys.stdout.write('    @dihedral:' + dih_name_abbr[dihedral_name] + ' ' +
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae*,ac*,ade'+anames[0]+',adc*,aie*,aic* '
+                                         'ap*,aq*,ab*,aae*,aac*,ade'+anames[0]+',adc*,aie*,aic* '
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae*,ac*,ade*,adc'+anames[1]+',aie*,aic* '
+                                         'ap*,aq*,ab*,aae*,aac*,ade*,adc'+anames[1]+',aie*,aic* '
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae*,ac*,ade*,adc'+anames[2]+',aie*,aic* '
+                                         'ap*,aq*,ab*,aae*,aac*,ade*,adc'+anames[2]+',aie*,aic* '
                                          ' @atom:*,p*,b*,d*,i*,' +
-                                         'ap*,aq*,ab*,ae*,ac*,ade'+anames[3]+',adc*,aie*,aic* '
+                                         'ap*,aq*,ab*,aae*,aac*,ade'+anames[3]+',adc*,aie*,aic* '
                                          '\n')
 
 
@@ -4050,79 +4135,179 @@ def main():
                           for x in ExtractANames(improper_name)]
                 #if (len(anames) == 4) and improper2style[improper_name] == 'class2':
                 #    continue
-                ang_names = [anames[4:7],anames[7:10],anames[10:13]]
-                # atom orderings are LAMMPS implementation specific.  See:
-                # http://lammps.sandia.gov/doc/improper_class2.html
-                #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
-                #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
-                #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
-                assert(ang_names[0][1] == ang_names[1][1] == ang_names[2][1])
-                assert(ang_names[0][0] == ang_names[1][0])
-                assert(ang_names[1][2] == ang_names[2][2])
-                assert(ang_names[2][0] == ang_names[0][2])
-                # (NOTE TO SELF:
-                #  If these assertions fail, then try checking if they are
-                #  all either the same, or '*'.  If they are then just replace '*'
-                #  everwhere that atom appears with the most restrictive name.)
+                ang_names = [[a for a in map(DecodeAName, anames[4:7])],
+                             [a for a in map(DecodeAName, anames[7:10])],
+                             [a for a in map(DecodeAName, anames[10:13])]]
+                anm = [a for a in map(DecodeAName, anames)]
 
-                # Optional: Shorten the angle name since some of the bnames are redundant:
-                is_auto = IsAutoInteraction(improper_name)
-                anm = [a for a in map(EncodeAName, anames)]
-                imp_name_abbr[improper_name] = EncodeInteractionName(anm[0:4]+
-                                                   #[ang_names[0][0],ang_names[0][1],ang_names[0][2],
-                                                   # ang_names[1][2]]
-                                                   [anm[4],anm[5],anm[6],
-                                                    anm[9]],
-                                                   is_auto)
+                improper_is_auto = IsAutoInteraction(improper_name)
+                if improper2style[improper_name] == 'class2':
+                    angle_is_auto1 = IsAutoInteraction(anames[4])
+                    angle_is_auto2 = IsAutoInteraction(anames[7])
+                    angle_is_auto3 = IsAutoInteraction(anames[10])
 
-                # Did the user ask us to include "auto" interactions?
-                if improper2style[improper_name] != 'class2':
-                    if IsAutoInteraction(improper_name):
-                        if include_auto_equivalences:
-                            sys.stdout.write('    @improper:' + imp_name_abbr[improper_name] +' '+
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
-                                             + anames[0] + ',aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aic'
-                                             + anames[1] +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
-                                             + anames[2] + ',aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie'
-                                             + anames[3] + ',aic*' +
-                                             '\n')
-                        else:
-                            continue
-                    else:
+                if ((improper_is_auto or
+                     angle_is_auto1 or
+                     angle_is_auto2 or
+                     angle_is_auto3) and
+                    (not include_auto_equivalences)):
+                    continue
+
+                # Can we ignore "auto" interactions?
+                # (If so, life is much easier)
+                if not (improper_is_auto or
+                        angle_is_auto1 or
+                        angle_is_auto2 or
+                        angle_is_auto3):
+                    if improper2style[improper_name] == 'class2':
+                        # NOTE: atom orderings here are LAMMPS implementation specific.
+                        # http://lammps.sandia.gov/doc/improper_class2.html
+                        #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
+                        #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
+                        #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
+                        assert(ang_names[0][1] == ang_names[1][1] == ang_names[2][1])
+                        assert(ang_names[0][0] == ang_names[1][0])
+                        assert(ang_names[1][2] == ang_names[2][2])
+                        assert(ang_names[2][0] == ang_names[0][2])
+
+                        # Optional: Shorten the improper name since some of the atom's bond names are redundant:
+                        imp_name_abbr[improper_name] = EncodeInteractionName(map(EncodeAName, anm[0:4] +
+                                                                                 [ang_names[0][0],
+                                                                                  ang_names[0][1],
+                                                                                  ang_names[0][2],
+                                                                                  ang_names[1][2]]),
+                                                                                  #[anm[4],anm[5],anm[6],
+                                                                                  #anm[9]],
+                                                                             improper_is_auto)
                         sys.stdout.write('    @improper:' + imp_name_abbr[improper_name] + ' ' +
-                                         ' @atom:*,p*,b*,a*,d*,i' + anames[0] + 
+                                         ' @atom:*,p*,b*,a'+ang_names[0][0]+',d*,i' + anames[0] +
+                                         ' @atom:*,p*,b*,a'+ang_names[0][1]+',d*,i' + anames[1] +
+                                         ' @atom:*,p*,b*,a'+ang_names[0][2]+',d*,i' + anames[2] +
+                                         ' @atom:*,p*,b*,a'+ang_names[1][2]+',d*,i' + anames[3] +
+                                         '\n')
+                    else:
+                        imp_name_abbr[improper_name] = improper_name
+                        sys.stdout.write('    @improper:' + imp_name_abbr[improper_name] + ' ' +
+                                         ' @atom:*,p*,b*,a*,d*,i' + anames[0] +
                                          ' @atom:*,p*,b*,a*,d*,i' + anames[1] +
                                          ' @atom:*,p*,b*,a*,d*,i' + anames[2] +
                                          ' @atom:*,p*,b*,a*,d*,i' + anames[3] +
                                          '\n')
                 else:
-                    if IsAutoInteraction(improper_name):
-                        if include_auto_equivalences:
-                            sys.stdout.write('    @improper:' + imp_name_abbr[improper_name] +' ' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade'+ang_names[0][0]+',adc*,aie'
-                                             + anames[0] + ',aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac'+ang_names[0][1]+',ade*,adc*,aie*,aic'
-                                             + anames[1] +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade'+ang_names[0][1]+',adc*,aie'
-                                             + anames[2] + ',aic*' +
-                                             ' @atom:*,ap*,aq*,ab*,aae*,aac*,ade'+ang_names[2][2]+',adc*,aie'
-                                             + anames[3] + ',aic*' +
-                                             '\n')
+                    # Consider "auto" interactions and "auto" atom equivalences
+                    imp_name_abbr[improper_name] = improper_name  #(full name)
+                    sys.stdout.write('    @improper:' + imp_name_abbr[improper_name] + ' ')
+
+                    if improper2style[improper_name] == 'class2':
+
+                        #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
+                        #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
+                        #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
+
+                        # default angle atom equivalence names:
+                        ashared1 = 'a*'          #(default for a1 <-> ang_names[0][0], ang_names[1][0])
+                        ashared2 = 'a*'          #(default for a2 <-> ang_names[0][1], ang_names[1][1], ang_names[2][1])
+                        ashared3 = 'a*'          #(default for a3 <-> ang_names[2][0], ang_names[0][2])
+                        ashared4 = 'a*'          #(default for a4 <-> ang_names[1][2], ang_names[2][2])
+
+                        # default auto angle atom equivalence names:
+                        aashared1 = 'aae*,aac*'  #(default for a1 <-> ang_names[0][0], ang_names[1][0])
+                        aashared2 = 'aae*,aac*'  #(default for a2 <-> ang_names[0][1], ang_names[1][1], ang_names[2][1])
+                        aashared3 = 'aae*,aac*'  #(default for a3 <-> ang_names[2][0], ang_names[0][2])
+                        aashared4 = 'aae*,aac*'  #(default for a4 <-> ang_names[1][2], ang_names[2][2])
+
+                        if improper_is_auto:
+                            i1 = i2 = i3 = i4 = 'i*'           #Then, dont use regular equivalences for these atoms.
+                            ai1 = 'aie' + anames[0] + ',aic*'  #Instead use the corresponding "auto" equivalence names
+                            ai2 = 'aie*,aic*' + anames[1]      #for these atoms. (There are different auto equivalence names depending
+                            ai3 = 'aie' + anames[2] + ',aic*'  #on if the atom appears in the center (c) or end(e)
+                            ai4 = 'aie' + anames[3] + ',aic*'
                         else:
-                            continue
+                            i1 = 'i' + anames[0]               #In this case, use use (regular) equivalence names
+                            i2 = 'i' + anames[1]               #for these atoms
+                            i3 = 'i' + anames[2]
+                            i4 = 'i' + anames[3]
+                            ai1 = ai2 = ai3 = 'aie*,aic*'
+
+                        #For reference, LAMMPS-specific atom ordering:
+                        #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
+                        #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
+                        #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
+                        if not angle_is_auto1:
+                            ashared1 = 'a' + ang_names[0][0]
+                            ashared2 = 'a' + ang_names[0][1]
+                            ashared3 = 'a' + ang_names[0][2]
+                        else:
+                            aashared1 = 'aae' + ang_names[0][0] + ',aac*'
+                            aashared2 = 'aae*,aac' + ang_names[0][1]
+                            aashared3 = 'aae' + ang_names[0][2] + ',aac*'
+
+                        #For reference, LAMMPS-specific atom ordering:
+                        #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
+                        #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
+                        #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
+                        if not angle_is_auto2:
+                            assert((ashared1 == 'a*') or (ashared1 == 'a' + ang_names[1][0]))
+                            ashared1 = 'a' + ang_names[1][0]
+                            assert((ashared2 == 'a*') or (ashared2 == 'a' + ang_names[1][1]))
+                            ashared2 = 'a' + ang_names[1][1]
+                            ashared4 = 'a' + ang_names[1][2]
+                        else:
+                            assert((aashared1 == 'aae*,aac*') or (aashared1 == 'aae' + ang_names[1][0] + ',aac*'))
+                            aashared1 = 'aae' + ang_names[1][0] + ',aac*'
+                            assert((aashared2 == 'aae*,aac*') or (aashared2 == 'aae*,aac' + ang_names[1][1]))
+                            aashared2 = 'aae*,aac' + ang_names[1][1]
+                            aashared4 = 'aae' + ang_names[1][2] + ',aac*'
+
+                        #For reference, LAMMPS-specific atom ordering:
+                        #ang_names[0] <==> (a1, a2, a3) <==>  (i, j, k)
+                        #ang_names[1] <==> (a1, a2, a4) <==>  (i, j, l)
+                        #ang_names[2] <==> (a3, a2, a4) <==>  (k, j, l)
+                        if not angle_is_auto3:
+                            assert((ashared3 == 'a*') or (ashared3 == 'a' + ang_names[2][0]))
+                            ashared3 = 'a' + ang_names[2][0]
+                            assert((ashared2 == 'a*') or (ashared2 == 'a' + ang_names[2][1]))
+                            ashared2 = 'a' + ang_names[2][1]
+                            assert((ashared4 == 'a*') or (ashared4 == 'a' + ang_names[2][2]))
+                            ashared4 = 'a' + ang_names[2][2]
+                        else:
+                            assert((aashared3 == 'aae*,aac*') or (aashared3 == 'aae' + ang_names[2][0] + ',aac*'))
+                            aashared3 = 'aae' + ang_names[2][0] + ',aac*'
+                            assert((aashared2 == 'aae*,aac*') or (aashared2 == 'aae*,aac' + ang_names[2][1]))
+                            aashared2 = 'aae*,aac' + ang_names[2][1]
+                            assert((aashared4 == 'aae*,aac*') or (aashared4 == 'aae' + ang_names[2][2] + ',aac*'))
+                            aashared4 = 'aae' + ang_names[2][2] + ',aac*'
+
+                        # print atom 1 information:
+                        sys.stdout.write(' @atom:*,p*,b*,'+ashared1+',d*,'+i1+','+
+                                         'ap*,aq*,ab*,'+aashared1+',ad*,'+ai1)
+                        # print atom 2 information:
+                        sys.stdout.write(' @atom:*,p*,b*,'+ashared2+',d*,'+i2+','+
+                                         'ap*,aq*,ab*,'+aashared2+',ad*,'+ai2)
+                        # print atom 3 information:
+                        sys.stdout.write(' @atom:*,p*,b*,'+ashared3+',d*,'+i3+','+
+                                         'ap*,aq*,ab*,'+aashared3+',ad*,'+ai3)
+                        # print atom 4 information:
+                        sys.stdout.write(' @atom:*,p*,b*,'+ashared4+',d*,'+i4+','+
+                                         'ap*,aq*,ab*,'+aashared4+',ad*,'+ai4)
+                        sys.stdout.write('\n')
                     else:
                         sys.stdout.write('    @improper:' + imp_name_abbr[improper_name] + ' ' +
-                                         ' @atom:*,p*,b*,a'+ang_names[0][0]+',d*,i' + anames[0] + 
-                                         ' @atom:*,p*,b*,a'+ang_names[0][1]+',d*,i' + anames[1] +
-                                         ' @atom:*,p*,b*,a'+ang_names[0][2]+',d*,i' + anames[2] +
-                                         ' @atom:*,p*,b*,a'+ang_names[1][2]+',d*,i' + anames[3] +
+                                         ' @atom:*,p*,b*,d*,i*,' +
+                                         'ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aie'+anames[0]+',aic*'
+                                         ' @atom:*,p*,b*,d*,i*,' +
+                                         'ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aie*,aic'+anames[1]+
+                                         ' @atom:*,p*,b*,d*,i*,' +
+                                         'ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aie'+anames[2]+',aic*'
+                                         ' @atom:*,p*,b*,d*,i*,' +
+                                         'ap*,aq*,ab*,aae*,aac*,ade*,adc*,aie*,aie'+anames[3]+',aic*'
                                          '\n')
 
                 assert(imp_name_abbr[improper_name] not in imp_name_abbr_used)
                 imp_name_abbr_used.add(imp_name_abbr[improper_name])
+
+
+
 
             sys.stdout.write('  }  # end of "Data Impropers By Type" section\n'
                              '\n')
@@ -4167,7 +4352,7 @@ def main():
                                  "  # (ver=" + improper2ver[improper_name] +
                                  ", ref=" + improper2ref[improper_name] + ")\n")
                 if improper_name in improper2class2_aa:
-                    sys.stdout.write('    improper_coeff @improper:'+imp_name_abbr[improper_name_abbr]+'  '+
+                    sys.stdout.write('    improper_coeff @improper:'+imp_name_abbr[improper_name]+'  '+
                                      improper2style[improper_name] + ' aa ' +
                                      improper2class2_aa[improper_name] +
                                      "  # (ver=" + improper2ver_aa[improper_name] +

@@ -4,7 +4,6 @@ import "alkane50.lt"  # Defines the "Alkane50" molecule
 polymer = new Alkane50
 
 
-
 # Specify the size of the world the polymer lives in:
 write_once("Data Boundary") {
    0.0  72.0  xlo xhi
