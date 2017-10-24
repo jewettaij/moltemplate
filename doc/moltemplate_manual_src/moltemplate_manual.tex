@@ -930,6 +930,17 @@ you want the scaling to occur.
  Of omitted, the origin is used.)
 \\
 \hline
+\begin{tabular}[t]{l}
+  \textit{.quat($a,b,c,d$)} \\
+  \textit{.quat($a,b,c,d,x_0,y_0,z_0$)} \\
+\end{tabular}
+  &
+ Rotate atom coordinates by the rotation corresponding
+ to quaternion $a+b\mathbf{i}+c\mathbf{j}+b\mathbf{k}$
+ (around \mbox{$(x_0,y_0,z_0)$}, if specified)
+  % Otherwise around $(0,0,0)$)
+\\
+\hline
 \multicolumn{2}{c} {
 \textbf{
 \textit{Note:}
@@ -1127,9 +1138,9 @@ Normally moltemplate.sh reorders the atoms in each bond, angle, dihedral, and im
 \\
 \hline
 -allow-wildcards &
-Allow the user of ``*'' and ``?'' characters within
+Allow the use of ``*'' and ``?'' characters within
 ``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
-and ``improper\_coeff'' commands.
+and ``improper\_coeff'' commands. (Default)
 \\
 \hline
 \end{tabular}

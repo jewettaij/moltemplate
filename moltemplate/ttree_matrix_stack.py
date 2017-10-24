@@ -388,6 +388,48 @@ class AffineStack(object):
                     AffineCompose(Mtmp, moveCentBack, Mdest)
                     CopyMat(Mdest, Mtmp)
 
+            elif transform_str.find('quat(') == 0:
+                i_paren_close = transform_str.find(')')
+                if i_paren_close == -1:
+                    i_paren_close = len(transform_str)
+                args = transform_str[5:i_paren_close].split(',')
+                center_v = None
+                if (len(args) == 7):
+                    center_v = [float(args[4]), float(args[5]), float(args[6])]
+                elif (len(args) != 4):
+                    raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+                                     '       Invalid command: \"' + transform_str + '\"\n'
+                                     '       This command requires either 4 or 7 numerical arguments.  Either:\n'
+                                     '           rot(angle, axisX, axisY, axiZ)  or \n'
+                                     '           rot(angle, axisX, axisY, axiZ, centerX, centerY, centerZ)')
+                M[0][3] = 0.0  # RotMatAXYZ() only modifies 3x3 submatrix of M
+                M[1][3] = 0.0  # The remaining final column must be zeroed by hand
+                M[2][3] = 0.0
+                q = (float(args[0]),
+                     float(args[1]),
+                     float(args[2]),
+                     float(args[3]))
+                Quaternion2Matrix(q, M)
+                if (center_v == None):
+                    AffineCompose(Mtmp, M, Mdest)
+                    CopyMat(Mdest, Mtmp)
+                else:
+                    # Move "center_v" to the origin
+                    moveCentToOrig = [[1.0, 0.0, 0.0, -center_v[0]],
+                                      [0.0, 1.0, 0.0, -center_v[1]],
+                                      [0.0, 0.0, 1.0, -center_v[2]]]
+                    AffineCompose(Mtmp, moveCentToOrig, Mdest)
+                    CopyMat(Mdest, Mtmp)
+                    # Rotate the coordinates (relative to the origin)
+                    AffineCompose(Mtmp, M, Mdest)  # M is the rotation matrix
+                    CopyMat(Mdest, Mtmp)
+                    # Move the origin back to center_v
+                    moveCentBack = [[1.0, 0.0, 0.0, center_v[0]],
+                                    [0.0, 1.0, 0.0, center_v[1]],
+                                    [0.0, 0.0, 1.0, center_v[2]]]
+                    AffineCompose(Mtmp, moveCentBack, Mdest)
+                    CopyMat(Mdest, Mtmp)
+
             # # elif transform_str.find('rotcm(') == 0:
             # #     assert(xcm != None)
             # #     i_paren_close = transform_str.find(')')
@@ -828,6 +870,20 @@ def RotMatAXYZ(dest, angle, axis_x, axis_y, axis_z):
     # from lttree_matrixstack import *
     # r = [[1.0,0.0,0.0], [0.0,1.0,0.0], [0.0,0.0,1.0]]
     # RotMatAXYZ(r, 90.0, 0.0, 0.0, 1.0)
+
+
+def Quaternion2Matrix(q, M):
+    "convert a quaternion q to a 3x3 rotation matrix M"""
+
+    M[0][0] =  (q[0]*q[0])-(q[1]*q[1])-(q[2]*q[2])+(q[3]*q[3])
+    M[1][1] = -(q[0]*q[0])+(q[1]*q[1])-(q[2]*q[2])+(q[3]*q[3])
+    M[2][2] = -(q[0]*q[0])-(q[1]*q[1])+(q[2]*q[2])+(q[3]*q[3])
+    M[0][1] = 2*(q[0]*q[1] - q[2]*q[3]);
+    M[1][0] = 2*(q[0]*q[1] + q[2]*q[3]);
+    M[1][2] = 2*(q[1]*q[2] - q[0]*q[3]);
+    M[2][1] = 2*(q[1]*q[2] + q[0]*q[3]);
+    M[0][2] = 2*(q[0]*q[2] + q[1]*q[3]);
+    M[2][0] = 2*(q[0]*q[2] - q[1]*q[3]);
 
 
 def CrossProd(dest, A, B):

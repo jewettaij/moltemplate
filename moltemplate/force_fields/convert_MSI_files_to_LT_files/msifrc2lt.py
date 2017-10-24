@@ -1,4 +1,8 @@
 #! /usr/bin/env python
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: 3-clause BSD License  (See LICENSE.TXT)
+# Copyright (c) 2017, California Institute of Technology
+# All rights reserved.
 
 """
 This standalone python script can be used to convert force-field data 
@@ -40,7 +44,7 @@ import os
 
 from collections import defaultdict, OrderedDict
 from operator import itemgetter
-from math import *
+
 
 g_program_name = __file__.split('/')[-1]
 
@@ -86,6 +90,36 @@ class InputError(Exception):
 
     def __repr__(self):
         return str(self)
+
+# It seems like there are no ordered sets in python, (a set that remembers the
+# order that you added elements), so I built one by wrapping OrderedDict()
+
+class MyOrderedSet(object):
+    def __init__(self, l):
+        self.d = OrderedDict()
+        for x in l:
+            self.d[x] = True
+    def __add__(self, x):
+        self.d[x] = True
+    def __delitem__(self, x):
+        del self.d[x]
+    def __contains__(self, x):
+        return x in self.d
+    def __iter__(self):
+        self.p = iter(self.d)
+        return self
+    def __next__(self):
+        return next(self.p)
+    # the following wrappers might be necessary for python2/3 compatibility:
+    def add(self, x):
+        self.__add__(x)
+    def del_item(self, x):
+        self.__del_item__(x)
+    def iter(self):
+        return self.__iter__()
+    def next(self):
+        return self.__next__()
+    # no need to bother with set unions and intersections
 
 
 def NSplitQuotedString(string,
@@ -840,7 +874,7 @@ def main():
         bond_style2docs['harmonic'] = 'http://lammps.sandia.gov/doc/bond_harmonic.html'
         bond_style2docs['class2'] = 'http://lammps.sandia.gov/doc/bond_class2.html'
         bond_style2docs['morse'] = 'http://lammps.sandia.gov/doc/bond_morse.html'
-        bond_symmetry_subgraph = ''  # default
+        bond_symmetry_subgraph = ''   # default
 
         angle_style2docs = {}
         #angle_style2args = defaultdict(str)
@@ -858,7 +892,7 @@ def main():
         #improper_style2args = defaultdict(str)
         improper_style2docs['cvff'] = 'http://lammps.sandia.gov/doc/improper_cvff.html'
         improper_style2docs['class2'] = 'http://lammps.sandia.gov/doc/improper_class2.html'
-        improper_symmetry_subgraph = 'cenJsortIKL'
+        improper_symmetry_subgraph = {}  #'cenJsortIKL'
 
         pair_mixing_style = 'sixthpower tail yes'
 
@@ -1070,8 +1104,8 @@ def main():
             elif argv[i] in ('-url', '-in-url'):
                 import urllib2
                 if i + 1 >= len(argv):
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed by the name of a\n'
-                                     '       file containing force-field information in msi/frc format.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by a URL pointing to\n'
+                                     '       a file containing force-field information in msi/frc format.\n')
                 url = argv[i + 1]
                 try:
                     request = urllib2.Request(url)
@@ -2220,26 +2254,27 @@ def main():
                 aorig = [a for a in map(EncodeAName, tokens[2:6])]
                 atom_names,_ignore  = OOPImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
-                improper2ver[improper_name] = tokens[0]
-                improper2ref[improper_name] = tokens[1]
-                improper2priority_or[improper_name] = \
+                imsym = improper_symmetry_subgraph[improper_name] = 'cenJflipIL'
+                subgraph2impname['cenJflipIL'].add(improper_name) CONTINUEHERE
+                improper2ver[imsym][improper_name] = tokens[0]
+                improper2ref[imsym][improper_name] = tokens[1]
+                improper2priority_or[imsym][improper_name] = \
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:6],
-                                              float(improper2ver[improper_name]))
-                improper_is_secondary_or[imp_name_orig] = False
-                improper2priority[improper_name] = \
+                                              float(improper2ver[imsym][improper_name]))
+                improper_is_secondary_or[imsym][imp_name_orig] = False
+                improper2priority[imsym][improper_name] = \
                     (section_is_auto,
-                     improper_is_secondary_or[imp_name_orig],
-                     improper2priority_or[improper_name])
+                     improper_is_secondary_or[imsym][imp_name_orig],
+                     improper2priority_or[imsym][improper_name])
                 K = tokens[6]
                 n = tokens[7]
                 chi0 = tokens[8]
-                improper2style[improper_name] = 'cvff'
-                improper2params[improper_name] = (Kchi+' '+n+' '+chi0)
-                improper_symmetry_subgraph = 'cenJswapIL'
+                improper2style[imsym][improper_name] = 'cvff'
+                improper2params[imsym][improper_name] = (Kchi+' '+n+' '+chi0)
                 #if improper_style_name == 'cvff':
                 #    improper2params[improper_name] = (Kchi+' '+n+' '+chi0)
-                #    improper_symmetry_subgraph = 'cenJswapIL'
+                #    improper_symmetry_subgraph[improper_name] = 'cenJswapIL'
 
 
             elif ((len(tokens) > 7) and (section_name == '#wilson_out_of_plane')
@@ -2247,8 +2282,6 @@ def main():
                 if line.lstrip().find('!') == 0:
                     continue
                 improper_styles.add('class2')
-                #improper_symmetry_subgraph = 'dihedrals_nosym'  (<--no)
-                improper_symmetry_subgraph = 'cenJsortIKL'
                 sys.stderr.write('tokens = ' + str(tokens) + '\n')
 
                 version = tokens[0]
@@ -2271,13 +2304,15 @@ def main():
                 # associated with the same improper interaction.
 
                 imp_name_orig = EncodeInteractionName(atom_names, section_is_auto)
-                improper2ver_or[imp_name_orig] = version
-                improper2ref_or[imp_name_orig] = reference
-                improper2priority_or[imp_name_orig] = \
+                #improper_symmetry_subgraph_or[improper_name] = 'dihedrals_nosym'  (<--no)
+                imsym = improper_symmetry_subgraph_or[imp_name_orig] = 'cenJsortIKL'
+                improper2ver_or[imsym][imp_name_orig] = version
+                improper2ref_or[imsym][imp_name_orig] = reference
+                improper2priority_or[imsym][imp_name_orig] = \
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:6],
                                               float(improper2ver_or[imp_name_orig]))
-                improper_is_secondary_or[imp_name_orig] = False
+                improper_is_secondary_or[imsym][imp_name_orig] = False
                 #improper2priority[imp_name_orig] = \
                 #    (section_is_auto,
                 #     improper_is_secondary_or[imp_name_orig],
@@ -2302,14 +2337,14 @@ def main():
 
                     chi0 = str(-1.0*float(chi0))  # same as ('-' + chi0)
 
-                improper2style_or[imp_name_orig] = 'class2'
-                improper2params_or[imp_name_orig] = [K, chi0]
+                improper2style_or[imsym][imp_name_orig] = 'class2'
+                improper2params_or[imsym][imp_name_orig] = [K, chi0]
                 #improper2params[imp_name_orig] = K + ' ' + chi0
                 # default values for cross terms:
                 if not imp_name_orig in improper2class2_aa_or:
-                    improper2class2_aa_or[imp_name_orig] = '0.0' #(default)
-                    improper2ver_aa_or[imp_name_orig] = version
-                    improper2ref_aa_or[imp_name_orig] = reference
+                    improper2class2_aa_or[imsym][imp_name_orig] = '0.0' #(default)
+                    improper2ver_aa_or[imsym][imp_name_orig] = version
+                    improper2ref_aa_or[imsym][imp_name_orig] = reference
                     # Initially, set all of the angle-angle cross terms to zero
                     # Start with the first cross term between aorig[0],aorig[1],aorig[2] & aorig[2],aorig[1],aorig[3]
                     improper2cross[imp_name_orig][ImCrossTermID([aorig[0],aorig[1],aorig[2],aorig[3]])] = '0.0'
@@ -2327,16 +2362,17 @@ def main():
                 aorig = [a for a in map(EncodeAName, tokens[2:6])]
                 atom_names, permutation = Class2ImproperNameSort(tokens[2:6])
                 imp_name_orig = EncodeInteractionName(atom_names, section_is_auto)
-                improper2ver_aa_or[imp_name_orig] = version
-                improper2ref_aa_or[imp_name_orig] = reference
+                imsym = improper_symmetry_subgraph_or[imp_name_orig] = 'cenJsortIKL'
+                improper2ver_aa_or[imsym][imp_name_orig] = version
+                improper2ref_aa_or[imsym][imp_name_orig] = reference
                 K = tokens[6]
-                improper2style_or[imp_name_orig] = 'class2'
+                improper2style_or[imsym][imp_name_orig] = 'class2'
                 if not imp_name_orig in improper2params_or:
-                    improper_is_secondary_or[imp_name_orig] = True   #only cross terms have been defined so far
-                    improper2params_or[imp_name_orig] = ['0.0', '0.0']
-                    improper2ver_or[imp_name_orig] = version
-                    improper2ref_or[imp_name_orig] = reference
-                    improper2priority_or[imp_name_orig] = 0.0
+                    improper_is_secondary_or[imsym][imp_name_orig] = True   #only cross terms have been defined so far
+                    improper2params_or[imsym][imp_name_orig] = ['0.0', '0.0']
+                    improper2ver_or[imsym][imp_name_orig] = version
+                    improper2ref_or[imsym][imp_name_orig] = reference
+                    improper2priority_or[imsym][imp_name_orig] = 0.0
                 if not imp_name_orig in improper2cross:
                     # then initialize all of the cross terms to zero
                     improper2cross[imp_name_orig][ImCrossTermID([aorig[0],aorig[1],aorig[2],aorig[3]])] = '0.0'
@@ -3039,10 +3075,14 @@ def main():
 
 
 
+        imsym = 'cenJsortIKL'
+        for imp_name_orig in improper2cross[imsym]:
 
-        for imp_name_orig in improper2cross:
-            assert(imp_name_orig in improper2params_or)
-            #assert(imp_name_orig in improper2class2_aa_or)
+            if improper2style_or[imsym][imp_name_orig] != 'class2':
+                continue
+
+            assert(imp_name_orig in improper2params_or[imsym])
+            assert(imp_name_orig in improper2class2_aa_or[imsym])
 
             is_auto = (imp_name_orig.find('auto') == 0)
 
@@ -3296,37 +3336,37 @@ def main():
                                              EncodeInteractionName(aatoms[1], a_is_auto[1]) + ',' +
                                              EncodeInteractionName(aatoms[2], a_is_auto[2]))
 
-                            #if imp_name_orig in improper2params_or[imp_name_orig]:
-                            improper2params[imp_name_full] = ' '.join(improper2params_or[imp_name_orig])
+                            #if imp_name_orig in improper2params_or[imsym][imp_name_orig]:
+                            improper2params[imsym][imp_name_full] = ' '.join(improper2params_or[imsym][imp_name_orig])
                             #else:
-                            #    improper2params[imp_name_full] = '0.0 0.0'
+                            #    improper2params[imsym][imp_name_full] = '0.0 0.0'
 
                             #if imp_name_orig in improper2cross:
-                            improper2class2_aa[imp_name_full] = \
+                            improper2class2_aa[imsym][imp_name_full] = \
                                 (str(M1)+' '+str(M2)+' '+str(M3)+' '+
                                  str(theta0s[0])+' '+str(theta0s[1])+' '+str(theta0s[2]))
                             #else:
-                            #    improper2class2_aa[imp_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0'
-                            #    improper2ver_aa_or[imp_name_orig] = improper2ver_or[imp_name_orig]
-                            #    improper2ref_aa_or[imp_name_orig] = improper2ref_or[imp_name_orig]
+                            #    improper2class2_aa[imsym][imp_name_full] = '0.0 0.0 0.0 0.0 0.0 0.0'
+                            #    improper2ver_aa_or[imsym][imp_name_orig] = improper2ver_or[imsym][imp_name_orig]
+                            #    improper2ref_aa_or[imsym][imp_name_orig] = improper2ref_or[imsym][imp_name_orig]
 
                         improper2priority_aa = \
                             DetermineNumericPriority(is_auto,
                                                      aatoms[0] + aatoms[1] + aatoms[2],
-                                                     float(improper2ver_aa_or[imp_name_orig]))
-                        improper2ver_aa[imp_name_full] = improper2ver_aa_or[imp_name_orig]
-                        improper2ref_aa[imp_name_full] = improper2ref_aa_or[imp_name_orig]
+                                                     float(improper2ver_aa_or[imsym][imp_name_orig]))
+                        improper2ver_aa[imsym][imp_name_full] = improper2ver_aa_or[imsym][imp_name_orig]
+                        improper2ref_aa[imsym][imp_name_full] = improper2ref_aa_or[imsym][imp_name_orig]
 
 
-                        version = max((improper2ver_or[imp_name_orig],
-                                       improper2ver_aa_or[imp_name_orig]))
-                        improper2style[imp_name_full] = 'class2'
-                        improper2ref[imp_name_full] = improper2ref_or[imp_name_orig]
-                        improper2ver[imp_name_full] = version
-                        improper2priority[imp_name_full] = \
+                        version = max((improper2ver_or[imsym][imp_name_orig],
+                                       improper2ver_aa_or[imsym][imp_name_orig]))
+                        improper2style[imsym][imp_name_full] = 'class2'
+                        improper2ref[imsym][imp_name_full] = improper2ref_or[imsym][imp_name_orig]
+                        improper2ver[imsym][imp_name_full] = version
+                        improper2priority[imsym][imp_name_full] = \
                             (is_auto,
-                             improper_is_secondary_or[imp_name_orig],
-                             improper2priority_or[imp_name_orig],
+                             improper_is_secondary_or[imsym][imp_name_orig],
+                             improper2priority_or[imsym][imp_name_orig],
                              improper2priority_aa)
 
                         if len(improper2params) > num_impropers:
@@ -3350,11 +3390,12 @@ def main():
                 # This usually occurs because most of the .FRC files which are
                 # in circulation are incomplete.  We have to handle this gracefully.
                 imp_name_full = (imp_name_orig + ',X,X,X,X,X,X,X,X,X')
-                reference = improper2ref_or[imp_name_orig]
-                version = improper2ver_or[imp_name_orig]
-                improper2ref[imp_name_full] = reference
-                improper2ver[imp_name_full] = version
-                improper2params[imp_name_full] = ' '.join(improper2params_or[imp_name_orig])
+                reference = improper2ref_or[imsym][imp_name_orig]
+                version = improper2ver_or[imsym][imp_name_orig]
+                improper2ref[imsym][imp_name_full] = reference
+                improper2ver[imsym][imp_name_full] = version
+                improper2params[imsym][imp_name_full] = ' '.join(improper2params_or[imp_name_orig])
+                CONTINUEHERE
                 improper2style[imp_name_full] = 'class2'
                 improper2priority[imp_name_full] = improper2priority_or[imp_name_orig]
                 # substitute zeros for the cross term interactions

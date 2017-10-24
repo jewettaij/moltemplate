@@ -203,8 +203,9 @@ def main():
             elif argv[i] in ('-url', '-in-url'):
                 import urllib2
                 if i + 1 >= len(argv):
-                    raise Exception(
-                        'Error: ' + argv[i] + ' flag should be followed by the name of a force-field file.\n')
+                    raise InputError('Error: ' + argv[i] + ' flag should be followed by a URL pointing to\n'
+                        
+                                     ' a TINKER file containing force-field information.\n')
                 url = argv[i + 1]
                 try:
                     request = urllib2.Request(url)

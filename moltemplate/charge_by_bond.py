@@ -1,9 +1,7 @@
 #!/usr/bin/env python
-
 # Author: Andrew Jewett (jewett.aij at g mail)
-#         http://www.chem.ucsb.edu/~sheagroup
 # License: 3-clause BSD License  (See LICENSE.TXT)
-# Copyright (c) 2011, Regents of the University of California
+# Copyright (c) 2017, California Institute of Technology
 # All rights reserved.
 
 g_program_name = __file__.split('/')[-1]   # = 'charge_by_bond.py'
