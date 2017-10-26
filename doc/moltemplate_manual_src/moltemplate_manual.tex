@@ -933,11 +933,15 @@ you want the scaling to occur.
 \begin{tabular}[t]{l}
   \textit{.quat($a,b,c,d$)} \\
   \textit{.quat($a,b,c,d,x_0,y_0,z_0$)} \\
+  \textit{.quatT($a,b,c,d$)} \\
+  \textit{.quatT($a,b,c,d,x_0,y_0,z_0$)} \\
 \end{tabular}
   &
  Rotate atom coordinates by the rotation corresponding
  to quaternion $a+b\mathbf{i}+c\mathbf{j}+b\mathbf{k}$
  (around \mbox{$(x_0,y_0,z_0)$}, if specified)
+ The \textit{.quatT(a,b,c,d)} variant performs the inverse rotation.
+ (Equivalent to \textit{.quat(a,-b,-c,-d)}.)
   % Otherwise around $(0,0,0)$)
 \\
 \hline

@@ -34,6 +34,21 @@ def MultMat(dest, A, B):
             for k in range(0, K):
                 dest[i][j] += A[i][k] * B[k][j]
 
+def Transpose(M):
+    return [ [M[j][i] for j in range(0, len(M))]
+             for i in range(0, len(M[0])) ]
+
+
+def TransposeInPlace(M):
+    N = len(M)
+    for i in range(0, N):
+        for j in range(0, i):
+            M_ij = M[i][j]
+            M_ji = M[j][i]
+            M[i][j] = M_ji
+            M[j][i] = M_ij
+            
+
 
 def MatToStr(M):
     strs = []
@@ -388,7 +403,8 @@ class AffineStack(object):
                     AffineCompose(Mtmp, moveCentBack, Mdest)
                     CopyMat(Mdest, Mtmp)
 
-            elif transform_str.find('quat(') == 0:
+            elif ((transform_str.find('quat(') == 0) or
+                  (transform_str.find('quatT(') == 0)):
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
@@ -410,6 +426,8 @@ class AffineStack(object):
                      float(args[2]),
                      float(args[3]))
                 Quaternion2Matrix(q, M)
+                if (transform_str.find('quatT(') == 0):
+                    TransposeInPlace(M)
                 if (center_v == None):
                     AffineCompose(Mtmp, M, Mdest)
                     CopyMat(Mdest, Mtmp)
