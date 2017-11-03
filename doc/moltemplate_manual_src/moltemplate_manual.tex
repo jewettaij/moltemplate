@@ -2281,11 +2281,10 @@ For this reason, it is often more convenient to provide
 moltemplate with instructions to help it automatically figure out 
 which atoms participate in 3-body and 4-body angle interactions,
 and what force field parameters to assign to them.
-
 We will do that below using the following commands:
-\mbox{``write\_once("Data Angles By Type")''}
-\mbox{``write\_once("Data Dihedrals By Type")''}, 
-\mbox{``write\_once("Data Impropers By Type")''})
+``write\_once("Data Angles By Type")'',
+``write\_once("Data Dihedrals By Type")'', and
+``write\_once("Data Impropers By Type")''
 
   %Moltemplate can detect consecutively bonded atoms and 
   %determine the forces between them based on atom type (and bond type).
@@ -2295,9 +2294,7 @@ the same rules for creating 3-body and 4-body angle interactions,
 it is convenient to organize all of this information
 together into one place (eg an object named ``ForceField'').
 A ``ForceField'' object will typically include many
-\mbox{``write\_once("Data Angles By Type")''} and 
-\mbox{``write\_once("Data Dihedrals By Type")''} 
-\mbox{``write\_once("Data Impropers By Type")''} 
+``write\_once("Data Angles By Type")''
 commands, as well as force field parameters and related atom type properties.
 We also typically store that information in a separate file
 (eg ``forcefield.lt'', ``oplsaa.lt'', ``gaff2.lt'', ``compass.lt'', etc...).
