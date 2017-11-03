@@ -2188,111 +2188,14 @@ Soon will use it to construct a polymer (``Peptide'')
 warns moltemplate that the ``Monomer'' molecule may be part of a larger
 molecule.
 (This is explained in more detail in section \ref{sec:ellipsis_mol}.)
+(Note: The meaning of ``inherits ForceField''
+       will be explained below in section \ref{sec:nbody_by_type_intro})
 }
-
+       
 In this example we will define two kinds of molecule objects:
 ``Monomer'', and ``Peptide'' (\textit{defined later}).
-It is often convenient to store atom types, masses, and force-field 
-parameters in a separate file so that they
-can be shared between these different molecules.
-We do that in the ``forcefield.lt'' file below:
 
-
-\begin{verbatim}
-# -- file "forcefield.lt" --
-
-ForceField {
-
-  # There are 2 atom types: "CA" and "R"
-  write_once("Data Masses") {
-    @atom:CA    13.0
-    @atom:R     50.0
-  }
-
-  # Force-field parameters ("coeffs") go in the "In Settings" section:
-
-  write_once("In Settings") {
-    # Pairwise (non-bonded) interactions:
-    #           atomType1 atomType2   epsilon sigma
-    pair_coeff   @atom:CA @atom:CA       0.10 2.0
-    pair_coeff   @atom:R  @atom:R        0.50 3.6
-    # (Interactions between different atoms are determined by mixing rules.)
-  }
-
-  # 2-body (bonded) interactions:
-  #
-  #   Ubond(r) = k*(r-r0)^2
-  #
-  write_once("In Settings") {
-    #             bond-type        k     r0
-    bond_coeff  @bond:Sidechain   15.0   3.4
-    bond_coeff  @bond:Backbone    15.0   3.7
-  }
-
-  # Although the simple "Monomer" object we defined above has only
-  # two atoms, later on, we will create molecules with many bonds.
-  # By convention, in this file we keep track of all of the possible
-  # interactions which could exist between these atoms:
-
-  # Rules for determining 3-body (angle) interactions by atom & bond type:
-  # angle-type     atomType1 atomType2 atomType3  bondType1 bondType2
-
-  write_once("Data Angles By Type") {
-    @angle:Backbone  @atom:CA  @atom:CA  @atom:CA   @bond:*   @bond:*
-    @angle:Sidechain @atom:CA  @atom:CA  @atom:R    @bond:*   @bond:*
-  }
-
-  # Force-field parameters for 3-body (angle) interactions:
-  #
-  #   Uangle(theta) = k*(theta-theta0)^2
-  #
-  write_once("In Settings") {
-    #             angle-type       k    theta0
-    angle_coeff @angle:Backbone   30.00  114
-    angle_coeff @angle:Sidechain  30.00  132
-  }
-
-  # Rules for determining 4-body (dihedral) interactions by atom & bond type:
-  write_once("Data Dihedrals By Type") {
-    # dihedralType atmType1 atmType2 atmType3 atmType4 bondType1 bnd2   bnd3
-    @dihedral:CCCC @atom:CA @atom:CA @atom:CA @atom:CA  @bond:* @bond:* @bond:*
-    @dihedral:RCCR @atom:R  @atom:CA @atom:CA @atom:R   @bond:* @bond:* @bond:*
-  }
-
-  # 4-body interactions in this example are listed by atomType
-  # The forumula used is:
-  #
-  # Udihedral(phi) = K * (1 + cos(n*phi - d))
-  #
-  #     The d parameter is in degrees, K is in kcal/mol/rad^2.
-  #
-  # The corresponding command is 
-  # dihedral_coeff dihedralType       K  n   d  w(ignored)
-
-  write_once("In Settings") {
-    dihedral_coeff @dihedral:CCCC   -0.5 1 -180 0.0
-    dihedral_coeff @dihedral:RCCR   -1.5 1 -180 0.0
-  }
-
-  write_once("In Init") {
-    # -- Styles used in "ForceField" --
-    # -- (Changing these styles will change the formulas above) --
-    units           real
-    atom_style      full
-    bond_style      harmonic
-    angle_style     harmonic
-    dihedral_style  charmm
-    pair_style      lj/cut/coul/debye 0.1 11.0
-    pair_modify     mix arithmetic
-    dielectric      80.0
-    special_bonds   lj 0.0 0.0 0.0
-  }
-}
-\end{verbatim}
-
-
-
-\subsubsection{Building a simple polymer}
+\subsubsection*{Building a simple polymer}
 We construct a short polymer by making 7 copies of ``Monomer'',
 rotating and moving each copy:
 \label{sec:2beadPeptide}
@@ -2366,27 +2269,142 @@ the write(``Data Bonds'') command to append additional bonds to the system.
 \label{sec:nbody_by_type_intro}
 
 In this example we did \textit{not} provide a list of all 3-body
-and 4-body forces between bonded atoms in the polymer.
-(for example using the ``write\_once("Data Angles")'' command
+and 4-body angle forces between bonded atoms in the polymer.
+Moltemplate allows you to manually list all of these interactions
+(using the ``write\_once("Data Angles")'' command
 from section \ref{sec:spce_example},
 \textit{or} 
 the ``write\_once("Data Dihedrals")'', 
-or ``write\_once("Data Impropers")'' commands.)
-Instead we provided moltemplate.sh with instructions to help it figure out 
-which atoms participate in 3-body and 4-body bonded interactions.
-Moltemplate can detect consecutively bonded atoms and 
-determine the forces between them based on atom type.
-(Bond type can also be used as a criteria.)
-We did this in ``forcefield.lt'' using the
+or ``write\_once("Data Impropers")'' commands).
+However there are usually many of them.
+For this reason, it is often more convenient to provide
+moltemplate with instructions to help it automatically figure out 
+which atoms participate in 3-body and 4-body angle interactions,
+and what force field parameters to assign to them.
+
+We will do that below using the following commands:
+\mbox{``write\_once("Data Angles By Type")''}
+\mbox{``write\_once("Data Dihedrals By Type")''}, 
+\mbox{``write\_once("Data Impropers By Type")''})
+
+  %Moltemplate can detect consecutively bonded atoms and 
+  %determine the forces between them based on atom type (and bond type).
+
+Furthermoree, since many different kinds molecules often share
+the same rules for creating 3-body and 4-body angle interactions,
+it is convenient to organize all of this information
+together into one place (eg an object named ``ForceField'').
+A ``ForceField'' object will typically include many
 \mbox{``write\_once("Data Angles By Type")''} and 
 \mbox{``write\_once("Data Dihedrals By Type")''} 
-commands.
-You can also generate improper interactions 
-between any 4-atoms bonded together in a T-shaped topology
-using the  ``write\_once("Impropers By Type")'' command.
-See appendix \ref{sec:nbody_by_type} for more details.
-\textit{(More general interactions are possible.
- See appendix \ref{sec:nbody_by_type_custom}.)}
+\mbox{``write\_once("Data Impropers By Type")''} 
+commands, as well as force field parameters and related atom type properties.
+We also typically store that information in a separate file
+(eg ``forcefield.lt'', ``oplsaa.lt'', ``gaff2.lt'', ``compass.lt'', etc...).
+
+\begin{verbatim}
+# -- file "forcefield.lt" --
+
+ForceField {
+
+  # There are 2 atom types: "CA" and "R"
+  write_once("Data Masses") {
+    @atom:CA    13.0
+    @atom:R     50.0
+  }
+
+  # Force-field parameters ("coeffs") go in the "In Settings" section:
+
+  write_once("In Settings") {
+    # Pairwise (non-bonded) interactions:
+    #           atomType1 atomType2   epsilon sigma
+    pair_coeff   @atom:CA @atom:CA       0.10 2.0
+    pair_coeff   @atom:R  @atom:R        0.50 3.6
+    # (Interactions between different atoms are determined by mixing rules.)
+  }
+
+  # 2-body (bonded) interactions:
+  #
+  #   Ubond(r) = k*(r-r0)^2
+  #
+  write_once("In Settings") {
+    #             bond-type        k     r0
+    bond_coeff  @bond:Sidechain   15.0   3.4
+    bond_coeff  @bond:Backbone    15.0   3.7
+  }
+
+  # Although the simple "Monomer" object we defined above has only
+  # two atoms, later on, we will create molecules with many bonds.
+  # By convention, in this file we keep track of all of the possible
+  # interactions which could exist between these atoms:
+
+  # Rules for determining 3-body (angle) interactions by atom & bond type:
+  # angle-type     atomType1 atomType2 atomType3  bondType1 bondType2
+
+  write_once("Data Angles By Type") {
+    @angle:Backbone  @atom:CA  @atom:CA  @atom:CA   @bond:*   @bond:*
+    @angle:Sidechain @atom:CA  @atom:CA  @atom:R    @bond:*   @bond:*
+  }
+
+  # Force-field parameters for 3-body (angle) interactions:
+  #
+  #   Uangle(theta) = k*(theta-theta0)^2
+  #
+  write_once("In Settings") {
+    #             angle-type       k    theta0
+    angle_coeff @angle:Backbone   30.00  114
+    angle_coeff @angle:Sidechain  30.00  132
+  }
+
+  # 4-body interactions in this example are listed by atomType
+  # Rules for determining 4-body (dihedral) interactions by atom & bond type:
+  write_once("Data Dihedrals By Type") {
+    # dihedralType atmType1 atmType2 atmType3 atmType4 bondType1 bType2 bType3
+    @dihedral:CCCC @atom:CA @atom:CA @atom:CA @atom:CA  @bond:* @bond:* @bond:*
+    @dihedral:RCCR @atom:R  @atom:CA @atom:CA @atom:R   @bond:* @bond:* @bond:*
+  }
+
+  # The forumula used is:
+  #
+  # Udihedral(phi) = K * (1 + cos(n*phi - d))
+  #
+  #     The d parameter is in degrees, K is in kcal/mol/rad^2.
+  #
+  # The corresponding command is 
+  # dihedral_coeff dihedralType       K  n   d  w(ignored)
+
+  write_once("In Settings") {
+    dihedral_coeff @dihedral:CCCC   -0.5 1 -180 0.0
+    dihedral_coeff @dihedral:RCCR   -1.5 1 -180 0.0
+  }
+
+  write_once("In Init") {
+    # -- Styles used in "ForceField" --
+    # -- (Changing these styles will change the formulas above) --
+    units           real
+    atom_style      full
+    bond_style      harmonic
+    angle_style     harmonic
+    dihedral_style  charmm
+    pair_style      lj/cut/coul/debye 0.1 11.0
+    pair_modify     mix arithmetic
+    dielectric      80.0
+    special_bonds   lj 0.0 0.0 0.0
+  }
+}
+\end{verbatim}
+Any molecule that wants to access this information can use the
+``inherits ForceField'' keyword.
+\textit{(...as we did in the ``monomer.lt'' and ``polymer.lt'' files in theexample above.
+ Note: the ``import forcefield'' statement was also necessary because the
+ information is located in a separate file: ``forcefield.lt''.}
+%\textit{(Note: You can also generate \textbf{improper} interactions 
+%  %between any 4-atoms bonded together in a T-shaped topology
+%  the same way, using the  ``write\_once("Impropers By Type")'' command.
+%  See appendix \ref{sec:nbody_by_type} for more details.
+\textit{You can customize these ``By Type'' rules further
+  by altering the bond topology search rules and atom type symmetry.
+  See appendix \ref{sec:nbody_by_type_custom} for details.)}
 
   %\subsubsection*{\textit{(Advanced)} Order matters when sets overlap}
   %Bonded-interactions are generated in the order they appear in the LT file.
