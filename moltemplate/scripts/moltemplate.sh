@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.5.5"
-G_DATE="2017-10-23"
+G_VERSION="2.5.6"
+G_DATE="2017-11-02"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -2186,7 +2186,6 @@ fi
 
 
 
-
 #N_in_prefix=`expr length "$in_prefix"` <-- not posix compliant. AVOID.
 N_in_prefix=${#in_prefix}  #<-- works even if $in_prefix contains spaces
 #for file_name in "${in_prefix}"*; do
@@ -2196,25 +2195,25 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     #If using sh:
     #SECTION_NAME=`expr substr "$file_name" $(($N_in_prefix+1)) 1000000` <-- not posix compliant. AVOID
     SECTION_NAME=`echo "" | awk "END{print substr(\"$file_name\",$((N_in_prefix+1)),1000000)}"`
-    FILE_SUFFIX=`echo "$SECTION_NAME" | awk '{print tolower($0)}'`
+    #FILE_SUFFIX=`echo "$SECTION_NAME" | awk '{print tolower($0)}'`
+    FILE_SUFFIX=`echo "$SECTION_NAME" | awk '{print tolower($0)}'|sed 's/ /./g'`
     # Create a new section in the lammps input script
     # matching the portion of the name of
     # the file after the in_prefix.
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     echo "# ----------------- $SECTION_NAME Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-    cp -f "$file_name" ${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}
+    cp -f "$file_name" "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
 
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_INPUT_SCRIPT
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
-
+    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     mv -f "$file_name" output_ttree/
 done
 
 if [ -e "$in_prefix_no_space" ]; then
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
-    cat "$in_prefix_no_space" >> $OUT_FILE_INPUT_SCRIPT
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
+    cat "$in_prefix_no_space" >> "$OUT_FILE_INPUT_SCRIPT"
+    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     mv -f "$in_prefix_no_space" output_ttree/
 fi
 
