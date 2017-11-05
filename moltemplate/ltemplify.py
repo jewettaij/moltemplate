@@ -1827,8 +1827,11 @@ def main():
             else:
                 i_a = i_b = Intify(atomtype_i_str)
 
+            assert((type(i_a) is int) and (type(i_b) is int))
+
             i_a_final = None
             i_b_final = None
+
             for i in range(i_a, i_b + 1):
                 if ((i in needed_atomtypes) or (min_sel_atomtype <= i)):
                     i_a_final = i
