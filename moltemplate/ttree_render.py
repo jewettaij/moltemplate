@@ -92,6 +92,9 @@ def main():
                     ic = entry.find('.')
                     var_name = entry[:ic]
                     var_suffix = entry[ic:]
+                    if not var_suffix[0:7] in ('.ljust(', '.rjust('):
+                        var_name = entry
+                        var_suffix = ''
                 else:
                     var_name = entry
                     var_suffix = ''
