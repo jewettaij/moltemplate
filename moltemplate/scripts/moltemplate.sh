@@ -10,8 +10,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.5.7"
-G_DATE="2017-11-04"
+G_VERSION="2.5.8"
+G_DATE="2017-11-06"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -957,7 +957,7 @@ FILE_angles_by_type2=""
 #for FILE in "$data_angles_by_type"*.template; do
 IFS_BACKUP="$IFS"
 IFS=$(echo -en "\n\b")
-for FILE in `ls -v "$data_angles_by_type"*.template`; do
+for FILE in `ls -v "$data_angles_by_type"*.template 2> /dev/null`; do
 
     if [ ! -s "$FILE" ] || [ ! -s "$data_bonds" ]; then
         break;  # This handles with the special cases that occur when
@@ -1063,7 +1063,7 @@ FILE_dihedrals_by_type2=""
 #for FILE in "$data_dihedrals_by_type"*.template; do
 IFS_BACKUP="$IFS"
 IFS=$(echo -en "\n\b")
-for FILE in `ls -v "$data_dihedrals_by_type"*.template`; do
+for FILE in `ls -v "$data_dihedrals_by_type"*.template 2> /dev/null`; do
 
     if [ ! -s "$FILE" ] || [ ! -s "$data_bonds" ]; then
         break;  # This handles with the special cases that occur when
@@ -1168,7 +1168,7 @@ FILE_impropers_by_type2=""
 #for FILE in "$data_impropers_by_type"*.template; do
 IFS_BACKUP="$IFS"
 IFS=$(echo -en "\n\b")
-for FILE in `ls -v "$data_impropers_by_type"*.template`; do
+for FILE in `ls -v "$data_impropers_by_type"*.template 2> /dev/null`; do
 
     if [ ! -s "$FILE" ] || [ ! -s "$data_bonds" ]; then
         break;  # This handles with the special cases that occur when
@@ -1275,25 +1275,25 @@ IFS="$IFS_BACKUP"
 echo "expanding wildcards in \"_coeff\" commands" >&2
 #ls "${in_prefix}"*.template 2> /dev/null | while read file_name; do
 for file_name in "${in_prefix}"*.template; do
-    echo "expanding wildcards in \"_coeff\" commands in \"$file_name\"" >&2
-    if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
-        ERR_INTERNAL
-    fi
 
-    # invoking "ttree_render.py" can be very slow, so only do it if the
-    # postprocess_coeffs.py command altered the lammps input script file
-    if ! cmp "$file_name" "${file_name}.tmp"; then
+    # invoking "postprocess_coeffs.py" can be very slow, so only do it if the
+    # file contains both _coeff commands and wildcards *,? on the same line:
+    if ! awk '{if (match($1,/'_coeff/') && match($0,/'[*,?]/')) exit 1}' < "$file_name"; then
+
+	echo "expanding wildcards in \"_coeff\" commands in \"$file_name\"" >&2
+	if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
+            ERR_INTERNAL
+	fi
+
         mv -f "${file_name}.tmp" "$file_name"
 	# Now reassign integers to these variables
 	bn=`basename "$file_name" .template`
 	if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
-             ttree_assignments.txt \
-             < "$file_name" \
-             > "$bn"; then
-            exit 6
+	     ttree_assignments.txt \
+	     < "$file_name" \
+	     > "$bn"; then
+	    exit 6
 	fi
-    else
-	rm -f "${file_name}.tmp"
     fi
 done
 #fi
@@ -2243,6 +2243,7 @@ for file_name in "$OUT_FILE_INIT" "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_SETTINGS";
             ERR_INTERNAL
         fi
         echo "" >&2
+
         mv -f "$file_name.tmp" "$file_name"
         #cat "$file_name" >> input_scripts_so_far.tmp
         #dos2unix < "$file_name" >> input_scripts_so_far.tmp
