@@ -1,0 +1,30 @@
+language: bash
+
+
+before_script:
+
+  # Install "shunit2"
+
+  # Note sure where to find the most dependable source for "shunit2". Try this:
+
+  - git clone https://github.com/kward/shunit2 shunit2
+
+python:
+  - "3.5"
+
+
+install:
+  - pip install .
+  #- pip install -r requirements.txt
+
+
+# commands to run tests
+
+script:
+  - bash tests/test_read_coords_pdb.sh
+  - bash tests/test_oplsaa.sh
+
+
+# Thanks to Kate Ward, Martin Seener, and Davi Ortega:
+# https://github.com/kward/shunit2
+# https://www.sysorchestra.com/2014/10/12/travisshunit2/

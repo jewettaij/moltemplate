@@ -993,7 +993,7 @@ def main():
                         pass
                         #kspace_style = ''
                     else:
-                        raise InputError('Error: ' + argv[i] + ' ' + pair_style_name + ' not supported.\n'
+                        raise InputError('Error: ' + argv[i] + ' ' + pair_style + ' not supported.\n'
                                          '          The following pair_styles are supported:\n'
                                          '       lj/class2/coul/cut\n'
                                          '       lj/class2/coul/long\n'
