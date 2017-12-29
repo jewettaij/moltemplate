@@ -10,12 +10,13 @@ before_script:
   - git clone https://github.com/kward/shunit2 shunit2
 
 python:
-  - "2.7"
+  - "3.5"
 
 
 install:
-  - pip install .
-  #- pip install -r requirements.txt
+  #- pip install .   # Build fails "Permission denied".  Try using sudo:
+  - sudo pip install .
+  #- sudo pip install -r requirements.txt
 
 
 # commands to run tests
