@@ -1614,6 +1614,9 @@ NIMPROPERS="0"
 if [ -s "${data_atoms}" ]; then
   NATOMS=`awk 'END{print NR}' < "${data_atoms}"`
 fi
+if [ -s "${data_ellipsoids}" ]; then
+  NELLIPSOIDS=`awk 'END{print NR}' < "${data_ellipsoids}"`
+fi
 if [ -s "${data_bonds}" ]; then
   NBONDS=`awk 'END{print NR}' < "${data_bonds}"`
 fi
@@ -1631,6 +1634,9 @@ fi
 echo "LAMMPS Description" > "$OUT_FILE_DATA"
 echo "" >> "$OUT_FILE_DATA"
 echo "     $NATOMS  atoms" >> "$OUT_FILE_DATA"
+if [ -n "$NELLIPSOIDS" ]; then
+    echo "     $NATOMS  ellipsoids" >> "$OUT_FILE_DATA"
+fi
 if [ -n "$NBONDS" ]; then
     echo "     $NBONDS  bonds" >> "$OUT_FILE_DATA"
 fi

@@ -332,6 +332,60 @@ def TransformAtomText(text, matrix, settings):
     return '\n'.join(lines)
 
 
+
+def TransformEllipsoidText(text, matrix, settings):
+    """ Apply the transformation matrix to the quaternions represented
+    by the last four numbers on each line.
+    The \"matrix\" stores the aggregate sum of combined transformations
+    to be applied and the rotational part of this matrix 
+    must be converted to a quaternion.
+
+    """
+
+    #sys.stderr.write('matrix_stack.M = \n'+ MatToStr(matrix) + '\n')
+
+    lines = text.split('\n')
+
+    for i in range(0, len(lines)):
+        line_orig = lines[i]
+        ic = line_orig.find('#')
+        if ic != -1:
+            line = line_orig[:ic]
+            comment = ' ' + line_orig[ic:].rstrip('\n')
+        else:
+            line = line_orig.rstrip('\n')
+            comment = ''
+
+        columns = line.split()
+
+        if len(columns) != 0:
+            if len(columns) != 8:
+                raise InputError('Error (lttree.py): Expected 7 numbers'
+                                 + ' instead of '
+                                 + str(len(columns))
+                                 + '\nline:\n'
+                                 + line
+                                 + ' in each line of the ellipsoids\" section.\n"')
+            q_orig = [float(columns[-4]),
+                      float(columns[-3]),
+                      float(columns[-2]),
+                      float(columns[-1])]
+
+            qRot = [0.0, 0.0, 0.0, 0.0]
+            Matrix2Quaternion(matrix, qRot)
+
+            q_new = [0.0, 0.0, 0.0, 0.0]
+            MultQuat(q_new, qRot, q_orig)
+
+            columns[-4] = str(q_new[0])
+            columns[-3] = str(q_new[1])
+            columns[-2] = str(q_new[2])
+            columns[-1] = str(q_new[3])
+            lines[i] = ' '.join(columns) + comment
+    return '\n'.join(lines)
+
+
+
 def CalcCM(text_Atoms,
            text_Masses=None,
            settings=None):
@@ -553,6 +607,8 @@ def _ExecCommands(command_list,
             # before passing them on to the caller.
             if command.filename == data_atoms:
                 text = TransformAtomText(text, matrix_stack.M, settings)
+            if command.filename == data_ellipsoids:
+                text = TransformEllipsoidText(text, matrix_stack.M, settings)
 
             files_content[command.filename].append(text)
 
@@ -599,6 +655,9 @@ def _ExecCommands(command_list,
                     files_content[data_atoms] = \
                         TransformAtomText(files_content[data_atoms],
                                           matrix_stack.M, settings)
+                    files_content[data_ellipsoids] = \
+                        TransformEllipsoidText(files_content[data_ellipsoids],
+                                               matrix_stack.M, settings)
 
                 for ppcommand in postprocessing_commands:
                     matrix_stack.Pop(which_stack=command.context_node)

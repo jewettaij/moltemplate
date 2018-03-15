@@ -891,7 +891,7 @@ def RotMatAXYZ(dest, angle, axis_x, axis_y, axis_z):
 
 
 def Quaternion2Matrix(q, M):
-    "convert a quaternion q to a 3x3 rotation matrix M"""
+    "convert a quaternion (q) to a 3x3 rotation matrix (M)"""
 
     M[0][0] =  (q[0]*q[0])-(q[1]*q[1])-(q[2]*q[2])+(q[3]*q[3])
     M[1][1] = -(q[0]*q[0])+(q[1]*q[1])-(q[2]*q[2])+(q[3]*q[3])
@@ -902,6 +902,56 @@ def Quaternion2Matrix(q, M):
     M[2][1] = 2*(q[1]*q[2] + q[0]*q[3]);
     M[0][2] = 2*(q[0]*q[2] + q[1]*q[3]);
     M[2][0] = 2*(q[0]*q[2] - q[1]*q[3]);
+
+
+
+def Matrix2Quaternion(M, q):
+    """convert a 3x3 rotation matrix (M) to a quaternion (q)
+       http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
+    """
+    tr = M[0][0] + M[1][1] + M[2][2]
+    if tr > 0:
+        S = math.sqrt(tr+1.0) * 2                        # S=4*qw 
+        qw = 0.25 * S
+        qx = (M[2][1] - M[1][2]) / S
+        qy = (M[0][2] - M[2][0]) / S
+        qz = (M[1][0] - M[0][1]) / S
+    elif (M[0][0] > M[1][1]) and (M[0][0] > M[2][2]):
+        S = math.sqrt(1.0 + M[0][0] - M[1][1] - M[2][2]) * 2   # S=4*qx 
+        qw = (M[2][1] - M[1][2]) / S
+        qx = 0.25 * S
+        qy = (M[0][1] + M[1][0]) / S
+        qz = (M[0][2] + M[2][0]) / S
+    elif (M[1][1] > M[2][2]):
+        S = math.sqrt(1.0 + M[1][1] - M[0][0] - M[2][2]) * 2   # S=4*qy
+        qw = (M[0][2] - M[2][0]) / S
+        qx = (M[0][1] + M[1][0]) / S
+        qy = 0.25 * S
+        qz = (M[1][2] + M[2][1]) / S
+    else:
+        S = math.sqrt(1.0 + M[2][2] - M[0][0] - M[1][1]) * 2   # S=4*qz
+        qw = (M[1][0] - M[0][1]) / S
+        qx = (M[0][2] + M[2][0]) / S
+        qy = (M[1][2] + M[2][1]) / S
+        qz = 0.25 * S
+    q[0] = qw
+    q[1] = qx
+    q[2] = qy
+    q[3] = qz
+
+
+def MultQuat(dest, q1, q2):
+    """ multiply 2 quaternions and store the result in "qdest"
+      (q1[0] + i*q1[1] + j*q1[2] + k*q1[3])
+       *
+      (q2[0] + i*q2[1] + j*q3[2] + k*q3[3])
+    https://en.wikipedia.org/wiki/Quaternion#Hamilton_product
+    """
+    dest[0] = q1[0]*q2[0] - q1[1]*q2[1] - q1[2]*q2[2] - q1[3]*q2[3]
+    dest[1] = q1[0]*q2[1] + q1[1]*q2[0] + q1[2]*q2[3] - q1[3]*q2[2]
+    dest[2] = q1[0]*q2[2] - q1[1]*q2[3] + q1[2]*q2[0] + q1[3]*q2[1]
+    dest[3] = q1[0]*q2[3] + q1[1]*q2[2] - q1[2]*q2[1] + q1[3]*q2[0]
+
 
 
 def CrossProd(dest, A, B):
