@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 # Author: Andrew Jewett (jewett.aij at g mail)
+#         http://www.moltemplate.org
 #         http://www.chem.ucsb.edu/~sheagroup
 # License: 3-clause BSD License  (See LICENSE.TXT)
 # Copyright (c) 2011, Regents of the University of California
@@ -28,8 +29,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2017-4-11'
-g_version_str = '0.76.0'
+g_date_str = '2018-3-15'
+g_version_str = '0.77.0'
 
 
 import sys
@@ -45,7 +46,19 @@ try:
     from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
         TemplateLexer
     from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid, \
-        ColNames2Coords, ColNames2Vects, data_atoms, data_masses
+        ColNames2Coords, ColNames2Vects, \
+        data_atoms, data_prefix, data_masses, \
+        data_velocities, data_ellipsoids, data_triangles, data_lines, \
+        data_pair_coeffs, data_bond_coeffs, data_angle_coeffs, \
+        data_dihedral_coeffs, data_improper_coeffs, data_bondbond_coeffs, \
+        data_bondangle_coeffs, data_middlebondtorsion_coeffs, \
+        data_endbondtorsion_coeffs, data_angletorsion_coeffs, \
+        data_angleangletorsion_coeffs, data_bondbond13_coeffs, \
+        data_angleangle_coeffs, data_bonds_by_type, data_angles_by_type, \
+        data_dihedrals_by_type, data_impropers_by_type, \
+        data_bonds, data_bond_list, data_angles, data_dihedrals, data_impropers, \
+        data_boundary, data_pbc, data_prefix_no_space, in_init, in_settings, \
+        in_prefix
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
 except (SystemError, ValueError):

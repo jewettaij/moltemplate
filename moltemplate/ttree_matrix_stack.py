@@ -1,4 +1,5 @@
 # Author: Andrew Jewett (jewett.aij@gmail.com)
+#         http://www.moltemplate.org
 #         http://www.chem.ucsb.edu/~sheagroup
 # License: 3-clause BSD License  (See LICENSE.TXT)
 # Copyright (c) 2012, Regents of the University of California

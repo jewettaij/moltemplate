@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Authors: Andrew Jewett (jewett.aij at g mail)
+# Author: Andrew Jewett (jewett.aij at g mail)
 #         http://www.moltemplate.org
 #         http://www.chem.ucsb.edu/~sheagroup
 # License: 3-clause BSD License  (See LICENSE.TXT)
