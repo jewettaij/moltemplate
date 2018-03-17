@@ -1,0 +1,15 @@
+# Run with the command:
+# moltemplate.sh  -atomstyle "atomid atomtype flag density x y z" benzene_sample01.lt -allow-wildcards -nocheck
+
+import "benzene_cg.lt"
+
+# Specify the periodic boundary conditions:
+write_once("Data Boundary") {
+  0 35.0 xlo xhi
+  0 35.0 ylo yhi
+  0 35.0 zlo zhi
+}
+
+bulk = new BENZ [5].move(7, 0, 0)
+		[5].move(0, 7, 0).rot(10,0,1,0)
+		[5].move(0, 0, 7)
