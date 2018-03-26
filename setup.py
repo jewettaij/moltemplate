@@ -7,6 +7,10 @@ setup(
   packages=['moltemplate',
             'moltemplate.nbody_alt_symmetry'],
 
+  package_dir={'moltemplate': 'moltemplate'},           #.py files are in "moltemplate/"
+
+  package_data={'moltemplate': ['force_fields/*.lt']},  #.lt files are in "moltemplate/force_fields/"
+
   description='A general cross-platform text-based molecule builder for LAMMPS',
 
   author='Andrew Jewett',
@@ -15,9 +19,9 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.7.0.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.7.1.zip',
 
-  version='2.7.0',
+  version='2.7.1',
 
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],
@@ -71,7 +75,6 @@ setup(
         'remove_duplicates_nbody.py=moltemplate.remove_duplicates_nbody:main',
         'renumber_DATA_first_column.py=moltemplate.renumber_DATA_first_column:main']},
 
-  package_data={'moltemplate': ['force_fields/*.lt']},
   # install_requires=['numpy', 'scipy'],
   setup_requires=['pytest-runner'],
   tests_require=['pytest'],
