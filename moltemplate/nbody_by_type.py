@@ -169,7 +169,7 @@ try:
     from .nbody_by_type_lib import GenInteractions_str
     from .ttree_lex import *
     from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     from extract_lammps_data import *
     from nbody_by_type_lib import GenInteractions_str
     from ttree_lex import *

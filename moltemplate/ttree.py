@@ -67,7 +67,7 @@ try:
         SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildcard, \
         InputError, ErrorLeader, OSrcLoc, TextBlock, VarRef, VarBinding, \
         TemplateLexer
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree_lex import *
 

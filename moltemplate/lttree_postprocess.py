@@ -16,7 +16,7 @@ import sys
 try:
     from .lttree_styles import *
     from .ttree_lex import ExtractCatName
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from lttree_styles import *
     from ttree_lex import ExtractCatName

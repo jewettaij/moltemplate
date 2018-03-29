@@ -61,7 +61,7 @@ try:
         in_prefix
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree import *
     from ttree_lex import *

@@ -69,7 +69,7 @@ try:
     from .lttree import LttreeSettings, LttreeParseArgs
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree_lex import *
     from ttree import *

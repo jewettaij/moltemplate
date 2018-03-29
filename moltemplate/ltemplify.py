@@ -30,7 +30,7 @@ import sys
 try:
     from .ttree_lex import *
     from .lttree_styles import *
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree_lex import *
     from lttree_styles import *

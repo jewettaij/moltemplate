@@ -56,7 +56,7 @@ try:
         iEsptAtomCoords, iEsptAtomVects, iEsptAtomType, iEsptAtomID
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree import *
     from ttree_lex import *

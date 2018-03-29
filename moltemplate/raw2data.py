@@ -6,7 +6,7 @@ import sys, io
 try:
     from .dump2data import *
     from .extract_lammps_data import lammps_data_sections
-except:
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from dump2data import *
     from extract_lammps_data import lammps_data_sections

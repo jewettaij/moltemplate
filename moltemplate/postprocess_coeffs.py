@@ -43,7 +43,7 @@ try:
     from .ttree import ExtractFormattingCommands
     from .ttree_lex import *
 
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree import ExtractFormattingCommands
     from ttree_lex import *

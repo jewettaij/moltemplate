@@ -16,7 +16,7 @@ from collections import defaultdict
 try:
     from . import ttree_lex
     from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     import ttree_lex
     from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
