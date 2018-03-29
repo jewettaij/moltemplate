@@ -81,7 +81,7 @@ except (ImportError, SystemError, ValueError):
 try:
     from .ttree import StaticObj, WriteFileCommand, DescrToCatLeafPtkns, \
         AssignStaticVarPtrs, FindReplacementVarPairs, ReplaceVars
-except (SystemError, ValueError):
+except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree import *
     from lttree import *

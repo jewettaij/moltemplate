@@ -373,7 +373,7 @@ def GenInteractions_files(lines_data,
         try:
             g = importlib.import_module(name, pkg)
             break
-        except (SystemError, ImportError):
+        except (ImportError, SystemError, ValueError):
             pass
 
     if g is None:
