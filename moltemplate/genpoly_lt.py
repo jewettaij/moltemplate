@@ -340,7 +340,7 @@ class WrapPeriodic(object):
 
     @classmethod
     def Wrap(obj, i, N):
-        if i / N != 0:
+        if i // N != 0:
             obj.bounds_err = True
         return i % N
 
