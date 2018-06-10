@@ -1868,9 +1868,9 @@ def CheckInFileSyntax(tmpl_list,
 
                 if len(table[i]) > 2:  # if not, deal with error later
                     if ((isinstance(table[i][1], TextBlock) and
-                         (table[i][1].text == '*')) and
-                        (isinstance(table[i][1], TextBlock) and
-                         (table[i][1].text == '*'))):
+                         (table[i][1].text == '*')) and         #'* *' <--BUG?
+                        (isinstance(table[i][1], TextBlock) and #      <--BUG?
+                         (table[i][1].text == '*'))):           #      <--BUG?
                         pair_coeffs_defined.add(('*', '*'))
                     else:
                         compound_wildcard = False
