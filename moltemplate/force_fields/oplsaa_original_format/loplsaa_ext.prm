@@ -1,10 +1,11 @@
-  ###########################################################################
-  ## Extra OPLSAA parameters and atom types for long hydrocarbon chains    ##
-  ## SOURCE: Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8, 1459 ##
-  ## CREDIT: Sebastian Echeverri (file format conversion)                  ##
-  ###########################################################################
-  ## This file was used with "tinkerparm2lt.py" to create "loplsaa.lt"     ##
-  ###########################################################################
+  ############################################################################
+  ## Extra OPLSAA parameters and atom types for long hydrocarbon chains     ##
+  ## SOURCES: Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4), 1459
+  ##          Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287 ##
+  ## CREDIT: Sebastian Echeverri (file format conversion)                   ##
+  ############################################################################
+  ## This file was used with "tinkerparm2lt.py" to create "loplsaa.lt"      ##
+  ############################################################################
 
 atom         80L  13L   CT    "Alkane CH3- (LOPLS CT_CH3)"    6   12.011   4
 atom         81L  13L   CT    "Alkane -CH2- (LOPLS CT_CH2)"   6   12.011   4
