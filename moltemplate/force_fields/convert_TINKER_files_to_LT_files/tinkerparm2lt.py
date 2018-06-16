@@ -17,8 +17,8 @@ to my knowledge, have not yet been implemented in LAMMPS as of 2017-2-01.)
 
 __author__ = 'Jason Lambert and Andrew Jewett'
 # (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)
-__version__ = '0.2.1'
-__date__ = '2017-17-18'
+__version__ = '0.3.2'
+__date__ = '2018-6-15'
 
 
 import sys
@@ -38,10 +38,12 @@ doc_msg = \
     "   and   \"OPLS\" is the name that future moltemplate users will use to refer to\n" + \
     "         this force-field (optional).\n" + \
     "Optional Arguments\n" + \
-    "   -name FORCEFIELDNAME # Give the force-field a name\n" + \
+    "   -name FORCEFIELDNAME # Give the force-field a name (recommended)\n" + \
     "   -file FILE_NAME      # Read force field parameters from a file\n" + \
-    "   -url URL             # Read force field parameters from a file on the web\n" + \
-    "   -atoms \"QUOTED LIST\" # Restrict output to a subset of atom types\n"
+    "   -url URL             # Read force field parameters from a file online\n" + \
+    "   -atoms \"QUOTED LIST\" # Restrict output to a subset of atom types\n" + \
+    "   -hybrid              # Optional LAMMPS \"hybrid\" style compatibility\n" + \
+    "   -zeropad N          # Optional zero-padding for bonded interactions\n"
 
 
 def SplitQuotedString(string,
@@ -146,7 +148,9 @@ def main():
         #improper_style_link = "http://lammps.sandia.gov/doc/improper_cvff.html"
         special_bonds_command = "special_bonds lj/coul 0.0 0.0 0.5"
         mixing_style = "geometric"
+        use_hybrid = False
         contains_united_atoms = False
+        zeropad_ffid = 1
     
         argv = [arg for arg in sys.argv]
     
@@ -185,7 +189,7 @@ def main():
                                      '       for reading.\n')
                     sys.exit(1)
                 del argv[i:i + 2]
-    
+
             elif argv[i] == '-dihedral-style':
                 if i + 1 >= len(argv):
                     raise Exception(
@@ -213,6 +217,17 @@ def main():
                 except urllib2.URLError:
                     sys.stdout.write("Error: Unable to open link:\n" + url + "\n")
                     sys.exit(1)
+                del argv[i:i + 2]
+
+            elif argv[i] == '-hybrid':
+                use_hybrid = True
+                del argv[i:i + 1]
+    
+            elif (argv[i] == '-zeropad' or argv[i] == '-zero-pad'):
+                if (i + 1 >= len(argv)) or (argv[i+1][1:] == '-'):
+                    raise Exception(
+                        'Error: ' + argv[i] + ' flag should be followed by a positive integer\n')
+                zeropad_ffid = int(argv[i+1])
                 del argv[i:i + 2]
     
             elif argv[i] in ('-help', '--help', '-?', '--?'):
@@ -279,11 +294,14 @@ def main():
             elif (len(tokens) > 4) and (tokens[0] == 'bond'):
                 k = float(tokens[3])
                 r0 = float(tokens[4])
-                bonds_by_type[tokens[1], tokens[2]] = (k, r0)
+                bonds_by_type[tokens[1].rjust(zeropad_ffid,'0'),
+                              tokens[2].rjust(zeropad_ffid,'0')] = (k, r0)
             elif (len(tokens) > 5) and (tokens[0] == 'angle'):
                 k = float(tokens[4])
                 angle0 = float(tokens[5])
-                angles_by_type[tokens[1], tokens[2], tokens[3]] = (k, angle0)
+                angles_by_type[tokens[1].rjust(zeropad_ffid,'0'),
+                               tokens[2].rjust(zeropad_ffid,'0'),
+                               tokens[3].rjust(zeropad_ffid,'0')] = (k, angle0)
             elif (len(tokens) > 11) and (tokens[0] == 'torsion'):
                 if dihedral_style_name == 'fourier':
                     # http://lammps.sandia.gov/doc/dihedral_fourier.html
@@ -295,8 +313,10 @@ def main():
                         K[i] = float(tokens[5 + 3 * i])
                         d[i] = float(tokens[5 + 3 * i + 1])
                         n[i] = float(tokens[5 + 3 * i + 2])
-                    dihedrals_by_type[tokens[1], tokens[2],
-                                      tokens[3], tokens[4]] = (K, n, d)
+                    dihedrals_by_type[tokens[1].rjust(zeropad_ffid,'0'),
+                                      tokens[2].rjust(zeropad_ffid,'0'),
+                                      tokens[3].rjust(zeropad_ffid,'0'),
+                                      tokens[4].rjust(zeropad_ffid,'0')] = (K, n, d)
                 elif dihedral_style_name == 'opls':
                     # http://lammps.sandia.gov/doc/dihedral_opls.html
                     K1 = float(tokens[5])
@@ -314,8 +334,10 @@ def main():
                           (float(tokens[16]) != 4.0)))):
                         raise Exception("Error: This parameter file is incompatible with -dihedral-style \"" + dihedral_style_name + "\"\n" +
                                         "       (See line number " + str(iline + 1) + " of parameter file.)\n")
-                    dihedrals_by_type[tokens[1], tokens[2],
-                                      tokens[3], tokens[4]] = (K1, K2, K3, K4)
+                    dihedrals_by_type[tokens[1].rjust(zeropad_ffid,'0'),
+                                      tokens[2].rjust(zeropad_ffid,'0'),
+                                      tokens[3].rjust(zeropad_ffid,'0'),
+                                      tokens[4].rjust(zeropad_ffid,'0')] = (K1, K2, K3, K4)
                 else:
                     assert(False)
     
@@ -323,8 +345,10 @@ def main():
                 k = float(tokens[5])
                 angle0 = float(tokens[6])
                 multiplicity = float(tokens[7])
-                impropers_by_type[tokens[1], tokens[2], tokens[
-                    3], tokens[4]] = (k / multiplicity, angle0)
+                impropers_by_type[tokens[1].rjust(zeropad_ffid,'0'),
+                                  tokens[2].rjust(zeropad_ffid,'0'),
+                                  tokens[3].rjust(zeropad_ffid,'0'),
+                                  tokens[4].rjust(zeropad_ffid,'0')] = (k / multiplicity, angle0)
             elif ((len(tokens) > 0) and (tokens[0] == 'biotype')):
                 # I'm not sure what to do with these, so I'll store them for now and
                 # append them as comments to the .lt file generated by the program.
@@ -354,13 +378,28 @@ def main():
                                     "       to consider alternate mixing rules.\n\n" +
                                     "The offending line from the file is line number " + str(iline) + ":\n" +
                                     line + "\n")
-    
-    
-    
+
+        # Zero-pad the atom2ffid values so that they have the same number
+        # of digits.  This is usually not necessary, but it can be helpful
+        # to remove uncertainty about the meaning of '4*' which could
+        # pattern match with '4', '4L', '47', '47L'...  If you replace '4'
+        # with '04', '04*' becomes distinguishable from '47*'.
+        # This can be useful if you want to augment the force field later,
+        # (for example, adding additional atoms to the LOPLSAA variant of OPLSAA)
+
+        for k in atom2ffid.keys():
+            atom2ffid[k] = atom2ffid[k].rjust(zeropad_ffid, '0')
+
+            # Horrible hack:  for LOPLSAA, uncomment the next 3 lines:
+            #ki = atom2ffid[k].find('L')
+            #if ki!=-1:
+            #    atom2ffid[k] = atom2ffid[k].rjust(zeropad_ffid + len(atom2ffid[k]) - ki, '0')
+
+
         #sys.stderr.write(" done.\n")
         #sys.stderr.write("Converting to moltemplate format...\n")
-        
-        
+
+
         system_is_charged = False
         for atom_type in atom2charge:
             if atom2charge[atom_type] != 0.0:
@@ -376,10 +415,9 @@ def main():
             pair_style_params = "10.0"
             kspace_style = ""
             pair_style_link = "http://lammps.sandia.gov/doc/pair_lj.html"
-        
-        pair_style_command = "    pair_style hybrid " + \
-            pair_style_name + " " + pair_style_params + "\n"
-        
+
+        pair_style_command = "    pair_style " + ("hybrid " if use_hybrid else "") + \
+                             pair_style_name + " " + pair_style_params + "\n"
         
         sys.stdout.write("# This file was generated automatically using:\n")
         sys.stdout.write("# " + g_program_name + " " + " ".join(sys.argv[1:]) + "\n")
@@ -445,8 +483,10 @@ def main():
         sys.stdout.write("  # --------------- Non-Bonded interactions: ---------------------\n"
                          "  # " + pair_style_link + "\n"
                          "  # Syntax:\n"
-                         "  # pair_coeff    AtomType1    AtomType2   pair_style_name  parameters...\n\n")
-        
+                         "  # pair_coeff    AtomType1    AtomType2   " +
+                         ("PairStyleName  " if use_hybrid else "") +
+                         "parameters...\n\n")
+            
         sys.stdout.write("  write_once(\"In Settings\") {\n")
         for atype in atom2vdw_e:
             assert(atype in atom2vdw_s)
@@ -457,7 +497,7 @@ def main():
                              "@atom:" + atype + "_b" + atom2ffid[atype] + "_a" + atom2ffid[
                                  atype] + "_d" + atom2ffid[atype] + "_i" + atom2ffid[atype] + " "
                              "@atom:" + atype + "_b" + atom2ffid[atype] + "_a" + atom2ffid[atype] + "_d" + atom2ffid[atype] + "_i" + atom2ffid[atype] + " " +
-                             pair_style_name +
+                             (pair_style_name if use_hybrid else "") +
                              " " + str(atom2vdw_e[atype]) +
                              " " + str(atom2vdw_s[atype]) + "\n")
         sys.stdout.write("  } #(end of pair_coeffs)\n\n\n\n")
@@ -466,15 +506,18 @@ def main():
         sys.stdout.write("  # ------- Bonded Interactions: -------\n"
                          "  # " + bond_style_link + "\n"
                          "  # Syntax:  \n"
-                         "  # bond_coeff BondTypeName  BondStyle  parameters...\n\n")
+                         "  # bond_coeff BondTypeName  " +
+                         ("BondStyleName  " if use_hybrid else "") +
+                         "parameters...\n\n")
         
         sys.stdout.write("  write_once(\"In Settings\") {\n")
         for btype in bonds_by_type:
-            ffid1 = btype[0] if btype[0] != "0" else "X"
-            ffid2 = btype[1] if btype[1] != "0" else "X"
+            ffid1 = btype[0] if btype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = btype[1] if btype[1] != ("0"*zeropad_ffid) else "X"
             (k, r0) = bonds_by_type[btype]
-            sys.stdout.write("    bond_coeff @bond:" + ffid1 + "-" + ffid2 + " " +
-                             bond_style_name + " " + str(k) + " " + str(r0) + "\n")
+            sys.stdout.write("    bond_coeff @bond:" + ffid1 + "_" + ffid2 + " " +
+                             (bond_style_name if use_hybrid else "") +
+                             " " + str(k) + " " + str(r0) + "\n")
         sys.stdout.write("  } #(end of bond_coeffs)\n\n")
         
         sys.stdout.write("  # Rules for assigning bond types by atom type:\n"
@@ -483,13 +526,13 @@ def main():
         
         sys.stdout.write("  write_once(\"Data Bonds By Type\") {\n")
         for btype in bonds_by_type:
-            ffid1 = btype[0] if btype[0] != "0" else "X"
-            ffid2 = btype[1] if btype[1] != "0" else "X"
-            sys.stdout.write("    @bond:" + ffid1 + "-" + ffid2)
+            ffid1 = btype[0] if btype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = btype[1] if btype[1] != ("0"*zeropad_ffid) else "X"
+            sys.stdout.write("    @bond:" + ffid1 + "_" + ffid2)
             ffid1 = "@atom:*_b" + btype[0] + \
-                "_a*_d*_i*" if btype[0] != "0" else "@atom:*"
+                "*_a*_d*_i*" if btype[0] != ("0"*zeropad_ffid) else "@atom:*"
             ffid2 = "@atom:*_b" + btype[1] + \
-                "_a*_d*_i*" if btype[1] != "0" else "@atom:*"
+                "*_a*_d*_i*" if btype[1] != ("0"*zeropad_ffid) else "@atom:*"
             sys.stdout.write(" " + ffid1 + " " + ffid2 + "\n")
         sys.stdout.write("  } #(end of bonds by type)\n\n\n\n\n")
         
@@ -497,16 +540,19 @@ def main():
         sys.stdout.write("  # ------- Angle Interactions: -------\n"
                          "  # " + angle_style_link + "\n"
                          "  # Syntax:  \n"
-                         "  # angle_coeff AngleTypeName  AngleStyle  parameters...\n\n")
+                         "  # angle_coeff AngleTypeName  "+
+                         ("AngleStyleName  " if use_hybrid else "") +
+                         "parameters...\n\n")
         
         sys.stdout.write("  write_once(\"In Settings\") {\n")
         for atype in angles_by_type:
-            ffid1 = atype[0] if atype[0] != "0" else "X"
-            ffid2 = atype[1] if atype[1] != "0" else "X"
-            ffid3 = atype[2] if atype[2] != "0" else "X"
+            ffid1 = atype[0] if atype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = atype[1] if atype[1] != ("0"*zeropad_ffid) else "X"
+            ffid3 = atype[2] if atype[2] != ("0"*zeropad_ffid) else "X"
             (k, angle0) = angles_by_type[atype]
-            sys.stdout.write("    angle_coeff @angle:" + ffid1 + "-" + ffid2 + "-" + ffid3 + " " +
-                             angle_style_name + " " + str(k) + " " + str(angle0) + "\n")
+            sys.stdout.write("    angle_coeff @angle:" + ffid1 + "_" + ffid2 + "_" + ffid3 + " " +
+                             (angle_style_name if use_hybrid else "") +
+                             " " + str(k) + " " + str(angle0) + "\n")
         sys.stdout.write("  } #(end of angle_coeffs)\n\n")
         
         
@@ -516,16 +562,16 @@ def main():
         
         sys.stdout.write("  write_once(\"Data Angles By Type\") {\n")
         for atype in angles_by_type:
-            ffid1 = atype[0] if atype[0] != "0" else "X"
-            ffid2 = atype[1] if atype[1] != "0" else "X"
-            ffid3 = atype[2] if atype[2] != "0" else "X"
-            sys.stdout.write("    @angle:" + ffid1 + "-" + ffid2 + "-" + ffid3)
+            ffid1 = atype[0] if atype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = atype[1] if atype[1] != ("0"*zeropad_ffid) else "X"
+            ffid3 = atype[2] if atype[2] != ("0"*zeropad_ffid) else "X"
+            sys.stdout.write("    @angle:" + ffid1 + "_" + ffid2 + "_" + ffid3)
             ffid1 = "@atom:*_b*_a" + atype[0] + \
-                "_d*_i*" if atype[0] != "0" else "@atom:*"
+                "*_d*_i*" if atype[0] != ("0"*zeropad_ffid) else "@atom:*"
             ffid2 = "@atom:*_b*_a" + atype[1] + \
-                "_d*_i*" if atype[1] != "0" else "@atom:*"
+                "*_d*_i*" if atype[1] != ("0"*zeropad_ffid) else "@atom:*"
             ffid3 = "@atom:*_b*_a" + atype[2] + \
-                "_d*_i*" if atype[2] != "0" else "@atom:*"
+                "*_d*_i*" if atype[2] != ("0"*zeropad_ffid) else "@atom:*"
             sys.stdout.write(" " + ffid1 + " " + ffid2 + " " + ffid3 + "\n")
         sys.stdout.write("  } #(end of angles by type)\n\n\n\n\n")
         
@@ -533,17 +579,20 @@ def main():
         sys.stdout.write("  # ----------- Dihedral Interactions: ------------\n"
                          "  # " + dihedral_style_link + "\n"
                          "  # Syntax:\n"
-                         "  # dihedral_coeff DihedralTypeName  DihedralStyle  parameters...\n\n")
+                         "  # dihedral_coeff DihedralTypeName  " +
+                         ("DihedralStyleName  " if use_hybrid else "") +
+                         "parameters...\n\n")
         
         sys.stdout.write("  write_once(\"In Settings\") {\n")
         for dtype in dihedrals_by_type:
-            ffid1 = dtype[0] if dtype[0] != "0" else "X"
-            ffid2 = dtype[1] if dtype[1] != "0" else "X"
-            ffid3 = dtype[2] if dtype[2] != "0" else "X"
-            ffid4 = dtype[3] if dtype[3] != "0" else "X"
+            ffid1 = dtype[0] if dtype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = dtype[1] if dtype[1] != ("0"*zeropad_ffid) else "X"
+            ffid3 = dtype[2] if dtype[2] != ("0"*zeropad_ffid) else "X"
+            ffid4 = dtype[3] if dtype[3] != ("0"*zeropad_ffid) else "X"
             sys.stdout.write("    dihedral_coeff @dihedral:" +
-                             ffid1 + "-" + ffid2 + "-" + ffid3 + "-" + ffid4 + " " +
-                             dihedral_style_name + " ")
+                             ffid1 + "_" + ffid2 + "_" + ffid3 + "_" + ffid4 + " " +
+                             (dihedral_style_name if use_hybrid else "") +
+                             " ")
             if dihedral_style_name == 'fourier':
                 # http://lammps.sandia.gov/doc/dihedral_fourier.html
                 (K, n, d) = dihedrals_by_type[dtype]
@@ -570,20 +619,22 @@ def main():
         
         sys.stdout.write("  write_once(\"Data Dihedrals By Type\") {\n")
         for dtype in dihedrals_by_type:
-            ffid1 = dtype[0] if dtype[0] != "0" else "X"
-            ffid2 = dtype[1] if dtype[1] != "0" else "X"
-            ffid3 = dtype[2] if dtype[2] != "0" else "X"
-            ffid4 = dtype[3] if dtype[3] != "0" else "X"
-            sys.stdout.write("    @dihedral:" + ffid1 + "-" +
-                             ffid2 + "-" + ffid3 + "-" + ffid4)
+            ffid1 = dtype[0] if dtype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = dtype[1] if dtype[1] != ("0"*zeropad_ffid) else "X"
+            ffid3 = dtype[2] if dtype[2] != ("0"*zeropad_ffid) else "X"
+            ffid4 = dtype[3] if dtype[3] != ("0"*zeropad_ffid) else "X"
+            sys.stdout.write("    @dihedral:" +
+                             ffid1 + "_" + ffid2 + "_" +
+                             ffid3 + "_" + ffid4)
             ffid1 = "@atom:*_b*_a*_d" + dtype[0] + \
-                "_i*" if dtype[0] != "0" else "@atom:*"
+                "*_i*" if dtype[0] != ("0"*zeropad_ffid) else "@atom:*"
             ffid2 = "@atom:*_b*_a*_d" + dtype[1] + \
-                "_i*" if dtype[1] != "0" else "@atom:*"
+                "*_i*" if dtype[1] != ("0"*zeropad_ffid) else "@atom:*"
             ffid3 = "@atom:*_b*_a*_d" + dtype[2] + \
-                "_i*" if dtype[2] != "0" else "@atom:*"
+                "*_i*" if dtype[2] != ("0"*zeropad_ffid) else "@atom:*"
             ffid4 = "@atom:*_b*_a*_d" + dtype[3] + \
-                "_i*" if dtype[3] != "0" else "@atom:*"
+                "*_i*" if dtype[3] != ("0"*zeropad_ffid) else "@atom:*"
+            
             sys.stdout.write(" " + ffid1 + " " + ffid2 +
                              " " + ffid3 + " " + ffid4 + "\n")
         sys.stdout.write("  } #(end of dihedrals by type)\n\n\n\n\n")
@@ -592,18 +643,21 @@ def main():
         sys.stdout.write("  # ---------- Improper Interactions: ----------\n"
                          "  # " + improper_style_link + "\n"
                          "  # Syntax:\n"
-                         "  # improper_coeff ImproperTypeName  ImproperStyle  parameters\n\n")
+                         "  # improper_coeff ImproperTypeName  " +
+                         ("ImproperStyleName  " if use_hybrid else "") +
+                         "parameters\n\n")
         
         sys.stdout.write("  write_once(\"In Settings\") {\n")
         for itype in impropers_by_type:
-            ffid1 = itype[0] if itype[0] != "0" else "X"
-            ffid2 = itype[1] if itype[1] != "0" else "X"
-            ffid3 = itype[2] if itype[2] != "0" else "X"
-            ffid4 = itype[3] if itype[3] != "0" else "X"
+            ffid1 = itype[0] if itype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = itype[1] if itype[1] != ("0"*zeropad_ffid) else "X"
+            ffid3 = itype[2] if itype[2] != ("0"*zeropad_ffid) else "X"
+            ffid4 = itype[3] if itype[3] != ("0"*zeropad_ffid) else "X"
             (k, angle0) = impropers_by_type[itype]
             sys.stdout.write("    improper_coeff @improper:" +
-                             ffid1 + "-" + ffid2 + "-" + ffid3 + "-" + ffid4 + " " +
-                             improper_style_name + " " + str(k) + " " + str(angle0) + "\n")
+                             ffid1 + "_" + ffid2 + "_" + ffid3 + "_" + ffid4 + " " +
+                             (improper_style_name if use_hybrid else "") +
+                             " " + str(k) + " " + str(angle0) + "\n")
         sys.stdout.write("  } #(end of improper_coeffs)\n\n")
         
         
@@ -613,16 +667,17 @@ def main():
         
         sys.stdout.write("  write_once(\"Data Impropers By Type (opls_imp.py)\") {\n")
         for itype in impropers_by_type:
-            ffid1 = itype[0] if itype[0] != "0" else "X"
-            ffid2 = itype[1] if itype[1] != "0" else "X"
-            ffid3 = itype[2] if itype[2] != "0" else "X"
-            ffid4 = itype[3] if itype[3] != "0" else "X"
-            sys.stdout.write("    @improper:" + ffid1 + "-" +
-                             ffid2 + "-" + ffid3 + "-" + ffid4)
-            ffid1 = "@atom:*_b*_a*_d*_i" + itype[0] if itype[0] != "0" else "@atom:*"
-            ffid2 = "@atom:*_b*_a*_d*_i" + itype[1] if itype[1] != "0" else "@atom:*"
-            ffid3 = "@atom:*_b*_a*_d*_i" + itype[2] if itype[2] != "0" else "@atom:*"
-            ffid4 = "@atom:*_b*_a*_d*_i" + itype[3] if itype[3] != "0" else "@atom:*"
+            ffid1 = itype[0] if itype[0] != ("0"*zeropad_ffid) else "X"
+            ffid2 = itype[1] if itype[1] != ("0"*zeropad_ffid) else "X"
+            ffid3 = itype[2] if itype[2] != ("0"*zeropad_ffid) else "X"
+            ffid4 = itype[3] if itype[3] != ("0"*zeropad_ffid) else "X"
+            sys.stdout.write("    @improper:" +
+                             ffid1 + "_" + ffid2 + "_" +
+                             ffid3 + "_" + ffid4)
+            ffid1 = "@atom:*_b*_a*_d*_i" + itype[0]+"*" if itype[0] != ("0"*zeropad_ffid) else "@atom:*"
+            ffid2 = "@atom:*_b*_a*_d*_i" + itype[1]+"*" if itype[1] != ("0"*zeropad_ffid) else "@atom:*"
+            ffid3 = "@atom:*_b*_a*_d*_i" + itype[2]+"*" if itype[2] != ("0"*zeropad_ffid) else "@atom:*"
+            ffid4 = "@atom:*_b*_a*_d*_i" + itype[3]+"*" if itype[3] != ("0"*zeropad_ffid) else "@atom:*"
             sys.stdout.write(" " + ffid1 + " " + ffid2 +
                              " " + ffid3 + " " + ffid4 + "\n")
         sys.stdout.write("  } #(end of impropers by type)\n\n\n\n\n")
@@ -642,10 +697,18 @@ def main():
         sys.stdout.write("  write_once(\"In Init\") {\n")
         sys.stdout.write("    units real\n")
         sys.stdout.write("    atom_style full\n")
-        sys.stdout.write("    bond_style hybrid " + bond_style_name + "\n")
-        sys.stdout.write("    angle_style hybrid " + angle_style_name + "\n")
-        sys.stdout.write("    dihedral_style hybrid " + dihedral_style_name + "\n")
-        sys.stdout.write("    improper_style hybrid " + improper_style_name + "\n")
+        sys.stdout.write("    bond_style " +
+                         ("hybrid " if use_hybrid else "") +
+                         bond_style_name + "\n")
+        sys.stdout.write("    angle_style " +
+                         ("hybrid " if use_hybrid else "") +
+                         angle_style_name + "\n")
+        sys.stdout.write("    dihedral_style " +
+                         ("hybrid " if use_hybrid else "") +
+                         dihedral_style_name + "\n")
+        sys.stdout.write("    improper_style " +
+                         ("hybrid " if use_hybrid else "") +
+                         improper_style_name + "\n")
         sys.stdout.write(pair_style_command)
         sys.stdout.write("    pair_modify mix " + mixing_style + "\n")
         sys.stdout.write("    " + special_bonds_command + "\n")

@@ -3,15 +3,14 @@
 #
 # Author: Andrew Jewett (jewett.aij at g mail)
 #         http://www.moltemplate.org
-#         http://jensenlab.caltech.edu
 #         http://www.chem.ucsb.edu/~sheagroup
 # License: 3-clause BSD License  (See LICENSE.txt)
 # Copyright (c) 2012, Regents of the University of California
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.7.4"
-G_DATE="2018-6-09"
+G_VERSION="2.8.0"
+G_DATE="2018-6-15"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
