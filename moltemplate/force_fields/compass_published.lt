@@ -10,6 +10,26 @@
 # disclosed.)  We would like to thank Materials Design Inc. for collecting
 # these force field parameters and making them publicly available.
 
+# USAGE: You can create molecules using this force-field this way:
+#
+# MyMolecule inherits COMPASS {
+#  # atom-id  mol-id atom-type charge    X        Y        Z
+#  write('Data Atoms') {
+#    $atom:C1  $mol @atom:c4  0.00  -0.6695    0.000000  0.000000
+#    $atom:H11 $mol @atom:h1  0.00  -1.234217 -0.854458  0.000000
+#         :              :     :      :         :         :
+#   }
+# }
+#
+# You can omit the atom charge in your molecule definition.
+# (Partial charges will be assigned later according to the force field rules.)
+# Responsibility for choosing the atom types (eg "@atom:c4", "@atom:h1") falls
+# on the user.  You must select the type of each atom in the molecule carefully
+# by looking at the description in the "Data Masses" section of this file
+# (see below), and looking for a reasonable match. If your simulation is
+# non-neutral, or moltemplate complains that you have missing bond, angle, or
+# dihedral types, this means at least one of your atom types is incorrect.
+
 
 
 COMPASS {

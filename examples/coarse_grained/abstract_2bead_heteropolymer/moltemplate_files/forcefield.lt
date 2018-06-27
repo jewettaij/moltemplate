@@ -1,8 +1,11 @@
-# The "HPForceField" is a force-field environment object containing 
-# force-field data, atomic masses, and bond rules.
-# Later, when we define molecules (such as "H" and "P"), we can inherit
-# atom types and bond-rules from this force-field.  This will automatically
-# assign bonds and angular interactions according to atom (and bond) type.
+# Define a "ForceField" object.
+# A force field in moltemplate is any object containing mostly pair_coeff,
+# bond_coeff, angle_coeff, dihedral_coeff, "Bonds By Type", "Angles By Type",
+# "Dihedrals By Type", "Impropers By Type", "Data Masses" (and "In Charges")
+# information. Later, when we define molecules (such as "H" and "P"), we can 
+# borrow these atom types, bond-rules and force field parameters.  This way,
+# bonds and angular interactions are generated automatically according to
+# atom (and bond) type.
 # (You can also assign charge by atom type.  However in this example I assigned
 #  charge to each atom manually (not by type).  The OPLSAA examples in the 
 #  "all_atoms" directory demonstrate how to assign charge by atom type.)

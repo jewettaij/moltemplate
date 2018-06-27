@@ -12,3 +12,9 @@ Monomer inherits ForceField {
     $bond:cr    @bond:Sidechain  $atom:ca  $atom:r
   }
 }
+
+
+
+# NOTE: The "..." in "$mol:..." tells moltemplate that this molecule is part
+#       of a larger molecule, and to use the larger parent object's 
+#       molecule id number as it's own.

@@ -61,7 +61,7 @@ d) Try entering these commands:
     To shift the box in the y direction (for example) do this:
 
     pbc wrap -compound res -all -shiftcenterrel {-0.05 -0.05 -0.05}
-    pbc box -shiftcenterrel {-0.05 -0.05 -0.05}
+    pbc box -shiftcenterrel {-0.05 -0.05 -0.05} -width 0.9 -style tubes
 
     Distances are measured in units of box-length fractions, not Angstroms.
 

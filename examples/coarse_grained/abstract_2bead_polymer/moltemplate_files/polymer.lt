@@ -9,11 +9,11 @@ Polymer inherits ForceField {
 
   mon1 = new Monomer
   mon2 = new Monomer.rot(180.0, 1,0,0).move(3.2,0,0)
-  mon3 = new Monomer.rot(360.0, 1,0,0).move(6.4,0,0)
-  mon4 = new Monomer.rot(540.0, 1,0,0).move(9.6,0,0)
-  mon5 = new Monomer.rot(720.0, 1,0,0).move(12.8,0,0)
-  mon6 = new Monomer.rot(900.0, 1,0,0).move(16.0,0,0)
-  mon7 = new Monomer.rot(1080.0, 1,0,0).move(19.2,0,0)
+  mon3 = new Monomer.move(6.4,0,0)
+  mon4 = new Monomer.rot(180.0, 1,0,0).move(9.6,0,0)
+  mon5 = new Monomer.move(12.8,0,0)
+  mon6 = new Monomer.rot(180.0, 1,0,0).move(16.0,0,0)
+  mon7 = new Monomer.move(19.2,0,0)
 
   # Now, link the monomers together this way:
   write("Data Bonds") {

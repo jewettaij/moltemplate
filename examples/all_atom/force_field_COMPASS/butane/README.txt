@@ -1,5 +1,5 @@
-This example is a simple simulation of a short alkane chain (butane),
-in a vacuum at room temperature using the COMPASS force field.
+This example is a simple simulation of many short alkane chains (butane) in
+a box near the boiling point at atmospheric pressure.(Please read "WARNING.TXT")
 
 1) Create the "system.data", "system.in.init", and "system.in.settings"
 files which LAMMPS will read by running:
@@ -9,7 +9,7 @@ moltemplate.sh system.lt
 
 2) Run LAMMPS in this order:
 
-lmp_mpi -i run.in.min   # minimize the energy (to avoid atom overlap) before...
+lmp_mpi -i run.in.npt   # running the simulation at constant pressure
 lmp_mpi -i run.in.nvt   # running the simulation at constant temperature
 
 (The name of the LAMMPS executable, eg "lmp_mpi", may vary.)
