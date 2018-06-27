@@ -21,11 +21,11 @@ use the COMPASS force-field.  This means that when we define these molecules,
 we only specify the atom names, bond list, and coordinates.
 We do not have to list the atom charges, angles, dihedrals, or impropers.
 The rules for creating atomic charge and angle topology are contained in
-the "compass.lt" file created by step 3) above.  The "ch2group.lt",
-"ch3group.lt", and "alkane50.lt" files all refer to "compass.lt",
+the "compass_published.lt" file created by step 3) above.  The "ch2group.lt",
+"ch3group.lt", and "alkane50.lt" files all refer to "compass_published.lt",
 (as well as the "COMPASS" force-field object which it defines).  Excerpt:
 
-import "compass.lt"
+import "compass_published.lt"
 CH2 inherits COMPASS { ...
 CH3 inherits COMPASS { ...
 Alkane50 inherits COMPASS { ...
