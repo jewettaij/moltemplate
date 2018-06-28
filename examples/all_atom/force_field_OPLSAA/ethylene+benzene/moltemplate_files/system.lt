@@ -9,11 +9,13 @@ write_once("Data Boundary") {
    0.0  48.00  zlo zhi
 }
 
-# Create 216 ethylenes and 108 benzenes
+# Create 216 "Ethylene" molecules and arrange them in a 6x6x6 cubic lattice
 
 ethylenes = new Ethylene[6].move(8.0, 0, 0)
                         [6].move(0, 8.0, 0)
                         [6].move(0, 0, 8.0)
+
+# Create 108 "Benzene" molecules and arrange them in a 6x6x6 cubic lattice
 
 benzenes  = new Benzene[6].move(8.0, 0, 0)
                        [6].move(0, 8.0, 0)

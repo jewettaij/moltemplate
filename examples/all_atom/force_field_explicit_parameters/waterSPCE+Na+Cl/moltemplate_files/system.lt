@@ -10,7 +10,8 @@ write_once("Data Boundary") {
 }
 
 
-# The next command generates a (rather dense) cubic lattice with
+# The next command creates 1000 (10x10x10) copies of the SPCE water molecule
+# and arranges them in a (rather dense) cubic lattice with
 # spacing 3.45 Angstroms. (The pressure must be equilibrated later.)
 
 wat  = new SPCE [10].move(0.00, 0.00, 3.45) 
