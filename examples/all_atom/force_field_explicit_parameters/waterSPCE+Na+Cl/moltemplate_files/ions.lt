@@ -1,14 +1,14 @@
-# We define two molecule classes to represent Na+ and Cl- ions, respectively.
-# They both contain only one atom.
-
 # In moltemplate each molecule type is stored in a file whose format mimics the
 # format of a LAMMPS "data" file, with "Atoms", "Bonds", and "Angles" sections.
 # Once defined, these molecules may be copied and moved to build larger systems.
 
 
-NaIon {
+# We define two molecule classes to represent Na+ and Cl- ions, respectively.
+# They both contain only one atom.
 
-  #  ---- Definition of "NaIon" ----
+
+
+NaIon {
 
   # AtomID  MolID  AtomType  charge   X       Y         Z
   write("Data Atoms") {
@@ -30,8 +30,6 @@ NaIon {
 
 
 ClIon {
-
-  #  ---- Definition of "ClIon" ----
 
   # AtomID  MolID  AtomType  charge   X       Y         Z
   write("Data Atoms") {
