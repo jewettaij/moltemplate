@@ -1,61 +1,79 @@
+# In moltemplate each molecule type is stored in a file whose format mimics the
+# format of a LAMMPS "data" file, with "Atoms", "Bonds", and "Angles" sections.
+# Once defined, these molecules can be copied and moved to build larger systems.
+#
+# "SPCE" ("extended simple point charge") is one of several popular water models
+# (See Berendsen H.J.C et al., J.Phys.Chem. Vol91 pp.6269-6271,1987 for details)
+#
 # file "spce.lt" 
 #
 #    H1     H2
 #      \   /
 #        O
 
+
 SPCE {
 
-  # The "Data Atoms" section is where atom attributes (type, charge, x,y,z) go:
+  #  ---- Definition of the "SPCE" (water molecule type) ----
+
+  # The "Data Atoms" section is a list of atom attributes (type, charge, x,y,z)
   # AtomID  MoleculeID AtomType Charge   X        Y        Z
+
   write("Data Atoms") {
-    $atom:O    $mol    @atom:O -0.8476  0.0000000 0.00000 0.000000
-    $atom:H1   $mol    @atom:H  0.4238  0.8164904 0.00000  0.5773590
-    $atom:H2   $mol    @atom:H  0.4238  -0.8164904 0.00000 0.5773590
+    $atom:o    $mol    @atom:O -0.8476  0.0000000 0.00000 0.000000
+    $atom:h1   $mol    @atom:H  0.4238  0.8164904 0.00000  0.5773590
+    $atom:h2   $mol    @atom:H  0.4238  -0.8164904 0.00000 0.5773590
   }
+  # Note: LAMMPS expects an integer in the 2nd column (the Molecule-ID number).
+  #       If we put "$mol" there, moltemplate will generate this integer for you
+
+  # A list of the bonds in the molecule:
+  # BondID    BondType  AtomID1  AtomID2
+
+  write("Data Bonds") {
+    $bond:OH1 @bond:OH $atom:o $atom:h1
+    $bond:OH2 @bond:OH $atom:o $atom:h2
+  }
+
+  # A list of the angles in the molecule:
+  # AngleID    AngleType  AtomID1  AtomID2 AtomID3
+
+  write("Data Angles") {
+    $angle:HOH @angle:HOH $atom:h1 $atom:o $atom:h2
+  }
+
+  # The mass of each atom type:
 
   write_once("Data Masses") {
     @atom:O 15.9994
     @atom:H 1.008
   }
 
-  # A list of the bonds in the molecule
-  # BondID    BondType  AtomID1  AtomID2
-  write("Data Bonds") {
-    $bond:OH1 @bond:OH $atom:O $atom:H1
-    $bond:OH2 @bond:OH $atom:O $atom:H2
-  }
-
-  # A list of the angles in the molecule:
-  # AngleID    AngleType  AtomID1  AtomID2 AtomID3
-  write("Data Angles") {
-    $angle:HOH @angle:HOH $atom:H1 $atom:O $atom:H2
-  }
-
-
-
-
 
   # ---- Where to put force field parameters? ----
   # Moltemplate allows you to specify force-field parameters anywhere you want.
-  # Sometimes it is convenient to nest them inside a molecule's definition.
+  # Sometimes it is convenient to nest them within a molecule's definition.
   # For more complicated simulations, it's convenient to define a "ForceField"
   # object containing force field parameters shared by many different types of 
-  # molecules. (Since this is a simple example, there was no need to do that.)
+  # molecules. (Since this is a simple example, there is no need to do that.)
   
   # The "In Settings" section contains LAMMPS commands which typically define 
   # force-field parameters (eg "pair_coeff") and constraints (eg "fix shake")
 
   write_once("In Settings") {
     bond_coeff   @bond:OH           1000.0  1.0 
-
     # explanation:  http://lammps.sandia.gov/doc/bond_harmonic.html
-    angle_coeff  @angle:HOH         1000.0  109.47
 
+    angle_coeff  @angle:HOH         1000.0  109.47
     # explanation:  http://lammps.sandia.gov/doc/angle_harmonic.html
+ 
     pair_coeff   @atom:O @atom:O    0.1553  3.166 
     pair_coeff   @atom:H @atom:H    0.0     2.058
     # explanation:  http://lammps.sandia.gov/doc/pair_charmm.html
+
+    # OPTIONAL: We want the water molecules to behave like rigid objects, so 
+    # we apply the "SHAKE" constraint to the group of atoms in water molecules.
+    # (SHAKE is used to make bonds and angles rigid.)
 
     group gSPCE type  @atom:O  @atom:H
     # explanation:  http://lammps.sandia.gov/doc/group.html
