@@ -4,8 +4,7 @@
 # Do not expect a physical behaviour from this sample: long-range electrostatic
 # interactions are missing.
 #
-# Otello M. Roscioni
-# roscioni@gmail.com
+# -Otello M. Roscioni (U.Southampton)
 
 # Run with the command:
 # moltemplate.sh  -atomstyle "atomid atomtype flag density x y z" system.lt -allow-wildcards -nocheck
