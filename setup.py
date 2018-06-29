@@ -19,9 +19,9 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.8.6.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.8.7.zip',
 
-  version='2.8.6',
+  version='2.8.7',
 
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],

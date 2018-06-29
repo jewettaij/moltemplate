@@ -10,12 +10,14 @@ write_once("Data Boundary") {
 }
 
 # Create 216 "Ethylene" molecules and arrange them in a 6x6x6 cubic lattice
+# with 8.0 Angstrom spacing.
 
 ethylenes = new Ethylene[6].move(8.0, 0, 0)
                         [6].move(0, 8.0, 0)
                         [6].move(0, 0, 8.0)
 
-# Create 108 "Benzene" molecules and arrange them in a 6x6x6 cubic lattice
+# Create 108 "Benzene" molecules and arrange them in a 6x6x3 cubic lattice with
+# 8.0 Angstrom spacing in the x,y directions and 16 Anstrom spacing along Z.
 
 benzenes  = new Benzene[6].move(8.0, 0, 0)
                        [6].move(0, 8.0, 0)

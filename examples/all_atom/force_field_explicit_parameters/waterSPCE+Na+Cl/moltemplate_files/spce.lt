@@ -53,12 +53,12 @@ SPCE {
   # ---- Where to put force field parameters? ----
   # Moltemplate allows you to specify force-field parameters anywhere you want.
   # Sometimes it is convenient to nest them within a molecule's definition.
-  # For more complicated simulations, it's convenient to define a "ForceField"
-  # object containing force field parameters shared by many different types of 
-  # molecules. (Since this is a simple example, there is no need to do that.)
-  
   # The "In Settings" section contains LAMMPS commands which typically define 
-  # force-field parameters (eg "pair_coeff") and constraints (eg "fix shake")
+  # force-field parameters (eg "pair_coeff", "bond_coeff", "angle_coeff") and
+  # constraints (eg "fix shake") which are specific to this type of molecule.
+  # (For more complicated simulations, it's convenient to define a "ForceField"
+  # object containing force field parameters shared by many different types of 
+  # molecules. Since this is a simple example, there is no need to do that.)
 
   write_once("In Settings") {
     bond_coeff   @bond:OH           1000.0  1.0 

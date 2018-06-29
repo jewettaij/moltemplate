@@ -8,7 +8,7 @@
 #
 # The "oplsaa.prm" file was downloaded on 2018-6-15 from the TINKER website
 # https://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
-# (Corrections to imrpopers were added by David Huang (adelaide.edu.au))
+# (Corrections to impropers were added by David Huang (adelaide.edu.au))
 # (Additional conversion details are explained at the end of this file.)
 # Urey-Bradley parameters are not included, and a quadratic energy function
 # is used (rather than a cosine) for the improper interactions (in order

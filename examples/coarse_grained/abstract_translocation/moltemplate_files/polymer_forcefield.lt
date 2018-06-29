@@ -1,4 +1,4 @@
-# Define a "ForceField" object.
+# Define the "PForceField" object.
 # A force field in moltemplate is any object containing mostly pair_coeff,
 # bond_coeff, angle_coeff, dihedral_coeff, "Bonds By Type", "Angles By Type",
 # "Dihedrals By Type", "Impropers By Type", "Data Masses" (and "In Charges")
@@ -7,7 +7,7 @@
 # (See "monomer.lt" for example.)
 
 
-ForceField {
+PForceField {
 
   # LAMMPS supports a large number of "styles" (ie. equations for calculating 
   # forces between particles).  At some point, we must eventually select the
@@ -115,6 +115,6 @@ ForceField {
     dihedral_coeff  @dihedral:backbn  1.411036 -0.271016 3.145034 0.0
   }
 
-} # "ForceField"
+} # "PForceField"
 
 

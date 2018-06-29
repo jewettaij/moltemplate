@@ -1,5 +1,5 @@
 # In moltemplate each molecule type is stored in a file whose format mimics the
-# format of a LAMMPS "data" file, with "Atoms", "Bonds", and "Angles" sections.
+# format of a LAMMPS "data" file (with "Atoms" and "Masses" sections).
 # Once defined, these molecules may be copied and moved to build larger systems.
 
 
@@ -19,6 +19,7 @@ NaIon {
     @atom:Na 22.9898
   }
 
+  # The "In Settings" section stores force-field parameters for this molecule
   write_once("In Settings") {
     pair_coeff @atom:Na @atom:Na  0.3526418 1.079769246386
   }
@@ -40,6 +41,7 @@ ClIon {
     @atom:Cl 35.453
   }
 
+  # The "In Settings" section stores force-field parameters for this molecule
   write_once("In Settings") {
     pair_coeff @atom:Cl @atom:Cl   0.0127850  2.711
   }
