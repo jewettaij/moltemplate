@@ -76,8 +76,8 @@ step 3)  OPTIONAL
 
 To run a short LAMMPS simulation, you can use the "in.nvt" file, for example:
 
-$LAMMPS_BINARY -i run.in.nvt
+lmp_mpi -i run.in.nvt
 
-where "$LAMMPS_BINARY" is the name of the command you use to invoke lammps
-(such as lmp_linux, lmp_g++, lmp_mac, lmp_ubuntu, lmp_cygwin, etc...).
+where "lmp_mpi" is the name of the LAMMPS binary you are using.
+(Other possible names: "lmp_ubuntu", "lmp_g++", "lmp_mac", "lmp_cygwin", etc...)
     -----------
