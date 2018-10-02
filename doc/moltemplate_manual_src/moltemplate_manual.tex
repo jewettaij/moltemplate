@@ -952,7 +952,7 @@ Multiple transformations can be chained together into a compound operation.}
 }
 \\
 \multicolumn{2}{c} {
-(For example: \mbox{``$.scale(2.0).rotate(45.2,1,0,0).move(25.0,0,0)$''})
+(For example: \mbox{``$.scale(2.0).rot(45.2,1,0,0).move(25.0,0,0)$''})
 }
 \\
 \multicolumn{2}{c} {
@@ -1089,6 +1089,8 @@ These flags disable that behavior.
 This can be useful when you want to superimpose 
 multiple angular or dihedral forces on the same set of atoms
 (eg. to enable more complex force fields).
+Note: Each duplicate must still be given an unique
+\$bond, \$angle, \$dihedral, \$improper style variable name.
 \\
 \hline
 -nocheck &
@@ -2724,7 +2726,7 @@ specifying which part is random, and and which part is not:
                        [48].rot(180,1,0,0).move(2.95, 0, 0)
   monomers[49]   = new Monomer3
   # It's a good idea to move these monomers to keep them from overlapping
-  monomers[0].rotate(180,1,0,0)
+  monomers[0].rot(180,1,0,0)
   monomers[1-48].move(2.95,0,0)
   monomers[49].move(144.55,0,0)    #(note: 144.55=49*2.95)
 \end{verbatim}
@@ -2928,7 +2930,7 @@ And all of this can be done from anywhere else in the LT file.
 For example, suppose we used the ``Polymer'' molecule we defined above
 to create a larger, more complicated ``MolecularComplex'' molecule.
 \begin{verbatim}
-MolecularComplex {
+MolecularComplex inherits ForceField {
   polymers[0] = new Polymer
   polymers[1] = new Polymer.rot(180,1,0,0).move(0, 12.4, 0)
 }

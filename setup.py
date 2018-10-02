@@ -13,6 +13,8 @@ setup(
 
   description='A general cross-platform text-based molecule builder for LAMMPS',
 
+  long_description='Moltemplate is a general cross-platform text-based molecule builder for LAMMPS and ESPResSo. Moltemplate was intended for building custom coarse-grained molecular models, but it can be used to prepare realistic all-atom simulations as well.  It supports a variety of force fields for all-atom and coarse-grained modeling (including many-body forces and non-point-like particles).  New force fields and examples are added continually by users.',
+
   author='Andrew Jewett',
 
   author_email='jewett.aij@gmail.com',

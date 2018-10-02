@@ -21,7 +21,7 @@ NaIon {
 
   # The "In Settings" section stores force-field parameters for this molecule
   write_once("In Settings") {
-    pair_coeff @atom:Na @atom:Na  0.3526418 1.079769246386
+    pair_coeff @atom:Na @atom:Na  0.3526418 2.1595384928
   }
   # (explanation:  http://lammps.sandia.gov/doc/pair_charmm.html)
 
@@ -43,7 +43,7 @@ ClIon {
 
   # The "In Settings" section stores force-field parameters for this molecule
   write_once("In Settings") {
-    pair_coeff @atom:Cl @atom:Cl   0.0127850  2.711
+    pair_coeff @atom:Cl @atom:Cl   0.0127850  4.8304528498
   }
   # (explanation:  http://lammps.sandia.gov/doc/pair_charmm.html)
 
@@ -55,14 +55,10 @@ ClIon {
 
 
 # Note: Monovalent ion parameters for Ewald and SPC/E water
-#       are from: Joung & Cheatham JPCB (2008)
-# These Lennard Jones parameters match the parameters for ions
-# in SPC/E water in the "frcmod.ionsjc_spce" file distributed 
-# with Amber (the 2010 version).
-#
-# The epsilong & sigma parameters from that paper were 0.3526418 & 1.212.
-# However sigma must be divided by 2^(1/6), because they use the alternate
-# Lennard-Jones convention: U(r)=epsilon*((s/r)^12 - 2*(s/r)^6), and
-# pair_style lj/charmm/coul/long uses U(r)=4*epsilon*((s/r)^12 - (s/r)^6)
-# (Note: This change does not effect the epsilon parameter.)
-
+#       are from Joung & Cheatham JPCB (2008)   (Table 5)
+#       (The widths of the ions, expressed in terms of Rmin/2, are:
+#        1.212 and 2.711, for Na+ and Cl-, respectively)
+# Note: They use  U(r) =  ε*((σ/r)^12 - 2*(σ/r)^6)
+#            not  U(r) = 4ε*((σ/r)^12 - (σ/r)^6)
+#       ...but this should not effect the ε (epsilon) value.
+#       (LAMMPS uses later convention, in which case Rmin/2 = σ/2^(5/6))

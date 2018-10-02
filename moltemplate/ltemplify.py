@@ -36,8 +36,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.54.0'
-g_date_str = '2017-10-03'
+g_version_str = '0.55.0'
+g_date_str = '2018-10-03'
 
 def Intify(s):
     if s.isdigit():
@@ -1808,7 +1808,7 @@ def main():
 
                 if atomtype_i_tokens[0] == '':
                     if (min_sel_atomtype and
-                            (min_sel_atomtype < min_needed_atomtype)):
+                        (min_sel_atomtype < min_needed_atomtype)):
                         i_a = min_sel_atomtype
                     else:
                         i_a = min_needed_atomtype
@@ -1817,7 +1817,7 @@ def main():
 
                 if atomtype_i_tokens[1] == '':
                     if (max_sel_atomtype and
-                            (max_sel_atomtype > max_needed_atomtype)):
+                        (max_sel_atomtype > max_needed_atomtype)):
                         i_b = max_sel_atomtype
                     else:
                         i_b = max_needed_atomtype
@@ -1833,11 +1833,14 @@ def main():
             i_b_final = None
 
             for i in range(i_a, i_b + 1):
-                if ((i in needed_atomtypes) or (min_sel_atomtype <= i)):
+                if ((i in needed_atomtypes) or
+                    ((min_sel_atomtype != None) and (min_sel_atomtype <= i))):
                     i_a_final = i
                     break
+
             for i in reversed(range(i_a, i_b + 1)):
-                if ((i in needed_atomtypes) or (max_sel_atomtype >= i)):
+                if ((i in needed_atomtypes) or
+                    ((max_sel_atomtype != None) and (max_sel_atomtype >= i))):
                     i_b_final = i
                     break
 
@@ -1853,7 +1856,7 @@ def main():
 
                 if atomtype_j_tokens[0] == '':
                     if (min_sel_atomtype and
-                            (min_sel_atomtype < min_needed_atomtype)):
+                        (min_sel_atomtype < min_needed_atomtype)):
                         j_a = min_sel_atomtype
                     else:
                         j_a = min_needed_atomtype
@@ -1862,7 +1865,7 @@ def main():
 
                 if atomtype_j_tokens[1] == '':
                     if (max_sel_atomtype and
-                            (max_sel_atomtype > max_needed_atomtype)):
+                        (max_sel_atomtype > max_needed_atomtype)):
                         j_b = max_sel_atomtype
                     else:
                         j_b = max_needed_atomtype
@@ -1875,11 +1878,13 @@ def main():
             j_a_final = None
             j_b_final = None
             for j in range(j_a, j_b + 1):
-                if ((j in needed_atomtypes) or (min_sel_atomtype <= j)):
+                if ((j in needed_atomtypes) or
+                    ((min_sel_atomtype != None) and (min_sel_atomtype <= j))):
                     j_a_final = j
                     break
             for j in reversed(range(j_a, j_b + 1)):
-                if ((j in needed_atomtypes) or (max_sel_atomtype >= j)):
+                if ((j in needed_atomtypes) or
+                    ((max_sel_atomtype != None) and (max_sel_atomtype >= j))):
                     j_b_final = j
                     break
 
@@ -1940,7 +1945,7 @@ def main():
 
                 if atomtype_i_tokens[0] == '':
                     if (min_sel_atomtype and
-                            (min_sel_atomtype < min_needed_atomtype)):
+                        (min_sel_atomtype < min_needed_atomtype)):
                         i_a = min_sel_atomtype
                     else:
                         i_a = min_needed_atomtype
@@ -1949,7 +1954,7 @@ def main():
 
                 if atomtype_i_tokens[1] == '':
                     if (max_sel_atomtype and
-                            (max_sel_atomtype > max_needed_atomtype)):
+                        (max_sel_atomtype > max_needed_atomtype)):
                         i_b = max_sel_atomtype
                     else:
                         i_b = max_needed_atomtype

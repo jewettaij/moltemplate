@@ -61,10 +61,10 @@ SPCE {
   # molecules. Since this is a simple example, there is no need to do that.)
 
   write_once("In Settings") {
-    bond_coeff   @bond:OH           1000.0  1.0 
+    bond_coeff   @bond:OH           600.0   1.0
     # explanation:  http://lammps.sandia.gov/doc/bond_harmonic.html
 
-    angle_coeff  @angle:HOH         1000.0  109.47
+    angle_coeff  @angle:HOH         75.0    109.47
     # explanation:  http://lammps.sandia.gov/doc/angle_harmonic.html
  
     pair_coeff   @atom:O @atom:O    0.1553  3.166 
@@ -80,7 +80,7 @@ SPCE {
 
     fix fShakeSPCE gSPCE shake 0.0001 10 100 b @bond:OH a @angle:HOH
     # explanation:  http://lammps.sandia.gov/doc/fix_shake.html
-    # (Remember to "unfix" fSHAKE during minimization.)
+    # (Remember to disable this during minimization using "unfix fShakeSPCE")
  
   }
 

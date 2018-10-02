@@ -1,0 +1,114 @@
+# PREREQUISITES:
+#
+# 1)  You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#     (See README_setup.sh for details.)
+#
+# 2)  You must then run the minimization simulation beforehand using:
+#     lmp_mpi -i run.in.min    (assuming "lmp_mpi" is your lammps binary's name)
+
+# ------------------------------- Initialization Section --------------------
+
+include         system.in.init
+
+# ------------------------------- Atom Definition Section -------------------
+
+#read_data      system.data <-commenting out. use minimized conformation instead
+
+read_data       system_after_min.data
+
+# ------------------------------- Settings Section --------------------------
+
+include         system.in.settings     #(define force fields and constraints)
+
+# ------------------------------- Run Section -------------------------------
+
+# -- files containing trajectory data and other information --
+
+thermo_style    custom step temp pe ke etotal press vol epair ebond eangle edihed
+thermo_modify   norm yes
+thermo          100
+dump            1 all custom 500 traj_npt.lammpstrj id mol type x y z ix iy iz
+
+
+# -- simulation protocol --
+
+timestep        2.0
+
+group gRigid    union    gH2O gH2O
+group gFlexible subtract all gRigid
+
+fix fxRigid gH2O rigid/nph/small molecule iso 1 1 1000
+fix fxFlexible gFlexible nve
+fix fxLanvegin all langevin 298 298 10000.0 48279
+
+run		100000
+
+write_data   system_after_npt.data
+
+
+
+
+
+# NOTE:
+# The following alternate protocol seems to agree with the protocol used above:
+# (but this observation was based on an extremely short simulation)
+# fix fxRigid gH2O rigid/npt/small molecule temp 298 298 100 iso 1 1 1000
+# fix fxFlexible gFlexible nvt temp 298 298 100.0
+# <temp>~=297, <ke>~=0.45, <press>~=0, <volume>~=21900 (based on 10000 steps)
+#
+#
+#
+#
+# AVOID THESE PROTOCOLS FOR SIMULATIONS CONTAINING RIGID & FLEXIBLE MOLECULES:
+# 1)
+# fix fxRigid gH2O rigid/nvt/small molecule temp 298 298 100 
+# fix fxFlexible gFlexible npt temp 298 298 100.0 iso 1 1 1000
+#    (System behaves as if being compressed)
+# <temp>~=295, <ke>~=0.46, <press>~=10000, <volume>~=16500 (based on 10000steps)# 2)
+# fix fxRigid gH2O rigid/nve/small molecule
+# fix fxFlexible gFlexible nph iso 1 1 1000
+# fix fxLanvegin all langevin 298 298 5000.0 48279
+#    (System behaves as if compressed.  Temperature is elevated)
+# <temp>~=315, <ke>~=0.48, <press>~=11000, <volume>~=17000 (based on 10000steps)
+# 3)
+# fix fxRigid gH2O rigid/npt/small molecule temp 298 298 100 iso 1 1 1000
+# fix fxFlexible gFlexible nve
+#    (System behaves as it would at a lower temperature)
+# <temp>~=241, <ke>~=0.36, <press>~=0, <volume>~=20800 (based on 10000steps)
+# 4)
+# fix fxRigid gH2O rigid/nve/small molecule langevin 298 298 5000.0 48279
+# fix fxFlexible gFlexible nph iso 1 1 1000
+# fix fxLanvegin gFlexible langevin 298 298 5000.0 48279
+#    (System behaves as if compressed.  Temperature is elevated)
+# <temp>~=315, <ke>~=0.48, <press>~=10000, <volume>~=17000 (based on 10000steps)
+# 5)
+# fix fxRigid gH2O rigid/nph/small molecule iso 1 1 1000
+# fix fxFlexible gFlexible nvt temp 298 298 100.0
+#    (system behaves as it would at a higher temperature)
+# <temp>~=355, <ke>~=55, <press>~=0, <volume>~=30000   (based on 10000 steps)
+#
+#
+#
+#
+# EXCERPT from "https://lammps.sandia.gov/doc/fix_rigid.html"
+# "If you with to perform NPT or NPH dynamics (barostatting), you cannot
+# use both fix npt and the NPT or NPH rigid styles. This is because there 
+# can be one fix which monitors the global pressure and changes the 
+# simulation box dimensions. So you have 3 choices:
+#
+# Use one of the 4 NPT or NPH styles for the rigid bodies.  Use the dilate all
+# option so that it will dilate the positions of the non-rigid particles as well
+#
+# Use fix nvt (or any other thermostat) for the non-rigid particles.
+# Use fix npt for the group of non-rigid particles. Use the dilate all option
+# so that it will dilate the center-of-mass positions of the rigid bodies as
+# well. Use one of the 4 NVE or 2 NVT rigid styles for the rigid bodies.
+#
+# Use fix press/berendsen to compute the pressure and change the box dimensions.
+# Use one of the 4 NVE or 2 NVT rigid styles for the rigid bodies. Use fix nvt
+# (or any other thermostat) for the non-rigid particles.
+#
+# In all case, the rigid bodies and non-rigid particles both contribute to
+# the global pressure and the box is scaled the same by any of the
+# barostatting fixes."

@@ -33,7 +33,7 @@ SPCE {
     pair_coeff   @atom:H @atom:H  lj/charmm/coul/long  0.0     0.0
     group spce type  @atom:O  @atom:H
     fix fShakeSPCE spce shake 0.0001 10 100 b @bond:OH a @angle:HOH
-    # (Remember to "unfix" fShakeSPCE during minimization.)
+    # (Remember to disable this during minimization using "unfix fShakeSPCE")
   }
 
   write_once("In Init") {

@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)
+[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)]
 
 Moltemplate
 ===========
@@ -50,9 +51,9 @@ Make sure that your default pip install bin directory is in your PATH.  (This is
 If you continue to run into difficulty, try installing moltemplate into a temporary virtual environment by installing "*virtualenv*", downloading moltemplate (to "~/moltemplate" in the example below), and running these commands:
 
     cd ~/moltemplate
-    virtualenv venv
+    virtualenv venv     #(or "python3 -m venv venv" if using python3)
     source venv/bin/activate
-    pip install .
+    pip install .       #(or "pip3 install ." if using python3)
     #(now do something useful with moltemplate...)
 
 (You will have to "run source ~/moltemplate/venv/bin/activate" beforehand every time you want to run moltemplate.
