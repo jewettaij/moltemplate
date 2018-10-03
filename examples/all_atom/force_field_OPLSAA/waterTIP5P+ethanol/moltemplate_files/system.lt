@@ -1,4 +1,4 @@
-import "TIP5P.lt"     # <-defines the "TIP5P" (water) molecule type(uses OPLSAA)
+import "tip5p.lt"     # <-defines the "TIP5P" (water) molecule type(uses OPLSAA)
 import "ethanol.lt"   # <-defines the "Ethanol" molecule type
 
 

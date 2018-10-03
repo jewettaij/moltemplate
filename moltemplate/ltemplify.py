@@ -1723,7 +1723,7 @@ def main():
 
         # --- MASSES ---
 
-        # delete masses for atom types we don't care about anymore:
+        # delete masses for atom types we no longer care about:
         i_line = 0
         while i_line < len(l_data_masses):
             line = l_data_masses[i_line]
@@ -1741,7 +1741,7 @@ def main():
 
         # --- PAIR COEFFS ---
 
-        # delete data_pair_coeffs for atom types we don't care about anymore:
+        # delete data_pair_coeffs for atom types we no longer care about:
         i_line = 0
         while i_line < len(l_data_pair_coeffs):
             line = l_data_pair_coeffs[i_line]
@@ -1757,7 +1757,7 @@ def main():
             else:
                 i_line += 1
 
-        # delete data_pairij_coeffs for atom types we don't care about anymore:
+        # delete data_pairij_coeffs for atom types we no longer care about:
         i_line = 0
         while i_line < len(l_data_pairij_coeffs):
             line = l_data_pairij_coeffs[i_line]
@@ -1780,7 +1780,7 @@ def main():
             else:
                 i_line += 1
 
-        # delete in_pair_coeffs for atom we don't care about anymore:
+        # delete in_pair_coeffs for atom we no longer care about:
         i_line = 0
         while i_line < len(l_in_pair_coeffs):
             line = l_in_pair_coeffs[i_line]
@@ -1918,7 +1918,7 @@ def main():
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
 
-        # delete mass commands for atom types we don't care about anymore:
+        # delete mass commands for atom types we no longer care about:
         i_line = 0
         while i_line < len(l_in_masses):
             line = l_in_masses[i_line]
@@ -2028,7 +2028,7 @@ def main():
             # else:
             #    del l_data_bonds[i_line]
 
-        # delete data_bond_coeffs for bondtypes we don't care about anymore:
+        # delete data_bond_coeffs for bondtypes we no longer care about
         i_line = 0
         while i_line < len(l_data_bond_coeffs):
             line = l_data_bond_coeffs[i_line]
@@ -2042,23 +2042,30 @@ def main():
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
 
-        # delete in_bond_coeffs for bondtypes we don't care about anymore:
-        for bondtype in needed_bondtypes:
-            assert(type(bondtype) is int)
-            if ((min_needed_bondtype == None) or
+        # delete in_bond_coeffs for bondtypes we no longer care about:
+        if len(needed_bondtypes) > 0:
+            for bondtype in needed_bondtypes:
+                assert(type(bondtype) is int)
+                if ((min_needed_bondtype == None) or
                     (min_needed_bondtype > bondtype)):
-                min_needed_bondtype = bondtype
-            if ((max_needed_bondtype == None) or
+                    min_needed_bondtype = bondtype
+                if ((max_needed_bondtype == None) or
                     (max_needed_bondtype < bondtype)):
-                max_needed_bondtype = bondtype
-        for bondid in needed_bondids:
-            assert(type(bondid) is int)
-            if ((min_needed_bondid == None) or
+                    max_needed_bondtype = bondtype
+            for bondid in needed_bondids:
+                assert(type(bondid) is int)
+                if ((min_needed_bondid == None) or
                     (min_needed_bondid > bondid)):
-                min_needed_bondid = bondid
-            if ((max_needed_bondid == None) or
+                    min_needed_bondid = bondid
+                if ((max_needed_bondid == None) or
                     (max_needed_bondid < bondid)):
-                max_needed_bondid = bondid
+                    max_needed_bondid = bondid
+        else:
+            # If no bonds were needed, then define some defaults
+            # to make sure we don't keep any of them later.
+            min_needed_bondtype = 1
+            max_needed_bondtype = 0
+
 
         i_line = 0
         while i_line < len(l_in_bond_coeffs):
@@ -2145,7 +2152,7 @@ def main():
             # else:
             #    del l_data_angles[i_line]
 
-        # delete data_angle_coeffs for angletypes we don't care about anymore:
+        # delete data_angle_coeffs for angletypes we no longer care about:
         i_line = 0
         while i_line < len(l_data_angle_coeffs):
             line = l_data_angle_coeffs[i_line]
@@ -2165,7 +2172,7 @@ def main():
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO bondbond_coeff commands, or bondangle_coeff commands,
         #       etc..., so we dont have to worry about l_in_bondbond_coeffs,...
-        # delete data_bondbond_coeffs for angletypes we don't care about anymore:
+        # delete data_bondbond_coeffs for angletypes we no longer care about:
         i_line = 0
         while i_line < len(l_data_bondbond_coeffs):
             line = l_data_bondbond_coeffs[i_line]
@@ -2178,7 +2185,7 @@ def main():
                 l_data_bondbond_coeffs[i_line] = (
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
-        # delete data_bondangle_coeffs for angletypes we don't care about anymore:
+        # delete data_bondangle_coeffs for angletypes we no longer care about:
         i_line = 0
         while i_line < len(l_data_bondangle_coeffs):
             line = l_data_bondangle_coeffs[i_line]
@@ -2193,23 +2200,30 @@ def main():
                 i_line += 1
         # --- end of class2specific ----
 
-        # delete in_angle_coeffs for angletypes we don't care about anymore:
-        for angletype in needed_angletypes:
-            assert(type(angletype) is int)
-            if ((min_needed_angletype == None) or
-                    (min_needed_angletype > angletype)):
-                min_needed_angletype = angletype
-            if ((max_needed_angletype == None) or
-                    (max_needed_angletype < angletype)):
-                max_needed_angletype = angletype
-        for angleid in needed_angleids:
-            assert(type(angleid) is int)
-            if ((min_needed_angleid == None) or
-                    (min_needed_angleid > angleid)):
-                min_needed_angleid = angleid
-            if ((max_needed_angleid == None) or
-                    (max_needed_angleid < angleid)):
-                max_needed_angleid = angleid
+        # delete in_angle_coeffs for angletypes we no longer care about:
+        if len(needed_angletypes) > 0:
+            for angletype in needed_angletypes:
+                assert(type(angletype) is int)
+                if ((min_needed_angletype == None) or
+                        (min_needed_angletype > angletype)):
+                    min_needed_angletype = angletype
+                if ((max_needed_angletype == None) or
+                        (max_needed_angletype < angletype)):
+                    max_needed_angletype = angletype
+            for angleid in needed_angleids:
+                assert(type(angleid) is int)
+                if ((min_needed_angleid == None) or
+                        (min_needed_angleid > angleid)):
+                    min_needed_angleid = angleid
+                if ((max_needed_angleid == None) or
+                        (max_needed_angleid < angleid)):
+                    max_needed_angleid = angleid
+        else:
+            # If no angles were needed, then define some defaults
+            # to make sure we don't keep any of them later.
+            min_needed_angletype = 1
+            max_needed_angletype = 0
+
 
         i_line = 0
         while i_line < len(l_in_angle_coeffs):
@@ -2300,8 +2314,7 @@ def main():
             # else:
             #    del l_data_dihedrals[i_line]
 
-        # delete data_dihedral_coeffs for dihedraltypes we don't care about
-        # anymore:
+        # delete data_dihedral_coeffs for dihedraltypes we no longer care about:
         i_line = 0
         while i_line < len(l_data_dihedral_coeffs):
             line = l_data_dihedral_coeffs[i_line]
@@ -2322,8 +2335,8 @@ def main():
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO "middlebondtorsion_coeff" commands, etc...so we don't
         #       have to worry about dealing with "l_in_middlebondtorsion_coeffs",...
-        # delete data_middlebondtorsion_coeffs for dihedraltypes we don't care
-        # about anymore:
+        # delete data_middlebondtorsion_coeffs for dihedraltypes
+        # we no longer care about:
         i_line = 0
         while i_line < len(l_data_middlebondtorsion_coeffs):
             line = l_data_middlebondtorsion_coeffs[i_line]
@@ -2336,8 +2349,8 @@ def main():
                 l_data_middlebondtorsion_coeffs[i_line] = (
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
-        # delete data_endbondtorsion_coeffs for dihedraltypes we don't care about
-        # anymore:
+        # delete data_endbondtorsion_coeffs for dihedraltypes we 
+        # no longer care about:
         i_line = 0
         while i_line < len(l_data_endbondtorsion_coeffs):
             line = l_data_endbondtorsion_coeffs[i_line]
@@ -2350,8 +2363,8 @@ def main():
                 l_data_endbondtorsion_coeffs[i_line] = (
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
-        # delete data_angletorsion_coeffs for dihedraltypes we don't care about
-        # anymore:
+        # delete data_angletorsion_coeffs for dihedraltypes we 
+        # no longer care about:
         i_line = 0
         while i_line < len(l_data_angletorsion_coeffs):
             line = l_data_angletorsion_coeffs[i_line]
@@ -2364,8 +2377,8 @@ def main():
                 l_data_angletorsion_coeffs[i_line] = (
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
-        # delete data_angleangletorsion_coeffs for dihedraltypes we don't care
-        # about anymore:
+        # delete data_angleangletorsion_coeffs for dihedraltypes we 
+        # no longer care about:
         i_line = 0
         while i_line < len(l_data_angleangletorsion_coeffs):
             line = l_data_angleangletorsion_coeffs[i_line]
@@ -2378,8 +2391,8 @@ def main():
                 l_data_angleangletorsion_coeffs[i_line] = (
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
-        # delete data_bondbond13_coeffs for dihedraltypes we don't care about
-        # anymore:
+        # delete data_bondbond13_coeffs for dihedraltypes we 
+        # no longer care about:
         i_line = 0
         while i_line < len(l_data_bondbond13_coeffs):
             line = l_data_bondbond13_coeffs[i_line]
@@ -2394,23 +2407,31 @@ def main():
                 i_line += 1
         # --- end of class2specific ----
 
-        # delete in_dihedral_coeffs for dihedraltypes we don't care about anymore:
-        for dihedraltype in needed_dihedraltypes:
-            assert(type(dihedraltype) is int)
-            if ((min_needed_dihedraltype == None) or
-                    (min_needed_dihedraltype > dihedraltype)):
-                min_needed_dihedraltype = dihedraltype
-            if ((max_needed_dihedraltype == None) or
-                    (max_needed_dihedraltype < dihedraltype)):
-                max_needed_dihedraltype = dihedraltype
-        for dihedralid in needed_dihedralids:
-            assert(type(dihedralid) is int)
-            if ((min_needed_dihedralid == None) or
-                    (min_needed_dihedralid > dihedralid)):
-                min_needed_dihedralid = dihedralid
-            if ((max_needed_dihedralid == None) or
-                    (max_needed_dihedralid < dihedralid)):
-                max_needed_dihedralid = dihedralid
+
+        # delete in_dihedral_coeffs for dihedraltypes we no longer care about:
+        if len(needed_dihedraltypes) > 0:
+            for dihedraltype in needed_dihedraltypes:
+                assert(type(dihedraltype) is int)
+                if ((min_needed_dihedraltype == None) or
+                        (min_needed_dihedraltype > dihedraltype)):
+                    min_needed_dihedraltype = dihedraltype
+                if ((max_needed_dihedraltype == None) or
+                        (max_needed_dihedraltype < dihedraltype)):
+                    max_needed_dihedraltype = dihedraltype
+            for dihedralid in needed_dihedralids:
+                assert(type(dihedralid) is int)
+                if ((min_needed_dihedralid == None) or
+                        (min_needed_dihedralid > dihedralid)):
+                    min_needed_dihedralid = dihedralid
+                if ((max_needed_dihedralid == None) or
+                        (max_needed_dihedralid < dihedralid)):
+                    max_needed_dihedralid = dihedralid
+        else:
+            # If no dihedrals were needed, then define some defaults
+            # to make sure we don't keep any of them later.
+            min_needed_dihedraltype = 1
+            max_needed_dihedraltype = 0
+
 
         i_line = 0
         while i_line < len(l_in_dihedral_coeffs):
@@ -2501,8 +2522,8 @@ def main():
             # else:
             #    del l_data_impropers[i_line]
 
-        # delete data_improper_coeffs for impropertypes we don't care about
-        # anymore:
+
+        # delete data_improper_coeffs for impropertypes we no longer care about:
         i_line = 0
         while i_line < len(l_data_improper_coeffs):
             line = l_data_improper_coeffs[i_line]
@@ -2522,9 +2543,8 @@ def main():
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO "angleangle_coeff" commands, etc...so we don't
         #       have to worry about dealing with "l_in_angleangle_coeffs",...
-        # delete data_middlebondtorsion_coeffs for dihedraltypes we don't care about anymore:
-        # delete data_angleangle_coeffs for impropertypes we don't care about
-        # anymore:
+        # delete data_middlebondtorsion_coeffs for impropertypes we
+        # no longer care about:
         i_line = 0
         while i_line < len(l_data_angleangle_coeffs):
             line = l_data_angleangle_coeffs[i_line]
@@ -2539,23 +2559,30 @@ def main():
                 i_line += 1
         # --- end of class2specific ----
 
-        # delete in_improper_coeffs for impropertypes we don't care about anymore:
-        for impropertype in needed_impropertypes:
-            assert(type(impropertype) is int)
-            if ((min_needed_impropertype == None) or
+        # delete in_improper_coeffs for impropertypes we no longer care about:
+        if len(needed_impropertypes) > 0:
+            for impropertype in needed_impropertypes:
+                assert(type(impropertype) is int)
+                if ((min_needed_impropertype == None) or
                     (min_needed_impropertype > impropertype)):
-                min_needed_impropertype = impropertype
-            if ((max_needed_impropertype == None) or
+                    min_needed_impropertype = impropertype
+                if ((max_needed_impropertype == None) or
                     (max_needed_impropertype < impropertype)):
-                max_needed_impropertype = impropertype
-        for improperid in needed_improperids:
-            assert(type(improperid) is int)
-            if ((min_needed_improperid == None) or
+                    max_needed_impropertype = impropertype
+            for improperid in needed_improperids:
+                assert(type(improperid) is int)
+                if ((min_needed_improperid == None) or
                     (min_needed_improperid > improperid)):
-                min_needed_improperid = improperid
-            if ((max_needed_improperid == None) or
+                    min_needed_improperid = improperid
+                if ((max_needed_improperid == None) or
                     (max_needed_improperid < improperid)):
-                max_needed_improperid = improperid
+                    max_needed_improperid = improperid
+        else:
+            # If no impropers were needed, then define some defaults
+            # to make sure we don't keep any of them later.
+            min_needed_impropertype = 1
+            max_needed_impropertype = 0
+
 
         i_line = 0
         while i_line < len(l_in_improper_coeffs):
@@ -2579,9 +2606,11 @@ def main():
             else:
                 i_a = i_b = Intify(impropertype_str)
 
-            if i_a < min_needed_impropertype:
+            assert((type(i_a) is int) and (type(i_b) is int))
+
+            if (i_a < min_needed_impropertype):
                 i_a = min_needed_impropertype
-            if i_b > max_needed_impropertype:
+            if (i_b > max_needed_impropertype):
                 i_b = max_needed_impropertype
 
             # if i_a == i_b:

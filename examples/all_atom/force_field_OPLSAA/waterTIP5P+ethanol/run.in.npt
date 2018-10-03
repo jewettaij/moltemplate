@@ -53,8 +53,10 @@ write_data   system_after_npt.data
 # NOTE:
 # The following alternate protocol seems to agree with the protocol used above:
 # (but this observation was based on an extremely short simulation)
+#
 # fix fxRigid gH2O rigid/npt/small molecule temp 298 298 100 iso 1 1 1000
 # fix fxFlexible gFlexible nvt temp 298 298 100.0
+#
 # <temp>~=297, <ke>~=0.45, <press>~=0, <volume>~=21900 (based on 10000 steps)
 #
 #

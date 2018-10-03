@@ -7,3 +7,5 @@
 
 cleanup_moltemplate.sh
 
+# (Note: Removing unecessary atom types will make it easier to visualize the
+#        simulation in VMD.)

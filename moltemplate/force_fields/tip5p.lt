@@ -1,10 +1,16 @@
-# file "TIP5P.lt" 
+# file "tip5p.lt" 
 #
 #    H1     H2
 #      \   /
 #        O
 #       / \
-#      LP  LP 
+#     LP   LP 
+#
+# This file defines the 5-site water model TIP5P
+# You must used a rigid-body-integrator like "fix rigid" to simulate this 
+# molecule to prevent its shape from becoming deformed during the simulation.
+# (No angle, dihedral, or improper interactions have been defined.)
+# Credit: This file was contributed by Cheng Chen (Queen Mary University)
 
 import "oplsaa.lt"
 

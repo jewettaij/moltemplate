@@ -6,3 +6,6 @@
 # system.in.settings and system.in.data files, run this script:
 
 cleanup_moltemplate.sh
+
+# (Note: Removing unecessary atom types will make it easier to visualize the
+#        simulation in VMD.)
