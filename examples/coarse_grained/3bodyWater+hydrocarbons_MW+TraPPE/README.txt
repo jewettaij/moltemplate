@@ -27,4 +27,4 @@ README_run.sh
   This example requires the "MANYBODY" package.
   If lammps complains of a missing pair style enter "make yes-MANYBODY"
   into the shell before compiling lammps.  For details see:
-  http://lammps.sandia.gov/doc/Section_start.html#start_3
+  https://lammps.sandia.gov/doc/Build_package.html
