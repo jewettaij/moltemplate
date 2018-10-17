@@ -30,7 +30,7 @@ Additional LAMMPS-specific features may be added in the future.
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
 g_date_str = '2018-10-16'
-g_version_str = '0.78.0'
+g_version_str = '0.79.0'
 
 
 import sys
@@ -44,7 +44,7 @@ try:
         WriteVarBindingsFile, StaticObj, InstanceObj, \
         BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
     from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
-        TemplateLexer
+        TemplateLexer, TableFromTemplate
     from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid, \
         ColNames2Coords, ColNames2Vects, \
         data_atoms, data_prefix, data_masses, \
