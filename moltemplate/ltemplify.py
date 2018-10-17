@@ -27,6 +27,7 @@ define large systems containing this molecule.
 """
 
 import sys
+from collections import defaultdict
 try:
     from .ttree_lex import *
     from .lttree_styles import *
@@ -36,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.55.0'
-g_date_str = '2018-10-03'
+g_version_str = '0.57.0'
+g_date_str = '2018-10-16'
 
 def Intify(s):
     if s.isdigit():
@@ -364,7 +365,11 @@ def main():
         atoms_already_read = False
         some_pair_coeffs_read = False
         complained_atom_style_mismatch = False
-        infer_types_from_comments = False
+        infer_types_from_comments = True
+        ignore_angles_dihedrals_impropers = False
+        ignore_bond_types = False
+        forbid_atom_type_name_duplicates = False
+        prepend_atom_type = ''
         remove_coeffs_from_data_file = True
 
         argv = [arg for arg in sys.argv]
@@ -396,14 +401,6 @@ def main():
                                      '    Make sure you enclose the entire list in quotes.\n')
                 column_names = argv[i + 1].strip('\"\'').strip().split()
                 del argv[i:i + 2]
-
-            elif (argv[i] == '-ignore-comments'):
-                infer_types_from_comments = False
-                del argv[i:i + 1]
-
-            elif (argv[i] == '-infer-comments'):
-                infer_types_from_comments = True
-                del argv[i:i + 1]
 
             elif ((argv[i] == '-name') or
                   (argv[i] == '-molname') or
@@ -511,6 +508,43 @@ def main():
                                      '       include in the template you are creating.\n')
                 molid_selection += LammpsSelectToIntervals(argv[i + 1])
                 del argv[i:i + 2]
+
+            elif (argv[i] == '-ignore-comments'):
+                infer_types_from_comments = False
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-infer-comments'):
+                infer_types_from_comments = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-ignore-angles'):
+                ignore_angles_dihedrals_impropers = True
+                infer_types_from_comments = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-ignore-bond-types'):
+                ignore_bond_types = True
+                infer_types_from_comments = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-ignore-duplicates'):
+                forbid_atom_type_name_duplicates = False
+                infer_types_from_comments = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-forbid-duplicates'):
+                forbid_atom_type_name_duplicates = True
+                infer_types_from_comments = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-prepend-atom-type'):
+                prepend_atom_type = argv[i+1]
+                infer_types_from_comments = True
+                if ((len(prepend_atom_type) > 0) and
+                    (prepend_atom_type[-1] != '/')):
+                    prepend_atom_type += '/'
+                del argv[i:i + 2]
+
             else:
                 i += 1
 
@@ -527,11 +561,33 @@ def main():
         boundary_xz = None
 
         # atom type names
+        #atomtypes_name2int = {}
+        atomtypes_name2list = defaultdict(list)
         atomtypes_name2int = {}
         atomtypes_int2name = {}
         # atomids_name2int = {}  not needed
         atomids_int2name = {}
-        atomids_by_type = {}
+        atomids_by_type = defaultdict(list)
+
+        atomid2type = {}
+        atomid2mol = {}
+        data_file_header_names = set(['LAMMPS Description',
+                                      'Atoms', 'Masses', 'Velocities', 'Bonds',
+                                      'Angles', 'Dihedrals', 'Impropers',
+                                      'Pair Coeffs',
+                                      'Bond Coeffs', 'Angle Coeffs',
+                                      'Dihedral Coeffs', 'Improper Coeffs',
+                                      # class2 force fields:
+                                      'BondBond Coeffs', 'BondAngle Coeffs',
+                                      'MiddleBondTorsion Coeffs', 'EndBondTorsion Coeffs',
+                                      'AngleTorsion Coeffs', 'AngleAngleTorsion Coeffs',
+                                      'BondBond13 Coeffs',
+                                      'AngleAngle Coeffs',
+                                      # non-point-like particles:
+                                      'Ellipsoids', 'Triangles', 'Lines',
+                                      # specifying bonded interactions by type:
+                                      'Angles By Type', 'Dihedrals By Type', 'Impropers By Type'
+                                      ])
 
         if atom_style_undefined:
             # The default atom_style is "full"
@@ -555,6 +611,8 @@ def main():
         #-- parameters (coeff commands).
         #---------------------------------------------------------
 
+        # PASS1: determine the atom_style, as well as the atom type names.
+
         for i_arg in range(1, len(argv)):
             fname = argv[i_arg]
             try:
@@ -570,26 +628,6 @@ def main():
                                  '        then there is a problem in your argument list.)\n')
 
             sys.stderr.write('reading file \"' + fname + '\"\n')
-
-            atomid2type = {}
-            atomid2mol = {}
-            data_file_header_names = set(['LAMMPS Description',
-                                          'Atoms', 'Masses', 'Velocities', 'Bonds',
-                                          'Angles', 'Dihedrals', 'Impropers',
-                                          'Pair Coeffs',
-                                          'Bond Coeffs', 'Angle Coeffs',
-                                          'Dihedral Coeffs', 'Improper Coeffs',
-                                          # class2 force fields:
-                                          'BondBond Coeffs', 'BondAngle Coeffs',
-                                          'MiddleBondTorsion Coeffs', 'EndBondTorsion Coeffs',
-                                          'AngleTorsion Coeffs', 'AngleAngleTorsion Coeffs',
-                                          'BondBond13 Coeffs',
-                                          'AngleAngle Coeffs',
-                                          # non-point-like particles:
-                                          'Ellipsoids', 'Triangles', 'Lines',
-                                          # specifying bonded interactions by type:
-                                          'Angles By Type', 'Dihedrals By Type', 'Impropers By Type'
-                                          ])
 
             lex = LineLex(lammps_file, fname)
             lex.source_triggers = set(['include', 'import'])
@@ -615,7 +653,7 @@ def main():
                 tokens = line.strip().split()
                 if (len(tokens) > 0):
                     if ((tokens[0] == 'atom_style') and
-                            atom_style_undefined):
+                        atom_style_undefined):
 
                         sys.stderr.write(
                             '  Atom Style found. Processing: \"' + line.strip() + '\"\n')
@@ -640,24 +678,160 @@ def main():
                         sys.stderr.write('\n    \"Atoms\" column format:\n')
                         sys.stderr.write('    ' + (' '.join(column_names)) + '\n')
                         if i_molid:
-                            sys.stderr.write('        (i_atomid=' + str(i_atomid + 1) + ', i_atomtype=' + str(
-                                i_atomtype + 1) + ', i_molid=' + str(i_molid + 1) + ')\n\n')
+                            sys.stderr.write('        (i_atomid=' +
+                                             str(i_atomid + 1) +
+                                             ', i_atomtype=' + str(
+                                                 i_atomtype + 1) +
+                                             ', i_molid=' +
+                                             str(i_molid + 1) + ')\n\n')
                         else:
-                            sys.stderr.write(
-                                '        (i_atomid=' + str(i_atomid + 1) + ', i_atomtype=' + str(i_atomtype + 1) + ')\n\n')
+                            sys.stderr.write('        (i_atomid=' +
+                                             str(i_atomid + 1) +
+                                             ', i_atomtype=' +
+                                             str(i_atomtype + 1) + ')\n\n')
                         l_in_init.append((' ' * indent) + line.lstrip())
 
-                    elif (tokens[0] in set(['units',
-                                            'angle_style',
-                                            'bond_style',
-                                            'dihedral_style',
-                                            'improper_style',
-                                            'min_style',
-                                            'pair_style',
-                                            'pair_modify',
-                                            'special_bonds',
-                                            'kspace_style',
-                                            'kspace_modify'])):
+                    elif (line.strip() == 'Masses'):
+                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                        while lex:
+                            # Read the next line of text but don't skip comments
+                            comment_char_backup = lex.commenters
+                            lex.commenters = ''
+                            line = lex.ReadLine()
+                            lex.commenters = comment_char_backup
+
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.rstrip()
+
+                            if line.strip() in data_file_header_names:
+                                lex.push_raw_text(line)  # <- Save line for later
+                                break
+
+                            tokens = line.strip().split()
+                            if len(tokens) > 0:
+                                atomtype = Intify(tokens[0])
+                                atomtype_name = str(atomtype)
+
+                                if comment_text != '':
+
+                                    #comment_tokens = comment_text.split()
+                                    comment_tokens = SplitQuotedString(comment_text,
+                                                                       comment_char='')
+
+                                    # Assume the first word after the
+                                    # is the atom type name
+                                    atomtype_name = (prepend_atom_type +
+                                                     comment_tokens[0])
+
+                                if BelongsToSel(atomtype, atomtype_selection):
+
+                                    #Infer atom type names from comment strings?
+                                    if infer_types_from_comments:
+                                        atomtypes_name2list[atomtype_name].append(atomtype)
+                                    else:
+                                        atomtypes_int2name[atomtype] = ('type' +
+                                                                        str(atomtype))
+
+                        if infer_types_from_comments:
+                            for atypename, ilist in atomtypes_name2list.items():
+                                assert(len(ilist) > 0)
+                                if len(ilist) == 1:
+                                    atomtypes_int2name[ilist[0]] = atypename
+                                    atomtypes_name2int[atypename] = ilist[0]
+                            for atypename, ilist in atomtypes_name2list.items():
+                                if len(ilist) > 1:
+                                    if forbid_atom_type_name_duplicates:
+                                        raise InputError('Error: duplicate atom type names in Masses section: \"' + atypename + '\"\n'
+                                                         '       (By default ' + g_program_name +
+                                                         ' attempts to infer atom type names from\n'
+                                                         '       comments which appear in the \"Masses\" section of your data file.)\n'
+                                                         '       This error message occurs if two different atom types\n'
+                                                         '       have the same name (in the comments section)\n'
+                                                         '       You can avoid this error by adding the \"-ignore-duplicates\" argument.\n')
+                                        
+                                    # If there are multiple different atom types
+                                    # corresponding to the same name (eg "C")
+                                    # then add a numeric suffix to the name
+                                    # (eg "C1", "C2", ...).
+                                    ilist = sorted(ilist)
+                                    isuffix = 1
+                                    I = 0
+                                    while I < len(ilist):
+                                        name_attempt = atypename+str(isuffix)
+                                        if ((name_attempt in atomtypes_name2int)
+                                            or
+                                            (name_attempt in atomtypes_name2list)):
+                                            # Be careful not to create a name
+                                            # that has already been used.
+                                            # Keep incrementing "isuffix" until
+                                            # "name_attempt" has not been used
+                                            isuffix += 1
+                                        else:
+                                            atomtypes_name2int[name_attempt] = ilist[I]
+                                            atomtypes_int2name[ilist[I]] = name_attempt
+                                            I += 1
+
+            lammps_file.close()
+
+
+
+        # PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers (and Masses)
+
+        for i_arg in range(1, len(argv)):
+            fname = argv[i_arg]
+            try:
+                lammps_file = open(fname, 'r')
+            except IOError:
+                raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
+                                 '       OR unable to open file:\n'
+                                 '\n'
+                                 '       \"' + fname + '\"\n'
+                                 '       for reading.\n'
+                                 '\n'
+                                 '       (If you were not trying to open a file with this name,\n'
+                                 '        then there is a problem in your argument list.)\n')
+
+            sys.stderr.write('reading file \"' + fname + '\"\n')
+
+            lex = LineLex(lammps_file, fname)
+            lex.source_triggers = set(['include', 'import'])
+            # set up lex to accept most characters in file names:
+            lex.wordterminators = '(){}' + lex.whitespace
+            # set up lex to understand the "include" statement:
+            lex.source = 'include'
+            lex.escape = '\\'
+
+            while lex:
+                infile = lex.infile
+                lineno = lex.lineno
+                line = lex.ReadLine()
+                if (lex.infile != infile):
+                    infile = lex.infile
+                    lineno = lex.lineno
+
+                #sys.stderr.write('  processing \"'+line.strip()+'\", (\"'+infile+'\":'+str(lineno)+')\n')
+
+                if line == '':
+                    break
+
+                tokens = line.strip().split()
+                if (len(tokens) > 0):
+
+                    if (tokens[0] in set(['units',
+                                          'angle_style',
+                                          'bond_style',
+                                          'dihedral_style',
+                                          'improper_style',
+                                          'min_style',
+                                          'pair_style',
+                                          'pair_modify',
+                                          'special_bonds',
+                                          'kspace_style',
+                                          'kspace_modify'])):
                         l_in_init.append((' ' * indent) + line.lstrip())
 
                     # if (line.strip() == 'LAMMPS Description'):
@@ -689,8 +863,8 @@ def main():
                         # define the simulation's boundary. They are described here:
                         # http://lammps.sandia.gov/doc/Section_howto.html#howto-12
                         if ((boundary_xlo == None) or (boundary_xhi == None) or
-                                (boundary_ylo == None) or (boundary_yhi == None) or
-                                (boundary_zlo == None) or (boundary_zhi == None)):
+                            (boundary_ylo == None) or (boundary_yhi == None) or
+                            (boundary_zlo == None) or (boundary_zhi == None)):
 
                             raise InputError('Error: Either DATA file lacks a boundary-box header, or it is in the wrong\n'
                                              '       place.  At the beginning of the file, you need to specify the box size:\n'
@@ -758,8 +932,8 @@ def main():
                                     atomid2mol[atomid] = molid
 
                                 if (BelongsToSel(atomid, atomid_selection) and
-                                        BelongsToSel(atomtype, atomtype_selection) and
-                                        BelongsToSel(molid, molid_selection)):
+                                    BelongsToSel(atomtype, atomtype_selection) and
+                                    BelongsToSel(molid, molid_selection)):
 
                                     tokens[i_atomid] = '$atom:id' + \
                                         tokens[i_atomid]
@@ -767,7 +941,6 @@ def main():
                                     # fill atomtype_int2str[] with a default name (change later):
                                     #tokens[i_atomtype] = '@atom:type'+tokens[i_atomtype]
                                     atomtype_name = 'type' + tokens[i_atomtype]
-                                    atomtypes_int2name[atomtype] = atomtype_name
                                     tokens[i_atomtype] = '@atom:' + atomtype_name
 
                                     # Interpreting unit-cell counters
@@ -790,12 +963,18 @@ def main():
                                         nx = int(tokens[-3])
                                         ny = int(tokens[-2])
                                         nz = int(tokens[-1])
-                                        x = float(
-                                            tokens[i_x]) + nx * avec[0] + ny * bvec[0] + nz * cvec[0]
-                                        y = float(
-                                            tokens[i_y]) + nx * avec[1] + ny * bvec[1] + nz * cvec[1]
-                                        z = float(
-                                            tokens[i_z]) + nx * avec[2] + ny * bvec[2] + nz * cvec[2]
+                                        x = (float(tokens[i_x]) +
+                                             nx * avec[0] +
+                                             ny * bvec[0] +
+                                             nz * cvec[0])
+                                        y = (float(tokens[i_y]) +
+                                             nx * avec[1] +
+                                             ny * bvec[1] +
+                                             nz * cvec[1])
+                                        z = (float(tokens[i_z]) +
+                                             nx * avec[2] +
+                                             ny * bvec[2] +
+                                             nz * cvec[2])
                                         tokens[i_x] = str(x)
                                         tokens[i_y] = str(y)
                                         tokens[i_z] = str(z)
@@ -822,28 +1001,30 @@ def main():
                         for atomtype in needed_atomtypes:
                             assert(type(atomtype) is int)
                             if ((min_needed_atomtype == None) or
-                                    (min_needed_atomtype > atomtype)):
+                                (min_needed_atomtype > atomtype)):
                                 min_needed_atomtype = atomtype
                             if ((max_needed_atomtype == None) or
-                                    (max_needed_atomtype < atomtype)):
+                                (max_needed_atomtype < atomtype)):
                                 max_needed_atomtype = atomtype
 
                         for atomid in needed_atomids:
                             assert(type(atomid) is int)
                             if ((min_needed_atomid == None) or
-                                    (min_needed_atomid > atomid)):
+                                (min_needed_atomid > atomid)):
                                 min_needed_atomid = atomid
                             if ((max_needed_atomid == None) or
-                                    (max_needed_atomid < atomid)):
+                                (max_needed_atomid < atomid)):
                                 max_needed_atomid = atomid
                         for molid in needed_molids:
                             assert(type(molid) is int)
                             if ((min_needed_molid == None) or
-                                    (min_needed_molid > molid)):
+                                (min_needed_molid > molid)):
                                 min_needed_molid = molid
                             if ((max_needed_molid == None) or
-                                    (max_needed_molid < molid)):
+                                (max_needed_molid < molid)):
                                 max_needed_molid = molid
+
+                        pass
 
                     elif (line.strip() == 'Masses'):
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
@@ -857,44 +1038,23 @@ def main():
                             comment_text = ''
                             ic = line.find('#')
                             if ic != -1:
-                                line = line[:ic]
                                 comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
                             line = line.rstrip()
 
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line)  #<- Save line for later
                                 break
 
                             tokens = line.strip().split()
                             if len(tokens) > 0:
                                 atomtype = Intify(tokens[0])
-                                atomtype_name = str(atomtype)
-
-                                if comment_text != '':
-                                    comment_tokens = comment_text.split()
-                                    # Assume the first word after the # is the atom
-                                    # type name
-                                    atomtype_name = comment_tokens[0]
 
                                 if BelongsToSel(atomtype, atomtype_selection):
-                                    #tokens[0] = '@atom:type'+tokens[0]
-                                    l_data_masses.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
-                                    # infer atom type names from comment strings?
-                                    if infer_types_from_comments:
-                                        if atomtype_name in atomtypes_name2int:
-                                            raise InputError('Error: duplicate atom type names in mass section: \"' + atomtype_name + '\"\n'
-                                                             '       (By default ' + g_program_name +
-                                                             ' attempts to infer atom type names from\n'
-                                                             '       comments which appear in the \"Masses\" section of your data file.)\n'
-                                                             '       You can avoid this error by adding the \"-ignore-comments\" argument.\n')
-                                        atomtypes_name2int[
-                                            atomtype_name] = atomtype
-                                        atomtypes_int2name[
-                                            atomtype] = atomtype_name
-                                    else:
-                                        atomtypes_int2name[
-                                            atomtype] = 'type' + str(atomtype)
+                                    tokens[0] = '@atom:type' + tokens[0]
+                                    l_data_masses.append((' ' * indent) +
+                                                         (' '.join(tokens) +
+                                                          '\n'))
 
                     elif (line.strip() == 'Velocities'):
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
@@ -913,8 +1073,10 @@ def main():
                                 if atomid in atomid2mol:
                                     molid = atomid2mol[atomid]
                                 if (BelongsToSel(atomid, atomid_selection) and
-                                        BelongsToSel(atomtype, atomtype_selection) and
-                                        BelongsToSel(molid, molid_selection)):
+                                    BelongsToSel(atomtype,
+                                                 atomtype_selection) and
+                                    BelongsToSel(molid,
+                                                 molid_selection)):
                                     tokens[0] = '$atom:id' + tokens[0]
                                     #tokens[0] = '$atom:'+atomids_int2name[atomid]
                                     # NOTE:I can't use "atomids_int2name" yet because
@@ -940,9 +1102,11 @@ def main():
                                 moldid = None
                                 if atomid in atomid2mol:
                                     molid = atomid2mol[atomid]
-                                if (BelongsToSel(atomid, atomid_selection) and
-                                        BelongsToSel(atomtype, atomtype_selection) and
-                                        BelongsToSel(molid, molid_selection)):
+                                if (BelongsToSel(atomid,
+                                                 atomid_selection) and
+                                    BelongsToSel(atomtype,
+                                                 atomtype_selection) and
+                                    BelongsToSel(molid, molid_selection)):
                                     tokens[0] = '$atom:id' + tokens[0]
                                     #tokens[0] = '$atom:'+atomids_int2name[atomid]
                                     # NOTE:I can't use "atomids_int2name" yet because
@@ -1091,8 +1255,9 @@ def main():
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    l_data_angles.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not ignore_angles_dihedrals_impropers:
+                                        l_data_angles.append(
+                                            (' ' * indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS ANGLES\n')
@@ -1142,8 +1307,9 @@ def main():
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    l_data_dihedrals.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not ignore_angles_dihedrals_impropers:
+                                        l_data_dihedrals.append(
+                                            (' ' * indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS DIHEDRALS\n')
@@ -1157,6 +1323,7 @@ def main():
                                                      '         (They will be ignored.)\n'
                                                      '         Are you sure you selected the correct atoms?\n')
                                     no_warnings = False
+
 
                     elif (line.strip() == 'Impropers'):
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
@@ -1193,8 +1360,9 @@ def main():
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    l_data_impropers.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not ignore_angles_dihedrals_impropers:
+                                        l_data_impropers.append(
+                                            (' ' * indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS IMPROPERS\n')
@@ -1649,6 +1817,7 @@ def main():
                 # convert to an integer
                 atomid = Intify(atomid)
 
+            simple_atom_type_names = True
             if infer_types_from_comments:
                 atomtype = tokens[i_atomtype]
                 # remove the "@atom:" prefix (we will put it back later)
@@ -1657,6 +1826,9 @@ def main():
                 # convert to an integer
                 atomtype = Intify(atomtype)
                 atomtype_name = atomtypes_int2name[atomtype]
+                if atomtype_name.find('/') != -1:
+                    simple_atom_type_names = False
+            if (infer_types_from_comments and simple_atom_type_names):
                 if atomtype in atomids_by_type:
                     l_atomids = atomids_by_type[atomtype]
                     prev_count = len(l_atomids)
@@ -1665,17 +1837,16 @@ def main():
                     #ic = prev_atomid_name.rfind('_')
                     #prev_count = int(prev_atomid_name[ic+1:])
                     atomid_name = atomtype_name + '_' + str(prev_count + 1)
-                    atomids_by_type[atomtype].append(atomid)
                 else:
-                    atomids_by_type[atomtype] = [atomid]
-                    atomid_name = atomtype_name + '_1'
+                    atomid_name = atomtype_name  + '_1'
                 atomids_int2name[atomid] = atomid_name
                 #atomids_name2str[atomid_name] = atomid
             else:
                 atomids_int2name[atomid] = 'id' + str(atomid)
+            atomids_by_type[atomtype].append(atomid)
 
         sys.stderr.write(', pass2')
-        # Pass 2: If any atom types only appear once, simplify their atomid names.
+        #Pass 2: If any atom types only appear once, simplify their atomid names
         for i in range(0, len(l_data_atoms)):
             tokens = l_data_atoms[i].split()
 
@@ -1694,7 +1865,7 @@ def main():
                     atomids_int2name[atomid] = atomtype_name
 
         sys.stderr.write(', pass3')
-        # Pass 3: substitute the atomid names and atom type names into l_data_atoms
+        #Pass 3: substitute the atomid names and atom type names into l_data_atoms
         for i in range(0, len(l_data_atoms)):
             tokens = l_data_atoms[i].split()
             atomid = tokens[i_atomid]
@@ -1724,19 +1895,26 @@ def main():
         # --- MASSES ---
 
         # delete masses for atom types we no longer care about:
+        # also substitute the correct atom type name
         i_line = 0
         while i_line < len(l_data_masses):
             line = l_data_masses[i_line]
             tokens = line.strip().split()
-            atomtype = Intify(tokens[0])
+            atomtypestr = tokens[0]
+            if atomtypestr.find('@atom:') == 0:
+                atomtypestr = atomtypestr[6:]
+            atomtype = Intify(atomtypestr)
             if ((not (atomtype in needed_atomtypes)) and
                 (not ((len(atomtype_selection) > 0) and
                       BelongsToSel(atomtype, atomtype_selection)))):
                 del l_data_masses[i_line]
             else:
                 atomtype_name = atomtypes_int2name[atomtype]
-                tokens[0] = '@atom:' + atomtype_name
-                l_data_masses[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+                tokens[0] = '@atom:'+atomtype_name
+                #if atomtype_name != 'type'+str(atomtype):
+                #    tokens.append('  # '+atomtype_name)
+                l_data_masses[i_line] = ((' ' * indent) +
+                                         (' '.join(tokens) + '\n'))
                 i_line += 1
 
         # --- PAIR COEFFS ---
@@ -2021,6 +2199,10 @@ def main():
             #tokens[3] = '$atom:id'+str(atomid2)
             tokens[2] = '$atom:' + atomids_int2name[atomid1]
             tokens[3] = '$atom:' + atomids_int2name[atomid2]
+            if ignore_bond_types:
+                # Then instead of a "Bonds" section we want a "Bond List" 
+                # section which omits the bond type information (in tokens[1])
+                del tokens[1]
             needed_bondids.add(bondid)
             needed_bondtypes.add(bondtype)
             l_data_bonds[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
@@ -3478,8 +3660,12 @@ def main():
         #    sys.stdout.write('\n')
         #    sys.stdout.write(''.join(l_data_velocities))
         if len(l_data_bonds) > 0:
-            l_data_bonds.insert(0, (' ' * cindent) +
-                                'write(\"' + data_bonds + '\") {\n')
+            if ignore_bond_types:
+                l_data_bonds.insert(0, (' ' * cindent) +
+                                    'write(\"' + data_bond_list + '\") {\n')
+            else:
+                l_data_bonds.insert(0, (' ' * cindent) +
+                                    'write(\"' + data_bonds + '\") {\n')
             l_data_bonds.append((' ' * cindent) + '}\n')
             sys.stdout.write('\n')
             sys.stdout.write(''.join(l_data_bonds))

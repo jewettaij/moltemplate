@@ -5,11 +5,11 @@
 #         http://www.moltemplate.org
 # License: 3-clause BSD License  (See LICENSE.md)
 # Copyright (c) 2012, Regents of the University of California
-# All rights reserved.
+n# All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.8.8"
-G_DATE="2018-10-02"
+G_VERSION="2.9.0"
+G_DATE="2018-10-16"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -1947,9 +1947,9 @@ fi
 
 if [ -s "$data_atoms" ]; then
     if [ -n "$ATOM_STYLE" ]; then
-	echo "Atoms # $ATOM_STYLE" >> "$OUT_FILE_DATA"
+	echo "Atoms  # $ATOM_STYLE" >> "$OUT_FILE_DATA"
     else
-	echo "Atoms # full" >> "$OUT_FILE_DATA"
+	echo "Atoms  # full" >> "$OUT_FILE_DATA"
     fi
     #if [ -s "$tmp_atom_coords" ]; then
     #    echo "# (Note: x,y,z coordinates may overlap and can be modified later.)" >> "$OUT_FILE_DATA"

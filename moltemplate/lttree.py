@@ -29,8 +29,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2018-3-15'
-g_version_str = '0.77.0'
+g_date_str = '2018-10-16'
+g_version_str = '0.78.0'
 
 
 import sys
@@ -100,6 +100,9 @@ class LttreeSettings(BasicUISettings):
         self.i_atomid = None  # <--An integer indicating which column has the atomid
         self.i_atomtype = None  # <--An integer indicating which column has the atomtype
         self.i_molid = None  # <--An integer indicating which column has the molid, if applicable
+        self.print_full_atom_type_name_in_masses = False # <--how to print atom type names in the "Masses" section of a DATA file?
+
+
 
 
 def LttreeParseArgs(argv, settings, main=False, show_warnings=True):
@@ -202,6 +205,14 @@ def LttreeParseArgs(argv, settings, main=False, show_warnings=True):
                                  '       (This argument is unnecessary if you use the -atomstyle argument.)\n')
             i_molid = int(argv[i + 1]) - 1
             del(argv[i:i + 2])
+
+        elif (argv[i].lower() == '-full-comment-names'):
+            settings.print_full_atom_type_name_in_masses = True
+            del(argv[i:i + 1])
+
+        elif (argv[i].lower() == '-short-comment-names'):
+            settings.print_full_atom_type_name_in_masses = False
+            del(argv[i:i + 1])
 
         elif (argv[i].find('-') == 0) and main:
             # elif (__name__ == "__main__"):
@@ -468,6 +479,112 @@ def CalcCM(text_Atoms,
     return xcm
 
 
+
+
+
+def AddAtomTypeComments(tmpl_list, substitute_vars, print_full_atom_type_names):
+    """
+    This ugly code attempts to parse the text in the "Masses" section
+    of a LAMMPS DATA file, and append comments to the end of every line 
+    defining the atom type.  Each comment will contain a string which stores 
+    the name of the @atom-style variable (excluding the "@atom:" prefix).
+    This is unfortunately complicated and messy because we have to do 
+    this before we render the text.  (IE before we substutite numeric
+    values into the variables.  Once we've rendered the text, 
+    the variable names are discarded.)
+    Therefore we have to work with a messy "tmpl_list" object
+    which contains the text in a pre-rendered form.  The "tmpl_list" object
+    is a list of alternating TextBlocks and VarRef objects.
+    This function rebuilds this tmpl_list object, splitting it into separate
+    lines (which it currently is not) and then adding comments to the end
+    of each line (if there isn't one there already).  Finally it renders
+    the resulting template and returns that text to the caller.
+    """
+
+    table = TableFromTemplate(tmpl_list,
+                              [[' ', '\t', '\r'], '\n'],
+                              [True, True])
+    for i in range(0, len(table)):
+        j = 0
+        if isinstance(table[i][0], TextBlock):
+            j += 1
+        assert(hasattr(table[i], '__len__'))
+        syntax_err = False
+        if len(table[i]) == j+0:
+            pass  # skip blank lines
+        elif ((len(table[i]) > j+0) and
+              isinstance(table[i][0], TextBlock) and
+              (len(table[i][0].text) > 0) and
+              (table[i][0].text == '#')):
+            pass  # skip comment lines
+        if ((len(table[i]) > j+1) and
+            isinstance(table[i][j+0], VarRef) and
+            isinstance(table[i][j+1], TextBlock)):
+            var_ref = table[i][j+0]
+            if print_full_atom_type_names:
+                var_name = var_ref.prefix[0] + \
+                            CanonicalDescrStr(var_ref.nptr.cat_name,
+                                              var_ref.nptr.cat_node,
+                                              var_ref.nptr.leaf_node,
+                                              var_ref.srcloc)
+            else:
+                var_name = var_ref.nptr.leaf_node.name
+            # remove the "@atom:" prefix before the variable name:
+            if var_name.find('@atom:') == 0:
+                var_name = var_name[6:]
+            elif var_name.find('@/atom:') == 0:
+                var_name = var_name[7:]
+            new_comment = '  # ' + var_name
+            if (len(table[i]) == j+2):
+                table[i].append(TextBlock(new_comment,
+                                          table[i][j+1].srcloc))
+            else:
+                assert(len(table[i]) > j+2)
+                assert(isinstance(table[i][j+2], TextBlock))
+                # If this line doesn't already contain a comment, then add one
+                if table[i][j+2].text.find('#') == -1:
+                    table[i][j+2].text += new_comment
+                else:
+                    # Insert a space between 2nd column and the comment
+                    table[i][j+2].text = '  '+table[i][j+2].text
+
+            # Also add spaces between any words within the comments.  This is
+            # necessary because TableFromTemplate() removed all whitespace
+            for k in range(j+3, len(table[i])):
+                table[i][k].text = ' '+table[i][k].text
+                
+            # We must insert a space between the first and second columns
+            # because TableFromTemplate() removes this whitespace separator.
+            table[i].insert(j+1, TextBlock(' ', table[i][j+1].srcloc))
+                    
+        else:
+            raise InputError('----------------------------------------------------\n' +
+                             '     Syntax error near ' +
+                             ErrorLeader(table[i][j+0].srcloc.infile,
+                                         table[i][j+0].srcloc.lineno) + '\n'
+                             '     The format is incorrect.\n')
+        # Add a newline:
+        table[i].append(TextBlock('\n',table[i][j+1].srcloc))
+
+    # Now flatten the "table" (which is a list-of-lists) 
+    # into a simple 1-dimensional list
+    # (of alternating VarRefs and TextBlocks, in this case)
+
+    templ_list = [entry for sublist in table for entry in sublist]
+
+    # Note: This is equivalent to
+    # templ_list = []
+    # for sublist in table:
+    #     for entry in sublist:
+    #         templ_list.append(entry)
+    # When building list comprehensions with multiple "for" tokens,
+    # the outer loop comes first (ie "for sublist in table")
+
+    # Now render this text and return it to the caller:
+    return Render(templ_list, substitute_vars)
+
+
+
 def _ExecCommands(command_list,
                   index,
                   global_files_content,
@@ -620,9 +737,12 @@ def _ExecCommands(command_list,
             # before passing them on to the caller.
             if command.filename == data_atoms:
                 text = TransformAtomText(text, matrix_stack.M, settings)
-            if command.filename == data_ellipsoids:
+            elif command.filename == data_ellipsoids:
                 text = TransformEllipsoidText(text, matrix_stack.M, settings)
-
+            if command.filename == data_masses:
+                text = AddAtomTypeComments(tmpl_list,
+                                           substitute_vars,
+                                           settings.print_full_atom_type_name_in_masses)
             files_content[command.filename].append(text)
 
         elif isinstance(command, ScopeBegin):
