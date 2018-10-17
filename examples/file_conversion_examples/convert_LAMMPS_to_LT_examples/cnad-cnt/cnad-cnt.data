@@ -21,9 +21,9 @@ Only the bond connectivity and atomic positions are accurate.
 Masses
 
        1      10.0
-       2      10.0  # atom type names often appear
-       3      10.0  # in the comments follwing
-       4      10.0  # each line in the Masses section
+       2      10.0
+       3      10.0
+       4      10.0
        5      10.0
        6      10.0
        7      10.0
