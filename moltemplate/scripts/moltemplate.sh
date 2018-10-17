@@ -5,10 +5,10 @@
 #         http://www.moltemplate.org
 # License: 3-clause BSD License  (See LICENSE.md)
 # Copyright (c) 2012, Regents of the University of California
-n# All rights reserved.
+# All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.9.2"
+G_VERSION="2.9.3"
 G_DATE="2018-10-16"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
