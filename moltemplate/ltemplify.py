@@ -37,7 +37,7 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.57.0'
+g_version_str = '0.58.0'
 g_date_str = '2018-10-16'
 
 def Intify(s):
@@ -714,7 +714,7 @@ def main():
                             tokens = line.strip().split()
                             if len(tokens) > 0:
                                 atomtype = Intify(tokens[0])
-                                atomtype_name = str(atomtype)
+                                atomtype_name = 'type' + str(atomtype)
 
                                 if comment_text != '':
 
