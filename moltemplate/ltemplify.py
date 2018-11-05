@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.58.0'
-g_date_str = '2018-10-16'
+g_version_str = '0.58.1'
+g_date_str = '2018-11-05'
 
 def Intify(s):
     if s.isdigit():
@@ -1784,7 +1784,7 @@ def main():
                             l_in_fix_qmmm.append(
                                 (' ' * indent) + (' '.join(tokens) + '\n'))
                         elif (tokens[3].find('restrain') == 0):
-                            sys.stderr('WARNING: fix \"' + tokens[3] + '\" commands are NOT understood by ' + g_program_name + '.\n'
+                            sys.stderr.write('WARNING: fix \"' + tokens[3] + '\" commands are NOT understood by ' + g_program_name + '.\n'
                                        '  If you need restraints, add them to your final .LT file (eg. \"system.lt\"),\n'
                                        '  (And be sure to use unique (full, long) moltemplate names for each $atom:.)\n'
                                        '  Ignoring line \"' + line.strip() + '\"\n')

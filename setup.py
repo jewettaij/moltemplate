@@ -11,6 +11,30 @@ setup(
 
   package_data={'moltemplate': ['force_fields/*.lt']},  #.lt files are in "moltemplate/force_fields/"
 
+  #package_data={'moltemplate/force_fields':['*.lt']}
+  #
+  #package_data={'moltemplate/force_fields':
+  #              ['compass_published.lt',
+  #               'cooke_deserno_lipid.lt',
+  #               'gaff2.lt',
+  #               'gaff.lt',
+  #               'graphene.lt',
+  #               'graphite.lt',
+  #               'loplsaa.lt',
+  #               'martini.lt',
+  #               'oplsaa.lt',
+  #               'sdk.lt',
+  #               'spce_ice_rect16.lt',
+  #               'spce_ice_rect32.lt',
+  #               'spce_ice_rect8.lt',
+  #               'spce.lt',
+  #               'tip3p_1983_charmm.lt',
+  #               'tip3p_1983.lt',
+  #               'tip3p_2004.lt',
+  #               'tip5p.lt',
+  #               'trappe1998.lt',
+  #               'watmw.lt']},
+
   description='A general cross-platform text-based molecule builder for LAMMPS',
 
   long_description='Moltemplate is a general cross-platform text-based molecule builder for LAMMPS and ESPResSo. Moltemplate was intended for building custom coarse-grained molecular models, but it can be used to prepare realistic all-atom simulations as well.  It supports a variety of force fields for all-atom and coarse-grained modeling (including many-body forces and non-point-like particles).  New force fields and examples are added continually by users.',
@@ -33,7 +57,7 @@ setup(
   # - http://choosealicense.com/licenses/bsd-3-clause
   # - http://opensource.org/licenses/BSD-3-Clause
 
-  license='BSD',
+  #license='BSD',
 
   classifiers=['Environment :: Console',
                'License :: OSI Approved :: BSD License',

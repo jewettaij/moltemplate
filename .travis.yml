@@ -10,7 +10,7 @@ before_script:
   - git clone https://github.com/kward/shunit2 shunit2
 
 python:
-  - "3.5"
+  - "3.6"
 
 
 install:
@@ -23,8 +23,8 @@ install:
 
 script:
   - bash tests/test_read_coords_pdb.sh
-  - bash tests/test_oplsaa.sh
   - bash tests/test_ltemplify.sh
+  - bash tests/test_oplsaa.sh
 
 
 # Thanks to Kate Ward, Martin Seener, and Davi Ortega:
