@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.58.1'
-g_date_str = '2018-11-05'
+g_version_str = '0.59.0'
+g_date_str = '2018-11-13'
 
 def Intify(s):
     if s.isdigit():
@@ -268,6 +268,8 @@ def main():
         needed_dihedraltypes = set([])
         needed_improperids = set([])
         needed_impropertypes = set([])
+        needed_cmapids = set([])
+        needed_cmaptypes = set([])
 
         min_needed_atomtype = None
         max_needed_atomtype = None
@@ -279,6 +281,8 @@ def main():
         max_needed_dihedraltype = None
         min_needed_impropertype = None
         max_needed_impropertype = None
+        min_needed_cmaptype = None
+        max_needed_cmaptype = None
 
         min_needed_atomid = None
         max_needed_atomid = None
@@ -292,6 +296,8 @@ def main():
         max_needed_dihedralid = None
         min_needed_improperid = None
         max_needed_improperid = None
+        min_needed_cmapid = None
+        max_needed_cmapid = None
 
         # To process the selections, we need to know the atom style:
         atom_style_undefined = True
@@ -324,6 +330,7 @@ def main():
         l_data_angle_coeffs = []
         l_data_dihedral_coeffs = []
         l_data_improper_coeffs = []
+        #l_data_cmap_coeffs = []
         l_data_pair_coeffs = []
         l_data_pairij_coeffs = []
         l_data_atoms = []
@@ -332,6 +339,7 @@ def main():
         l_data_angles = []
         l_data_dihedrals = []
         l_data_impropers = []
+        l_data_cmap = []
 
         # class2 force fields
         # l_in_bondbond_coeffs = []   <--not needed, included in l_in_angle_coeff
@@ -574,6 +582,7 @@ def main():
         data_file_header_names = set(['LAMMPS Description',
                                       'Atoms', 'Masses', 'Velocities', 'Bonds',
                                       'Angles', 'Dihedrals', 'Impropers',
+                                      'CMAP',
                                       'Pair Coeffs',
                                       'Bond Coeffs', 'Angle Coeffs',
                                       'Dihedral Coeffs', 'Improper Coeffs',
@@ -1260,7 +1269,7 @@ def main():
                                             (' ' * indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
-                                        'WARNING: SELECTION BREAKS ANGLES\n')
+                                        'WARNING: SELECTION BREAKS ANGLE INTERACTION\n')
                                     sys.stderr.write(
                                         '         (between atom ids: ')
                                     for n in range(0, 3):
@@ -1312,7 +1321,7 @@ def main():
                                             (' ' * indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
-                                        'WARNING: SELECTION BREAKS DIHEDRALS\n')
+                                        'WARNING: SELECTION BREAKS DIHEDRAL INTERACTION\n')
                                     sys.stderr.write(
                                         '         (between atom ids: ')
                                     for n in range(0, 4):
@@ -1365,13 +1374,65 @@ def main():
                                             (' ' * indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
-                                        'WARNING: SELECTION BREAKS IMPROPERS\n')
+                                        'WARNING: SELECTION BREAKS IMPROPER INTERACTION\n')
                                     sys.stderr.write(
                                         '         (between atom ids: ')
                                     for n in range(0, 4):
                                         sys.stderr.write(str(atomids[n]) + ' ')
                                     sys.stderr.write(')\n'
                                                      '         The atoms you selected participate in 4-body \"Improper\"\n'
+                                                     '         interactions with other atoms you didn\'t select.\n'
+                                                     '         (They will be ignored.)\n'
+                                                     '         Are you sure you selected the correct atoms?\n')
+                                    no_warnings = False
+
+                    elif (line.strip() == 'CMAP'):
+                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                        while lex:
+                            line = lex.ReadLine()
+                            if line.strip() in data_file_header_names:
+                                lex.push_raw_text(line)  # <- Save line for later
+                                break
+                            tokens = line.strip().split()
+                            if len(tokens) > 0:
+                                if (len(tokens) < 7):
+                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                                     '       Nonsensical line in CMAP section:\n'
+                                                     '       \"' + line.strip() + '\"\n')
+                                #tokens[0] = '$cmap:id'+tokens[0]
+                                #tokens[1] = '@cmap:type'+tokens[1]
+                                atomids = [None, None, None, None, None]
+                                atomtypes = [None, None, None, None, None]
+                                molids = [None, None, None, None, None]
+                                in_selections = True
+                                some_in_selection = False
+                                for n in range(0, 5):
+                                    atomids[n] = Intify(tokens[2 + n])
+                                    if atomids[n] in atomid2type:
+                                        atomtypes[n] = atomid2type[atomids[n]]
+                                    if atomids[n] in atomid2mol:
+                                        molids[n] = atomid2mol[atomids[n]]
+                                    if (BelongsToSel(atomids[n], atomid_selection) and
+                                            BelongsToSel(atomtypes[n], atomtype_selection) and
+                                            BelongsToSel(molids[n], molid_selection)):
+                                        #tokens[2+n] = '$atom:id'+tokens[2+n]
+                                        #tokens[2+n] = '$atom:'+atomids_int2name[atomids[n]]
+                                        some_in_selection = True
+                                    else:
+                                        in_selections = False
+                                if in_selections:
+                                    if not ignore_angles_dihedrals_impropers:
+                                        l_data_cmap.append(
+                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                elif some_in_selection:
+                                    sys.stderr.write(
+                                        'WARNING: SELECTION BREAKS CMAP INTERACTION\n')
+                                    sys.stderr.write(
+                                        '         (between atom ids: ')
+                                    for n in range(0, 4):
+                                        sys.stderr.write(str(atomids[n]) + ' ')
+                                    sys.stderr.write(')\n'
+                                                     '         The atoms you selected participate in 5-body \"CMAP\"\n'
                                                      '         interactions with other atoms you didn\'t select.\n'
                                                      '         (They will be ignored.)\n'
                                                      '         Are you sure you selected the correct atoms?\n')
@@ -1881,7 +1942,7 @@ def main():
             tokens[i_atomid] = '$atom:' + atomids_int2name[atomid]
             tokens[i_atomtype] = '@atom:' + atomtypes_int2name[atomtype]
             l_data_atoms[i] = (' ' * indent) + (' '.join(tokens) + '\n')
-        sys.stderr.write(')\n')
+        sys.stderr.write(')\n\n')
 
         if len(l_data_atoms) == 0:
             raise InputError('Error(' + g_program_name + '): You have no atoms in you selection!\n'
@@ -2821,6 +2882,134 @@ def main():
                 else:
                     del l_in_improper_coeffs[i_line]
 
+
+
+        # --- CMAP INTERACTIONS ---
+
+        # Add the correct variable types to each line in l_data_cmaps
+        # ($cmap: $atom:)
+        # Also: delete lines from data_cmap if they involve atoms we don't care
+        # about
+        i_line = 0
+        while i_line < len(l_data_cmap):
+            line = l_data_cmap[i_line]
+            tokens = line.strip().split()
+            assert(len(tokens) == 7)
+
+            cmapid = Intify(tokens[0])
+            cmaptype = Intify(tokens[1])
+            atomid1 = Intify(tokens[2])
+            atomid2 = Intify(tokens[3])
+            atomid3 = Intify(tokens[4])
+            atomid4 = Intify(tokens[5])
+            atomid5 = Intify(tokens[6])
+            # if ((atomid1 in needed_atomids) and
+            #    (atomid2 in needed_atomids)):
+            tokens[0] = '$cmap:id' + str(cmapid)
+            #tokens[1] = '@cmap:type' + str(cmaptype)
+            tokens[1] = str(cmaptype)
+            #tokens[2] = '$atom:id'+str(atomid1)
+            #tokens[3] = '$atom:id'+str(atomid2)
+            #tokens[4] = '$atom:id'+str(atomid3)
+            #tokens[5] = '$atom:id'+str(atomid4)
+            #tokens[6] = '$atom:id'+str(atomid5)
+            tokens[2] = '$atom:' + atomids_int2name[atomid1]
+            tokens[3] = '$atom:' + atomids_int2name[atomid2]
+            tokens[4] = '$atom:' + atomids_int2name[atomid3]
+            tokens[5] = '$atom:' + atomids_int2name[atomid4]
+            tokens[6] = '$atom:' + atomids_int2name[atomid5]
+
+            needed_cmapids.add(cmapid)
+            needed_cmaptypes.add(cmaptype)
+            l_data_cmap[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+            i_line += 1
+            # else:
+            #    del l_data_cmap[i_line]
+
+        ## delete in_cmap_coeffs for cmaptypes we no longer care about:
+        #if len(needed_cmaptypes) > 0:
+        #    for cmaptype in needed_cmaptypes:
+        #        assert(type(cmaptype) is int)
+        #        if ((min_needed_cmaptype == None) or
+        #            (min_needed_cmaptype > cmaptype)):
+        #            min_needed_cmaptype = cmaptype
+        #        if ((max_needed_cmaptype == None) or
+        #            (max_needed_cmaptype < cmaptype)):
+        #            max_needed_cmaptype = cmaptype
+        #    for cmapid in needed_cmapids:
+        #        assert(type(cmapid) is int)
+        #        if ((min_needed_cmapid == None) or
+        #            (min_needed_cmapid > cmapid)):
+        #            min_needed_cmapid = cmapid
+        #        if ((max_needed_cmapid == None) or
+        #            (max_needed_cmapid < cmapid)):
+        #            max_needed_cmapid = cmapid
+        #else:
+        #    # If no cmap interactions were needed, then define some defaults
+        #    # to make sure we don't keep any of them later.
+        #    min_needed_cmaptype = 1
+        #    max_needed_cmaptype = 0
+        #
+        #
+        #i_line = 0
+        #while i_line < len(l_in_cmap_coeffs):
+        #    line = l_in_cmap_coeffs[i_line]
+        #    tokens = line.strip().split()
+        #    cmaptype_str = tokens[1]
+        #
+        #    if ('*' in cmaptype_str):
+        #        cmaptype_tokens = cmaptype_str.split('*')
+        #
+        #        if cmaptype_tokens[0] == '':
+        #            i_a = min_needed_cmaptype
+        #        else:
+        #            i_a = Intify(cmaptype_tokens[0])
+        #
+        #        if cmaptype_tokens[1] == '':
+        #            i_b = max_needed_cmaptype
+        #        else:
+        #            i_b = Intify(cmaptype_tokens[1])
+        #
+        #    else:
+        #        i_a = i_b = Intify(cmaptype_str)
+        #
+        #    assert((type(i_a) is int) and (type(i_b) is int))
+        #
+        #    if (i_a < min_needed_cmaptype):
+        #        i_a = min_needed_cmaptype
+        #    if (i_b > max_needed_cmaptype):
+        #        i_b = max_needed_cmaptype
+        #    
+        #    # if i_a == i_b:
+        #    #    i_str = '@cmap:type'+str(i_a)
+        #    #    tokens[1] = i_str
+        #    # else:
+        #    #    i_str = '@{cmap:type'+str(j_a)+'}*@{cmap:type'+str(j_b)+'}'
+        #    
+        #    if ('*' in cmaptype_str):
+        #        del l_in_cmap_coeffs[i_line]
+        #        for i in range(i_a, i_b + 1):
+        #            if (i in needed_cmaptypes):
+        #                tokens[1] = '@cmap:type' + str(i)
+        #                l_in_cmap_coeffs.insert(i_line,
+        #                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+        #                i_line += 1
+        #    else:
+        #        if i_a < i_b:
+        #            raise InputError('Error: number of cmap types in data file is not consistent with the\n'
+        #                             '       number of cmap types you have define cmap_coeffs for.\n')
+        #        if (i_a == i_b) and (i_a in needed_cmaptypes):
+        #            tokens[1] = '@cmap:type' + str(i_a)
+        #            l_in_cmap_coeffs[i_line] = (
+        #                ' ' * indent) + (' '.join(tokens) + '\n')
+        #            i_line += 1
+        #        else:
+        #            del l_in_cmap_coeffs[i_line]
+
+
+
+
+
         # --- GROUPS ---
 
         # Now parse through all of the "group" commands and try and figure
@@ -3690,6 +3879,17 @@ def main():
             l_data_impropers.append((' ' * cindent) + '}\n')
             sys.stdout.write('\n')
             sys.stdout.write(''.join(l_data_impropers))
+            non_empty_output = True
+        if len(l_data_cmap) > 0:
+            sys.stdout.write('\n')
+            l_data_cmap.insert(0, (' ' * cindent) +
+                                    'write(\"' + data_cmap + '\") {\n')
+            l_data_cmap.insert(0, '\n')
+            l_data_cmap.insert(0, (' ' * cindent) +
+                                'category $cmap(1, 1)\n')
+            l_data_cmap.append((' ' * cindent) + '}\n')
+            sys.stdout.write('\n')
+            sys.stdout.write(''.join(l_data_cmap))
             non_empty_output = True
 
         if len(l_in_group) > 0:

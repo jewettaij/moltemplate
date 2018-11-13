@@ -2078,6 +2078,9 @@ class StaticObj(object):
 
                 cat_count_start = 1
                 cat_count_incr = 1
+                backup_wordterminators = lex.wordterminators
+                lex.wordterminators += ','
+                #sys.stderr.write('DEBUG: wordterminators="'+str(lex.wordterminators)+'"\n')
 
                 open_paren = lex.get_token()
                 if (open_paren == '('):
@@ -2118,7 +2121,7 @@ class StaticObj(object):
                     lex.push_token(open_paren)
 
                 if (isinstance(cat_count_start, basestring) or
-                        isinstance(cat_count_incr, basestring)):
+                    isinstance(cat_count_incr, basestring)):
                     raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'
                                      '       Error near ' + lex.error_leader() + '\n'
                                      '       \"' + cmd_token + ' ' + cat_name + '(' +
@@ -2156,7 +2159,11 @@ class StaticObj(object):
                                      '       Error near ' + lex.error_leader() + '\n'
                                      '       category name = \"' + cat_name + '\" lacks a \'$\' or \'&\' prefix.\n'
                                      '       This one-character prefix indicates whether the variables in this\n'
-                                     '       new category will be static or dynamics variables\n')
+                     '       new category will be static or dynamics variables\n')
+
+
+                lex.wordterminators = backup_wordterminators
+
 
             elif (cmd_token == '}') or (cmd_token == ''):
                 # a '}' character means we have reached the end of our scope.
