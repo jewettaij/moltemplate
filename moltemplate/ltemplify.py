@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.59.0'
-g_date_str = '2018-11-13'
+g_version_str = '0.59.1'
+g_date_str = '2018-11-20'
 
 def Intify(s):
     if s.isdigit():
@@ -579,24 +579,6 @@ def main():
 
         atomid2type = {}
         atomid2mol = {}
-        data_file_header_names = set(['LAMMPS Description',
-                                      'Atoms', 'Masses', 'Velocities', 'Bonds',
-                                      'Angles', 'Dihedrals', 'Impropers',
-                                      'CMAP',
-                                      'Pair Coeffs',
-                                      'Bond Coeffs', 'Angle Coeffs',
-                                      'Dihedral Coeffs', 'Improper Coeffs',
-                                      # class2 force fields:
-                                      'BondBond Coeffs', 'BondAngle Coeffs',
-                                      'MiddleBondTorsion Coeffs', 'EndBondTorsion Coeffs',
-                                      'AngleTorsion Coeffs', 'AngleAngleTorsion Coeffs',
-                                      'BondBond13 Coeffs',
-                                      'AngleAngle Coeffs',
-                                      # non-point-like particles:
-                                      'Ellipsoids', 'Triangles', 'Lines',
-                                      # specifying bonded interactions by type:
-                                      'Angles By Type', 'Dihedrals By Type', 'Impropers By Type'
-                                      ])
 
         if atom_style_undefined:
             # The default atom_style is "full"
@@ -912,7 +894,16 @@ def main():
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Atoms" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if ((len(tokens) <= i_atomid) or
                                     (len(tokens) <= i_atomtype) or
                                     ((i_molid != None) and
@@ -1056,7 +1047,16 @@ def main():
                                 break
 
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Masses" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 atomtype = Intify(tokens[0])
 
                                 if BelongsToSel(atomtype, atomtype_selection):
@@ -1072,8 +1072,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Velocities" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 atomid = Intify(tokens[0])
                                 atomtype = None
                                 if atomid in atomid2type:
@@ -1102,8 +1112,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Ellipsoids" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 atomid = Intify(tokens[0])
                                 atomtype = None
                                 if atomid in atomid2type:
@@ -1123,6 +1143,7 @@ def main():
                                     # (Instead assign these names in a later pass.)
                                     l_data_ellipsoids.append(
                                         (' ' * indent) + (' '.join(tokens) + '\n'))
+
                     elif (line.strip() == 'Lines'):
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
                         while lex:
@@ -1130,8 +1151,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Lines" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 atomid = Intify(tokens[0])
                                 atomtype = None
                                 if atomid in atomid2type:
@@ -1149,6 +1180,7 @@ def main():
                                     # (Instead assign these names in a later pass.)
                                     l_data_lines.append(
                                         (' ' * indent) + (' '.join(tokens) + '\n'))
+
                     elif (line.strip() == 'Triangles'):
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
                         while lex:
@@ -1156,8 +1188,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Triangles" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 atomid = Intify(tokens[0])
                                 atomtype = None
                                 if atomid in atomid2type:
@@ -1183,12 +1225,23 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Bonds" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if (len(tokens) < 4):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in Bonds section:\n'
                                                      '       \"' + line.strip() + '\"\n')
+
                                 #tokens[0] = '$bond:id'+tokens[0]
                                 #tokens[1] = '@bond:type'+tokens[1]
                                 atomids = [None, None]
@@ -1236,8 +1289,19 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Angles" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
+
                                 if (len(tokens) < 5):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in Angles section:\n'
@@ -1288,8 +1352,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Dihedrals" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if (len(tokens) < 6):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in Dihedrals section:\n'
@@ -1341,8 +1415,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Impropers" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if (len(tokens) < 6):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in Impropers section:\n'
@@ -1395,6 +1479,14 @@ def main():
                                 break
                             tokens = line.strip().split()
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "CMAP" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if (len(tokens) < 7):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in CMAP section:\n'
@@ -1445,8 +1537,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Bond Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@bond:type'+tokens[0]
                                 l_data_bond_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1458,8 +1560,17 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Angle Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@angle:type'+tokens[0]
                                 l_data_angle_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1471,8 +1582,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Dihedral Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@dihedral:type'+tokens[0]
                                 l_data_dihedral_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1484,8 +1605,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Improper Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@improper:type'+tokens[0]
                                 l_data_improper_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1498,8 +1629,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Pair Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if (len(tokens) < 2):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in Pair Coeffs section:\n'
@@ -1513,7 +1654,8 @@ def main():
                                     i = int(atomtype_i_str)
                                     if ((not i) or
                                             BelongsToSel(i, atomtype_selection)):
-                                        i_str = '@atom:type' + str(i)
+                                        #i_str = '@atom:type' + str(i)
+                                        i_str = '@atom:' + atomtypes_int2name[i]
                                         tokens[0] = i_str
                                         l_data_pair_coeffs.append(
                                             (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1526,8 +1668,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "PairIJCoeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 if (len(tokens) < 2):
                                     raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
                                                      '       Nonsensical line in Pair Coeffs section:\n'
@@ -1543,8 +1695,10 @@ def main():
                                     j = int(atomtype_j_str)
                                     if (((not i) or BelongsToSel(i, atomtype_selection)) and
                                             ((not j) or BelongsToSel(j, atomtype_selection))):
-                                        i_str = '@atom:type' + str(i)
-                                        j_str = '@atom:type' + str(j)
+                                        #i_str = '@atom:type' + str(i)
+                                        #j_str = '@atom:type' + str(j)
+                                        i_str = '@atom:' + atomtypes_int2name[i]
+                                        j_str = '@atom:' + atomtypes_int2name[j]
                                         tokens[0] = i_str
                                         tokens[1] = j_str
                                         l_data_pair_coeffs.append(
@@ -1610,8 +1764,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "BondBond Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@angle:type'+tokens[0]
                                 l_data_bondbond_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1623,8 +1787,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "BondAngle Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@angle:type'+tokens[0]
                                 l_data_bondangle_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1636,8 +1810,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "MiddleBondTorsion Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@dihedral:type'+tokens[0]
                                 l_data_middlebondtorsion_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1649,8 +1833,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "EndBondTorsion Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@dihedral:type'+tokens[0]
                                 l_data_endbondtorsion_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1662,8 +1856,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "AngleTorsion Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@dihedral:type'+tokens[0]
                                 l_data_angletorsion_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1675,8 +1879,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "AngleAngleTorsion Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@dihedral:type'+tokens[0]
                                 l_data_angleangletorsion_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1688,8 +1902,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "BondBond13 Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@dihedral:type'+tokens[0]
                                 l_data_bondbond13_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1701,8 +1925,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "AngleAngle Coeffs" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 #tokens[0] = '@improper:type'+tokens[0]
                                 l_data_angleangle_coeffs.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1714,8 +1948,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Angles By Type" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 tokens[0] = '@angle:type' + tokens[0]
                                 l_data_angles_by_type.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1727,8 +1971,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Dihedrals By Type" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 tokens[0] = '@dihedral:type' + tokens[0]
                                 l_data_dihedrals_by_type.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1740,8 +1994,18 @@ def main():
                             if line.strip() in data_file_header_names:
                                 lex.push_raw_text(line)  # <- Save line for later
                                 break
+
                             tokens = line.strip().split()
+
                             if len(tokens) > 0:
+
+                                if not tokens[0].strip().isdigit():
+                                    raise InputError('Error near the "Impropers By Type" section.  Offending line:\n'
+                                                     '      "'+line.strip()+'"\n'
+                                                     '      This line does not begin with an integer, and it does not appear to be\n'
+                                                     '      a LAMMPS data file section name. If this is a valid data section name,\n'
+                                                     '      please let the author know.  (jewett.aij -at- gmail.com)\n')
+
                                 tokens[0] = '@improper:type' + tokens[0]
                                 l_data_impropers_by_type.append(
                                     (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -4000,7 +4264,7 @@ def main():
                              '         Feel free to report any bugs you find. (-Andrew Jewett 2017-10)\n')
 
 
-    except (ValueError, InputError) as err:
+    except (InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
         sys.exit(-1)
 

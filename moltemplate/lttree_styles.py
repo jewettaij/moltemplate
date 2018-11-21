@@ -61,6 +61,24 @@ data_boundary = "Data Boundary"
 # (for backward compatibility), an older version of this file was named:
 data_pbc = "Data PBC"
 
+data_file_header_names = set(['LAMMPS Description',
+                              'Atoms', 'Masses', 'Velocities',
+                              'Bonds', 'Angles', 'Dihedrals', 'Impropers',
+                              'CMAP',
+                              'Pair Coeffs', 'PairIJ Coeffs',
+                              'Bond Coeffs', 'Angle Coeffs',
+                              'Dihedral Coeffs', 'Improper Coeffs',
+                              # class2 force fields:
+                              'BondBond Coeffs', 'BondAngle Coeffs',
+                              'MiddleBondTorsion Coeffs', 'EndBondTorsion Coeffs',
+                              'AngleTorsion Coeffs', 'AngleAngleTorsion Coeffs',
+                              'BondBond13 Coeffs',
+                              'AngleAngle Coeffs',
+                              # non-point-like particles:
+                              'Ellipsoids', 'Triangles', 'Lines',
+                              # specifying bonded interactions by type:
+                              'Angles By Type', 'Dihedrals By Type', 'Impropers By Type'])
+
 # The files are fragments of a LAMMPS data file (see "read_data").
 # In addition, moltemplate may also generate the following files:
 in_prefix = "In "
