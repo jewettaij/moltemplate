@@ -37,7 +37,7 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.59.1'
+g_version_str = '0.59.2'
 g_date_str = '2018-11-20'
 
 def Intify(s):
@@ -1701,7 +1701,7 @@ def main():
                                         j_str = '@atom:' + atomtypes_int2name[j]
                                         tokens[0] = i_str
                                         tokens[1] = j_str
-                                        l_data_pair_coeffs.append(
+                                        l_data_pairij_coeffs.append(
                                             (' ' * indent) + (' '.join(tokens) + '\n'))
 
                     elif (tokens[0] == 'pair_coeff'):
