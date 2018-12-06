@@ -45,8 +45,8 @@ TIP3P_2004 {
   }
 
   write_once("In Settings") {
-    bond_coeff   @bond:OH         harmonic       450.0  0.9572
-    angle_coeff  @angle:HOH       harmonic       55.0   104.52
+    bond_coeff   @bond:OH         450.0  0.9572
+    angle_coeff  @angle:HOH       55.0   104.52
 
     #########################################################################
     ####  There are two choices for for the O-O interactions
@@ -54,27 +54,27 @@ TIP3P_2004 {
     ####  O-O nonbonded interactions
 
     #   For the 1983 Jorgensen version of TIP3P use:
-    #pair_coeff  @atom:O  @atom:O   lj/charmm/coul/charmm 0.1521 3.1507
+    #pair_coeff  @atom:O  @atom:O   0.1521 3.1507
 
     #   For the 2004 Price & Brooks version of TIP3P use:
-    pair_coeff  @atom:O  @atom:O   lj/charmm/coul/long 0.102 3.188
+    pair_coeff  @atom:O  @atom:O   0.102 3.188
 
     #########################################################################
     ####  There are three choices for for the O-H and H-H interactions
     #########################################################################
     #### 1) The original Jorgensen 1983 and 2004 Price & Brooks models have no
     #     mixed OH or HH interactions. For this behavior, uncomment these lines:
-    pair_coeff  @atom:H  @atom:H   lj/charmm/coul/long   0.00 0.4000
-    pair_coeff  @atom:O  @atom:H   lj/charmm/coul/long   0.00 1.7753
+    pair_coeff  @atom:H  @atom:H   0.00 0.4000
+    pair_coeff  @atom:O  @atom:H   0.00 1.7753
     #########################################################################
     #### 2) CHARMM uses an arithmetic mixing-rule for the O-H sigma parameter
-    #pair_coeff @atom:H  @atom:H   lj/charmm/coul/long 0.0460 0.4000
-    #pair_coeff @atom:O  @atom:H   lj/charmm/coul/long 0.0836 1.7753 #arithmetic
+    #pair_coeff @atom:H  @atom:H   0.0460 0.4000
+    #pair_coeff @atom:O  @atom:H   0.0836 1.7753 #arithmetic
     #########################################################################
     #### 3) OPLS-AA uses geometric a mixing-fule for the O-H sigma parameter,
     ####    If you want to use this, uncomment the following two lines:
-    #pair_coeff @atom:H  @atom:H  lj/charmm/coul/long 0.0460 0.4000
-    #pair_coeff @atom:O  @atom:H  lj/charmm/coul/long 0.0836 1.1226 #geometric
+    #pair_coeff @atom:H  @atom:H   0.0460 0.4000
+    #pair_coeff @atom:O  @atom:H   1.1226 #geometric
     #########################################################################
 
     # Define a group for the tip3p water molecules:
@@ -92,13 +92,13 @@ TIP3P_2004 {
     units        real
     atom_style   full
 
-    pair_style   hybrid lj/charmm/coul/long 10.0 10.5 10.5
+    pair_style   lj/charmm/coul/long 10.0 10.5 10.5
 
     # Note: in the LAMMPS "peptide" example, they use these parameters:
-    # pair_style   hybrid lj/charmm/coul/long 8.0 10.0 10.0
+    # pair_style   lj/charmm/coul/long 8.0 10.0 10.0
 
-    bond_style   hybrid harmonic
-    angle_style  hybrid harmonic
+    bond_style   harmonic
+    angle_style  harmonic
     kspace_style pppm 0.0001
     #pair_modify  mix arithmetic  # LEAVE THIS UNSPECIFIED!
   }
