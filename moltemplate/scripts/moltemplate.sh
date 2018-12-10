@@ -8,8 +8,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.10.3"
-G_DATE="2018-12-04"
+G_VERSION="2.10.4"
+G_DATE="2018-12-10"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -1273,7 +1273,14 @@ IFS="$IFS_BACKUP"
 echo "expanding wildcards in \"_coeff\" commands" >&2
 #ls "${in_prefix}"*.template 2> /dev/null | while read file_name; do
 for file_name in "${in_prefix}"*.template; do
-
+    if [ ! -f "$file_name" ]; then
+        # Special case: If there aren't any files which match the pattern
+        # ("${in_prefix}"*.template), then the bash glob expansion will 
+        # generate a list with only one entry ("${in_prefix}"*.template).
+        # In that case, there will be no file of that name, and we should skip
+        # this entry (or break out of the loop, since there's only one entry)
+        continue
+    fi
     # invoking "postprocess_coeffs.py" can be very slow, so only do it if the
     # file contains both _coeff commands and wildcards *,? on the same line:
     if ! awk '{if (match($1,/'_coeff/') && match($0,/'[*,?]/')) exit 1}' < "$file_name"; then
@@ -2280,6 +2287,14 @@ done
 # Process any custom input script files created by the user afterwards
 #ls "${OUT_FILE_INPUT_SCRIPT}"* 2> /dev/null | while read file_name; do
 for file_name in "${OUT_FILE_INPUT_SCRIPT}."*; do
+    if [ ! -f "$file_name" ]; then
+        # Special case: If there aren't any files which match the pattern
+        # ("${in_prefix}"*.template), then the bash glob expansion will 
+        # generate a list with only one entry ("${in_prefix}"*.template).
+        # In that case, there will be no file of that name, and we should skip
+        # this entry (or break out of the loop, since there's only one entry)
+        continue
+    fi
     if [ "$file_name" = "$OUT_FILE_INIT" ] || [ $file_name = "$OUT_FILE_INPUT_SCRIPT" ] || [ $file_name = "$OUT_FILE_SETTINGS" ]; then
         continue
     fi
