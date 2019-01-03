@@ -1009,11 +1009,11 @@ def main():
                         ys = float(tokens[i_ys])
                         zs = float(tokens[i_zs])
 
-                        x = float(xlo_str) + xs * \
+                        x = float(frame_xlo_str) + xs * \
                             avec[0] + ys * bvec[0] + zs * cvec[0]
-                        y = float(ylo_str) + xs * \
+                        y = float(frame_ylo_str) + xs * \
                             avec[1] + ys * bvec[1] + zs * cvec[1]
-                        z = float(zlo_str) + xs * \
+                        z = float(frame_zlo_str) + xs * \
                             avec[2] + ys * bvec[2] + zs * cvec[2]
 
                     # avec, bvec, cvec described here:
@@ -1024,11 +1024,11 @@ def main():
                         ysu = float(tokens[i_ysu])
                         zsu = float(tokens[i_zsu])
 
-                        x = float(xlo_str) + xsu * \
+                        x = float(frame_xlo_str) + xsu * \
                             avec[0] + ysu * bvec[0] + zsu * cvec[0]
-                        y = float(ylo_str) + xsu * \
+                        y = float(frame_ylo_str) + xsu * \
                             avec[1] + ysu * bvec[1] + zsu * cvec[1]
-                        z = float(zlo_str) + xsu * \
+                        z = float(frame_zlo_str) + xsu * \
                             avec[2] + ysu * bvec[2] + zsu * cvec[2]
 
                     # Now deal with ix, iy, iz
