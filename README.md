@@ -38,11 +38,11 @@ There are two ways to install moltemplate:
 ## Installation using pip
 If you are familiar with pip, then run the following command from within the directory where this README file is located:
 
-    pip install .
-
-If you receive an error regarding permissions, then run pip with the "--user" argument:
-
     pip install . --user
+
+This will install moltemplate for a single user.  On a shared computer, to install moltemplate system-wide, use:
+
+    sudo pip install .
 
 Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, this will be done for you automatically.)  Later, you can uninstall moltemplate using:
 
@@ -98,7 +98,7 @@ Otherwise, if you are using an older version of windows, try following the
 [tutorial](https://sourceforge.net/p/lammps/mailman/message/32599824/)
 written by Yanqing Fu instead.
 
-To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.  (Unfortunately, if you are using WSL, [graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
+To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.  (Unfortunately, **if you are using WSL**, graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  [Avoid these editors with WSL for now.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
 
 ## License
 
