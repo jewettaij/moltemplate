@@ -51,14 +51,16 @@ Make sure that your default pip install bin directory is in your PATH.  (This is
 If you continue to run into difficulty, try installing moltemplate into a temporary virtual environment by installing "*virtualenv*", downloading moltemplate (to "~/moltemplate" in the example below), and running these commands:
 
     cd ~/moltemplate
-    virtualenv venv     #(or "python3 -m venv venv" if using python3)
+    python3 -m venv venv     #(or "virtualenv venv" if using python2)
     source venv/bin/activate
-    pip install .       #(or "pip3 install ." if using python3)
+    pip install .
     #(now do something useful with moltemplate...)
 
 (You will have to "run source ~/moltemplate/venv/bin/activate" beforehand every time you want to run moltemplate.
-The *virtualenv* tool is
-[explained in detail here](http://docs.python-guide.org/en/latest/dev/virtualenvs/))  If all this fails, then try installing moltemplate by manually updating your \$PATH environment variable.  Instructions for doing that are included below.
+Virtual environments are
+[explained here](https://docs.python.org/3/tutorial/venv.html)
+If all this fails, then try installing moltemplate by manually updating your
+\$PATH environment variable.  Instructions for doing that are included below.
 
 ## Manual installation:
 
@@ -88,16 +90,15 @@ After making these changes, you may need to start a new terminal (shell) for the
 
 ### WINDOWS installation suggestions
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  If you are using Windows 10 or later, try installing the "Windows Subsystem for Linux (WSL)"
+You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  I recommend installing [virtualbox](https://www.virtualbox.org) in windows together with a debian-based linux distribution such as [xubuntu](https://xubuntu.org).  Alternatively, if you are using Windows 10 or later, you can try installing the "Windows Subsystem for Linux (WSL)", as explained
+[here](https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/)
+and
+[here](https://msdn.microsoft.com/en-us/commandline/wsl/faq).
+Otherwise, if you are using an older version of windows, try following the
+[tutorial](https://sourceforge.net/p/lammps/mailman/message/32599824/)
+written by Yanqing Fu instead.
 
-https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/
-https://msdn.microsoft.com/en-us/commandline/wsl/faq
-
-If you are using an older version of windows, try following the tutorial written by Yanqing Fu instead:
-
-https://sourceforge.net/p/lammps/mailman/message/32599824/
-
-To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.  (Unfortunately, as of 2017-5-17, [graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
+To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.  (Unfortunately, if you are using WSL, [graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
 
 ## License
 
