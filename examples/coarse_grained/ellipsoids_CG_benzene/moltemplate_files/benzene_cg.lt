@@ -7,7 +7,7 @@
 # -Otello M. Roscioni (U.Southampton)
 
 # Run with the command:
-# moltemplate.sh  -atomstyle "atomid atomtype flag density x y z" system.lt -allow-wildcards -nocheck
+# moltemplate.sh -atomstyle "atomid atomtype flag density x y z" system.lt -allow-wildcards -nocheck
 
 
 BENZ {

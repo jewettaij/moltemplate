@@ -1,5 +1,5 @@
 # Run with the command:
-# moltemplate.sh  -atomstyle "atomid atomtype flag density x y z" benzene_sample01.lt -allow-wildcards -nocheck
+# moltemplate.sh -atomstyle "atomid atomtype flag density x y z" system.lt -allow-wildcards -nocheck
 
 import "benzene_cg.lt"
 
