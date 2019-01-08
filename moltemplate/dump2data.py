@@ -22,8 +22,8 @@ A reference DATA file is needed (argument).
 # All rights reserved.
 
 g_program_name = 'dump2data.py'
-g_date_str = '2017-9-12'
-g_version_str = '0.54.1'
+g_date_str = '2017-1-07'
+g_version_str = '0.55.0'
 
 import sys
 from collections import defaultdict
@@ -458,8 +458,22 @@ def ParseArgs(argv,
             misc_settings.multi = False
             del(argv[i:i + 1])
 
-        elif ((argv[i].lower() == '-xyz') or (argv[i].lower() == '-xyzout')):
+        elif ((argv[i].lower() == '-xyz') or
+              (argv[i].lower() == '-xyz-type') or
+              (argv[i].lower() == '-xyzout')):
             misc_settings.output_format = 'xyz'
+            del(argv[i:i + 1])
+
+        elif (argv[i].lower() == '-xyz-id'):
+            misc_settings.output_format = 'xyz-id'
+            del(argv[i:i + 1])
+
+        elif (argv[i].lower() == '-xyz-mol'):
+            misc_settings.output_format = 'xyz-mol'
+            del(argv[i:i + 1])
+
+        elif (argv[i].lower() == '-xyz-type-mol'):
+            misc_settings.output_format = 'xyz-type-mol'
             del(argv[i:i + 1])
 
         elif (argv[i].lower() == '-xyzin'):
@@ -815,7 +829,7 @@ def main():
         frame_vects = defaultdict(list)
         frame_velocities = defaultdict(list)
         frame_atomtypes = defaultdict(list)
-        frame_molid = defaultdict(list)
+        frame_molids = defaultdict(list)
         frame_xlo_str = frame_xhi_str = None
         frame_ylo_str = frame_yhi_str = None
         frame_zlo_str = frame_zhi_str = None
@@ -1130,8 +1144,7 @@ def main():
                             i_vx_data += 1
 
                         if (0 <= I_data) and (I_data < len(data_settings.ii_vects)):
-                            frame_vects[atomid][I_data] = (
-                                vx_str, vy_str, vz_str)
+                            frame_vects[atomid][I_data] = (vx_str,vy_str,vz_str)
                         else:
                             raise InputError('Error(dump2data): You have a vector coordinate in your dump file named \"' + name_vx + '\"\n'
                                              '       However there are no columns with this name in your data file\n'
@@ -1144,8 +1157,7 @@ def main():
                     for atomid in frame_coords:
                         for d in range(0, 3):
                             crd = float(frame_coords[atomid][d])
-                            frame_coords[atomid][d] = str(
-                                crd * misc_settings.scale)
+                            frame_coords[atomid][d]=str(crd*misc_settings.scale)
 
                 if len(frame_coords) != frame_natoms:
                     err_msg = 'Number of lines in \"ITEM: ATOMS\" section disagrees with\n' \
@@ -1237,22 +1249,47 @@ def main():
                                                  str(misc_settings.scale * float(xyz[2])) + '\n')
                         sys.stdout.write('\n')
 
-                    elif misc_settings.output_format == 'xyz':
+                    elif ((misc_settings.output_format == 'xyz') or
+                          (misc_settings.output_format == 'xyz-id') or
+                          (misc_settings.output_format == 'xyz-mol') or
+                          (misc_settings.output_format == 'xyz-type-mol')):
                             # Print out the coordinates in simple 3-column text
                             # format
                         sys.stdout.write(str(len(frame_coords)) + '\n')
                         descr_str = 'LAMMPS data from timestep ' + frame_timestep_str
                         sys.stdout.write(descr_str + '\n')
                         for atomid, xyz in iter(sorted(frame_coords.items(), key=GetIntAtomID)):
+                            if ((misc_settings.output_format == 'xyz') or
+                                (misc_settings.output_format == 'xyz-type)')):
+                                atomtype = frame_atomtypes.get(atomid)
+                                if atomtype == None:
+                                    raise InputError('xyz ERROR: Your trajectory file lacks atom-type information\n')
+                                first_column = str(atomtype)
+                            elif misc_settings.output_format == 'xyz-id':
+                                first_column = str(atomid)
+                            elif misc_settings.output_format == 'xyz-mol':
+                                molid = frame_molids.get(atomid)
+                                if molid == None:
+                                    raise InputError('-xyz-mol ERROR: Your trajectory file lacks molecule-id information.\n')
+                                sys.stderr.write(str(molid)+'\n')
+                                first_column = str(molid)
+                            elif misc_settings.output_format == 'xyz-type-mol':
+                                atomtype = frame_atomtypes.get(atomid)
+                                if atomtype == None:
+                                    raise InputError('xyz-type-mol ERROR: Your trajectory file lacks atom-type information.\n')
+                                molid = frame_molids.get(atomid)
+                                if molid == None:
+                                    raise InputError('-xyz-type-mol ERROR: Your trajectory file lacks molecule-id information.\n')
+                                first_column = str(atomtype)+'_'+str(molid)
                             if misc_settings.scale == None:
-                                sys.stdout.write(str(atomid) + ' ' +
+                                sys.stdout.write(first_column + ' ' +
                                                  str(xyz[0]) + ' ' +
                                                  str(xyz[1]) + ' ' +
                                                  str(xyz[2]) + '\n')
                             else:
                                 # Only convert to float and back if
                                 # misc_settings.scale != None
-                                sys.stdout.write(str(atomid) + ' ' +
+                                sys.stdout.write(first_column + ' ' +
                                                  str(misc_settings.scale * float(xyz[0])) + ' ' +
                                                  str(misc_settings.scale * float(xyz[1])) + ' ' +
                                                  str(misc_settings.scale * float(xyz[2])) + '\n')
