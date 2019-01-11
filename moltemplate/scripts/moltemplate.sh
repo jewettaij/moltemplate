@@ -8,8 +8,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.10.6"
-G_DATE="2019-1-07"
+G_VERSION="2.10.7"
+G_DATE="2019-1-10"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -135,6 +135,7 @@ data_dihedral_coeffs="Data Dihedral Coeffs"
 data_improper_coeffs="Data Improper Coeffs"
 data_pair_coeffs="Data Pair Coeffs"
 data_pairij_coeffs="Data PairIJ Coeffs"
+data_cmap="Data CMAP"
 
 # interactions-by-type (not id. This is not part of the LAMMPS standard.)
 data_charge_by_bond="Data Charge By Bond"
@@ -1615,6 +1616,7 @@ NBONDS="0"
 NANGLES="0"
 NDIHEDRALS="0"
 NIMPROPERS="0"
+NCMAP="0"
 
 if [ -s "${data_atoms}" ]; then
   NATOMS=`awk 'END{print NR}' < "${data_atoms}"`
@@ -1633,6 +1635,9 @@ if [ -s "${data_dihedrals}" ]; then
 fi
 if [ -s "${data_impropers}" ]; then
   NIMPROPERS=`awk 'END{print NR}' < "${data_impropers}"`
+fi
+if [ -s "${data_cmap}" ]; then
+  NCMAP=`awk 'END{print NR}' < "${data_cmap}"`
 fi
 
 
@@ -1653,6 +1658,9 @@ if [ -n "$NDIHEDRALS" ]; then
 fi
 if [ -n "$NIMPROPERS" ]; then
     echo "     $NIMPROPERS  impropers" >> "$OUT_FILE_DATA"
+fi
+if [ -n "$NCMAP" ]; then
+    echo "     $NCMAP  crossterms" >> "$OUT_FILE_DATA"
 fi
 
 echo "" >> "$OUT_FILE_DATA"
