@@ -35,14 +35,16 @@ dump            1 all custom 100 traj_nvt.lammpstrj id mol type x y z ix iy iz
 
 # -- simulation protocol --
 
-timestep        2.0
+velocity all create 300.0 12345   # choose the starting velocities randomly
+
+timestep  0.25   #(fix rigid requires a small timestep. this might be too large)
 
 group gRigid    union    gH2O gH2O
 group gFlexible subtract all gRigid
 
 fix fxRigid gH2O rigid/nve/small molecule
 fix fxFlexible gFlexible nve
-fix fxLanvegin all langevin 298 298 10000.0 48279
+fix fxLanvegin all langevin 300 300 10000.0 48279
 # (Note: fix nvt probably works too, instead of fix nve + fix langevin)
 
 run		1000000

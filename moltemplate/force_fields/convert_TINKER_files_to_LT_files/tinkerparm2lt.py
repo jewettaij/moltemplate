@@ -470,7 +470,7 @@ def main():
                          "  #   The complete @atom type name includes ALL of these ID numbers.  There's\n"
                          "  #   no need to force the end-user to type the complete name of each atom.\n"
                          "  #   The \"replace\" command used below informs moltemplate that the short\n"
-                         "  #   @atom names we have been using abovee are equivalent to the complete\n"
+                         "  #   @atom names we have been using above are equivalent to the complete\n"
                          "  #   @atom names used below:\n\n")
         
         for atype in atom2ffid:

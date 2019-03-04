@@ -1870,7 +1870,7 @@ OPLSAA {
   #   The complete @atom type name includes ALL of these ID numbers.  There's
   #   no need to force the end-user to type the complete name of each atom.
   #   The "replace" command used below informs moltemplate that the short
-  #   @atom names we have been using abovee are equivalent to the complete
+  #   @atom names we have been using above are equivalent to the complete
   #   @atom names used below:
 
   replace{ @atom:1 @atom:1_b001_a001_d001_i001 }

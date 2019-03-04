@@ -8,8 +8,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.10.7"
-G_DATE="2019-1-10"
+G_VERSION="2.10.8"
+G_DATE="2019-3-04"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -1647,20 +1647,20 @@ echo "     $NATOMS  atoms" >> "$OUT_FILE_DATA"
 if [ -n "$NELLIPSOIDS" ]; then
     echo "     $NATOMS  ellipsoids" >> "$OUT_FILE_DATA"
 fi
-if [ -n "$NBONDS" ]; then
+if [ -n "$NBONDS" ] || [ -n "$NBONDTYPES" ]; then
     echo "     $NBONDS  bonds" >> "$OUT_FILE_DATA"
 fi
-if [ -n "$NANGLES" ]; then
+if [ -n "$NANGLES" ] || [ -n "$NANGLETYPES" ]; then
     echo "     $NANGLES  angles" >> "$OUT_FILE_DATA"
 fi
-if [ -n "$NDIHEDRALS" ]; then
+if [ -n "$NDIHEDRALS" ] || [ -n "$NDIHEDRALTYPES" ]; then
     echo "     $NDIHEDRALS  dihedrals" >> "$OUT_FILE_DATA"
 fi
-if [ -n "$NIMPROPERS" ]; then
+if [ -n "$NIMPROPERS" ] || [ -n "$NIMPROPERTYPES" ]; then
     echo "     $NIMPROPERS  impropers" >> "$OUT_FILE_DATA"
 fi
-if [ -n "$NCMAP" ]; then
-    echo "     $NCMAP  crossterms" >> "$OUT_FILE_DATA"
+if [ -n "$NCMAP" ] && [ "$NCMAP" -gt "0" ]; then
+   echo "     $NCMAP  crossterms" >> "$OUT_FILE_DATA"
 fi
 
 echo "" >> "$OUT_FILE_DATA"
