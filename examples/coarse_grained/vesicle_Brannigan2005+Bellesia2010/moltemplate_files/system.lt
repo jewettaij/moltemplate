@@ -41,12 +41,12 @@ using namespace 1beadProtSci2010
 # step1) Creae 120 proteins.  Distribute them on the surface of the sphere.
 #
 # step2) Keeping the coordinates from step1 fixed, 
-#     a) first we add 9500 DPPC lipids to the inner monolayer
-#     b)  then we add 9500 DLPC lipids to the inner monolayer
+#     a) first we add 14000 DPPC lipids to the inner monolayer
+#     b)  then we add 14000 DLPC lipids to the inner monolayer
 #
 # step3) Keeping the coordinates from steps 1 and 2 fixed, 
-#     a) first we add 12500 DPPC lipids to the outer monolayer
-#     b)  then we add 12500 DLPC lipids to the outer monolayer
+#     a) first we add 19000 DPPC lipids to the outer monolayer
+#     b)  then we add 19000 DLPC lipids to the outer monolayer
 #
 # The order that molecules are created in moltemplate should match the order
 # they appear in the final XYZ file created by PACKMOL.  (See above.)
@@ -58,14 +58,14 @@ using namespace 1beadProtSci2010
 proteins = new 4HelixInsideOut [120]
 
 # Step 2a)                  ---- inner monolayer ----
-dppc_in = new DPPC [9500]
+dppc_in = new DPPC [14000]
 # Step 2b)
-dlpc_in = new DLPC [9500]
+dlpc_in = new DLPC [14000]
 
 # Step 3a)                  ---- outer monolayer ----
-dppc_out = new DPPC [12500]
+dppc_out = new DPPC [19000]
 # Step 3b)
-dlpc_out = new DLPC [12500]
+dlpc_out = new DLPC [19000]
 
 
 

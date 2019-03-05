@@ -34,6 +34,10 @@ dump            1 all custom 250 traj_min.lammpstrj id mol type x y z ix iy iz
 
 #balance 1.3 rcb
 
+thermo_style  custom step temp pe etotal vol epair ebond eangle
+thermo        100  # time interval for printing out "thermo" data
+thermo_modify norm yes
+
 min_style quickmin
 min_modify dmax 0.1
 minimize 1.0e-5 1.0e-7 5000 20000
