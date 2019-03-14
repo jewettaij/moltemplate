@@ -1,5 +1,5 @@
 try:
-    from .nbody_graph_search import Ugraph
+    from ..nbody_graph_search import Ugraph
 except (SystemError, ValueError):
     # not installed as a package
     from nbody_graph_search import Ugraph

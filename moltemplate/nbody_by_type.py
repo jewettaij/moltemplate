@@ -363,7 +363,7 @@ def GenInteractions_files(lines_data,
                     ['nbody_alt_symmetry.'+src_bond_pattern, __package__]]
 
     if __package__:
-        for i, _ in enumerate(package_opts):
+        for i in range(0, len(package_opts)):
             package_opts[i][0] = '.' + package_opts[i][0]
         package_opts.append(['.'+src_bond_pattern, __package__+'.nbody_alt_symmetry'])
 

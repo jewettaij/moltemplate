@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+##!/usr/bin/env bash
 # (note: Classic Bourne shell (#!/bin/sh) also worked at some point.)
 #
 # Author: Andrew Jewett (jewett.aij at g mail)
@@ -8,7 +8,7 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.10.9"
+G_VERSION="2.10.10"
 G_DATE="2019-3-13"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
@@ -454,7 +454,7 @@ while [ "$i" -lt "$ARGC" ]; do
         i=$((i+1))
         eval A=\${ARGV${i}}
 	if [ "$A" = "NONE" ]; then
-            SUBGRAPH_SCRIPT_BONDS="../nbody_alt_symmetry/bonds_nosym.py"
+            SUBGRAPH_SCRIPT_BONDS="bonds_nosym.py"
 	else
             SUBGRAPH_SCRIPT_BONDS=$A
 	fi
@@ -468,7 +468,7 @@ while [ "$i" -lt "$ARGC" ]; do
         i=$((i+1))
         eval A=\${ARGV${i}}
 	if [ "$A" = "NONE" ]; then
-            SUBGRAPH_SCRIPT_ANGLES="../nbody_alt_symmetry/angles_nosym.py"
+            SUBGRAPH_SCRIPT_ANGLES="angles_nosym.py"
 	else
             SUBGRAPH_SCRIPT_ANGLES=$A
 	fi
@@ -482,7 +482,7 @@ while [ "$i" -lt "$ARGC" ]; do
         i=$((i+1))
         eval A=\${ARGV${i}}
 	if [ "$A" = "NONE" ]; then
-            SUBGRAPH_SCRIPT_DIHEDRALS="../nbody_alt_symmetry/dihedrals_nosym.py"
+            SUBGRAPH_SCRIPT_DIHEDRALS="dihedrals_nosym.py"
 	else
             SUBGRAPH_SCRIPT_DIHEDRALS=$A
 	fi
@@ -496,7 +496,7 @@ while [ "$i" -lt "$ARGC" ]; do
         i=$((i+1))
         eval A=\${ARGV${i}}
 	if [ "$A" = "NONE" ]; then
-            SUBGRAPH_SCRIPT_IMPROPERS="../nbody_alt_symmetry/impropers_nosym.py"
+            SUBGRAPH_SCRIPT_IMPROPERS="impropers_nosym.py"
 	else
             SUBGRAPH_SCRIPT_IMPROPERS=$A
 	fi

@@ -54,30 +54,36 @@ def main():
                      __package__]]
 
     if __package__:
-        for i, _ in enumerate(package_opts):
+        for i in range(0, len(package_opts)):
             package_opts[i][0] = '.' + package_opts[i][0]
 
-    g = None
+    grph = None
     for name, pkg in package_opts:
         try:
-            # defines g.bond_pattern, g.canonical_order
-            g = importlib.import_module(name, pkg)
+            sys.stderr.write('name=\"'+name+'\"\n')
+            sys.stderr.write('pkg=\"'+str(pkg)+'\"\n')
+            sys.stderr.write('__package__=\"'+str(__package__)+'\"\n')
+            sys.stderr.write('__name__=\"'+str(__name__)+'\"\n')
+            sys.stderr.write('__spec__=\"'+str(__spec__)+'\"\n')
+            #sys.stderr.write('__spec__.parent=\"'+str(__spec__.parent)+'\"\n')
+            # defines grph.bond_pattern, grph.canonical_order
+            grph = importlib.import_module(name, pkg)
             break
         except (ImportError, SystemError, ValueError):
             pass
 
-    if g is None:
+    if grph is None:
         sys.stderr.write('Error: Unable to locate file \"' +
                          bond_pattern_module_name + '\"\n'
                          '       (Did you mispell the file name?\n'
-                         '        Check the \"nbody_alternate_symmetry/\" directory.)\n')
+                         '        Check the \"nbody_alt_symmetry/\" directory.)\n')
         sys.exit(-1)
 
     # This module defines the graph representing the bond pattern for this type
     # of interaction.  (The number of vertices and edges for the graph corresponds
     # to the number of atoms and bonds in this type of interaction.)
-    natoms = g.bond_pattern.GetNumVerts()
-    nbonds = g.bond_pattern.GetNumEdges()
+    natoms = grph.bond_pattern.GetNumVerts()
+    nbonds = grph.bond_pattern.GetNumEdges()
 
 
     for line_orig in in_stream:
@@ -103,7 +109,7 @@ def main():
             else:
                 for i in range(0, natoms):
                     abids_l[0][i] = tokens[2 + i]
-            abids = g.canonical_order((tuple(abids_l[0]), tuple(abids_l[1])))
+            abids = grph.canonical_order((tuple(abids_l[0]), tuple(abids_l[1])))
             for i in range(0, natoms):
                 tokens[2 + i] = str(abids[0][i])
 
