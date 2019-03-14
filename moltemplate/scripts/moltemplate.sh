@@ -453,7 +453,7 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         i=$((i+1))
         eval A=\${ARGV${i}}
-	if [ "$A" = "NONE" ]; then
+	if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None"]; then
             SUBGRAPH_SCRIPT_BONDS="bonds_nosym.py"
 	else
             SUBGRAPH_SCRIPT_BONDS=$A
@@ -467,7 +467,7 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         i=$((i+1))
         eval A=\${ARGV${i}}
-	if [ "$A" = "NONE" ]; then
+	if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None"]; then
             SUBGRAPH_SCRIPT_ANGLES="angles_nosym.py"
 	else
             SUBGRAPH_SCRIPT_ANGLES=$A
@@ -481,7 +481,7 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         i=$((i+1))
         eval A=\${ARGV${i}}
-	if [ "$A" = "NONE" ]; then
+	if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None"]; then
             SUBGRAPH_SCRIPT_DIHEDRALS="dihedrals_nosym.py"
 	else
             SUBGRAPH_SCRIPT_DIHEDRALS=$A
@@ -495,7 +495,7 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         i=$((i+1))
         eval A=\${ARGV${i}}
-	if [ "$A" = "NONE" ]; then
+	if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None"]; then
             SUBGRAPH_SCRIPT_IMPROPERS="impropers_nosym.py"
 	else
             SUBGRAPH_SCRIPT_IMPROPERS=$A
