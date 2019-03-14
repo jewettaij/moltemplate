@@ -1,4 +1,4 @@
-##!/usr/bin/env bash
+#!/usr/bin/env bash
 # (note: Classic Bourne shell (#!/bin/sh) also worked at some point.)
 #
 # Author: Andrew Jewett (jewett.aij at g mail)
