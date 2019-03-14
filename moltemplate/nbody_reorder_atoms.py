@@ -60,13 +60,7 @@ def main():
     grph = None
     for name, pkg in package_opts:
         try:
-            sys.stderr.write('name=\"'+name+'\"\n')
-            sys.stderr.write('pkg=\"'+str(pkg)+'\"\n')
-            sys.stderr.write('__package__=\"'+str(__package__)+'\"\n')
-            sys.stderr.write('__name__=\"'+str(__name__)+'\"\n')
-            sys.stderr.write('__spec__=\"'+str(__spec__)+'\"\n')
-            #sys.stderr.write('__spec__.parent=\"'+str(__spec__.parent)+'\"\n')
-            # defines grph.bond_pattern, grph.canonical_order
+            # define grph.bond_pattern, grph.canonical_order
             grph = importlib.import_module(name, pkg)
             break
         except (ImportError, SystemError, ValueError):
