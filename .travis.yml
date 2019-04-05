@@ -25,6 +25,7 @@ script:
   - bash tests/test_read_coords_pdb.sh
   - bash tests/test_ltemplify.sh
   - bash tests/test_oplsaa.sh
+  - bash tests/test_compass.sh
 
 
 # Thanks to Kate Ward, Martin Seener, and Davi Ortega:

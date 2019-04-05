@@ -45,9 +45,9 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.10.11.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.10.12.zip',
 
-  version='2.10.11',
+  version='2.10.12',
 
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],
@@ -80,7 +80,7 @@ setup(
         'ttree.py=moltemplate.ttree:main',
         'ttree_render.py=moltemplate.ttree_render:main',
         'bonds_by_type.py=moltemplate.bonds_by_type:main',
-        'chargepairs_by_type.py=moltemplate.chargepairs_by_type:main',
+        'charge_by_bond.py=moltemplate.charge_by_bond:main',
         'dump2data.py=moltemplate.dump2data:main',
         'extract_espresso_atom_types.py=moltemplate.extract_espresso_atom_types:main',
         'extract_lammps_data.py=moltemplate.extract_lammps_data:main',
