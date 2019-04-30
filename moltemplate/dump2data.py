@@ -22,8 +22,8 @@ A reference DATA file is needed (argument).
 # All rights reserved.
 
 g_program_name = 'dump2data.py'
-g_date_str = '2017-1-07'
-g_version_str = '0.55.0'
+g_date_str = '2019-4-29'
+g_version_str = '0.56.0'
 
 import sys
 from collections import defaultdict
@@ -969,35 +969,70 @@ def main():
                         assert(not frame_xhi_str)
                         frame_xlo_str = tokens[0]
                         frame_xhi_str = tokens[1]
-                        avec[0] = float(frame_xhi_str) - float(frame_xlo_str)
+                        avec = [float(frame_xhi_str) - float(frame_xlo_str),
+                                0.0,
+                                0.0]
                         if (is_triclinic and (len(tokens) > 2)):
                             frame_xy_str = tokens[2]
-                            bvec[0] = float(frame_xy_str)
-                            # See http://lammps.sandia.gov/doc/Section-howto.html#howto_12
-                        # sys.stderr.write('avec='+str(avec)+'\n')
+                            # We will use this to recompute avec,bvec later. See
+                            # https://lammps.sandia.gov/doc/Howto_triclinic.html
 
                     elif not frame_ylo_str:
                         assert(not frame_yhi_str)
                         frame_ylo_str = tokens[0]
                         frame_yhi_str = tokens[1]
-                        bvec[1] = float(frame_yhi_str) - float(frame_ylo_str)
+                        bvec = [0.0,
+                                float(frame_yhi_str) - float(frame_ylo_str),
+                                0.0]
                         if (is_triclinic and (len(tokens) > 2)):
                             frame_xz_str = tokens[2]
-                            cvec[0] = float(frame_xz_str)
-                            # See http://lammps.sandia.gov/doc/Section-howto.html#howto_12
-                        # sys.stderr.write('bvec='+str(bvec)+'\n')
+                            # We will use this to recompute bvec later.  See:
+                            # https://lammps.sandia.gov/doc/Howto_triclinic.html
 
                     elif not frame_zlo_str:
                         assert(not frame_zhi_str)
                         frame_zlo_str = tokens[0]
                         frame_zhi_str = tokens[1]
-                        cvec = [0.0, 0.0, float(
-                            frame_zhi_str) - float(frame_zlo_str)]
-                        if (is_triclinic and (len(tokens) > 2)):
-                            frame_yz_str = tokens[2]
-                            cvec[1] = float(frame_yz_str)
-                            # See http://lammps.sandia.gov/doc/Section-howto.html#howto_12
-                        # sys.stderr.write('cvec='+str(cvec)+'\n')
+                        cvec = [0.0,
+                                0.0,
+                                float(frame_zhi_str) - float(frame_zlo_str)]
+
+                        if is_triclinic:
+                            # https://lammps.sandia.gov/doc/Howto_triclinic.html
+                            frame_yz_str = "0.0"
+                            if len(tokens) > 2:
+                                frame_yz_str = tokens[2]
+                            # If we are using triclinic boundary conditions,
+                            # then we need to update the way we compute the
+                            # lattice vectors: avec, bvec, cvec.
+                            # This was not possible to do until we had read:
+                            #   frame_xy_str, frame_xz_str, and frame_yz_str.
+                            #
+                            # Now that we have read all 3 of them, recompute
+                            # the avec, bvec, cvec vectors according to:
+                            # https://lammps.sandia.gov/doc/Howto_triclinic.html
+                            xlo_bound = str(frame_xlo_str)
+                            xhi_bound = str(frame_xhi_str)
+                            ylo_bound = str(frame_ylo_str)
+                            yhi_bound = str(frame_yhi_str)
+                            zlo_bound = str(frame_zlo_str)
+                            zhi_bound = str(frame_zhi_str)
+                            xy = float(frame_xy_str)
+                            xz = float(frame_xz_str)
+                            yz = float(frame_yz_str)
+                            xlo = xlo_bound - min(0.0, xy, xz, xy+xz)
+                            xhi = xhi_bound - max(0.0, xy, xz, xy+xz)
+                            ylo = ylo_bound - min(0.0, yz)
+                            yhi = yhi_bound - max(0.0, yz)
+                            zlo = zlo_bound
+                            zhi = zhi_bound
+                            avec = [xhi-xlo, 0.0, 0.0]
+                            bvec = [xy, yhi-ylo, 0.0]
+                            cvec = [xz, yz, zhi-zlo]
+                        
+                    # sys.stderr.write('avec='+str(avec)+'\n')
+                    # sys.stderr.write('bvec='+str(bvec)+'\n')
+                    # sys.stderr.write('cvec='+str(cvec)+'\n')
 
                 elif (section.find('ITEM: ATOMS') == 0):
                     tokens = line.split()
@@ -1031,7 +1066,7 @@ def main():
                             avec[2] + ys * bvec[2] + zs * cvec[2]
 
                     # avec, bvec, cvec described here:
-                    # http://lammps.sandia.gov/doc/Section-howto.html#howto_12
+                    # https://lammps.sandia.gov/doc/Howto_triclinic.html
 
                     elif ((i_xsu != -1) and (i_ysu != -1) and (i_zsu != -1)):
                         xsu = float(tokens[i_xsu])  # i_xs determined above
