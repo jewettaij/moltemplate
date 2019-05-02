@@ -72,6 +72,7 @@ class InputError(Exception):
         return str(self)
 
 
+
 class GPSettings(object):
 
     def __init__(self):
@@ -86,6 +87,7 @@ class GPSettings(object):
         self.name_sequence = []
         self.dir_index_offsets = (-1,1)
         self.cuts = []
+        self.reverse_polymer_directions = []
         self.box_padding = None
         self.bonds_name = []
         self.bonds_type = []
@@ -228,6 +230,37 @@ class GPSettings(object):
                             raise InputError(
                                 'Error: file ' + argv[i + 1] + ' should contain only nonnegative integers.\n')
                 del(argv[i:i + 2])
+            elif (argv[i].lower() == '-polymer-directions'):
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
+                try:
+                    f = open(argv[i + 1], "r")
+                except IOError:
+                    raise InputError(
+                        'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
+                self.name_sequence = []
+                for line_orig in f:
+                    line = line_orig.strip()
+                    ic = line.find('#')
+                    if ic != -1:
+                        line = line[:ic]
+                    else:
+                        line = line.strip()
+                    if len(line) > 0:
+                        try:
+                            entry = line
+                            if ((entry == '1') or
+                                (entry == '+1') or
+                                (entry == 'true') or
+                                (entry == 'increasing')):
+                                self.reverse_polymer_directions.append(False)
+                            else:
+                                self.reverse_polymer_directions.append(True)
+                        except ValueError:
+                            raise InputError(
+                                'Error: file ' + argv[i + 1] + ' should contain only \"+1\" or \"-1\" on each line.\n')
+                del(argv[i:i + 2])
             elif (argv[i].lower() == '-polymer-name'):
                 if i + 1 >= len(argv):
                     raise InputError(
@@ -308,6 +341,13 @@ class GPSettings(object):
             else:
                 i += 1
 
+        if ((len(self.reverse_polymer_directions) != 0) and 
+            (len(self.reverse_polymer_directions) != len(self.cuts) + 1)):
+            raise InputError('Error: The number of entries in the file you supplied to "-polymer-directions"\n'
+                             '       does not equal the number of polymers (which is either 1, or 1 + the\n'
+                             '       number of entries in the file you supplied to "-cuts", if applicable)\n')
+
+
         for b in range(0, len(self.bonds_type)):
             if len(self.bonds_type) > 1:
                 self.bonds_name.append('genpoly' + str(b + 1) + '_')
@@ -328,6 +368,7 @@ class GPSettings(object):
                 self.impropers_name.append('genpoly' + str(b + 1) + '_')
             else:
                 self.impropers_name.append('genpoly')
+
 
 
 class WrapPeriodic(object):
@@ -373,12 +414,23 @@ class GenPoly(object):
         self.N = 0
 
     def ParseArgs(self, argv):
+        """ 
+        parse the argument list
+        """
         # The command above will remove arguments from argv which are
         # understood by GPSettings.ParseArgs(argv).  
         # The remaining arguments will be handled below.
         self.settings.ParseArgs(argv)
 
     def ReadCoords(self, infile):
+        """
+        Read x y z coordinates from a 3-column ASCII text file.
+        Store the coordinates in the self.coords_multi[][][] list.
+        (Note: Information stored in self.settings.cuts and 
+               self.settings.reverse_polymer_directions 
+               is used to split the coordinate list into multiple lists
+               and to determine the order that coordinates are read.)
+        """
         coords = []
         lines = infile.readlines()
         for i in range(0, len(lines)):
@@ -394,12 +446,21 @@ class GenPoly(object):
         if len(self.settings.name_sequence) != self.N:
             self.settings.name_sequence = [self.settings.name_monomer] * self.N
 
+        # Did the caller ask us to split the polymer into multiple polymers?
         self.settings.cuts.append(self.N + 1)
         self.settings.cuts.sort()
         i = 0
         for j in self.settings.cuts:
             self.coords_multi.append(coords[i:j])
             i = j
+
+        # Did the caller ask us to reverse the direction of any polymers?
+        for i in range(0, len(self.settings.reverse_polymer_directions)):
+            assert(i < len(self.coords_multi))
+            if self.settings.reverse_polymer_directions[i]:
+                self.coords_multi[i].reverse()
+
+
 
     def ChooseDirections(self, coords):
         """
@@ -433,7 +494,7 @@ class GenPoly(object):
             for d in range(0, 3):
                 self.direction_vects[0][d] = coords[1][d] - coords[0][d]
                 self.direction_vects[
-                    self.N - 1][d] = coords[self.N - 1][d] - coords[self.N - 2][d]
+                    self.N-1][d] = coords[self.N-1][d] - coords[self.N-2][d]
 
         # Optional: normalize the direction vectors
 
@@ -718,8 +779,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.0.5'
-        g_date_str = '2017-4-14'
+        g_version_str = '0.0.6'
+        g_date_str = '2019-5-01'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
