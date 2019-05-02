@@ -532,9 +532,15 @@ class GenPoly(object):
                 outfile.write(self.settings.name_polymer + " {\n\n")
             outfile.write('# Definitions of individual polymers to follow\n\n')
             for i in range(0, len(self.coords_multi)):
+                # insert ".../" in front of the inherits string
+                ih_str = self.settings.inherits
+                ih = ih_str.find('inherits ')
+                if ih != -1:
+                    ih += len('inherits ')
+                    ih_str = ih_str[0:ih] + '.../' + ih_str[ih:]
                 self.WritePolymer(outfile,
                                   self.settings.name_polymer + '_sub' + str(i + 1) +
-                                  self.settings.inherits,
+                                  ih_str,
                                   self.coords_multi[i])
             outfile.write('\n\n'
                           '# Now instantiate all the polymers (once each)\n\n')
@@ -779,8 +785,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.0.6'
-        g_date_str = '2019-5-01'
+        g_version_str = '0.0.7'
+        g_date_str = '2019-5-02'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
