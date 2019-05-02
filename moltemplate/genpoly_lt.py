@@ -110,6 +110,7 @@ class GPSettings(object):
         i = 1
         while i < len(argv):
             #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
+
             if argv[i].lower() == '-bond':
                 if i + 3 >= len(argv):
                     raise InputError(
@@ -206,6 +207,7 @@ class GPSettings(object):
                     if len(line) > 0:
                         self.name_sequence.append(line)
                 del(argv[i:i + 2])
+
             elif (argv[i].lower() == '-cuts'):
                 if i + 1 >= len(argv):
                     raise InputError(
@@ -215,7 +217,6 @@ class GPSettings(object):
                 except IOError:
                     raise InputError(
                         'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
-                self.name_sequence = []
                 for line_orig in f:
                     line = line_orig.strip()
                     ic = line.find('#')
@@ -239,7 +240,6 @@ class GPSettings(object):
                 except IOError:
                     raise InputError(
                         'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
-                self.name_sequence = []
                 for line_orig in f:
                     line = line_orig.strip()
                     ic = line.find('#')
@@ -422,6 +422,7 @@ class GenPoly(object):
         # The remaining arguments will be handled below.
         self.settings.ParseArgs(argv)
 
+
     def ReadCoords(self, infile):
         """
         Read x y z coordinates from a 3-column ASCII text file.
@@ -443,8 +444,11 @@ class GenPoly(object):
             raise InputError(
                 "Error: Coordinate file must have at least 2 positions.\n")
         # Now generate self.settings.name_sequence:
-        if len(self.settings.name_sequence) != self.N:
+        if len(self.settings.name_sequence) == 0:
             self.settings.name_sequence = [self.settings.name_monomer] * self.N
+        elif len(self.settings.name_sequence) != self.N:
+            raise InputError(
+                "Error: Coordinate file and the sequence file have different lengths.\n")
 
         # Did the caller ask us to split the polymer into multiple polymers?
         self.settings.cuts.append(self.N + 1)
@@ -785,7 +789,7 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.0.7'
+        g_version_str = '0.0.8'
         g_date_str = '2019-5-02'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
