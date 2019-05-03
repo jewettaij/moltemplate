@@ -397,14 +397,14 @@ while [ "$i" -lt "$ARGC" ]; do
         unset LTTREE_POSTPROCESS_COMMAND
     elif [ "$A" = "-allow-wildcards" ]; then
         # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
-	if [ -z "$LTTREE_CHECK_ARGS" ]; then
+        if [ -z "$LTTREE_CHECK_ARGS" ]; then
             LTTREE_CHECK_ARGS="\"$A\""
         else
             LTTREE_CHECK_ARGS="${LTTREE_CHECK_ARGS} \"$A\""
         fi
     elif [ "$A" = "-forbid-wildcards" ]; then
         # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
-	if [ -z "$LTTREE_CHECK_ARGS" ]; then
+        if [ -z "$LTTREE_CHECK_ARGS" ]; then
             LTTREE_CHECK_ARGS="\"$A\""
         else
             LTTREE_CHECK_ARGS="${LTTREE_CHECK_ARGS} \"$A\""
@@ -455,9 +455,9 @@ while [ "$i" -lt "$ARGC" ]; do
         eval A=\${ARGV${i}}
         if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None" ]; then
             SUBGRAPH_SCRIPT_BONDS="bonds_nosym.py"
-	else
+        else
             SUBGRAPH_SCRIPT_BONDS=$A
-	fi
+        fi
 
     elif [ "$A" = "-angle-symmetry" ]; then
         # Change the atom ordering rules in a 3-body "angle" interaction:
@@ -469,9 +469,9 @@ while [ "$i" -lt "$ARGC" ]; do
         eval A=\${ARGV${i}}
         if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None" ]; then
             SUBGRAPH_SCRIPT_ANGLES="angles_nosym.py"
-	else
+        else
             SUBGRAPH_SCRIPT_ANGLES=$A
-	fi
+        fi
 
     elif [ "$A" = "-dihedral-symmetry" ]; then
         # Change the atom ordering rules in a 4-body "dihedral" interaction:
@@ -483,9 +483,9 @@ while [ "$i" -lt "$ARGC" ]; do
         eval A=\${ARGV${i}}
         if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None" ]; then
             SUBGRAPH_SCRIPT_DIHEDRALS="dihedrals_nosym.py"
-	else
+        else
             SUBGRAPH_SCRIPT_DIHEDRALS=$A
-	fi
+        fi
 
     elif [ "$A" = "-improper-symmetry" ]; then
         # Change the atom ordering rules in a 4-body "improper" interaction:
@@ -497,9 +497,9 @@ while [ "$i" -lt "$ARGC" ]; do
         eval A=\${ARGV${i}}
         if [ "$A" = "NONE" ] || [ "$A" = "none" ] || [ "$A" = "None" ]; then
             SUBGRAPH_SCRIPT_IMPROPERS="impropers_nosym.py"
-	else
+        else
             SUBGRAPH_SCRIPT_IMPROPERS=$A
-	fi
+        fi
 
     elif [ "$A" = "-xyz" ]; then
         if [ "$i" -eq "$ARGC" ]; then
@@ -543,23 +543,23 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         #echo "  (extracting coordinates from \"$PDB_FILE\")" >&2
         if grep -q '^ATOM  \|^HETATM' "$PDB_FILE"; then
-	    # Extract the coordinates from the PDB file:
+            # Extract the coordinates from the PDB file:
 
-	    # COMMENTING OUT ("pdbsort.py")
+            # COMMENTING OUT ("pdbsort.py")
             # I used to sort the PDB file by (ChainID,SeqNum,InsertCode)
-	    # and then extract the coordinates from the file.
-	    # This turned out to be inconvenient for users.  Instead
-	    # just read the coordinates in the order they appear in the file.
-	    # OLD CODE:
+            # and then extract the coordinates from the file.
+            # This turned out to be inconvenient for users.  Instead
+            # just read the coordinates in the order they appear in the file.
+            # OLD CODE:
             # Extract the coords from the "ATOM" records in the PDB file
             #if ! $PYTHON_COMMAND "${PY_SCR_DIR}/pdbsort.py" < "$PDB_FILE" \
             #    | awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' > "$tmp_atom_coords"; then
             #    ERR_INTERNAL
             #fi
-	    # NEW CODE (USE THIS INSTEAD):
+            # NEW CODE (USE THIS INSTEAD):
             awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' \
-		< "$PDB_FILE" \
-		> "$tmp_atom_coords"
+                < "$PDB_FILE" \
+                > "$tmp_atom_coords"
         else
             echo "$SYNTAX_MSG" >&2
             echo "-----------------------" >&2
@@ -793,7 +793,7 @@ for file in $MOLTEMPLATE_TEMP_FILES; do
         #dos2unix < "$file" > "$file.dos2unix"
         tr -d '\r' < "$file" > "$file.dos2unix"
         rm -f "$file" >/dev/null 2>&1 || true
-	mv -f "$file.dos2unix" "$file"
+        mv -f "$file.dos2unix" "$file"
     fi
 done
 IFS=$OIFS
@@ -821,27 +821,27 @@ if [ -s "${data_atoms}" ]; then
     mv -f "${data_atoms}.tmp" "${data_atoms}"
 else
     if [ -n "$NATOMTYPES" ]; then
-	echo "Error: There are no atoms in your system. Suggestions:" >&2
-	echo "" >&2
-	echo "       Make sure that you have the correct number of curly parenthesis {}." >&2
-	echo "       (Extra \"}\" parenthesis can cause this error.)" >&2
-	echo "" >&2
-	echo "       Your files must contain at least one" >&2
-	echo "           write(\"${data_atoms}\")" >&2
-	echo "       command.  These commands are typically located somewhere in" >&2
-	echo "       one of the molecule object(s) you have defined." >&2
-	echo "" >&2
-	echo "       This error often occurs if your input files lack \"new\" commands." >&2
-	echo "       Once you have defined a type of molecule, you must create a copy" >&2
-	echo "       of it using \"new\", if you want it to appear in your simulation." >&2
-	echo "       See the moltemplate manual or online tutorials for examples." >&2
-	echo "" >&2
-	echo "       (This error also occurs if you instantiated an object using \"new\"" >&2
-	echo "       which you thought was a molecule, but it is actually only a" >&2
-	echo "       namespace, a force-field name or category containing only the" >&2
-	echo "       definitions of other molecules, lacking any atoms of its own.)" >&2
-	echo "" >&2
-	exit 200
+        echo "Error: There are no atoms in your system. Suggestions:" >&2
+        echo "" >&2
+        echo "       Make sure that you have the correct number of curly parenthesis {}." >&2
+        echo "       (Extra \"}\" parenthesis can cause this error.)" >&2
+        echo "" >&2
+        echo "       Your files must contain at least one" >&2
+        echo "           write(\"${data_atoms}\")" >&2
+        echo "       command.  These commands are typically located somewhere in" >&2
+        echo "       one of the molecule object(s) you have defined." >&2
+        echo "" >&2
+        echo "       This error often occurs if your input files lack \"new\" commands." >&2
+        echo "       Once you have defined a type of molecule, you must create a copy" >&2
+        echo "       of it using \"new\", if you want it to appear in your simulation." >&2
+        echo "       See the moltemplate manual or online tutorials for examples." >&2
+        echo "" >&2
+        echo "       (This error also occurs if you instantiated an object using \"new\"" >&2
+        echo "       which you thought was a molecule, but it is actually only a" >&2
+        echo "       namespace, a force-field name or category containing only the" >&2
+        echo "       definitions of other molecules, lacking any atoms of its own.)" >&2
+        echo "" >&2
+        exit 200
     fi
 fi
 
@@ -984,7 +984,7 @@ for FILE in `ls -v "$data_angles_by_type"*.template 2> /dev/null`; do
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
         # if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
-	    #     echo "       It should be located in this directory:" >&2
+            #     echo "       It should be located in this directory:" >&2
         #     echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/" >&2
         #     exit 4
         # fi
@@ -1002,7 +1002,7 @@ for FILE in `ls -v "$data_angles_by_type"*.template 2> /dev/null`; do
             -atoms "${data_atoms}.template" \
             -bonds "${data_bonds}.template" \
             -nbodybytype "${FILE}" \
-	    $CHECKFF \
+            $CHECKFF \
             -prefix '$/angle:bytype' > gen_angles.template.tmp; then
         exit 4
     fi
@@ -1090,7 +1090,7 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template 2> /dev/null`; do
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
         # if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
-	    # echo "       It should be located in this directory:" >&2
+            # echo "       It should be located in this directory:" >&2
         #     echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/" >&2
         #     exit 4
         # fi
@@ -1108,7 +1108,7 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template 2> /dev/null`; do
             -atoms "${data_atoms}.template" \
             -bonds "${data_bonds}.template" \
             -nbodybytype "${FILE}" \
-	    $CHECKFF \
+            $CHECKFF \
             -prefix '$/dihedral:bytype' > gen_dihedrals.template.tmp; then
         exit 4
     fi
@@ -1195,7 +1195,7 @@ for FILE in `ls -v "$data_impropers_by_type"*.template 2> /dev/null`; do
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
         # if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #     echo "Error: File \"$SUBGRAPH_SCRIPT\" not found." >&2
-	    # echo "       It should be located in this directory:" >&2
+            # echo "       It should be located in this directory:" >&2
         #     echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/" >&2
         #     exit 4
         # fi
@@ -1286,20 +1286,20 @@ for file_name in "${in_prefix}"*.template; do
     # file contains both _coeff commands and wildcards *,? on the same line:
     if ! awk '{if (match($1,/'_coeff/') && match($0,/'[*,?]/')) exit 1}' < "$file_name"; then
 
-	echo "expanding wildcards in \"_coeff\" commands in \"$file_name\"" >&2
-	if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
+        echo "expanding wildcards in \"_coeff\" commands in \"$file_name\"" >&2
+        if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
             ERR_INTERNAL
-	fi
+        fi
 
         mv -f "${file_name}.tmp" "$file_name"
-	# Now reassign integers to these variables
-	bn=`basename "$file_name" .template`
-	if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
-	     ttree_assignments.txt \
-	     < "$file_name" \
-	     > "$bn"; then
-	    exit 6
-	fi
+        # Now reassign integers to these variables
+        bn=`basename "$file_name" .template`
+        if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
+             ttree_assignments.txt \
+             < "$file_name" \
+             > "$bn"; then
+            exit 6
+        fi
     fi
 done
 #fi
@@ -1336,12 +1336,12 @@ fi
 if [ -s "${data_bonds}" ]; then
     SUBGRAPH_SCRIPT="nbody_Bonds.py"
     if [ -n "$SUBGRAPH_SCRIPT_BONDS" ]; then
-	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_BONDS"
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_BONDS"
     fi
     if [ ! -z $REMOVE_DUPLICATE_BONDS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Bonds \
-	                     "$SUBGRAPH_SCRIPT" \
+                             "$SUBGRAPH_SCRIPT" \
                              < "${data_bonds}" \
                              > "${data_bonds}.tmp"; then
             ERR_INTERNAL
@@ -1374,12 +1374,12 @@ fi
 if [ -s "${data_angles}" ]; then
     SUBGRAPH_SCRIPT="nbody_Angles.py"
     if [ -n "$SUBGRAPH_SCRIPT_ANGLES" ]; then
-	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_ANGLES"
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_ANGLES"
     fi
     if [ ! -z $REMOVE_DUPLICATE_ANGLES ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Angles \
-	                     "$SUBGRAPH_SCRIPT" \
+                             "$SUBGRAPH_SCRIPT" \
                              < "${data_angles}" \
                              > "${data_angles}.tmp"; then
             ERR_INTERNAL
@@ -1406,7 +1406,7 @@ if [ -s "${data_angles}" ]; then
     mv -f "${data_angles}.tmp" "${data_angles}"
 
     if  [ ! -z $FILE_angles_by_type2 ]; then
-	MSG_MULTIPLE_ANGLE_RULES=$(cat <<EOF
+        MSG_MULTIPLE_ANGLE_RULES=$(cat <<EOF
 #############################################################################
 WARNING:
   It appears as though multiple conflicting rules were used to generate
@@ -1425,7 +1425,7 @@ please check the list of angle interactions to make sure they are correct!
 
 EOF
 )
-	echo "$MSG_MULTIPLE_ANGLE_RULES" >&2
+        echo "$MSG_MULTIPLE_ANGLE_RULES" >&2
     fi
 fi
 
@@ -1435,12 +1435,12 @@ fi
 if [ -s "${data_dihedrals}" ]; then
     SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
     if [ -n "$SUBGRAPH_SCRIPT_DIHEDRALS" ]; then
-	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_DIHEDRALS"
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_DIHEDRALS"
     fi
     if [ ! -z $REMOVE_DUPLICATE_DIHEDRALS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Dihedrals \
-	                     "$SUBGRAPH_SCRIPT" \
+                             "$SUBGRAPH_SCRIPT" \
                              < "${data_dihedrals}" \
                              > "${data_dihedrals}.tmp"; then
             ERR_INTERNAL
@@ -1467,7 +1467,7 @@ if [ -s "${data_dihedrals}" ]; then
     mv -f "${data_dihedrals}.tmp" "${data_dihedrals}"
 
     if  [ ! -z $FILE_dihedrals_by_type2 ]; then
-	MSG_MULTIPLE_DIHEDRAL_RULES=$(cat <<EOF
+        MSG_MULTIPLE_DIHEDRAL_RULES=$(cat <<EOF
 #############################################################################
 WARNING:
   It appears as though multiple conflicting rules were used to generate
@@ -1486,7 +1486,7 @@ please check the list of dihedral interactions to make sure they are correct!
 
 EOF
 )
-	echo "$MSG_MULTIPLE_DIHEDRAL_RULES" >&2
+        echo "$MSG_MULTIPLE_DIHEDRAL_RULES" >&2
     fi
 fi
 
@@ -1494,12 +1494,12 @@ fi
 if [ -s "${data_impropers}" ]; then
     SUBGRAPH_SCRIPT="nbody_Impropers.py"
     if [ -n "$SUBGRAPH_SCRIPT_IMPROPERS" ]; then
-	SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_IMPROPERS"
+        SUBGRAPH_SCRIPT="$SUBGRAPH_SCRIPT_IMPROPERS"
     fi
     if [ ! -z $REMOVE_DUPLICATE_IMPROPERS ]; then
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/nbody_reorder_atoms.py" \
                              Impropers \
-	                     "$SUBGRAPH_SCRIPT" \
+                             "$SUBGRAPH_SCRIPT" \
                              < "${data_impropers}" \
                              > "${data_impropers}.tmp"; then
             ERR_INTERNAL
@@ -1526,7 +1526,7 @@ if [ -s "${data_impropers}" ]; then
     mv -f "${data_impropers}.tmp" "${data_impropers}"
 
     if  [ ! -z $FILE_impropers_by_type2 ]; then
-	MSG_MULTIPLE_IMPROPER_RULES=$(cat <<EOF
+        MSG_MULTIPLE_IMPROPER_RULES=$(cat <<EOF
 #############################################################################
 WARNING:
   It appears as though multiple conflicting rules were used to generate
@@ -1545,7 +1545,7 @@ please check the list of improper interactions to make sure they are correct!
 
 EOF
 )
-	echo "$MSG_MULTIPLE_IMPROPER_RULES" >&2
+        echo "$MSG_MULTIPLE_IMPROPER_RULES" >&2
     fi
 
 fi
@@ -1962,9 +1962,9 @@ fi
 
 if [ -s "$data_atoms" ]; then
     if [ -n "$ATOM_STYLE" ]; then
-	echo "Atoms  # $ATOM_STYLE" >> "$OUT_FILE_DATA"
+        echo "Atoms  # $ATOM_STYLE" >> "$OUT_FILE_DATA"
     else
-	echo "Atoms  # full" >> "$OUT_FILE_DATA"
+        echo "Atoms  # full" >> "$OUT_FILE_DATA"
     fi
     #if [ -s "$tmp_atom_coords" ]; then
     #    echo "# (Note: x,y,z coordinates may overlap and can be modified later.)" >> "$OUT_FILE_DATA"
@@ -2192,7 +2192,7 @@ ls "${data_prefix}"* 2> /dev/null | while read file_name; do
     mv -f "$file_name" output_ttree/
 done
 
-					  
+
 
 if [ -e "$data_prefix_no_space" ]; then
     echo "" >> "$OUT_FILE_DATA"
@@ -2307,10 +2307,10 @@ for file_name in "${OUT_FILE_INPUT_SCRIPT}."*; do
         continue
     fi
     if [[ "$file_name" == *.tmp ]]; then
-	continue
+        continue
     fi
     if [[ "$file_name" == *.template ]]; then
-	continue
+        continue
     fi
     echo "postprocessing file \"$file_name\"" >&2
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_input_script.py" input_scripts_so_far.tmp < "$file_name" > "$file_name.tmp"; then

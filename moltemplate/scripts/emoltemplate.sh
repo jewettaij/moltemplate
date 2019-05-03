@@ -129,7 +129,7 @@ else
     ETFILE_BASE=`basename "$LAST_ARG" .ET`
     ETFILE_NO_EXT="${ETFILE_DIR}/${ETFILE_BASE}"
     if [ "$ETFILE_NO_EXT" != "$ETFILE" ]; then
-	OUT_FILE_BASE="$ETFILE_BASE"
+        OUT_FILE_BASE="$ETFILE_BASE"
     fi
 fi
 OUT_FILE_TCL="${OUT_FILE_BASE}.tcl"
@@ -353,20 +353,20 @@ while [ "$i" -lt "$ARGC" ]; do
     i=$((i+1))
     eval A=\${ARGV${i}}
     if [ "$A" = "-nocheck" ]; then
-	# Disable syntax checking by undefining ETTREE_CHECK_COMMAND
-	unset ETTREE_CHECK_COMMAND
+        # Disable syntax checking by undefining ETTREE_CHECK_COMMAND
+        unset ETTREE_CHECK_COMMAND
     elif [ "$A" = "-overlay-bonds" ]; then
-	# In that case, do not remove duplicate bond interactions
-	unset REMOVE_DUPLICATE_BONDS
+        # In that case, do not remove duplicate bond interactions
+        unset REMOVE_DUPLICATE_BONDS
     elif [ "$A" = "-overlay-angles" ]; then
-	# In that case, do not remove duplicate angle interactions
-	unset REMOVE_DUPLICATE_ANGLES
+        # In that case, do not remove duplicate angle interactions
+        unset REMOVE_DUPLICATE_ANGLES
     elif [ "$A" = "-overlay-dihedrals" ]; then
-	# In that case, do not remove duplicate dihedral interactions
-	unset REMOVE_DUPLICATE_DIHEDRALS
+        # In that case, do not remove duplicate dihedral interactions
+        unset REMOVE_DUPLICATE_DIHEDRALS
     elif [ "$A" = "-overlay-impropers" ]; then
-	# In that case, do not remove duplicate improper interactions
-	unset REMOVE_DUPLICATE_IMPROPERS
+        # In that case, do not remove duplicate improper interactions
+        unset REMOVE_DUPLICATE_IMPROPERS
     elif [ "$A" = "-raw" ]; then
         if [ "$i" -eq "$ARGC" ]; then
             echo "$SYNTAX_MSG" >&2
@@ -390,12 +390,12 @@ while [ "$i" -lt "$ARGC" ]; do
             echo "$SYNTAX_MSG" >&2
             exit 2
         fi
-	# "isnum(x)" returns 1 or 0 depending upon whether or not
-	# a string is numeric.
-	#http://rosettacode.org/wiki/Determine_if_a_string_is_numeric#AWK
+        # "isnum(x)" returns 1 or 0 depending upon whether or not
+        # a string is numeric.
+        #http://rosettacode.org/wiki/Determine_if_a_string_is_numeric#AWK
         i=$((i+1))
         eval A=\${ARGV${i}}
-	XYZ_FILE=$A
+        XYZ_FILE=$A
         if [ ! -s "$XYZ_FILE" ]; then
             echo "$SYNTAX_MSG" >&2
             echo "-----------------------" >&2
@@ -404,8 +404,8 @@ while [ "$i" -lt "$ARGC" ]; do
             echo "       (File is empty or does not exist.)" >&2
             exit 3
         fi
-	#echo "  (extracting coordinates from \"$XYZ_FILE\")" >&2
-	awk 'function isnum(x){return(x==x+0)} BEGIN{targetframe=1;framecount=0} {if (isnum($0)) {framecount++} else{if (framecount==targetframe){  if (NF>0) { if ((NF==3) && isnum($1)) {print $1" "$2" "$3} else if ((NF==4) && isnum($2)) {print $2" "$3" "$4} }}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
+        #echo "  (extracting coordinates from \"$XYZ_FILE\")" >&2
+        awk 'function isnum(x){return(x==x+0)} BEGIN{targetframe=1;framecount=0} {if (isnum($0)) {framecount++} else{if (framecount==targetframe){  if (NF>0) { if ((NF==3) && isnum($1)) {print $1" "$2" "$3} else if ((NF==4) && isnum($2)) {print $2" "$3" "$4} }}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
 
     elif [ "$A" = "-pdb" ]; then 
         if [ "$i" -eq "$ARGC" ]; then
@@ -423,8 +423,8 @@ while [ "$i" -lt "$ARGC" ]; do
             echo "       (File is empty or does not exist.)" >&2
             exit 3
         fi
-	#echo "  (extracting coordinates from \"$PDB_FILE\")" >&2
-	if grep -q '^ATOM  \|^HETATM' "$PDB_FILE"; then
+        #echo "  (extracting coordinates from \"$PDB_FILE\")" >&2
+        if grep -q '^ATOM  \|^HETATM' "$PDB_FILE"; then
             # Extract the coords from the "ATOM" records in the PDB file
             pdbsort.py < "$PDB_FILE" | awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' > "$tmp_atom_coords"
         else
@@ -437,12 +437,12 @@ while [ "$i" -lt "$ARGC" ]; do
         # Now extract the periodic bounding-box informatio from the PDB file
         # The CRYST1 records are described at:
         # http://deposit.rcsb.org/adit/docs/pdb_atom_format.html
-	BOXSIZE_A=-1.0
-	BOXSIZE_B=-1.0
-	BOXSIZE_C=-1.0
-	ALPHA=" 90.00"  #Note: The space before the number in " 90.00" is intentional.
-	BETA=" 90.00"   #      Later we will check to see if the system is triclinic
-	GAMMA=" 90.00"  #      by comparing these strings for equality with " 90.00"
+        BOXSIZE_A=-1.0
+        BOXSIZE_B=-1.0
+        BOXSIZE_C=-1.0
+        ALPHA=" 90.00"  #Note: The space before the number in " 90.00" is intentional.
+        BETA=" 90.00"   #      Later we will check to see if the system is triclinic
+        GAMMA=" 90.00"  #      by comparing these strings for equality with " 90.00"
         if grep -qF "CRYST1" "$PDB_FILE"; then
             BOXSIZE_A=`awk '/CRYST1/{print substr($0,8,8)}' < "$PDB_FILE"`
             BOXSIZE_B=`awk '/CRYST1/{print substr($0,17,8)}' < "$PDB_FILE"`
@@ -460,34 +460,34 @@ while [ "$i" -lt "$ARGC" ]; do
             # equations are correct, but I don't know if their are special cases 
             # that require the coordinates to be rotated or processed beforehand.
             # This is an experimental feature.
-	    TRICLINIC="True"
-	    PI=3.1415926535897931
-	    BOXSIZE_X=$BOXSIZE_A
-	    BOXSIZE_Y=`awk "BEGIN{print $BOXSIZE_B*sin($GAMMA*$PI/180.0)}"`
-	    BOXSIZE_XY=`awk "BEGIN{print $BOXSIZE_B*cos($GAMMA*$PI/180.0)}"`
-	    BOXSIZE_XZ=`awk "BEGIN{print $BOXSIZE_C*cos($BETA*$PI/180.0)}"`
-	    BOXSIZE_YZ=`awk "BEGIN{ca=cos($ALPHA*$PI/180.0); cb=cos($BETA*$PI/180.0); cg=cos($GAMMA*$PI/180.0); sg=sin($GAMMA*$PI/180.0); c=$BOXSIZE_C; print c*(ca-(cg*cb))/sg}"`
-	    BOXSIZE_Z=`awk "BEGIN{print sqrt(($BOXSIZE_C**2)-(($BOXSIZE_XZ**2)+($BOXSIZE_YZ**2)))}"`
+            TRICLINIC="True"
+            PI=3.1415926535897931
+            BOXSIZE_X=$BOXSIZE_A
+            BOXSIZE_Y=`awk "BEGIN{print $BOXSIZE_B*sin($GAMMA*$PI/180.0)}"`
+            BOXSIZE_XY=`awk "BEGIN{print $BOXSIZE_B*cos($GAMMA*$PI/180.0)}"`
+            BOXSIZE_XZ=`awk "BEGIN{print $BOXSIZE_C*cos($BETA*$PI/180.0)}"`
+            BOXSIZE_YZ=`awk "BEGIN{ca=cos($ALPHA*$PI/180.0); cb=cos($BETA*$PI/180.0); cg=cos($GAMMA*$PI/180.0); sg=sin($GAMMA*$PI/180.0); c=$BOXSIZE_C; print c*(ca-(cg*cb))/sg}"`
+            BOXSIZE_Z=`awk "BEGIN{print sqrt(($BOXSIZE_C**2)-(($BOXSIZE_XZ**2)+($BOXSIZE_YZ**2)))}"`
         else
-	    BOXSIZE_X=$BOXSIZE_A
-	    BOXSIZE_Y=$BOXSIZE_B
-	    BOXSIZE_Z=$BOXSIZE_C
-	    BOXSIZE_XY=0.0
-	    BOXSIZE_XZ=0.0
-	    BOXSIZE_YZ=0.0
-	fi
-	BOXSIZE_MINX=0.0
-	BOXSIZE_MINY=0.0
-	BOXSIZE_MINZ=0.0
-	BOXSIZE_MAXX=$BOXSIZE_X
-	BOXSIZE_MAXY=$BOXSIZE_Y
-	BOXSIZE_MAXZ=$BOXSIZE_Z
+            BOXSIZE_X=$BOXSIZE_A
+            BOXSIZE_Y=$BOXSIZE_B
+            BOXSIZE_Z=$BOXSIZE_C
+            BOXSIZE_XY=0.0
+            BOXSIZE_XZ=0.0
+            BOXSIZE_YZ=0.0
+        fi
+        BOXSIZE_MINX=0.0
+        BOXSIZE_MINY=0.0
+        BOXSIZE_MINZ=0.0
+        BOXSIZE_MAXX=$BOXSIZE_X
+        BOXSIZE_MAXY=$BOXSIZE_Y
+        BOXSIZE_MAXZ=$BOXSIZE_Z
 
     #else:  If the arguments are not understood in this script, then
     #       pass them on to "ettree.py"
     elif [ "$i" -lt "$ARGC" ]; then
-	if [ -z "$TTREE_ARGS" ]; then
-	    TTREE_ARGS="\"$A\""
+        if [ -z "$TTREE_ARGS" ]; then
+            TTREE_ARGS="\"$A\""
         else
             TTREE_ARGS="${TTREE_ARGS} \"$A\""
         fi
@@ -551,7 +551,7 @@ for file in $MOLTEMPLATE_TEMP_FILES; do
         #dos2unix < "$file" > "$file.dos2unix"
         tr -d '\r' < "$file" > "$file.dos2unix"
         rm -f "$file" >/dev/null 2>&1 || true
-	mv -f "$file.dos2unix" "$file"
+        mv -f "$file.dos2unix" "$file"
     fi
 done
 IFS=$OIFS
@@ -585,7 +585,7 @@ if [ -s "${data_bond_list}.template" ]; then
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/extract_espresso_atom_types.py" \
         < "${data_atoms}.template" \
         > "${data_atoms}.template.minimal"; then
-	exit 4
+        exit 4
     fi
 
     # Note: The 3 lines above are usually equivalent to:
@@ -696,7 +696,7 @@ for FILE in "$data_angles_by_type"*.template; do
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
         #if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #    echo "Error: File \"$SUBGRAPH_SCRIPT\" not found.\n" >&2
-	#    echo "       It should be located in this directory:\n" >&2
+        #    echo "       It should be located in this directory:\n" >&2
         #    echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/\n" >&2
         #    exit 4
         #fi
@@ -710,7 +710,7 @@ for FILE in "$data_angles_by_type"*.template; do
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/extract_espresso_atom_types.py" \
         < "${data_atoms}.template" \
         > "${data_atoms}.template.minimal"; then
-	exit 4
+        exit 4
     fi
     # Note: The 3 lines above are usually equivalent to:
     #awk '{print $2" "$8}' \
@@ -816,7 +816,7 @@ for FILE in "$data_dihedrals_by_type"*.template; do
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
         #if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #    echo "Error: File \"$SUBGRAPH_SCRIPT\" not found.\n" >&2
-	#    echo "       It should be located in this directory:\n" >&2
+        #    echo "       It should be located in this directory:\n" >&2
         #    echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/\n" >&2
         #    exit 4
         #fi
@@ -830,7 +830,7 @@ for FILE in "$data_dihedrals_by_type"*.template; do
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/extract_espresso_atom_types.py" \
         < "${data_atoms}.template" \
         > "${data_atoms}.template.minimal"; then
-	exit 4
+        exit 4
     fi
     # Note: The 3 lines above are usually equivalent to:
     #awk '{print $2" "$8}' \
@@ -939,7 +939,7 @@ for FILE in "$data_impropers_by_type"*.template; do
         echo "(using the rules in \"$SUBGRAPH_SCRIPT\")" >&2
         #if [ ! -s "${PY_SCR_DIR}/nbody_alt_symmetry/$SUBGRAPH_SCRIPT" ]; then
         #    echo "Error: File \"$SUBGRAPH_SCRIPT\" not found.\n" >&2
-	#    echo "       It should be located in this directory:\n" >&2
+        #    echo "       It should be located in this directory:\n" >&2
         #    echo "       ${PY_SCR_DIR}/nbody_alt_symmetry/\n" >&2
         #    exit 4
         #fi
@@ -953,7 +953,7 @@ for FILE in "$data_impropers_by_type"*.template; do
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/extract_espresso_atom_types.py" \
         < "${data_atoms}.template" \
         > "${data_atoms}.template.minimal"; then
-	exit 4
+        exit 4
     fi
     # Note: The 3 lines above are usually equivalent to:
     #awk '{print $2" "$8}' \
@@ -1113,28 +1113,28 @@ elif [ -z "$BOXSIZE_MINX" ] || [ -z "$BOXSIZE_MAXX" ] || [ -z "$BOXSIZE_MINY" ] 
         # Estimate the minimimum, maximum x,y,z values
         # from the coordinate data.
 
-	MINMAX_BOUNDS=`awk 'BEGIN{first=1}{if (NF>=3){x=$1; y=$2; z=$3; if (first) {first=0; xmin=x; xmax=x; ymin=y; ymax=y; zmin=z; zmax=z;} else {if (x<xmin) xmin=x; if (x>xmax) xmax=x; if (y<ymin) ymin=y; if (y>ymax) ymax=y; if (z<zmin) zmin=z; if (z>zmax) zmax=z;}}} END{print xmin" "xmax" "ymin" "ymax" "zmin" "zmax;}' < "$tmp_atom_coords"`
+        MINMAX_BOUNDS=`awk 'BEGIN{first=1}{if (NF>=3){x=$1; y=$2; z=$3; if (first) {first=0; xmin=x; xmax=x; ymin=y; ymax=y; zmin=z; zmax=z;} else {if (x<xmin) xmin=x; if (x>xmax) xmax=x; if (y<ymin) ymin=y; if (y>ymax) ymax=y; if (z<zmin) zmin=z; if (z>zmax) zmax=z;}}} END{print xmin" "xmax" "ymin" "ymax" "zmin" "zmax;}' < "$tmp_atom_coords"`
 
         # ...and add a narrow margin (10%) around the boundaries:
-	BOXSIZE_MINX=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$2-$1; print $1-0.0*margin*width}"`
-	BOXSIZE_MAXX=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$2-$1; print $2+1.0*margin*width}"`
-	BOXSIZE_MINY=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$4-$3; print $3-0.0*margin*width}"`
-	BOXSIZE_MAXY=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$4-$3; print $4+1.0*margin*width}"`
-	BOXSIZE_MINZ=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$6-$5; print $5-0.0*margin*width}"`
-	BOXSIZE_MAXZ=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$6-$5; print $6+1.0*margin*width}"`
+        BOXSIZE_MINX=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$2-$1; print $1-0.0*margin*width}"`
+        BOXSIZE_MAXX=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$2-$1; print $2+1.0*margin*width}"`
+        BOXSIZE_MINY=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$4-$3; print $3-0.0*margin*width}"`
+        BOXSIZE_MAXY=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$4-$3; print $4+1.0*margin*width}"`
+        BOXSIZE_MINZ=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$6-$5; print $5-0.0*margin*width}"`
+        BOXSIZE_MAXZ=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$6-$5; print $6+1.0*margin*width}"`
     else
         # By default, choose some reasonably large box:
-	BOXSIZE_MINX="0.0"
-	BOXSIZE_MAXX="100.0"
-	BOXSIZE_MINY="0.0"
-	BOXSIZE_MAXY="100.0"
-	BOXSIZE_MINZ="0.0"
-	BOXSIZE_MAXZ="100.0"
-	# ...and print message scolding the user for being lazy
-	#echo "----------------------------------------------------------------------" >&2
+        BOXSIZE_MINX="0.0"
+        BOXSIZE_MAXX="100.0"
+        BOXSIZE_MINY="0.0"
+        BOXSIZE_MAXY="100.0"
+        BOXSIZE_MINZ="0.0"
+        BOXSIZE_MAXZ="100.0"
+        # ...and print message scolding the user for being lazy
+        #echo "----------------------------------------------------------------------" >&2
         #echo "---- Warning: Unable to determine periodic boundary conditions.   ----" >&2
-	#echo "----          This is probably okay.                              ----" >&2
-	#echo "----------------------------------------------------------------------" >&2
+        #echo "----          This is probably okay.                              ----" >&2
+        #echo "----------------------------------------------------------------------" >&2
     fi
 
 elif [ -n $TRICLINIC ]; then
@@ -1165,7 +1165,7 @@ if [ -s "$data_bond_coeffs" ]; then
     cat "$data_bond_coeffs" >> "$OUT_FILE_TCL"
 #else
 #    if [ -n "$NBONDTYPES" ] && ( [ ! -s "$in_settings" ] || (! grep -q bond_coeff "$in_settings") ); then
-#	echo "WARNING: no bond coeff have been set!" >&2
+#        echo "WARNING: no bond coeff have been set!" >&2
 #    fi
 fi
 
@@ -1176,7 +1176,7 @@ if [ -s "$data_angle_coeffs" ]; then
     cat "$data_angle_coeffs" >> "$OUT_FILE_TCL"
 #else
 #    if [ -n "$NANGLETYPES" ] && ( [ ! -s "$in_settings" ] || (! grep -q angle_coeff "$in_settings") ); then
-#	echo "WARNING: no angle coeff have been set!" >&2
+#        echo "WARNING: no angle coeff have been set!" >&2
 #    fi
 fi
 
@@ -1187,7 +1187,7 @@ if [ -s "$data_dihedral_coeffs" ]; then
     cat "$data_dihedral_coeffs" >> "$OUT_FILE_TCL"
 #else
 #    if [ -n "$NDIHEDRALTYPES" ] && ( [ ! -s "$in_settings" ] || (! grep -q dihedral_coeff "$in_settings") ); then
-#	echo "WARNING: no dihedral coeffs have been set!" >&2
+#        echo "WARNING: no dihedral coeffs have been set!" >&2
 #    fi
 fi
 
@@ -1198,7 +1198,7 @@ if [ -s "$data_improper_coeffs" ]; then
     cat "$data_improper_coeffs" >> "$OUT_FILE_TCL"
 #else
 #    if [ -n "$NIMPROPERTYPES" ] && ( [ ! -s "$in_settings" ] || (! grep -q improper_coeff "$in_settings") ); then
-#	echo "WARNING: no improper coeffs have been set!" >&2
+#        echo "WARNING: no improper coeffs have been set!" >&2
 #    fi
 fi
 
@@ -1222,7 +1222,7 @@ if [ -s "$tmp_atom_coords" ]; then
     NATOMCRDS=`awk '{if (NF>=3) natom+=1} END{print(natom)}' < "$tmp_atom_coords"`
     if [ $NATOMS -ne $NATOMCRDS ]; then 
         echo "Error: Number of atoms in coordinate file provided by user ($NATOMCRDS)" >&2
-	echo "does not match the number of atoms generated in ttree file ($NATOMS)" >&2
+        echo "does not match the number of atoms generated in ttree file ($NATOMS)" >&2
         exit 6
     fi
 fi
