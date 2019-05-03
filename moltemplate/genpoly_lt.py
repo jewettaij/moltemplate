@@ -82,9 +82,9 @@ class GPSettings(object):
         self.delta_phi = 0.0
         self.header = 'import \"forcefield.lt\"'
         self.name_monomer = 'Monomer'
+        self.name_sequence_filename = ''
         self.name_polymer = ''
         self.inherits = ''
-        self.name_sequence = []
         self.dir_index_offsets = (-1,1)
         self.cuts = []
         self.reverse_polymer_directions = []
@@ -191,21 +191,7 @@ class GPSettings(object):
                 if i + 1 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by a file name\n')
-                try:
-                    f = open(argv[i + 1], "r")
-                except IOError:
-                    raise InputError(
-                        'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
-                self.name_sequence = []
-                for line_orig in f:
-                    line = line_orig.strip()
-                    ic = line.find('#')
-                    if ic != -1:
-                        line = line[:ic]
-                    else:
-                        line = line.strip()
-                    if len(line) > 0:
-                        self.name_sequence.append(line)
+                self.name_sequence_filename = argv[i + 1]
                 del(argv[i:i + 2])
 
             elif (argv[i].lower() == '-cuts'):
@@ -408,6 +394,7 @@ class GenPoly(object):
     def __init__(self):
         self.settings = GPSettings()
         self.coords_multi = []  # a list-of-list-of-lists of numbers Nxnx3
+        self.name_sequence_multi = []
         self.direction_vects = []
         self.box_bounds_min = [0.0, 0.0, 0.0]
         self.box_bounds_max = [0.0, 0.0, 0.0]
@@ -432,7 +419,18 @@ class GenPoly(object):
                is used to split the coordinate list into multiple lists
                and to determine the order that coordinates are read.)
         """
+        filename = ''
+        if isinstance(infile, str):
+            filename = infile
+            try:
+                infile = open(filename, 'r')
+            except IOError:
+                raise InputError(
+                    'Error: file ' + filename +
+                    ' could not be opened for reading\n')
+
         coords = []
+
         lines = infile.readlines()
         for i in range(0, len(lines)):
             tokens = lines[i].strip().split()
@@ -443,16 +441,12 @@ class GenPoly(object):
         if self.N < 2:
             raise InputError(
                 "Error: Coordinate file must have at least 2 positions.\n")
-        # Now generate self.settings.name_sequence:
-        if len(self.settings.name_sequence) == 0:
-            self.settings.name_sequence = [self.settings.name_monomer] * self.N
-        elif len(self.settings.name_sequence) != self.N:
-            raise InputError(
-                "Error: Coordinate file and the sequence file have different lengths.\n")
 
         # Did the caller ask us to split the polymer into multiple polymers?
-        self.settings.cuts.append(self.N + 1)
-        self.settings.cuts.sort()
+        if len(self.settings.cuts) > 0:
+            if (self.settings.cuts[-1] < self.N+1):
+                self.settings.cuts.append(self.N + 1)
+                self.settings.cuts.sort()
         i = 0
         for j in self.settings.cuts:
             self.coords_multi.append(coords[i:j])
@@ -464,6 +458,60 @@ class GenPoly(object):
             if self.settings.reverse_polymer_directions[i]:
                 self.coords_multi[i].reverse()
 
+        if filename != '':
+            # Then we opened a new file with that name.  We should close it now.
+            infile.close()
+
+
+
+    def ReadSequence(self, infile):
+        """
+        Read a sequence of monomer type names from a file.
+        This function is similar to ReadCoords().
+        """
+        name_sequence = []
+
+        filename = ''
+        if isinstance(infile, str):
+            filename = infile
+            try:
+                infile = open(filename, 'r')
+            except IOError:
+                raise InputError(
+                    'Error: file ' + filename +
+                    ' could not be opened for reading\n')
+
+        for line_orig in infile:
+            line = line_orig.strip()
+            ic = line.find('#')
+            if ic != -1:
+                line = line[:ic]
+            else:
+                line = line.strip()
+                if len(line) > 0:
+                    name_sequence.append(line)
+
+        N = len(name_sequence)
+
+        # Did the caller ask us to split the polymer into multiple polymers?
+        if len(self.settings.cuts) > 0:
+            if (self.settings.cuts[-1] < N+1):
+                self.settings.cuts.append(N + 1)
+                self.settings.cuts.sort()
+        i = 0
+        for j in self.settings.cuts:
+            self.name_sequence_multi.append(name_sequence[i:j])
+            i = j
+
+        # Did the caller ask us to reverse the direction of any polymers?
+        for i in range(0, len(self.settings.reverse_polymer_directions)):
+            if self.settings.reverse_polymer_directions[i]:
+                self.name_sequence_multi[i].reverse()
+
+        if filename != '':
+            # Then we opened a new file with that name.  We should close it now.
+            infile.close()
+
 
 
     def ChooseDirections(self, coords):
@@ -472,24 +520,24 @@ class GenPoly(object):
 
         """
 
-        self.N = len(coords)
-        self.direction_vects = [[0.0, 0.0, 0.0] for i in range(0, self.N + 1)]
+        N = len(coords)
+        self.direction_vects = [[0.0, 0.0, 0.0] for i in range(0, N + 1)]
 
         if self.settings.is_circular:
-            for i in range(0, self.N):
+            for i in range(0, N):
                 # By default, the direction that monomer "i" is pointing is
                 # determined by the position of the monomers before and after it
                 # (at index i-1, and i+1).  More generally, we allow the user
                 # to choose what these offsets are ("dir_index_offsets[")
                 ia = WrapPeriodic.Wrap(i + self.settings.dir_index_offsets[0],
-                                       self.N)
+                                       N)
                 ib = WrapPeriodic.Wrap(i + self.settings.dir_index_offsets[1],
-                                       self.N)
+                                       N)
                 for d in range(0, 3):
-                    self.direction_vects[i][d] = coords[
-                        ib][d] - coords[ia][d]
+                    self.direction_vects[i][d] = coords[ib][d] - coords[ia][d]
+                        
         else:
-            for i in range(1, self.N - 1):
+            for i in range(1, N - 1):
                 for d in range(0, 3):
                     self.direction_vects[i][d] = coords[
                         i + self.settings.dir_index_offsets[1]][d] - coords[
@@ -497,12 +545,11 @@ class GenPoly(object):
 
             for d in range(0, 3):
                 self.direction_vects[0][d] = coords[1][d] - coords[0][d]
-                self.direction_vects[
-                    self.N-1][d] = coords[self.N-1][d] - coords[self.N-2][d]
+                self.direction_vects[N-1][d] = coords[N-1][d] - coords[N-2][d]
 
         # Optional: normalize the direction vectors
 
-        for i in range(0, self.N):
+        for i in range(0, N):
             direction_len = 0.0
             for d in range(0, 3):
                 direction_len += (self.direction_vects[i][d])**2
@@ -530,7 +577,8 @@ class GenPoly(object):
             self.WritePolymer(outfile,
                               self.settings.name_polymer +
                               self.settings.inherits,
-                              self.coords_multi[0])
+                              self.coords_multi[0],
+                              self.name_sequence_multi[0])
         else:
             if self.settings.name_polymer != '':
                 outfile.write(self.settings.name_polymer + " {\n\n")
@@ -545,7 +593,8 @@ class GenPoly(object):
                 self.WritePolymer(outfile,
                                   self.settings.name_polymer + '_sub' + str(i + 1) +
                                   ih_str,
-                                  self.coords_multi[i])
+                                  self.coords_multi[i],
+                                  self.name_sequence_multi[i])
             outfile.write('\n\n'
                           '# Now instantiate all the polymers (once each)\n\n')
 
@@ -567,11 +616,13 @@ class GenPoly(object):
     def WritePolymer(self,
                      outfile,
                      name_polymer,
-                     coords):
+                     coords,
+                     names_monomers):
         """ Write a single polymer object to a file.
             This function is invoked by WriteLTFile()
 
         """
+        N = len(coords)
         self.ChooseDirections(coords)
 
         if name_polymer != '':
@@ -596,11 +647,11 @@ class GenPoly(object):
 
         outfile.write("push(move(0,0,0))\n")
 
-        for i in range(0, self.N):
+        for i in range(0, N):
             #im1 = i-1
             # if im1 < 0 or self.settings.connect_ends:
             #    if im1 < 0:
-            #        im1 += self.N
+            #        im1 += N
             outfile.write("pop()\n")
             outfile.write("push(rotvv(" +
                           str(self.direction_vects[i - 1][0]) + "," +
@@ -617,7 +668,7 @@ class GenPoly(object):
                           str(coords[i][2]) + "))\n")
 
             outfile.write("mon[" + str(i) + "] = new " +
-                          self.settings.name_sequence[i] +
+                          names_monomers[i] +
                           ".rot(" + str(self.settings.delta_phi * i) + ",1,0,0)\n")
 
         assert(len(self.settings.bonds_name) ==
@@ -629,13 +680,13 @@ class GenPoly(object):
                           "\n"
                           "write(\"Data Bonds\") {\n")
         WrapPeriodic.bounds_err = False
-        for i in range(0, self.N):
+        for i in range(0, N):
             test = False
             for b in range(0, len(self.settings.bonds_type)):
                 I = i + self.settings.bonds_index_offsets[b][0]
                 J = i + self.settings.bonds_index_offsets[b][1]
-                I = WrapPeriodic.Wrap(I, self.N)
-                J = WrapPeriodic.Wrap(J, self.N)
+                I = WrapPeriodic.Wrap(I, N)
+                J = WrapPeriodic.Wrap(J, N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
@@ -657,14 +708,14 @@ class GenPoly(object):
             outfile.write("\n"
                           "\n"
                           "write(\"Data Angles\") {\n")
-        for i in range(0, self.N):
+        for i in range(0, N):
             for b in range(0, len(self.settings.angles_type)):
                 I = i + self.settings.angles_index_offsets[b][0]
                 J = i + self.settings.angles_index_offsets[b][1]
                 K = i + self.settings.angles_index_offsets[b][2]
-                I = WrapPeriodic.Wrap(I, self.N)
-                J = WrapPeriodic.Wrap(J, self.N)
-                K = WrapPeriodic.Wrap(K, self.N)
+                I = WrapPeriodic.Wrap(I, N)
+                J = WrapPeriodic.Wrap(J, N)
+                K = WrapPeriodic.Wrap(K, N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
@@ -689,16 +740,16 @@ class GenPoly(object):
             outfile.write("\n"
                           "\n"
                           "write(\"Data Dihedrals\") {\n")
-        for i in range(0, self.N):
+        for i in range(0, N):
             for b in range(0, len(self.settings.dihedrals_type)):
                 I = i + self.settings.dihedrals_index_offsets[b][0]
                 J = i + self.settings.dihedrals_index_offsets[b][1]
                 K = i + self.settings.dihedrals_index_offsets[b][2]
                 L = i + self.settings.dihedrals_index_offsets[b][3]
-                I = WrapPeriodic.Wrap(I, self.N)
-                J = WrapPeriodic.Wrap(J, self.N)
-                K = WrapPeriodic.Wrap(K, self.N)
-                L = WrapPeriodic.Wrap(L, self.N)
+                I = WrapPeriodic.Wrap(I, N)
+                J = WrapPeriodic.Wrap(J, N)
+                K = WrapPeriodic.Wrap(K, N)
+                L = WrapPeriodic.Wrap(L, N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
@@ -724,16 +775,16 @@ class GenPoly(object):
             outfile.write("\n"
                           "\n"
                           "write(\"Data Impropers\") {\n")
-        for i in range(0, self.N):
+        for i in range(0, N):
             for b in range(0, len(self.settings.impropers_type)):
                 I = i + self.settings.impropers_index_offsets[b][0]
                 J = i + self.settings.impropers_index_offsets[b][1]
                 K = i + self.settings.impropers_index_offsets[b][2]
                 L = i + self.settings.impropers_index_offsets[b][3]
-                I = WrapPeriodic.Wrap(I, self.N)
-                J = WrapPeriodic.Wrap(J, self.N)
-                K = WrapPeriodic.Wrap(K, self.N)
-                L = WrapPeriodic.Wrap(L, self.N)
+                I = WrapPeriodic.Wrap(I, N)
+                J = WrapPeriodic.Wrap(J, N)
+                K = WrapPeriodic.Wrap(K, N)
+                L = WrapPeriodic.Wrap(L, N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
@@ -804,7 +855,40 @@ def main():
                              'Unrecogized command line argument \"' + argv[1] +
                              '\"\n\n' +
                              g_usage_msg)
+
+        # Read the coordinates
         genpoly.ReadCoords(infile)
+
+        # Did the user ask us to read a custom sequence of monomer type names?
+        if genpoly.settings.name_sequence_filename != '':
+            # Note: This will fill the contents of genpoly.name_sequence_multi
+            genpoly.ReadSequence(genpoly.settings.name_sequence_filename)
+
+        else:
+            # Otherwise just fill genpoly.name_sequence_multi with
+            #  repeated copies of genpoly.settings.name_monomer
+            #   (...using this ugly two-dimensional list-of-lists comprehension)
+            genpoly.name_sequence_multi = [[genpoly.settings.name_monomer
+                                            for j in
+                                            range(0, len(genpoly.coords_multi[i]))]
+                                           for i in range(0,len(genpoly.coords_multi))]
+
+        # Now, check for polymer and sequence length inconsistencies:
+        if (len(genpoly.coords_multi) != len(genpoly.name_sequence_multi)):
+            raise InputError('Error(' +
+                             g_program_name + '):\n' +
+                             '      The coordinate file and sequence file have different lengths.\n')
+        for i in range(0, len(genpoly.coords_multi)):
+            if len(genpoly.name_sequence_multi[i]) > 0:
+                if (len(genpoly.coords_multi[i]) !=
+                    len(genpoly.name_sequence_multi[i])):
+                    raise InputError('Error(' +
+                                     g_program_name + '):\n' +
+                                     '      The coordinate file and sequence file have different lengths.\n')
+
+
+
+        # Convert all of this information to moltemplate (LT) format:
         genpoly.WriteLTFile(outfile)
 
     except (ValueError, InputError) as err:
