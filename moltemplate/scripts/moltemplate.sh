@@ -551,7 +551,7 @@ while [ "$i" -lt "$ARGC" ]; do
             # This turned out to be inconvenient for users.  Instead
             # just read the coordinates in the order they appear in the file.
 
-            awk -f pdb2coords.awk < "$PDB_FILE" > "$tmp_atom_coords"
+            pdb2coords.awk < "$PDB_FILE" > "$tmp_atom_coords"
 
         else
             echo "$SYNTAX_MSG" >&2
