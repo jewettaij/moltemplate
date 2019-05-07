@@ -545,13 +545,15 @@ while [ "$i" -lt "$ARGC" ]; do
         if grep -q '^ATOM  \|^HETATM' "$PDB_FILE"; then
             # Extract the coordinates from the PDB file:
 
-            # COMMENTING OUT ("pdbsort.py")
+            # COMMENT:
             # I used to sort the PDB file by (ChainID,SeqNum,InsertCode)
             # and then extract the coordinates from the file.
             # This turned out to be inconvenient for users.  Instead
-            # just read the coordinates in the order they appear in the file.
+            # just read the coordinates in the order they appear in the file:
 
-            pdb2coords.awk < "$PDB_FILE" > "$tmp_atom_coords"
+            awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' \
+                < "$PDB_FILE" \
+                > "$tmp_atom_coords"
 
         else
             echo "$SYNTAX_MSG" >&2
