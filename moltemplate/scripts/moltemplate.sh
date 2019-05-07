@@ -9,7 +9,7 @@
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.10.15"
-G_DATE="2019-5-02"
+G_DATE="2019-5-06"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -550,16 +550,9 @@ while [ "$i" -lt "$ARGC" ]; do
             # and then extract the coordinates from the file.
             # This turned out to be inconvenient for users.  Instead
             # just read the coordinates in the order they appear in the file.
-            # OLD CODE:
-            # Extract the coords from the "ATOM" records in the PDB file
-            #if ! $PYTHON_COMMAND "${PY_SCR_DIR}/pdbsort.py" < "$PDB_FILE" \
-            #    | awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' > "$tmp_atom_coords"; then
-            #    ERR_INTERNAL
-            #fi
-            # NEW CODE (USE THIS INSTEAD):
-            awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' \
-                < "$PDB_FILE" \
-                > "$tmp_atom_coords"
+
+            awk -f pdb2coords.awk < "$PDB_FILE" > "$tmp_atom_coords"
+
         else
             echo "$SYNTAX_MSG" >&2
             echo "-----------------------" >&2
