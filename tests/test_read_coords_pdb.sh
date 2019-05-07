@@ -17,7 +17,7 @@ test_read_coords_pdb() {
       # and confirm that they actually match the coordinates from the PDB file.
       # (We only do this for one of the lines.  I chose line #4 arbitrarily.)
       CRDS_DATA_LINE4=`extract_lammps_data.py Atoms < system.data | sort -g -k 1 | awk '{print $5" "$6" "$7}' | awk '{if (NR==4) {print $0}}'`
-      CRDS_PDB_LINE4=`awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' < solvate.pdb  | awk '{if (NR==4) {print $0}}'`
+      CRDS_PDB_LINE4=`awk '/^ATOM  |^HETATM/{print substr($0,31,8)" "substr($0,39,8)" "substr($0,47,8)}' < moltemplate_files/solvate.pdb  | awk '{if (NR==4) {print $0}}'`
       Xdata=`echo $CRDS_DATA_LINE4 | awk '{print $1}'`
       Ydata=`echo $CRDS_DATA_LINE4 | awk '{print $2}'`
       Zdata=`echo $CRDS_DATA_LINE4 | awk '{print $3}'`
