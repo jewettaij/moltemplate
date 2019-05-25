@@ -217,7 +217,12 @@ def LookupBondTypes(bond_types,
             raise ttree_lex.InputError('Error: No bond types defined for the bond between\n'
                                        '       atoms ' + atomid1 +
                                        ' (type ' + atomtype1 + ')\n'
-                                       '         and ' + atomid2 + ' (type ' + atomtype2 + ')\n')
+                                       '         and ' + atomid2 + ' (type ' + atomtype2 + ')\n'
+                                       '\n'
+                                       '       (If you are using a force field, then it probably means that you made a\n'
+                                       '        mistake choosing at least one of these two @atom types from the list\n'
+                                       '        of available atom types supplied by the force field.  To fix it, edit\n'
+                                       '        the corresponding lines in the "Data Atoms" section of your LT file.)\n')
 
 
 def main():

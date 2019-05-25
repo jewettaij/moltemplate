@@ -365,9 +365,12 @@ def GenInteractions_int(G_system,
                                  '       ' +
                                  (',\n       '.join(atomids_str)) + '\n' +
                                  '       ...however no interaction between these types of atoms has been defined\n' +
-                                 '       This usually means that at least one of your atom TYPES is incorrect.\n' +
-                                 '       If this is not the case, then you can override this error message by\n' +
-                                 '       invoking moltemplate.sh without the \"-checkff\" argument.\n')
+                                 '       (If you are using a force field, then it probably means that you made a\n'
+                                 '        mistake choosing at least one of these two @atom types from the list\n'
+                                 '        of available atom types supplied by the force field.  To fix it, edit\n'
+                                 '        the corresponding lines in the "Data Atoms" section of your LT file.\n'
+                                 '        If this is not the case, then you can override this error message by\n'
+                                 '        invoking moltemplate.sh without the \"-checkff\" argument.)\n')
 
     return coefftype_to_atomids
 
