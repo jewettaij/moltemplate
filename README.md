@@ -106,3 +106,8 @@ If you are **NOT using WSL**, then you can also use a graphical text editor whic
 
 Moltemplate is available under the terms of the open-source 3-clause BSD
 license.  (See "[LICENSE.md](./LICENSE.md)")
+
+## Funding
+
+Moltemplate is currently funded by NIH grant R01GM120604
+(and previously by NSF-grant 1056587).
