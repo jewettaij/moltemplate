@@ -37,7 +37,7 @@ setup(
 
   description='A general cross-platform text-based molecule builder for LAMMPS',
 
-  long_description='Moltemplate is a general cross-platform text-based molecule builder for LAMMPS and ESPResSo. Moltemplate was intended for building custom coarse-grained molecular models, but it can be used to prepare realistic all-atom simulations as well.  It supports a variety of force fields for all-atom and coarse-grained modeling (including many-body forces and non-point-like particles).  New force fields and examples are added continually by users.',
+  long_description='Moltemplate is a general cross-platform text-based molecule builder for LAMMPS and ESPResSo. Moltemplate was intended for building custom coarse-grained molecular models, but it can be used to prepare realistic all-atom simulations as well.  It supports a variety of force fields for all-atom and coarse-grained modeling (including many-body forces and non-point-like particles).  New force fields and examples are added continually by users.  NOTE: Downloading moltemplate from pypi using PIP will omit all examples and documentation.  Examples and documentation are available at https://moltemplate.org and https://github.com/jewettaij/moltemplate.',
 
   author='Andrew Jewett',
 

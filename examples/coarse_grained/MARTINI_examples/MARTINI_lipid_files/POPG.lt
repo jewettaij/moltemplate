@@ -25,11 +25,11 @@ POPG inherits MARTINI {
     $bond:b4 $atom:GL1 $atom:C1A
     $bond:b5 $atom:C1A $atom:D2A
     $bond:b6 $atom:D2A $atom:C3A
-    $bond:b9 $atom:C3A $atom:C4A
-    $bond:b10 $atom:GL2 $atom:C1B
-    $bond:b11 $atom:C1B $atom:C2B
-    $bond:b12 $atom:C2B $atom:C3B
-    $bond:b13 $atom:C3B $atom:C4B
+    $bond:b7 $atom:C3A $atom:C4A
+    $bond:b8 $atom:GL2 $atom:C1B
+    $bond:b9 $atom:C1B $atom:C2B
+    $bond:b10 $atom:C2B $atom:C3B
+    $bond:b11 $atom:C3B $atom:C4B
   }
 
 } 

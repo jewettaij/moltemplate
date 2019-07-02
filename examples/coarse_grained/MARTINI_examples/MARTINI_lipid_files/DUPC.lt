@@ -26,11 +26,11 @@ DUPC inherits MARTINI {
     $bond:b4 $atom:GL1 $atom:C1A
     $bond:b5 $atom:C1A $atom:E2A
     $bond:b6 $atom:E2A $atom:D3A
-    $bond:b9 $atom:D3A $atom:C4A
-    $bond:b10 $atom:GL2 $atom:C1B
-    $bond:b11 $atom:C1B $atom:F2B
-    $bond:b12 $atom:F2B $atom:D3B
-    $bond:b13 $atom:D3B $atom:C4B
+    $bond:b7 $atom:D3A $atom:C4A
+    $bond:b8 $atom:GL2 $atom:C1B
+    $bond:b9 $atom:C1B $atom:F2B
+    $bond:b10 $atom:F2B $atom:D3B
+    $bond:b11 $atom:D3B $atom:C4B
   }
 
 } 

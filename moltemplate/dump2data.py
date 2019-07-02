@@ -21,7 +21,8 @@ A reference DATA file is needed (argument).
 # Copyright (c) 2014
 # All rights reserved.
 
-g_program_name = 'dump2data.py'
+#g_program_name = 'dump2data.py'
+g_program_name = __file__.split('/')[-1]
 g_date_str = '2019-4-29'
 g_version_str = '0.56.0'
 

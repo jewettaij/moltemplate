@@ -7,7 +7,16 @@ Conversion from EMC (.PRM) format to moltemplate (.LT) format was
 done using the "emcprm2lt.py" script written by David Stelter.
 Here is an example how to use the emcprm2lt.py script:
 
+Step 1:
 emcprm2lt.py martini.prm lipids.prm cholesterol.prm --bond-style=harmonic --angle-style=cosine/squared --pair-style=lj/gromacs/coul/gromacs --name=martini
+
+Step 2:
+The MARTINI force field uses custom "special_bonds" settings.  So we must erase
+the line containing the default "special bonds" line and replace it.  You can
+do this using a text editor, or use sed:
+
+sed -i 's/special_bonds lj\/coul 0.0 0.0 0.0/special_bonds lj 0.0 1.0 1.0/g' martini.lt
+
 
 This will generate a file named "martini.lt" which (in this example)
 only includes the force field parameters for lipids and cholestrol.

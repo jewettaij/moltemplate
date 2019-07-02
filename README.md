@@ -110,4 +110,4 @@ license.  (See "[LICENSE.md](./LICENSE.md)")
 ## Funding
 
 Moltemplate is currently funded by NIH grant R01GM120604
-(and previously by NSF-grant 1056587).
+(and previously by NSF grant 1056587).
