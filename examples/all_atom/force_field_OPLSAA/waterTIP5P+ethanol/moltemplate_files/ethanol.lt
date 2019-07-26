@@ -17,15 +17,15 @@ Ethanol inherits OPLSAA {
   # atomID   molID  atomTyle  charge     X        Y          Z
 
   write('Data Atoms') {
-    $atom:O   $mol:. @atom:96   0.0  1.2322305822 -0.2731895077 -0.1276123902
-    $atom:H   $mol:. @atom:97   0.0  1.2473876659 -0.8998737590  0.6150681570
-    $atom:C1  $mol:. @atom:99   0.0  0.0849758188 0.5590385475 0.0510545434
-    $atom:H11 $mol:. @atom:98   0.0  0.1506137362 1.1200249874 0.9943015309
-    $atom:H12 $mol:. @atom:98   0.0  0.1316093068 1.2841805400 -0.7645223601
-    $atom:C2  $mol:. @atom:80   0.0 -1.2129704155 -0.2295285634 -0.0097156258
-    $atom:H21 $mol:. @atom:85   0.0 -1.2655910941 -0.9539857247  0.8097953440  
-    $atom:H22 $mol:. @atom:85   0.0  -1.2737541560 -0.7748626513 -0.9540587845
-    $atom:H23 $mol:. @atom:85   0.0  -2.0801425360 0.4329727646 0.0722817289
+    $atom:o   $mol:. @atom:96   0.0  1.2322305822 -0.2731895077 -0.1276123902
+    $atom:h   $mol:. @atom:97   0.0  1.2473876659 -0.8998737590  0.6150681570
+    $atom:c1  $mol:. @atom:99   0.0  0.0849758188 0.5590385475 0.0510545434
+    $atom:h11 $mol:. @atom:98   0.0  0.1506137362 1.1200249874 0.9943015309
+    $atom:h12 $mol:. @atom:98   0.0  0.1316093068 1.2841805400 -0.7645223601
+    $atom:c2  $mol:. @atom:80   0.0 -1.2129704155 -0.2295285634 -0.0097156258
+    $atom:h21 $mol:. @atom:85   0.0 -1.2655910941 -0.9539857247  0.8097953440  
+    $atom:h22 $mol:. @atom:85   0.0  -1.2737541560 -0.7748626513 -0.9540587845
+    $atom:h23 $mol:. @atom:85   0.0  -2.0801425360 0.4329727646 0.0722817289
   }
 
   #  Charges will be assigned by OPLSAA, so we leave them 0.0 here.
@@ -34,14 +34,14 @@ Ethanol inherits OPLSAA {
   #   The "." simply means this molecule is not a part of a larger molecule.)
 
   write('Data Bond List') {
-    $bond:OH $atom:O $atom:H
-    $bond:C1HO $atom:C1 $atom:O
-    $bond:C1H11 $atom:C1 $atom:H11
-    $bond:C1H12 $atom:C1 $atom:H12
-    $bond:C1C2 $atom:C1 $atom:C2
-    $bond:C2H21 $atom:C2 $atom:H21
-    $bond:C2H22 $atom:C2 $atom:H22
-    $bond:C2H23 $atom:C2 $atom:H23
+    $bond:oh $atom:o $atom:h
+    $bond:c1hO $atom:c1 $atom:o
+    $bond:c1h11 $atom:c1 $atom:h11
+    $bond:c1h12 $atom:c1 $atom:h12
+    $bond:c1c2 $atom:c1 $atom:c2
+    $bond:c2h21 $atom:c2 $atom:h21
+    $bond:c2h22 $atom:c2 $atom:h22
+    $bond:c2h23 $atom:c2 $atom:h23
   }
 
 } # Ethanol

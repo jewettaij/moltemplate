@@ -1,3 +1,4 @@
+
 import "ch2group.lt"  # load the definition of the "CH2" object
 import "ch3group.lt"  # load the definition of the "CH3" object
 
@@ -17,9 +18,9 @@ Butane inherits COMPASS {
   # (Angles, dihedrals, impropers will be automatically added later.)
 
   write('Data Bond List') {
-    $bond:b1  $atom:monomer1/C $atom:monomer2/C
-    $bond:b2  $atom:monomer2/C $atom:monomer3/C
-    $bond:b3  $atom:monomer3/C $atom:monomer4/C
+    $bond:b1  $atom:monomer1/c $atom:monomer2/c
+    $bond:b2  $atom:monomer2/c $atom:monomer3/c
+    $bond:b3  $atom:monomer3/c $atom:monomer4/c
   }
 
 } # Butane

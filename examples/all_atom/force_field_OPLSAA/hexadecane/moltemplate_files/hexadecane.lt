@@ -42,21 +42,21 @@ Hexadecane inherits OPLSAA {
   # Now add a list of bonds connecting the carbon atoms together:
 
   write('Data Bond List') {
-    $bond:b1  $atom:monomers[0]/C $atom:monomers[1]/C
-    $bond:b2  $atom:monomers[1]/C $atom:monomers[2]/C
-    $bond:b3  $atom:monomers[2]/C $atom:monomers[3]/C
-    $bond:b4  $atom:monomers[3]/C $atom:monomers[4]/C
-    $bond:b5  $atom:monomers[4]/C $atom:monomers[5]/C
-    $bond:b6  $atom:monomers[5]/C $atom:monomers[6]/C
-    $bond:b7  $atom:monomers[6]/C $atom:monomers[7]/C
-    $bond:b8  $atom:monomers[7]/C $atom:monomers[8]/C
-    $bond:b9   $atom:monomers[8]/C $atom:monomers[9]/C
-    $bond:b10  $atom:monomers[9]/C $atom:monomers[10]/C
-    $bond:b11  $atom:monomers[10]/C $atom:monomers[11]/C
-    $bond:b12  $atom:monomers[11]/C $atom:monomers[12]/C
-    $bond:b13  $atom:monomers[12]/C $atom:monomers[13]/C
-    $bond:b14  $atom:monomers[13]/C $atom:monomers[14]/C
-    $bond:b15  $atom:monomers[14]/C $atom:monomers[15]/C
+    $bond:b1  $atom:monomers[0]/c $atom:monomers[1]/c
+    $bond:b2  $atom:monomers[1]/c $atom:monomers[2]/c
+    $bond:b3  $atom:monomers[2]/c $atom:monomers[3]/c
+    $bond:b4  $atom:monomers[3]/c $atom:monomers[4]/c
+    $bond:b5  $atom:monomers[4]/c $atom:monomers[5]/c
+    $bond:b6  $atom:monomers[5]/c $atom:monomers[6]/c
+    $bond:b7  $atom:monomers[6]/c $atom:monomers[7]/c
+    $bond:b8  $atom:monomers[7]/c $atom:monomers[8]/c
+    $bond:b9   $atom:monomers[8]/c $atom:monomers[9]/c
+    $bond:b10  $atom:monomers[9]/c $atom:monomers[10]/c
+    $bond:b11  $atom:monomers[10]/c $atom:monomers[11]/c
+    $bond:b12  $atom:monomers[11]/c $atom:monomers[12]/c
+    $bond:b13  $atom:monomers[12]/c $atom:monomers[13]/c
+    $bond:b14  $atom:monomers[13]/c $atom:monomers[14]/c
+    $bond:b15  $atom:monomers[14]/c $atom:monomers[15]/c
   }
 
 } # Hexadecane

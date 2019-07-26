@@ -23,13 +23,13 @@ CH2 inherits OPLSAA {
 
   write("Data Atoms") {
     $atom:c  $mol:... @atom:81L    0.0  0.000000     0.000000      0.000000
-    $atom:H1 $mol:... @atom:85LCH2 0.0  0.000000     0.631044      0.892431
-    $atom:H2 $mol:... @atom:85LCH2 0.0  0.000000     0.631044     -0.892431
+    $atom:h1 $mol:... @atom:85LCH2 0.0  0.000000     0.631044      0.892431
+    $atom:h2 $mol:... @atom:85LCH2 0.0  0.000000     0.631044     -0.892431
   }
 
   write('Data Bond List') {
-    $bond:ch1 $atom:c $atom:H1
-    $bond:ch2 $atom:c $atom:H2
+    $bond:ch1 $atom:c $atom:h1
+    $bond:ch2 $atom:c $atom:h2
   }
 
   # Atom type numbers (@atom:80L,@atom:85LCH3) are defined in "loplsaa.lt":

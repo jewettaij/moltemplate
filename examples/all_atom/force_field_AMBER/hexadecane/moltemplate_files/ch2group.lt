@@ -17,9 +17,9 @@ CH2 inherits GAFF {
   # atom-id  mol-id atom-type  charge    x        y                z
 
   write("Data Atoms") {
-    $atom:C  $mol:... @atom:c3 -0.120  0.000  0.000             0.000
-    $atom:H1 $mol:... @atom:hc  0.060  0.000  0.63104384422426  0.892430762954
-    $atom:H2 $mol:... @atom:hc  0.060  0.000  0.63104384422426 -0.892430762954
+    $atom:c  $mol:... @atom:c3 -0.120  0.000  0.000             0.000
+    $atom:h1 $mol:... @atom:hc  0.060  0.000  0.63104384422426  0.892430762954
+    $atom:h2 $mol:... @atom:hc  0.060  0.000  0.63104384422426 -0.892430762954
   }
 
   #  Note: The "..." in "$mol:..." tells moltemplate that this molecule may
@@ -29,8 +29,8 @@ CH2 inherits GAFF {
 
   # Now specify which pairs of atoms are bonded:
   write('Data Bond List') {
-    $bond:CH1 $atom:C $atom:H1
-    $bond:CH2 $atom:C $atom:H2
+    $bond:ch1 $atom:c $atom:h1
+    $bond:ch2 $atom:c $atom:h2
   }
 
 } # CH2

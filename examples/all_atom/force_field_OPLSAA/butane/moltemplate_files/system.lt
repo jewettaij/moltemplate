@@ -1,3 +1,4 @@
+
 import "butane.lt"  # <- defines the "Butane" molecule type.
 
 # Periodic boundary conditions:

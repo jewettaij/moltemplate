@@ -1,0 +1,25 @@
+
+# define "MARTINI", and "@atom:C1":
+import "martini.lt"
+
+# define the "PolyethelyneMonomer" molecule object containing one carbon atom:
+
+PolyethyleneMonomer inherits MARTINI {
+
+  # atom-id mol-id atom-type charge   x     y     z
+  write("Data Atoms") {
+    $atom:c  $mol  @atom:C1   0.0   0.00   0.00  0.00
+  }
+
+}
+
+# Later will use this to define a Polyethylene polymer.
+#
+# It may seem strange to define a "molecule" object containing only one atom.
+# However it is convenient to do this because it enables you to apply
+# movement and rotation commands to the coordinates of the object.
+# (One of the quirks of moltemplate is that you cannot apply .move() and .rot()
+#  commands to individual atoms in a molecule.  You can only apply movement
+#  commands to objects, like this one.
+#  That's why I define this as a molecule object containing only one atom.)
+

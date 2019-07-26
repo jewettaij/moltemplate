@@ -1,0 +1,18 @@
+import "polyethylene16_star12.lt"
+
+# Periodic boundary conditions:
+# (You should eventually change the size of this box)
+write_once("Data Boundary") {
+   -75.0  75.0  xlo xhi
+   -75.0  75.0  ylo yhi
+   -30.0  30.0  zlo zhi
+}
+
+star1 = new Polyethylene16Star12.move(42.0,0,0)
+star2 = new Polyethylene16Star12.move(42.0,0,0).rot(72.0,0,0,1).move(0,0,5)
+star3 = new Polyethylene16Star12.move(42.0,0,0).rot(144.0,0,0,1).move(0,0,15)
+star4 = new Polyethylene16Star12.move(42.0,0,0).rot(216.0,0,0,1).move(0,0,20)
+star5 = new Polyethylene16Star12.move(42.0,0,0).rot(288.0,0,0,1).move(0,0,25)
+
+# Note you can accomplish the same thing using:
+# stars = new Polyethylene16Star12.move(42.0,0,0) [5].rot(72.0,0,0,1).move(0,0,5)

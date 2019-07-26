@@ -13,12 +13,12 @@ Ethylene inherits OPLSAA {
   # atom-id mol-id atom-type charge   X       Y       Z     # comment
 
   write('Data Atoms') {
-    $atom:C1  $mol @atom:88  0.00 -0.6695   0.00000  0.000  #88<->"Alkene H2-C="
-    $atom:C2  $mol @atom:88  0.00  0.6695   0.00000  0.000  #88<->"Alkene H2-C="
-    $atom:H11 $mol @atom:89  0.00 -1.23422 -0.85446  0.000  #89<->"Alkene H-C="
-    $atom:H12 $mol @atom:89  0.00 -1.23422  0.85446  0.000  #89<->"Alkene H-C="
-    $atom:H21 $mol @atom:89  0.00  1.23422 -0.85446  0.000  #89<->"Alkene H-C="
-    $atom:H22 $mol @atom:89  0.00  1.23422  0.85446  0.000  #89<->"Alkene H-C="
+    $atom:c1  $mol @atom:88  0.00 -0.6695   0.00000  0.000  #88<->"Alkene H2-C="
+    $atom:c2  $mol @atom:88  0.00  0.6695   0.00000  0.000  #88<->"Alkene H2-C="
+    $atom:h11 $mol @atom:89  0.00 -1.23422 -0.85446  0.000  #89<->"Alkene H-C="
+    $atom:h12 $mol @atom:89  0.00 -1.23422  0.85446  0.000  #89<->"Alkene H-C="
+    $atom:h21 $mol @atom:89  0.00  1.23422 -0.85446  0.000  #89<->"Alkene H-C="
+    $atom:h22 $mol @atom:89  0.00  1.23422  0.85446  0.000  #89<->"Alkene H-C="
   }
 
   # Note: You don't have to specify the charge in this example because we are
@@ -31,11 +31,11 @@ Ethylene inherits OPLSAA {
   # BondID     AtomID1  AtomID2
 
   write('Data Bond List') {
-    $bond:C12  $atom:C1 $atom:C2
-    $bond:C1H1 $atom:C1 $atom:H11
-    $bond:C1H2 $atom:C1 $atom:H12
-    $bond:C2H1 $atom:C2 $atom:H21
-    $bond:C2H2 $atom:C2 $atom:H22
+    $bond:c12  $atom:c1 $atom:c2
+    $bond:c1h1 $atom:c1 $atom:h11
+    $bond:c1h2 $atom:c1 $atom:h12
+    $bond:c2h1 $atom:c2 $atom:h21
+    $bond:c2h2 $atom:c2 $atom:h22
   }
 
   # In the "Data Bond List" section we don't have to specify the bond type.

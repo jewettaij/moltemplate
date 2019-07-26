@@ -15,16 +15,16 @@ CH3 inherits COMPASS {
   # atom-id  mol-id   atom-type  charge   x             y                z
 
   write("Data Atoms") {
-    $atom:C  $mol:... @atom:c4   0.0    0.000000     0.000000      0.000000
-    $atom:H1 $mol:... @atom:h1   0.0    0.000000     0.631044      0.892431
-    $atom:H2 $mol:... @atom:h1   0.0    0.000000     0.631044     -0.892431
-    $atom:H3 $mol:... @atom:h1   0.0   -0.892431    -0.631044      0.000000
+    $atom:c  $mol:... @atom:c4   0.0    0.000000     0.000000      0.000000
+    $atom:h1 $mol:... @atom:h1   0.0    0.000000     0.631044      0.892431
+    $atom:h2 $mol:... @atom:h1   0.0    0.000000     0.631044     -0.892431
+    $atom:h3 $mol:... @atom:h1   0.0   -0.892431    -0.631044      0.000000
   }
 
   write('Data Bond List') {
-    $bond:CH1 $atom:C $atom:H1
-    $bond:CH2 $atom:C $atom:H2
-    $bond:CH3 $atom:C $atom:H3
+    $bond:ch1 $atom:c $atom:h1
+    $bond:ch2 $atom:c $atom:h2
+    $bond:ch3 $atom:c $atom:h3
   }
 
 } # CH3

@@ -1,38 +1,40 @@
-# This file contains a definition for the "CH2" molecular subunit.
+# This file contains a definition for the "CH3" molecular subunit.
 
 # First, load the OPLS force field parameters we will need.
 # These 2 files are located in the "force_fields" subdirectory
-# distributed with moltemplate.
+# of the moltemplate distribution.
 
 import "oplsaa.lt"    # <-- defines the standard "OPLSAA" force field
 import "loplsaa.lt"   # <-- custom parameters for long alkane chains taken from
                       #     Sui et al. J.Chem.Theory.Comp (2012), 8, 1459 
 		      #     To use the ordinary OPLSAA force field parameters,
 		      #     (instead of the Sui et al. parameters), change the
-		      #     atom types below from "@atom:81L","@atom:85LCH2" to
-		      #     "@atom:81" and "@atom:85"  (defined in "oplsaa.lt")
+		      #     atom types below from "@atom:80L","@atom:85LCH3" to
+		      #     "@atom:80" and "@atom:85"  (defined in "oplsaa.lt")
 
 
 
-# Then define "CH2":
+# Then define "CH3":
 
 
-CH2 inherits OPLSAA {
+CH3 inherits OPLSAA {
 
   # atom-id  mol-id   atom-type  charge   x             y                z
 
   write("Data Atoms") {
-    $atom:c  $mol:... @atom:81L    0.0  0.000000     0.000000      0.000000
-    $atom:H1 $mol:... @atom:85LCH2 0.0  0.000000     0.631044      0.892431
-    $atom:H2 $mol:... @atom:85LCH2 0.0  0.000000     0.631044     -0.892431
+    $atom:c  $mol:... @atom:80L    0.0  0.000000     0.000000      0.000000
+    $atom:h1 $mol:... @atom:85LCH3 0.0  0.000000     0.631044      0.892431
+    $atom:h2 $mol:... @atom:85LCH3 0.0  0.000000     0.631044     -0.892431
+    $atom:h3 $mol:... @atom:85LCH3 0.0 -0.892431    -0.631044      0.000000
   }
 
   write('Data Bond List') {
-    $bond:ch1 $atom:c $atom:H1
-    $bond:ch2 $atom:c $atom:H2
+    $bond:ch1 $atom:c $atom:h1
+    $bond:ch2 $atom:c $atom:h2
+    $bond:ch3 $atom:c $atom:h3
   }
 
-  # Atom type numbers (@atom:80L,@atom:85LCH3) are defined in "loplsaa.lt":
+  # Atom type numbers (@atom:80L,@atom:85LCH3) are defined in "loplsaa.lt",
   #    @atom:80L     "Alkane CH3- (LOPLS CT_CH3)"
   #    @atom:81L     "Alkane -CH2- (LOPLS CT_CH2)"
   #    @atom:85LCH3  "Alkane H-C CH3 (LOPLS HC_CH3)"
@@ -43,7 +45,7 @@ CH2 inherits OPLSAA {
   # of a larger molecule, and (if so) to use the larger parent object's 
   # molecule id number as it's own.
 
-} # CH2
+} # CH3
 
 
 
@@ -66,7 +68,7 @@ CH2 inherits OPLSAA {
 #            If this is confusing, then simply add 0.4431163 to the Y 
 #            coordinates in the "Data Atoms" section above.)
 
-CH2.move(0,0.4431163,0)
+CH3.move(0,0.4431163,0)
 
 
 
