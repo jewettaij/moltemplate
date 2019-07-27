@@ -22,6 +22,8 @@ include         "system.in.settings"
 
 # -- minimization protocol --
 
+thermo_style   custom step temp ke pe etotal epair ebond eangle edihed press vol
+thermo         50
 minimize 1.0e-4 1.0e-6 100000 400000
 
 # -- simulation protocol --
@@ -35,6 +37,7 @@ print "-------------------------------------------------------------------------
 
 fix fxlan all langevin  300.0 300.0  120  123456  # temp: 300 K
 fix fxnph all nph  iso 50.0 50.0 1000.0   # pressure: 50 barr
+thermo    100
 run 2000
 unfix fxlan
 unfix fxnph
@@ -42,11 +45,11 @@ unfix fxnph
 print "---------------------------------------------------------------------------"
 print "--- Now continue the simulation using a Nose-Hoover Thermostat/Barostat ---"
 print "---------------------------------------------------------------------------"
-dump            1 all custom 1000 traj_npt.lammpstrj id mol type x y z ix iy iz
+dump           1 all custom 1000 traj_npt.lammpstrj id mol type x y z ix iy iz
 # temperature: 300 K, pressure: 50 barr
-fix             fxnpt all npt temp 300.0 300.0 100.0 iso 50.0 50.0 1000.0 drag 1.0
-thermo          100
-#thermo_modify  flush yes
+fix            fxnpt all npt temp 300.0 300.0 100.0 iso 50.0 50.0 1000.0 drag 1.0
+thermo         100
+#thermo_modify flush yes
 
 run             100000
 

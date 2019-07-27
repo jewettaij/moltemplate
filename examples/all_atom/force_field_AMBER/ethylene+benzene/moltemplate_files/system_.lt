@@ -1,5 +1,5 @@
 import "ethylene.lt"  # <- defines the "Ethylene" molecule type.
-import "benzene.lt"  # <- defines the "Benzene" molecule type.
+import "benzene.lt"   # <- defines the "Benzene" molecule type.
 
 
 # Periodic boundary conditions:
@@ -9,15 +9,11 @@ write_once("Data Boundary") {
    0.0  48.00  zlo zhi
 }
 
-# Create 216 "Ethylene" molecules and arrange them in a 6x6x6 cubic lattice
-# with 8.0 Angstrom spacing.
+# Create 216 ethylenes and 108 benzenes
 
 ethylenes = new Ethylene[6].move(8.0, 0, 0)
                         [6].move(0, 8.0, 0)
                         [6].move(0, 0, 8.0)
-
-# Create 108 "Benzene" molecules and arrange them in a 6x6x3 cubic lattice with
-# 8.0 Angstrom spacing in the x,y directions and 16 Anstrom spacing along Z.
 
 benzenes  = new Benzene[6].move(8.0, 0, 0)
                        [6].move(0, 8.0, 0)
@@ -29,6 +25,4 @@ benzenes  = new Benzene[6].move(8.0, 0, 0)
 benzenes[*][*][*].move(4.0, 4.0, 4.0)
 
 # Note: There is also an example which shows how to generate the coordinates
-# using PACKMOL. (That allows us to omit the coordinates and .move() commands
-# and allows you to specify the number of molecules you want more precisely.
-# It is one of the OPLSAA examples.)
+# using PACKMOL. (That allows us to omit the coordinates and .move() commands.)

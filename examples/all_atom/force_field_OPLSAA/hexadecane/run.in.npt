@@ -24,8 +24,9 @@ include         system.in.charges
 # reorient, compress).  The system (as defined in the "system.data" file) 
 # is already expanded.  That means there are 3 steps left:
 
-dump            dumpeq1 all custom 50 traj_eq1_min.lammpstrj id mol type x y z ix iy iz
-thermo          50
+dump           dumpeq1 all custom 50 traj_eq1_min.lammpstrj id mol type x y z ix iy iz
+thermo_style   custom step temp ke pe etotal epair ebond eangle edihed press vol
+thermo         50
 
 # -- Equilibration: part 1: initial minimization --
 

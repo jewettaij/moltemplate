@@ -73,4 +73,4 @@ Polyethylene16Star12 inherits OPLSAA {
 # (I recommend using fix rigid.)
 # Otherwise, you will have to convert the metalic force-field parameters to be
 # compatible with the OPLSA units ("units real"), and use a "hybrid" pair style
-# (because force-field for metals do not use lennard-jones pairwise forces).
+# (because force fields for metals do not use lennard-jones pairwise forces).

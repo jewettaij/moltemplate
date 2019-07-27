@@ -33,12 +33,13 @@ include       system.in.settings
 # -- simulation protocol --
 
 
-timestep        1.0
-dump            1 all custom 500 traj_npt.lammpstrj id mol type x y z ix iy iz
-fix             fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
-thermo          100
-#thermo_modify  flush yes
+timestep       1.0
+dump           1 all custom 500 traj_npt.lammpstrj id mol type x y z ix iy iz
+fix            fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
+thermo_style   custom step temp ke pe etotal epair ebond eangle edihed press vol
+thermo         100
+#thermo_modify flush yes
 
-run             40000
+run            40000
 
 write_data   system_after_npt.data
