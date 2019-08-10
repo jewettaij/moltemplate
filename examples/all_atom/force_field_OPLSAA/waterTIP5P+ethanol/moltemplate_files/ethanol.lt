@@ -28,7 +28,7 @@ Ethanol inherits OPLSAA {
     $atom:h23 $mol:. @atom:85   0.0  -2.0801425360 0.4329727646 0.0722817289
   }
 
-  #  Charges will be assigned by OPLSAA, so we leave them 0.0 here.
+  #  Charges will be assigned by OPLSAA, so we can leave them 0.0 here.
   #
   #  (The "." in "$mol:." refers to this molecule-object's molecule-ID number.
   #   The "." simply means this molecule is not a part of a larger molecule.)
