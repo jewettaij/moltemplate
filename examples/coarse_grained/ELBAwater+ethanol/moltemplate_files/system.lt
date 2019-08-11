@@ -12,18 +12,15 @@ solute = new Methanol [1]
 
 solvent = new ElbaWater [1000]
 
-# Lorentz-Berthelot mixing
+
+# Define interactions between ELBA water particles and the atoms in methanol.
+# (Because the two different molecules use different pair styles, LAMMPS
+#  does not know how to generate interactions between them automatically.)
+
 write_once("In Settings") {
-  pair_coeff @atom:Methanol/type1 @atom:Methanol/type2 lj/charmm/coul/long 0.151716 3.233071 0.151716 3.233071
-  pair_coeff @atom:Methanol/type1 @atom:Methanol/type3 lj/charmm/coul/long 0.057474 2.768913 0.057474 2.768913
-  pair_coeff @atom:Methanol/type1 @atom:Methanol/type4 lj/charmm/coul/long 0.000000 1.533237 0.000000 1.533237
-  pair_coeff @atom:Methanol/type1 @atom:ElbaFF/W lj/sf/dipole/sf     0.340176 3.058237
-  pair_coeff @atom:Methanol/type2 @atom:Methanol/type3 lj/charmm/coul/long 0.041444 2.935511 0.041444 2.935511
-  pair_coeff @atom:Methanol/type2 @atom:Methanol/type4 lj/charmm/coul/long 0.000000 1.699835 0.000000 1.699835
-  pair_coeff @atom:Methanol/type2 @atom:ElbaFF/W lj/sf/dipole/sf     0.245296 3.224835
-  pair_coeff @atom:Methanol/type3 @atom:Methanol/type4 lj/charmm/coul/long 0.000000 1.235677 0.000000 1.235677
-  pair_coeff @atom:Methanol/type3 @atom:ElbaFF/W lj/sf/dipole/sf     0.092925 2.760677
-  pair_coeff @atom:Methanol/type4 @atom:ElbaFF/W lj/sf/dipole/sf     0.000000 1.525000
+  pair_coeff @atom:Methanol/O @atom:ElbaFF/W   lj/sf/dipole/sf  0.3401  3.058
+  pair_coeff @atom:Methanol/C @atom:ElbaFF/W   lj/sf/dipole/sf  0.2453  3.2248
+  pair_coeff @atom:Methanol/HC @atom:ElbaFF/W  lj/sf/dipole/sf  0.09293 2.761
+  pair_coeff @atom:Methanol/HO @atom:ElbaFF/W  lj/sf/dipole/sf  0.000   1.525
 }
- 
-}
+

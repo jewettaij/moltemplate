@@ -14,23 +14,25 @@ import "oplsaa.lt"   # OPLSAA atom types and force field params used by Ethanol
 
 Ethanol inherits OPLSAA {
 
-  # atomID   molID  atomTyle  charge     X        Y          Z
+  # atomID    molID  atomTyle  charge     X        Y          Z
   write('Data Atoms') {
-    $atom:O   $mol:. @atom:96   0.0  1.2322305822 -0.2731895077 -0.1276123902
-    $atom:H   $mol:. @atom:97   0.0  1.2473876659 -0.8998737590  0.6150681570
-    $atom:C1  $mol:. @atom:99   0.0  0.0849758188 0.5590385475 0.0510545434
-    $atom:H11 $mol:. @atom:98   0.0  0.1506137362 1.1200249874 0.9943015309
-    $atom:H12 $mol:. @atom:98   0.0  0.1316093068 1.2841805400 -0.7645223601
-    $atom:C2  $mol:. @atom:80   0.0 -1.2129704155 -0.2295285634 -0.0097156258
-    $atom:H21 $mol:. @atom:85   0.0 -1.2655910941 -0.9539857247  0.8097953440  
-    $atom:H22 $mol:. @atom:85   0.0  -1.2737541560 -0.7748626513 -0.9540587845
-    $atom:H23 $mol:. @atom:85   0.0  -2.0801425360 0.4329727646 0.0722817289
+    $atom:O   $mol:m @atom:96   0.0  1.2322305822 -0.2731895077 -0.1276123902
+    $atom:H   $mol:m @atom:97   0.0  1.2473876659 -0.8998737590  0.6150681570
+    $atom:C1  $mol:m @atom:99   0.0  0.0849758188 0.5590385475 0.0510545434
+    $atom:H11 $mol:m @atom:98   0.0  0.1506137362 1.1200249874 0.9943015309
+    $atom:H12 $mol:m @atom:98   0.0  0.1316093068 1.2841805400 -0.7645223601
+    $atom:C2  $mol:m @atom:80   0.0 -1.2129704155 -0.2295285634 -0.0097156258
+    $atom:H21 $mol:m @atom:85   0.0 -1.2655910941 -0.9539857247  0.8097953440  
+    $atom:H22 $mol:m @atom:85   0.0  -1.2737541560 -0.7748626513 -0.9540587845
+    $atom:H23 $mol:m @atom:85   0.0  -2.0801425360 0.4329727646 0.0722817289
   }
 
-  #  Charges will be assigned by OPLSAA, so we leave them 0.0 here.
+  #  Charges will be assigned by OPLSAA, so we can leave them 0.0 here.
   #
-  #  (The "." in "$mol:." refers to this molecule-object's molecule-ID number.
-  #   The "." simply means this molecule is not a part of a larger molecule.)
+  #  (The "m" in "$mol:m" refers to this molecule-object's molecule-ID number.
+  #   If there are multiple different molecules contained in this object, 
+  #   then you can give them different names, eg "$mol:m1", "$mol:m2"
+  #   If this molecule is part of a larger molecule, then use "$mol:...")
 
   write('Data Bond List') {
     $bond:OH $atom:O $atom:H
