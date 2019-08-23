@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 
+g_program_name = __file__.split('/')[-1]  # = 'interpolate_mt.py'
+g_version_str = '0.1.0'
+g_date_str = '2019-8-22'
 
 g_usage_str = """
 Usage:
 
-   interpolate_mt.py Ndesired [scale] < coords_orig.raw > coords.raw
+   """ + g_program_name + """ Ndesired [scale] < coords_orig.raw > coords.raw
 
 Example:
 
-   interpolate_mt.py 30117 3.0 < coords_orig.raw > coords.raw
+   """ + g_program_name + """ 30117 3.0 < coords_orig.raw > coords.raw
 
 """
 
@@ -17,10 +20,6 @@ import sys
 from math import *
 import numpy as np
 import bisect
-
-g_program_name = __file__.split('/')[-1]  # = 'interpolate_mt.py'
-g_version_str = '0.1.0'
-g_date_str = '2019-8-22'
 
 
 
@@ -263,6 +262,9 @@ class InputError(Exception):
 def main():
 
     try:
+
+        #######  Main Code Below: #######
+        sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+'\n')
 
         spline_exponent_alpha = 0.5
         use_linear_interpolation = False
