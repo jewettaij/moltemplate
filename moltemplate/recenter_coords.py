@@ -2,7 +2,7 @@
 
 
 
-g_program_name = __file__.split('/')[-1]  # "raw2rg.py"
+g_program_name = __file__.split('/')[-1]  # "recenter_coords.py"
 g_version_str  = '0.1'
 g_date_str     = '2019-8-22'
 
