@@ -37,7 +37,7 @@ genpoly_lt.py
       [-polymer-directions polarities.txt] \
       < coords.raw > polymer.lt
 ```
-Arguments (optional):
+## Arguments [optional]
 
     -axis x,y,z  direction of the polymer axis in the original monomer object.
              These three numbers (separated by commas with no spaces)
@@ -120,34 +120,67 @@ Arguments (optional):
              appear several times in the argument list.
 
     -monomer-name name
-                   Name of the moltemplate object that will be created.
-                   (By default "Monomer")  Note: You can include 1 or more
-                   coordinate transformations added to the monomer subunit
-                   before it is moved into position.  For example, it is
-                   often useful to to use a modified version of the monomer
+                   Name of the moltemplate object that will be replicated along
+                   the length of the polymer(s).  ("Monomer" by default).
+                   This monomer should be defined elsewhere and
+                   ORIENTED SO THAT THE POLYMER AXIS LIES IN THE +X DIRECTION.
+                   You can use the "-header" argument to specify where
+                   the monomer(s) is defined.  *Note: If you are defining
+                   heteropolymers or polymers with end-caps, then do not use the
+                   "-monomer" argument.  Use the "-sequence" argument instead.
+
+                   You can include rotations or transformations to the monomer subunit before it is moved into position.  For example, it
+                   is often useful to to use a modified version of the monomer
                    whose initial coordinates are compressed to avoid collisions
                    with other monomers.  To do this, use something like
                    "Monomer.scale(0.5,0.7,0.7)" instead of "Monomer".
-                   This typically would compress each monomer lengthwise by 0.5
+                   This would compress each monomer lengthwise by 0.5
                    and 0.7 laterally. (After minimization, each monomer should
-                   expand back to its ordinary size and shape.)
+                   expand back to its ordinary size and shape.)*
 
     -header 'some text'
-                   This is a way to add text at the beginning of the file.
-                   It was intended to be used to define the force fields and
-                   the monomer subunits you are using.  For example:
-                   -header 'import "FILE_WHICH_DEFINES_Monomer.lt"'
+                   This is a way to insert text at the beginning of the file.
+                   It was intended as a way to tell moltemplate to import files
+                   containing definitions of the monomer subunits you will need.
+                   For example: -header 'import "FILE_WHICH_DEFINES_Monomer.lt"'
 
     -sequence sequence.txt
-                   If you are building a heteropolymer this argument allows
+                   If you are building a heteropolymer, this argument allows
                    you to specify the sequence of monomers in the polymer.
-                   Here "sequence.txt" file contains the sequence of monomers
-                   you want in your polymer.  Each line of this file should
+                   You can also use this argument to add *end-caps* (ie custom
+                   monomer types) to the ends of your polymer, and orient them
+                   in the forward and backward directions.  See example below.
+                   The "sequence.txt" file contains the sequence of monomers
+                   you want in your polymer(s).  Each line of this file should
                    be the name of a moltemplate object for the monomer subunit
                    you want at that location.  The number of lines in this file
-                   should match the number of lines in the coordinate file.
+                   should match the sum of all of the lengths of the polymers
+                   (which equals the number of lines in the coordinate file).
+                   Each type of monomer listed must be a moltemplate object
+                   which contains atoms whose $atom (atom-ID) variables match
+                   the a1,a2 atoms mentioned in the -bond, -angle, -dihedral,
+                   and -improper arguments (if applicable).  (In the butane
+                   example below, it would be the carbon atom in the backbone.)
                    As before, you can include coordinate transforms in each
-                   monomer's name.
+                   monomer's name.  Here is an example for butane:
+                   --- sequences.txt ---
+                   CH3
+                   CH2
+                   CH2
+                   CH3.rot(180,0,0,1)
+                   -----
+                   The CH2 and CH3 moltemplate objects are presumably defined
+                   elsewhere and ORIENTED WITH THE POLYMER AXIS ALONG THE +X
+                   DIRECTION.  The ".rot(180,0,0,1)" makes sure the final CH3
+                   monomer is oriented in the -X (opposite) direction.
+                   (Additional movement and rotation commands will be added
+                   to align each monomer with the direction of the curve.)
+                   If you are using the "-cuts" argument to create multiple
+                   polymers, then this file would resemble the file above, with
+                   the sequence of multiple such polymers appended together.
+                   It would include additional "CH3" and "CH3.rot(180,0,0,1)
+                   end-cap monomers at places which are before and after the
+                   integers specified using the "-cuts" argument.
 
     -polymer-name name
                    Name of the moltemplate object that will be created.
@@ -161,23 +194,31 @@ Arguments (optional):
                    you imported using the "-header" argument.
 
     -cuts cut_locations.txt
-                   Cut the polymer in several places along its length.
-                   This can be useful if your goal is to create many
-                   polymers of different lenthgs.  Rather than being forced
-                   to define a new Polymer object for each polymer, simply
+                   Cut the polymer in several places along its length.  This is
+                   useful if your goal is to create many polymers of different
+                   lengths instead of one long polymer.  This will simply
                    cut the polymer N times along its length.  The file
                    "cut_locations.txt" is a text file containing a list of
                    positive integers (one per line) indicating where you would
                    like the polymer to be cut.  For each integer, i, which
                    appears in this file, a cut is made between monomers
                    i-1 and i (Indexing begins at 0, so a value of 1
-                   corresonds to a cut between the first and second monomers.)
+                   corresponds to a cut between the first and second monomers.)
                    A separate polymer object will be created for each polymer,
                    and an integer suffix will be added to the name, to
-                   distinguish them from eachother.  (Each of these
+                   distinguish them from each other.  (Each of these
                    polymers will be part of a larger object defined by this
                    program.  Instantiating that object will create all of the
                    individual polymers.)
+                   **NOTE** To put *end-caps* at the ends of each polymer
+                   (ie. to change the monomer type at the ends of each polymer),
+                   you *must* use the "-sequence" argument.  You must supply a
+                   text file with the monomers you want to put at the beginning
+                   and ending of each polymer listed at the appropriate place
+                   in this file. (You also have the option to apply different
+                   rotations to the monomers at either end of each polymer
+                   to orient them in the forward and backward directions.)
+                   See the description of the *-sequence* argument for details.
 
     -box paddingX,paddingY,paddingZ
                    This will cause the program to attempt to estimate the size
