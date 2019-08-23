@@ -7,13 +7,13 @@
 
 Methanol {
 
-  # NOTE: This molecule uses atom_style "hybrid sphere dipole molecular"
+  # NOTE: This molecule uses "atom_style hybrid sphere dipole molecular"
   #       (This is the same atom_style used by ELBA.)  Hence the extra
   #       columns for "diam", "mux", "muy", "muz" are not relevant
-  #       for this molecule and can be ignored.  "dens" us used for mass.)
+  #       for this molecule and can be ignored.)
 
   write("Data Atoms") {
-    # atom-ID  atom-Type   x     y     z    diam dens   q    mux muy muz mol-ID
+    # Atom-ID AtomType   x     y     z     diam dens  charge mux muy muz mol-ID
     $atom:o   @atom:O   0.708  0.0    0.0   0.0 16.0 -0.5988 0.0 0.0 0.0 $mol:m
     $atom:c   @atom:C  -0.708  0.0    0.0   0.0 12.01 0.1167 0.0 0.0 0.0 $mol:m
     $atom:hc1 @atom:HC -1.073 -0.769  0.685 0.0 1.008 0.0287 0.0 0.0 0.0 $mol:m
@@ -29,11 +29,13 @@ Methanol {
     @atom:HC 1.008
   }
 
-  #  (The "m" in "$mol:m" just refers to this object's molecule-ID.
-  #   If there are multiple molecules contained in this object, 
-  #   then you can give them different names, eg "$mol:m1", "$mol:m2"
-  #   and they will be assigned to different numbers by moltemplate.
-  #   If this molecule is part of a larger molecule, then use "$mol:...")
+  # Note: The "m" in "$mol:m" just refers to this object's molecule-ID.
+  #       If there are multiple molecules contained in this object, 
+  #       then you can give them different names, eg "$mol:m1", "$mol:m2"
+  #       and they will be assigned to different numbers by moltemplate.
+  #       If this molecule is part of a larger molecule, then use "$mol:..."
+
+  # --- bonded interactions ---
 
   write("Data Bonds") {
     $bond:b1 @bond:O_H  $atom:o  $atom:ho

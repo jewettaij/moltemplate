@@ -29,7 +29,7 @@ ElbaWater inherits ElbaFF {
 
   # atom-ID  atom-Type x   y   z  diameter  density  q    mux muy muz molecule-ID
   write("Data Atoms") {
-    $atom:id1 @atom:W 0.0 0.0 0.0 4.080749 0.5063179 0.0 0.541 0.0 0.0 $mol:. 
+    $atom:w @atom:W 0.0 0.0 0.0 4.080749 0.5063179 0.0 0.541 0.0 0.0 $mol:m
   } 
 
   write_once("In Settings") {
