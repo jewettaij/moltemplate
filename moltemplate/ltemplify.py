@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.59.2'
-g_date_str = '2018-11-20'
+g_version_str = '0.60.0'
+g_date_str = '2019-8-25'
 
 def Intify(s):
     if s.isdigit():
@@ -376,7 +376,7 @@ def main():
         infer_types_from_comments = True
         ignore_angles_dihedrals_impropers = False
         ignore_bond_types = False
-        forbid_atom_type_name_duplicates = False
+        forbid_type_name_duplicates = False
         prepend_atom_type = ''
         remove_coeffs_from_data_file = True
 
@@ -536,12 +536,12 @@ def main():
                 del argv[i:i + 1]
 
             elif (argv[i] == '-ignore-duplicates'):
-                forbid_atom_type_name_duplicates = False
+                forbid_type_name_duplicates = False
                 infer_types_from_comments = True
                 del argv[i:i + 1]
 
             elif (argv[i] == '-forbid-duplicates'):
-                forbid_atom_type_name_duplicates = True
+                forbid_type_name_duplicates = True
                 infer_types_from_comments = True
                 del argv[i:i + 1]
 
@@ -579,6 +579,18 @@ def main():
 
         atomid2type = {}
         atomid2mol = {}
+
+        # bond type names
+        bondtypes_int2name = {}
+
+        # angle type names
+        angletypes_int2name = {}
+
+        # dihedral type names
+        dihtypes_int2name = {}
+
+        # improper type names
+        imptypes_int2name = {}
 
         if atom_style_undefined:
             # The default atom_style is "full"
@@ -699,7 +711,7 @@ def main():
                             line = line.rstrip()
 
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -735,7 +747,7 @@ def main():
                                     atomtypes_name2int[atypename] = ilist[0]
                             for atypename, ilist in atomtypes_name2list.items():
                                 if len(ilist) > 1:
-                                    if forbid_atom_type_name_duplicates:
+                                    if forbid_type_name_duplicates:
                                         raise InputError('Error: duplicate atom type names in Masses section: \"' + atypename + '\"\n'
                                                          '       (By default ' + g_program_name +
                                                          ' attempts to infer atom type names from\n'
@@ -831,7 +843,7 @@ def main():
                     #    while lex:
                     #        line = lex.ReadLine()
                     #        if line.strip() in data_file_header_names:
-                    #            lex.push_raw_text(line) # <- Save line for later
+                    #            lex.push_raw_text(line+'\n') # <- Save line for later
                     #            break
 
                     elif (line.strip() == 'Atoms'):
@@ -891,7 +903,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
                             tokens = line.strip().split()
 
@@ -1043,7 +1055,7 @@ def main():
                             line = line.rstrip()
 
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  #<- Save line for later
+                                lex.push_raw_text(line+'\n')  #<- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1070,7 +1082,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1110,7 +1122,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1149,7 +1161,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1186,7 +1198,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1223,7 +1235,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1287,7 +1299,7 @@ def main():
                             if line == '':
                                 break
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1350,7 +1362,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1413,7 +1425,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1475,7 +1487,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
                             tokens = line.strip().split()
                             if len(tokens) > 0:
@@ -1535,7 +1547,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1558,7 +1570,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1580,7 +1592,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1603,7 +1615,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1627,7 +1639,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1666,7 +1678,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1747,6 +1759,7 @@ def main():
                         #tokens[1] = '@dihedral:type'+tokens[1]
                         l_in_dihedral_coeffs.append(
                             (' ' * indent) + (' '.join(tokens) + '\n'))
+
                     elif (tokens[0] == 'improper_coeff'):
                         if (len(tokens) < 2):
                             raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
@@ -1762,7 +1775,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1785,7 +1798,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1808,7 +1821,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1831,7 +1844,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1854,7 +1867,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1877,7 +1890,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1900,7 +1913,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1923,7 +1936,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1946,7 +1959,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1969,7 +1982,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -1992,7 +2005,7 @@ def main():
                         while lex:
                             line = lex.ReadLine()
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line)  # <- Save line for later
+                                lex.push_raw_text(line+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -2113,6 +2126,108 @@ def main():
                                        '  If you need restraints, add them to your final .LT file (eg. \"system.lt\"),\n'
                                        '  (And be sure to use unique (full, long) moltemplate names for each $atom:.)\n'
                                        '  Ignoring line \"' + line.strip() + '\"\n')
+
+
+                    elif (infer_types_from_comments and
+                          (len(tokens) == 3) and (tokens[2] == 'types') and
+                          (tokens[1] == 'bond') or
+                          (tokens[1] == 'angle') or
+                          (tokens[1] == 'dihedral') or
+                          (tokens[1] == 'improper')):
+                        
+                        interaction_type = tokens[1]
+                        #interaction_type='bond','angle','dihedral',or'improper'
+
+                        ntypes = 0
+                        encountered_types = set([])
+
+                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                        while lex:
+                            # Read the next line of text but don't skip comments
+                            comment_char_backup = lex.commenters
+                            lex.commenters = ''
+                            line = lex.ReadLine()
+                            lex.commenters = comment_char_backup
+
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.rstrip()
+
+                            ltokens = SplitQuotedString(line.strip())
+                            ctokens = SplitQuotedString(comment_text.strip())
+
+                            if ((line.strip() in data_file_header_names) or
+                                ((len(ltokens) == 3) and
+                                 (ltokens[1] == 'bond') and
+                                 (ltokens[2] == 'types')) or
+                                ((len(ltokens) == 3) and
+                                 (ltokens[1] == 'angle') and
+                                 (ltokens[2] == 'types')) or
+                                ((len(ltokens) == 3) and
+                                 (ltokens[1] == 'dihedral') and
+                                 (ltokens[2] == 'types')) or
+                                ((len(ltokens) == 3) and
+                                 (ltokens[1] == 'improper') and
+                                 (ltokens[2] == 'types')) or
+                                ((len(ltokens) == 2) and
+                                 (ltokens[1] == 'crossterms')) or
+                                ((len(ltokens) == 4) and
+                                 (ltokens[2] == 'xlo') and
+                                 (ltokens[3] == 'xhi')) or
+                                ((len(ltokens) == 4) and
+                                 (ltokens[2] == 'ylo') and
+                                 (ltokens[3] == 'yhi')) or
+                                ((len(ltokens) == 4) and
+                                 (ltokens[2] == 'zlo') and
+                                 (ltokens[3] == 'zhi')) or
+                                ((len(ltokens) == 6) and
+                                 (ltokens[3] == 'xy') and
+                                 (ltokens[4] == 'xz') and
+                                 (ltokens[5] == 'yz'))):
+                                lex.push_raw_text(line+'\n')  #<- Save line for later
+                                break
+
+                            if len(ctokens) == 2:
+                                type_int = Intify(ctokens[0])
+                                type_str = RemoveOuterQuotes(ctokens[1], '\'\"')
+                            elif len(tokens) == 1:
+                                type_int = ntypes+1
+                                type_str = RemoveOuterQuotes(ctokens[0], '\'\"')
+                            else:
+                                continue
+                            if (interaction_type == 'bond'):
+                                bondtypes_int2name[type_int]=type_str
+                                ntypes += 1
+                            elif (interaction_type == 'angle'):
+                                angletypes_int2name[type_int]=type_str
+                                ntypes += 1
+                            elif (interaction_type == 'dihedral'):
+                                dihtypes_int2name[type_int]=type_str
+                                ntypes += 1
+                            elif (interaction_type == 'improper'):
+                                imptypes_int2name[type_int]=type_str
+                                ntypes += 1
+                            else:
+                                continue
+                            if (forbid_type_name_duplicates and
+                                (type_str in encountered_types)):
+                                raise InputError('Error: Duplicate name in comments following: \"' + interaction_type + ' types\" section\n'
+                                                 '       (By default ' + g_program_name +
+                                                 ' attempts to infer '+interaction_type+' type names from\n'
+                                                 '       comments following the \"'+interaction_type+'\" section of your data file.)\n'
+                                                 '       This error message occurs if two different '+interaction_type+' types\n'
+                                                 '       have the same name (in the comments section)\n'
+                                                 '       You can avoid this error by adding the \"-ignore-duplicates\" argument.\n')
+
+
+                            # Print out an optional debug string:
+                            sys.stderr.write(interaction_type+'_type_name['+
+                                             str(type_int)+'] = \"'+
+                                             type_str+'\"\n');
+                                            
 
                     else:
                         sys.stderr.write('  Ignoring line \"' +
@@ -2517,9 +2632,13 @@ def main():
             atomid1 = Intify(tokens[2])
             atomid2 = Intify(tokens[3])
             # if ((atomid1 in needed_atomids) and
-            #    (atomid2 in needed_atomids)):
+            #     (atomid2 in needed_atomids)):
             tokens[0] = '$bond:id' + str(bondid)
-            tokens[1] = '@bond:type' + str(bondtype)
+            if bondtype in bondtypes_int2name:
+                type_str = bondtypes_int2name[bondid]
+            else:
+                type_str = 'type' + str(bondtype)
+            tokens[1] = '@bond:' + type_str
             #tokens[2] = '$atom:id'+str(atomid1)
             #tokens[3] = '$atom:id'+str(atomid2)
             tokens[2] = '$atom:' + atomids_int2name[atomid1]
@@ -2645,7 +2764,11 @@ def main():
             # if ((atomid1 in needed_atomids) and
             #    (atomid2 in needed_atomids)):
             tokens[0] = '$angle:id' + str(angleid)
-            tokens[1] = '@angle:type' + str(angletype)
+            if angletype in angletypes_int2name:
+                type_str = angletypes_int2name[angleid]
+            else:
+                type_str = 'type' + str(angletype)
+            tokens[1] = '@angle:' + type_str
             #tokens[2] = '$atom:id'+str(atomid1)
             #tokens[3] = '$atom:id'+str(atomid2)
             #tokens[4] = '$atom:id'+str(atomid3)
@@ -2804,7 +2927,11 @@ def main():
             # if ((atomid1 in needed_atomids) and
             #    (atomid2 in needed_atomids)):
             tokens[0] = '$dihedral:id' + str(dihedralid)
-            tokens[1] = '@dihedral:type' + str(dihedraltype)
+            if dihdraltype in dihtypes_int2name:
+                type_str = dihtypes_int2name[dihedralid]
+            else:
+                type_str = 'type'+str(dihedraltype)
+            tokens[1] = '@dihedral:' + type_str
             #tokens[2] = '$atom:id'+str(atomid1)
             #tokens[3] = '$atom:id'+str(atomid2)
             #tokens[4] = '$atom:id'+str(atomid3)
@@ -3013,6 +3140,11 @@ def main():
             #    (atomid2 in needed_atomids)):
             tokens[0] = '$improper:id' + str(improperid)
             tokens[1] = '@improper:type' + str(impropertype)
+            if impropertype in imptypes_int2name:
+                type_str = imptypes_int2name[improperid]
+            else:
+                type_str = 'type' + str(impropertype)
+            tokens[1] = '@improper:' + type_str
             #tokens[2] = '$atom:id'+str(atomid1)
             #tokens[3] = '$atom:id'+str(atomid2)
             #tokens[4] = '$atom:id'+str(atomid3)
@@ -4253,15 +4385,15 @@ def main():
 
         # if non_empty_output and no_warnings:
         if non_empty_output:
-            sys.stderr.write('WARNING: The ' + g_program_name + ' script has not been rigorously tested.\n'
-                             '         Exotic (many-body) pair-styles and pair-styles with\n'
-                             '         unusual syntax (such hbond/dreiding) are not understood\n'
-                             '         by ' + g_program_name +
+            sys.stderr.write('\n'
+                             '# WARNING: Exotic (many-body) pair-styles and pair-styles with\n'
+                             '#          unusual syntax (such hbond/dreiding) are not understood\n'
+                             '#          by ' + g_program_name +
                              ' (...although they are supported by moltemplate).\n'
-                             '         Please look over the resulting LT file and check for errors.\n'
-                             '         Convert any remaining atom, bond, angle, dihedral, or improper id\n'
-                             '         or type numbers to the corresponding $ or @-style counter variables.\n'
-                             '         Feel free to report any bugs you find. (-Andrew Jewett 2017-10)\n')
+                             '#          Please look over the resulting LT file and check for errors.\n'
+                             '#          Convert any remaining atom, bond, angle, dihedral, or improper id\n'
+                             '#          or type numbers to the corresponding $ or @-style counter variables.\n'
+                             '#          Feel free to report any bugs you find. (-Andrew Jewett 2017-10)\n')
 
 
     except (InputError) as err:

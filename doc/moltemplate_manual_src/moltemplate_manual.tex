@@ -57,7 +57,11 @@
   %(which is distributed with moltemplate).
   %These were created to supplement the moltemplate documentation.
 
-\subsubsection*{Warning: This manual does not explain how to run ``active-matter'' simulations or use all-atom force fields.}
+\subsubsection*{Warning:
+  This manual does not explain how build molecules that use
+  all-atom force fields, or how to to run reactive
+  (a.k.a. ``active-matter'', ``MCA'') simulations.}
+  
 However numerous examples and README files are available to
 demonstrate how to run these kinds of simulations.
 Downloading these examples is \textit{highly recommended}.
@@ -70,10 +74,37 @@ Downloading these examples is \textit{highly recommended}.
 Moltemplate is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
 LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build even larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
 
-Popular force-fields such as AMBER GAFF and OPLS-AA have been converted into LT format, allowing users to quickly create molecules using moltemplate.  (With help, more popular force-fields can be converted.)  This way moltemplate users can build a molecule by specifying only a list of atoms in the molecule and the bonds connecting them.  End-users are not required to manually specify all of the force-field parameters.  However they still have the freedom to easily customize individual interactions when needed.
-  %or generate all of its angle, dihedral, improper interactions manually.
+Moltemplate is extremely flexible.
+It supports all LAMMPS force-field styles and nearly all atom-styles
+(now and in the future).
 
-Moltemplate is extremely flexible.  It supports all LAMMPS force-field styles and nearly all atom-styles (now and in the future).
+Although moltemplate was designed for building coarse-grained molecules,
+popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
+converted into LT format.  This enables moltemplate users to
+build molecules without being forced to manually list all of the angles, 
+dihedrals, and impropers within every molecule.
+Unfortunately, as of 2019-8-25, moltemplate does
+\textit{not} assign partial charges
+\text{or} infer atom-types from SMILES strings, PDB files,
+or any other popular molecular file formats.
+In practice, this can be a huge limitation.
+Instead, currently, users must carefully choose the name
+of the atom type associated with every atom in the molecule.
+For small molecules, they can do this by reading the force-field
+file carefully and choosing from among the \@atom types in the list.
+This will insure that the force-field selected will understand the atom type
+and moltemplate will be able to use it to look up force field information.
+For large molecules, they can use an external tool (like AmberTools or PSFGEN)
+to generate atom type names and partial charges, and (manually) copy that
+information (and convert it) into a format that is compatible with
+moltemplate's version of the force-field.
+(Unfortunately, the atom type names in different versions of the
+ same force field do not always match, so this also must be done carefully.
+ As of 2019-8-25, efforts are underway to make this easier.)
+
+Fortunately, external servers such as LibParGen and ATB can also be used to
+generate files in LAMMPS or moltemplate format which contain all of the
+force-field information.
 
   % OLD VERSION
   %Moltemplate is a cross-platform text-based molecule builder for LAMMPS. It is typically used for building coarse-grained toy molecular models. Moltemplate users have access to (nearly) all of the standard and non-standard (custom, user-created) force-field and features available in LAMMPS.
