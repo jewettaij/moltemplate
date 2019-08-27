@@ -2224,9 +2224,9 @@ def main():
 
 
                             # Print out an optional debug string:
-                            sys.stderr.write(interaction_type+'_type_name['+
-                                             str(type_int)+'] = \"'+
-                                             type_str+'\"\n');
+                            #sys.stderr.write(interaction_type+'_type_name['+
+                            #                 str(type_int)+'] = \"'+
+                            #                 type_str+'\"\n');
                                             
 
                     else:
@@ -2318,8 +2318,16 @@ def main():
                 atomtype = atomtype[6:]
             atomtype = Intify(atomtype)
             tokens = l_data_atoms[i].split()
-            tokens[i_atomid] = '$atom:' + atomids_int2name[atomid]
-            tokens[i_atomtype] = '@atom:' + atomtypes_int2name[atomtype]
+            atomid_name = atomids_int2name[atomid]
+            atomtype_name = atomtypes_int2name[atomtype]
+            if atomid_name.find(' ') != -1:
+                tokens[i_atomid] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[i_atomid] = '$atom:' + atomid_name
+            if atomtype_name.find(' ') != -1:
+                tokens[i_atomtype] = '@{atom:' +atomtype_name+'}'
+            else:
+                tokens[i_atomtype] = '@atom:' + atomtype_name
             l_data_atoms[i] = (' ' * indent) + (' '.join(tokens) + '\n')
         sys.stderr.write(')\n\n')
 
@@ -2350,7 +2358,10 @@ def main():
                 del l_data_masses[i_line]
             else:
                 atomtype_name = atomtypes_int2name[atomtype]
-                tokens[0] = '@atom:'+atomtype_name
+                if atomtype_name.find(' ') != -1:
+                    tokens[0] = '@{atom:'+atomtype_name+'}'
+                else:
+                    tokens[0] = '@atom:'+atomtype_name
                 #if atomtype_name != 'type'+str(atomtype):
                 #    tokens.append('  # '+atomtype_name)
                 l_data_masses[i_line] = ((' ' * indent) +
@@ -2405,7 +2416,7 @@ def main():
             tokens = line.strip().split()
             atomtype_i_str = tokens[1]
             atomtype_j_str = tokens[2]
-            # if (('*' in atomtype_i_str) or
+            #if (('*' in atomtype_i_str) or
             #    ('*' in atomtype_j_str)):
             #    sys.stderr.write('WARNING: near or before '+ErrorLeader(infile, lineno)+'\n'
             #                     '         pair_coeff command contains a \"*\" character.\n'
@@ -2520,18 +2531,31 @@ def main():
                 for i in range(i_a_final, i_b_final + 1):
                     for j in range(j_a_final, j_b_final + 1):
                         if j >= i:
-                            #tokens[1] = '@atom:type'+str(i)
-                            #tokens[2] = '@atom:type'+str(j)
-                            tokens[1] = '@atom:' + atomtypes_int2name[i]
-                            tokens[2] = '@atom:' + atomtypes_int2name[j]
+                            atomtype_name_i = atomtypes_int2name[i]
+                            atomtype_name_j = atomtypes_int2name[j]
+                            if atomtype_name_i.find(' ') != -1:
+                                tokens[1] = '@{atom:' + atomtype_name_i + '}'
+                            else:
+                                tokens[1] = '@atom:' + atomtype_name_i
+                            if atomtype_name_j.find(' ') != -1:
+                                tokens[2] = '@{atom:' + atomtype_name_j + '}'
+                            else:
+                                tokens[2] = '@atom:' + atomtype_name_j
+
                             l_in_pair_coeffs.insert(i_line,
                                                     (' ' * indent) + (' '.join(tokens) + '\n'))
                             i_line += 1
             else:
-                #tokens[1] = '@atom:type'+tokens[1]
-                #tokens[2] = '@atom:type'+tokens[2]
-                tokens[1] = '@atom:' + atomtypes_int2name[int(tokens[1])]
-                tokens[2] = '@atom:' + atomtypes_int2name[int(tokens[2])]
+                atomtype_name_i = atomtypes_int2name[int(tokens[1])]
+                atomtype_name_j = atomtypes_int2name[int(tokens[2])]
+                if atomtype_name_i.find(' ') != -1:
+                    tokens[1] = '@{atom:' + atomtype_name_i + '}'
+                else:
+                    tokens[1] = '@atom:' + atomtype_name_i
+                if atomtype_name_j.find(' ') != -1:
+                    tokens[2] = '@{atom:' + atomtype_name_j + '}'
+                else:
+                    tokens[2] = '@atom:' + atomtype_name_j
                 l_in_pair_coeffs[i_line] = (
                     ' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
@@ -2605,7 +2629,11 @@ def main():
                 del l_in_masses[i_line]
                 for i in range(i_a_final, i_b_final + 1):
                     #tokens[1] = '@atom:type'+str(i)
-                    tokens[1] = '@atom:' + atomtypes_int2name[i]
+                    atomtype_name = atomtypes_int2name[i]
+                    if atomtype_name.find(' ') != -1:
+                        tokens[1] = '@{atom:' + atomtype_name + '}'
+                    else:
+                        tokens[1] = '@atom:' + atomtype_name
                     # CONTINUEHERE: CHECK THAT THIS IS WORKING
                     l_in_masses.insert(i_line, (' ' * indent) +
                                        (' '.join(tokens) + '\n'))
@@ -2613,7 +2641,11 @@ def main():
             else:
                 assert(i_a == i_b)
                 #tokens[1] = '@atom:type'+str(i_a)
-                tokens[1] = '@atom:' + atomtypes_int2name[i_a]
+                atomtype_name = atomtypes_int2name[i_a]
+                if atomtype_name.find(' ') != -1:
+                    tokens[1] = '@{atom:' + atomtype_name + '}'
+                else:
+                    tokens[1] = '@atom:' + atomtype_name
                 # CONTINUEHERE: CHECK THAT THIS IS WORKING
                 l_in_masses[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
                 i_line += 1
@@ -2638,11 +2670,18 @@ def main():
                 type_str = bondtypes_int2name[bondid]
             else:
                 type_str = 'type' + str(bondtype)
-            tokens[1] = '@bond:' + type_str
-            #tokens[2] = '$atom:id'+str(atomid1)
-            #tokens[3] = '$atom:id'+str(atomid2)
-            tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            tokens[3] = '$atom:' + atomids_int2name[atomid2]
+            if type_str.find(' ') != -1:
+                tokens[1] = '@{bond:' + type_str + '}'
+            else:
+                tokens[1] = '@bond:' + type_str
+            if atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            else:
+                tokens[2] = '$atom:' + atomids_int2name[atomid1]
+            if atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+            else:
+                tokens[3] = '$atom:' + atomids_int2name[atomid2]
             if ignore_bond_types:
                 # Then instead of a "Bonds" section we want a "Bond List" 
                 # section which omits the bond type information (in tokens[1])
@@ -2768,13 +2807,22 @@ def main():
                 type_str = angletypes_int2name[angleid]
             else:
                 type_str = 'type' + str(angletype)
-            tokens[1] = '@angle:' + type_str
-            #tokens[2] = '$atom:id'+str(atomid1)
-            #tokens[3] = '$atom:id'+str(atomid2)
-            #tokens[4] = '$atom:id'+str(atomid3)
-            tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            tokens[4] = '$atom:' + atomids_int2name[atomid3]
+            if type_str.find(' ') != -1:
+                tokens[1] = '@{angle:' + type_str + '}'
+            else:
+                tokens[1] = '@angle:' + type_str
+            if atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            else:
+                tokens[2] = '$atom:' + atomids_int2name[atomid1]
+            if atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+            else:
+                tokens[3] = '$atom:' + atomids_int2name[atomid2]
+            if atomids_int2name[atomid3].find(' ') != -1:
+                tokens[4] = '${atom:' + atomids_int2name[atomid3] + '}'
+            else:
+                tokens[4] = '$atom:' + atomids_int2name[atomid3]
             needed_angleids.add(angleid)
             needed_angletypes.add(angletype)
             l_data_angles[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
@@ -2927,19 +2975,30 @@ def main():
             # if ((atomid1 in needed_atomids) and
             #    (atomid2 in needed_atomids)):
             tokens[0] = '$dihedral:id' + str(dihedralid)
-            if dihdraltype in dihtypes_int2name:
+            if dihedraltype in dihtypes_int2name:
                 type_str = dihtypes_int2name[dihedralid]
             else:
                 type_str = 'type'+str(dihedraltype)
-            tokens[1] = '@dihedral:' + type_str
-            #tokens[2] = '$atom:id'+str(atomid1)
-            #tokens[3] = '$atom:id'+str(atomid2)
-            #tokens[4] = '$atom:id'+str(atomid3)
-            #tokens[5] = '$atom:id'+str(atomid4)
-            tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            tokens[4] = '$atom:' + atomids_int2name[atomid3]
-            tokens[5] = '$atom:' + atomids_int2name[atomid4]
+            if type_str.find(' ') != -1:
+                tokens[1] = '@{dihedral:' + type_str + '}'
+            else:
+                tokens[1] = '@dihedral:' + type_str
+            if atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            else:
+                tokens[2] = '$atom:' + atomids_int2name[atomid1]
+            if atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+            else:
+                tokens[3] = '$atom:' + atomids_int2name[atomid2]
+            if atomids_int2name[atomid3].find(' ') != -1:
+                tokens[4] = '${atom:' + atomids_int2name[atomid3] + '}'
+            else:
+                tokens[4] = '$atom:' + atomids_int2name[atomid3]
+            if atomids_int2name[atomid4].find(' ') != -1:
+                tokens[5] = '${atom:' + atomids_int2name[atomid4] + '}'
+            else:
+                tokens[5] = '$atom:' + atomids_int2name[atomid4]
 
             needed_dihedralids.add(dihedralid)
             needed_dihedraltypes.add(dihedraltype)
@@ -3144,15 +3203,26 @@ def main():
                 type_str = imptypes_int2name[improperid]
             else:
                 type_str = 'type' + str(impropertype)
-            tokens[1] = '@improper:' + type_str
-            #tokens[2] = '$atom:id'+str(atomid1)
-            #tokens[3] = '$atom:id'+str(atomid2)
-            #tokens[4] = '$atom:id'+str(atomid3)
-            #tokens[5] = '$atom:id'+str(atomid4)
-            tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            tokens[4] = '$atom:' + atomids_int2name[atomid3]
-            tokens[5] = '$atom:' + atomids_int2name[atomid4]
+            if type_str.find(' ') != -1:
+                tokens[1] = '@{improper:' + type_str + '}'
+            else:
+                tokens[1] = '@improper:' + type_str
+            if atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            else:
+                tokens[2] = '$atom:' + atomids_int2name[atomid1]
+            if atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+            else:
+                tokens[3] = '$atom:' + atomids_int2name[atomid2]
+            if atomids_int2name[atomid3].find(' ') != -1:
+                tokens[4] = '${atom:' + atomids_int2name[atomid3] + '}'
+            else:
+                tokens[4] = '$atom:' + atomids_int2name[atomid3]
+            if atomids_int2name[atomid4].find(' ') != -1:
+                tokens[5] = '${atom:' + atomids_int2name[atomid4] + '}'
+            else:
+                tokens[5] = '$atom:' + atomids_int2name[atomid4]
 
             needed_improperids.add(improperid)
             needed_impropertypes.add(impropertype)
