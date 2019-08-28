@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.2'
-g_date_str = '2019-8-27'
+g_version_str = '0.60.3'
+g_date_str = '2019-8-28'
 
 def Intify(s):
     if s.isdigit():
@@ -2706,7 +2706,7 @@ def main():
             #     (atomid2 in needed_atomids)):
             tokens[0] = '$bond:id' + str(bondid)
             if bondtype in bondtypes_int2name:
-                type_str = bondtypes_int2name[bondid]
+                type_str = bondtypes_int2name[bondtype]
             else:
                 type_str = 'type' + str(bondtype)
             if type_str.find(' ') != -1:
@@ -2843,7 +2843,7 @@ def main():
             #    (atomid2 in needed_atomids)):
             tokens[0] = '$angle:id' + str(angleid)
             if angletype in angletypes_int2name:
-                type_str = angletypes_int2name[angleid]
+                type_str = angletypes_int2name[angletype]
             else:
                 type_str = 'type' + str(angletype)
             if type_str.find(' ') != -1:
@@ -3015,7 +3015,7 @@ def main():
             #    (atomid2 in needed_atomids)):
             tokens[0] = '$dihedral:id' + str(dihedralid)
             if dihedraltype in dihtypes_int2name:
-                type_str = dihtypes_int2name[dihedralid]
+                type_str = dihtypes_int2name[dihedraltype]
             else:
                 type_str = 'type'+str(dihedraltype)
             if type_str.find(' ') != -1:
@@ -3239,7 +3239,7 @@ def main():
             tokens[0] = '$improper:id' + str(improperid)
             tokens[1] = '@improper:type' + str(impropertype)
             if impropertype in imptypes_int2name:
-                type_str = imptypes_int2name[improperid]
+                type_str = imptypes_int2name[impropertype]
             else:
                 type_str = 'type' + str(impropertype)
             if type_str.find(' ') != -1:
