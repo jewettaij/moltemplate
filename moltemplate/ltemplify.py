@@ -21,7 +21,7 @@ Example:
 This creates a template for a new type of molecule (named "Mol"),
 consisting of all the atoms in the lammps files you included,
 and saves this data in a single ttree file ("mol.lt").
-This file can be used with moltemplate (ttree) to
+This file can be used with moltemplate to
 define large systems containing this molecule.
 
 """
@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.0'
-g_date_str = '2019-8-25'
+g_version_str = '0.60.1'
+g_date_str = '2019-8-27'
 
 def Intify(s):
     if s.isdigit():
@@ -721,12 +721,12 @@ def main():
 
                                 if comment_text != '':
 
-                                    #comment_tokens = comment_text.split()
-                                    comment_tokens = SplitQuotedString(comment_text,
-                                                                       comment_char='')
+                                    comment_tokens = comment_text.split()
+                                    #comment_tokens = SplitQuotedString(comment_text,
+                                    #                                   comment_char='')
 
-                                    # Assume the first word after the
-                                    # is the atom type name
+                                    # Assume the first word after the comment
+                                    # character is the atom type name
                                     atomtype_name = (prepend_atom_type +
                                                      comment_tokens[0])
 
@@ -2156,10 +2156,12 @@ def main():
                                 line = line[:ic]
                             line = line.rstrip()
 
-                            ltokens = SplitQuotedString(line.strip())
-                            ctokens = SplitQuotedString(comment_text.strip())
+                            #ltokens = SplitQuotedString(line.strip())
+                            ltokens = line.strip().split()
 
                             if ((line.strip() in data_file_header_names) or
+                                (len(ltokens) >= 2) and
+                                ltokens[0].isdigit() and
                                 ((len(ltokens) == 3) and
                                  (ltokens[1] == 'bond') and
                                  (ltokens[2] == 'types')) or
@@ -2190,14 +2192,32 @@ def main():
                                 lex.push_raw_text(line+'\n')  #<- Save line for later
                                 break
 
-                            if len(ctokens) == 2:
-                                type_int = Intify(ctokens[0])
-                                type_str = RemoveOuterQuotes(ctokens[1], '\'\"')
-                            elif len(tokens) == 1:
+                            #ctokens = SplitQuotedString(comment_text.strip())
+                            #if len(ctokens) == 1:
+                            #    type_int = ntypes+1
+                            #    type_str = RemoveOuterQuotes(ctokens[0],'\'\"')
+                            #elif len(ctokens) >= 2:
+                            #    type_int = Intify(ctokens[0])
+                            #    type_str = RemoveOuterQuotes(ctokens[1],'\'\"')
+                            #else:
+                            #    continue
+
+                            comment_text = comment_text.strip()
+                            ctokens = comment_text.split()
+                            if len(ctokens) == 1:
                                 type_int = ntypes+1
-                                type_str = RemoveOuterQuotes(ctokens[0], '\'\"')
-                            else:
-                                continue
+                                type_str = ctokens[0]
+                            elif len(ctokens) >= 2:
+                                type_int = Intify(ctokens[0])
+                                #type_str = ctokens[1]
+
+                                #iws=comment_text.find(' ') <--only works on ' '
+                                iws = 0 #<--detect first character of whitespace
+                                while iws < len(comment_text):
+                                    if comment_text[iws].isspace():
+                                        break
+                                    iws += 1
+                                type_str = comment_text[iws+1:].strip()
                             if (interaction_type == 'bond'):
                                 bondtypes_int2name[type_int]=type_str
                                 ntypes += 1
