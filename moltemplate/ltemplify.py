@@ -37,7 +37,7 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.1'
+g_version_str = '0.60.2'
 g_date_str = '2019-8-27'
 
 def Intify(s):
@@ -2134,7 +2134,21 @@ def main():
                           (tokens[1] == 'angle') or
                           (tokens[1] == 'dihedral') or
                           (tokens[1] == 'improper')):
-                        
+
+                        #####################################################
+                        # Consider comments following these commands:
+                        #"N bond types"
+                        #"N angle types"
+                        #"N dihedral types"
+                        #"N improper types"
+                        # Lines containing nothing but comments after
+                        # these lines are ASSUMED to contain names
+                        # for these bonded types.
+                        # So instead of generating bond types with names like:
+                        # @bond:type1, @bond:type2, you will get names like:
+                        # @bond:CA_HC1, @{bond:N CA}, ...
+                        #####################################################
+
                         interaction_type = tokens[1]
                         #interaction_type='bond','angle','dihedral',or'improper'
 
@@ -2202,6 +2216,9 @@ def main():
                             #else:
                             #    continue
 
+                            if len(ltokens) > 0:
+                                continue
+
                             comment_text = comment_text.strip()
                             ctokens = comment_text.split()
                             if len(ctokens) == 1:
@@ -2218,6 +2235,8 @@ def main():
                                         break
                                     iws += 1
                                 type_str = comment_text[iws+1:].strip()
+                            else:
+                                continue
                             if (interaction_type == 'bond'):
                                 bondtypes_int2name[type_int]=type_str
                                 ntypes += 1
