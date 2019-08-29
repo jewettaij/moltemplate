@@ -37,7 +37,7 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.3'
+g_version_str = '0.60.4'
 g_date_str = '2019-8-28'
 
 def Intify(s):
@@ -950,7 +950,7 @@ def main():
                                     tokens[i_atomid] = '$atom:id' + \
                                         tokens[i_atomid]
                                     #tokens[i_atomid] = '$atom:'+atomids_int2name[atomid]
-                                    # fill atomtype_int2str[] with a default name (change later):
+                                    # fill atomtypes_int2str[] with a default name (change later):
                                     #tokens[i_atomtype] = '@atom:type'+tokens[i_atomtype]
                                     atomtype_name = 'type' + tokens[i_atomtype]
                                     tokens[i_atomtype] = '@atom:' + atomtype_name
@@ -998,7 +998,7 @@ def main():
                                     # (Instead assign these names in a later pass.)
 
                                     if i_molid:
-                                        tokens[i_molid] = '$mol:id' + \
+                                        tokens[i_molid] = '$mol:m' + \
                                             tokens[i_molid]
                                     l_data_atoms.append(
                                         (' ' * indent) + (' '.join(tokens) + '\n'))
@@ -1076,6 +1076,12 @@ def main():
                                     l_data_masses.append((' ' * indent) +
                                                          (' '.join(tokens) +
                                                           '\n'))
+                                    # NOTE: We might modify this entry in the
+                                    #       l_data_masses list later if we
+                                    #       learn that the user has chosen a
+                                    #       preferred name for this atom type
+                                    #       (if infer_types_from_comments==True)
+
 
                     elif (line.strip() == 'Velocities'):
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
@@ -2278,8 +2284,8 @@ def main():
 
         # post-processing:
 
-        if len(l_data_masses) == 0:
-            infer_types_from_comments = False
+        #if len(l_data_masses) == 0:
+        #    infer_types_from_comments = False
 
         # Pass 1 through l_data_atoms:
         # Now do a second-pass throught the "l_data_atoms" section, and
@@ -2297,13 +2303,14 @@ def main():
                 atomid = Intify(atomid)
 
             simple_atom_type_names = True
-            if infer_types_from_comments:
-                atomtype = tokens[i_atomtype]
-                # remove the "@atom:" prefix (we will put it back later)
-                if atomtype.find('@atom:') == 0:
-                    atomtype = atomtype[6:]
+            atomtype = tokens[i_atomtype]
+            # remove the "@atom:" prefix (we will put it back later)
+            if atomtype.find('@atom:') == 0:
+                atomtype = Intify(atomtype[6:])
                 # convert to an integer
-                atomtype = Intify(atomtype)
+            if not (atomtype in atomtypes_int2name):
+                atomtypes_int2name[atomtype] = 'type' + str(atomtype)
+            if infer_types_from_comments:
                 atomtype_name = atomtypes_int2name[atomtype]
                 if atomtype_name.find('/') != -1:
                     simple_atom_type_names = False
