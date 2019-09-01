@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.4'
-g_date_str = '2019-8-28'
+g_version_str = '0.60.5'
+g_date_str = '2019-8-31'
 
 def Intify(s):
     if s.isdigit():
@@ -221,11 +221,14 @@ def BelongsToSel(i, sel):
     return belongs
 
 
-def main():
-    try:
-        sys.stderr.write(g_program_name + ' v' +
-                         g_version_str + ' ' + g_date_str + '\n')
 
+def ui(argv, out_file=sys.stdout):
+    """
+    Read LAMMPS input script and DATA files whose names are specified in argv,
+    and convert them to moltemplate format.  See doc_ltemplify.md for details.
+    """
+
+    try:
         non_empty_output = False
         no_warnings = True
         indent = 2
@@ -380,9 +383,12 @@ def main():
         prepend_atom_type = ''
         remove_coeffs_from_data_file = True
 
-        argv = [arg for arg in sys.argv]
 
-        i = 1
+        # Process the argument list.
+        # Arguments are explained in the ltemplify.py documentation located at:
+        # https://github.com/jewettaij/moltemplate/blob/master/doc/utils/doc_ltemplify.md
+
+        i = 0
 
         while i < len(argv):
 
@@ -616,7 +622,7 @@ def main():
 
         # PASS1: determine the atom_style, as well as the atom type names.
 
-        for i_arg in range(1, len(argv)):
+        for i_arg in range(0, len(argv)):
             fname = argv[i_arg]
             try:
                 lammps_file = open(fname, 'r')
@@ -668,7 +674,8 @@ def main():
                                              '       LAMMPS input script file is processed before the data file, or use\n'
                                              '       the \"-atom_style\" command line argument to specify the atom_style.)\n')
 
-                        column_names = AtomStyle2ColNames(line.split()[1])
+                        atom_style_str = ' '.join(tokens[1:])  # skip over the 'atom_style '
+                        column_names = AtomStyle2ColNames(atom_style_str)
                         i_atomid, i_atomtype, i_molid = ColNames2AidAtypeMolid(
                             column_names)
                         # Which columns contain the coordinates?
@@ -784,7 +791,7 @@ def main():
 
         # PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers (and Masses)
 
-        for i_arg in range(1, len(argv)):
+        for i_arg in range(0, len(argv)):
             fname = argv[i_arg]
             try:
                 lammps_file = open(fname, 'r')
@@ -4035,31 +4042,31 @@ def main():
         #                 '        ----------------------\n')
 
         if mol_name != '':
-            sys.stdout.write(mol_name + ' {\n')
+            out_file.write(mol_name + ' {\n')
 
         if len(l_in_init) > 0:
-            sys.stdout.write('\n  ### LAMMPS commands for initialization\n'
+            out_file.write('\n  ### LAMMPS commands for initialization\n'
                              '  ### (These can be overridden later.)\n\n')
             l_in_init.insert(0, (' ' * cindent) +
                              'write_once(\"' + in_init + '\") {\n')
             l_in_init.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_init))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_init))
         if len(l_in_settings) > 0:
-            sys.stdout.write('\n  ### LAMMPS commands for settings\n'
+            out_file.write('\n  ### LAMMPS commands for settings\n'
                              '  ### (These can be overridden later.)\n\n')
             l_in_settings.insert(0, (' ' * cindent) +
                                  'write_once(\"' + in_settings + '\") {\n')
             l_in_settings.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_settings))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_settings))
             non_empty_output = True
         if len(l_in_masses) > 0:
             l_in_masses.insert(0, (' ' * cindent) +
                                'write_once(\"' + in_settings + '\") {\n')
             l_in_masses.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_masses))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_masses))
             non_empty_output = True
 
         if remove_coeffs_from_data_file:
@@ -4079,8 +4086,8 @@ def main():
             l_in_pair_coeffs.insert(0, (' ' * cindent) +
                                     'write_once(\"' + in_settings + '\") {\n')
             l_in_pair_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_pair_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_pair_coeffs))
             non_empty_output = True
 
         if (remove_coeffs_from_data_file and (len(l_data_bond_coeffs) > 0)):
@@ -4092,8 +4099,8 @@ def main():
             l_in_bond_coeffs.insert(0, (' ' * cindent) +
                                     'write_once(\"' + in_settings + '\") {\n')
             l_in_bond_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_bond_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_bond_coeffs))
             non_empty_output = True
 
         if (remove_coeffs_from_data_file and (len(l_data_angle_coeffs) > 0)):
@@ -4115,8 +4122,8 @@ def main():
             l_in_angle_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + in_settings + '\") {\n')
             l_in_angle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_angle_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_angle_coeffs))
             non_empty_output = True
 
         if (remove_coeffs_from_data_file and (len(l_data_dihedral_coeffs) > 0)):
@@ -4159,8 +4166,8 @@ def main():
             l_in_dihedral_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + in_settings + '\") {\n')
             l_in_dihedral_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_dihedral_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_dihedral_coeffs))
             non_empty_output = True
 
         if (remove_coeffs_from_data_file and (len(l_data_improper_coeffs) > 0)):
@@ -4179,61 +4186,61 @@ def main():
             l_in_improper_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + in_settings + '\") {\n')
             l_in_improper_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_improper_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_improper_coeffs))
             non_empty_output = True
 
         if non_empty_output:
-            sys.stdout.write('\n\n  ### DATA sections\n\n')
+            out_file.write('\n\n  ### DATA sections\n\n')
 
         if len(l_data_masses) > 0:
             l_data_masses.insert(0, (' ' * cindent) +
                                  'write_once(\"' + data_masses + '\") {\n')
             l_data_masses.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_masses))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_masses))
             non_empty_output = True
         if len(l_data_bond_coeffs) > 0:
             l_data_bond_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_bond_coeffs + '\") {\n')
             l_data_bond_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bond_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_bond_coeffs))
             non_empty_output = True
         if len(l_data_angle_coeffs) > 0:
             l_data_angle_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_angle_coeffs + '\") {\n')
             l_data_angle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angle_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_angle_coeffs))
             non_empty_output = True
         if len(l_data_dihedral_coeffs) > 0:
             l_data_dihedral_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_dihedral_coeffs + '\") {\n')
             l_data_dihedral_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_dihedral_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_dihedral_coeffs))
             non_empty_output = True
         if len(l_data_improper_coeffs) > 0:
             l_data_improper_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_improper_coeffs + '\") {\n')
             l_data_improper_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_improper_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_improper_coeffs))
             non_empty_output = True
         if len(l_data_pair_coeffs) > 0:
             l_data_pair_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_pair_coeffs + '\") {\n')
             l_data_pair_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_pair_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_pair_coeffs))
             non_empty_output = True
         if len(l_data_pairij_coeffs) > 0:
             l_data_pairij_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_pairij_coeffs + '\") {\n')
             l_data_pairij_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_pairij_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_pairij_coeffs))
             non_empty_output = True
 
         # class2 force fields:
@@ -4241,57 +4248,57 @@ def main():
             l_data_bondbond_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_bondbond_coeffs + '\") {\n')
             l_data_bondbond_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bondbond_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_bondbond_coeffs))
             non_empty_output = True
         if len(l_data_bondangle_coeffs) > 0:
             l_data_bondangle_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_bondangle_coeffs + '\") {\n')
             l_data_bondangle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bondangle_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_bondangle_coeffs))
             non_empty_output = True
         if len(l_data_middlebondtorsion_coeffs) > 0:
             l_data_middlebondtorsion_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_middlebondtorsion_coeffs + '\") {\n')
             l_data_middlebondtorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_middlebondtorsion_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_middlebondtorsion_coeffs))
             non_empty_output = True
         if len(l_data_endbondtorsion_coeffs) > 0:
             l_data_endbondtorsion_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_endbondtorsion_coeffs + '\") {\n')
             l_data_endbondtorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_endbondtorsion_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_endbondtorsion_coeffs))
             non_empty_output = True
         if len(l_data_angletorsion_coeffs) > 0:
             l_data_angletorsion_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_angletorsion_coeffs + '\") {\n')
             l_data_angletorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angletorsion_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_angletorsion_coeffs))
             non_empty_output = True
         if len(l_data_angleangletorsion_coeffs) > 0:
             l_data_angleangletorsion_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_angleangletorsion_coeffs + '\") {\n')
             l_data_angleangletorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angleangletorsion_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_angleangletorsion_coeffs))
             non_empty_output = True
         if len(l_data_bondbond13_coeffs) > 0:
             l_data_bondbond13_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_bondbond13_coeffs + '\") {\n')
             l_data_bondbond13_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bondbond13_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_bondbond13_coeffs))
             non_empty_output = True
         if len(l_data_angleangle_coeffs) > 0:
             l_data_angleangle_coeffs.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_angleangle_coeffs + '\") {\n')
             l_data_angleangle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angleangle_coeffs))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_angleangle_coeffs))
             non_empty_output = True
 
         # automatic generation of bonded interactions by type:
@@ -4299,30 +4306,30 @@ def main():
             l_data_angles_by_type.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_angles_by_type + '\") {\n')
             l_data_angles_by_type.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angles_by_type))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_angles_by_type))
             non_empty_output = True
         if len(l_data_dihedrals_by_type) > 0:
             l_data_dihedrals_by_type.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_dihedrals_by_type + '\") {\n')
             l_data_dihedrals_by_type.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_dihedrals_by_type))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_dihedrals_by_type))
             non_empty_output = True
         if len(l_data_impropers_by_type) > 0:
             l_data_impropers_by_type.insert(
                 0, (' ' * cindent) + 'write_once(\"' + data_impropers_by_type + '\") {\n')
             l_data_impropers_by_type.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_impropers_by_type))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_impropers_by_type))
             non_empty_output = True
 
         if len(l_data_atoms) > 0:
             l_data_atoms.insert(0, (' ' * cindent) +
                                 'write(\"' + data_atoms + '\") {\n')
             l_data_atoms.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_atoms))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_atoms))
             non_empty_output = True
         else:
             sys.stderr.write('Warning: missing \"Atoms\" section.\n'
@@ -4334,20 +4341,20 @@ def main():
             l_data_ellipsoids.insert(
                 0, (' ' * cindent) + 'write(\"' + data_ellipsoids + '\") {\n')
             l_data_ellipsoids.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_ellipsoids))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_ellipsoids))
         if len(l_data_lines) > 0:
             l_data_lines.insert(0, (' ' * cindent) +
                                 'write(\"' + data_lines + '\") {\n')
             l_data_lines.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_lines))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_lines))
         if len(l_data_triangles) > 0:
             l_data_triangles.insert(0, (' ' * cindent) +
                                     'write(\"' + data_triangles + '\") {\n')
             l_data_triangles.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_triangles))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_triangles))
 
         # DO NOT WRITE OUT VELOCITY DATA
         # (Why: because it makes it difficult to combine this molecular template
@@ -4358,8 +4365,8 @@ def main():
         # if len(l_data_velocities) > 0:
         #    l_data_velocities.insert(0, (' '*cindent)+'write(\"'+data_velocities+'\") {\n')
         #    l_data_velocities.append((' '*cindent)+'}\n')
-        #    sys.stdout.write('\n')
-        #    sys.stdout.write(''.join(l_data_velocities))
+        #    out_file.write('\n')
+        #    out_file.write(''.join(l_data_velocities))
         if len(l_data_bonds) > 0:
             if ignore_bond_types:
                 l_data_bonds.insert(0, (' ' * cindent) +
@@ -4368,40 +4375,40 @@ def main():
                 l_data_bonds.insert(0, (' ' * cindent) +
                                     'write(\"' + data_bonds + '\") {\n')
             l_data_bonds.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bonds))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_bonds))
             non_empty_output = True
         if len(l_data_angles) > 0:
             l_data_angles.insert(0, (' ' * cindent) +
                                  'write(\"' + data_angles + '\") {\n')
             l_data_angles.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angles))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_angles))
             non_empty_output = True
         if len(l_data_dihedrals) > 0:
             l_data_dihedrals.insert(0, (' ' * cindent) +
                                     'write(\"' + data_dihedrals + '\") {\n')
             l_data_dihedrals.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_dihedrals))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_dihedrals))
             non_empty_output = True
         if len(l_data_impropers) > 0:
             l_data_impropers.insert(0, (' ' * cindent) +
                                     'write(\"' + data_impropers + '\") {\n')
             l_data_impropers.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_impropers))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_impropers))
             non_empty_output = True
         if len(l_data_cmap) > 0:
-            sys.stdout.write('\n')
+            out_file.write('\n')
             l_data_cmap.insert(0, (' ' * cindent) +
                                     'write(\"' + data_cmap + '\") {\n')
             l_data_cmap.insert(0, '\n')
             l_data_cmap.insert(0, (' ' * cindent) +
                                 'category $cmap(1, 1)\n')
             l_data_cmap.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_cmap))
+            out_file.write('\n')
+            out_file.write(''.join(l_data_cmap))
             non_empty_output = True
 
         if len(l_in_group) > 0:
@@ -4409,8 +4416,8 @@ def main():
             l_in_group.insert(0, (' ' * cindent) +
                               'write(\"' + in_settings + '\") {\n')
             l_in_group.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_group))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_group))
             # sys.stderr.write('######################################################\n'
             #                 'WARNING: One or more \"group\" commands appear to refer to relevant atoms.\n'
             #                 '         Please check to make sure that the group(s) generated by\n'
@@ -4422,25 +4429,25 @@ def main():
             l_in_set.insert(0, ((' ' * cindent) +
                                 'write(\"' + in_settings + '\") {'))
             l_in_set.append((' ' * cindent) + '} # end of list of \"set\" commands\n')
-            sys.stdout.write('\n')
-            sys.stdout.write((' ' * cindent) + '# list of \"set\" commands:\n')
-            sys.stdout.write('\n'.join(l_in_set))
+            out_file.write('\n')
+            out_file.write((' ' * cindent) + '# list of \"set\" commands:\n')
+            out_file.write('\n'.join(l_in_set))
 
         if len(l_in_set_static) > 0:
             l_in_set_static.insert(0, ((' ' * cindent) +
                                        'write_once(\"' + in_settings + '\") {'))
             l_in_set_static.append((' ' * cindent) + '} # end of list of (static) \"set\" commands\n')
-            sys.stdout.write('\n')
-            sys.stdout.write((' ' * cindent) + '# list of (static) \"set\" commands:\n')
-            sys.stdout.write('\n'.join(l_in_set_static))
+            out_file.write('\n')
+            out_file.write((' ' * cindent) + '# list of (static) \"set\" commands:\n')
+            out_file.write('\n'.join(l_in_set_static))
 
         if len(l_in_fix_rigid) > 0:
             no_warnings = False
             l_in_fix_rigid.insert(0, (' ' * cindent) +
                                   'write(\"' + in_settings + '\") {\n')
             l_in_fix_rigid.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_rigid))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_fix_rigid))
             sys.stderr.write('WARNING: \"fix rigid\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
@@ -4451,8 +4458,8 @@ def main():
             l_in_fix_shake.insert(0, (' ' * cindent) +
                                   'write(\"' + in_settings + '\") {\n')
             l_in_fix_shake.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_shake))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_fix_shake))
             sys.stderr.write('WARNING: \"fix shake\" style command(s) applied to selected atoms.\n'
                              '         Please check to make sure that the fix group(s) are defined correctly,\n'
 
@@ -4465,8 +4472,8 @@ def main():
             l_in_fix_poems.insert(0, (' ' * cindent) +
                                   'write(\"' + in_settings + '\") {\n')
             l_in_fix_poems.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_poems))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_fix_poems))
             sys.stderr.write('WARNING: \"fix poems\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
@@ -4477,8 +4484,8 @@ def main():
             l_in_fix_qeq.insert(0, (' ' * cindent) +
                                 'write(\"' + in_settings + '\") {\n')
             l_in_fix_qeq.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_qeq))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_fix_qeq))
             sys.stderr.write('WARNING: \"fix qeq\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
@@ -4489,15 +4496,15 @@ def main():
             l_in_fix_qmmm.insert(0, (' ' * cindent) +
                                  'write(\"' + in_settings + '\") {\n')
             l_in_fix_qmmm.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_qmmm))
+            out_file.write('\n')
+            out_file.write(''.join(l_in_fix_qmmm))
             sys.stderr.write('WARNING: \"fix qmmm\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
             assert(non_empty_output)
 
         if mol_name != '':
-            sys.stdout.write('\n} # end of \"' + mol_name + '\" type definition\n')
+            out_file.write('\n} # end of \"' + mol_name + '\" type definition\n')
 
         # if non_empty_output and no_warnings:
         if non_empty_output:
@@ -4518,5 +4525,16 @@ def main():
 
     return
 
+
+
+def main():
+
+    sys.stderr.write(g_program_name + ' v' +
+                     g_version_str + ' ' + g_date_str + '\n')
+
+    ui(sys.argv[1:], out_file = sys.stdout)
+
+
 if __name__ == '__main__':
     main()
+
