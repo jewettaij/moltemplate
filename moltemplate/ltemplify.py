@@ -3619,7 +3619,7 @@ class Ltemplify(object):
                 if ((self.max_needed_dihedraltype == None) or
                         (self.max_needed_dihedraltype < dihedraltype)):
                     self.max_needed_dihedraltype = dihedraltype
-            for dihedralid in needed_dihedralids:
+            for dihedralid in self.needed_dihedralids:
                 assert(type(dihedralid) is int)
                 if ((self.min_needed_dihedralid == None) or
                         (self.min_needed_dihedralid > dihedralid)):
