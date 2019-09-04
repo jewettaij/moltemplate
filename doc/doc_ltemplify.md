@@ -43,7 +43,7 @@ MOLTEMPLATE file created by ltemplify.py.)
 ***Note: Tiresome details to follow.***
 
 ***First time readers should probably skip to the
-[examples section](#-Examples).***
+[examples section](#examples).***
 
 
 

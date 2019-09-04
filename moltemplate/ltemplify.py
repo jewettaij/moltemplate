@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.5'
-g_date_str = '2019-8-31'
+g_version_str = '0.61.0'
+g_date_str = '2019-9-03'
 
 def Intify(s):
     if s.isdigit():
@@ -2594,13 +2594,13 @@ def ui(argv, out_file=sys.stdout):
         #if len(l_data_masses) == 0:
         #    infer_types_from_comments = False
 
-        # Pass 1 through l_data_atoms:
+        # Postprocessing1:
         # Now do a second-pass throught the "l_data_atoms" section, and
         # finish dealing with "infer_types_from_comments".
         # During this pass, peplace the atomtype names and atomid names with
         # atom type names which were inferred from comments read earlier.
 
-        sys.stderr.write('pass2.1')
+        sys.stderr.write('postprocessing1')
         for i in range(0, len(l_data_atoms)):
             tokens = l_data_atoms[i].split()
             atomid = tokens[i_atomid]
@@ -2638,8 +2638,9 @@ def ui(argv, out_file=sys.stdout):
                 atomids_int2name[atomid] = 'id' + str(atomid)
             atomids_by_type[atomtype].append(atomid)
 
-        sys.stderr.write(', pass2.2')
-        #Pass 2.2: If any atom types only appear once, simplify their atomid names
+        sys.stderr.write(', postprocessing2')
+
+        #Postprocessing 2: If any atom types only appear once, simplify their atomid names
         for i in range(0, len(l_data_atoms)):
             tokens = l_data_atoms[i].split()
 
@@ -2657,8 +2658,14 @@ def ui(argv, out_file=sys.stdout):
                     atomtype_name = atomtypes_int2name[atomtype]
                     atomids_int2name[atomid] = atomtype_name
 
-        sys.stderr.write(', pass2.3')
-        #Pass 2.3: substitute the atomid names and atom type names into l_data_atoms
+        sys.stderr.write(', postprocessing3')
+        # Postprocessing 3:
+        #  Substitute the updated atomid names and atom type names into
+        # l_data_atoms
+        # l_data_velocities
+        # l_data_ellipsoids
+        # l_data_lines
+        # l_data_triangles
         for i in range(0, len(l_data_atoms)):
             tokens = l_data_atoms[i].split()
             atomid = tokens[i_atomid]
@@ -2682,6 +2689,77 @@ def ui(argv, out_file=sys.stdout):
             else:
                 tokens[i_atomtype] = '@atom:' + atomtype_name
             l_data_atoms[i] = (' ' * indent) + (' '.join(tokens))
+
+        # l_data_velocities
+        for i in range(0, len(l_data_velocities)):
+            tokens = l_data_velocities[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = atomids_int2name[atomid]
+            tokens = l_data_velocities[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            l_data_velocities[i] = (' ' * indent) + (' '.join(tokens))
+
+        # l_data_ellipsoids
+        for i in range(0, len(l_data_ellipsoids)):
+            tokens = l_data_ellipsoids[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = atomids_int2name[atomid]
+            tokens = l_data_ellipsoids[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            l_data_ellipsoids[i] = (' ' * indent) + (' '.join(tokens))
+
+
+        # l_data_lines
+        for i in range(0, len(l_data_lines)):
+            tokens = l_data_lines[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = atomids_int2name[atomid]
+            tokens = l_data_lines[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            l_data_lines[i] = (' ' * indent) + (' '.join(tokens))
+
+        # l_data_triangles
+        for i in range(0, len(l_data_triangles)):
+            tokens = l_data_triangles[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = atomids_int2name[atomid]
+            tokens = l_data_triangles[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            l_data_triangles[i] = (' ' * indent) + (' '.join(tokens))
+
+
+
+
+
+
         sys.stderr.write(')\n\n')
 
         if len(l_data_atoms) == 0:
