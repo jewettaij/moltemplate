@@ -34,7 +34,7 @@ from .ttree import main
 from .lttree import main
 from .ettree import main
 from .ttree_render import main
-from .ltemplify import main
+from .ltemplify import main, Ltemplify
 from .dump2data import main
 from .raw2data import main
 from .extract_lammps_data import main
