@@ -78,35 +78,6 @@ Moltemplate is extremely flexible.
 It supports all LAMMPS force-field styles and nearly all atom-styles
 (now and in the future).
 
-\subsubsection*{Warning: All-atom force fields}
-
-Although moltemplate was designed for building coarse-grained molecules,
-popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
-converted into LT format, and more are planned.  This enables moltemplate
-users to build molecules without being forced to manually list all of the
-angles, dihedrals, and impropers within every molecule.
-Unfortunately, as of 2019-8-26, moltemplate does 
-\textit{not} assign partial charges, 
-\textit{or} infer atom-types from SMILES strings, PDB files,
-PSF files or other popular molecular file formats.
-In practice, the lack of automatic atom-type determination
-can be a huge limitation.
-Currently, users must carefully choose the name
-of the atom type associated with every atom in the molecule.
-For small molecules, they can do this by reading the force-field
-file carefully and choosing from among the \@atom types in the list.
-This will insure that the force-field selected will understand the atom type
-and moltemplate will be able to use it to look up force field information.
-For large molecules, they can use an external tool (like AmberTools or PSFGEN)
-to generate atom type names and partial charges, and (manually) copy that
-information \textit{and convert it, if necessary into a format that is compatible with moltemplate's version of the force-field}.
-(Unfortunately, the atom type names in different versions of the
- same force field do not always match, so this also must be done carefully.
- As of 2019-8-26, efforts are underway to make this easier.)
-
-Fortunately, external servers such as LibParGen and ATB can also be
-used to generate files in LAMMPS or moltemplate format which contain
-all of the force-field information.
 
   % OLD VERSION
   %Moltemplate is a cross-platform text-based molecule builder for LAMMPS. It is typically used for building coarse-grained toy molecular models. Moltemplate users have access to (nearly) all of the standard and non-standard (custom, user-created) force-field and features available in LAMMPS.
@@ -202,6 +173,49 @@ Existing LAMMPS input/data files can be converted into
  See appendix \ref{sec:ltemplify}.})
   % Some manual editing of the resulting LT files may be required,
   % especially when exotic or many-body pair\_styles are used.)
+
+
+
+
+\subsubsection*{Warning: All-atom force fields}
+
+Although moltemplate was designed for building coarse-grained molecules,
+popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
+converted into LT format, and more are planned.  Moltemplate
+users can build molecules, using these force-field rules to generate
+angles, dihedrals, and impropers interactions for their molecules automatically
+(and lookup their corresponding force field parameters).
+Unfortunately, as of 2019-9-03, moltemplate does 
+\textit{not} assign partial charges, 
+\textit{or} infer the atom-types which are needed to lookup this information.
+\textit{(Force-field-specific atom types are typically inferred from PDB files,
+CIF files, SMILES strings, or read directly from PSF files or other files.)}
+In practice, the lack of automatic atom-type
+determination can be a huge limitation.
+Currently, users must carefully choose the name
+of the atom type associated with every atom in their molecules.
+For small molecules, this can sometimes be done by reading the force-field
+file carefully and choosing from among the \@atom types in the list
+whose description in the comments seems to match the context where
+the atom appears in their molecule.  However this is risky because the accuracy
+of the simulation depends on selecting the correct atom type from this list.
+For large, complex molecules, manually selecting atom types this way
+is not feasible.  In that case, users can try using an external tool
+(like AmberTools or PSFGEN) to generate atom type names and partial charges,
+and (manually) copy that information into the moltemplate file (LT file).
+(Unfortunately, the atom type names in different versions of the
+ same force field do not always match, so this also must be done carefully.
+ For example, as of 2019-9-03, the OPLSAA atom types created by PSFGEN
+ \textit{do not match} the OPLSAA atom types used by moltemplate.
+ Efforts are underway to make these various tools work better together.)
+
+Fortunately, external web-servers such as ATB or LibParGen can be
+used to generate files moltemplate or LAMMPS or format which internally
+contain all of the force-field information (so that using an external
+force field is unnecessary).
+
+
+
 
 
 %\subsection*{Strengths}
@@ -431,7 +445,7 @@ Alternatively, you can also download moltemplate as a .tar.gz archive from
 \url{http://www.moltemplate.org}
 and can unpack it using:
 \begin{verbatim}
-tar -xzvf moltemplate_2017-8-22.tar.gz
+tar -xzvf moltemplate_2019-9-03.tar.gz
 \end{verbatim}
 (The date will vary from version to version.)
 Somewhat older versions of moltemplate are also bundled with the LAMMPS 
@@ -593,7 +607,6 @@ using \mbox{NewMol \{\textit{more\ content}...\}}.
 Create a new molecule \textbf{type} based on an existing molecule type,
 and apply coordinate transformation \textit{xform()} to it.
 (See section \ref{sec:molecule_customization}.)
- % \textit{This feature is experimental as of 2012-9-28}.)
 \\
 \hline
   %\textit{NewMol} \textbf{inherits} \textit{Mol1} \textit{Mol2} \mbox{\{...\}} &
@@ -622,7 +635,6 @@ follows within the curly brackets.
 Apply the coordinate transform \textit{xform()} to the coordinates 
 of the atoms in all molecules of type \textit{MolType}.
 (See section \ref{sec:molecule_customization}.)
- % \textit{This feature is experimental as of 2012-9-28}.)
 \\
 \hline
 \textit{molecule}.\textit{xform()}
@@ -1492,11 +1504,6 @@ for details.
   %}
   %\end{verbatim}
   %Note that the simulation volume is still finite.
-  %(Currently, as of 2012-5-28, 
-  % atoms which escape the simulation boundary are lost/destroyed.)
-  %  %(Of course, you can always manually edit the LAMMPS input script 
-  %  % file that was generated by moltemplate.sh before running LAMMPS.
-  %  % These files are explained below.)
 
 \subsection{Visualization using VMD \& topotools}
 \label{sec:vmd_topotools}
@@ -1558,7 +1565,7 @@ display periodic boundaries, and wrap atomic coordinates,
 read the short VMD tutorial in appendix \ref{sec:vmd_advanced}.
 
 \textit{(Note:
-As of 2012-12-18, 
+As of 2019-9-03, 
 VMD does not have built-in support for exotic atom\_styles 
 such as ellipsoids and dipoles, but their are 3rd-party scripts, plugins 
 and settings you can use. Search the VMD and LAMMPS mailing lists 
@@ -1723,7 +1730,7 @@ In addition, all users should be familiar with the following commands:
 %   %Note: Special care is required for \textit{coarse-grained} systems.
 %(The Berendsen thermostat is also not recommended.)
 %The Langevin thermostat is available in LAMMPS, 
-%however it (currently as of 2012-5) requires 
+%however it (currently as of 2019-9-03) requires 
 %two ``fix'' commands, as shown below:
 %\begin{verbatim}
 %#  -- run at constant volume using Langevin dynamics. --
@@ -3160,12 +3167,12 @@ and wildcard characters (``*'').
 Deleting atoms or molecules may cause 
 inaccuracies in the \$atoms, \$bonds, \$angles, \$dihedrals, and \$impropers
 sections of the ``ttree\_assignments.txt'' file.
-(If this is a problem, please email me. -Andrew 2014-12-09.)
+(If this is a problem, please email me. -Andrew 2019-9-03.)
 Fortunately, this should not harm the resulting LAMMPS data files or input
 scripts generated by moltemplate.  They should still work with LAMMPS.}
 
 \textit{WARNING: The \textbf{delete} feature is experimental.
-There have been a few bugs in the \textbf{delete} command, but by 2014-12-09
+There have been a few bugs in the \textbf{delete} command, but by 2019-9-03
 these should be fixed.  Please report any problems you find.
 As always, be sure to visualize your structures 
 to make sure they look reasonable.
@@ -3173,7 +3180,7 @@ to make sure they look reasonable.
  ``-vmd'' command line option, for example.
  See sections \ref{sec:vmd_topotools}, \ref{sec:vmd_advanced} for details.)}
 %\textit{\textbf{BUG Warning:}
-%As of 2014-4-02, delete does not always work 
+%As of 2019-9-03, delete does not always work 
 %when the deleted molecule is both bonded to other molecules,
 %and when it contains sub-molecules of it's own.
 %The temporary work-around is simply to avoid connecting bonds to any molecule
@@ -3183,7 +3190,7 @@ to make sure they look reasonable.
 
 
   %\subsubsection*{The context() modifier.}
-  %\textit{THIS FEATURE DOES NOT WORK YET AS OF 2012-5}
+  %\textit{THIS FEATURE DOES NOT WORK YET AS OF 2019-9-03}
   %By default, this transformations is applied relative
   %to the coordinate system in which the command was given.
   %In other words, this command will move the third 
@@ -3198,7 +3205,7 @@ to make sure they look reasonable.
 
 
 %\subsubsection*{Examples using center-of-mass coordinate transformations}
-%\textit{WARNING: experimental feature 2012-3-31}
+%\textit{WARNING: experimental feature 2019-9-03}
 %
 %You can also center a molecule around it's center-of-mass using ``movecm()'',
 %rotate it, and then move it this way:
@@ -3278,10 +3285,6 @@ A customized version of the ``MolecularComplex'' molecule.
 }
 \end{figure}
 
-  %\textit{Note1: Coordinate transformations applied to entire
-  %molecule types are an experimental feature as of 2013-4-07.)
-  %SINCE THEN THIS FEATURE HAS BEEN TESTED.  IT SEEMS TO WORK.
-  
 
 \textit{Note: These coordinate transformations will be 
 applied \textbf{after} the molecule is constructed.
@@ -3972,7 +3975,7 @@ Butane inherits TraPPE OPLSAA {
 molecule types if they are found in both parents, giving priority to the 
 first parent in the list of parents following the ``inherits'' keyword. 
 (``TraPPE'' in this example.)
-  %Note: This feature has not been rigorously tested as of 2013-4-07.)
+  %Note: This feature has not been rigorously tested as of 2019-9-03.)
 }
 
 \subsubsection{Inheritance \textit{vs.} Nesting}
@@ -4013,7 +4016,6 @@ A {
 
   %\section{Inheritance}
   %\label{sec:inheritance}
-  %\textit{New (experimental) feature as of 2012-3-31:}
   %
   %In this section we show a simple example of inheritance and nesting.
   %
@@ -4136,7 +4138,7 @@ to request support for LAMMPS-style molecule templates.
 \textbf{2)} \textbf{Moltemplate consumes a large amount of memory (RAM)}
 
 Memory use grows proportional to system size.
-As of 2014-12-09, setting up a system of 1000000 atoms using moltemplate 
+As of 2019-9-03, setting up a system of 1000000 atoms using moltemplate 
 currently requires between 2.7 and 12 GB of \textit{available} memory. 
 (Systems with many bonds and angles consume more memory, 
  as well as systems with a high molecule count.)
@@ -4171,9 +4173,10 @@ starting moltemplate and kill the process if it's memory usage exceeds 80\%.
 
 \textbf{3)} Limited support for non-point-like atoms:
 
-As of 2017-8-31, only the ``full'', ``angle'', ``atomic'', ``charge'',
-``sphere'', ``dipole'', and ``molecular'' styles have been tested.  
-Non-point-like atoms like ``ellipsoid'', ``tri'', ``line'' 
+As of 2019-9-03, only the ``full'', ``angle'', ``atomic'', ``charge'',
+``sphere'', ``dipole'', ``ellipsoid'', and ``molecular'' styles
+have been tested.  
+Other non-point-like atoms like ``tri'', ``line'' 
 \textit{should} also work with moltemplate. 
 However these objects
 are \textit{not rotated correctly} 
@@ -4207,7 +4210,7 @@ sections.
 
 \textbf{5)} Triclinic boundary conditions have not been tested:
 
-As of 2014-12-09, support for PDB files with triclinic cells is experimental.
+As of 2019-9-03, support for PDB files with triclinic cells is experimental.
 Please let me know if it is not working.
 
 \textbf{6)} Inconsistent support for wildcard characters (``*'' and ``?'') 
@@ -4229,21 +4232,22 @@ Please let me know if it is not working.
    (such as ``pair\_style hbond/dreiding/lj''.
     However manybody pair\_styles which use ``pair\_coeff * *''
     notation work fine.)
-   As of 2017-8-31, wildcard characters (``*'', ``?'') also fail to work inside
-   \textit{``bond\_modify''} commands, and other commands used for running
-   active matter simulations. (Such commands are typically located within the
-   \textit{``write\_once("In Transitions")''} section of an .LT file.)
-   LAMMPS interprets ``*'' characters appearing here as
-   \textit{numeric ranges}, and their behavior depends on the
-   integers which moltemplate assigns to these variables,
-   \textit{not} the \textit{names} of the variables.
-   (See the official documentation for bond\_modify, and bond\_coeff
-    commands to see how ``*'' characters are interpreted.
-   This can lead to unintended side-effects and is discouraged.
-   The ``*'' character can be safely used in array brackets, \textit{[*]}, or in
-   the varios \textit{``\_coeff''} commands and \textit{``By Type''} sections.
-   (See section \ref{sec:array_wildcards_intro} 
-    and appendix \ref{sec:nbody_by_type}.)
+
+   %As of 2019-9-03, wildcard characters (``*'', ``?'') also fail to work inside
+   %\textit{``bond\_modify''} commands, and other commands used for running
+   %active matter simulations. (Such commands are typically located within the
+   %\textit{``write\_once("In Transitions")''} section of an .LT file.)
+   %LAMMPS interprets ``*'' characters appearing here as
+   %\textit{numeric ranges}, and their behavior depends on the
+   %integers which moltemplate assigns to these variables,
+   %\textit{not} the \textit{names} of the variables.
+   %(See the official documentation for bond\_modify, and bond\_coeff
+   % commands to see how ``*'' characters are interpreted.
+   %This can lead to unintended side-effects and is discouraged.
+   %The ``*'' character can be safely used in array brackets, \textit{[*]}, or in
+   %the varios \textit{``\_coeff''} commands and \textit{``By Type''} sections.
+   %(See section \ref{sec:array_wildcards_intro} 
+   % and appendix \ref{sec:nbody_by_type}.)
 
 \pagebreak
 
@@ -4325,7 +4329,7 @@ Regular-expressions can also be used to match potential atom and bond types.
 bond types on either side by slashes.  
 For example: \mbox{@atom:C[1-5]/}, should match 
 \mbox{@atom:C1} through \mbox{@atom:C6}.)
-\textit{Note: This feature has not been tested as of 2014-12-09.}
+\textit{Note: This feature has not been tested as of 2019-9-03.}
 
 In a similar way, one can define ``Dihedrals By Type'' and 
 ``Impropers By Type''.
@@ -4375,7 +4379,7 @@ by ``ltemplify.py'' contain the definition of a single type of molecule
 This way, moltemplate users later on can build complicated simulations using
 this molecule as a building block (perhaps along with other molecules).
 
-Users typically select the molecule (or molecules) they want
+Users can select the molecule (or molecules) they want
 using the ``-mol'', ``-id'', or ``-type'' arguments,
 and give the molecule a name using the ``-name'' argument.  (See below.)
 The resulting LT file will include all of the information relevant
@@ -4554,7 +4558,7 @@ Coefficients, atom styles, and most force-field styles and
 settings \textit{should} also be included in the resulting .LT file.
 ltemplify.py also understands simple group commands
 (using ``id'', ``molecule'', or ``type'' styles)
-and ``fix shake'' and ``fix rigid''  (untested 2019-8-31).
+and ``fix shake'' and ``fix rigid''  (untested 2019-9-03).
 However most other fixes, and complex group commands are not understood.
 Those commands must be added to the resulting .LT file manually.
 (See section \ref{sec:ltemplify_limitations} for more details.)
@@ -4573,7 +4577,7 @@ Other fixes must be added manually to the file generated by ltemplify.py.
 
 ltemplify.py can understand simple (static) ``group'' commands, and will include them in the output file, if it can determine that they contain any relevant atoms.  (Fixes depending on irrelevant groups are also deleted.)
 
-\textit{Note: This feature has not been tested carefully.  So please review all of the group and fix commands generated by ltemplify.py to make sure they refer to the correct atoms.  And please report any bugs you find. (-Andrew 2019-8-31)}
+\textit{Note: This feature has not been tested carefully.  So please review all of the group and fix commands generated by ltemplify.py to make sure they refer to the correct atoms.  And please report any bugs you find. (-Andrew 2019-9-03)}
 
 
 
@@ -4621,7 +4625,7 @@ assigned to type names like ``@bond:type4'',
 ``@angle:type7''.
 
 \textit{However, if comments appear} directly following the line in the
-header file ``\textit{N} bond types``, then these comments will be interpreted
+header file ``\textit{N} bond types'', then these comments will be interpreted
 as a list of bond type names (optionally preceded by an integer).
 (The same is true of angle, dihedral, and improper type names.)
 Consider this excerpt from a LAMMPS data file:
@@ -4693,7 +4697,7 @@ Later when moltemplate is used to read this file, the ``GAFF2''
 force field will be used to generate angles, dihedrals and impropers,
 and lookup their force field parameters.
 
-In addition, after ltemplify.py is finished, the user must manually insert the following line *at the beginning* of the file that ltemplify.py created.  For example:
+In addition, after ltemplify.py is finished, the user must manually insert the following line \textit{at the beginning} of the file that ltemplify.py created.  For example:
 \begin{verbatim}
 import "gaff2.lt"     #<-- define the GAFF2 force field
 
@@ -4730,7 +4734,7 @@ later when we run moltemplate.sh on that file.)
 \subsubsection*{-ignore-bond-types}
 
 Similarly, when using force-fields, you only need to specify a
-list of *which pairs of atoms* are bonded together.
+list of \textit{which pairs of atoms} are bonded together.
 The force-field will determine the type and
 properties of each bond (eg, equilibrium rest length, stiffness, etc...)
 according to atom type names and the force field rules.
@@ -4799,6 +4803,17 @@ containing a new type of molecule (named ``Ethane''),
 consisting of all the atoms whose molecule-ID number equals 1.
 \textit{(Presumabely, the first molecule in FILE.data is an ethane molecule.)}
 
+ltemplify.py reads the atom coordinates and bonded interactions from
+``FILE.data''.
+Other information relevant to that molecule (including the atom\_style,
+force-field styles and parameters, groups and fixes)
+are read from ``FILE.in'' (which is presumabely a LAMMPS input script file).
+
+\textit{(NOTE: Again, it is not necessary to include a LAMMPS input script in
+        the argument list.  However important information is typically
+        contained in LAMMPS input script files, so if you have one, including
+        it is recommended.  However a data file is enough.)}
+
 Note: Selecting atoms by molecule-ID only works if you are using
 one of the ``molecular'' atom\_styles (such as ``atom\_style full'').
 If you are using a different atom\_style
@@ -4807,13 +4822,14 @@ you can select the atoms you want either by type or by id number.
 (See below.)
 
 
+
 \subsubsection*{Example 2}
 Sometimes, the information describing your molecule will divided
 into multiple lammps input scripts.
-(For example, one input script may contain various *style* commands.
- The next input script may contain *coeff* commands.)
+(For example, one input script may contain various \textit{style} commands.
+ The next input script may contain \textit{coeff} commands.)
 In that case, these input scripts should appear
-in the argument list *before the data file*,
+in the argument list \textit{before the data file},
 and in the order in which they are read by LAMMPS.
 \begin{verbatim}
 ltemplify.py -name Ethane \
@@ -4865,7 +4881,7 @@ Note: The input scripts (``FILE.in'' in this example) should appear
 \label{sec:ltemplify_examples_force_fields}
 
 
-You can also use *ltemplify.py* to create molecules that use 3rd-party
+You can also use \textit{ltemplify.py} to create molecules that use 3rd-party
 force fields such as OPLSAA, GAFF2, COMPASS, ....
 
 
@@ -5026,7 +5042,7 @@ and then select an option from the
 Atoms are colored by atom-type by default.
 You can customize the color of each atom type by 
 \mbox{\textbf{Graphics}}$\rightarrow$\mbox{\textbf{Colors...}}
-As of 2012-11-18, VMD arbitrarily allows you to
+As of 2019-9-03, VMD arbitrarily allows you to
 assign colors to \textit{only} the first 9 atom types.
 However you can get around this limitation
 using multiple \textit{representations} 
@@ -5205,7 +5221,7 @@ Optional arguments:
                 If the PDB file contains periodic boundary box information 
                 (IE., a "CRYST1" record), this information is also copied 
                 to the LAMMPS data file.  
-                (Support for triclinic cells is experimental as of 2014-12-09.
+                (Support for triclinic cells is experimental as of 2019-9-03.
                 Other molecular structure formats may be supported later.
 -a "@atom:x 1"
 -a assignments.txt
@@ -5394,7 +5410,7 @@ may cause some of the instance variables
 and \$improper variables)
 to be numbered incorrectly.  
 However static variables (beginning with @) should always be accurate.
--Andrew 2013-4-07.}
+-Andrew 2019-9-03.}
 
 
 \subsubsection*{lttree.py and ttree.py also accept ``-a'' and ``-b'' flags}
@@ -5536,7 +5552,7 @@ copy of the class they create.
   %(as described above).
   %
   %\subsubsection*{The ``-order-dfs'' command}
-  %\textit{(This is an experimental feature as of 2012-2-13.)}
+  %\textit{(This is an experimental feature as of 2019-9-03.)}
   %However, if the ``-order-dfs'' command line option is selected, 
   %then instance variables (\$) are counted in the order they appear 
   %in the tree of instantiated classes (IE. the ``instance tree''), with only 
@@ -5560,7 +5576,7 @@ copy of the class they create.
   % listed in the ``ttree\_assignments.txt'' file.)
 
   %\subsubsection*{The ``-order-file'' command}
-  %\textit{(This is an experimental feature as of 2012-2-13.)}
+  %\textit{(This is an experimental feature as of 2019-9-03.)}
   %If ``-order-file'' command line option is selected, 
   %then instance variables (\$) are primarily sorted 
   %according to the position that the variable first 
