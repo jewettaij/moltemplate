@@ -37,7 +37,7 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.61.1'
+g_version_str = '0.61.2'
 g_date_str = '2019-9-03'
 
 def Intify(s):
@@ -5017,12 +5017,12 @@ def main():
         # Read the command line arguments to figure out which files
         # we will need to read (and also how to modify the output format).
 
-        ltemplify = Ltemplify(sys.argv[1:])
+        ltemp = Ltemplify(sys.argv[1:])
 
         # Using these settings, convert these files into a single file.
         # Send the content that file to sys.stdout.
 
-        ltemplify.Convert(sys.stdout)
+        ltemp.Convert(sys.stdout)
 
     except (InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
