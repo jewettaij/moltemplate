@@ -4409,6 +4409,8 @@ the examples in section\ref{sec:ltemplify_examples}.}
 
 ``ltemplify.py'' requires only one argument: the name of a LAMMPS data file.
 However (as shown in the example above), it also reads LAMMPS input scripts.
+\textit{(Note: If LAMMPS input scripts are included, they must appear
+\textbf{before} the DATA file in the argument list.  See examples below.)}
 ``ltemplify.py'' also accepts many arguments to select the atoms belonging
 to the molecule of interest and customize the output.
 
@@ -4874,7 +4876,7 @@ and saves this data in a single LT file (``entire\_system.lt'').
 This file can be used with moltemplate.sh (and/or ttree.py) to
 define large systems containing this molecule.
 
-Note: The input scripts (``FILE.in'' in this example) should appear 
+Note: Again, the input scripts (``FILE.in'' in this example) should appear 
       before the data file (``FILE.data'') in the argument list.
 
 

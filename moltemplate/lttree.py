@@ -944,8 +944,17 @@ def main():
         sys.stderr.write(' done\n')
 
     except (ValueError, InputError) as err:
-        sys.stderr.write('\n\n' + str(err) + '\n')
-        sys.exit(-1)
+        if isinstance(err, ValueError):
+            sys.stderr.write('Error converting string to numeric format.\n'
+                             '      This sometimes means you have neglected to specify the atom style\n'
+                             '      (using the \"-atomstyle\" command).  Alternatively it could indicate\n'
+                             '      that the moltemplate file contains non-numeric text in one of the\n'
+                             '      .move(), .rot(), .scale() commands.  If neither of these scenarios\n'
+                             '      apply, then please report this bug. (jewett.aij at gmail dot com)\n')
+            sys.exit(-1)
+        else:
+            sys.stderr.write('\n\n' + str(err) + '\n')
+            sys.exit(-1)
 
     return
 

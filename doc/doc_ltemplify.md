@@ -51,17 +51,10 @@ MOLTEMPLATE file created by ltemplify.py.)
 
 "ltemplify.py" requires one argument: the name of a LAMMPS data file.
 However (as shown in the example above), it also reads LAMMPS input scripts.
+*(Note: If LAMMPS input scripts are included, then they must appear before
+the DATA file in the argument list.  See examples below.)*
 "ltemplify.py" also accepts many arguments to select the atoms belonging
 to the molecule of interest and customize the output.
-
-#### LAMMPS input scripts
-
-In addition to LAMMPS DATA files, users can also supply
-one or more LAMMPS input scripts
-(typically containing information relevant to that molecule,
-such as force field parameters and fixes).
-If LAMMPS input scripts are included, they must appear *before*
-the DATA file in the argument list. (See examples below.)
 
 
 ## Optional arguments
@@ -395,12 +388,8 @@ and saves this data in a single LT file ("entire\_system.lt").
 This file can be used with moltemplate.sh (and/or ttree.py) to
 define large systems containing this molecule.
 
-Note: The input scripts ("FILE.in" in this example) should appear 
+Note: Again, the input scripts ("FILE.in" in this example) should appear 
       before the data file ("FILE.data") in the argument list.
-
-Note: *Multiple* input scripts can be used, if the LAMMPS commands
-      are split into multiple files.
-      In that case, list them in the order they would be read by LAMMPS:
 
 
 
