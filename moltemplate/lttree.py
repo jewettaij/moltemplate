@@ -29,8 +29,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2018-10-16'
-g_version_str = '0.80.0'
+g_date_str = '2019-9-05'
+g_version_str = '0.80.1'
 
 
 import sys
