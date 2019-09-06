@@ -614,27 +614,31 @@ class Ltemplify(object):
         #-- parameters (coeff commands).
         #---------------------------------------------------------
 
-        # copy the contents of argv[] into self.input_files[]
-        self.input_files = [ f for f in argv ]
+        if len(argv) > 0:
+            self.input_data_file = argv[-1]  #the last argument is the data file
+            self.input_script_files = argv[:-1] # optional input script files
 
 
 
 
 
 
-    def Convert(self, out_file):
+    def Convert(self,
+                input_data_file,
+                input_script_files,
+                out_file):
         """
-        Read the LAMMPS input script and DATA files whose names are
-        specified in self.input_files, and convert them to moltemplate format.
+        Read the LAMMPS DATA file (and optional input script files)
+        and convert these files to moltemplate format.
         (See doc_ltemplify.md for details.)
         """
 
         # Determine the atom_style, as well as the atom type names
-        self.Pass1()
+        self.Pass1(input_data_file, input_script_files)
 
         # Parse all other sections of the LAMMPS files,
         # including Atoms, Bonds, Angles, Dihedrals, Impropers and Masses
-        self.Pass2()
+        self.Pass2(input_data_file, input_script_files)
 
         # Deal with CUSTOM atom type and bonded interaction type names.
         #
@@ -660,26 +664,31 @@ class Ltemplify(object):
 
 
 
-    def Pass1(self):
+    def Pass1(self, input_data_file, input_script_files):
         "PASS1: determine the atom_style, as well as the atom type names."
 
         atom_style_str = ''
 
-        for i_arg in range(0, len(self.input_files)):
-            fname = self.input_files[i_arg]
-            try:
-                lammps_file = open(fname, 'r')
-            except IOError:
-                raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
-                                 '       OR unable to open file:\n'
-                                 '\n'
-                                 '       \"' + fname + '\"\n'
-                                 '       for reading.\n'
-                                 '\n'
-                                 '       (If you were not trying to open a file with this name,\n'
-                                 '        then there is a problem in your argument list.)\n')
+        input_files = input_script_files + [input_data_file]
 
-            sys.stderr.write('reading file \"' + fname + '\"\n')
+        for i_arg in range(0, len(input_files)):
+            fname = input_files[i_arg]
+            if isinstance(fname, str):
+                try:
+                    lammps_file = open(fname, 'r')
+                except IOError:
+                    raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
+                                     '       OR unable to open file:\n'
+                                     '\n'
+                                     '       \"' + fname + '\"\n'
+                                     '       for reading.\n'
+                                     '\n'
+                                     '       (If you were not trying to open a file with this name,\n'
+                                     '        then there is a problem in your argument list.)\n')
+
+                sys.stderr.write('reading file \"' + fname + '\"\n')
+            else:
+                lammps_file = fname #then "fname" is a file stream, not a string
 
             lex = LineLex(lammps_file, fname)
             lex.source_triggers = set(['include', 'import'])
@@ -870,24 +879,30 @@ class Ltemplify(object):
 
 
 
-    def Pass2(self):
+    def Pass2(self, input_data_file, input_script_files):
         "PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers and Masses."
 
-        for i_arg in range(0, len(self.input_files)):
-            fname = self.input_files[i_arg]
-            try:
-                lammps_file = open(fname, 'r')
-            except IOError:
-                raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
-                                 '       OR unable to open file:\n'
-                                 '\n'
-                                 '       \"' + fname + '\"\n'
-                                 '       for reading.\n'
-                                 '\n'
-                                 '       (If you were not trying to open a file with this name,\n'
-                                 '        then there is a problem in your argument list.)\n')
+        input_files = input_script_files + [input_data_file]
 
-            sys.stderr.write('reading file \"' + fname + '\"\n')
+
+        for i_arg in range(0, len(input_files)):
+            fname = input_files[i_arg]
+            if isinstance(fname, str):
+                try:
+                    lammps_file = open(fname, 'r')
+                except IOError:
+                    raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
+                                     '       OR unable to open file:\n'
+                                     '\n'
+                                     '       \"' + fname + '\"\n'
+                                     '       for reading.\n'
+                                     '\n'
+                                     '       (If you were not trying to open a file with this name,\n'
+                                     '        then there is a problem in your argument list.)\n')
+
+                sys.stderr.write('reading file \"' + fname + '\"\n')
+            else:
+                lammps_file = fname #then "fname" is a file stream, not a string
 
             lex = LineLex(lammps_file, fname)
             lex.source_triggers = set(['include', 'import'])
@@ -5019,10 +5034,16 @@ def main():
 
         ltemp = Ltemplify(sys.argv[1:])
 
+        # Note: The arguments in sys.argv contains the list of files that
+        #       the user wants us to read and convert into moltemplate format.
+        #       This list of files is now in the ltemp.input_files data member.
+
         # Using these settings, convert these files into a single file.
         # Send the content that file to sys.stdout.
 
-        ltemp.Convert(sys.stdout)
+        ltemp.Convert(ltemp.input_data_file,
+                      ltemp.input_script_files,
+                      sys.stdout)
 
     except (InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
