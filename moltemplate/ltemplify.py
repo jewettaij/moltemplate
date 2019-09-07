@@ -38,8 +38,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.62.1'
-g_date_str = '2019-9-06'
+g_version_str = '0.62.2'
+g_date_str = '2019-9-07'
 
 def Intify(s):
     if s.isdigit():
@@ -746,6 +746,8 @@ class Ltemplify(object):
     def Pass1(self, input_data_file, input_script_files):
         "PASS1: determine the atom_style, as well as the atom type names."
 
+        sys.stderr.write(Ltemplify.Pass1.__doc__+'\n')
+
         atom_style_str = ''
 
         input_files = input_script_files + [input_data_file]
@@ -961,6 +963,8 @@ class Ltemplify(object):
 
     def Pass2(self, input_data_file, input_script_files):
         "PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers and Masses."
+
+        sys.stderr.write(Ltemplify.Pass2.__doc__+'\n')
 
         input_files = input_script_files + [input_data_file]
 
@@ -2743,8 +2747,8 @@ class Ltemplify(object):
         
         sys.stderr.write('\n\n')
 
-        sys.stderr.write('  processing \"Atoms\" section (')
-        sys.stderr.write('postprocess1')
+        sys.stderr.write('  processing \"Atoms\" section (\n')
+        sys.stderr.write('    postprocess1,\n')
 
 
         # set the atomid name to the atomtype name with an integer suffix.
@@ -2820,7 +2824,7 @@ class Ltemplify(object):
         self.l_data_triangles
         """
 
-        sys.stderr.write(', postprocess2')
+        sys.stderr.write('    postprocess2,\n')
         
         for i in range(0, len(self.l_data_atoms)):
             tokens = self.l_data_atoms[i].split()
@@ -2941,6 +2945,7 @@ class Ltemplify(object):
            pair_coeffs and masses for atom types we don't care about.)
         """
            
+        sys.stderr.write('    postprocess3\n')
 
         # --- Now delete items that were not selected from the other lists ---
 
