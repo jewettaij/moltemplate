@@ -624,14 +624,19 @@ class Ltemplify(object):
 
 
     def Convert(self,
-                input_data_file,
-                input_script_files,
-                out_file):
+                out_file,
+                input_data_file=None,
+                input_script_files=None):
+
         """
         Read the LAMMPS DATA file (and optional input script files)
         and convert these files to moltemplate format.
         (See doc_ltemplify.md for details.)
         """
+
+        assert(input_data_file != None)
+        if input_script_files == None:
+            input_script_files = []
 
         # Determine the atom_style, as well as the atom type names
         self.Pass1(input_data_file, input_script_files)
@@ -4518,6 +4523,11 @@ class Ltemplify(object):
         ########################################
         """
 
+        out_fname = ''
+        if isinstance(out_file, str):  # is "out_file" a file or a file name?
+            out_fname = out_file
+            out_file = open(out_fname, 'w')
+
         if not self.some_pair_coeffs_read:
             sys.stderr.write('Warning: No \"pair coeffs\" set.\n'
                              '         (No interactions between non-bonded atoms defined.)\n')
@@ -5018,7 +5028,8 @@ class Ltemplify(object):
                              '#          or type numbers to the corresponding $ or @-style counter variables.\n'
                              '#          Feel free to report any bugs you find. (-Andrew Jewett 2017-10)\n')
 
-
+        if out_fname != None:
+            out_file.close()
 
 
 
@@ -5041,9 +5052,10 @@ def main():
         # Using these settings, convert these files into a single file.
         # Send the content that file to sys.stdout.
 
-        ltemp.Convert(ltemp.input_data_file,
-                      ltemp.input_script_files,
-                      sys.stdout)
+        ltemp.Convert(sys.stdout,
+                      ltemp.input_data_file,
+                      ltemp.input_script_files)
+                      
 
     except (InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
