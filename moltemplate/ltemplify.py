@@ -37,8 +37,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.60.2'
-g_date_str = '2019-8-27'
+g_version_str = '0.61.3'
+g_date_str = '2019-9-05'
 
 def Intify(s):
     if s.isdigit():
@@ -221,125 +221,130 @@ def BelongsToSel(i, sel):
     return belongs
 
 
-def main():
-    try:
-        sys.stderr.write(g_program_name + ' v' +
-                         g_version_str + ' ' + g_date_str + '\n')
 
-        non_empty_output = False
-        no_warnings = True
-        indent = 2
-        cindent = 0
-        atomid_selection = []
-        atomtype_selection = []
-        molid_selection = []
-        mol_name = ''
+class Ltemplify(object):
 
-        min_sel_atomid = None
-        min_sel_atomtype = None
-        min_sel_bondid = None
-        min_sel_bondtype = None
-        min_sel_angleid = None
-        min_sel_angletype = None
-        min_sel_dihedralid = None
-        min_sel_dihedraltype = None
-        min_sel_improperid = None
-        min_sel_impropertype = None
+    def __init__(self, argv):
+        """
+        Read the command line arguments to figure out which files
+        we will need to read (and also how to modify the output format).
+        """
 
-        max_sel_atomid = None
-        max_sel_atomtype = None
-        max_sel_bondid = None
-        max_sel_bondtype = None
-        max_sel_angleid = None
-        max_sel_angletype = None
-        max_sel_dihedralid = None
-        max_sel_dihedraltype = None
-        max_sel_improperid = None
-        max_sel_impropertype = None
+        self.atom_column_names = []
+        self.non_empty_output = False
+        self.no_warnings = True
+        self.indent = 2
+        self.cindent = 0
+        self.atomid_selection = []
+        self.atomtype_selection = []
+        self.molid_selection = []
+        self.mol_name = ''
 
-        needed_atomids = set([])
-        needed_atomtypes = set([])
-        needed_molids = set([])
-        needed_bondids = set([])
-        needed_bondtypes = set([])
-        needed_angleids = set([])
-        needed_angletypes = set([])
-        needed_dihedralids = set([])
-        needed_dihedraltypes = set([])
-        needed_improperids = set([])
-        needed_impropertypes = set([])
-        needed_cmapids = set([])
-        needed_cmaptypes = set([])
+        self.min_sel_atomid = None
+        self.min_sel_atomtype = None
+        self.min_sel_bondid = None
+        self.min_sel_bondtype = None
+        self.min_sel_angleid = None
+        self.min_sel_angletype = None
+        self.min_sel_dihedralid = None
+        self.min_sel_dihedraltype = None
+        self.min_sel_improperid = None
+        self.min_sel_impropertype = None
 
-        min_needed_atomtype = None
-        max_needed_atomtype = None
-        min_needed_bondtype = None
-        max_needed_bondtype = None
-        min_needed_angletype = None
-        max_needed_angletype = None
-        min_needed_dihedraltype = None
-        max_needed_dihedraltype = None
-        min_needed_impropertype = None
-        max_needed_impropertype = None
-        min_needed_cmaptype = None
-        max_needed_cmaptype = None
+        self.max_sel_atomid = None
+        self.max_sel_atomtype = None
+        self.max_sel_bondid = None
+        self.max_sel_bondtype = None
+        self.max_sel_angleid = None
+        self.max_sel_angletype = None
+        self.max_sel_dihedralid = None
+        self.max_sel_dihedraltype = None
+        self.max_sel_improperid = None
+        self.max_sel_impropertype = None
 
-        min_needed_atomid = None
-        max_needed_atomid = None
-        min_needed_molid = None
-        max_needed_molid = None
-        min_needed_bondid = None
-        max_needed_bondid = None
-        min_needed_angleid = None
-        max_needed_angleid = None
-        min_needed_dihedralid = None
-        max_needed_dihedralid = None
-        min_needed_improperid = None
-        max_needed_improperid = None
-        min_needed_cmapid = None
-        max_needed_cmapid = None
+        self.needed_atomids = set([])
+        self.needed_atomtypes = set([])
+        self.needed_molids = set([])
+        self.needed_bondids = set([])
+        self.needed_bondtypes = set([])
+        self.needed_angleids = set([])
+        self.needed_angletypes = set([])
+        self.needed_dihedralids = set([])
+        self.needed_dihedraltypes = set([])
+        self.needed_improperids = set([])
+        self.needed_impropertypes = set([])
+        self.needed_cmapids = set([])
+        self.needed_cmaptypes = set([])
+
+        self.min_needed_atomtype = None
+        self.max_needed_atomtype = None
+        self.min_needed_bondtype = None
+        self.max_needed_bondtype = None
+        self.min_needed_angletype = None
+        self.max_needed_angletype = None
+        self.min_needed_dihedraltype = None
+        self.max_needed_dihedraltype = None
+        self.min_needed_impropertype = None
+        self.max_needed_impropertype = None
+        self.min_needed_cmaptype = None
+        self.max_needed_cmaptype = None
+
+        self.min_needed_atomid = None
+        self.max_needed_atomid = None
+        self.min_needed_molid = None
+        self.max_needed_molid = None
+        self.min_needed_bondid = None
+        self.max_needed_bondid = None
+        self.min_needed_angleid = None
+        self.max_needed_angleid = None
+        self.min_needed_dihedralid = None
+        self.max_needed_dihedralid = None
+        self.min_needed_improperid = None
+        self.max_needed_improperid = None
+        self.min_needed_cmapid = None
+        self.max_needed_cmapid = None
 
         # To process the selections, we need to know the atom style:
-        atom_style_undefined = True
+        self.atom_style_undefined = True
 
-        i_atomid = None
-        i_atomtype = None
-        i_molid = None
-        i_x = None
-        i_y = None
-        i_z = None
+        self.i_atomid = None
+        self.i_atomtype = None
+        self.i_molid = None
+        self.i_x = None
+        self.i_y = None
+        self.i_z = None
 
-        l_in_init = []
-        l_in_settings = []
-        l_in_masses = []
-        l_in_pair_coeffs = []
-        l_in_bond_coeffs = []
-        l_in_angle_coeffs = []
-        l_in_dihedral_coeffs = []
-        l_in_improper_coeffs = []
-        l_in_group = []
-        l_in_set = []
-        l_in_set_static = []
-        l_in_fix_shake = []
-        l_in_fix_rigid = []
-        l_in_fix_poems = []
-        l_in_fix_qeq = []
-        l_in_fix_qmmm = []
-        l_data_masses = []
-        l_data_bond_coeffs = []
-        l_data_angle_coeffs = []
-        l_data_dihedral_coeffs = []
-        l_data_improper_coeffs = []
-        #l_data_cmap_coeffs = []
-        l_data_pair_coeffs = []
-        l_data_pairij_coeffs = []
-        l_data_atoms = []
-        l_data_velocities = []
-        l_data_bonds = []
-        l_data_angles = []
-        l_data_dihedrals = []
-        l_data_impropers = []
-        l_data_cmap = []
+        self.l_in_init = []
+        self.l_in_settings = []
+        self.l_in_masses = []
+        self.l_in_pair_coeffs = []
+        self.l_in_bond_coeffs = []
+        self.l_in_angle_coeffs = []
+        self.l_in_dihedral_coeffs = []
+        self.l_in_improper_coeffs = []
+        self.l_in_group = []
+        self.l_in_set = []
+        self.l_in_set_static = []
+        self.l_in_fix_shake = []
+        self.l_in_fix_rigid = []
+        self.l_in_fix_poems = []
+        self.l_in_fix_qeq = []
+        self.l_in_fix_qmmm = []
+        self.l_data_masses = []
+        self.l_data_bond_coeffs = []
+        self.l_data_angle_coeffs = []
+        self.l_data_dihedral_coeffs = []
+        self.l_data_improper_coeffs = []
+        self.l_data_cmap_coeffs = []
+        self.l_data_pair_coeffs = []
+        self.l_data_pairij_coeffs = []
+        self.l_data_atoms = []
+        self.l_data_velocities = []
+        self.l_data_bonds = []
+        self.l_data_angles = []
+        self.l_data_dihedrals = []
+        self.l_data_impropers = []
+        self.l_data_cmap = []
 
         # class2 force fields
         # l_in_bondbond_coeffs = []   <--not needed, included in l_in_angle_coeff
@@ -351,38 +356,43 @@ def main():
         # l_in_bondbond13_coeffs = []  <--not needed, included in l_in_dihedral_coeff
         # l_in_angleangle_coeffs = []  <--not needed, included in
         # l_in_improper_coeff
-        l_data_bondbond_coeffs = []
-        l_data_bondangle_coeffs = []
-        l_data_middlebondtorsion_coeffs = []
-        l_data_endbondtorsion_coeffs = []
-        l_data_angletorsion_coeffs = []
-        l_data_angleangletorsion_coeffs = []
-        l_data_bondbond13_coeffs = []
-        l_data_angleangle_coeffs = []
+        self.l_data_bondbond_coeffs = []
+        self.l_data_bondangle_coeffs = []
+        self.l_data_middlebondtorsion_coeffs = []
+        self.l_data_endbondtorsion_coeffs = []
+        self.l_data_angletorsion_coeffs = []
+        self.l_data_angleangletorsion_coeffs = []
+        self.l_data_bondbond13_coeffs = []
+        self.l_data_angleangle_coeffs = []
 
         # non-point-like particles:
-        l_data_ellipsoids = []
-        l_data_lines = []
-        l_data_triangles = []
+        self.l_data_ellipsoids = []
+        self.l_data_lines = []
+        self.l_data_triangles = []
 
         # automatic generation of bonded interactions by type:
-        l_data_angles_by_type = []
-        l_data_dihedrals_by_type = []
-        l_data_impropers_by_type = []
+        self.l_data_angles_by_type = []
+        self.l_data_dihedrals_by_type = []
+        self.l_data_impropers_by_type = []
 
-        atoms_already_read = False
-        some_pair_coeffs_read = False
-        complained_atom_style_mismatch = False
-        infer_types_from_comments = True
-        ignore_angles_dihedrals_impropers = False
-        ignore_bond_types = False
-        forbid_type_name_duplicates = False
-        prepend_atom_type = ''
-        remove_coeffs_from_data_file = True
+        self.atoms_already_read = False
+        self.some_pair_coeffs_read = False
+        self.complained_atom_style_mismatch = False
+        self.infer_types_from_comments = True
+        self.ignore_coeffs = False
+        self.ignore_angles_dihedrals_impropers = False
+        self.ignore_bond_types = False
+        self.ignore_masses = False
+        self.forbid_type_name_duplicates = False
+        self.prepend_atom_type = ''
+        self.remove_coeffs_from_data_file = True
 
-        argv = [arg for arg in sys.argv]
 
-        i = 1
+        # Process the argument list.
+        # Arguments are explained in the ltemplify.py documentation located at:
+        # https://github.com/jewettaij/moltemplate/blob/master/doc/utils/doc_ltemplify.md
+
+        i = 0
 
         while i < len(argv):
 
@@ -407,7 +417,7 @@ def main():
                                      '       defines a custom atom_style containing the properties\n'
                                      '            atom-ID atom-type q polarizability molecule-ID x y z\n'
                                      '    Make sure you enclose the entire list in quotes.\n')
-                column_names = argv[i + 1].strip('\"\'').strip().split()
+                self.atom_column_names = argv[i+1].strip('\"\'').strip().split()
                 del argv[i:i + 2]
 
             elif ((argv[i] == '-name') or
@@ -417,9 +427,9 @@ def main():
                 if i + 1 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by a a molecule type name.\n')
-                cindent = 2
-                indent += cindent
-                mol_name = argv[i + 1]
+                self.cindent = 2
+                self.indent += self.cindent
+                self.mol_name = argv[i + 1]
                 del argv[i:i + 2]
 
             elif ((argv[i].lower() == '-atomstyle') or
@@ -429,37 +439,35 @@ def main():
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by a an atom_style name.\n'
                                      '       (or single quoted string which includes a space-separated\n'
                                      '       list of column names).\n')
-                atom_style_undefined = False
-                column_names = AtomStyle2ColNames(argv[i + 1])
+                self.atom_style_undefined = False
+                self.atom_column_names = AtomStyle2ColNames(argv[i + 1])
                 if (argv[i + 1].strip().split()[0] in g_style_map):
-                    l_in_init.append((' ' * indent) +
+                    self.l_in_init.append((' ' * self.indent) +
                                      'atom_style ' + argv[i + 1] + '\n')
                 sys.stderr.write('\n    \"Atoms\" column format:\n')
-                sys.stderr.write('    ' + (' '.join(column_names)) + '\n')
-                i_atomid, i_atomtype, i_molid = ColNames2AidAtypeMolid(
-                    column_names)
+                sys.stderr.write('    ' + (' '.join(self.atom_column_names)) + '\n')
+                self.i_atomid, self.i_atomtype, self.i_molid = ColNames2AidAtypeMolid(
+                    self.atom_column_names)
                 # Which columns contain the coordinates?
-                ii_coords = ColNames2Coords(column_names)
+                ii_coords = ColNames2Coords(self.atom_column_names)
                 assert(len(ii_coords) == 1)
-                i_x = ii_coords[0][0]
-                i_y = ii_coords[0][1]
-                i_z = ii_coords[0][2]
+                self.i_x = ii_coords[0][0]
+                self.i_y = ii_coords[0][1]
+                self.i_z = ii_coords[0][2]
 
-                if i_molid:
-                    sys.stderr.write('      (i_atomid=' + str(i_atomid + 1) + ', i_atomtype=' + str(
-                        i_atomtype + 1) + ', i_molid=' + str(i_molid + 1) + ')\n\n')
+                if self.i_molid:
+                    sys.stderr.write('      (i_atomid=' + str(self.i_atomid + 1) + ', i_atomtype=' + str(
+                        self.i_atomtype + 1) + ', i_molid=' + str(self.i_molid + 1) + ')\n\n')
                 else:
-                    sys.stderr.write('      (i_atomid=' + str(i_atomid + 1) +
-                                     ', i_atomtype=' + str(i_atomtype + 1) + ')\n')
+                    sys.stderr.write('      (i_atomid=' + str(self.i_atomid + 1) +
+                                     ', i_atomtype=' + str(self.i_atomtype + 1) + ')\n')
                 del argv[i:i + 2]
 
             elif ((argv[i].lower() == '-id') or
-                  #(argv[i].lower() == '-a') or
-                  #(argv[i].lower() == '-atoms') or
                   (argv[i].lower() == '-atomid') or
                   #(argv[i].lower() == '-atomids') or
                   (argv[i].lower() == '-atom-id')
-                  #(argv[i].lower() == '-atom-ids') or
+                   #(argv[i].lower() == '-atom-ids') or
                   #(argv[i].lower() == '-$atom') or
                   #(argv[i].lower() == '-$atoms')
                   ):
@@ -467,15 +475,15 @@ def main():
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by a list of integers\n'
                                      '       (or strings).  These identify the group of atoms you want to\n'
                                      '       to include in the template you are creating.\n')
-                atomid_selection += LammpsSelectToIntervals(argv[i + 1])
-                min_sel_atomid, max_sel_atomid = IntervalListToMinMax(
-                    atomid_selection)
+                self.atomid_selection += LammpsSelectToIntervals(argv[i + 1])
+                self.min_sel_atomid, self.max_sel_atomid = IntervalListToMinMax(
+                    self.atomid_selection)
                 del argv[i:i + 2]
             elif ((argv[i].lower() == '-datacoeffs') or
                   (argv[i].lower() == '-datacoeff') or
                   (argv[i].lower() == '-Coeff') or
                   (argv[i].lower() == '-Coeffs')):
-                remove_coeffs_from_data_file = False
+                self.remove_coeffs_from_data_file = False
                 del argv[i:i + 1]
             elif ((argv[i].lower() == '-type') or
                   #(argv[i].lower() == '-t') or
@@ -492,9 +500,9 @@ def main():
                     raise InputError('Error: ' + argv[i] + ' flag should be followed by a list of integers.\n'
                                      '       (or strings).  These identify the group of atom types you want to\n'
                                      '       to include in the template you are creating.\n')
-                atomtype_selection += LammpsSelectToIntervals(argv[i + 1])
-                min_sel_atomtype, max_sel_atomtype = IntervalListToMinMax(
-                    atomtype_selection)
+                self.atomtype_selection += LammpsSelectToIntervals(argv[i + 1])
+                self.min_sel_atomtype, self.max_sel_atomtype = IntervalListToMinMax(
+                    self.atomtype_selection)
                 del argv[i:i + 2]
             elif ((argv[i].lower() == '-mol') or
                   #(argv[i].lower() == '-m') or
@@ -514,43 +522,46 @@ def main():
                     sys.stderr.write('Error: ' + argv[i] + ' flag should be followed by a list of integers.\n'
                                      '       (or strings).  These identify the group of molecules you want to\n'
                                      '       include in the template you are creating.\n')
-                molid_selection += LammpsSelectToIntervals(argv[i + 1])
+                self.molid_selection += LammpsSelectToIntervals(argv[i + 1])
                 del argv[i:i + 2]
 
             elif (argv[i] == '-ignore-comments'):
-                infer_types_from_comments = False
+                self.infer_types_from_comments = False
                 del argv[i:i + 1]
 
             elif (argv[i] == '-infer-comments'):
-                infer_types_from_comments = True
+                self.infer_types_from_comments = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-ignore-coeffs'):
+                self.ignore_coeffs = True
                 del argv[i:i + 1]
 
             elif (argv[i] == '-ignore-angles'):
-                ignore_angles_dihedrals_impropers = True
-                infer_types_from_comments = True
+                self.ignore_angles_dihedrals_impropers = True
                 del argv[i:i + 1]
 
             elif (argv[i] == '-ignore-bond-types'):
-                ignore_bond_types = True
-                infer_types_from_comments = True
+                self.ignore_bond_types = True
+                del argv[i:i + 1]
+
+            elif (argv[i] == '-ignore-masses'):
+                self.ignore_masses = True
                 del argv[i:i + 1]
 
             elif (argv[i] == '-ignore-duplicates'):
-                forbid_type_name_duplicates = False
-                infer_types_from_comments = True
+                self.forbid_type_name_duplicates = False
                 del argv[i:i + 1]
 
             elif (argv[i] == '-forbid-duplicates'):
-                forbid_type_name_duplicates = True
-                infer_types_from_comments = True
+                self.forbid_type_name_duplicates = True
                 del argv[i:i + 1]
 
             elif (argv[i] == '-prepend-atom-type'):
-                prepend_atom_type = argv[i+1]
-                infer_types_from_comments = True
-                if ((len(prepend_atom_type) > 0) and
-                    (prepend_atom_type[-1] != '/')):
-                    prepend_atom_type += '/'
+                self.prepend_atom_type = argv[i+1]
+                if ((len(self.prepend_atom_type) > 0) and
+                    (self.prepend_atom_type[-1] != '/')):
+                    self.prepend_atom_type += '/'
                 del argv[i:i + 2]
 
             else:
@@ -558,50 +569,39 @@ def main():
 
         # We might need to parse the simulation boundary-box.
         # If so, use these variables.  (None means uninitialized.)
-        boundary_xlo = None
-        boundary_xhi = None
-        boundary_ylo = None
-        boundary_yhi = None
-        boundary_zlo = None
-        boundary_zhi = None
-        boundary_xy = None
-        boundary_yz = None
-        boundary_xz = None
+        self.boundary_xlo = None
+        self.boundary_xhi = None
+        self.boundary_ylo = None
+        self.boundary_yhi = None
+        self.boundary_zlo = None
+        self.boundary_zhi = None
+        self.boundary_xy = None
+        self.boundary_yz = None
+        self.boundary_xz = None
 
         # atom type names
-        #atomtypes_name2int = {}
-        atomtypes_name2list = defaultdict(list)
-        atomtypes_name2int = {}
-        atomtypes_int2name = {}
-        # atomids_name2int = {}  not needed
-        atomids_int2name = {}
-        atomids_by_type = defaultdict(list)
+        #self.atomtypes_name2int = {}
+        self.atomtypes_name2list = defaultdict(list)
+        self.atomtypes_name2int = {}
+        self.atomtypes_int2name = {}
+        # self.atomids_name2int = {}  not needed
+        self.atomids_int2name = {}
+        self.atomids_by_type = defaultdict(list)
 
-        atomid2type = {}
-        atomid2mol = {}
+        self.atomid2type = {}
+        self.atomid2mol = {}
 
         # bond type names
-        bondtypes_int2name = {}
+        self.bondtypes_int2name = {}
 
         # angle type names
-        angletypes_int2name = {}
+        self.angletypes_int2name = {}
 
         # dihedral type names
-        dihtypes_int2name = {}
+        self.dihtypes_int2name = {}
 
         # improper type names
-        imptypes_int2name = {}
-
-        if atom_style_undefined:
-            # The default atom_style is "full"
-            column_names = AtomStyle2ColNames('full')
-            i_atomid, i_atomtype, i_molid = ColNames2AidAtypeMolid(column_names)
-            # Which columns contain the coordinates?
-            ii_coords = ColNames2Coords(column_names)
-            assert(len(ii_coords) == 1)
-            i_x = ii_coords[0][0]
-            i_y = ii_coords[0][1]
-            i_z = ii_coords[0][2]
+        self.imptypes_int2name = {}
 
         #---------------------------------------------------------
         #-- The remaining arguments are files that the user wants
@@ -614,26 +614,90 @@ def main():
         #-- parameters (coeff commands).
         #---------------------------------------------------------
 
-        # PASS1: determine the atom_style, as well as the atom type names.
+        if len(argv) > 0:
+            self.input_data_file = argv[-1]  #the last argument is the data file
+            self.input_script_files = argv[:-1] # optional input script files
 
-        for i_arg in range(1, len(argv)):
-            fname = argv[i_arg]
-            try:
-                lammps_file = open(fname, 'r')
-            except IOError:
-                raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
-                                 '       OR unable to open file:\n'
-                                 '\n'
-                                 '       \"' + fname + '\"\n'
-                                 '       for reading.\n'
-                                 '\n'
-                                 '       (If you were not trying to open a file with this name,\n'
-                                 '        then there is a problem in your argument list.)\n')
 
-            sys.stderr.write('reading file \"' + fname + '\"\n')
+
+
+
+
+    def Convert(self,
+                out_file,
+                input_data_file=None,
+                input_script_files=None):
+
+        """
+        Read the LAMMPS DATA file (and optional input script files)
+        and convert these files to moltemplate format.
+        (See doc_ltemplify.md for details.)
+        """
+
+        assert(input_data_file != None)
+        if input_script_files == None:
+            input_script_files = []
+
+        # Determine the atom_style, as well as the atom type names
+        self.Pass1(input_data_file, input_script_files)
+
+        # Parse all other sections of the LAMMPS files,
+        # including Atoms, Bonds, Angles, Dihedrals, Impropers and Masses
+        self.Pass2(input_data_file, input_script_files)
+
+        # Deal with CUSTOM atom type and bonded interaction type names.
+        #
+        # Infer the atomtype names, (and bondtype names, angletype names,
+        # dihedraltype names, and impropertype names)
+        # ...from comments located in the data file
+        self.PostProcess1()
+
+        # Determine atomid names from atomtype names, and update the references
+        # to these atomids the "Atoms", "Velocities", "Ellipsoids",... sections.
+        self.PostProcess2()
+
+        # Discard unnecessary information.
+        # Delete the bonded and nonbonded interactions involving atoms
+        # that we don't care about (atoms that were not selected by the user).
+        # This is also a good time to update the references to the atomids in
+        # bonded interactions (to refer to custom atomid names, if applicable).
+        self.PostProcess3()
+
+        # Print all the information contained in the list variables
+        # (such as "l_in_..." and "l_data_...") to a file (out_file).
+        self.Write(out_file)
+
+
+
+    def Pass1(self, input_data_file, input_script_files):
+        "PASS1: determine the atom_style, as well as the atom type names."
+
+        atom_style_str = ''
+
+        input_files = input_script_files + [input_data_file]
+
+        for i_arg in range(0, len(input_files)):
+            fname = input_files[i_arg]
+            if isinstance(fname, str):
+                try:
+                    lammps_file = open(fname, 'r')
+                except IOError:
+                    raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
+                                     '       OR unable to open file:\n'
+                                     '\n'
+                                     '       \"' + fname + '\"\n'
+                                     '       for reading.\n'
+                                     '\n'
+                                     '       (If you were not trying to open a file with this name,\n'
+                                     '        then there is a problem in your argument list.)\n')
+
+                sys.stderr.write('reading file \"' + fname + '\"\n')
+            else:
+                lammps_file = fname #then "fname" is a file stream, not a string
 
             lex = LineLex(lammps_file, fname)
             lex.source_triggers = set(['include', 'import'])
+            lex.commenters = '' # do not ignore comments
             # set up lex to accept most characters in file names:
             lex.wordterminators = '(){}' + lex.whitespace
             # set up lex to understand the "include" statement:
@@ -641,26 +705,31 @@ def main():
             lex.escape = '\\'
 
             while lex:
-                infile = lex.infile
-                lineno = lex.lineno
-                line = lex.ReadLine()
-                if (lex.infile != infile):
-                    infile = lex.infile
-                    lineno = lex.lineno
 
-                #sys.stderr.write('  processing \"'+line.strip()+'\", (\"'+infile+'\":'+str(lineno)+')\n')
+                line_orig = lex.ReadLine()
+                line = line_orig
+                comment_text = ''
+                ic = line_orig.find('#')
+                if ic != -1:
+                    comment_text = line[ic + 1:].strip()
+                    line = line_orig[:ic]
 
-                if line == '':
-                    break
+                line = line.strip()
 
-                tokens = line.strip().split()
+                #sys.stderr.write('  processing \"'+line.strip()+'\", (\"'+lex.infile+'\":'+str(lex.lineno)+')\n')
+
+                tokens = line.split()
                 if (len(tokens) > 0):
                     if ((tokens[0] == 'atom_style') and
-                        atom_style_undefined):
+                        self.atom_style_undefined):
+
+                        if self.atom_style_undefined:
+                            self.atom_style_undefined = False
+                            atom_style_str = comment_text.strip()
 
                         sys.stderr.write(
-                            '  Atom Style found. Processing: \"' + line.strip() + '\"\n')
-                        if atoms_already_read:
+                            '  Atom Style found. Processing: \"' + line + '\"\n')
+                        if self.atoms_already_read:
                             raise InputError('Error: The file containing the \"atom_style\" command must\n'
                                              '       come before the data file in the argument list.\n'
                                              '       (The templify program needs to know the atom style before reading\n'
@@ -668,41 +737,28 @@ def main():
                                              '       LAMMPS input script file is processed before the data file, or use\n'
                                              '       the \"-atom_style\" command line argument to specify the atom_style.)\n')
 
-                        column_names = AtomStyle2ColNames(line.split()[1])
-                        i_atomid, i_atomtype, i_molid = ColNames2AidAtypeMolid(
-                            column_names)
-                        # Which columns contain the coordinates?
-                        ii_coords = ColNames2Coords(column_names)
-                        assert(len(ii_coords) == 1)
-                        i_x = ii_coords[0][0]
-                        i_y = ii_coords[0][1]
-                        i_z = ii_coords[0][2]
+                        atom_style_str = ' '.join(tokens[1:])  # skip over the 'atom_style '
 
-                        sys.stderr.write('\n    \"Atoms\" column format:\n')
-                        sys.stderr.write('    ' + (' '.join(column_names)) + '\n')
-                        if i_molid:
-                            sys.stderr.write('        (i_atomid=' +
-                                             str(i_atomid + 1) +
-                                             ', i_atomtype=' + str(
-                                                 i_atomtype + 1) +
-                                             ', i_molid=' +
-                                             str(i_molid + 1) + ')\n\n')
-                        else:
-                            sys.stderr.write('        (i_atomid=' +
-                                             str(i_atomid + 1) +
-                                             ', i_atomtype=' +
-                                             str(i_atomtype + 1) + ')\n\n')
-                        l_in_init.append((' ' * indent) + line.lstrip())
+                    elif (line == 'Atoms'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
+                        # Check to see if the atom_style was specified
+                        # in a comment at the end of this line.
 
-                    elif (line.strip() == 'Masses'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                        if self.atom_style_undefined:
+                            self.atom_style_undefined = False
+                            atom_style_str = comment_text.strip()
+
+
+                    elif (line == 'Masses'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
                             # Read the next line of text but don't skip comments
-                            comment_char_backup = lex.commenters
+                            #comment_char_backup = lex.commenters
                             lex.commenters = ''
-                            line = lex.ReadLine()
-                            lex.commenters = comment_char_backup
+                            line_orig = lex.ReadLine()
+                            #lex.commenters = comment_char_backup
 
+                            line = line_orig
                             comment_text = ''
                             ic = line.find('#')
                             if ic != -1:
@@ -711,7 +767,7 @@ def main():
                             line = line.rstrip()
 
                             if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
                             tokens = line.strip().split()
@@ -727,27 +783,27 @@ def main():
 
                                     # Assume the first word after the comment
                                     # character is the atom type name
-                                    atomtype_name = (prepend_atom_type +
+                                    atomtype_name = (self.prepend_atom_type +
                                                      comment_tokens[0])
 
-                                if BelongsToSel(atomtype, atomtype_selection):
+                                if BelongsToSel(atomtype, self.atomtype_selection):
 
                                     #Infer atom type names from comment strings?
-                                    if infer_types_from_comments:
-                                        atomtypes_name2list[atomtype_name].append(atomtype)
+                                    if self.infer_types_from_comments:
+                                        self.atomtypes_name2list[atomtype_name].append(atomtype)
                                     else:
-                                        atomtypes_int2name[atomtype] = ('type' +
-                                                                        str(atomtype))
+                                        self.atomtypes_int2name[atomtype] = ('type' +
+                                                                             str(atomtype))
 
-                        if infer_types_from_comments:
-                            for atypename, ilist in atomtypes_name2list.items():
+                        if self.infer_types_from_comments:
+                            for atypename, ilist in self.atomtypes_name2list.items():
                                 assert(len(ilist) > 0)
                                 if len(ilist) == 1:
-                                    atomtypes_int2name[ilist[0]] = atypename
-                                    atomtypes_name2int[atypename] = ilist[0]
-                            for atypename, ilist in atomtypes_name2list.items():
+                                    self.atomtypes_int2name[ilist[0]] = atypename
+                                    self.atomtypes_name2int[atypename] = ilist[0]
+                            for atypename, ilist in self.atomtypes_name2list.items():
                                 if len(ilist) > 1:
-                                    if forbid_type_name_duplicates:
+                                    if self.forbid_type_name_duplicates:
                                         raise InputError('Error: duplicate atom type names in Masses section: \"' + atypename + '\"\n'
                                                          '       (By default ' + g_program_name +
                                                          ' attempts to infer atom type names from\n'
@@ -765,43 +821,97 @@ def main():
                                     I = 0
                                     while I < len(ilist):
                                         name_attempt = atypename+str(isuffix)
-                                        if ((name_attempt in atomtypes_name2int)
+                                        if ((name_attempt in self.atomtypes_name2int)
                                             or
-                                            (name_attempt in atomtypes_name2list)):
+                                            (name_attempt in self.atomtypes_name2list)):
                                             # Be careful not to create a name
                                             # that has already been used.
                                             # Keep incrementing "isuffix" until
                                             # "name_attempt" has not been used
                                             isuffix += 1
                                         else:
-                                            atomtypes_name2int[name_attempt] = ilist[I]
-                                            atomtypes_int2name[ilist[I]] = name_attempt
+                                            self.atomtypes_name2int[name_attempt] = ilist[I]
+                                            self.atomtypes_int2name[ilist[I]] = name_attempt
                                             I += 1
 
+            # We are finished reading that file.  close it.
             lammps_file.close()
 
+            # (As a C++ programmer, this is why I don't like the fact
+            #  that python  uses indentation exclusively to indicate scope.
+            #  To be fair, I should use more function calls...)
+
+        # Loop over input files...
+
+        # Now we are through reading all of the LAMMPS input files.
+
+        if atom_style_str == '':
+            # The default atom_style is "full"
+            atom_style_str == 'full'
+
+        sys.stderr.write('\n    atom_style = \"'+atom_style_str+'\"\n')
+
+        self.atom_column_names = AtomStyle2ColNames(atom_style_str)
+        self.i_atomid, self.i_atomtype, self.i_molid = ColNames2AidAtypeMolid(
+            self.atom_column_names)
+        # Which columns contain the coordinates?
+        ii_coords = ColNames2Coords(self.atom_column_names)
+        assert(len(ii_coords) == 1)
+        self.i_x = ii_coords[0][0]
+        self.i_y = ii_coords[0][1]
+        self.i_z = ii_coords[0][2]
+
+        sys.stderr.write('\n    \"Atoms\" column format:\n')
+        sys.stderr.write('    ' + (' '.join(self.atom_column_names)) + '\n')
+        if self.i_molid:
+            sys.stderr.write('        (i_atomid=' +
+                             str(self.i_atomid + 1) +
+                             ', i_atomtype=' + str(
+                                 self.i_atomtype + 1) +
+                             ', i_molid=' +
+                             str(self.i_molid + 1) + ')\n\n')
+        else:
+            sys.stderr.write('        (i_atomid=' +
+                             str(self.i_atomid + 1) +
+                             ', i_atomtype=' +
+                             str(self.i_atomtype + 1) + ')\n\n')
+        self.l_in_init.append((' ' * self.indent) +
+                         'atom_style ' + atom_style_str)
 
 
-        # PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers (and Masses)
 
-        for i_arg in range(1, len(argv)):
-            fname = argv[i_arg]
-            try:
-                lammps_file = open(fname, 'r')
-            except IOError:
-                raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
-                                 '       OR unable to open file:\n'
-                                 '\n'
-                                 '       \"' + fname + '\"\n'
-                                 '       for reading.\n'
-                                 '\n'
-                                 '       (If you were not trying to open a file with this name,\n'
-                                 '        then there is a problem in your argument list.)\n')
 
-            sys.stderr.write('reading file \"' + fname + '\"\n')
+
+
+
+    def Pass2(self, input_data_file, input_script_files):
+        "PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers and Masses."
+
+        input_files = input_script_files + [input_data_file]
+
+
+        for i_arg in range(0, len(input_files)):
+            fname = input_files[i_arg]
+            if isinstance(fname, str):
+                try:
+                    lammps_file = open(fname, 'r')
+                except IOError:
+                    raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
+                                     '       OR unable to open file:\n'
+                                     '\n'
+                                     '       \"' + fname + '\"\n'
+                                     '       for reading.\n'
+                                     '\n'
+                                     '       (If you were not trying to open a file with this name,\n'
+                                     '        then there is a problem in your argument list.)\n')
+
+                sys.stderr.write('reading file \"' + fname + '\"\n')
+            else:
+                lammps_file = fname #then "fname" is a file stream, not a string
 
             lex = LineLex(lammps_file, fname)
             lex.source_triggers = set(['include', 'import'])
+            lex.commenters = '' # do not ignore comments
             # set up lex to accept most characters in file names:
             lex.wordterminators = '(){}' + lex.whitespace
             # set up lex to understand the "include" statement:
@@ -809,19 +919,18 @@ def main():
             lex.escape = '\\'
 
             while lex:
-                infile = lex.infile
-                lineno = lex.lineno
-                line = lex.ReadLine()
-                if (lex.infile != infile):
-                    infile = lex.infile
-                    lineno = lex.lineno
+                line_orig = lex.ReadLine()
+                line = line_orig
+                comment_text = ''
+                ic = line.find('#')
+                if ic != -1:
+                    comment_text = line[ic + 1:].strip()
+                    line = line[:ic]
+                line = line.strip()
 
-                #sys.stderr.write('  processing \"'+line.strip()+'\", (\"'+infile+'\":'+str(lineno)+')\n')
+                #sys.stderr.write('  processing \"'+line+'\", (\"'+lex.infile+'\":'+str(lex.lineno)+')\n')
 
-                if line == '':
-                    break
-
-                tokens = line.strip().split()
+                tokens = line.split()
                 if (len(tokens) > 0):
 
                     if (tokens[0] in set(['units',
@@ -835,20 +944,20 @@ def main():
                                           'special_bonds',
                                           'kspace_style',
                                           'kspace_modify'])):
-                        l_in_init.append((' ' * indent) + line.lstrip())
+                        self.l_in_init.append((' ' * self.indent) + line.lstrip())
 
-                    # if (line.strip() == 'LAMMPS Description'):
-                    #    sys.stderr.write('  reading \"'+line.strip()+'\"\n')
+                    # if (line == 'LAMMPS Description'):
+                    #    sys.stderr.write('  reading \"'+line+'\"\n')
                     #    # skip over this section
                     #    while lex:
                     #        line = lex.ReadLine()
-                    #        if line.strip() in data_file_header_names:
+                    #        if line in data_file_header_names:
                     #            lex.push_raw_text(line+'\n') # <- Save line for later
                     #            break
 
-                    elif (line.strip() == 'Atoms'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
-                        atoms_already_read = True
+                    elif (line == 'Atoms'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
+                        self.atoms_already_read = True
 
                         # Before attempting to read atomic coordinates, first find
                         # the lattice vectors of the simulation's boundary box:
@@ -865,9 +974,9 @@ def main():
                         # avec, bvec, cvec are the axis of the parallelepiped which
                         # define the simulation's boundary. They are described here:
                         # http://lammps.sandia.gov/doc/Section_howto.html#howto-12
-                        if ((boundary_xlo == None) or (boundary_xhi == None) or
-                            (boundary_ylo == None) or (boundary_yhi == None) or
-                            (boundary_zlo == None) or (boundary_zhi == None)):
+                        if ((self.boundary_xlo == None) or (self.boundary_xhi == None) or
+                            (self.boundary_ylo == None) or (self.boundary_yhi == None) or
+                            (self.boundary_zlo == None) or (self.boundary_zhi == None)):
 
                             raise InputError('Error: Either DATA file lacks a boundary-box header, or it is in the wrong\n'
                                              '       place.  At the beginning of the file, you need to specify the box size:\n'
@@ -886,74 +995,83 @@ def main():
                                              '       these numbers are all ignored, however you must still specify\n'
                                              '       xlo, xhi, ylo, yhi, zlo, zhi.  You can set them all to 0.0.)\n')
 
-                        if not (boundary_xy and boundary_yz and boundary_xz):
+                        if not (self.boundary_xy and self.boundary_yz and self.boundary_xz):
                             # Then use a simple rectangular boundary box:
-                            avec = (boundary_xhi - boundary_xlo, 0.0, 0.0)
-                            bvec = (0.0, boundary_yhi - boundary_ylo, 0.0)
-                            cvec = (0.0, 0.0, boundary_zhi - boundary_zlo)
+                            avec = (self.boundary_xhi - self.boundary_xlo, 0.0, 0.0)
+                            bvec = (0.0, self.boundary_yhi - self.boundary_ylo, 0.0)
+                            cvec = (0.0, 0.0, self.boundary_zhi - self.boundary_zlo)
                         else:
                             # Triclinic geometry in LAMMPS is explained here:
                             # http://lammps.sandia.gov/doc/Section_howto.html#howto-12
                             # http://lammps.sandia.gov/doc/read_data.html
-                            avec = (boundary_xhi - boundary_xlo, 0.0, 0.0)
-                            bvec = (boundary_xy, boundary_yhi - boundary_ylo, 0.0)
-                            cvec = (boundary_xz, boundary_yz,
-                                    boundary_zhi - boundary_zlo)
+                            avec = (self.boundary_xhi - self.boundary_xlo, 0.0, 0.0)
+                            bvec = (self.boundary_xy, self.boundary_yhi - self.boundary_ylo, 0.0)
+                            cvec = (self.boundary_xz, self.boundary_yz,
+                                    self.boundary_zhi - self.boundary_zlo)
 
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+                            
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
-                            tokens = line.strip().split()
+
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Atoms" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
-                                if ((len(tokens) <= i_atomid) or
-                                    (len(tokens) <= i_atomtype) or
-                                    ((i_molid != None) and
-                                     (len(tokens) <= i_molid))):
+                                if ((len(tokens) <= self.i_atomid) or
+                                    (len(tokens) <= self.i_atomtype) or
+                                    ((self.i_molid != None) and
+                                     (len(tokens) <= self.i_molid))):
                                     raise InputError('Error: The number of columns in the \"Atoms\" section does\n'
                                                      '       not match the atom_style (see column name list above).\n')
-                                elif ((len(tokens) != len(column_names)) and
-                                      (len(tokens) != len(column_names) + 3) and
-                                      (not complained_atom_style_mismatch)):
-                                    complained_atom_style_mismatch = True
+                                elif ((len(tokens) != len(self.atom_column_names)) and
+                                      (len(tokens) != len(self.atom_column_names) + 3) and
+                                      (not self.complained_atom_style_mismatch)):
+                                    self.complained_atom_style_mismatch = True
                                     sys.stderr.write('Warning: The number of columns in the \"Atoms\" section does\n'
                                                      '         not match the atom_style (see column name list above).\n')
                                     # this is not a very serious warning.
-                                    # no_warnings = False <--no need. commenting
+                                    # self.no_warnings = False <--no need. commenting
                                     # out
 
-                                atomid = Intify(tokens[i_atomid])
-                                atomtype = Intify(tokens[i_atomtype])
+                                atomid = Intify(tokens[self.i_atomid])
+                                atomtype = Intify(tokens[self.i_atomtype])
 
                                 molid = None
-                                if i_molid:
-                                    molid = Intify(tokens[i_molid])
+                                if self.i_molid:
+                                    molid = Intify(tokens[self.i_molid])
 
-                                atomid2type[atomid] = atomtype
-                                if i_molid:
-                                    atomid2mol[atomid] = molid
+                                self.atomid2type[atomid] = atomtype
+                                if self.i_molid:
+                                    self.atomid2mol[atomid] = molid
 
-                                if (BelongsToSel(atomid, atomid_selection) and
-                                    BelongsToSel(atomtype, atomtype_selection) and
-                                    BelongsToSel(molid, molid_selection)):
+                                if (BelongsToSel(atomid, self.atomid_selection) and
+                                    BelongsToSel(atomtype, self.atomtype_selection) and
+                                    BelongsToSel(molid, self.molid_selection)):
 
-                                    tokens[i_atomid] = '$atom:id' + \
-                                        tokens[i_atomid]
-                                    #tokens[i_atomid] = '$atom:'+atomids_int2name[atomid]
-                                    # fill atomtype_int2str[] with a default name (change later):
-                                    #tokens[i_atomtype] = '@atom:type'+tokens[i_atomtype]
-                                    atomtype_name = 'type' + tokens[i_atomtype]
-                                    tokens[i_atomtype] = '@atom:' + atomtype_name
+                                    tokens[self.i_atomid] = '$atom:id' + \
+                                        tokens[self.i_atomid]
+                                    #tokens[self.i_atomid] = '$atom:'+self.atomids_int2name[atomid]
+                                    # fill self.atomtypes_int2str[] with a default name (change later):
+                                    #tokens[self.i_atomtype] = '@atom:type'+tokens[self.i_atomtype]
+                                    atomtype_name = 'type' + tokens[self.i_atomtype]
+                                    tokens[self.i_atomtype] = '@atom:' + atomtype_name
 
                                     # Interpreting unit-cell counters
                                     # If present, then unit-cell "flags" must be
@@ -971,94 +1089,91 @@ def main():
                                     #  updated if an atom’s coordinates need to
                                     #  wrapped back into the simulation box."
 
-                                    if (len(tokens) == len(column_names) + 3):
+                                    if (len(tokens) == len(self.atom_column_names) + 3):
                                         nx = int(tokens[-3])
                                         ny = int(tokens[-2])
                                         nz = int(tokens[-1])
-                                        x = (float(tokens[i_x]) +
+                                        x = (float(tokens[self.i_x]) +
                                              nx * avec[0] +
                                              ny * bvec[0] +
                                              nz * cvec[0])
-                                        y = (float(tokens[i_y]) +
+                                        y = (float(tokens[self.i_y]) +
                                              nx * avec[1] +
                                              ny * bvec[1] +
                                              nz * cvec[1])
-                                        z = (float(tokens[i_z]) +
+                                        z = (float(tokens[self.i_z]) +
                                              nx * avec[2] +
                                              ny * bvec[2] +
                                              nz * cvec[2])
-                                        tokens[i_x] = str(x)
-                                        tokens[i_y] = str(y)
-                                        tokens[i_z] = str(z)
+                                        tokens[self.i_x] = str(x)
+                                        tokens[self.i_y] = str(y)
+                                        tokens[self.i_z] = str(z)
                                         # Now get rid of them:
                                         del tokens[-3:]
 
-                                    # I can't use atomids_int2name or atomtypes_int2name yet
+                                    # I can't use self.atomids_int2name or self.atomtypes_int2name yet
                                     # because they probably have not been defined yet.
                                     # (Instead assign these names in a later pass.)
 
-                                    if i_molid:
-                                        tokens[i_molid] = '$mol:id' + \
-                                            tokens[i_molid]
-                                    l_data_atoms.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
-                                    needed_atomids.add(atomid)
+                                    if self.i_molid:
+                                        tokens[self.i_molid] = '$mol:m' + \
+                                            tokens[self.i_molid]
+                                    self.l_data_atoms.append(
+                                        (' ' * self.indent) + (' '.join(tokens)))
+                                    self.needed_atomids.add(atomid)
 
-                                    needed_atomtypes.add(atomtype)
+                                    self.needed_atomtypes.add(atomtype)
                                     # Not all atom_styles have molids.
                                     # Check for this before adding.
                                     if molid != None:
-                                        needed_molids.add(molid)
+                                        self.needed_molids.add(molid)
 
-                        for atomtype in needed_atomtypes:
+                        for atomtype in self.needed_atomtypes:
                             assert(type(atomtype) is int)
-                            if ((min_needed_atomtype == None) or
-                                (min_needed_atomtype > atomtype)):
-                                min_needed_atomtype = atomtype
-                            if ((max_needed_atomtype == None) or
-                                (max_needed_atomtype < atomtype)):
-                                max_needed_atomtype = atomtype
+                            if ((self.min_needed_atomtype == None) or
+                                (self.min_needed_atomtype > atomtype)):
+                                self.min_needed_atomtype = atomtype
+                            if ((self.max_needed_atomtype == None) or
+                                (self.max_needed_atomtype < atomtype)):
+                                self.max_needed_atomtype = atomtype
 
-                        for atomid in needed_atomids:
+                        for atomid in self.needed_atomids:
                             assert(type(atomid) is int)
-                            if ((min_needed_atomid == None) or
-                                (min_needed_atomid > atomid)):
-                                min_needed_atomid = atomid
-                            if ((max_needed_atomid == None) or
-                                (max_needed_atomid < atomid)):
-                                max_needed_atomid = atomid
-                        for molid in needed_molids:
+                            if ((self.min_needed_atomid == None) or
+                                (self.min_needed_atomid > atomid)):
+                                self.min_needed_atomid = atomid
+                            if ((self.max_needed_atomid == None) or
+                                (self.max_needed_atomid < atomid)):
+                                self.max_needed_atomid = atomid
+                        for molid in self.needed_molids:
                             assert(type(molid) is int)
-                            if ((min_needed_molid == None) or
-                                (min_needed_molid > molid)):
-                                min_needed_molid = molid
-                            if ((max_needed_molid == None) or
-                                (max_needed_molid < molid)):
-                                max_needed_molid = molid
+                            if ((self.min_needed_molid == None) or
+                                (self.min_needed_molid > molid)):
+                                self.min_needed_molid = molid
+                            if ((self.max_needed_molid == None) or
+                                (self.max_needed_molid < molid)):
+                                self.max_needed_molid = molid
 
                         pass
 
-                    elif (line.strip() == 'Masses'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Masses'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
                             # Read the next line of text but don't skip comments
-                            comment_char_backup = lex.commenters
-                            lex.commenters = ''
-                            line = lex.ReadLine()
-                            lex.commenters = comment_char_backup
-
+                            line_orig = lex.ReadLine()
+                            line = line_orig
                             comment_text = ''
                             ic = line.find('#')
                             if ic != -1:
                                 comment_text = line[ic + 1:].strip()
                                 line = line[:ic]
-                            line = line.rstrip()
+                            line = line.strip()
 
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  #<- Save line for later
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  #<- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
@@ -1071,188 +1186,238 @@ def main():
 
                                 atomtype = Intify(tokens[0])
 
-                                if BelongsToSel(atomtype, atomtype_selection):
+                                if BelongsToSel(atomtype, self.atomtype_selection):
                                     tokens[0] = '@atom:type' + tokens[0]
-                                    l_data_masses.append((' ' * indent) +
-                                                         (' '.join(tokens) +
-                                                          '\n'))
+                                    self.l_data_masses.append((' ' * self.indent) +
+                                                         (' '.join(tokens)))
 
-                    elif (line.strip() == 'Velocities'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                                    # NOTE: We might modify this entry in the
+                                    #       self.l_data_masses list later if we
+                                    #       learn that the user has chosen a
+                                    #       preferred name for this atom type
+                                    #       (if self.infer_types_from_comments==True)
+
+
+                    elif (line == 'Velocities'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Velocities" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 atomid = Intify(tokens[0])
                                 atomtype = None
-                                if atomid in atomid2type:
-                                    atomtype = atomid2type[atomid]
+                                if atomid in self.atomid2type:
+                                    atomtype = self.atomid2type[atomid]
                                 moldid = None
-                                if atomid in atomid2mol:
-                                    molid = atomid2mol[atomid]
-                                if (BelongsToSel(atomid, atomid_selection) and
+                                if atomid in self.atomid2mol:
+                                    molid = self.atomid2mol[atomid]
+                                if (BelongsToSel(atomid, self.atomid_selection) and
                                     BelongsToSel(atomtype,
-                                                 atomtype_selection) and
+                                                 self.atomtype_selection) and
                                     BelongsToSel(molid,
-                                                 molid_selection)):
+                                                 self.molid_selection)):
+
                                     tokens[0] = '$atom:id' + tokens[0]
-                                    #tokens[0] = '$atom:'+atomids_int2name[atomid]
-                                    # NOTE:I can't use "atomids_int2name" yet because
+                                    #tokens[0] = '$atom:'+self.atomids_int2name[atomid]
+                                    # NOTE:I can't use "self.atomids_int2name" yet because
                                     #     they probably have not been defined yet.
                                     # (Instead assign these names in a later pass.)
-                                    l_data_velocities.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    self.l_data_velocities.append(
+                                        (' ' * self.indent) + (' '.join(tokens)))
 
                     # non-point-like-particles:
-                    elif (line.strip() == 'Ellipsoids'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Ellipsoids'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Ellipsoids" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 atomid = Intify(tokens[0])
                                 atomtype = None
-                                if atomid in atomid2type:
-                                    atomtype = atomid2type[atomid]
+                                if atomid in self.atomid2type:
+                                    atomtype = self.atomid2type[atomid]
                                 moldid = None
-                                if atomid in atomid2mol:
-                                    molid = atomid2mol[atomid]
+                                if atomid in self.atomid2mol:
+                                    molid = self.atomid2mol[atomid]
                                 if (BelongsToSel(atomid,
-                                                 atomid_selection) and
+                                                 self.atomid_selection) and
                                     BelongsToSel(atomtype,
-                                                 atomtype_selection) and
-                                    BelongsToSel(molid, molid_selection)):
+                                                 self.atomtype_selection) and
+                                    BelongsToSel(molid, self.molid_selection)):
+
                                     tokens[0] = '$atom:id' + tokens[0]
-                                    #tokens[0] = '$atom:'+atomids_int2name[atomid]
-                                    # NOTE:I can't use "atomids_int2name" yet because
+                                    #tokens[0] = '$atom:'+self.atomids_int2name[atomid]
+                                    # NOTE:I can't use "self.atomids_int2name" yet because
                                     #     they probably have not been defined yet.
                                     # (Instead assign these names in a later pass.)
-                                    l_data_ellipsoids.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    self.l_data_ellipsoids.append(
+                                        (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Lines'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Lines'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Lines" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 atomid = Intify(tokens[0])
                                 atomtype = None
-                                if atomid in atomid2type:
-                                    atomtype = atomid2type[atomid]
+                                if atomid in self.atomid2type:
+                                    atomtype = self.atomid2type[atomid]
                                 moldid = None
-                                if atomid in atomid2mol:
-                                    molid = atomid2mol[atomid]
-                                if (BelongsToSel(atomid, atomid_selection) and
-                                        BelongsToSel(atomtype, atomtype_selection) and
-                                        BelongsToSel(molid, molid_selection)):
+                                if atomid in self.atomid2mol:
+                                    molid = self.atomid2mol[atomid]
+                                if (BelongsToSel(atomid, self.atomid_selection) and
+                                        BelongsToSel(atomtype, self.atomtype_selection) and
+                                        BelongsToSel(molid, self.molid_selection)):
                                     tokens[0] = '$atom:id' + tokens[0]
-                                    #tokens[0] = '$atom:'+atomids_int2name[atomid]
-                                    # NOTE:I can't use "atomids_int2name" yet because
+                                    #tokens[0] = '$atom:'+self.atomids_int2name[atomid]
+                                    # NOTE:I can't use "self.atomids_int2name" yet because
                                     #     they probably have not been defined yet.
                                     # (Instead assign these names in a later pass.)
-                                    l_data_lines.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    self.l_data_lines.append(
+                                        (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Triangles'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Triangles'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Triangles" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 atomid = Intify(tokens[0])
                                 atomtype = None
-                                if atomid in atomid2type:
-                                    atomtype = atomid2type[atomid]
+                                if atomid in self.atomid2type:
+                                    atomtype = self.atomid2type[atomid]
                                 moldid = None
-                                if atomid in atomid2mol:
-                                    molid = atomid2mol[atomid]
-                                if (BelongsToSel(atomid, atomid_selection) and
-                                        BelongsToSel(atomtype, atomtype_selection) and
-                                        BelongsToSel(molid, molid_selection)):
+                                if atomid in self.atomid2mol:
+                                    molid = self.atomid2mol[atomid]
+                                if (BelongsToSel(atomid, self.atomid_selection) and
+                                        BelongsToSel(atomtype, self.atomtype_selection) and
+                                        BelongsToSel(molid, self.molid_selection)):
                                     tokens[0] = '$atom:id' + tokens[0]
-                                    #tokens[0] = '$atom:'+atomids_int2name[atomid]
-                                    # NOTE:I can't use "atomids_int2name" yet because
+                                    #tokens[0] = '$atom:'+self.atomids_int2name[atomid]
+                                    # NOTE:I can't use "self.atomids_int2name" yet because
                                     #     they probably have not been defined yet.
                                     # (Instead assign these names in a later pass.)
-                                    l_data_triangles.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    self.l_data_triangles.append(
+                                        (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Bonds'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Bonds'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Bonds" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 if (len(tokens) < 4):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in Bonds section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
 
                                 #tokens[0] = '$bond:id'+tokens[0]
                                 #tokens[1] = '@bond:type'+tokens[1]
@@ -1263,21 +1428,19 @@ def main():
                                 some_in_selection = False
                                 for n in range(0, 2):
                                     atomids[n] = Intify(tokens[2 + n])
-                                    if atomids[n] in atomid2type:
-                                        atomtypes[n] = atomid2type[atomids[n]]
-                                    if atomids[n] in atomid2mol:
-                                        molids[n] = atomid2mol[atomids[n]]
-                                    if (BelongsToSel(atomids[n], atomid_selection) and
-                                            BelongsToSel(atomtypes[n], atomtype_selection) and
-                                            BelongsToSel(molids[n], molid_selection)):
-                                        #tokens[2+n] = '$atom:id'+tokens[2+n]
-                                        #tokens[2+n] = '$atom:'+atomids_int2name[atomids[n]]
+                                    if atomids[n] in self.atomid2type:
+                                        atomtypes[n] = self.atomid2type[atomids[n]]
+                                    if atomids[n] in self.atomid2mol:
+                                        molids[n] = self.atomid2mol[atomids[n]]
+                                    if (BelongsToSel(atomids[n], self.atomid_selection) and
+                                            BelongsToSel(atomtypes[n], self.atomtype_selection) and
+                                            BelongsToSel(molids[n], self.molid_selection)):
                                         some_in_selection = True
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    l_data_bonds.append(
-                                        (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    self.l_data_bonds.append(
+                                        (' ' * self.indent) + (' '.join(tokens)))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS BONDS\n')
@@ -1290,34 +1453,42 @@ def main():
                                                      '         The atoms you selected are bonded\n'
                                                      '         to other atoms you didn\'t select.\n'
                                                      '         Are you sure you selected the correct atoms?\n')
-                                    no_warnings = False
+                                    self.no_warnings = False
 
-                    elif (line.strip() == 'Angles'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Angles'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line == '':
-                                break
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Angles" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
 
                                 if (len(tokens) < 5):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in Angles section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
                                 #tokens[0] = '$angle:id'+tokens[0]
                                 #tokens[1] = '@angle:type'+tokens[1]
                                 atomids = [None, None, None]
@@ -1327,22 +1498,20 @@ def main():
                                 some_in_selection = False
                                 for n in range(0, 3):
                                     atomids[n] = Intify(tokens[2 + n])
-                                    if atomids[n] in atomid2type:
-                                        atomtypes[n] = atomid2type[atomids[n]]
-                                    if atomids[n] in atomid2mol:
-                                        molids[n] = atomid2mol[atomids[n]]
-                                    if (BelongsToSel(atomids[n], atomid_selection) and
-                                            BelongsToSel(atomtypes[n], atomtype_selection) and
-                                            BelongsToSel(molids[n], molid_selection)):
-                                        #tokens[2+n] = '$atom:id'+tokens[2+n]
-                                        #tokens[2+n] = '$atom:'+atomids_int2name[atomids[n]]
+                                    if atomids[n] in self.atomid2type:
+                                        atomtypes[n] = self.atomid2type[atomids[n]]
+                                    if atomids[n] in self.atomid2mol:
+                                        molids[n] = self.atomid2mol[atomids[n]]
+                                    if (BelongsToSel(atomids[n], self.atomid_selection) and
+                                            BelongsToSel(atomtypes[n], self.atomtype_selection) and
+                                            BelongsToSel(molids[n], self.molid_selection)):
                                         some_in_selection = True
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    if not ignore_angles_dihedrals_impropers:
-                                        l_data_angles.append(
-                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not self.ignore_angles_dihedrals_impropers:
+                                        self.l_data_angles.append(
+                                            (' ' * self.indent) + (' '.join(tokens)))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS ANGLE INTERACTION\n')
@@ -1355,31 +1524,41 @@ def main():
                                                      '         interactions with other atoms you didn\'t select.\n'
                                                      '         (They will be ignored.)\n'
                                                      '         Are you sure you selected the correct atoms?\n')
-                                    no_warnings = False
+                                    self.no_warnings = False
 
-                    elif (line.strip() == 'Dihedrals'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Dihedrals'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Dihedrals" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 if (len(tokens) < 6):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in Dihedrals section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
                                 #tokens[0] = '$dihedral:id'+tokens[0]
                                 #tokens[1] = '@dihedral:type'+tokens[1]
                                 atomids = [None, None, None, None]
@@ -1389,22 +1568,20 @@ def main():
                                 some_in_selection = False
                                 for n in range(0, 4):
                                     atomids[n] = Intify(tokens[2 + n])
-                                    if atomids[n] in atomid2type:
-                                        atomtypes[n] = atomid2type[atomids[n]]
-                                    if atomids[n] in atomid2mol:
-                                        molids[n] = atomid2mol[atomids[n]]
-                                    if (BelongsToSel(atomids[n], atomid_selection) and
-                                            BelongsToSel(atomtypes[n], atomtype_selection) and
-                                            BelongsToSel(molids[n], molid_selection)):
-                                        #tokens[2+n] = '$atom:id'+tokens[2+n]
-                                        #tokens[2+n] = '$atom:'+atomids_int2name[atomids[n]]
+                                    if atomids[n] in self.atomid2type:
+                                        atomtypes[n] = self.atomid2type[atomids[n]]
+                                    if atomids[n] in self.atomid2mol:
+                                        molids[n] = self.atomid2mol[atomids[n]]
+                                    if (BelongsToSel(atomids[n], self.atomid_selection) and
+                                            BelongsToSel(atomtypes[n], self.atomtype_selection) and
+                                            BelongsToSel(molids[n], self.molid_selection)):
                                         some_in_selection = True
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    if not ignore_angles_dihedrals_impropers:
-                                        l_data_dihedrals.append(
-                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not self.ignore_angles_dihedrals_impropers:
+                                        self.l_data_dihedrals.append(
+                                            (' ' * self.indent) + (' '.join(tokens)))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS DIHEDRAL INTERACTION\n')
@@ -1417,32 +1594,42 @@ def main():
                                                      '         interactions with other atoms you didn\'t select.\n'
                                                      '         (They will be ignored.)\n'
                                                      '         Are you sure you selected the correct atoms?\n')
-                                    no_warnings = False
+                                    self.no_warnings = False
 
 
-                    elif (line.strip() == 'Impropers'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Impropers'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Impropers" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 if (len(tokens) < 6):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in Impropers section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
                                 #tokens[0] = '$improper:id'+tokens[0]
                                 #tokens[1] = '@improper:type'+tokens[1]
                                 atomids = [None, None, None, None]
@@ -1452,22 +1639,20 @@ def main():
                                 some_in_selection = False
                                 for n in range(0, 4):
                                     atomids[n] = Intify(tokens[2 + n])
-                                    if atomids[n] in atomid2type:
-                                        atomtypes[n] = atomid2type[atomids[n]]
-                                    if atomids[n] in atomid2mol:
-                                        molids[n] = atomid2mol[atomids[n]]
-                                    if (BelongsToSel(atomids[n], atomid_selection) and
-                                            BelongsToSel(atomtypes[n], atomtype_selection) and
-                                            BelongsToSel(molids[n], molid_selection)):
-                                        #tokens[2+n] = '$atom:id'+tokens[2+n]
-                                        #tokens[2+n] = '$atom:'+atomids_int2name[atomids[n]]
+                                    if atomids[n] in self.atomid2type:
+                                        atomtypes[n] = self.atomid2type[atomids[n]]
+                                    if atomids[n] in self.atomid2mol:
+                                        molids[n] = self.atomid2mol[atomids[n]]
+                                    if (BelongsToSel(atomids[n], self.atomid_selection) and
+                                            BelongsToSel(atomtypes[n], self.atomtype_selection) and
+                                            BelongsToSel(molids[n], self.molid_selection)):
                                         some_in_selection = True
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    if not ignore_angles_dihedrals_impropers:
-                                        l_data_impropers.append(
-                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not self.ignore_angles_dihedrals_impropers:
+                                        self.l_data_impropers.append(
+                                            (' ' * self.indent) + (' '.join(tokens) + '\n'))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS IMPROPER INTERACTION\n')
@@ -1480,29 +1665,41 @@ def main():
                                                      '         interactions with other atoms you didn\'t select.\n'
                                                      '         (They will be ignored.)\n'
                                                      '         Are you sure you selected the correct atoms?\n')
-                                    no_warnings = False
+                                    self.no_warnings = False
 
-                    elif (line.strip() == 'CMAP'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'CMAP'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
-                            tokens = line.strip().split()
+
+                            tokens = line.split()
+
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "CMAP" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 if (len(tokens) < 7):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in CMAP section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
                                 #tokens[0] = '$cmap:id'+tokens[0]
                                 #tokens[1] = '@cmap:type'+tokens[1]
                                 atomids = [None, None, None, None, None]
@@ -1512,22 +1709,20 @@ def main():
                                 some_in_selection = False
                                 for n in range(0, 5):
                                     atomids[n] = Intify(tokens[2 + n])
-                                    if atomids[n] in atomid2type:
-                                        atomtypes[n] = atomid2type[atomids[n]]
-                                    if atomids[n] in atomid2mol:
-                                        molids[n] = atomid2mol[atomids[n]]
-                                    if (BelongsToSel(atomids[n], atomid_selection) and
-                                            BelongsToSel(atomtypes[n], atomtype_selection) and
-                                            BelongsToSel(molids[n], molid_selection)):
-                                        #tokens[2+n] = '$atom:id'+tokens[2+n]
-                                        #tokens[2+n] = '$atom:'+atomids_int2name[atomids[n]]
+                                    if atomids[n] in self.atomid2type:
+                                        atomtypes[n] = self.atomid2type[atomids[n]]
+                                    if atomids[n] in self.atomid2mol:
+                                        molids[n] = self.atomid2mol[atomids[n]]
+                                    if (BelongsToSel(atomids[n], self.atomid_selection) and
+                                            BelongsToSel(atomtypes[n], self.atomtype_selection) and
+                                            BelongsToSel(molids[n], self.molid_selection)):
                                         some_in_selection = True
                                     else:
                                         in_selections = False
                                 if in_selections:
-                                    if not ignore_angles_dihedrals_impropers:
-                                        l_data_cmap.append(
-                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                    if not self.ignore_angles_dihedrals_impropers:
+                                        self.l_data_cmap.append(
+                                            (' ' * self.indent) + (' '.join(tokens)))
                                 elif some_in_selection:
                                     sys.stderr.write(
                                         'WARNING: SELECTION BREAKS CMAP INTERACTION\n')
@@ -1540,488 +1735,644 @@ def main():
                                                      '         interactions with other atoms you didn\'t select.\n'
                                                      '         (They will be ignored.)\n'
                                                      '         Are you sure you selected the correct atoms?\n')
-                                    no_warnings = False
+                                    self.no_warnings = False
 
-                    elif (line.strip() == 'Bond Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Bond Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Bond Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@bond:type'+tokens[0]
-                                l_data_bond_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_bond_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Angle Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Angle Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Angle Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@angle:type'+tokens[0]
-                                l_data_angle_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_angle_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Dihedral Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Dihedral Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Dihedral Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@dihedral:type'+tokens[0]
-                                l_data_dihedral_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_dihedral_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Improper Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Improper Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Improper Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@improper:type'+tokens[0]
-                                l_data_improper_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_improper_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Pair Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
-                        some_pair_coeffs_read = True
+                    elif (line == 'Pair Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
+                        self.some_pair_coeffs_read = True
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Pair Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 if (len(tokens) < 2):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in Pair Coeffs section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
                                 atomtype_i_str = tokens[0]
                                 if '*' in atomtype_i_str:
-                                    raise InputError('PROBLEM near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('PROBLEM near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '         As of 2017-10, moltemplate forbids use of the "\*\" wildcard\n'
                                                      '         character in the \"Pair Coeffs\" section.\n')
                                 else:
                                     i = int(atomtype_i_str)
                                     if ((not i) or
-                                            BelongsToSel(i, atomtype_selection)):
+                                            BelongsToSel(i, self.atomtype_selection)):
                                         #i_str = '@atom:type' + str(i)
-                                        i_str = '@atom:' + atomtypes_int2name[i]
+                                        i_str = '@atom:' + self.atomtypes_int2name[i]
                                         tokens[0] = i_str
-                                        l_data_pair_coeffs.append(
-                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                        self.l_data_pair_coeffs.append(
+                                            (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'PairIJ Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
-                        some_pair_coeffs_read = True
+                    elif (line == 'PairIJ Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
+                        self.some_pair_coeffs_read = True
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "PairIJCoeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 if (len(tokens) < 2):
-                                    raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('Error: near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '       Nonsensical line in Pair Coeffs section:\n'
-                                                     '       \"' + line.strip() + '\"\n')
+                                                     '       \"' + line + '\"\n')
                                 atomtype_i_str = tokens[0]
                                 atomtype_j_str = tokens[1]
                                 if (('*' in atomtype_i_str) or ('*' in atomtype_j_str)):
-                                    raise InputError('PROBLEM near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                    raise InputError('PROBLEM near or before ' +
+                                                     ErrorLeader(lex.infile,
+                                                                 lex.lineno) + '\n'
                                                      '         As of 2017-10, moltemplate forbids use of the "\*\" wildcard\n'
                                                      '         character in the \"PairIJ Coeffs\" section.\n')
                                 else:
                                     i = int(atomtype_i_str)
                                     j = int(atomtype_j_str)
-                                    if (((not i) or BelongsToSel(i, atomtype_selection)) and
-                                            ((not j) or BelongsToSel(j, atomtype_selection))):
+                                    if (((not i) or BelongsToSel(i, self.atomtype_selection)) and
+                                            ((not j) or BelongsToSel(j, self.atomtype_selection))):
                                         #i_str = '@atom:type' + str(i)
                                         #j_str = '@atom:type' + str(j)
-                                        i_str = '@atom:' + atomtypes_int2name[i]
-                                        j_str = '@atom:' + atomtypes_int2name[j]
+                                        i_str = '@atom:' + self.atomtypes_int2name[i]
+                                        j_str = '@atom:' + self.atomtypes_int2name[j]
                                         tokens[0] = i_str
                                         tokens[1] = j_str
-                                        l_data_pairij_coeffs.append(
-                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                        self.l_data_pairij_coeffs.append(
+                                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif (tokens[0] == 'pair_coeff'):
-                        some_pair_coeffs_read = True
+                        self.some_pair_coeffs_read = True
                         if (len(tokens) < 3):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical pair_coeff command:\n'
-                                             '       \"' + line.strip() + '\"\n')
-                        l_in_pair_coeffs.append(' ' * indent + line.strip())
+                                             '       \"' + line + '\"\n')
+                        self.l_in_pair_coeffs.append(' ' * self.indent + line)
 
                     elif (tokens[0] == 'mass'):
-                        some_pair_coeffs_read = True
+                        self.some_pair_coeffs_read = True
                         if (len(tokens) < 3):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical \"mass\" command:\n'
-                                             '       \"' + line.strip() + '\"\n')
-                        l_in_masses.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                                             '       \"' + line + '\"\n')
+                        self.l_in_masses.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif (tokens[0] == 'bond_coeff'):
                         if (len(tokens) < 2):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical bond_coeff command:\n'
-                                             '       \"' + line.strip() + '\"\n')
+                                             '       \"' + line + '\"\n')
                         #tokens[1] = '@bond:type'+tokens[1]
-                        l_in_bond_coeffs.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_bond_coeffs.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif (tokens[0] == 'angle_coeff'):
                         if (len(tokens) < 2):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical angle_coeff command:\n'
-                                             '       \"' + line.strip() + '\"\n')
+                                             '       \"' + line + '\"\n')
                         #tokens[1] = '@angle:type'+tokens[1]
-                        l_in_angle_coeffs.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_angle_coeffs.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif (tokens[0] == 'dihedral_coeff'):
                         if (len(tokens) < 2):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical dihedral_coeff command:\n'
-                                             '       \"' + line.strip() + '\"\n')
+                                             '       \"' + line + '\"\n')
                         #tokens[1] = '@dihedral:type'+tokens[1]
-                        l_in_dihedral_coeffs.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_dihedral_coeffs.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif (tokens[0] == 'improper_coeff'):
                         if (len(tokens) < 2):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical improper_coeff command:\n'
-                                             '       \"' + line.strip() + '\"\n')
+                                             '       \"' + line + '\"\n')
                         #tokens[1] = '@improper:type'+tokens[1]
-                        l_in_improper_coeffs.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_improper_coeffs.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     # -- class2 force fields --
-                    elif (line.strip() == 'BondBond Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'BondBond Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "BondBond Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@angle:type'+tokens[0]
-                                l_data_bondbond_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_bondbond_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'BondAngle Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'BondAngle Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "BondAngle Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@angle:type'+tokens[0]
-                                l_data_bondangle_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_bondangle_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'MiddleBondTorsion Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'MiddleBondTorsion Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "MiddleBondTorsion Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@dihedral:type'+tokens[0]
-                                l_data_middlebondtorsion_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_middlebondtorsion_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'EndBondTorsion Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'EndBondTorsion Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "EndBondTorsion Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@dihedral:type'+tokens[0]
-                                l_data_endbondtorsion_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_endbondtorsion_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'AngleTorsion Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'AngleTorsion Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "AngleTorsion Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@dihedral:type'+tokens[0]
-                                l_data_angletorsion_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_angletorsion_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'AngleAngleTorsion Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'AngleAngleTorsion Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "AngleAngleTorsion Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@dihedral:type'+tokens[0]
-                                l_data_angleangletorsion_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_angleangletorsion_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'BondBond13 Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'BondBond13 Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "BondBond13 Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@dihedral:type'+tokens[0]
-                                l_data_bondbond13_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_bondbond13_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'AngleAngle Coeffs'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'AngleAngle Coeffs'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "AngleAngle Coeffs" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 #tokens[0] = '@improper:type'+tokens[0]
-                                l_data_angleangle_coeffs.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_angleangle_coeffs.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Angles By Type'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Angles By Type'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Angles By Type" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 tokens[0] = '@angle:type' + tokens[0]
-                                l_data_angles_by_type.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_angles_by_type.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Dihedrals By Type'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Dihedrals By Type'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Dihedrals By Type" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 tokens[0] = '@dihedral:type' + tokens[0]
-                                l_data_dihedrals_by_type.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_dihedrals_by_type.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
-                    elif (line.strip() == 'Impropers By Type'):
-                        sys.stderr.write('  reading \"' + line.strip() + '\"\n')
+                    elif (line == 'Impropers By Type'):
+                        sys.stderr.write('  reading \"' + line + '\"\n')
                         while lex:
-                            line = lex.ReadLine()
-                            if line.strip() in data_file_header_names:
-                                lex.push_raw_text(line+'\n')  # <- Save line for later
+                            line_orig = lex.ReadLine()
+                            line = line_orig
+                            comment_text = ''
+                            ic = line.find('#')
+                            if ic != -1:
+                                comment_text = line[ic + 1:].strip()
+                                line = line[:ic]
+                            line = line.strip()
+
+                            if line in data_file_header_names:
+                                lex.push_raw_text(line_orig+'\n')  # <- Save line for later
                                 break
 
-                            tokens = line.strip().split()
+                            tokens = line.split()
 
                             if len(tokens) > 0:
 
                                 if not tokens[0].strip().isdigit():
                                     raise InputError('Error near the "Impropers By Type" section.  Offending line:\n'
-                                                     '      "'+line.strip()+'"\n'
+                                                     '      "'+line+'"\n'
                                                      '      This line does not begin with an integer, and it does not appear to be\n'
                                                      '      a LAMMPS data file section name. If this is a valid data section name,\n'
                                                      '      please let the author know.  (jewett.aij -at- gmail.com)\n')
 
                                 tokens[0] = '@improper:type' + tokens[0]
-                                l_data_impropers_by_type.append(
-                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                                self.l_data_impropers_by_type.append(
+                                    (' ' * self.indent) + (' '.join(tokens)))
 
                     # Figure out the size of the simulation box boundary:
                     elif ((len(tokens) == 4) and
@@ -2029,24 +2380,24 @@ def main():
                           (tokens[3] == 'xhi') and
                           IsNumber(tokens[0]) and
                           IsNumber(tokens[1])):
-                        boundary_xlo = float(tokens[0])
-                        boundary_xhi = float(tokens[1])
+                        self.boundary_xlo = float(tokens[0])
+                        self.boundary_xhi = float(tokens[1])
 
                     elif ((len(tokens) == 4) and
                           (tokens[2] == 'ylo') and
                           (tokens[3] == 'yhi') and
                           IsNumber(tokens[0]) and
                           IsNumber(tokens[1])):
-                        boundary_ylo = float(tokens[0])
-                        boundary_yhi = float(tokens[1])
+                        self.boundary_ylo = float(tokens[0])
+                        self.boundary_yhi = float(tokens[1])
 
                     elif ((len(tokens) == 4) and
                           (tokens[2] == 'zlo') and
                           (tokens[3] == 'zhi') and
                           IsNumber(tokens[0]) and
                           IsNumber(tokens[1])):
-                        boundary_zlo = float(tokens[0])
-                        boundary_zhi = float(tokens[1])
+                        self.boundary_zlo = float(tokens[0])
+                        self.boundary_zhi = float(tokens[1])
 
                     elif ((len(tokens) == 6) and
                           (tokens[3] == 'xy') and
@@ -2055,72 +2406,86 @@ def main():
                           IsNumber(tokens[0]) and
                           IsNumber(tokens[1]) and
                           IsNumber(tokens[2])):
-                        boundary_xy = float(tokens[0])
-                        boundary_xz = float(tokens[1])
-                        boundary_yz = float(tokens[2])
+                        self.boundary_xy = float(tokens[0])
+                        self.boundary_xz = float(tokens[1])
+                        self.boundary_yz = float(tokens[2])
 
                     elif (tokens[0] == 'group'):
                         if (len(tokens) < 3):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical group command:\n'
                                              '       \"' + line.strip() + '\"\n')
-                        l_in_group.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_group.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif (tokens[0] == 'set'):
                         if (len(tokens) < 3):
-                            raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                            raise InputError('Error: near or before ' +
+                                             ErrorLeader(lex.infile,
+                                                         lex.lineno) + '\n'
                                              '       Nonsensical set command:\n'
                                              '       \"' + line.strip() + '\"\n')
-                        l_in_set.append(
-                            (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_set.append(
+                            (' ' * self.indent) + (' '.join(tokens)))
 
                     elif ((tokens[0] == 'fix') and (len(tokens) >= 4)):
                         if (tokens[3].find('rigid') == 0):
                             if (len(tokens) < 6):
-                                raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                raise InputError('Error: near or before ' +
+                                                 ErrorLeader(lex.infile,
+                                                             lex.lineno) + '\n'
                                                  '       Nonsensical ' +
                                                  tokens[0] + ' ' +
                                                  tokens[3] + ' command:\n'
                                                  '       \"' + line.strip() + '\"\n')
-                            l_in_fix_rigid.append(
-                                (' ' * indent) + (' '.join(tokens) + '\n'))
+                            self.l_in_fix_rigid.append(
+                                (' ' * self.indent) + (' '.join(tokens)))
                         elif (tokens[3].find('shake') == 0):
                             if (len(tokens) < 7):
-                                raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                raise InputError('Error: near or before ' +
+                                                 ErrorLeader(lex.infile,
+                                                             lex.lineno) + '\n'
                                                  '       Nonsensical ' +
                                                  tokens[0] + ' ' +
                                                  tokens[3] + ' command:\n'
                                                  '       \"' + line.strip() + '\"\n')
-                            l_in_fix_shake.append(
-                                (' ' * indent) + (' '.join(tokens) + '\n'))
+                            self.l_in_fix_shake.append(
+                                (' ' * self.indent) + (' '.join(tokens)))
                         elif (tokens[3].find('poems') == 0):
                             if (len(tokens) < 4):
-                                raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                raise InputError('Error: near or before ' +
+                                                 ErrorLeader(lex.infile,
+                                                             lex.lineno) + '\n'
                                                  '       Nonsensical ' +
                                                  tokens[0] + ' ' +
                                                  tokens[3] + ' command:\n'
                                                  '       \"' + line.strip() + '\"\n')
-                            l_in_fix_poems.append(
-                                (' ' * indent) + (' '.join(tokens) + '\n'))
+                            self.l_in_fix_poems.append(
+                                (' ' * self.indent) + (' '.join(tokens)))
                         elif (tokens[3].find('qeq') == 0):
                             if (len(tokens) < 8):
-                                raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                raise InputError('Error: near or before ' +
+                                                 ErrorLeader(lex.infile,
+                                                             lex.lineno) + '\n'
                                                  '       Nonsensical ' +
                                                  tokens[0] + ' ' +
                                                  tokens[3] + ' command:\n'
                                                  '       \"' + line.strip() + '\"\n')
-                            l_in_fix_qeq.append(
-                                (' ' * indent) + (' '.join(tokens) + '\n'))
+                            self.l_in_fix_qeq.append(
+                                (' ' * self.indent) + (' '.join(tokens)))
                         elif (tokens[3].find('qmmm') == 0):
                             if (len(tokens) < 8):
-                                raise InputError('Error: near or before ' + ErrorLeader(infile, lineno) + '\n'
+                                raise InputError('Error: near or before ' +
+                                                 ErrorLeader(lex.infile,
+                                                             lex.lineno) + '\n'
                                                  '       Nonsensical ' +
                                                  tokens[0] + ' ' +
                                                  tokens[3] + ' command:\n'
                                                  '       \"' + line.strip() + '\"\n')
-                            l_in_fix_qmmm.append(
-                                (' ' * indent) + (' '.join(tokens) + '\n'))
+                            self.l_in_fix_qmmm.append(
+                                (' ' * self.indent) + (' '.join(tokens)))
                         elif (tokens[3].find('restrain') == 0):
                             sys.stderr.write('WARNING: fix \"' + tokens[3] + '\" commands are NOT understood by ' + g_program_name + '.\n'
                                        '  If you need restraints, add them to your final .LT file (eg. \"system.lt\"),\n'
@@ -2128,15 +2493,18 @@ def main():
                                        '  Ignoring line \"' + line.strip() + '\"\n')
 
 
-                    elif (infer_types_from_comments and
+                    elif (self.infer_types_from_comments and
                           (len(tokens) == 3) and (tokens[2] == 'types') and
-                          ((tokens[1] == 'bond') or
+                          ((tokens[1] == 'atom') or
+                           (tokens[1] == 'bond') or
                            (tokens[1] == 'angle') or
                            (tokens[1] == 'dihedral') or
                            (tokens[1] == 'improper'))):
 
+
                         #####################################################
                         # Consider comments following these commands:
+                        #"N atom types"
                         #"N bond types"
                         #"N angle types"
                         #"N dihedral types"
@@ -2150,7 +2518,7 @@ def main():
                         #####################################################
 
                         interaction_type = tokens[1]
-                        #interaction_type='bond','angle','dihedral',or'improper'
+                        #interaction_type='bond','angle','dihedral','improper', (or 'atom')
 
                         ntypes = 0
                         encountered_types = set([])
@@ -2158,10 +2526,10 @@ def main():
                         sys.stderr.write('  reading \"' + line.strip() + '\"\n')
                         while lex:
                             # Read the next line of text but don't skip comments
-                            comment_char_backup = lex.commenters
+                            #comment_char_backup = lex.commenters
                             lex.commenters = ''
                             line = lex.ReadLine()
-                            lex.commenters = comment_char_backup
+                            #lex.commenters = comment_char_backup
 
                             comment_text = ''
                             ic = line.find('#')
@@ -2176,6 +2544,9 @@ def main():
                             if ((line.strip() in data_file_header_names) or
                                 (len(ltokens) >= 2) and
                                 ltokens[0].isdigit() and
+                                ((len(ltokens) == 3) and
+                                 (ltokens[1] == 'atom') and
+                                 (ltokens[2] == 'types')) or
                                 ((len(ltokens) == 3) and
                                  (ltokens[1] == 'bond') and
                                  (ltokens[2] == 'types')) or
@@ -2237,21 +2608,27 @@ def main():
                                 type_str = comment_text[iws+1:].strip()
                             else:
                                 continue
+
+                            if (interaction_type == 'atom'):
+                                #self.atomtypes_int2name[type_int]=type_str
+                                self.atomtypes_int2name[type_int] = type_str
+                                self.atomtypes_name2int[type_str] = type_int
+                                ntypes += 1
                             if (interaction_type == 'bond'):
-                                bondtypes_int2name[type_int]=type_str
+                                self.bondtypes_int2name[type_int]=type_str
                                 ntypes += 1
                             elif (interaction_type == 'angle'):
-                                angletypes_int2name[type_int]=type_str
+                                self.angletypes_int2name[type_int]=type_str
                                 ntypes += 1
                             elif (interaction_type == 'dihedral'):
-                                dihtypes_int2name[type_int]=type_str
+                                self.dihtypes_int2name[type_int]=type_str
                                 ntypes += 1
                             elif (interaction_type == 'improper'):
-                                imptypes_int2name[type_int]=type_str
+                                self.imptypes_int2name[type_int]=type_str
                                 ntypes += 1
                             else:
                                 continue
-                            if (forbid_type_name_duplicates and
+                            if (self.forbid_type_name_duplicates and
                                 (type_str in encountered_types)):
                                 raise InputError('Error: Duplicate name in comments following: \"' + interaction_type + ' types\" section\n'
                                                  '       (By default ' + g_program_name +
@@ -2272,110 +2649,224 @@ def main():
                         sys.stderr.write('  Ignoring line \"' +
                                          line.strip() + '\"\n')
 
+
+    def PostProcess1(self):
+        """
+        PostProcess1:
+        Now do a second-pass throught the "self.l_data_atoms" section, and
+        finish dealing with "self.infer_types_from_comments".
+
+        Determine atomid names from atomtype names.
+
+        If an atom type appears multiple times (as is usually the case),
+        then set the atomid names to the atomtype name with an integer suffix.
+        (For example, the atoms of type "CA" will be named
+         "CA_1", "CA_2", "CA_3", ...)
+
+        If any atom types only appear once,
+        set the atomid name = atomtype name.
+        """
+        
         sys.stderr.write('\n\n')
 
         sys.stderr.write('  processing \"Atoms\" section (')
+        sys.stderr.write('postprocess1')
 
-        # post-processing:
 
-        if len(l_data_masses) == 0:
-            infer_types_from_comments = False
+        # set the atomid name to the atomtype name with an integer suffix.
+        # (For example, the atoms of type "CA" will be named
+        #  "CA_1", "CA_2", "CA_3", ...)
 
-        # Pass 1 through l_data_atoms:
-        # Now do a second-pass throught the "l_data_atoms" section, and
-        # finish dealing with "infer_types_from_comments".
-        # During this pass, peplace the atomtype names and atomid names with
-        # atom type names which were inferred from comments read earlier.
-
-        sys.stderr.write('pass1')
-        for i in range(0, len(l_data_atoms)):
-            tokens = l_data_atoms[i].split()
-            atomid = tokens[i_atomid]
+        for i in range(0, len(self.l_data_atoms)):
+            tokens = self.l_data_atoms[i].split()
+            atomid = tokens[self.i_atomid]
             if atomid.find('$atom:') == 0:
                 atomid = atomid[6:]
                 # convert to an integer
                 atomid = Intify(atomid)
 
             simple_atom_type_names = True
-            if infer_types_from_comments:
-                atomtype = tokens[i_atomtype]
-                # remove the "@atom:" prefix (we will put it back later)
-                if atomtype.find('@atom:') == 0:
-                    atomtype = atomtype[6:]
+            atomtype = tokens[self.i_atomtype]
+            # remove the "@atom:" prefix (we will put it back later)
+            if atomtype.find('@atom:') == 0:
+                atomtype = Intify(atomtype[6:])
                 # convert to an integer
-                atomtype = Intify(atomtype)
-                atomtype_name = atomtypes_int2name[atomtype]
+            if not (atomtype in self.atomtypes_int2name):
+                self.atomtypes_int2name[atomtype] = 'type' + str(atomtype)
+            if self.infer_types_from_comments:
+                atomtype_name = self.atomtypes_int2name[atomtype]
                 if atomtype_name.find('/') != -1:
                     simple_atom_type_names = False
-            if (infer_types_from_comments and simple_atom_type_names):
-                if atomtype in atomids_by_type:
-                    l_atomids = atomids_by_type[atomtype]
-                    prev_count = len(l_atomids)
+            if (self.infer_types_from_comments and simple_atom_type_names):
+                if atomtype in self.atomids_by_type:
+                    self.l_atomids = self.atomids_by_type[atomtype]
+                    prev_count = len(self.l_atomids)
                     # lookup the most recently added atom of this type:
-                    #prev_atomid_name = l_atomids[-1]
+                    #prev_atomid_name = self.l_atomids[-1]
                     #ic = prev_atomid_name.rfind('_')
                     #prev_count = int(prev_atomid_name[ic+1:])
                     atomid_name = atomtype_name + '_' + str(prev_count + 1)
                 else:
                     atomid_name = atomtype_name  + '_1'
-                atomids_int2name[atomid] = atomid_name
-                #atomids_name2str[atomid_name] = atomid
+                self.atomids_int2name[atomid] = atomid_name
+                #self.atomids_name2str[atomid_name] = atomid
             else:
-                atomids_int2name[atomid] = 'id' + str(atomid)
-            atomids_by_type[atomtype].append(atomid)
+                self.atomids_int2name[atomid] = 'id' + str(atomid)
+            self.atomids_by_type[atomtype].append(atomid)
 
-        sys.stderr.write(', pass2')
-        #Pass 2: If any atom types only appear once, simplify their atomid names
-        for i in range(0, len(l_data_atoms)):
-            tokens = l_data_atoms[i].split()
+        # If any atom types only appear once, simplify atomid names
+        # by setting the atomid name = atomtype name.
+
+        for i in range(0, len(self.l_data_atoms)):
+            tokens = self.l_data_atoms[i].split()
 
             # remove the "@atom:" prefix (we will put it back later)
-            atomtype = tokens[i_atomtype]
+            atomtype = tokens[self.i_atomtype]
             if atomtype.find('@atom:') == 0:
                 atomtype = atomtype[6:]
             atomtype = Intify(atomtype)
-            if infer_types_from_comments:
-                if len(atomids_by_type[atomtype]) == 1:
-                    atomid = tokens[i_atomid]
+            if self.infer_types_from_comments:
+                if len(self.atomids_by_type[atomtype]) == 1:
+                    atomid = tokens[self.i_atomid]
                     if atomid.find('$atom:') == 0:
                         atomid = atomid[6:]
                     atomid = Intify(atomid)
-                    atomtype_name = atomtypes_int2name[atomtype]
-                    atomids_int2name[atomid] = atomtype_name
+                    atomtype_name = self.atomtypes_int2name[atomtype]
+                    self.atomids_int2name[atomid] = atomtype_name
 
-        sys.stderr.write(', pass3')
-        #Pass 3: substitute the atomid names and atom type names into l_data_atoms
-        for i in range(0, len(l_data_atoms)):
-            tokens = l_data_atoms[i].split()
-            atomid = tokens[i_atomid]
+
+    def PostProcess2(self):
+        """
+        PostProcess2:
+             Substitute the updated atomid names and atom type names into:
+        self.l_data_atoms
+        self.l_data_velocities
+        self.l_data_ellipsoids
+        self.l_data_lines
+        self.l_data_triangles
+        """
+
+        sys.stderr.write(', postprocess2')
+        
+        for i in range(0, len(self.l_data_atoms)):
+            tokens = self.l_data_atoms[i].split()
+            atomid = tokens[self.i_atomid]
             if atomid.find('$atom:') == 0:
                 atomid = atomid[6:]
                 # convert to an integer
                 atomid = Intify(atomid)
-            atomtype = tokens[i_atomtype]
+            atomtype = tokens[self.i_atomtype]
             if atomtype.find('@atom:') == 0:
                 atomtype = atomtype[6:]
             atomtype = Intify(atomtype)
-            tokens = l_data_atoms[i].split()
-            atomid_name = atomids_int2name[atomid]
-            atomtype_name = atomtypes_int2name[atomtype]
+            tokens = self.l_data_atoms[i].split()
+            atomid_name = self.atomids_int2name[atomid]
+            atomtype_name = self.atomtypes_int2name[atomtype]
             if atomid_name.find(' ') != -1:
-                tokens[i_atomid] = '${atom:' + atomid_name + '}'
+                tokens[self.i_atomid] = '${atom:' + atomid_name + '}'
             else:
-                tokens[i_atomid] = '$atom:' + atomid_name
+                tokens[self.i_atomid] = '$atom:' + atomid_name
             if atomtype_name.find(' ') != -1:
-                tokens[i_atomtype] = '@{atom:' +atomtype_name+'}'
+                tokens[self.i_atomtype] = '@{atom:' +atomtype_name+'}'
             else:
-                tokens[i_atomtype] = '@atom:' + atomtype_name
-            l_data_atoms[i] = (' ' * indent) + (' '.join(tokens) + '\n')
-        sys.stderr.write(')\n\n')
+                tokens[self.i_atomtype] = '@atom:' + atomtype_name
+            self.l_data_atoms[i] = (' ' * self.indent) + (' '.join(tokens))
 
-        if len(l_data_atoms) == 0:
+        # self.l_data_velocities
+        for i in range(0, len(self.l_data_velocities)):
+            tokens = self.l_data_velocities[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = self.atomids_int2name[atomid]
+            tokens = self.l_data_velocities[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            self.l_data_velocities[i] = (' ' * self.indent) + (' '.join(tokens))
+
+        # self.l_data_ellipsoids
+        for i in range(0, len(self.l_data_ellipsoids)):
+            tokens = self.l_data_ellipsoids[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = self.atomids_int2name[atomid]
+            tokens = self.l_data_ellipsoids[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            self.l_data_ellipsoids[i] = (' ' * self.indent) + (' '.join(tokens))
+
+        # self.l_data_lines
+        for i in range(0, len(self.l_data_lines)):
+            tokens = self.l_data_lines[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = self.atomids_int2name[atomid]
+            tokens = self.l_data_lines[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            self.l_data_lines[i] = (' ' * self.indent) + (' '.join(tokens))
+
+        # self.l_data_triangles
+        for i in range(0, len(self.l_data_triangles)):
+            tokens = self.l_data_triangles[i].split()
+            atomid = tokens[0]
+            if atomid.find('$atom:') == 0:
+                atomid = atomid[6:]
+                # convert to an integer
+                atomid = Intify(atomid)
+            atomid_name = self.atomids_int2name[atomid]
+            tokens = self.l_data_triangles[i].split()
+            if atomid_name.find(' ') != -1:
+                tokens[0] = '${atom:' + atomid_name + '}'
+            else:
+                tokens[0] = '$atom:' + atomid_name
+            self.l_data_triangles[i] = (' ' * self.indent) + (' '.join(tokens))
+
+        if len(self.l_data_atoms) == 0:
             raise InputError('Error(' + g_program_name + '): You have no atoms in you selection!\n'
                              '\n'
                              '       Either you have chosen a set of atoms, molecules, or atom types which\n'
                              '       does not exist, or there is a problem with (the format of) your\n'
                              '       arguments. Check the documentation and examples.\n')
+
+
+
+
+
+
+    def PostProcess3(self):
+        """
+        PostProcess3
+        1) Delete lines from l_data_bonds, l_data_angles, l_data_dihedrals,
+           l_data_impropers, and cmaps describing interactions between atoms we
+           don't care about (i.e. atoms which were not selected by the user).
+        2) For the atoms we do care about, replace their atomid names
+           (which in this section of the file are still currently numeric)
+           with the updated atomids that we determined earlier.
+        3) Now that we know which bonds, angles, dihedrals, and impropers
+           and cmaps we want to keep, we can figure out which bond types,
+           angle types, dihedral types, and improper types are no longer
+           needed, and delete their corresponding entry from the lists:
+           l_in_bond_coeffs, l_in_angle_coeffs, l_in_dihedral_coeffs, and
+           l_in_improper_coeffs
+        4) Do the same thing for l_in_pair_coeffs and l_data_masses.  (Discard
+           pair_coeffs and masses for atom types we don't care about.)
+        """
+           
 
         # --- Now delete items that were not selected from the other lists ---
 
@@ -2384,51 +2875,51 @@ def main():
         # delete masses for atom types we no longer care about:
         # also substitute the correct atom type name
         i_line = 0
-        while i_line < len(l_data_masses):
-            line = l_data_masses[i_line]
+        while i_line < len(self.l_data_masses):
+            line = self.l_data_masses[i_line]
             tokens = line.strip().split()
             atomtypestr = tokens[0]
             if atomtypestr.find('@atom:') == 0:
                 atomtypestr = atomtypestr[6:]
             atomtype = Intify(atomtypestr)
-            if ((not (atomtype in needed_atomtypes)) and
-                (not ((len(atomtype_selection) > 0) and
-                      BelongsToSel(atomtype, atomtype_selection)))):
-                del l_data_masses[i_line]
+            if ((not (atomtype in self.needed_atomtypes)) and
+                (not ((len(self.atomtype_selection) > 0) and
+                      BelongsToSel(atomtype, self.atomtype_selection)))):
+                del self.l_data_masses[i_line]
             else:
-                atomtype_name = atomtypes_int2name[atomtype]
+                atomtype_name = self.atomtypes_int2name[atomtype]
                 if atomtype_name.find(' ') != -1:
                     tokens[0] = '@{atom:'+atomtype_name+'}'
                 else:
                     tokens[0] = '@atom:'+atomtype_name
                 #if atomtype_name != 'type'+str(atomtype):
                 #    tokens.append('  # '+atomtype_name)
-                l_data_masses[i_line] = ((' ' * indent) +
-                                         (' '.join(tokens) + '\n'))
+                self.l_data_masses[i_line] = ((' ' * self.indent) +
+                                              (' '.join(tokens)))
                 i_line += 1
 
         # --- PAIR COEFFS ---
 
         # delete data_pair_coeffs for atom types we no longer care about:
         i_line = 0
-        while i_line < len(l_data_pair_coeffs):
-            line = l_data_pair_coeffs[i_line]
+        while i_line < len(self.l_data_pair_coeffs):
+            line = self.l_data_pair_coeffs[i_line]
             tokens = line.strip().split()
             assert(len(tokens) > 0)
             split_colon = tokens[0].split(':')
             assert(len(split_colon) == 2)
             atomtype = Intify(split_colon[1])
-            if ((not (atomtype in needed_atomtypes)) and
-                (not ((len(atomtype_selection) > 0) and
-                      BelongsToSel(atomtype, atomtype_selection)))):
-                del l_data_pair_coeffs[i_line]
+            if ((not (atomtype in self.needed_atomtypes)) and
+                (not ((len(self.atomtype_selection) > 0) and
+                      BelongsToSel(atomtype, self.atomtype_selection)))):
+                del self.l_data_pair_coeffs[i_line]
             else:
                 i_line += 1
 
         # delete data_pairij_coeffs for atom types we no longer care about:
         i_line = 0
-        while i_line < len(l_data_pairij_coeffs):
-            line = l_data_pairij_coeffs[i_line]
+        while i_line < len(self.l_data_pairij_coeffs):
+            line = self.l_data_pairij_coeffs[i_line]
             tokens = line.strip().split()
             assert(len(tokens) > 0)
             split_colon_I = tokens[0].split(':')
@@ -2437,27 +2928,27 @@ def main():
             split_colon_J = tokens[1].split(':')
             assert(len(split_colon_J) == 2)
             atomtype_J = Intify(split_colon_J[1])
-            if (((not (atomtype_I in needed_atomtypes)) and
-                 (not ((len(atomtype_selection) > 0) and
-                       BelongsToSel(atomtype_I, atomtype_selection))))
+            if (((not (atomtype_I in self.needed_atomtypes)) and
+                 (not ((len(self.atomtype_selection) > 0) and
+                       BelongsToSel(atomtype_I, self.atomtype_selection))))
                 or
-                ((not (atomtype_J in needed_atomtypes)) and
-                 (not ((len(atomtype_selection) > 0) and
-                       BelongsToSel(atomtype_J, atomtype_selection))))):
-                del l_data_pairij_coeffs[i_line]
+                ((not (atomtype_J in self.needed_atomtypes)) and
+                 (not ((len(self.atomtype_selection) > 0) and
+                       BelongsToSel(atomtype_J, self.atomtype_selection))))):
+                del self.l_data_pairij_coeffs[i_line]
             else:
                 i_line += 1
 
         # delete in_pair_coeffs for atom we no longer care about:
         i_line = 0
-        while i_line < len(l_in_pair_coeffs):
-            line = l_in_pair_coeffs[i_line]
+        while i_line < len(self.l_in_pair_coeffs):
+            line = self.l_in_pair_coeffs[i_line]
             tokens = line.strip().split()
             atomtype_i_str = tokens[1]
             atomtype_j_str = tokens[2]
             #if (('*' in atomtype_i_str) or
             #    ('*' in atomtype_j_str)):
-            #    sys.stderr.write('WARNING: near or before '+ErrorLeader(infile, lineno)+'\n'
+            #    sys.stderr.write('WARNING: near or before '+ErrorLeader(lex.infile, lex.lineno)+'\n'
             #                     '         pair_coeff command contains a \"*\" character.\n'
             #                     '         Keep in mind that using moltemplate.sh you can manually change the\n'
             #                     '         numbers assigned to each atom type (when using -a or -b).  Make sure\n'
@@ -2475,20 +2966,20 @@ def main():
                 atomtype_i_tokens = atomtype_i_str.split('*')
 
                 if atomtype_i_tokens[0] == '':
-                    if (min_sel_atomtype and
-                        (min_sel_atomtype < min_needed_atomtype)):
-                        i_a = min_sel_atomtype
+                    if (self.min_sel_atomtype and
+                        (self.min_sel_atomtype < self.min_needed_atomtype)):
+                        i_a = self.min_sel_atomtype
                     else:
-                        i_a = min_needed_atomtype
+                        i_a = self.min_needed_atomtype
                 else:
                     i_a = Intify(atomtype_i_tokens[0])
 
                 if atomtype_i_tokens[1] == '':
-                    if (max_sel_atomtype and
-                        (max_sel_atomtype > max_needed_atomtype)):
-                        i_b = max_sel_atomtype
+                    if (self.max_sel_atomtype and
+                        (self.max_sel_atomtype > self.max_needed_atomtype)):
+                        i_b = self.max_sel_atomtype
                     else:
-                        i_b = max_needed_atomtype
+                        i_b = self.max_needed_atomtype
                 else:
                     i_b = Intify(atomtype_i_tokens[1])
 
@@ -2501,14 +2992,14 @@ def main():
             i_b_final = None
 
             for i in range(i_a, i_b + 1):
-                if ((i in needed_atomtypes) or
-                    ((min_sel_atomtype != None) and (min_sel_atomtype <= i))):
+                if ((i in self.needed_atomtypes) or
+                    ((self.min_sel_atomtype != None) and (self.min_sel_atomtype <= i))):
                     i_a_final = i
                     break
 
             for i in reversed(range(i_a, i_b + 1)):
-                if ((i in needed_atomtypes) or
-                    ((max_sel_atomtype != None) and (max_sel_atomtype >= i))):
+                if ((i in self.needed_atomtypes) or
+                    ((self.max_sel_atomtype != None) and (self.max_sel_atomtype >= i))):
                     i_b_final = i
                     break
 
@@ -2523,20 +3014,20 @@ def main():
                 atomtype_j_tokens = atomtype_j_str.split('*')
 
                 if atomtype_j_tokens[0] == '':
-                    if (min_sel_atomtype and
-                        (min_sel_atomtype < min_needed_atomtype)):
-                        j_a = min_sel_atomtype
+                    if (self.min_sel_atomtype and
+                        (self.min_sel_atomtype < self.min_needed_atomtype)):
+                        j_a = self.min_sel_atomtype
                     else:
-                        j_a = min_needed_atomtype
+                        j_a = self.min_needed_atomtype
                 else:
                     j_a = Intify(atomtype_j_tokens[0])
 
                 if atomtype_j_tokens[1] == '':
-                    if (max_sel_atomtype and
-                        (max_sel_atomtype > max_needed_atomtype)):
-                        j_b = max_sel_atomtype
+                    if (self.max_sel_atomtype and
+                        (self.max_sel_atomtype > self.max_needed_atomtype)):
+                        j_b = self.max_sel_atomtype
                     else:
-                        j_b = max_needed_atomtype
+                        j_b = self.max_needed_atomtype
                 else:
                     j_b = Intify(atomtype_j_tokens[1])
 
@@ -2546,13 +3037,13 @@ def main():
             j_a_final = None
             j_b_final = None
             for j in range(j_a, j_b + 1):
-                if ((j in needed_atomtypes) or
-                    ((min_sel_atomtype != None) and (min_sel_atomtype <= j))):
+                if ((j in self.needed_atomtypes) or
+                    ((self.min_sel_atomtype != None) and (self.min_sel_atomtype <= j))):
                     j_a_final = j
                     break
             for j in reversed(range(j_a, j_b + 1)):
-                if ((j in needed_atomtypes) or
-                    ((max_sel_atomtype != None) and (max_sel_atomtype >= j))):
+                if ((j in self.needed_atomtypes) or
+                    ((self.max_sel_atomtype != None) and (self.max_sel_atomtype >= j))):
                     j_b_final = j
                     break
 
@@ -2564,14 +3055,14 @@ def main():
             #        j_str = '@{atom:type'+str(j_a_final)+'}*@{atom:type'+str(j_b_final)+'}'
 
             if not (i_a_final and i_b_final and j_a_final and j_b_final):
-                del l_in_pair_coeffs[i_line]
+                del self.l_in_pair_coeffs[i_line]
             elif (('*' in atomtype_i_str) or ('*' in atomtype_j_str)):
-                del l_in_pair_coeffs[i_line]
+                del self.l_in_pair_coeffs[i_line]
                 for i in range(i_a_final, i_b_final + 1):
                     for j in range(j_a_final, j_b_final + 1):
                         if j >= i:
-                            atomtype_name_i = atomtypes_int2name[i]
-                            atomtype_name_j = atomtypes_int2name[j]
+                            atomtype_name_i = self.atomtypes_int2name[i]
+                            atomtype_name_j = self.atomtypes_int2name[j]
                             if atomtype_name_i.find(' ') != -1:
                                 tokens[1] = '@{atom:' + atomtype_name_i + '}'
                             else:
@@ -2581,12 +3072,12 @@ def main():
                             else:
                                 tokens[2] = '@atom:' + atomtype_name_j
 
-                            l_in_pair_coeffs.insert(i_line,
-                                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                            self.l_in_pair_coeffs.insert(i_line,
+                                                         (' ' * self.indent) + (' '.join(tokens)))
                             i_line += 1
             else:
-                atomtype_name_i = atomtypes_int2name[int(tokens[1])]
-                atomtype_name_j = atomtypes_int2name[int(tokens[2])]
+                atomtype_name_i = self.atomtypes_int2name[int(tokens[1])]
+                atomtype_name_j = self.atomtypes_int2name[int(tokens[2])]
                 if atomtype_name_i.find(' ') != -1:
                     tokens[1] = '@{atom:' + atomtype_name_i + '}'
                 else:
@@ -2595,19 +3086,19 @@ def main():
                     tokens[2] = '@{atom:' + atomtype_name_j + '}'
                 else:
                     tokens[2] = '@atom:' + atomtype_name_j
-                l_in_pair_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_in_pair_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
         # delete mass commands for atom types we no longer care about:
         i_line = 0
-        while i_line < len(l_in_masses):
-            line = l_in_masses[i_line]
+        while i_line < len(self.l_in_masses):
+            line = self.l_in_masses[i_line]
             tokens = line.strip().split()
             atomtype_i_str = tokens[1]
             # if (('*' in atomtype_i_str) or
             #    ('*' in atomtype_j_str)):
-            #    sys.stderr.write('WARNING: near or before '+ErrorLeader(infile, lineno)+'\n'
+            #    sys.stderr.write('WARNING: near or before '+ErrorLeader(lex.infile, lex.lineno)+'\n'
             #                     '         pair_coeff command contains a \"*\" character.\n'
             #                     '         Keep in mind that using moltemplate.sh you can manually change the\n'
             #                     '         numbers assigned to each atom type (when using -a or -b).  Make sure\n'
@@ -2625,20 +3116,20 @@ def main():
                 atomtype_i_tokens = atomtype_i_str.split('*')
 
                 if atomtype_i_tokens[0] == '':
-                    if (min_sel_atomtype and
-                        (min_sel_atomtype < min_needed_atomtype)):
-                        i_a = min_sel_atomtype
+                    if (self.min_sel_atomtype and
+                        (self.min_sel_atomtype < self.min_needed_atomtype)):
+                        i_a = self.min_sel_atomtype
                     else:
-                        i_a = min_needed_atomtype
+                        i_a = self.min_needed_atomtype
                 else:
                     i_a = Intify(atomtype_i_tokens[0])
 
                 if atomtype_i_tokens[1] == '':
-                    if (max_sel_atomtype and
-                        (max_sel_atomtype > max_needed_atomtype)):
-                        i_b = max_sel_atomtype
+                    if (self.max_sel_atomtype and
+                        (self.max_sel_atomtype > self.max_needed_atomtype)):
+                        i_b = self.max_sel_atomtype
                     else:
-                        i_b = max_needed_atomtype
+                        i_b = self.max_needed_atomtype
                 else:
                     i_b = Intify(atomtype_i_tokens[1])
 
@@ -2648,11 +3139,11 @@ def main():
             i_a_final = None
             i_b_final = None
             for i in range(i_a, i_b + 1):
-                if ((i in needed_atomtypes) or (min_sel_atomtype <= i)):
+                if ((i in self.needed_atomtypes) or (self.min_sel_atomtype <= i)):
                     i_a_final = i
                     break
             for i in reversed(range(i_a, i_b + 1)):
-                if ((i in needed_atomtypes) or (max_sel_atomtype >= i)):
+                if ((i in self.needed_atomtypes) or (self.max_sel_atomtype >= i)):
                     i_b_final = i
                     break
             # if i_a_final and i_b_final:
@@ -2663,38 +3154,36 @@ def main():
             #        i_str = '@{atom:type'+str(i_a_final)+'}*@{atom:type'+str(i_b_final)+'}'
 
             if not (i_a_final and i_b_final and j_a_final and j_b_final):
-                del l_in_masses[i_line]
+                del self.l_in_masses[i_line]
             elif ('*' in atomtype_i_str):
-                del l_in_masses[i_line]
+                del self.l_in_masses[i_line]
                 for i in range(i_a_final, i_b_final + 1):
                     #tokens[1] = '@atom:type'+str(i)
-                    atomtype_name = atomtypes_int2name[i]
+                    atomtype_name = self.atomtypes_int2name[i]
                     if atomtype_name.find(' ') != -1:
                         tokens[1] = '@{atom:' + atomtype_name + '}'
                     else:
                         tokens[1] = '@atom:' + atomtype_name
-                    # CONTINUEHERE: CHECK THAT THIS IS WORKING
-                    l_in_masses.insert(i_line, (' ' * indent) +
-                                       (' '.join(tokens) + '\n'))
+                    self.l_in_masses.insert(i_line, (' ' * self.indent) +
+                                            (' '.join(tokens)))
                     i_line += 1
             else:
                 assert(i_a == i_b)
                 #tokens[1] = '@atom:type'+str(i_a)
-                atomtype_name = atomtypes_int2name[i_a]
+                atomtype_name = self.atomtypes_int2name[i_a]
                 if atomtype_name.find(' ') != -1:
                     tokens[1] = '@{atom:' + atomtype_name + '}'
                 else:
                     tokens[1] = '@atom:' + atomtype_name
-                # CONTINUEHERE: CHECK THAT THIS IS WORKING
-                l_in_masses[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_in_masses[i_line] = (' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
         # --- BONDS AND BOND COEFFS ---
 
-        # delete lines from data_bonds if they involve atoms we don't care about
+        # delete lines from l_data_bonds if they involve atoms we don't care about
         i_line = 0
-        while i_line < len(l_data_bonds):
-            line = l_data_bonds[i_line]
+        while i_line < len(self.l_data_bonds):
+            line = self.l_data_bonds[i_line]
             tokens = line.strip().split()
             assert(len(tokens) == 4)
 
@@ -2702,78 +3191,79 @@ def main():
             bondtype = Intify(tokens[1])
             atomid1 = Intify(tokens[2])
             atomid2 = Intify(tokens[3])
-            # if ((atomid1 in needed_atomids) and
-            #     (atomid2 in needed_atomids)):
+            # if ((atomid1 in self.needed_atomids) and
+            #     (atomid2 in self.needed_atomids)):
             tokens[0] = '$bond:id' + str(bondid)
-            if bondtype in bondtypes_int2name:
-                type_str = bondtypes_int2name[bondtype]
+
+            if bondtype in self.bondtypes_int2name:
+                type_str = self.bondtypes_int2name[bondtype]
             else:
                 type_str = 'type' + str(bondtype)
             if type_str.find(' ') != -1:
                 tokens[1] = '@{bond:' + type_str + '}'
             else:
                 tokens[1] = '@bond:' + type_str
-            if atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            if self.atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
             else:
-                tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            if atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
+            if self.atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
             else:
-                tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            if ignore_bond_types:
+                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
+            if self.ignore_bond_types:
                 # Then instead of a "Bonds" section we want a "Bond List" 
                 # section which omits the bond type information (in tokens[1])
                 del tokens[1]
-            needed_bondids.add(bondid)
-            needed_bondtypes.add(bondtype)
-            l_data_bonds[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+            self.needed_bondids.add(bondid)
+            self.needed_bondtypes.add(bondtype)
+            self.l_data_bonds[i_line] = (' ' * self.indent) + (' '.join(tokens))
             i_line += 1
             # else:
-            #    del l_data_bonds[i_line]
+            #    del self.l_data_bonds[i_line]
 
         # delete data_bond_coeffs for bondtypes we no longer care about
         i_line = 0
-        while i_line < len(l_data_bond_coeffs):
-            line = l_data_bond_coeffs[i_line]
+        while i_line < len(self.l_data_bond_coeffs):
+            line = self.l_data_bond_coeffs[i_line]
             tokens = line.strip().split()
             bondtype = Intify(tokens[0])
-            if (not (bondtype in needed_bondtypes)):
-                del l_data_bond_coeffs[i_line]
+            if (not (bondtype in self.needed_bondtypes)):
+                del self.l_data_bond_coeffs[i_line]
             else:
                 tokens[0] = '@bond:type' + str(bondtype)
-                l_data_bond_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_bond_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
         # delete in_bond_coeffs for bondtypes we no longer care about:
-        if len(needed_bondtypes) > 0:
-            for bondtype in needed_bondtypes:
+        if len(self.needed_bondtypes) > 0:
+            for bondtype in self.needed_bondtypes:
                 assert(type(bondtype) is int)
-                if ((min_needed_bondtype == None) or
-                    (min_needed_bondtype > bondtype)):
-                    min_needed_bondtype = bondtype
-                if ((max_needed_bondtype == None) or
-                    (max_needed_bondtype < bondtype)):
-                    max_needed_bondtype = bondtype
-            for bondid in needed_bondids:
+                if ((self.min_needed_bondtype == None) or
+                    (self.min_needed_bondtype > bondtype)):
+                    self.min_needed_bondtype = bondtype
+                if ((self.max_needed_bondtype == None) or
+                    (self.max_needed_bondtype < bondtype)):
+                    self.max_needed_bondtype = bondtype
+            for bondid in self.needed_bondids:
                 assert(type(bondid) is int)
-                if ((min_needed_bondid == None) or
-                    (min_needed_bondid > bondid)):
-                    min_needed_bondid = bondid
-                if ((max_needed_bondid == None) or
-                    (max_needed_bondid < bondid)):
-                    max_needed_bondid = bondid
+                if ((self.min_needed_bondid == None) or
+                    (self.min_needed_bondid > bondid)):
+                    self.min_needed_bondid = bondid
+                if ((self.max_needed_bondid == None) or
+                    (self.max_needed_bondid < bondid)):
+                    self.max_needed_bondid = bondid
         else:
             # If no bonds were needed, then define some defaults
             # to make sure we don't keep any of them later.
-            min_needed_bondtype = 1
-            max_needed_bondtype = 0
+            self.min_needed_bondtype = 1
+            self.max_needed_bondtype = 0
 
 
         i_line = 0
-        while i_line < len(l_in_bond_coeffs):
-            line = l_in_bond_coeffs[i_line]
+        while i_line < len(self.l_in_bond_coeffs):
+            line = self.l_in_bond_coeffs[i_line]
             tokens = line.strip().split()
             bondtype_str = tokens[1]
 
@@ -2781,12 +3271,12 @@ def main():
                 bondtype_tokens = bondtype_str.split('*')
 
                 if bondtype_tokens[0] == '':
-                    i_a = min_needed_bondtype
+                    i_a = self.min_needed_bondtype
                 else:
                     i_a = Intify(bondtype_tokens[0])
 
                 if bondtype_tokens[1] == '':
-                    i_b = max_needed_bondtype
+                    i_b = self.max_needed_bondtype
                 else:
                     i_b = Intify(bondtype_tokens[1])
 
@@ -2794,10 +3284,10 @@ def main():
                 i_a = Intify(bondtype_str)
                 i_b = i_a
 
-            if i_a < min_needed_bondtype:
-                i_a = min_needed_bondtype
-            if i_b > max_needed_bondtype:
-                i_b = max_needed_bondtype
+            if i_a < self.min_needed_bondtype:
+                i_a = self.min_needed_bondtype
+            if i_b > self.max_needed_bondtype:
+                i_b = self.max_needed_bondtype
 
             # if i_a == i_b:
             #    i_str = '@bond:type'+str(i_a)
@@ -2806,31 +3296,31 @@ def main():
             #    i_str = '@{bond:type'+str(j_a)+'}*@{bond:type'+str(j_b)+'}'
 
             if ('*' in bondtype_str):
-                del l_in_bond_coeffs[i_line]
+                del self.l_in_bond_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
-                    if (i in needed_bondtypes):
+                    if (i in self.needed_bondtypes):
                         tokens[1] = '@bond:type' + str(i)
-                        l_in_bond_coeffs.insert(i_line,
-                                                (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_bond_coeffs.insert(i_line,
+                                                     (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
             else:
                 if i_a < i_b:
                     raise InputError('Error: number of bond types in data file is not consistent with the\n'
                                      '       number of bond types you have define bond_coeffs for.\n')
-                if (i_a == i_b) and (i_a in needed_bondtypes):
+                if (i_a == i_b) and (i_a in self.needed_bondtypes):
                     tokens[1] = '@bond:type' + str(i_a)
-                    l_in_bond_coeffs[i_line] = (
-                        ' ' * indent) + (' '.join(tokens) + '\n')
+                    self.l_in_bond_coeffs[i_line] = (
+                        ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
                 else:
-                    del l_in_bond_coeffs[i_line]
+                    del self.l_in_bond_coeffs[i_line]
 
         # --- ANGLES AND ANGLE COEFFS ---
 
         # delete lines from data_angles if they involve atoms we don't care about
         i_line = 0
-        while i_line < len(l_data_angles):
-            line = l_data_angles[i_line]
+        while i_line < len(self.l_data_angles):
+            line = self.l_data_angles[i_line]
             tokens = line.strip().split()
             assert(len(tokens) == 5)
 
@@ -2839,48 +3329,49 @@ def main():
             atomid1 = Intify(tokens[2])
             atomid2 = Intify(tokens[3])
             atomid3 = Intify(tokens[4])
-            # if ((atomid1 in needed_atomids) and
-            #    (atomid2 in needed_atomids)):
+            # if ((atomid1 in self.needed_atomids) and
+            #    (atomid2 in self.needed_atomids)):
             tokens[0] = '$angle:id' + str(angleid)
-            if angletype in angletypes_int2name:
-                type_str = angletypes_int2name[angletype]
+
+            if angletype in self.angletypes_int2name:
+                type_str = self.angletypes_int2name[angletype]
             else:
                 type_str = 'type' + str(angletype)
             if type_str.find(' ') != -1:
                 tokens[1] = '@{angle:' + type_str + '}'
             else:
                 tokens[1] = '@angle:' + type_str
-            if atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            if self.atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
             else:
-                tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            if atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
+            if self.atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
             else:
-                tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            if atomids_int2name[atomid3].find(' ') != -1:
-                tokens[4] = '${atom:' + atomids_int2name[atomid3] + '}'
+                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
+            if self.atomids_int2name[atomid3].find(' ') != -1:
+                tokens[4] = '${atom:' + self.atomids_int2name[atomid3] + '}'
             else:
-                tokens[4] = '$atom:' + atomids_int2name[atomid3]
-            needed_angleids.add(angleid)
-            needed_angletypes.add(angletype)
-            l_data_angles[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+                tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
+            self.needed_angleids.add(angleid)
+            self.needed_angletypes.add(angletype)
+            self.l_data_angles[i_line] = (' ' * self.indent) + (' '.join(tokens))
             i_line += 1
             # else:
-            #    del l_data_angles[i_line]
+            #    del self.l_data_angles[i_line]
 
         # delete data_angle_coeffs for angletypes we no longer care about:
         i_line = 0
-        while i_line < len(l_data_angle_coeffs):
-            line = l_data_angle_coeffs[i_line]
+        while i_line < len(self.l_data_angle_coeffs):
+            line = self.l_data_angle_coeffs[i_line]
             tokens = line.strip().split()
             angletype = Intify(tokens[0])
-            if (not (angletype in needed_angletypes)):
-                del l_data_angle_coeffs[i_line]
+            if (not (angletype in self.needed_angletypes)):
+                del self.l_data_angle_coeffs[i_line]
             else:
                 tokens[0] = '@angle:type' + str(angletype)
-                l_data_angle_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_angle_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
         # --- class2specific ----
@@ -2891,60 +3382,60 @@ def main():
         #       etc..., so we dont have to worry about l_in_bondbond_coeffs,...
         # delete data_bondbond_coeffs for angletypes we no longer care about:
         i_line = 0
-        while i_line < len(l_data_bondbond_coeffs):
-            line = l_data_bondbond_coeffs[i_line]
+        while i_line < len(self.l_data_bondbond_coeffs):
+            line = self.l_data_bondbond_coeffs[i_line]
             tokens = line.strip().split()
             angletype = Intify(tokens[0])
-            if (not (angletype in needed_angletypes)):
-                del l_data_bondbond_coeffs[i_line]
+            if (not (angletype in self.needed_angletypes)):
+                del self.l_data_bondbond_coeffs[i_line]
             else:
                 tokens[0] = '@angle:type' + str(angletype)
-                l_data_bondbond_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_bondbond_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # delete data_bondangle_coeffs for angletypes we no longer care about:
         i_line = 0
-        while i_line < len(l_data_bondangle_coeffs):
-            line = l_data_bondangle_coeffs[i_line]
+        while i_line < len(self.l_data_bondangle_coeffs):
+            line = self.l_data_bondangle_coeffs[i_line]
             tokens = line.strip().split()
             angletype = Intify(tokens[0])
-            if (not (angletype in needed_angletypes)):
-                del l_data_bondangle_coeffs[i_line]
+            if (not (angletype in self.needed_angletypes)):
+                del self.l_data_bondangle_coeffs[i_line]
             else:
                 tokens[0] = '@angle:type' + str(angletype)
-                l_data_bondangle_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_bondangle_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # --- end of class2specific ----
 
         # delete in_angle_coeffs for angletypes we no longer care about:
-        if len(needed_angletypes) > 0:
-            for angletype in needed_angletypes:
+        if len(self.needed_angletypes) > 0:
+            for angletype in self.needed_angletypes:
                 assert(type(angletype) is int)
-                if ((min_needed_angletype == None) or
-                        (min_needed_angletype > angletype)):
-                    min_needed_angletype = angletype
-                if ((max_needed_angletype == None) or
-                        (max_needed_angletype < angletype)):
-                    max_needed_angletype = angletype
-            for angleid in needed_angleids:
+                if ((self.min_needed_angletype == None) or
+                        (self.min_needed_angletype > angletype)):
+                    self.min_needed_angletype = angletype
+                if ((self.max_needed_angletype == None) or
+                        (self.max_needed_angletype < angletype)):
+                    self.max_needed_angletype = angletype
+            for angleid in self.needed_angleids:
                 assert(type(angleid) is int)
-                if ((min_needed_angleid == None) or
-                        (min_needed_angleid > angleid)):
-                    min_needed_angleid = angleid
-                if ((max_needed_angleid == None) or
-                        (max_needed_angleid < angleid)):
-                    max_needed_angleid = angleid
+                if ((self.min_needed_angleid == None) or
+                        (self.min_needed_angleid > angleid)):
+                    self.min_needed_angleid = angleid
+                if ((self.max_needed_angleid == None) or
+                        (self.max_needed_angleid < angleid)):
+                    self.max_needed_angleid = angleid
         else:
             # If no angles were needed, then define some defaults
             # to make sure we don't keep any of them later.
-            min_needed_angletype = 1
-            max_needed_angletype = 0
+            self.min_needed_angletype = 1
+            self.max_needed_angletype = 0
 
 
         i_line = 0
-        while i_line < len(l_in_angle_coeffs):
-            line = l_in_angle_coeffs[i_line]
+        while i_line < len(self.l_in_angle_coeffs):
+            line = self.l_in_angle_coeffs[i_line]
             tokens = line.strip().split()
             angletype_str = tokens[1]
 
@@ -2952,22 +3443,22 @@ def main():
                 angletype_tokens = angletype_str.split('*')
 
                 if angletype_tokens[0] == '':
-                    i_a = min_needed_angletype
+                    i_a = self.min_needed_angletype
                 else:
                     i_a = Intify(angletype_tokens[0])
 
                 if angletype_tokens[1] == '':
-                    i_b = max_needed_angletype
+                    i_b = self.max_needed_angletype
                 else:
                     i_b = Intify(angletype_tokens[1])
 
             else:
                 i_a = i_b = Intify(angletype_str)
 
-            if i_a < min_needed_angletype:
-                i_a = min_needed_angletype
-            if i_b > max_needed_angletype:
-                i_b = max_needed_angletype
+            if i_a < self.min_needed_angletype:
+                i_a = self.min_needed_angletype
+            if i_b > self.max_needed_angletype:
+                i_b = self.max_needed_angletype
 
             # if i_a == i_b:
             #    i_str = '@angle:type'+str(i_a)
@@ -2976,32 +3467,32 @@ def main():
             #    i_str = '@{angle:type'+str(j_a)+'}*@{angle:type'+str(j_b)+'}'
 
             if ('*' in angletype_str):
-                del l_in_angle_coeffs[i_line]
+                del self.l_in_angle_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
-                    if (i in needed_angletypes):
+                    if (i in self.needed_angletypes):
                         tokens[1] = '@angle:type' + str(i)
-                        l_in_angle_coeffs.insert(i_line,
-                                                 (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_angle_coeffs.insert(i_line,
+                                                      (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
             else:
                 if i_a < i_b:
                     raise InputError('Error: number of angle types in data file is not consistent with the\n'
                                      '       number of angle types you have define angle_coeffs for.\n')
-                if (i_a == i_b) and (i_a in needed_angletypes):
+                if (i_a == i_b) and (i_a in self.needed_angletypes):
                     tokens[1] = '@angle:type' + str(i_a)
-                    l_in_angle_coeffs[i_line] = (
-                        ' ' * indent) + (' '.join(tokens) + '\n')
+                    self.l_in_angle_coeffs[i_line] = (
+                        ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
                 else:
-                    del l_in_angle_coeffs[i_line]
+                    del self.l_in_angle_coeffs[i_line]
 
         # --- DIHEDRALS AND DIHEDRAL COEFFS ---
 
         # delete lines from data_dihedrals if they involve atoms we don't care
         # about
         i_line = 0
-        while i_line < len(l_data_dihedrals):
-            line = l_data_dihedrals[i_line]
+        while i_line < len(self.l_data_dihedrals):
+            line = self.l_data_dihedrals[i_line]
             tokens = line.strip().split()
             assert(len(tokens) == 6)
 
@@ -3011,53 +3502,55 @@ def main():
             atomid2 = Intify(tokens[3])
             atomid3 = Intify(tokens[4])
             atomid4 = Intify(tokens[5])
-            # if ((atomid1 in needed_atomids) and
-            #    (atomid2 in needed_atomids)):
+            # if ((atomid1 in self.needed_atomids) and
+            #    (atomid2 in self.needed_atomids)):
+
             tokens[0] = '$dihedral:id' + str(dihedralid)
-            if dihedraltype in dihtypes_int2name:
-                type_str = dihtypes_int2name[dihedraltype]
+
+            if dihedraltype in self.dihtypes_int2name:
+                type_str = self.dihtypes_int2name[dihedraltype]
             else:
                 type_str = 'type'+str(dihedraltype)
             if type_str.find(' ') != -1:
                 tokens[1] = '@{dihedral:' + type_str + '}'
             else:
                 tokens[1] = '@dihedral:' + type_str
-            if atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            if self.atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
             else:
-                tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            if atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
+            if self.atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
             else:
-                tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            if atomids_int2name[atomid3].find(' ') != -1:
-                tokens[4] = '${atom:' + atomids_int2name[atomid3] + '}'
+                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
+            if self.atomids_int2name[atomid3].find(' ') != -1:
+                tokens[4] = '${atom:' + self.atomids_int2name[atomid3] + '}'
             else:
-                tokens[4] = '$atom:' + atomids_int2name[atomid3]
-            if atomids_int2name[atomid4].find(' ') != -1:
-                tokens[5] = '${atom:' + atomids_int2name[atomid4] + '}'
+                tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
+            if self.atomids_int2name[atomid4].find(' ') != -1:
+                tokens[5] = '${atom:' + self.atomids_int2name[atomid4] + '}'
             else:
-                tokens[5] = '$atom:' + atomids_int2name[atomid4]
+                tokens[5] = '$atom:' + self.atomids_int2name[atomid4]
 
-            needed_dihedralids.add(dihedralid)
-            needed_dihedraltypes.add(dihedraltype)
-            l_data_dihedrals[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+            self.needed_dihedralids.add(dihedralid)
+            self.needed_dihedraltypes.add(dihedraltype)
+            self.l_data_dihedrals[i_line] = (' ' * self.indent) + (' '.join(tokens))
             i_line += 1
             # else:
-            #    del l_data_dihedrals[i_line]
+            #    del self.l_data_dihedrals[i_line]
 
         # delete data_dihedral_coeffs for dihedraltypes we no longer care about:
         i_line = 0
-        while i_line < len(l_data_dihedral_coeffs):
-            line = l_data_dihedral_coeffs[i_line]
+        while i_line < len(self.l_data_dihedral_coeffs):
+            line = self.l_data_dihedral_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype = Intify(tokens[0])
-            if (not (dihedraltype in needed_dihedraltypes)):
-                del l_data_dihedral_coeffs[i_line]
+            if (not (dihedraltype in self.needed_dihedraltypes)):
+                del self.l_data_dihedral_coeffs[i_line]
             else:
                 tokens[0] = '@dihedral:type' + str(dihedraltype)
-                l_data_dihedral_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_dihedral_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
         # --- class2specific ----
@@ -3066,108 +3559,108 @@ def main():
         # NOTE: LAMMPS INPUT SCRIPTS, ALL CLASS2 COEFFS are represented by:
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO "middlebondtorsion_coeff" commands, etc...so we don't
-        #       have to worry about dealing with "l_in_middlebondtorsion_coeffs",...
+        #       have to worry about dealing with "self.l_in_middlebondtorsion_coeffs",...
         # delete data_middlebondtorsion_coeffs for dihedraltypes
         # we no longer care about:
         i_line = 0
-        while i_line < len(l_data_middlebondtorsion_coeffs):
-            line = l_data_middlebondtorsion_coeffs[i_line]
+        while i_line < len(self.l_data_middlebondtorsion_coeffs):
+            line = self.l_data_middlebondtorsion_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype = Intify(tokens[0])
-            if (not (dihedraltype in needed_dihedraltypes)):
-                del l_data_middlebondtorsion_coeffs[i_line]
+            if (not (dihedraltype in self.needed_dihedraltypes)):
+                del self.l_data_middlebondtorsion_coeffs[i_line]
             else:
                 tokens[0] = '@dihedral:type' + str(dihedraltype)
-                l_data_middlebondtorsion_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_middlebondtorsion_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # delete data_endbondtorsion_coeffs for dihedraltypes we 
         # no longer care about:
         i_line = 0
-        while i_line < len(l_data_endbondtorsion_coeffs):
-            line = l_data_endbondtorsion_coeffs[i_line]
+        while i_line < len(self.l_data_endbondtorsion_coeffs):
+            line = self.l_data_endbondtorsion_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype = Intify(tokens[0])
-            if (not (dihedraltype in needed_dihedraltypes)):
-                del l_data_endbondtorsion_coeffs[i_line]
+            if (not (dihedraltype in self.needed_dihedraltypes)):
+                del self.l_data_endbondtorsion_coeffs[i_line]
             else:
                 tokens[0] = '@dihedral:type' + str(dihedraltype)
-                l_data_endbondtorsion_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_endbondtorsion_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # delete data_angletorsion_coeffs for dihedraltypes we 
         # no longer care about:
         i_line = 0
-        while i_line < len(l_data_angletorsion_coeffs):
-            line = l_data_angletorsion_coeffs[i_line]
+        while i_line < len(self.l_data_angletorsion_coeffs):
+            line = self.l_data_angletorsion_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype = Intify(tokens[0])
-            if (not (dihedraltype in needed_dihedraltypes)):
-                del l_data_angletorsion_coeffs[i_line]
+            if (not (dihedraltype in self.needed_dihedraltypes)):
+                del self.l_data_angletorsion_coeffs[i_line]
             else:
                 tokens[0] = '@dihedral:type' + str(dihedraltype)
-                l_data_angletorsion_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_angletorsion_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # delete data_angleangletorsion_coeffs for dihedraltypes we 
         # no longer care about:
         i_line = 0
-        while i_line < len(l_data_angleangletorsion_coeffs):
-            line = l_data_angleangletorsion_coeffs[i_line]
+        while i_line < len(self.l_data_angleangletorsion_coeffs):
+            line = self.l_data_angleangletorsion_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype = Intify(tokens[0])
-            if (not (dihedraltype in needed_dihedraltypes)):
-                del l_data_angleangletorsion_coeffs[i_line]
+            if (not (dihedraltype in self.needed_dihedraltypes)):
+                del self.l_data_angleangletorsion_coeffs[i_line]
             else:
                 tokens[0] = '@dihedral:type' + str(dihedraltype)
-                l_data_angleangletorsion_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_angleangletorsion_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # delete data_bondbond13_coeffs for dihedraltypes we 
         # no longer care about:
         i_line = 0
-        while i_line < len(l_data_bondbond13_coeffs):
-            line = l_data_bondbond13_coeffs[i_line]
+        while i_line < len(self.l_data_bondbond13_coeffs):
+            line = self.l_data_bondbond13_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype = Intify(tokens[0])
-            if (not (dihedraltype in needed_dihedraltypes)):
-                del l_data_bondbond13_coeffs[i_line]
+            if (not (dihedraltype in self.needed_dihedraltypes)):
+                del self.l_data_bondbond13_coeffs[i_line]
             else:
                 tokens[0] = '@dihedral:type' + str(dihedraltype)
-                l_data_bondbond13_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_bondbond13_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # --- end of class2specific ----
 
 
         # delete in_dihedral_coeffs for dihedraltypes we no longer care about:
-        if len(needed_dihedraltypes) > 0:
-            for dihedraltype in needed_dihedraltypes:
+        if len(self.needed_dihedraltypes) > 0:
+            for dihedraltype in self.needed_dihedraltypes:
                 assert(type(dihedraltype) is int)
-                if ((min_needed_dihedraltype == None) or
-                        (min_needed_dihedraltype > dihedraltype)):
-                    min_needed_dihedraltype = dihedraltype
-                if ((max_needed_dihedraltype == None) or
-                        (max_needed_dihedraltype < dihedraltype)):
-                    max_needed_dihedraltype = dihedraltype
-            for dihedralid in needed_dihedralids:
+                if ((self.min_needed_dihedraltype == None) or
+                        (self.min_needed_dihedraltype > dihedraltype)):
+                    self.min_needed_dihedraltype = dihedraltype
+                if ((self.max_needed_dihedraltype == None) or
+                        (self.max_needed_dihedraltype < dihedraltype)):
+                    self.max_needed_dihedraltype = dihedraltype
+            for dihedralid in self.needed_dihedralids:
                 assert(type(dihedralid) is int)
-                if ((min_needed_dihedralid == None) or
-                        (min_needed_dihedralid > dihedralid)):
-                    min_needed_dihedralid = dihedralid
-                if ((max_needed_dihedralid == None) or
-                        (max_needed_dihedralid < dihedralid)):
-                    max_needed_dihedralid = dihedralid
+                if ((self.min_needed_dihedralid == None) or
+                        (self.min_needed_dihedralid > dihedralid)):
+                    self.min_needed_dihedralid = dihedralid
+                if ((self.max_needed_dihedralid == None) or
+                        (self.max_needed_dihedralid < dihedralid)):
+                    self.max_needed_dihedralid = dihedralid
         else:
             # If no dihedrals were needed, then define some defaults
             # to make sure we don't keep any of them later.
-            min_needed_dihedraltype = 1
-            max_needed_dihedraltype = 0
+            self.min_needed_dihedraltype = 1
+            self.max_needed_dihedraltype = 0
 
 
         i_line = 0
-        while i_line < len(l_in_dihedral_coeffs):
-            line = l_in_dihedral_coeffs[i_line]
+        while i_line < len(self.l_in_dihedral_coeffs):
+            line = self.l_in_dihedral_coeffs[i_line]
             tokens = line.strip().split()
             dihedraltype_str = tokens[1]
 
@@ -3175,22 +3668,22 @@ def main():
                 dihedraltype_tokens = dihedraltype_str.split('*')
 
                 if dihedraltype_tokens[0] == '':
-                    i_a = min_needed_dihedraltype
+                    i_a = self.min_needed_dihedraltype
                 else:
                     i_a = Intify(dihedraltype_tokens[0])
 
                 if dihedraltype_tokens[1] == '':
-                    i_b = max_needed_dihedraltype
+                    i_b = self.max_needed_dihedraltype
                 else:
                     i_b = Intify(dihedraltype_tokens[1])
 
             else:
                 i_a = i_b = Intify(dihedraltype_str)
 
-            if i_a < min_needed_dihedraltype:
-                i_a = min_needed_dihedraltype
-            if i_b > max_needed_dihedraltype:
-                i_b = max_needed_dihedraltype
+            if i_a < self.min_needed_dihedraltype:
+                i_a = self.min_needed_dihedraltype
+            if i_b > self.max_needed_dihedraltype:
+                i_b = self.max_needed_dihedraltype
 
             # if i_a == i_b:
             #    i_str = '@dihedral:type'+str(i_a)
@@ -3199,32 +3692,32 @@ def main():
             #    i_str = '@{dihedral:type'+str(j_a)+'}*@{dihedral:type'+str(j_b)+'}'
 
             if ('*' in dihedraltype_str):
-                del l_in_dihedral_coeffs[i_line]
+                del self.l_in_dihedral_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
-                    if (i in needed_dihedraltypes):
+                    if (i in self.needed_dihedraltypes):
                         tokens[1] = '@dihedral:type' + str(i)
-                        l_in_dihedral_coeffs.insert(i_line,
-                                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_dihedral_coeffs.insert(i_line,
+                                                         (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
             else:
                 if i_a < i_b:
                     raise InputError('Error: number of dihedral types in data file is not consistent with the\n'
                                      '       number of dihedral types you have define dihedral_coeffs for.\n')
-                if (i_a == i_b) and (i_a in needed_dihedraltypes):
+                if (i_a == i_b) and (i_a in self.needed_dihedraltypes):
                     tokens[1] = '@dihedral:type' + str(i_a)
-                    l_in_dihedral_coeffs[i_line] = (
-                        ' ' * indent) + (' '.join(tokens) + '\n')
+                    self.l_in_dihedral_coeffs[i_line] = (
+                        ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
                 else:
-                    del l_in_dihedral_coeffs[i_line]
+                    del self.l_in_dihedral_coeffs[i_line]
 
         # --- IMPROPERS AND IMPROPER COEFFS ---
 
         # delete lines from data_impropers if they involve atoms we don't care
         # about
         i_line = 0
-        while i_line < len(l_data_impropers):
-            line = l_data_impropers[i_line]
+        while i_line < len(self.l_data_impropers):
+            line = self.l_data_impropers[i_line]
             tokens = line.strip().split()
             assert(len(tokens) == 6)
 
@@ -3234,55 +3727,55 @@ def main():
             atomid2 = Intify(tokens[3])
             atomid3 = Intify(tokens[4])
             atomid4 = Intify(tokens[5])
-            # if ((atomid1 in needed_atomids) and
-            #    (atomid2 in needed_atomids)):
+
             tokens[0] = '$improper:id' + str(improperid)
             tokens[1] = '@improper:type' + str(impropertype)
-            if impropertype in imptypes_int2name:
-                type_str = imptypes_int2name[impropertype]
+
+            if impropertype in self.imptypes_int2name:
+                type_str = self.imptypes_int2name[impropertype]
             else:
                 type_str = 'type' + str(impropertype)
             if type_str.find(' ') != -1:
                 tokens[1] = '@{improper:' + type_str + '}'
             else:
                 tokens[1] = '@improper:' + type_str
-            if atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + atomids_int2name[atomid1] + '}'
+            if self.atomids_int2name[atomid1].find(' ') != -1:
+                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
             else:
-                tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            if atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + atomids_int2name[atomid2] + '}'
+                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
+            if self.atomids_int2name[atomid2].find(' ') != -1:
+                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
             else:
-                tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            if atomids_int2name[atomid3].find(' ') != -1:
-                tokens[4] = '${atom:' + atomids_int2name[atomid3] + '}'
+                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
+            if self.atomids_int2name[atomid3].find(' ') != -1:
+                tokens[4] = '${atom:' + self.atomids_int2name[atomid3] + '}'
             else:
-                tokens[4] = '$atom:' + atomids_int2name[atomid3]
-            if atomids_int2name[atomid4].find(' ') != -1:
-                tokens[5] = '${atom:' + atomids_int2name[atomid4] + '}'
+                tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
+            if self.atomids_int2name[atomid4].find(' ') != -1:
+                tokens[5] = '${atom:' + self.atomids_int2name[atomid4] + '}'
             else:
-                tokens[5] = '$atom:' + atomids_int2name[atomid4]
+                tokens[5] = '$atom:' + self.atomids_int2name[atomid4]
 
-            needed_improperids.add(improperid)
-            needed_impropertypes.add(impropertype)
-            l_data_impropers[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+            self.needed_improperids.add(improperid)
+            self.needed_impropertypes.add(impropertype)
+            self.l_data_impropers[i_line] = (' ' * self.indent) + (' '.join(tokens))
             i_line += 1
             # else:
-            #    del l_data_impropers[i_line]
+            #    del self.l_data_impropers[i_line]
 
 
         # delete data_improper_coeffs for impropertypes we no longer care about:
         i_line = 0
-        while i_line < len(l_data_improper_coeffs):
-            line = l_data_improper_coeffs[i_line]
+        while i_line < len(self.l_data_improper_coeffs):
+            line = self.l_data_improper_coeffs[i_line]
             tokens = line.strip().split()
             impropertype = Intify(tokens[0])
-            if (not (impropertype in needed_impropertypes)):
-                del l_data_improper_coeffs[i_line]
+            if (not (impropertype in self.needed_impropertypes)):
+                del self.l_data_improper_coeffs[i_line]
             else:
                 tokens[0] = '@improper:type' + str(impropertype)
-                l_data_improper_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_improper_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
         # --- class2specific ----
@@ -3291,50 +3784,50 @@ def main():
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO "angleangle_coeff" commands, etc...so we don't
         #       have to worry about dealing with "l_in_angleangle_coeffs",...
-        # delete data_middlebondtorsion_coeffs for impropertypes we
+        # delete entries in l_data_angleangle_coeffs for impropertypes we
         # no longer care about:
         i_line = 0
-        while i_line < len(l_data_angleangle_coeffs):
-            line = l_data_angleangle_coeffs[i_line]
+        while i_line < len(self.l_data_angleangle_coeffs):
+            line = self.l_data_angleangle_coeffs[i_line]
             tokens = line.strip().split()
             impropertype = Intify(tokens[0])
-            if (not (impropertype in needed_impropertypes)):
-                del l_data_angleangle_coeffs[i_line]
+            if (not (impropertype in self.needed_impropertypes)):
+                del self.l_data_angleangle_coeffs[i_line]
             else:
                 tokens[0] = '@improper:type' + str(impropertype)
-                l_data_angleangle_coeffs[i_line] = (
-                    ' ' * indent) + (' '.join(tokens) + '\n')
+                self.l_data_angleangle_coeffs[i_line] = (
+                    ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # --- end of class2specific ----
 
         # delete in_improper_coeffs for impropertypes we no longer care about:
-        if len(needed_impropertypes) > 0:
-            for impropertype in needed_impropertypes:
+        if len(self.needed_impropertypes) > 0:
+            for impropertype in self.needed_impropertypes:
                 assert(type(impropertype) is int)
-                if ((min_needed_impropertype == None) or
-                    (min_needed_impropertype > impropertype)):
-                    min_needed_impropertype = impropertype
-                if ((max_needed_impropertype == None) or
-                    (max_needed_impropertype < impropertype)):
-                    max_needed_impropertype = impropertype
+                if ((self.min_needed_impropertype == None) or
+                    (self.min_needed_impropertype > impropertype)):
+                    self.min_needed_impropertype = impropertype
+                if ((self.max_needed_impropertype == None) or
+                    (self.max_needed_impropertype < impropertype)):
+                    self.max_needed_impropertype = impropertype
             for improperid in needed_improperids:
                 assert(type(improperid) is int)
-                if ((min_needed_improperid == None) or
-                    (min_needed_improperid > improperid)):
-                    min_needed_improperid = improperid
-                if ((max_needed_improperid == None) or
-                    (max_needed_improperid < improperid)):
-                    max_needed_improperid = improperid
+                if ((self.min_needed_improperid == None) or
+                    (self.min_needed_improperid > improperid)):
+                    self.min_needed_improperid = improperid
+                if ((self.max_needed_improperid == None) or
+                    (self.max_needed_improperid < improperid)):
+                    self.max_needed_improperid = improperid
         else:
             # If no impropers were needed, then define some defaults
             # to make sure we don't keep any of them later.
-            min_needed_impropertype = 1
-            max_needed_impropertype = 0
+            self.min_needed_impropertype = 1
+            self.max_needed_impropertype = 0
 
 
         i_line = 0
-        while i_line < len(l_in_improper_coeffs):
-            line = l_in_improper_coeffs[i_line]
+        while i_line < len(self.l_in_improper_coeffs):
+            line = self.l_in_improper_coeffs[i_line]
             tokens = line.strip().split()
             impropertype_str = tokens[1]
 
@@ -3342,12 +3835,12 @@ def main():
                 impropertype_tokens = impropertype_str.split('*')
 
                 if impropertype_tokens[0] == '':
-                    i_a = min_needed_impropertype
+                    i_a = self.min_needed_impropertype
                 else:
                     i_a = Intify(impropertype_tokens[0])
 
                 if impropertype_tokens[1] == '':
-                    i_b = max_needed_impropertype
+                    i_b = self.max_needed_impropertype
                 else:
                     i_b = Intify(impropertype_tokens[1])
 
@@ -3356,10 +3849,10 @@ def main():
 
             assert((type(i_a) is int) and (type(i_b) is int))
 
-            if (i_a < min_needed_impropertype):
-                i_a = min_needed_impropertype
-            if (i_b > max_needed_impropertype):
-                i_b = max_needed_impropertype
+            if (i_a < self.min_needed_impropertype):
+                i_a = self.min_needed_impropertype
+            if (i_b > self.max_needed_impropertype):
+                i_b = self.max_needed_impropertype
 
             # if i_a == i_b:
             #    i_str = '@improper:type'+str(i_a)
@@ -3368,36 +3861,36 @@ def main():
             #    i_str = '@{improper:type'+str(j_a)+'}*@{improper:type'+str(j_b)+'}'
 
             if ('*' in impropertype_str):
-                del l_in_improper_coeffs[i_line]
+                del self.l_in_improper_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
-                    if (i in needed_impropertypes):
+                    if (i in self.needed_impropertypes):
                         tokens[1] = '@improper:type' + str(i)
-                        l_in_improper_coeffs.insert(i_line,
-                                                    (' ' * indent) + (' '.join(tokens) + '\n'))
+                        self.l_in_improper_coeffs.insert(i_line,
+                                                         (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
             else:
                 if i_a < i_b:
                     raise InputError('Error: number of improper types in data file is not consistent with the\n'
                                      '       number of improper types you have define improper_coeffs for.\n')
-                if (i_a == i_b) and (i_a in needed_impropertypes):
+                if (i_a == i_b) and (i_a in self.needed_impropertypes):
                     tokens[1] = '@improper:type' + str(i_a)
-                    l_in_improper_coeffs[i_line] = (
-                        ' ' * indent) + (' '.join(tokens) + '\n')
+                    self.l_in_improper_coeffs[i_line] = (
+                        ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
                 else:
-                    del l_in_improper_coeffs[i_line]
+                    del self.l_in_improper_coeffs[i_line]
 
 
 
         # --- CMAP INTERACTIONS ---
 
-        # Add the correct variable types to each line in l_data_cmaps
+        # Add the correct variable types to each line in self.l_data_cmaps
         # ($cmap: $atom:)
         # Also: delete lines from data_cmap if they involve atoms we don't care
         # about
         i_line = 0
-        while i_line < len(l_data_cmap):
-            line = l_data_cmap[i_line]
+        while i_line < len(self.l_data_cmap):
+            line = self.l_data_cmap[i_line]
             tokens = line.strip().split()
             assert(len(tokens) == 7)
 
@@ -3408,8 +3901,8 @@ def main():
             atomid3 = Intify(tokens[4])
             atomid4 = Intify(tokens[5])
             atomid5 = Intify(tokens[6])
-            # if ((atomid1 in needed_atomids) and
-            #    (atomid2 in needed_atomids)):
+            # if ((atomid1 in self.needed_atomids) and
+            #    (atomid2 in self.needed_atomids)):
             tokens[0] = '$cmap:id' + str(cmapid)
             #tokens[1] = '@cmap:type' + str(cmaptype)
             tokens[1] = str(cmaptype)
@@ -3418,47 +3911,47 @@ def main():
             #tokens[4] = '$atom:id'+str(atomid3)
             #tokens[5] = '$atom:id'+str(atomid4)
             #tokens[6] = '$atom:id'+str(atomid5)
-            tokens[2] = '$atom:' + atomids_int2name[atomid1]
-            tokens[3] = '$atom:' + atomids_int2name[atomid2]
-            tokens[4] = '$atom:' + atomids_int2name[atomid3]
-            tokens[5] = '$atom:' + atomids_int2name[atomid4]
-            tokens[6] = '$atom:' + atomids_int2name[atomid5]
+            tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
+            tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
+            tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
+            tokens[5] = '$atom:' + self.atomids_int2name[atomid4]
+            tokens[6] = '$atom:' + self.atomids_int2name[atomid5]
 
-            needed_cmapids.add(cmapid)
-            needed_cmaptypes.add(cmaptype)
-            l_data_cmap[i_line] = (' ' * indent) + (' '.join(tokens) + '\n')
+            self.needed_cmapids.add(cmapid)
+            self.needed_cmaptypes.add(cmaptype)
+            self.l_data_cmap[i_line] = (' ' * self.indent) + (' '.join(tokens))
             i_line += 1
             # else:
-            #    del l_data_cmap[i_line]
+            #    del self.l_data_cmap[i_line]
 
         ## delete in_cmap_coeffs for cmaptypes we no longer care about:
-        #if len(needed_cmaptypes) > 0:
-        #    for cmaptype in needed_cmaptypes:
+        #if len(self.needed_cmaptypes) > 0:
+        #    for cmaptype in self.needed_cmaptypes:
         #        assert(type(cmaptype) is int)
-        #        if ((min_needed_cmaptype == None) or
-        #            (min_needed_cmaptype > cmaptype)):
-        #            min_needed_cmaptype = cmaptype
-        #        if ((max_needed_cmaptype == None) or
-        #            (max_needed_cmaptype < cmaptype)):
-        #            max_needed_cmaptype = cmaptype
-        #    for cmapid in needed_cmapids:
+        #        if ((self.min_needed_cmaptype == None) or
+        #            (self.min_needed_cmaptype > cmaptype)):
+        #            self.min_needed_cmaptype = cmaptype
+        #        if ((self.max_needed_cmaptype == None) or
+        #            (self.max_needed_cmaptype < cmaptype)):
+        #            self.max_needed_cmaptype = cmaptype
+        #    for cmapid in self.needed_cmapids:
         #        assert(type(cmapid) is int)
-        #        if ((min_needed_cmapid == None) or
-        #            (min_needed_cmapid > cmapid)):
-        #            min_needed_cmapid = cmapid
-        #        if ((max_needed_cmapid == None) or
-        #            (max_needed_cmapid < cmapid)):
-        #            max_needed_cmapid = cmapid
+        #        if ((self.min_needed_cmapid == None) or
+        #            (self.min_needed_cmapid > cmapid)):
+        #            self.min_needed_cmapid = cmapid
+        #        if ((self.max_needed_cmapid == None) or
+        #            (self.max_needed_cmapid < cmapid)):
+        #            self.max_needed_cmapid = cmapid
         #else:
         #    # If no cmap interactions were needed, then define some defaults
         #    # to make sure we don't keep any of them later.
-        #    min_needed_cmaptype = 1
-        #    max_needed_cmaptype = 0
+        #    self.min_needed_cmaptype = 1
+        #    self.max_needed_cmaptype = 0
         #
         #
         #i_line = 0
-        #while i_line < len(l_in_cmap_coeffs):
-        #    line = l_in_cmap_coeffs[i_line]
+        #while i_line < len(self.l_in_cmap_coeffs):
+        #    line = self.l_in_cmap_coeffs[i_line]
         #    tokens = line.strip().split()
         #    cmaptype_str = tokens[1]
         #
@@ -3466,12 +3959,12 @@ def main():
         #        cmaptype_tokens = cmaptype_str.split('*')
         #
         #        if cmaptype_tokens[0] == '':
-        #            i_a = min_needed_cmaptype
+        #            i_a = self.min_needed_cmaptype
         #        else:
         #            i_a = Intify(cmaptype_tokens[0])
         #
         #        if cmaptype_tokens[1] == '':
-        #            i_b = max_needed_cmaptype
+        #            i_b = self.max_needed_cmaptype
         #        else:
         #            i_b = Intify(cmaptype_tokens[1])
         #
@@ -3480,10 +3973,10 @@ def main():
         #
         #    assert((type(i_a) is int) and (type(i_b) is int))
         #
-        #    if (i_a < min_needed_cmaptype):
-        #        i_a = min_needed_cmaptype
-        #    if (i_b > max_needed_cmaptype):
-        #        i_b = max_needed_cmaptype
+        #    if (i_a < self.min_needed_cmaptype):
+        #        i_a = self.min_needed_cmaptype
+        #    if (i_b > self.max_needed_cmaptype):
+        #        i_b = self.max_needed_cmaptype
         #    
         #    # if i_a == i_b:
         #    #    i_str = '@cmap:type'+str(i_a)
@@ -3492,24 +3985,24 @@ def main():
         #    #    i_str = '@{cmap:type'+str(j_a)+'}*@{cmap:type'+str(j_b)+'}'
         #    
         #    if ('*' in cmaptype_str):
-        #        del l_in_cmap_coeffs[i_line]
+        #        del self.l_in_cmap_coeffs[i_line]
         #        for i in range(i_a, i_b + 1):
-        #            if (i in needed_cmaptypes):
+        #            if (i in self.needed_cmaptypes):
         #                tokens[1] = '@cmap:type' + str(i)
-        #                l_in_cmap_coeffs.insert(i_line,
-        #                                            (' ' * indent) + (' '.join(tokens) + '\n'))
+        #                self.l_in_cmap_coeffs.insert(i_line,
+        #                                             (' ' * self.indent) + (' '.join(tokens)))
         #                i_line += 1
         #    else:
         #        if i_a < i_b:
         #            raise InputError('Error: number of cmap types in data file is not consistent with the\n'
         #                             '       number of cmap types you have define cmap_coeffs for.\n')
-        #        if (i_a == i_b) and (i_a in needed_cmaptypes):
+        #        if (i_a == i_b) and (i_a in self.needed_cmaptypes):
         #            tokens[1] = '@cmap:type' + str(i_a)
-        #            l_in_cmap_coeffs[i_line] = (
-        #                ' ' * indent) + (' '.join(tokens) + '\n')
+        #            self.l_in_cmap_coeffs[i_line] = (
+        #                ' ' * self.indent) + (' '.join(tokens))
         #            i_line += 1
         #        else:
-        #            del l_in_cmap_coeffs[i_line]
+        #            del self.l_in_cmap_coeffs[i_line]
 
 
 
@@ -3522,7 +4015,7 @@ def main():
         # If so, then save the group and write it out.
         # (I hate trying to parse this kind of text.)
 
-        # if len(l_in_group) > 0:
+        # if len(self.l_in_group) > 0:
         #    sys.stderr.write('\n'
         #                     ' --groups--  Attempting to parse \"group\" commands.\n'
         #                     '         This may cause '+g_program_name+' to crash.\n'
@@ -3531,8 +4024,8 @@ def main():
 
         i_line = 0
         groups_needed = set(['all'])
-        while i_line < len(l_in_group):
-            line = l_in_group[i_line]
+        while i_line < len(self.l_in_group):
+            line = self.l_in_group[i_line]
             tokens = line.strip().split()
             delete_this_command = False
             explicit_definition = False
@@ -3585,60 +4078,60 @@ def main():
                         2:] + tokens[i_token_sel_min]
                     str_logical = str_logical[0:2]
                     if str_logical == '<=':
-                        l_group_selection = [(None, int(tokens[i_token_sel_min]))]
+                        self.l_group_selection = [(None, int(tokens[i_token_sel_min]))]
                     elif str_logical == '>=':
-                        l_group_selection = [(int(tokens[i_token_sel_min]), None)]
+                        self.l_group_selection = [(int(tokens[i_token_sel_min]), None)]
                     elif str_logical == '==':
-                        l_group_selection = [(int(tokens[i_token_sel_min]),
+                        self.l_group_selection = [(int(tokens[i_token_sel_min]),
                                               int(tokens[i_token_sel_min]))]
                     elif str_logical == '!=':
-                        l_group_selection = [(None, int(tokens[i_token_sel_min]) - 1),
+                        self.l_group_selection = [(None, int(tokens[i_token_sel_min]) - 1),
                                              (int(tokens[i_token_sel_min]) + 1, None)]
                     elif str_logical == '<>':
-                        l_group_selection = [(int(tokens[i_token_sel_min]),
-                                              int(tokens[i_token_sel_max]))]
+                        self.l_group_selection= [(int(tokens[i_token_sel_min]),
+                                                  int(tokens[i_token_sel_max]))]
 
                 elif str_logical[0:1] in ('<', '>'):
                     tokens[i_token_sel_min] = str_logical[
                         1:] + tokens[i_token_sel_min]
                     str_logical = str_logical[0:1]
                     if str_logical == '<':
-                        l_group_selection = [
+                        self.l_group_selection = [
                             (None, int(tokens[i_token_sel_min]) - 1)]
                     elif str_logical == '>':
-                        l_group_selection = [
+                        self.l_group_selection = [
                             (int(tokens[i_token_sel_min]) + 1, None)]
                 else:
                     str_selection = ' '.join(
                         tokens[i_token_sel_min:i_token_sel_max + 1])
-                    l_group_selection = LammpsSelectToIntervals(str_selection,
-                                                                slice_delim=':',
-                                                                or_delim=' ')
+                    self.l_group_selection = LammpsSelectToIntervals(str_selection,
+                                                                     slice_delim=':',
+                                                                     or_delim=' ')
 
-                mn, mx = IntervalListToMinMax(l_group_selection)
+                mn, mx = IntervalListToMinMax(self.l_group_selection)
                 if mn == None:
                     mn = 1
                 filtered_selection = []
                 if specifier_style == 'type':
                     if mx == None:
-                        mx = max_needed_atomtype
+                        mx = self.max_needed_atomtype
                     for i in range(mn, mx + 1):
-                        if (BelongsToSel(i, l_group_selection)
-                                and (i in needed_atomtypes)):
+                        if (BelongsToSel(i, self.l_group_selection)
+                                and (i in self.needed_atomtypes)):
                             filtered_selection.append((i, i))
                 elif specifier_style == 'id':
                     if mx == None:
-                        mx = max_needed_atomid
+                        mx = self.max_needed_atomid
                     for i in range(mn, mx + 1):
-                        if (BelongsToSel(i, l_group_selection)
+                        if (BelongsToSel(i, self.l_group_selection)
                                 and (i in needed_atomids)):
                             filtered_selection.append((i, i))
                 elif specifier_style == 'molecule':
                     if mx == None:
-                        mx = max_needed_molid
+                        mx = self.max_needed_molid
                     for i in range(mn, mx + 1):
-                        if (BelongsToSel(i, l_group_selection)
-                                and (i in needed_molids)):
+                        if (BelongsToSel(i, self.l_group_selection)
+                                and (i in self.needed_molids)):
                             filtered_selection.append((i, i))
 
                 MergeIntervals(filtered_selection)
@@ -3672,7 +4165,7 @@ def main():
                                               '}:${mol:id' + str(b) + '}')
 
                     # Commenting out next two lines.  (This is handled later.)
-                    #l_in_group[i_line] = ' '.join(tokens)
+                    #self.l_in_group[i_line] = ' '.join(tokens)
                     # groups_needed.add(group_name)
 
                 else:
@@ -3722,18 +4215,18 @@ def main():
                     delete_this_command = True
             if delete_this_command:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_group[i_line].rstrip() + '\"\n')
-                del l_in_group[i_line]
+                                 self.l_in_group[i_line].rstrip() + '\"\n')
+                del self.l_in_group[i_line]
             else:
                 groups_needed.add(group_name)
-                l_in_group[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
+                self.l_in_group[i_line] = (' ' * self.indent) + ' '.join(tokens)
                 i_line += 1
 
         # --- fix rigid ---
 
         i_line = 0
-        while i_line < len(l_in_fix_rigid):
-            line = l_in_fix_rigid[i_line]
+        while i_line < len(self.l_in_fix_rigid):
+            line = self.l_in_fix_rigid[i_line]
             tokens = line.strip().split()
             if len(tokens) < 4:
                 break
@@ -3746,100 +4239,100 @@ def main():
 
             if delete_this_command:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_fix_rigid[i_line].rstrip() + '\"\n')
-                del l_in_fix_rigid[i_line]
+                                 self.l_in_fix_rigid[i_line].rstrip() + '\"\n')
+                del self.l_in_fix_rigid[i_line]
             else:
-                l_in_fix_rigid[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
+                self.l_in_fix_rigid[i_line] = (' ' * self.indent) + ' '.join(tokens)
                 i_line += 1
 
         # --- set ---
 
         i_line = 0
-        while i_line < len(l_in_set):
-            line = l_in_set[i_line]
+        while i_line < len(self.l_in_set):
+            line = self.l_in_set[i_line]
             tokens = line.strip().split()
-            l_new_set_commands = []
-            l_new_set_static_commands = []
+            self.l_new_set_commands = []
+            self.l_new_set_static_commands = []
             if len(tokens) < 4:
                 break
             if tokens[1] == 'type':
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
-                    types_lo = min_needed_atomtype
+                    types_lo = self.min_needed_atomtype
                 else:
                     types_lo = types_hi = int(pattern[0])
-                    if types_lo < min_needed_atomtype:
-                        types_lo = min_needed_atomtype
+                    if types_lo < self.min_needed_atomtype:
+                        types_lo = self.min_needed_atomtype
                 if len(pattern)  == 2:
                     if pattern[1] == '':
-                        types_hi = max_needed_atomtype
+                        types_hi = self.max_needed_atomtype
                     else:
-                        types_hi = min(int(pattern[1]), max_needed_atomtype)
+                        types_hi = min(int(pattern[1]), self.max_needed_atomtype)
                 for i in range(types_lo, types_hi+1):
-                    if i in needed_atomtypes:
-                        l_new_set_static_commands.append((' ' * indent) +
-                                                         ' '.join(tokens[0:2])+' '+
-                                                         '@atom:type'+str(i) + ' ' +
-                                                         ' '.join(tokens[3:]))
+                    if i in self.needed_atomtypes:
+                        self.l_new_set_static_commands.append((' ' * self.indent) +
+                                                              ' '.join(tokens[0:2])+' '+
+                                                              '@atom:type'+str(i) + ' ' +
+                                                              ' '.join(tokens[3:]))
             elif tokens[1] == 'atom':
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
-                    atomids_lo = min_needed_atomid
+                    atomids_lo = self.min_needed_atomid
                 else:
                     atomids_lo = atomids_hi = int(pattern[0])
-                    if atomids_lo < min_needed_atomid:
-                        atomids_lo = min_needed_atomid
+                    if atomids_lo < self.min_needed_atomid:
+                        atomids_lo = self.min_needed_atomid
                 if len(pattern)  == 2:
                     if pattern[1] == '':
-                        atomids_hi = max_needed_atomid
+                        atomids_hi = self.max_needed_atomid
                     else:
-                        atomids_hi = min(int(pattern[1]), max_needed_atomid)
+                        atomids_hi = min(int(pattern[1]), self.max_needed_atomid)
                 for i in range(atomids_lo, atomids_hi+1):
-                    if i in needed_atomids:
-                        l_new_set_commands.append((' ' * indent) +
-                                                  ' '.join(tokens[0:2])+' '+
-                                                  str(i) + ' ' +
-                                                  ' '.join(tokens[3:]))
+                    if i in self.needed_atomids:
+                        self.l_new_set_commands.append((' ' * self.indent) +
+                                                       ' '.join(tokens[0:2])+' '+
+                                                       str(i) + ' ' +
+                                                       ' '.join(tokens[3:]))
             elif tokens[1] == 'mol':
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
-                    molids_lo = min_needed_molid
+                    molids_lo = self.min_needed_molid
                 else:
                     molids_lo = molids_hi = int(pattern[0])
-                    if molids_lo < min_needed_molid:
-                        molids_lo = min_needed_molid
+                    if molids_lo < self.min_needed_molid:
+                        molids_lo = self.min_needed_molid
                 if len(pattern)  == 2:
                     if pattern[1] == '':
-                        molids_hi = max_needed_molid
+                        molids_hi = self.max_needed_molid
                     else:
-                        molids_hi = min(int(pattern[1]), max_needed_molid)
+                        molids_hi = min(int(pattern[1]), self.max_needed_molid)
                 for i in range(molids_lo, molids_hi+1):
-                    if i in needed_molids:
-                        l_new_set_commands.append(' '.join(tokens[0:2])+' '+
-                                                  str(i) + ' ' +
-                                                  ' '.join(tokens[3:]))
+                    if i in self.needed_molids:
+                        self.l_new_set_commands.append(' '.join(tokens[0:2])+' '+
+                                                       str(i) + ' ' +
+                                                       ' '.join(tokens[3:]))
             elif tokens[0] == 'group':
                 group_name = tokens[2]
                 if group_name in groups_needed:
-                    l_new_set_static_commands = [l_in_set[i_line]]
+                    self.l_new_set_static_commands = [self.l_in_set[i_line]]
 
-            if len(l_new_set_commands) > 0:
-                l_in_set[i_line:i_line+1] = l_new_set_commands
-                i_line += len(l_new_set_commands)
-            elif len(l_new_set_static_commands) > 0:
-                l_in_set_static += l_new_set_static_commands
-                del l_in_set[i_line]
+            if len(self.l_new_set_commands) > 0:
+                self.l_in_set[i_line:i_line+1] = self.l_new_set_commands
+                i_line += len(self.l_new_set_commands)
+            elif len(self.l_new_set_static_commands) > 0:
+                self.l_in_set_static += self.l_new_set_static_commands
+                del self.l_in_set[i_line]
             else:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_set[i_line].rstrip() + '\"\n')
-                del l_in_set[i_line]
+                                 self.l_in_set[i_line].rstrip() + '\"\n')
+                del self.l_in_set[i_line]
             
 
         # --- fix shake ---
 
         i_line = 0
-        while i_line < len(l_in_fix_shake):
-            line = l_in_fix_shake[i_line]
+        while i_line < len(self.l_in_fix_shake):
+            line = self.l_in_fix_shake[i_line]
             tokens = line.strip().split()
             if len(tokens) < 4:
                 break
@@ -3859,7 +4352,7 @@ def main():
                     # delete angle types from the list which
                     # do not belong to the selection
                     btype = int(tokens[i_token])
-                    if int(tokens[i_token]) in needed_angletypes:
+                    if int(tokens[i_token]) in self.needed_angletypes:
                         tokens[i_token] = '@angle:type' + tokens[i_token]
                         i_token += 1
                         delete_this_command = False
@@ -3877,7 +4370,7 @@ def main():
                     # delete bond types from the list which
                     # do not belong to the selection
                     btype = int(tokens[i_token])
-                    if int(tokens[i_token]) in needed_bondtypes:
+                    if int(tokens[i_token]) in self.needed_bondtypes:
                         tokens[i_token] = '@bond:type' + tokens[i_token]
                         i_token += 1
                         delete_this_command = False
@@ -3895,7 +4388,7 @@ def main():
                     # delete atom types from the list which
                     # do not belong to the selection
                     btype = int(tokens[i_token])
-                    if int(tokens[i_token]) in needed_atomtypes:
+                    if int(tokens[i_token]) in self.needed_atomtypes:
                         tokens[i_token] = '@atom:type' + tokens[i_token]
                         i_token += 1
                         delete_this_command = False
@@ -3918,17 +4411,17 @@ def main():
 
             if delete_this_command:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_fix_shake[i_line].rstrip() + '\"\n')
-                del l_in_fix_shake[i_line]
+                                 self.l_in_fix_shake[i_line].rstrip() + '\"\n')
+                del self.l_in_fix_shake[i_line]
             else:
-                l_in_fix_shake[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
+                self.l_in_fix_shake[i_line] = (' ' * self.indent) + ' '.join(tokens)
                 i_line += 1
 
         # --- fix poems ---
 
         i_line = 0
-        while i_line < len(l_in_fix_poems):
-            line = l_in_fix_poems[i_line]
+        while i_line < len(self.l_in_fix_poems):
+            line = self.l_in_fix_poems[i_line]
             tokens = line.strip().split()
             if len(tokens) < 4:
                 break
@@ -3961,17 +4454,17 @@ def main():
 
             if delete_this_command:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_fix_poems[i_line].rstrip() + '\"\n')
-                del l_in_fix_poems[i_line]
+                                 self.l_in_fix_poems[i_line].rstrip() + '\"\n')
+                del self.l_in_fix_poems[i_line]
             else:
-                l_in_fix_poems[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
+                self.l_in_fix_poems[i_line] = (' ' * self.indent) + ' '.join(tokens)
                 i_line += 1
 
         # --- fix qeq ---
 
         i_line = 0
-        while i_line < len(l_in_fix_qeq):
-            line = l_in_fix_qeq[i_line]
+        while i_line < len(self.l_in_fix_qeq):
+            line = self.l_in_fix_qeq[i_line]
             tokens = line.strip().split()
             if len(tokens) < 4:
                 break
@@ -3984,17 +4477,17 @@ def main():
 
             if delete_this_command:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_fix_qeq[i_line].rstrip() + '\"\n')
-                del l_in_fix_qeq[i_line]
+                                 self.l_in_fix_qeq[i_line].rstrip() + '\"\n')
+                del self.l_in_fix_qeq[i_line]
             else:
-                l_in_fix_qeq[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
+                self.l_in_fix_qeq[i_line] = (' ' * self.indent) + ' '.join(tokens)
                 i_line += 1
 
         # --- fix qmmm ---
 
         i_line = 0
-        while i_line < len(l_in_fix_qmmm):
-            line = l_in_fix_qmmm[i_line]
+        while i_line < len(self.l_in_fix_qmmm):
+            line = self.l_in_fix_qmmm[i_line]
             tokens = line.strip().split()
             if len(tokens) < 4:
                 break
@@ -4007,340 +4500,375 @@ def main():
 
             if delete_this_command:
                 sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 l_in_fix_qmmm[i_line].rstrip() + '\"\n')
-                del l_in_fix_qmmm[i_line]
+                                 self.l_in_fix_qmmm[i_line].rstrip() + '\"\n')
+                del self.l_in_fix_qmmm[i_line]
             else:
-                l_in_fix_qmmm[i_line] = (' ' * indent) + ' '.join(tokens) + '\n'
+                self.l_in_fix_qmmm[i_line] = (' ' * self.indent) + ' '.join(tokens)
                 i_line += 1
 
+
+
+        sys.stderr.write(')\n\n')
+
+
+
+
+
+
+
+
+
+
+    def Write(self, out_file):
+
+        """
         ########################################
         ###  Now begin writing the template. ###
         ########################################
+        """
 
-        if not some_pair_coeffs_read:
+        out_fname = ''
+        if isinstance(out_file, str):  # is "out_file" a file or a file name?
+            out_fname = out_file
+            out_file = open(out_fname, 'w')
+
+        if not self.some_pair_coeffs_read:
             sys.stderr.write('Warning: No \"pair coeffs\" set.\n'
                              '         (No interactions between non-bonded atoms defined.)\n')
-            no_warnings = False
+            self.no_warnings = False
 
         # sys.stderr.write('Writing ttree data to standard out.\n'
         #                 '       You can redirect this to a file using:\n'+
         #                 '   '+' '.join(sys.argv)+' > filename.ttree\n'
         #                 '        ----------------------\n')
 
-        if mol_name != '':
-            sys.stdout.write(mol_name + ' {\n')
+        if self.mol_name != '':
+            out_file.write(self.mol_name + ' {\n')
 
-        if len(l_in_init) > 0:
-            sys.stdout.write('\n  ### LAMMPS commands for initialization\n'
+        if len(self.l_in_init) > 0:
+            out_file.write('\n  ### LAMMPS commands for initialization\n'
                              '  ### (These can be overridden later.)\n\n')
-            l_in_init.insert(0, (' ' * cindent) +
-                             'write_once(\"' + in_init + '\") {\n')
-            l_in_init.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_init))
-        if len(l_in_settings) > 0:
-            sys.stdout.write('\n  ### LAMMPS commands for settings\n'
+            self.l_in_init.insert(0, (' ' * self.cindent) +
+                             'write_once(\"' + in_init + '\") {')
+            self.l_in_init.append((' ' * self.cindent) + '}\n')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_init))
+        if len(self.l_in_settings) > 0:
+            out_file.write('\n  ### LAMMPS commands for settings\n'
                              '  ### (These can be overridden later.)\n\n')
-            l_in_settings.insert(0, (' ' * cindent) +
-                                 'write_once(\"' + in_settings + '\") {\n')
-            l_in_settings.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_settings))
-            non_empty_output = True
-        if len(l_in_masses) > 0:
-            l_in_masses.insert(0, (' ' * cindent) +
-                               'write_once(\"' + in_settings + '\") {\n')
-            l_in_masses.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_masses))
-            non_empty_output = True
+            self.l_in_settings.insert(0, (' ' * self.cindent) +
+                                 'write_once(\"' + in_settings + '\") {')
+            self.l_in_settings.append((' ' * self.cindent) + '}\n')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_settings))
+            self.non_empty_output = True
+        if len(self.l_in_masses) > 0:
+            self.l_in_masses.insert(0, (' ' * self.cindent) +
+                                    'write_once(\"' + in_settings + '\") {')
+            self.l_in_masses.append((' ' * self.cindent) + '}\n')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_masses))
+            self.non_empty_output = True
 
-        if remove_coeffs_from_data_file:
-            if len(l_data_pair_coeffs) > 0:
-                for line in l_data_pair_coeffs:
+
+        if not self.ignore_coeffs:
+            if self.remove_coeffs_from_data_file:
+                if len(self.l_data_pair_coeffs) > 0:
+                    for line in self.l_data_pair_coeffs:
+                        tokens = line.strip().split()
+                        atomtype_str = tokens[0]
+                        self.l_in_pair_coeffs.append((' ' * self.cindent) + '  pair_coeff ' + atomtype_str +
+                                                ' ' + atomtype_str + ' ' + ' '.join(tokens[1:]))
+                    self.l_data_pair_coeffs = []
+                if len(self.l_data_pairij_coeffs) > 0:
+                    for line in self.l_data_pairij_coeffs:
+                        self.l_in_pair_coeffs.append(
+                            (' ' * self.cindent) + '  pair_coeff ' + line.strip())
+                        self.l_data_pairij_coeffs = []
+
+            if len(self.l_in_pair_coeffs) > 0:
+                self.l_in_pair_coeffs.insert(0, (' ' * self.cindent) +
+                                             'write_once(\"' + in_settings + '\") {')
+                self.l_in_pair_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_in_pair_coeffs) + '\n')
+                self.non_empty_output = True
+
+            if (self.remove_coeffs_from_data_file and (len(self.l_data_bond_coeffs) > 0)):
+                for line in self.l_data_bond_coeffs:
+                    self.l_in_bond_coeffs.append(
+                        (' ' * self.cindent) + '  bond_coeff ' + line.strip())
+                    self.l_data_bond_coeffs = []
+            if len(self.l_in_bond_coeffs) > 0:
+                self.l_in_bond_coeffs.insert(0, (' ' * self.cindent) +
+                                             'write_once(\"' + in_settings + '\") {')
+                self.l_in_bond_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_in_bond_coeffs) + '\n')
+                self.non_empty_output = True
+
+            if (self.remove_coeffs_from_data_file and (len(self.l_data_angle_coeffs) > 0)):
+                for line in self.l_data_angle_coeffs:
+                    self.l_in_angle_coeffs.append(
+                        (' ' * self.cindent) + '  angle_coeff ' + line.strip())
+                    self.l_data_angle_coeffs = []
+                for line in self.l_data_bondbond_coeffs:
                     tokens = line.strip().split()
-                    atomtype_str = tokens[0]
-                    l_in_pair_coeffs.append((' ' * cindent) + '  pair_coeff ' + atomtype_str +
-                                            ' ' + atomtype_str + ' ' + ' '.join(tokens[1:]) + '\n')
-                l_data_pair_coeffs = []
-            if len(l_data_pairij_coeffs) > 0:
-                for line in l_data_pairij_coeffs:
-                    l_in_pair_coeffs.append(
-                        (' ' * cindent) + '  pair_coeff ' + line.strip() + '\n')
-                    l_data_pairij_coeffs = []
-        if len(l_in_pair_coeffs) > 0:
-            l_in_pair_coeffs.insert(0, (' ' * cindent) +
-                                    'write_once(\"' + in_settings + '\") {\n')
-            l_in_pair_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_pair_coeffs))
-            non_empty_output = True
+                    self.l_in_angle_coeffs.append(
+                        (' ' * self.cindent) + '  angle_coeff ' + tokens[0] + ' bb ' + ' '.join(tokens[1:]))
+                    self.l_data_bondbond_coeffs = []
+                for line in self.l_data_bondangle_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_angle_coeffs.append(
+                        (' ' * self.cindent) + '  angle_coeff ' + tokens[0] + ' ba ' + ' '.join(tokens[1:]))
+                    self.l_data_bondangle_coeffs = []
+            if len(self.l_in_angle_coeffs) > 0:
+                self.l_in_angle_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + in_settings + '\") {')
+                self.l_in_angle_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_in_angle_coeffs) + '\n')
+                self.non_empty_output = True
 
-        if (remove_coeffs_from_data_file and (len(l_data_bond_coeffs) > 0)):
-            for line in l_data_bond_coeffs:
-                l_in_bond_coeffs.append(
-                    (' ' * cindent) + '  bond_coeff ' + line.strip() + '\n')
-                l_data_bond_coeffs = []
-        if len(l_in_bond_coeffs) > 0:
-            l_in_bond_coeffs.insert(0, (' ' * cindent) +
-                                    'write_once(\"' + in_settings + '\") {\n')
-            l_in_bond_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_bond_coeffs))
-            non_empty_output = True
+            if (self.remove_coeffs_from_data_file and (len(self.l_data_dihedral_coeffs) > 0)):
+                for line in self.l_data_dihedral_coeffs:
+                    self.l_in_dihedral_coeffs.append(
+                        (' ' * self.cindent) + '  dihedral_coeff ' + line.strip())
+                    self.l_data_dihedral_coeffs = []
 
-        if (remove_coeffs_from_data_file and (len(l_data_angle_coeffs) > 0)):
-            for line in l_data_angle_coeffs:
-                l_in_angle_coeffs.append(
-                    (' ' * cindent) + '  angle_coeff ' + line.strip() + '\n')
-                l_data_angle_coeffs = []
-            for line in l_data_bondbond_coeffs:
-                tokens = line.strip().split()
-                l_in_angle_coeffs.append(
-                    (' ' * cindent) + '  angle_coeff ' + tokens[0] + ' bb ' + ' '.join(tokens[1:]) + '\n')
-                l_data_bondbond_coeffs = []
-            for line in l_data_bondangle_coeffs:
-                tokens = line.strip().split()
-                l_in_angle_coeffs.append(
-                    (' ' * cindent) + '  angle_coeff ' + tokens[0] + ' ba ' + ' '.join(tokens[1:]) + '\n')
-                l_data_bondangle_coeffs = []
-        if len(l_in_angle_coeffs) > 0:
-            l_in_angle_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + in_settings + '\") {\n')
-            l_in_angle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_angle_coeffs))
-            non_empty_output = True
+                for line in self.l_data_middlebondtorsion_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_dihedral_coeffs.append(
+                        (' ' * self.cindent) + '  dihedral_coeff ' + tokens[0] + ' mbt ' + ' '.join(tokens[1:]))
+                    self.l_data_middlebondtorsion_coeffs = []
 
-        if (remove_coeffs_from_data_file and (len(l_data_dihedral_coeffs) > 0)):
-            for line in l_data_dihedral_coeffs:
-                l_in_dihedral_coeffs.append(
-                    (' ' * cindent) + '  dihedral_coeff ' + line.strip() + '\n')
-                l_data_dihedral_coeffs = []
+                for line in self.l_data_endbondtorsion_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_dihedral_coeffs.append(
+                        (' ' * self.cindent) + '  dihedral_coeff ' + tokens[0] + ' ebt ' + ' '.join(tokens[1:]))
+                    self.l_data_endbondtorsion_coeffs = []
 
-            for line in l_data_middlebondtorsion_coeffs:
-                tokens = line.strip().split()
-                l_in_dihedral_coeffs.append(
-                    (' ' * cindent) + '  dihedral_coeff ' + tokens[0] + ' mbt ' + ' '.join(tokens[1:]) + '\n')
-                l_data_middlebondtorsion_coeffs = []
+                for line in self.l_data_angletorsion_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_dihedral_coeffs.append(
+                        (' ' * self.cindent) + '  dihedral_coeff ' + tokens[0] + ' at ' + ' '.join(tokens[1:]))
+                    self.l_data_angletorsion_coeffs = []
 
-            for line in l_data_endbondtorsion_coeffs:
-                tokens = line.strip().split()
-                l_in_dihedral_coeffs.append(
-                    (' ' * cindent) + '  dihedral_coeff ' + tokens[0] + ' ebt ' + ' '.join(tokens[1:]) + '\n')
-                l_data_endbondtorsion_coeffs = []
+                for line in self.l_data_angleangletorsion_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_dihedral_coeffs.append(
+                        (' ' * self.cindent) + '  dihedral_coeff ' + tokens[0] + ' aat ' + ' '.join(tokens[1:]))
+                    self.l_data_angleangletorsion_coeffs = []
 
-            for line in l_data_angletorsion_coeffs:
-                tokens = line.strip().split()
-                l_in_dihedral_coeffs.append(
-                    (' ' * cindent) + '  dihedral_coeff ' + tokens[0] + ' at ' + ' '.join(tokens[1:]) + '\n')
-                l_data_angletorsion_coeffs = []
+                for line in self.l_data_bondbond13_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_dihedral_coeffs.append(
+                        (' ' * self.cindent) + '  dihedral_coeff ' + tokens[0] + ' bb13 ' + ' '.join(tokens[1:]))
+                    self.l_data_bondbond13_coeffs = []
 
-            for line in l_data_angleangletorsion_coeffs:
-                tokens = line.strip().split()
-                l_in_dihedral_coeffs.append(
-                    (' ' * cindent) + '  dihedral_coeff ' + tokens[0] + ' aat ' + ' '.join(tokens[1:]) + '\n')
-                l_data_angleangletorsion_coeffs = []
+            if len(self.l_in_dihedral_coeffs) > 0:
+                self.l_in_dihedral_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + in_settings + '\") {')
+                self.l_in_dihedral_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_in_dihedral_coeffs) + '\n')
+                self.non_empty_output = True
 
-            for line in l_data_bondbond13_coeffs:
-                tokens = line.strip().split()
-                l_in_dihedral_coeffs.append(
-                    (' ' * cindent) + '  dihedral_coeff ' + tokens[0] + ' bb13 ' + ' '.join(tokens[1:]) + '\n')
-                l_data_bondbond13_coeffs = []
+            if (self.remove_coeffs_from_data_file and (len(self.l_data_improper_coeffs) > 0)):
+                for line in self.l_data_improper_coeffs:
+                    self.l_in_improper_coeffs.append(
+                        (' ' * self.cindent) + '  improper_coeff ' + line.strip())
+                    self.l_data_improper_coeffs = []
 
-        if len(l_in_dihedral_coeffs) > 0:
-            l_in_dihedral_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + in_settings + '\") {\n')
-            l_in_dihedral_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_dihedral_coeffs))
-            non_empty_output = True
+                for line in self.l_data_angleangle_coeffs:
+                    tokens = line.strip().split()
+                    self.l_in_improper_coeffs.append(
+                        (' ' * self.cindent) + '  improper_coeff ' + tokens[0] + ' aa ' + ' '.join(tokens[1:]))
+                    self.l_data_angleangle_coeffs = []
 
-        if (remove_coeffs_from_data_file and (len(l_data_improper_coeffs) > 0)):
-            for line in l_data_improper_coeffs:
-                l_in_improper_coeffs.append(
-                    (' ' * cindent) + '  improper_coeff ' + line.strip() + '\n')
-                l_data_improper_coeffs = []
+            if len(self.l_in_improper_coeffs) > 0:
+                self.l_in_improper_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + in_settings + '\") {')
+                self.l_in_improper_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_in_improper_coeffs) + '\n')
+                self.non_empty_output = True
 
-            for line in l_data_angleangle_coeffs:
-                tokens = line.strip().split()
-                l_in_improper_coeffs.append(
-                    (' ' * cindent) + '  improper_coeff ' + tokens[0] + ' aa ' + ' '.join(tokens[1:]) + '\n')
-                l_data_angleangle_coeffs = []
 
-        if len(l_in_improper_coeffs) > 0:
-            l_in_improper_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + in_settings + '\") {\n')
-            l_in_improper_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_improper_coeffs))
-            non_empty_output = True
+            # END OF "if not self.ignore_coeffs:"
 
-        if non_empty_output:
-            sys.stdout.write('\n\n  ### DATA sections\n\n')
 
-        if len(l_data_masses) > 0:
-            l_data_masses.insert(0, (' ' * cindent) +
-                                 'write_once(\"' + data_masses + '\") {\n')
-            l_data_masses.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_masses))
-            non_empty_output = True
-        if len(l_data_bond_coeffs) > 0:
-            l_data_bond_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_bond_coeffs + '\") {\n')
-            l_data_bond_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bond_coeffs))
-            non_empty_output = True
-        if len(l_data_angle_coeffs) > 0:
-            l_data_angle_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_angle_coeffs + '\") {\n')
-            l_data_angle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angle_coeffs))
-            non_empty_output = True
-        if len(l_data_dihedral_coeffs) > 0:
-            l_data_dihedral_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_dihedral_coeffs + '\") {\n')
-            l_data_dihedral_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_dihedral_coeffs))
-            non_empty_output = True
-        if len(l_data_improper_coeffs) > 0:
-            l_data_improper_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_improper_coeffs + '\") {\n')
-            l_data_improper_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_improper_coeffs))
-            non_empty_output = True
-        if len(l_data_pair_coeffs) > 0:
-            l_data_pair_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_pair_coeffs + '\") {\n')
-            l_data_pair_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_pair_coeffs))
-            non_empty_output = True
-        if len(l_data_pairij_coeffs) > 0:
-            l_data_pairij_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_pairij_coeffs + '\") {\n')
-            l_data_pairij_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_pairij_coeffs))
-            non_empty_output = True
+        if self.non_empty_output:
+            out_file.write('\n\n  ### DATA sections\n\n')
 
-        # class2 force fields:
-        if len(l_data_bondbond_coeffs) > 0:
-            l_data_bondbond_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_bondbond_coeffs + '\") {\n')
-            l_data_bondbond_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bondbond_coeffs))
-            non_empty_output = True
-        if len(l_data_bondangle_coeffs) > 0:
-            l_data_bondangle_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_bondangle_coeffs + '\") {\n')
-            l_data_bondangle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bondangle_coeffs))
-            non_empty_output = True
-        if len(l_data_middlebondtorsion_coeffs) > 0:
-            l_data_middlebondtorsion_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_middlebondtorsion_coeffs + '\") {\n')
-            l_data_middlebondtorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_middlebondtorsion_coeffs))
-            non_empty_output = True
-        if len(l_data_endbondtorsion_coeffs) > 0:
-            l_data_endbondtorsion_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_endbondtorsion_coeffs + '\") {\n')
-            l_data_endbondtorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_endbondtorsion_coeffs))
-            non_empty_output = True
-        if len(l_data_angletorsion_coeffs) > 0:
-            l_data_angletorsion_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_angletorsion_coeffs + '\") {\n')
-            l_data_angletorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angletorsion_coeffs))
-            non_empty_output = True
-        if len(l_data_angleangletorsion_coeffs) > 0:
-            l_data_angleangletorsion_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_angleangletorsion_coeffs + '\") {\n')
-            l_data_angleangletorsion_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angleangletorsion_coeffs))
-            non_empty_output = True
-        if len(l_data_bondbond13_coeffs) > 0:
-            l_data_bondbond13_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_bondbond13_coeffs + '\") {\n')
-            l_data_bondbond13_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bondbond13_coeffs))
-            non_empty_output = True
-        if len(l_data_angleangle_coeffs) > 0:
-            l_data_angleangle_coeffs.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_angleangle_coeffs + '\") {\n')
-            l_data_angleangle_coeffs.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angleangle_coeffs))
-            non_empty_output = True
+        if (len(self.l_data_masses) > 0) and (not self.ignore_masses):
+            self.l_data_masses.insert(0, (' ' * self.cindent) +
+                                 'write_once(\"' + data_masses + '\") {')
+            self.l_data_masses.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_masses) + '\n')
+            self.non_empty_output = True
+
+        if not self.ignore_coeffs:
+            if len(self.l_data_bond_coeffs) > 0:
+                self.l_data_bond_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_bond_coeffs + '\") {')
+                self.l_data_bond_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_bond_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_angle_coeffs) > 0:
+                self.l_data_angle_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_angle_coeffs + '\") {')
+                self.l_data_angle_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_angle_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_dihedral_coeffs) > 0:
+                self.l_data_dihedral_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_dihedral_coeffs + '\") {')
+                self.l_data_dihedral_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_dihedral_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_improper_coeffs) > 0:
+                l_data_improper_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_improper_coeffs + '\") {')
+                self.l_data_improper_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_improper_coeffs))
+                self.non_empty_output = True
+            if len(self.l_data_pair_coeffs) > 0:
+                self.l_data_pair_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_pair_coeffs + '\") {')
+                self.l_data_pair_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_pair_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_pairij_coeffs) > 0:
+                self.l_data_pairij_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_pairij_coeffs + '\") {')
+                self.l_data_pairij_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_pairij_coeffs) + '\n')
+                self.non_empty_output = True
+
+            # class2 force fields:
+            if len(self.l_data_bondbond_coeffs) > 0:
+                self.l_data_bondbond_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_bondbond_coeffs + '\") {')
+                self.l_data_bondbond_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_bondbond_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_bondangle_coeffs) > 0:
+                self.l_data_bondangle_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_bondangle_coeffs + '\") {')
+                self.l_data_bondangle_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_bondangle_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_middlebondtorsion_coeffs) > 0:
+                self.l_data_middlebondtorsion_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_middlebondtorsion_coeffs + '\") {')
+                self.l_data_middlebondtorsion_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_middlebondtorsion_coeffs) +'\n')
+                self.non_empty_output = True
+            if len(self.l_data_endbondtorsion_coeffs) > 0:
+                self.l_data_endbondtorsion_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_endbondtorsion_coeffs + '\") {')
+                self.l_data_endbondtorsion_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_endbondtorsion_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_angletorsion_coeffs) > 0:
+                self.l_data_angletorsion_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_angletorsion_coeffs + '\") {')
+                self.l_data_angletorsion_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_angletorsion_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_angleangletorsion_coeffs) > 0:
+                self.l_data_angleangletorsion_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_angleangletorsion_coeffs + '\") {')
+                self.l_data_angleangletorsion_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_angleangletorsion_coeffs)+'\n')
+                self.non_empty_output = True
+            if len(self.l_data_bondbond13_coeffs) > 0:
+                self.l_data_bondbond13_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_bondbond13_coeffs + '\") {')
+                self.l_data_bondbond13_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_bondbond13_coeffs) + '\n')
+                self.non_empty_output = True
+            if len(self.l_data_angleangle_coeffs) > 0:
+                self.l_data_angleangle_coeffs.insert(
+                    0, (' ' * self.cindent) + 'write_once(\"' + data_angleangle_coeffs + '\") {')
+                self.l_data_angleangle_coeffs.append((' ' * self.cindent) + '}')
+                out_file.write('\n')
+                out_file.write('\n'.join(self.l_data_angleangle_coeffs) + '\n')
+                self.non_empty_output = True
+
+
+            # END OF "if not self.ignore_coeffs:"
+
 
         # automatic generation of bonded interactions by type:
-        if len(l_data_angles_by_type) > 0:
-            l_data_angles_by_type.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_angles_by_type + '\") {\n')
-            l_data_angles_by_type.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angles_by_type))
-            non_empty_output = True
-        if len(l_data_dihedrals_by_type) > 0:
-            l_data_dihedrals_by_type.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_dihedrals_by_type + '\") {\n')
-            l_data_dihedrals_by_type.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_dihedrals_by_type))
-            non_empty_output = True
-        if len(l_data_impropers_by_type) > 0:
-            l_data_impropers_by_type.insert(
-                0, (' ' * cindent) + 'write_once(\"' + data_impropers_by_type + '\") {\n')
-            l_data_impropers_by_type.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_impropers_by_type))
-            non_empty_output = True
+        if len(self.l_data_angles_by_type) > 0:
+            self.l_data_angles_by_type.insert(
+                0, (' ' * self.cindent) + 'write_once(\"' + data_angles_by_type + '\") {')
+            self.l_data_angles_by_type.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_angles_by_type) + '\n')
+            self.non_empty_output = True
+        if len(self.l_data_dihedrals_by_type) > 0:
+            self.l_data_dihedrals_by_type.insert(
+                0, (' ' * self.cindent) + 'write_once(\"' + data_dihedrals_by_type + '\") {')
+            self.l_data_dihedrals_by_type.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_dihedrals_by_type) + '\n')
+            self.non_empty_output = True
+        if len(self.l_data_impropers_by_type) > 0:
+            self.l_data_impropers_by_type.insert(
+                0, (' ' * self.cindent) + 'write_once(\"' + data_impropers_by_type + '\") {')
+            self.l_data_impropers_by_type.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_impropers_by_type) + '\n')
+            self.non_empty_output = True
 
-        if len(l_data_atoms) > 0:
-            l_data_atoms.insert(0, (' ' * cindent) +
-                                'write(\"' + data_atoms + '\") {\n')
-            l_data_atoms.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_atoms))
-            non_empty_output = True
+        if len(self.l_data_atoms) > 0:
+            self.l_data_atoms.insert(0, (' ' * self.cindent) +
+                                'write(\"' + data_atoms + '\") {')
+            self.l_data_atoms.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_atoms) + '\n')
+            self.non_empty_output = True
         else:
             sys.stderr.write('Warning: missing \"Atoms\" section.\n'
                              '         (Did you include a LAMMPS data file in your argument list?)\n')
-            no_warnings = False
+            self.no_warnings = False
 
         # non-point-like particles
-        if len(l_data_ellipsoids) > 0:
-            l_data_ellipsoids.insert(
-                0, (' ' * cindent) + 'write(\"' + data_ellipsoids + '\") {\n')
-            l_data_ellipsoids.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_ellipsoids))
-        if len(l_data_lines) > 0:
-            l_data_lines.insert(0, (' ' * cindent) +
-                                'write(\"' + data_lines + '\") {\n')
-            l_data_lines.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_lines))
-        if len(l_data_triangles) > 0:
-            l_data_triangles.insert(0, (' ' * cindent) +
-                                    'write(\"' + data_triangles + '\") {\n')
-            l_data_triangles.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_triangles))
+        if len(self.l_data_ellipsoids) > 0:
+            self.l_data_ellipsoids.insert(
+                0, (' ' * self.cindent) + 'write(\"' + data_ellipsoids + '\") {')
+            self.l_data_ellipsoids.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_ellipsoids) + '\n')
+        if len(self.l_data_lines) > 0:
+            self.l_data_lines.insert(0, (' ' * self.cindent) +
+                                'write(\"' + data_lines + '\") {')
+            self.l_data_lines.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_lines) + '\n')
+        if len(self.l_data_triangles) > 0:
+            self.l_data_triangles.insert(0, (' ' * self.cindent) +
+                                    'write(\"' + data_triangles + '\") {')
+            self.l_data_triangles.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_triangles) + '\n')
 
         # DO NOT WRITE OUT VELOCITY DATA
         # (Why: because it makes it difficult to combine this molecular template
@@ -4348,152 +4876,152 @@ def main():
         #  LAMMPS (and topotools) will crash if the number of entries in the
         #  Velocities section of a data file does not match the number of atoms.)
         # COMMENTING OUT:
-        # if len(l_data_velocities) > 0:
-        #    l_data_velocities.insert(0, (' '*cindent)+'write(\"'+data_velocities+'\") {\n')
-        #    l_data_velocities.append((' '*cindent)+'}\n')
-        #    sys.stdout.write('\n')
-        #    sys.stdout.write(''.join(l_data_velocities))
-        if len(l_data_bonds) > 0:
-            if ignore_bond_types:
-                l_data_bonds.insert(0, (' ' * cindent) +
-                                    'write(\"' + data_bond_list + '\") {\n')
+        # if len(self.l_data_velocities) > 0:
+        #    self.l_data_velocities.insert(0, (' '*self.cindent)+'write(\"'+data_velocities+'\") {')
+        #    self.l_data_velocities.append((' '*self.cindent)+'}')
+        #    out_file.write('\n')
+        #    out_file.write('\n'.join(self.l_data_velocities) + '\n')
+        if len(self.l_data_bonds) > 0:
+            if self.ignore_bond_types:
+                self.l_data_bonds.insert(0, (' ' * self.cindent) +
+                                         'write(\"' + data_bond_list + '\") {')
             else:
-                l_data_bonds.insert(0, (' ' * cindent) +
-                                    'write(\"' + data_bonds + '\") {\n')
-            l_data_bonds.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_bonds))
-            non_empty_output = True
-        if len(l_data_angles) > 0:
-            l_data_angles.insert(0, (' ' * cindent) +
-                                 'write(\"' + data_angles + '\") {\n')
-            l_data_angles.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_angles))
-            non_empty_output = True
-        if len(l_data_dihedrals) > 0:
-            l_data_dihedrals.insert(0, (' ' * cindent) +
-                                    'write(\"' + data_dihedrals + '\") {\n')
-            l_data_dihedrals.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_dihedrals))
-            non_empty_output = True
-        if len(l_data_impropers) > 0:
-            l_data_impropers.insert(0, (' ' * cindent) +
-                                    'write(\"' + data_impropers + '\") {\n')
-            l_data_impropers.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_impropers))
-            non_empty_output = True
-        if len(l_data_cmap) > 0:
-            sys.stdout.write('\n')
-            l_data_cmap.insert(0, (' ' * cindent) +
-                                    'write(\"' + data_cmap + '\") {\n')
-            l_data_cmap.insert(0, '\n')
-            l_data_cmap.insert(0, (' ' * cindent) +
+                self.l_data_bonds.insert(0, (' ' * self.cindent) +
+                                         'write(\"' + data_bonds + '\") {')
+            self.l_data_bonds.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_bonds) + '\n')
+            self.non_empty_output = True
+        if len(self.l_data_angles) > 0:
+            self.l_data_angles.insert(0, (' ' * self.cindent) +
+                                 'write(\"' + data_angles + '\") {')
+            self.l_data_angles.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_angles) + '\n')
+            self.non_empty_output = True
+        if len(self.l_data_dihedrals) > 0:
+            self.l_data_dihedrals.insert(0, (' ' * self.cindent) +
+                                    'write(\"' + data_dihedrals + '\") {')
+            self.l_data_dihedrals.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_dihedrals) + '\n')
+            self.non_empty_output = True
+        if len(self.l_data_impropers) > 0:
+            self.l_data_impropers.insert(0, (' ' * self.cindent) +
+                                    'write(\"' + data_impropers + '\") {')
+            self.l_data_impropers.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_impropers) + '\n')
+            self.non_empty_output = True
+        if len(self.l_data_cmap) > 0:
+            out_file.write('\n')
+            self.l_data_cmap.insert(0, (' ' * self.cindent) +
+                                    'write(\"' + data_cmap + '\") {')
+            self.l_data_cmap.insert(0, '\n')
+            self.l_data_cmap.insert(0, (' ' * self.cindent) +
                                 'category $cmap(1, 1)\n')
-            l_data_cmap.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_data_cmap))
-            non_empty_output = True
+            self.l_data_cmap.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_data_cmap) + '\n')
+            self.non_empty_output = True
 
-        if len(l_in_group) > 0:
-            no_warnings = False
-            l_in_group.insert(0, (' ' * cindent) +
-                              'write(\"' + in_settings + '\") {\n')
-            l_in_group.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_group))
+        if len(self.l_in_group) > 0:
+            self.no_warnings = False
+            self.l_in_group.insert(0, (' ' * self.cindent) +
+                              'write(\"' + in_settings + '\") {')
+            self.l_in_group.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_group) + '\n')
             # sys.stderr.write('######################################################\n'
             #                 'WARNING: One or more \"group\" commands appear to refer to relevant atoms.\n'
             #                 '         Please check to make sure that the group(s) generated by\n'
             #                 '         '+g_program_name+' contain the correct atoms.  (-Andrew 2017-10)\n'
             #                 '######################################################\n')
-            assert(non_empty_output)
+            assert(self.non_empty_output)
 
-        if len(l_in_set) > 0:
-            l_in_set.insert(0, ((' ' * cindent) +
+        if len(self.l_in_set) > 0:
+            self.l_in_set.insert(0, ((' ' * self.cindent) +
                                 'write(\"' + in_settings + '\") {'))
-            l_in_set.append((' ' * cindent) + '} # end of list of \"set\" commands\n')
-            sys.stdout.write('\n')
-            sys.stdout.write((' ' * cindent) + '# list of \"set\" commands:\n')
-            sys.stdout.write('\n'.join(l_in_set))
+            self.l_in_set.append((' ' * self.cindent) + '} # end of list of \"set\" commands\n')
+            out_file.write('\n')
+            out_file.write((' ' * self.cindent) + '# list of \"set\" commands:\n')
+            out_file.write('\n'.join(self.l_in_set) + '\n')
 
-        if len(l_in_set_static) > 0:
-            l_in_set_static.insert(0, ((' ' * cindent) +
+        if len(self.l_in_set_static) > 0:
+            self.l_in_set_static.insert(0, ((' ' * self.cindent) +
                                        'write_once(\"' + in_settings + '\") {'))
-            l_in_set_static.append((' ' * cindent) + '} # end of list of (static) \"set\" commands\n')
-            sys.stdout.write('\n')
-            sys.stdout.write((' ' * cindent) + '# list of (static) \"set\" commands:\n')
-            sys.stdout.write('\n'.join(l_in_set_static))
+            self.l_in_set_static.append((' ' * self.cindent) + '} # end of list of (static) \"set\" commands\n')
+            out_file.write('\n')
+            out_file.write((' ' * self.cindent) + '# list of (static) \"set\" commands:\n')
+            out_file.write('\n'.join(self.l_in_set_static) + '\n')
 
-        if len(l_in_fix_rigid) > 0:
-            no_warnings = False
-            l_in_fix_rigid.insert(0, (' ' * cindent) +
-                                  'write(\"' + in_settings + '\") {\n')
-            l_in_fix_rigid.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_rigid))
+        if len(self.l_in_fix_rigid) > 0:
+            self.no_warnings = False
+            self.l_in_fix_rigid.insert(0, (' ' * self.cindent) +
+                                  'write(\"' + in_settings + '\") {')
+            self.l_in_fix_rigid.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_fix_rigid) + '\n')
             sys.stderr.write('WARNING: \"fix rigid\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
-            assert(non_empty_output)
+            assert(self.non_empty_output)
 
-        if len(l_in_fix_shake) > 0:
-            no_warnings = False
-            l_in_fix_shake.insert(0, (' ' * cindent) +
-                                  'write(\"' + in_settings + '\") {\n')
-            l_in_fix_shake.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_shake))
+        if len(self.l_in_fix_shake) > 0:
+            self.no_warnings = False
+            self.l_in_fix_shake.insert(0, (' ' * self.cindent) +
+                                  'write(\"' + in_settings + '\") {')
+            self.l_in_fix_shake.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_fix_shake) + '\n')
             sys.stderr.write('WARNING: \"fix shake\" style command(s) applied to selected atoms.\n'
                              '         Please check to make sure that the fix group(s) are defined correctly,\n'
 
                              '         and also check that the atom, bond, and angle types are correct.\n'
                              '######################################################\n')
-            assert(non_empty_output)
+            assert(self.non_empty_output)
 
-        if len(l_in_fix_poems) > 0:
-            no_warnings = False
-            l_in_fix_poems.insert(0, (' ' * cindent) +
-                                  'write(\"' + in_settings + '\") {\n')
-            l_in_fix_poems.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_poems))
+        if len(self.l_in_fix_poems) > 0:
+            self.no_warnings = False
+            self.l_in_fix_poems.insert(0, (' ' * self.cindent) +
+                                  'write(\"' + in_settings + '\") {')
+            self.l_in_fix_poems.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_fix_poems) + '\n')
             sys.stderr.write('WARNING: \"fix poems\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
-            assert(non_empty_output)
+            assert(self.non_empty_output)
 
-        if len(l_in_fix_qeq) > 0:
-            no_warnings = False
-            l_in_fix_qeq.insert(0, (' ' * cindent) +
-                                'write(\"' + in_settings + '\") {\n')
-            l_in_fix_qeq.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_qeq))
+        if len(self.l_in_fix_qeq) > 0:
+            self.no_warnings = False
+            self.l_in_fix_qeq.insert(0, (' ' * self.cindent) +
+                                'write(\"' + in_settings + '\") {')
+            self.l_in_fix_qeq.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_fix_qeq) + '\n')
             sys.stderr.write('WARNING: \"fix qeq\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
-            assert(non_empty_output)
+            assert(self.non_empty_output)
 
-        if len(l_in_fix_qmmm) > 0:
-            no_warnings = False
-            l_in_fix_qmmm.insert(0, (' ' * cindent) +
-                                 'write(\"' + in_settings + '\") {\n')
-            l_in_fix_qmmm.append((' ' * cindent) + '}\n')
-            sys.stdout.write('\n')
-            sys.stdout.write(''.join(l_in_fix_qmmm))
+        if len(self.l_in_fix_qmmm) > 0:
+            self.no_warnings = False
+            self.l_in_fix_qmmm.insert(0, (' ' * self.cindent) +
+                                 'write(\"' + in_settings + '\") {')
+            self.l_in_fix_qmmm.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_fix_qmmm) + '\n')
             sys.stderr.write('WARNING: \"fix qmmm\" style command(s) applied to selected atoms.\n'
                              '         Please make sure that the fix group(s) are defined correctly.\n'
                              '######################################################\n')
-            assert(non_empty_output)
+            assert(self.non_empty_output)
 
-        if mol_name != '':
-            sys.stdout.write('\n} # end of \"' + mol_name + '\" type definition\n')
+        if self.mol_name != '':
+            out_file.write('\n} # end of \"' + self.mol_name + '\" type definition\n')
 
-        # if non_empty_output and no_warnings:
-        if non_empty_output:
+        # if self.non_empty_output and self.no_warnings:
+        if self.non_empty_output:
             sys.stderr.write('\n'
                              '# WARNING: Exotic (many-body) pair-styles and pair-styles with\n'
                              '#          unusual syntax (such hbond/dreiding) are not understood\n'
@@ -4504,6 +5032,34 @@ def main():
                              '#          or type numbers to the corresponding $ or @-style counter variables.\n'
                              '#          Feel free to report any bugs you find. (-Andrew Jewett 2017-10)\n')
 
+        if out_fname != None:
+            out_file.close()
+
+
+
+def main():
+
+    sys.stderr.write(g_program_name + ' v' +
+                     g_version_str + ' ' + g_date_str + '\n')
+
+    try:
+
+        # Read the command line arguments to figure out which files
+        # we will need to read (and also how to modify the output format).
+
+        ltemp = Ltemplify(sys.argv[1:])
+
+        # Note: The arguments in sys.argv contains the list of files that
+        #       the user wants us to read and convert into moltemplate format.
+        #       This list of files is now in the ltemp.input_files data member.
+
+        # Using these settings, convert these files into a single file.
+        # Send the content that file to sys.stdout.
+
+        ltemp.Convert(sys.stdout,
+                      ltemp.input_data_file,
+                      ltemp.input_script_files)
+                      
 
     except (InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
@@ -4511,5 +5067,8 @@ def main():
 
     return
 
+
+
 if __name__ == '__main__':
     main()
+

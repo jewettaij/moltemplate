@@ -5,7 +5,7 @@ cd moltemplate_files
   # as well as a custom -atomstyle
 
   moltemplate.sh -atomstyle "atomid atomtype flag density x y z" system.lt \
-                 -allow-wildcards -nocheck
+                 -allow-wildcards
 
   # This will generate various files with names ending in *.in* and *.data.
   # Move them to the directory where you plan to run LAMMPS (in this case "../")
