@@ -70,10 +70,10 @@ to the molecule of interest and customize the output.
 |-datacoeffs | Put force field information in the data file, not in an input script. (By default, force field parameters will be placed in the "In Settings"  section which will eventually be written to a LAMMPS input script.) |
 |-ignore-comments  | Do not infer atom, bond, angle, dihedral, and improper type names from comments in the data file.  |
 |-infer-comments  | Infer atom, bond, angle, dihedral, and improper type names from comments in the data file. |
-|-ignore-coeffs  | Ignore all force field parameters (coeffs).  Omit from output file. (This is useful when using force fields which contain force field parameters.)|
-|-ignore-angles  | Ignore angles, dihedrals and impropers.  Omit from output file. (This is useful when using force fields which generate angles, dihedrals, and impropers automatically.) |
-|-ignore-bond-types  | Ignore the 2nd column in the "Bonds" section of the LAMMPS data file, and create a "Bond List" section in the resulting MOLTEMPLATE LT file which omits the bond types.  (This is useful when using force fields which choose bond type automatically.) |
-|-ignore-masses | Ignore all masses in the data file.  Omit from output file. (This is useful when using force fields, since they typically contain atomic mass definitions.) |
+|-ignore-coeffs  | Ignore all force field parameters (coeffs).  Omit from output file. (This is useful when using external force fields, such as OPLSAA.)|
+|-ignore-angles  | Ignore angles, dihedrals and impropers.  Omit from output file. (This is useful when using external force fields, such as OPLSAA.)|
+|-ignore-bond-types  | Ignore the 2nd column in the "Bonds" section of the LAMMPS data file, and create a "Bond List" section in the resulting MOLTEMPLATE LT file which omits the bond types.  (This is useful when using external force fields, such as OPLSAA.)| |
+|-ignore-masses | Ignore all masses in the data file.  Omit from output file.  (This is useful when using external force fields, such as OPLSAA.)|
 |-prepend-atom-type *STR* | prepend the string from the *STR* argument to the beginning of all atom type names. |
 
 Examples showing typical argument usage are
