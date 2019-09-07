@@ -27,6 +27,7 @@ define large systems containing this molecule.
 """
 
 import sys
+import io
 from collections import defaultdict
 try:
     from .ttree_lex import *
@@ -37,8 +38,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.61.3'
-g_date_str = '2019-9-05'
+g_version_str = '0.62.1'
+g_date_str = '2019-9-06'
 
 def Intify(s):
     if s.isdigit():
@@ -388,7 +389,21 @@ class Ltemplify(object):
         self.remove_coeffs_from_data_file = True
 
 
-        # Process the argument list.
+        # self.input_data_file      Name of the data file we will read.
+        # self.input_script_files   Name of the LAMMPS input scripts to be read.
+        self.input_data_file = None
+        self.input_script_files = []
+        # Normally these self.input_file... data members are not necessary
+        # when this function is invoked from within python.
+        # Python users will specify the list of files they want to read
+        # by passing arguments to the "Convert()" member function.
+        # These members are only needed when this function is used to parse
+        # all of the arguments from the command line.  Those arguments will
+        # include a list of the names of input files that we need to read.
+        # The next two data members are then used to store that information.
+
+
+        # Parse the argument list.
         # Arguments are explained in the ltemplify.py documentation located at:
         # https://github.com/jewettaij/moltemplate/blob/master/doc/utils/doc_ltemplify.md
 
@@ -633,18 +648,77 @@ class Ltemplify(object):
         and convert these files to moltemplate format.
         (See doc_ltemplify.md for details.)
         """
+        # We need to know the list of files we will read.
 
+        # If the caller did not specify parameters, then copy them
+        # from self.input_data_file and self.input_script_files.
+        # If the caller did specify these files, this will override the list of
+        # files stored in in self.input_data_file and self.input_script_files.
+        if input_data_file == None:
+            input_data_file = self.input_data_file
         assert(input_data_file != None)
         if input_script_files == None:
-            input_script_files = []
+            input_script_files = self.input_script_files
 
+        # (Note: The "data" file is assumed to be the last entry in the list.)
+        input_files = input_script_files + [input_data_file]
+        assert(len(input_files) > 0)
+        input_files_txt = ['' for f in input_files]
+        input_files_sio = [None for f in input_files]
+
+        #### READ ALL OF THE INPUT FILES AND SAVE THEIR TEXT FOR LATER
+        for i_f in range(0, len(input_files)):
+            fname = input_files[i_f]
+            if isinstance(fname, str):
+                try:
+                    input_file = open(fname, 'r')
+                except IOError:
+                    raise InputError('Error: unrecognized argument (\"' + fname + '\"),\n'
+                                     '       OR unable to open file:\n'
+                                     '\n'
+                                     '       \"' + fname + '\"\n'
+                                     '       for reading.\n'
+                                     '\n'
+                                     '       (If you were not trying to open a file with this name,\n'
+                                     '        then there is a problem in your argument list.)\n')
+
+                sys.stderr.write('reading file \"' + fname + '\"\n')
+            else:
+                input_file = fname #then "fname" is a file stream, not a string
+
+            input_files_txt[i_f] = input_file.read()
+        #### FINISHED READING THE FILES
+
+        # Now create io.StringIO versions of these files
+        for i_f in range(0, len(input_files)):
+            input_files_sio[i_f] = io.StringIO(input_files_txt[i_f])
+        # Split this list of files into a LAMMPS data files and input scripts:
+        # (Note: The "data" file is assumed to be the last entry in the list.)
+        assert(len(input_files_sio) > 0)
+        input_data_file_sio = input_files_sio[-1]
+        input_script_files_sio = input_files_sio[:-1]
+
+
+        # PASS 1
         # Determine the atom_style, as well as the atom type names
-        self.Pass1(input_data_file, input_script_files)
+        self.Pass1(input_data_file_sio, input_script_files_sio)
 
+
+        # PASS 2
         # Parse all other sections of the LAMMPS files,
         # including Atoms, Bonds, Angles, Dihedrals, Impropers and Masses
-        self.Pass2(input_data_file, input_script_files)
 
+        # Again, create io.StringIO versions of these files for reading again.
+        for i_f in range(0, len(input_files)):
+            input_files_sio[i_f] = io.StringIO(input_files_txt[i_f])
+        input_data_file_sio = input_files_sio[-1]
+        input_script_files_sio = input_files_sio[:-1]
+
+        self.Pass2(input_data_file_sio, input_script_files_sio)
+
+
+
+        # POST PROCESSING:
         # Deal with CUSTOM atom type and bonded interaction type names.
         #
         # Infer the atomtype names, (and bondtype names, angletype names,
@@ -694,6 +768,7 @@ class Ltemplify(object):
                 sys.stderr.write('reading file \"' + fname + '\"\n')
             else:
                 lammps_file = fname #then "fname" is a file stream, not a string
+
 
             lex = LineLex(lammps_file, fname)
             lex.source_triggers = set(['include', 'import'])
@@ -847,7 +922,7 @@ class Ltemplify(object):
 
         if atom_style_str == '':
             # The default atom_style is "full"
-            atom_style_str == 'full'
+            atom_style_str = 'full'
 
         sys.stderr.write('\n    atom_style = \"'+atom_style_str+'\"\n')
 
@@ -888,7 +963,6 @@ class Ltemplify(object):
         "PASS2: Parse Atoms, Bonds, Angles, Dihedrals, Impropers and Masses."
 
         input_files = input_script_files + [input_data_file]
-
 
         for i_arg in range(0, len(input_files)):
             fname = input_files[i_arg]
