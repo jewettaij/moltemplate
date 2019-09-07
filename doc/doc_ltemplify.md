@@ -417,7 +417,6 @@ echo "import gaff2.lt"  >  ethane.lt
 ltemplify.py -name "Ethane inherits GAFF2" \
              -molid "1" \
              -ignore-angles -ignore-bond-types -ignore-coeffs \
-             -forbid-duplicates \
              FILE.in FILE.data >> ethane.lt
 
 # Note: if you want to build a simulation containing these molecules,
