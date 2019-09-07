@@ -27,6 +27,8 @@ wheels/
 .installed.cfg
 *.egg
 
+
+
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
@@ -47,6 +49,11 @@ nosetests.xml
 coverage.xml
 *,cover
 .hypothesis/
+
+# Ignore the contents of the "shunit2" bash unit testing tool directory
+# (This directory is generated automatically by .travis.yml.)
+shunit2/
+
 
 # Translations
 *.mo
