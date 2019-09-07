@@ -2495,11 +2495,12 @@ class Ltemplify(object):
 
                     elif (self.infer_types_from_comments and
                           (len(tokens) == 3) and (tokens[2] == 'types') and
-                          (tokens[1] == 'atom') or
-                          (tokens[1] == 'bond') or
-                          (tokens[1] == 'angle') or
-                          (tokens[1] == 'dihedral') or
-                          (tokens[1] == 'improper')):
+                          ((tokens[1] == 'atom') or
+                           (tokens[1] == 'bond') or
+                           (tokens[1] == 'angle') or
+                           (tokens[1] == 'dihedral') or
+                           (tokens[1] == 'improper'))):
+
 
                         #####################################################
                         # Consider comments following these commands:
@@ -3193,6 +3194,7 @@ class Ltemplify(object):
             # if ((atomid1 in self.needed_atomids) and
             #     (atomid2 in self.needed_atomids)):
             tokens[0] = '$bond:id' + str(bondid)
+
             if bondtype in self.bondtypes_int2name:
                 type_str = self.bondtypes_int2name[bondtype]
             else:
@@ -3330,6 +3332,7 @@ class Ltemplify(object):
             # if ((atomid1 in self.needed_atomids) and
             #    (atomid2 in self.needed_atomids)):
             tokens[0] = '$angle:id' + str(angleid)
+
             if angletype in self.angletypes_int2name:
                 type_str = self.angletypes_int2name[angletype]
             else:
@@ -3503,6 +3506,7 @@ class Ltemplify(object):
             #    (atomid2 in self.needed_atomids)):
 
             tokens[0] = '$dihedral:id' + str(dihedralid)
+
             if dihedraltype in self.dihtypes_int2name:
                 type_str = self.dihtypes_int2name[dihedraltype]
             else:
@@ -3723,10 +3727,10 @@ class Ltemplify(object):
             atomid2 = Intify(tokens[3])
             atomid3 = Intify(tokens[4])
             atomid4 = Intify(tokens[5])
-            # if ((atomid1 in self.needed_atomids) and
-            #    (atomid2 in self.needed_atomids)):
+
             tokens[0] = '$improper:id' + str(improperid)
             tokens[1] = '@improper:type' + str(impropertype)
+
             if impropertype in self.imptypes_int2name:
                 type_str = self.imptypes_int2name[impropertype]
             else:
@@ -3780,7 +3784,7 @@ class Ltemplify(object):
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO "angleangle_coeff" commands, etc...so we don't
         #       have to worry about dealing with "l_in_angleangle_coeffs",...
-        # delete data_middlebondtorsion_coeffs for impropertypes we
+        # delete entries in l_data_angleangle_coeffs for impropertypes we
         # no longer care about:
         i_line = 0
         while i_line < len(self.l_data_angleangle_coeffs):
