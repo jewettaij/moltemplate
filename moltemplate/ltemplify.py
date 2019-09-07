@@ -27,8 +27,16 @@ define large systems containing this molecule.
 """
 
 import sys
-import io
 from collections import defaultdict
+
+if sys.version < '2.6':
+    raise InputError('Error: Using python ' + sys.version + '\n'
+                     '       Alas, you must upgrade to a newer version of python (2.7 or later).')
+elif sys.version > '3':
+    from io import StringIO
+else:
+    from StringIO import StringIO
+
 try:
     from .ttree_lex import *
     from .lttree_styles import *
@@ -38,7 +46,7 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.62.2'
+g_version_str = '0.62.3'
 g_date_str = '2019-9-07'
 
 def Intify(s):
@@ -689,9 +697,10 @@ class Ltemplify(object):
             input_files_txt[i_f] = input_file.read()
         #### FINISHED READING THE FILES
 
-        # Now create io.StringIO versions of these files
+        # Now create StringIO versions of these files
         for i_f in range(0, len(input_files)):
-            input_files_sio[i_f] = io.StringIO(input_files_txt[i_f])
+            input_files_sio[i_f] = StringIO(input_files_txt[i_f])
+
         # Split this list of files into a LAMMPS data files and input scripts:
         # (Note: The "data" file is assumed to be the last entry in the list.)
         assert(len(input_files_sio) > 0)
@@ -708,9 +717,9 @@ class Ltemplify(object):
         # Parse all other sections of the LAMMPS files,
         # including Atoms, Bonds, Angles, Dihedrals, Impropers and Masses
 
-        # Again, create io.StringIO versions of these files for reading again.
+        # Again, create StringIO versions of these files for reading again.
         for i_f in range(0, len(input_files)):
-            input_files_sio[i_f] = io.StringIO(input_files_txt[i_f])
+            input_files_sio[i_f] = StringIO(input_files_txt[i_f])
         input_data_file_sio = input_files_sio[-1]
         input_script_files_sio = input_files_sio[:-1]
 
