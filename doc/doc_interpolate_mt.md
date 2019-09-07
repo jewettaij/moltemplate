@@ -37,20 +37,21 @@ Those commands are described in chapter 3 of the moltemplate manual.)*
 
 
 
-### Example
+### Example:
 
-Use another program to generate a backbone trace for your polymer.
-Here we use
+Here we use 
 [ndmansfield](https://github.com/jewettaij/ndmansfield)
-to generate coordinates for a random lattice polymer
-("Hamiltonian path") which fills a box of size 53 x 40 x 31
+to generate an initial (space-filling) curve for the shape of the polymer.
+to generate coordinates for a random lattice polymer:
 ```
 ndmansfield -box 53 40 31 -cyclic yes -seed 1  \
             -tsave 200000 -tstop 3200000       \
             > ndmansfield_traj_53x40x31.raw
 ```
-This program uses Monte-Carlo to generate a series of increasingly random
-polymer shapes.  As the simulation progresses, the coordinates of the polymer
+In this example, this program generates a random space-filling curve
+(a "Hamiltonian path") which fills a rectangular lattice of size 53 x 40 x 31.
+*(This program uses Monte-Carlo to generate a series of increasingly random
+polymer shapes as the simulation progresses.)*  The coordinates of the polymer
 will be written to a file ("ndmansfield_traj_53x40x31.raw").  This is a
 3-column text file (with blank-line delimeters).  It has the following format:
 
@@ -67,30 +68,33 @@ xN yN zN
 ```
              etc...
 
-*Note: The coordinates generated ndmansfield are nonnegative integers.*
-
+*(Notes on "ndmansfield" usage:
 We just need to run the lattice simulation long enough to get a random
-polymer conformation.  This duration should be long enough.  (You can check
+polymer conformation.  This duration should be long enough.  You can check
 long enough by watching the messages from ndmansfield printed to the stderr.
-The number of bonds in each direction: x,y,z should be approximately equal.)
+The number of bonds in each direction: x,y,z should be approximately equal.
+Incidentally, he coordinates generated ndmansfield are nonnegative integers.)*
+
+
 We want to extract the last frame of this trajectory.  The length of
 the lattice polymer in this example is Nx\*Ny\*Nz = 53\*40\*31 = 65720
-but we add 1 because there is a blank line separating each frame
+but we add 1 because there is a blank line separating each frame.
 ```
-tail -n 65721 ndmansfield_traj_53x40x31.raw > coords_lattice.raw
+tail -n 65721 ndmansfield_traj_53x40x31.raw > coords.raw
 ```
 It might be convenient to center these coordinates before continuing,
 so we do that next:
 ```
-recenter_coords.py 0 0 0 < coords_lattice.raw > coords_lattice_cen.raw
+recenter_coords.py 0 0 0 < coords.raw > coords_cen.raw
 ```
+*(Note: The recenter_coords.py script is included with moltemplate.)*
+
 Suppose we want our final polymer to contain 150000 monomers,
-run "interpolate_coords.py" this way:
+run "interpolate_mt.py" this way:
 ```
-interpolate_mt.py 150000 7.99 < coords_lattice_cen.raw \
-      > moltemplate_files/init_crds_center-of-mass-trace.raw
+interpolate_mt.py 150000 7.99 < coords_cen.raw > coords_smoothed.raw
 ```
 This will generate 150000 points at even intervals along this interpolated
 path and rescale them so that the separation distance between monomers
 is ~3.50, which equals 7.99\*(65720/150000)\*1.  (Recall that the original
-space between the points in the "coords_lattice_cen.raw" file is 1.)
+space between the points in the "coords_cen.raw" file is 1.)
