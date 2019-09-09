@@ -18,13 +18,11 @@ for i in range(0, len(lines_gaff)):
     at2 = atype2.replace('X','*')
     at3 = atype3.replace('X','*')
     at4 = atype4.replace('X','*')
-    impropertype = '@improper:'+atype1+'-'+atype2+'-'+atype3+'-'+atype4
-    #sys.stdout.write('    '+impropertype+' @atom:'+at1+' @atom:'+at2+' @atom:'+at3+' @atom:'+at4+'\n')
-    # Oops.  This is incorrect.
-    # In moltemplate, the central atom is the first atom,
-    # In "gaff.dat", the central atom is the third atom
+    # NOTE: In "gaff.dat", the central atom is the third atom
     # http://archive.ambermd.org/201307/0519.html
-    #impropertype = '@improper:'+atype3+'-'+atype1+'-'+atype2+'-'+atype4
+    # We will have to select a module file from the "nbody_alt_symmetry"
+    # subdirectory which uses the same convention regarding the central atom:
+    impropertype = '@improper:'+atype1+'-'+atype2+'-'+atype3+'-'+atype4
 
     tokens= line[11:].split()
     Kn = float(tokens[0])
