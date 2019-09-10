@@ -893,6 +893,7 @@ def main():
         improper_style2docs['cvff'] = 'http://lammps.sandia.gov/doc/improper_cvff.html'
         improper_style2docs['class2'] = 'http://lammps.sandia.gov/doc/improper_class2.html'
         improper_symmetry_subgraph = {}  #'cenJsortIKL'
+        improper_symmetry_subgraph_or = {}  #'cenJsortIKL'
 
         pair_mixing_style = 'sixthpower tail yes'
 
@@ -2254,8 +2255,8 @@ def main():
                 aorig = [a for a in map(EncodeAName, tokens[2:6])]
                 atom_names,_ignore  = OOPImproperNameSort(tokens[2:6])
                 improper_name = EncodeInteractionName(atom_names, section_is_auto)
-                imsym = improper_symmetry_subgraph[improper_name] = 'cenJflipIL'
-                subgraph2impname['cenJflipIL'].add(improper_name) CONTINUEHERE
+                imsym = improper_symmetry_subgraph[improper_name] = 'cenJswapIL'
+                subgraph2impname['cenJswapIL'].add(improper_name) CONTINUEHERE
                 improper2ver[imsym][improper_name] = tokens[0]
                 improper2ref[imsym][improper_name] = tokens[1]
                 improper2priority_or[imsym][improper_name] = \
@@ -2304,7 +2305,7 @@ def main():
                 # associated with the same improper interaction.
 
                 imp_name_orig = EncodeInteractionName(atom_names, section_is_auto)
-                #improper_symmetry_subgraph_or[improper_name] = 'dihedrals_nosym'  (<--no)
+                #improper_symmetry_subgraph_or[improper_name] = 'impropers_nosym'  (<--no)
                 imsym = improper_symmetry_subgraph_or[imp_name_orig] = 'cenJsortIKL'
                 improper2ver_or[imsym][imp_name_orig] = version
                 improper2ref_or[imsym][imp_name_orig] = reference

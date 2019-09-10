@@ -76,6 +76,7 @@ class InputError(Exception):
 class GPSettings(object):
 
     def __init__(self):
+        self.infile_name = ''
         self.direction_orig = [1.0, 0.0, 0.0]
         self.is_circular = False
         self.connect_ends = False
@@ -111,7 +112,14 @@ class GPSettings(object):
         while i < len(argv):
             #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
 
-            if argv[i].lower() == '-bond':
+            if ((argv[i].lower() == '-i') or
+                (argv[i].lower() == '-in')):
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a file name.\n')
+                self.infile_name = argv[i + 1]
+                del(argv[i:i + 2])
+            elif argv[i].lower() == '-bond':
                 if i + 3 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by 4 strings.\n')
@@ -845,8 +853,6 @@ def main():
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
-        infile = sys.stdin
-        outfile = sys.stdout
         genpoly = GenPoly()
         genpoly.ParseArgs(argv)
         # Any remain arguments?
@@ -855,6 +861,12 @@ def main():
                              'Unrecogized command line argument \"' + argv[1] +
                              '\"\n\n' +
                              g_usage_msg)
+
+        if genpoly.settings.infile_name != '':
+            infile = open(genpoly.settings.infile_name, 'r')
+        else:
+            infile = sys.stdin
+        outfile = sys.stdout
 
         # Read the coordinates
         genpoly.ReadCoords(infile)
@@ -890,6 +902,10 @@ def main():
 
         # Convert all of this information to moltemplate (LT) format:
         genpoly.WriteLTFile(outfile)
+
+        # Now close the input file
+        if genpoly.settings.infile_name != '':  # <--if not reading from stdin
+            infile.close()
 
     except (ValueError, InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
