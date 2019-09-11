@@ -112,8 +112,8 @@ class GPSettings(object):
         while i < len(argv):
             #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
 
-            if ((argv[i].lower() == '-i') or
-                (argv[i].lower() == '-in')):
+            if ((argv[i].lower() == '-in') or
+                (argv[i].lower() == '-i')):
                 if i + 1 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by a file name.\n')
@@ -142,8 +142,8 @@ class GPSettings(object):
                                                   int(argv[i + 6]),
                                                   int(argv[i + 7])))
                 if ((self.angles_index_offsets[-1][0] < 0) or
-                        (self.angles_index_offsets[-1][1] < 0) or
-                        (self.angles_index_offsets[-1][2] < 0)):
+                    (self.angles_index_offsets[-1][1] < 0) or
+                    (self.angles_index_offsets[-1][2] < 0)):
                     raise InputError(
                         'Error: ' + argv[i] + ' indices (i1 i2 i3) must be >= 0\n')
                 del(argv[i:i + 8])
@@ -162,9 +162,9 @@ class GPSettings(object):
                                                      int(argv[i + 8]),
                                                      int(argv[i + 9])))
                 if ((self.dihedrals_index_offsets[-1][0] < 0) or
-                        (self.dihedrals_index_offsets[-1][1] < 0) or
-                        (self.dihedrals_index_offsets[-1][2] < 0) or
-                        (self.dihedrals_index_offsets[-1][3] < 0)):
+                    (self.dihedrals_index_offsets[-1][1] < 0) or
+                    (self.dihedrals_index_offsets[-1][2] < 0) or
+                    (self.dihedrals_index_offsets[-1][3] < 0)):
                     raise InputError(
                         'Error: ' + argv[i] + ' indices (i1 i2 i3 i4) must be >= 0\n')
                 del(argv[i:i + 10])
@@ -183,9 +183,9 @@ class GPSettings(object):
                                                      int(argv[i + 8]),
                                                      int(argv[i + 9])))
                 if ((self.impropers_index_offsets[-1][0] < 0) or
-                        (self.impropers_index_offsets[-1][1] < 0) or
-                        (self.impropers_index_offsets[-1][2] < 0) or
-                        (self.impropers_index_offsets[-1][3] < 0)):
+                    (self.impropers_index_offsets[-1][1] < 0) or
+                    (self.impropers_index_offsets[-1][2] < 0) or
+                    (self.impropers_index_offsets[-1][3] < 0)):
                     raise InputError(
                         'Error: ' + argv[i] + ' indices (i1 i2 i3 i4) must be >= 0\n')
                 del(argv[i:i + 10])
@@ -447,18 +447,21 @@ class GenPoly(object):
 
         self.N = len(coords)
         if self.N < 2:
-            raise InputError(
-                "Error: Coordinate file must have at least 2 positions.\n")
+            err_msg = 'Error: Coordinate file must have at least 2 positions'
+            raise InputError(err_msg+'.\n')
+                
 
         # Did the caller ask us to split the polymer into multiple polymers?
         if len(self.settings.cuts) > 0:
             if (self.settings.cuts[-1] < self.N+1):
                 self.settings.cuts.append(self.N + 1)
                 self.settings.cuts.sort()
-        i = 0
-        for j in self.settings.cuts:
-            self.coords_multi.append(coords[i:j])
-            i = j
+            i = 0
+            for j in self.settings.cuts:
+                self.coords_multi.append(coords[i:j])
+                i = j
+        else:
+            self.coords_multi.append(coords)
 
         # Did the caller ask us to reverse the direction of any polymers?
         for i in range(0, len(self.settings.reverse_polymer_directions)):
