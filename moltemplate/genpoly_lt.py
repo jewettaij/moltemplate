@@ -509,10 +509,12 @@ class GenPoly(object):
             if (self.settings.cuts[-1] < N+1):
                 self.settings.cuts.append(N + 1)
                 self.settings.cuts.sort()
-        i = 0
-        for j in self.settings.cuts:
-            self.name_sequence_multi.append(name_sequence[i:j])
-            i = j
+            i = 0
+            for j in self.settings.cuts:
+                self.name_sequence_multi.append(name_sequence[i:j])
+                i = j
+        else:
+            self.name_sequence_multi.append(name_sequence)
 
         # Did the caller ask us to reverse the direction of any polymers?
         for i in range(0, len(self.settings.reverse_polymer_directions)):
