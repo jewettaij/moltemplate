@@ -158,20 +158,20 @@ OPLSAA {
   write_once("In Settings") {
     pair_coeff @atom:80L_b013_a013_d013L_i013 @atom:80L_b013_a013_d013L_i013  0.066 3.5
     pair_coeff @atom:81L_b013_a013_d013L_i013 @atom:81L_b013_a013_d013L_i013  0.066 3.5
-    pair_coeff @atom:81LL_b013_a013_d013LL_i013 @atom:81LL_b013_a013_d013LL_i013  0.066 0.35
+    pair_coeff @atom:81LL_b013_a013_d013LL_i013 @atom:81LL_b013_a013_d013LL_i013  0.066 3.5
     pair_coeff @atom:85LCH3_b046_a046_d046_i046 @atom:85LCH3_b046_a046_d046_i046  0.03 2.5
     pair_coeff @atom:85LCH2_b046_a046_d046_i046 @atom:85LCH2_b046_a046_d046_i046  0.026290630975 2.5
     pair_coeff @atom:87L_b047_a047_d047L_i047 @atom:87L_b047_a047_d047L_i047  0.076 3.55
     pair_coeff @atom:89L_b046_a046_d046_i046 @atom:89L_b046_a046_d046_i046  0.03 2.42
     pair_coeff @atom:86L_b047_a047_d047L_i047 @atom:86L_b047_a047_d047L_i047  0.076 3.55
     pair_coeff @atom:88L_b047_a047_d047L_i047 @atom:88L_b047_a047_d047L_i047  0.076 3.55
-    pair_coeff @atom:96L_b005_a005_d005L_i005 @atom:96L_b005_a005_d005L_i005  0.17 0.312
+    pair_coeff @atom:96L_b005_a005_d005L_i005 @atom:96L_b005_a005_d005L_i005  0.17 3.12
     pair_coeff @atom:97L_b007_a007_d007L_i007 @atom:97L_b007_a007_d007L_i007  0.0 0.0
-    pair_coeff @atom:111L_b005_a005_d005L_i005 @atom:111L_b005_a005_d005L_i005  0.17 0.307
+    pair_coeff @atom:111L_b005_a005_d005L_i005 @atom:111L_b005_a005_d005L_i005  0.17 3.07
     pair_coeff @atom:112L_b007_a007_d007L_i007 @atom:112L_b007_a007_d007L_i007  0.0 0.0
-    pair_coeff @atom:113L_b005_a005_d005L_i005 @atom:113L_b005_a005_d005L_i005  0.17 0.307
+    pair_coeff @atom:113L_b005_a005_d005L_i005 @atom:113L_b005_a005_d005L_i005  0.17 3.07
     pair_coeff @atom:114L_b007_a007_d007L_i007 @atom:114L_b007_a007_d007L_i007  0.0 0.0
-    pair_coeff @atom:118L_b046_a046_d046L_i046 @atom:118L_b046_a046_d046L_i046  0.03 0.25
+    pair_coeff @atom:118L_b046_a046_d046L_i046 @atom:118L_b046_a046_d046L_i046  0.03 2.5
     pair_coeff @atom:169L_b047_a047_d047L_i047 @atom:169L_b047_a047_d047L_i047  0.076 3.55
     pair_coeff @atom:266L_b047_a047_d047L_i047 @atom:266L_b047_a047_d047L_i047  0.08 3.5
     pair_coeff @atom:267L_b047_a047_d047L_i047 @atom:267L_b047_a047_d047L_i047  0.08 3.5
@@ -181,14 +181,14 @@ OPLSAA {
     pair_coeff @atom:325L_b047_a047_d047L_i047 @atom:325L_b047_a047_d047L_i047  0.08 3.5
     pair_coeff @atom:340L_b047_a047_d047L_i047 @atom:340L_b047_a047_d047L_i047  0.08 3.5
     pair_coeff @atom:342L_b047_a047_d047L_i047 @atom:342L_b047_a047_d047L_i047  0.076 3.55
-    pair_coeff @atom:406L_b003_a003_d003L_i003 @atom:406L_b003_a003_d003L_i003  0.105 0.31875
-    pair_coeff @atom:407L_b004_a004_d004L_i004 @atom:407L_b004_a004_d004L_i004  0.168 0.3108
-    pair_coeff @atom:408L_b020_a020_d020L_i020 @atom:408L_b020_a020_d020L_i020  0.17 0.255
+    pair_coeff @atom:406L_b003_a003_d003L_i003 @atom:406L_b003_a003_d003L_i003  0.105 3.1875
+    pair_coeff @atom:407L_b004_a004_d004L_i004 @atom:407L_b004_a004_d004L_i004  0.168 3.108
+    pair_coeff @atom:408L_b020_a020_d020L_i020 @atom:408L_b020_a020_d020L_i020  0.17 2.55
     pair_coeff @atom:458L_b047_a047_d047L_i047 @atom:458L_b047_a047_d047L_i047  0.076 3.55
     pair_coeff @atom:459L_b047_a047_d047L_i047 @atom:459L_b047_a047_d047L_i047  0.076 3.55
     pair_coeff @atom:649L_b047_a047_d047L_i047 @atom:649L_b047_a047_d047L_i047  0.076 3.55
-    pair_coeff @atom:718L_b046_a046_d046L_i046 @atom:718L_b046_a046_d046L_i046  0.15 0.242
-    pair_coeff @atom:718LL_b046_a046_d046L_i046 @atom:718LL_b046_a046_d046L_i046  0.15 0.242
+    pair_coeff @atom:718L_b046_a046_d046L_i046 @atom:718L_b046_a046_d046L_i046  0.15 2.42
+    pair_coeff @atom:718LL_b046_a046_d046L_i046 @atom:718LL_b046_a046_d046L_i046  0.15 2.42
     pair_coeff @atom:900L_b047_a047_d047L_i047 @atom:900L_b047_a047_d047L_i047  0.086 3.3
     pair_coeff @atom:901L_b047_a047_d047L_i047 @atom:901L_b047_a047_d047L_i047  0.086 3.3
     pair_coeff @atom:902L_b047_a047_d047L_i047 @atom:902L_b047_a047_d047L_i047  0.086 3.3

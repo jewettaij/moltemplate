@@ -5,11 +5,11 @@ ltemplify.py
 ## Description
 
 The "ltemplify.py" script is used to convert LAMMPS data files and
-input into a single MOLTEMPLATE ("**LT**") file.
+input scripts into a single MOLTEMPLATE ("**LT**") file.
 
 *Typically*, the LT files generated
 by "ltemplify.py" contain the definition of a single type of molecule
-(or molecular complex) present in the data file.
+(or molecular complex) present in a data file.
 This way, moltemplate users later on can build complicated simulations using
 this molecule as a building block (perhaps along with other molecules).
 
@@ -19,14 +19,14 @@ and give the molecule a name using the "-name" argument.  (See below.)
 The resulting LT file will include all of the information relevant
 to that molecule including atom types, charges, coordinates,
 bonded interactions, force field parameters, force field styles,
-groups, and fixes that are relevant to that molecule.
+groups, and fixes that effect the molecule.
 (Other information will be omitted.)
 
 *However, by default*, "ltemplify.py" will copy all of the information
 from these files into an LT file that
 describes the entire system.
 *(Later, when moltemplate.sh is run on that LT file,
-  it will try to re-generate the original LAMMPS files.)*
+  it will try to re-generate all of the original LAMMPS files.)*
 Normally, this is not very useful.
 
 
