@@ -267,5 +267,6 @@ OPLSAA {
   # dihedral_coeff DihedralTypeName  parameters...
 
 
+
 }  # OPLSAA
 
