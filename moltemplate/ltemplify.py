@@ -3898,7 +3898,7 @@ class Ltemplify(object):
                 if ((self.max_needed_impropertype == None) or
                     (self.max_needed_impropertype < impropertype)):
                     self.max_needed_impropertype = impropertype
-            for improperid in needed_improperids:
+            for improperid in self.needed_improperids:
                 assert(type(improperid) is int)
                 if ((self.min_needed_improperid == None) or
                     (self.min_needed_improperid > improperid)):
