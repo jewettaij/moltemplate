@@ -243,16 +243,19 @@ genpoly_lt.py
 
 ## Examples:
 
-   1) Make a simple polymer, adding "@bond:Backbone" type bonds between
-   "$atom:c2" from each monomer with "$atom:c1" from the next monomer.
+1) Make a simple polymer, adding "@bond:Backbone" type bonds between
+"$atom:c2" from each monomer with "$atom:c1" from the next monomer.
+
 ```
    genpoly_lt.py -bond Backbone c2 c1 < crds.raw > poly.lt
 ```
-   2) Make a circular twisted double-stranded DNA model, treating each base-pair
-   as a monomer, and connecting each base-pair monomer with 2 bonds
-   with the next base-pair.  This is done using 2 "-bond"
-   commands connecting the "O3p_a" atom with the "P_a" atom (in strand A),
-   and the "P_b" atom with the "O3p_b" atom (from the opposite strand, B).
+
+2) Make a circular twisted double-stranded DNA model, treating each base-pair
+as a monomer, and connecting each base-pair monomer with 2 bonds
+with the next base-pair.  This is done using 2 "-bond"
+commands connecting the "O3p_a" atom with the "P_a" atom (in strand A),
+and the "P_b" atom with the "O3p_b" atom (from the opposite strand, B).
+
 ```
    genpoly_lt.py -circular yes -helix 34.2857 \
                  -header 'import "basepair.lt"   #<--defines "BasePair"' \
@@ -263,5 +266,5 @@ genpoly_lt.py
                  < dna_basepair_CM_coords.raw \
                  > chromosome.lt
 ```
-   If you want to control the sequence of the polymer, replace the
-   "-monomer-name" argument with "-sequence sequence.txt".
+If you want to control the sequence of the polymer, replace the
+"-monomer-name" argument with "-sequence sequence.txt".

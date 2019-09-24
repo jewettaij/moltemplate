@@ -8,8 +8,8 @@
 # All rights reserved.
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.12.6"
-G_DATE="2019-9-13"
+G_VERSION="2.12.7"
+G_DATE="2019-9-24"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -396,21 +396,18 @@ while [ "$i" -lt "$ARGC" ]; do
         unset LTTREE_CHECK_COMMAND
         unset LTTREE_POSTPROCESS_COMMAND
     elif [ "$A" = "-allow-wildcards" ]; then
-        # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
         if [ -z "$LTTREE_CHECK_ARGS" ]; then
             LTTREE_CHECK_ARGS="\"$A\""
         else
             LTTREE_CHECK_ARGS="${LTTREE_CHECK_ARGS} \"$A\""
         fi
     elif [ "$A" = "-forbid-wildcards" ]; then
-        # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
         if [ -z "$LTTREE_CHECK_ARGS" ]; then
             LTTREE_CHECK_ARGS="\"$A\""
         else
             LTTREE_CHECK_ARGS="${LTTREE_CHECK_ARGS} \"$A\""
         fi
     elif [ "$A" = "-checkff" ]; then
-        # Disable syntax checking by undefining LTTREE_CHECK_COMMAND
         CHECKFF="$A"
     elif [ "$A" = "-overlay-bonds" ]; then
         # In that case, do not remove duplicate bond interactions

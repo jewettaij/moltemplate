@@ -46,8 +46,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.62.3'
-g_date_str = '2019-9-07'
+g_version_str = '0.62.4'
+g_date_str = '2019-9-24'
 
 def Intify(s):
     if s.isdigit():
@@ -3898,7 +3898,7 @@ class Ltemplify(object):
                 if ((self.max_needed_impropertype == None) or
                     (self.max_needed_impropertype < impropertype)):
                     self.max_needed_impropertype = impropertype
-            for improperid in needed_improperids:
+            for improperid in self.needed_improperids:
                 assert(type(improperid) is int)
                 if ((self.min_needed_improperid == None) or
                     (self.min_needed_improperid > improperid)):
@@ -4212,7 +4212,7 @@ class Ltemplify(object):
                         mx = self.max_needed_atomid
                     for i in range(mn, mx + 1):
                         if (BelongsToSel(i, self.l_group_selection)
-                                and (i in needed_atomids)):
+                                and (i in self.needed_atomids)):
                             filtered_selection.append((i, i))
                 elif specifier_style == 'molecule':
                     if mx == None:
