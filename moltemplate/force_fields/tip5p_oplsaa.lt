@@ -12,20 +12,20 @@
 # (No angle, dihedral, or improper interactions have been defined.)
 # Credit: This file was contributed by Cheng Chen (Queen Mary University)
 
-import "oplsaa.lt"
+import "oplsaa.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
 
 TIP5P inherits OPLSAA {
 
-  # Atom types from "oplsaa_lt_generator/oplsaa_subset.prm"
+  # Atom types from "oplsa.lt"
   # @atom:73  <-->  OW  "TIP5P Water O"
   # @atom:74  <-->  HW  "TIP5P Water H"
   # @atom:75  <-->  LP  "TIP5P Water LP"
 
   # Atom-ID Mol-ID Atom-Type  charge      X      Y       Z
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:73   0.0000    0.00000 0.00000 0.00000
-    $atom:H1 $mol:. @atom:74   0.2410    0.00000 0.81649 0.57736
-    $atom:H2 $mol:. @atom:74   0.2410    0.00000 -0.81649 0.57736
+    $atom:O   $mol:. @atom:73  0.0000    0.00000 0.00000 0.00000
+    $atom:H1  $mol:. @atom:74  0.2410    0.00000 0.81649 0.57736
+    $atom:H2  $mol:. @atom:74  0.2410    0.00000 -0.81649 0.57736
     $atom:LP1 $mol:. @atom:75 -0.2410    0.57154 0.00000 -0.404151
     $atom:LP2 $mol:. @atom:75 -0.2410   -0.57154 0.00000 -0.404151
   }
@@ -40,14 +40,11 @@ TIP5P inherits OPLSAA {
   write_once("In Settings") {
     # Define a group.  We will apply "fix rigid" to the atoms 
     # in this group to preserve the shape of each molecule.
-    group gH2O type  @atom:73  @atom:74 @atom:75
+    group gH2O type  @atom:73 @atom:74 @atom:75
     # explanation:  http://lammps.sandia.gov/doc/group.html
   }
 
 } # end of definition of "TIP5P" water molecule type
-
-
-
 
 
 

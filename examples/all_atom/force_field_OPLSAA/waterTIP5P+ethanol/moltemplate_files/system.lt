@@ -1,5 +1,5 @@
-import "tip5p.lt"     # <-defines the "TIP5P" (water) molecule type(uses OPLSAA)
-import "ethanol.lt"   # <-defines the "Ethanol" molecule type
+import "tip5p_oplsaa.lt"  # <-defines the "TIP5P" (water) molecule type
+import "ethanol.lt"       # <-defines the "Ethanol" molecule type
 
 
 waters = new TIP5P [8].move(0.00, 0.00, 3.45) 
