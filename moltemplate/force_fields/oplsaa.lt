@@ -24,7 +24,7 @@
 #         :              :     :      :         :         :
 #   }
 # }
-# 
+#
 # You can omit the atom charge in your molecule definition.
 # (Partial charges will be assigned later according to the force field rules.)
 # Responsibility for choosing the atom types (eg "@atom:88", "@atom:89") falls
