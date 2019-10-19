@@ -1,12 +1,11 @@
 #########################################################
-# WARNING: THIS FILE HAS NOT BEEN TESTED!
-# I BELIEVE THE PARAMETERS IN THIS FILE ARE IN AGREEMENT WITH THE 1987
+# WARNING: THIS FILE HAS NOT BEEN TESTED.
+# I THINK THE PARAMETERS IN THIS FILE ARE IN AGREEMENT WITH THE 1987
 # PAPER AS WELL AS THE "tip3f.key" FILE DISTRIBUTED WITH TINKER.
 # HOWEVER THIS INFORMATION CONTRADICTS THE CHARGES AND LENNARD-JONES
 # PARAMETERS IN THE THE "oplsaa.prm" FROM WHICH "oplsaa.lt" WAS DERIVED.
 # (PERHAPS THE TIP3F MODEL HAS BEEN UPDATED SINCE 1987?)
-# I'M NOT SURE IF THE LINES FOLLOWING "OPTIONAL (?)" SHOULD BE INCLUDED.
-# IF YOU OMIT THEM, THE INFORMATION IN 
+# PLEASE READ THE COMMENTS AT THE END OF THIS FILE BEFORE USING.
 #
 # If you use this file in a simulation, please email me to let me know
 # if it worked.  -Andrew 2019-10-16,   (jewett dot aij at gmail dot com)
@@ -30,9 +29,13 @@
 # For model details, see:
 # Dang, Pettitt, J. Phys. Chem, (1997) Vol 91, 3349-3354
 
-import "oplsaa.lt"  # <- defines OPLSAA
+import "oplsaa.lt"  # <-- defines OPLSAA, @atom:68, @atom:69
 
 TIP3F_1983_oplsaa inherits OPLSAA {
+
+  # Atom types from "oplsaa.lt"
+  # @atom:68 <--> "TIP3F Water O"
+  # @atom:69 <--> "TIP3F Water H"
 
   #  AtomID  MolID  AtomType charge(can be overridden)   x    y    z
 
@@ -58,16 +61,20 @@ TIP3F_1983_oplsaa inherits OPLSAA {
     bond_coeff   @bond:OH        529.6  0.9572
     bond_coeff   @bond:HH        38.25  1.5139
     angle_coeff  @angle:HOH      34.05  104.52
-    # OPTIONAL (?)
-    # The following numbers were taken from "tip3f.key" distributed by TINKER.
-    # These parameters override the pair_coeff (VDW) settings from "oplsaa.lt":
-    pair_coeff   @atom:68 @atom:68  3.150656111     0.152072595
   }
 
+  # OPTIONAL (?)
+  # I'M NOT SURE IF THE REMAINING LINES SHOULD BE INCLUDED.
+  # IF YOU INCLUDE THEM, THEN THE WATER MODEL WILL AGREE WITH THE 1987 PAPER.
+  # (AS WELL AS THE "tip3f.key" FILE DISTRIBUTED WITH TINKER).
+  # IF YOU OMIT THEM, THE WATER MODEL WILL AGREE WITH THE PARAMETERS FROM
+  # THE "oplsaa.prm" FILE DISTRIBUTED WITH TINKER (and the "oplsaa.lt" file).
+  # THE FOLLOWING NUMBERS WERE TAKEN FROM "tip3f.key" AND THE 1987 PAPER.
+  # These parameters override the pair_coeff (VDW) settings from "oplsaa.lt":
+  write_once("In Settings") {
+    pair_coeff   @atom:68 @atom:68  3.150656111     0.152072595
+  }
   write_once("In Charges") {
-    # OPTIONAL (?)
-    # The following numbers were taken from "tip3f.key" distributed by TINKER.
-    # These parameters override the charge settings from "oplsaa.lt":
     set type @atom:68 charge -0.834  # "TIP3F Water O"
     set type @atom:69 charge  0.417  # "TIP3F Water H"
   }
