@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]
 
 Moltemplate
 ===========
@@ -104,8 +104,7 @@ If you are **NOT using WSL**, then you can also use a graphical text editor whic
 
 ## License
 
-Moltemplate is available under the terms of the open-source 3-clause BSD
-license.  (See "[LICENSE.md](./LICENSE.md)")
+Moltemplate is available under the terms of the [MIT license](LICENSE.md).
 
 ## Funding
 

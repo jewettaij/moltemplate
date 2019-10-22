@@ -52,15 +52,10 @@ setup(
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],
             
-
-  # BSD 3-Clause License:
-  # - http://choosealicense.com/licenses/bsd-3-clause
-  # - http://opensource.org/licenses/BSD-3-Clause
-
-  #license='BSD',
+  license='MIT',
 
   classifiers=['Environment :: Console',
-               'License :: OSI Approved :: BSD License',
+               'License :: OSI Approved :: MIT License',
                'Operating System :: MacOS :: MacOS X',
                'Operating System :: POSIX :: Linux',
                'Operating System :: Microsoft :: Windows',
