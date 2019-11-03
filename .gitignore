@@ -129,6 +129,7 @@ system.in
 system.in.init
 system.in.settings
 system.in.charges
+system.in.transitions
 system.psf
 ttree_assignments.txt
 output_ttree/

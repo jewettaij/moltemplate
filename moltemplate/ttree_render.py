@@ -31,8 +31,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2017-11-04'
-g_version_str = '0.2.2'
+g_date_str = '2019-11-02'
+g_version_str = '0.2.3'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -41,7 +41,7 @@ g_program_name = g_filename
 
 def main():
     try:
-        if (len(sys.argv) != 2):
+        if (len(sys.argv) < 2):
             raise InputError('Error running  \"' + g_program_name + '\"\n'
                              ' Typical usage:\n'
                              ' ttree_render.py ttree_assignments.txt < file.template > file.rendered\n'
@@ -53,14 +53,21 @@ def main():
                              '    This script was not intended to be run by end users.)\n')
 
         bindings_filename = sys.argv[1]
-        f = open(bindings_filename)
+        ftemplate = sys.stdin
+        ftemplate_name = '__standard_input_for_ttree_render__'
+        if len(sys.argv) >= 3:
+            ftemplate_name = sys.argv[2]
+            ftemplate = open(ftemplate_name, 'r')
+
+
+        fbindings = open(bindings_filename)
         assignments = {}
 
         #BasicUIReadBindingsStream(assignments, f, bindings_filename)
 
         # The line above is robust but it uses far too much memory.
         # This for loop below works for most cases.
-        for line in f:
+        for line in fbindings:
             #tokens = lines.strip().split()
             # like split but handles quotes
             tokens = SplitQuotedString(line.strip())
@@ -68,10 +75,10 @@ def main():
                 continue
             assignments[tokens[0]] = tokens[1]
 
-        f.close()
+        fbindings.close()
         gc.collect()
-
-        lex = TemplateLexer(sys.stdin, '__standard_input_for_ttree_render__')
+       
+        lex = TemplateLexer(ftemplate, ftemplate_name)
         lex.var_delim = '$@'
 
         text_block_list = lex.ReadTemplate(simplify_output=True)
@@ -139,6 +146,11 @@ def main():
 
         sys.stdout.write(''.join(output))
 
+        # If we are not reading the file from sys.stdin, then close the file:
+        if ftemplate_name == '__standard_input_for_ttree_render__':
+            assert(ftemplate == sys.stdin)
+        else:
+            ftemplate.close()
 
     except (ValueError, InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
