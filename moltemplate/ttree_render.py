@@ -32,7 +32,7 @@ g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
 g_date_str = '2019-11-02'
-g_version_str = '0.2.3'
+g_version_str = '0.2.4'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -90,21 +90,26 @@ def main():
 
             if ((len(entry) > 1) and (entry[0] in lex.var_delim)):
 
+                var_prefix = ''
+                var_suffix = ''
+                var_format = ''
                 if ((len(entry) >= 3) and
                     (entry[1] == '{') and
                     (entry[-1] == '}')):
+                    var_prefix = entry[0] + '{'
+                    var_suffix = '}'
                     entry = entry[0] + entry[2:-1]
 
                 if '.' in entry:
                     ic = entry.find('.')
                     var_name = entry[:ic]
-                    var_suffix = entry[ic:]
-                    if not var_suffix[0:7] in ('.ljust(', '.rjust('):
+                    var_format = entry[ic:]
+                    if not var_format[0:7] in ('.ljust(', '.rjust('):
                         var_name = entry
-                        var_suffix = ''
+                        var_format = ''
                 else:
                     var_name = entry
-                    var_suffix = ''
+                    var_format = ''
 
                 if var_name not in assignments:
                     #COMMENTING OUT:
@@ -124,12 +129,12 @@ def main():
                     #
                     # Do this by substituting the variable's name as it's value:
 
-                    var_value = var_name
+                    var_value = var_prefix + var_name + var_suffix
 
                 else:
                     var_value = assignments[var_name]
 
-                format_fname, args = ExtractFormattingCommands(var_suffix)
+                format_fname, args = ExtractFormattingCommands(var_format)
                 if format_fname == 'ljust':
                     if len(args) == 1:
                         var_value = var_value.ljust(int(args[0]))
