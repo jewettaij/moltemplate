@@ -1,0 +1,73 @@
+# PREREQUISITES:
+#
+#      You must use moltemplate.sh (& packmol?) to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#
+# See "README_setup.sh" for instructions how to use moltemplate.sh
+# Note: This input script file only covers equilibration of the system.
+#
+# ------------------------------- Initialization Section --------------------
+
+include    "system.in.init"
+boundary    p p p
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data  "system.data"
+
+# ------------------------------- Settings Section --------------------------
+
+# Important: We must define "Toxdna" before reading the force field parameters
+variable Toxdna equal 0.1  # (Note: In oxDNA units, 0.1 corresponds to 300K)
+
+# Now we can read the force field parameters (which depend on ${Toxdna})
+include    "system.in.settings"
+
+# ------------------------------- Run Section -------------------------------
+
+#  The following settings were taken from the "in.duplex1" file located in the
+#  "examples/USER/cgdna/examples/oxDNA2/duplex1" subdirectory within LAMMPS:
+
+atom_modify sort 0 1.0
+# Pair interactions require lists of neighbours to be calculated
+neighbor 1.0 bin
+neigh_modify every 1 delay 0 check yes
+
+# NVE ensemble
+fix fxnve gOXDNA2 nve/dot
+#fix fxnvt gOXDNA2 nve/dotc/langevin ${Toxdna} ${Toxdna} 0.03 457145 angmom 10
+#fix fxnve gOXDNA2 nve/asphere
+fix fxlan gOXDNA2 langevin ${Toxdna} ${Toxdna} 0.03 457145 angmom 10
+
+# (you may need to adjust this timestep)
+timestep 1e-5
+
+# optional: print out various contributions to the energy 
+compute erot gOXDNA2 erotate/asphere
+compute ekin gOXDNA2 ke
+compute epot all pe
+variable erot equal c_erot
+variable ekin equal c_ekin
+variable epot equal c_epot
+variable etot equal c_erot+c_ekin+c_epot
+
+
+fix fxPrint gOXDNA2 print 1000 "$(step)  ekin = ${ekin} |  erot = ${erot} | epot = ${epot} | etot = ${etot}" screen yes
+
+
+compute quat  gOXDNA2 property/atom quatw quati quatj quatk
+compute shape gOXDNA2 property/atom shapex shapey shapez
+
+dump out gOXDNA2 custom 10000 traj.lammpstrj &
+          id mol type x y z ix iy iz &
+          c_quat[1] c_quat[2] c_quat[3] c_quat[4] &
+          c_shape[1] c_shape[2] c_shape[3]
+
+#dump_modify out sort id
+
+
+run 10000000
+
+
+#write_restart restart_t=10000000
+#write_data    system_after_t=10000000.data
