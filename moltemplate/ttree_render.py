@@ -96,7 +96,7 @@ def main():
                 if ((len(entry) >= 3) and
                     (entry[1] == '{') and
                     (entry[-1] == '}')):
-                    var_prefix = entry[0] + '{'
+                    var_prefix = '{'
                     var_suffix = '}'
                     entry = entry[0] + entry[2:-1]
 
@@ -129,7 +129,7 @@ def main():
                     #
                     # Do this by substituting the variable's name as it's value:
 
-                    var_value = var_prefix + var_name + var_suffix
+                    var_value = entry[0] + var_prefix + var_name[1:] + var_suffix
 
                 else:
                     var_value = assignments[var_name]
