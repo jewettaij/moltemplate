@@ -9,9 +9,11 @@ input scripts into a single MOLTEMPLATE ("**LT**") file.
 
 *Typically*, the LT files generated
 by "ltemplify.py" contain the definition of a single type of molecule
-(or molecular complex) present in a data file.
-This way, moltemplate users later on can build complicated simulations using
-this molecule as a building block (perhaps along with other molecules).
+(or molecular complex) present in a data file (including geometry,
+topology, force field information, and some of the the groups or fixes
+that the molecule participates in.)  This way, moltemplate users later
+on can build complicated simulations using this molecule as a building
+block (perhaps along with other molecules).
 
 Users can select the molecule (or molecules) they want
 using the "-mol", "-id", or "-type" arguments,
@@ -28,6 +30,14 @@ describes the entire system.
 *(Later, when moltemplate.sh is run on that LT file,
   it will try to re-generate all of the original LAMMPS files.)*
 Normally, this is not very useful.
+
+
+ltemplify.py is *scriptable*:
+It can be run from the terminal
+(as explained below)
+or
+[from within python](https://github.com/sgsaenger/vipster/issues/35#issuecomment-529094485).
+
 
 
 ### Typical Usage

@@ -11,8 +11,8 @@ ltemplify.py
 
 The "ltemplify.py" script can be used to convert existing LAMMPS
 input script and data files into a single .lt file
-(which includes both topology and force-field information
- for a single molecule in your system).
+(which typically includes geometry, topology and force-field
+ information for a single molecule in your system).
 
 Example:
 
@@ -46,8 +46,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.62.4'
-g_date_str = '2019-9-24'
+g_version_str = '0.62.5'
+g_date_str = '2019-11-06'
 
 def Intify(s):
     if s.isdigit():
@@ -4140,7 +4140,7 @@ class Ltemplify(object):
                 i_token_sel_min = 3
                 if len(tokens) <= i_token_sel_min:
                     sys.stderr.write('WARNING: possible syntax error on this line:\n'
-                                     + '        ' + l_in_group[i_line] + '\n')
+                                     + '        ' + self.l_in_group[i_line] + '\n')
                     delete_this_command = True
                 if str_logical == '':
                     str_logical = tokens[i_token_sel_min]
@@ -4820,7 +4820,7 @@ class Ltemplify(object):
                 out_file.write('\n'.join(self.l_data_dihedral_coeffs) + '\n')
                 self.non_empty_output = True
             if len(self.l_data_improper_coeffs) > 0:
-                l_data_improper_coeffs.insert(
+                self.l_data_improper_coeffs.insert(
                     0, (' ' * self.cindent) + 'write_once(\"' + data_improper_coeffs + '\") {')
                 self.l_data_improper_coeffs.append((' ' * self.cindent) + '}')
                 out_file.write('\n')
