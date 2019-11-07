@@ -1,8 +1,7 @@
 [![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)
-[![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)]()
-[![GitHub All Releases](https://img.shields.io/github/downloads/jewettaij/moltemplate/total)]()
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)]()
-[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=moltemplate.org%20online&url=https%3A%2F%2Fmoltemplate.org)]()
+[![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](LICENSE.md)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
+[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=moltemplate.org%20online&url=https%3A%2F%2Fmoltemplate.org)](moltemplate.org)
 [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
 
 Moltemplate
@@ -10,11 +9,50 @@ Moltemplate
 
 ##  Description
 
-Moltemplate is a *general* cross-platform text-based molecule builder for **LAMMPS** and **ESPResSo**.  Moltemplate was intended for building custom coarse-grained molecular models, but it can be used to prepare realistic all-atom simulations as well.  It currently supports the **OPLS**, **COMPASS**, **AMBER**(GAFF,GAFF2), **MARTINI**, **SDK**, **LOPLS**(2015), **EFF**, and **TraPPE**(1998) force fields, numerous solvent models, and includes approximately 40 examples.  (New force fields and examples are added continually by users.)
+Moltemplate is a *general* cross-platform text-based molecule builder for
+[**LAMMPS**](https://lammps.sandia.gov) and
+[**ESPResSo**](http://espressomd.org).
+Moltemplate was intended for building custom coarse-grained molecular models,
+but it can be used to prepare realistic all-atom simulations as well.
+It currently supports the
+[**OPLSAA**](./tree/master/examples/all_atom/force_field_OPLSAA),
+[**OPLSUA**](./tree/master/examples/all_atom/force_field_OPLSUA_united_atom),
+[**LOPLS**(2015)](./tree/master/examples/all_atom/force_field_OPLSAA/hexadecane),
+[**COMPASS**](./tree/master/examples/all_atom/force_field_COMPASS),
+[**AMBER**(GAFF,GAFF2)](./tree/master/examples/all_atom/force_field_AMBER),
+[**TraPPE**(1998)](./tree/master/examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
+force fields, and the
+[**MOLC**](./tree/master/examples/coarse_grained/MOLC),
+[**mW**](./tree/master/examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
+[**ELBA**(water)](./tree/master/examples/coarse_grained/ELBAwater%2Bmethanol),
+[**oxDNA2**](./tree/master/examples/coarse_grained/DNA_models),
+[**MARTINI**(lipids)](./tree/master/examples/coarse_grained/MARTINI_examples/force_field_explicit),
+[**EFF**](./tree/master/examples/misc_examples/explicit_electrons)
+molecular models (and others).
+This repository includes approximately 50 [examples](./tree/master/examples).
+(New force fields and examples are added continually by users.)
+
+
+### Documentation
+
+The best way to learn how to use moltemplate is to find an
+example which is similar to the system you wish to simulate.
+In addition to the examples listed above, there are several
+introductory examples 
+[here](http://moltemplate.org/visual_examples.html).
+
+All moltemplate users should probably read chapter 4 of the
+[reference manual](./tree/master/doc/moltemplate_manual.pdf)
+(It's only a few pages long.  The first 3 chapters are optional.)
+In addition, there are also several
+[talks/tutorials](http://moltemplate.org/doc/talks.html)
+online.
+
 
 ## Typical usage
 
     moltemplate.sh [-atomstyle style] [-pdb/-xyz coord_file] [-vmd] system.lt
+
 
 ## Web page
 
@@ -22,11 +60,12 @@ Documentation, examples, and supporting code can be downloaded at:
 
 http://www.moltemplate.org
 
+
 ## Requirements
 
 Moltemplate requires the Bourne-shell, and a recent version of python
-(2.7, 3.0 or higher), and can run on OS X, linux, or windows. (...if a
-suitable shell environment has been installed.  See below.)
+(2.7, 3.0 or higher), and can run on OS X, linux, or windows.
+(...if a suitable shell environment has been installed.  See below.)
 
 
 ## INSTALLATION INSTRUCTIONS
@@ -38,6 +77,7 @@ This directory should contain 3 folders:
     examples/                     <-- examples built with moltemplate
 
 There are two ways to install moltemplate:
+
 
 ## Installation using pip
 If you are familiar with pip, then run the following command from within the directory where this README file is located:
@@ -65,6 +105,7 @@ Virtual environments are
 [explained here](https://docs.python.org/3/tutorial/venv.html)
 If all this fails, then try installing moltemplate by manually updating your
 \$PATH environment variable.  Instructions for doing that are included below.
+
 
 ## Manual installation:
 
@@ -106,9 +147,11 @@ Otherwise, if you are using an older version of windows, try installing
 To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.
 If you are **NOT using WSL**, then you can also use a graphical text editor which might be easier for a beginner to use.  Such editors include Atom, Sublime, Notepad++, VSCode, and the graphical versione of emacs and vim.  ([Don't use these editors to edit files within the WSL environment.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
 
+
 ## License
 
 Moltemplate is available under the terms of the [MIT license](LICENSE.md).
+
 
 ## Funding
 
