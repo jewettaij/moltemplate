@@ -839,6 +839,7 @@ class GenPoly(object):
         outfile.write("\n# ---------------- simulation box -----------------\n"
             
                       "# Now define a box big enough to hold a polymer with this (initial) shape\n"
+                      "# (The user can override this later on.  This is the default box size.)"
                       "\n\n"
                       "write_once(\"Data Boundary\") {\n"
                       + str(self.box_bounds_min[0]) + "  " +
