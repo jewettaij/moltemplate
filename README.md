@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)
-[![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](LICENSE.md)
+[![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](./.travis.yml)
+[![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
-[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](moltemplate.org)
+[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](http://moltemplate.org)
 [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
 
 Moltemplate
@@ -43,7 +43,7 @@ introductory examples
 
 All moltemplate users should probably read chapter 4 of the
 [reference manual](./doc/moltemplate_manual.pdf)
-(It's only a few pages long.  The first 3 chapters are optional.)
+*(It's only a few pages long.  The first 3 chapters are optional.)*
 In addition, there are also several
 [talks/tutorials](http://moltemplate.org/doc/talks.html)
 online.
@@ -56,7 +56,7 @@ online.
 
 ## Web page
 
-Documentation, examples, and supporting code can be downloaded at:
+Additional suggestions and supporting code can be found at:
 
 http://www.moltemplate.org
 
