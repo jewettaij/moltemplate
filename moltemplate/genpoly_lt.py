@@ -81,7 +81,8 @@ class GPSettings(object):
         self.is_circular = False
         self.connect_ends = False
         self.delta_phi = 0.0
-        self.header = 'import \"forcefield.lt\"'
+        #self.header = 'import \"forcefield.lt\"'
+        self.header = ''
         self.name_monomer = 'Monomer'
         self.name_sequence_filename = ''
         self.name_polymer = ''
@@ -277,7 +278,9 @@ class GPSettings(object):
                 if i + 1 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by a string (usually in quotes)\n')
-                self.header = argv[i + 1]
+                if self.header != '':
+                    self.header += '\n'
+                self.header += argv[i + 1]
                 del(argv[i:i + 2])
             elif argv[i].lower() == '-axis':
                 if i + 1 >= len(argv):
@@ -854,8 +857,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.0.8'
-        g_date_str = '2019-5-02'
+        g_version_str = '0.0.9'
+        g_date_str = '2019-11-07'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]

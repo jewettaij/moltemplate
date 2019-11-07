@@ -135,8 +135,8 @@ OXDNA2 {
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../A -0.600000 0.000000 0.000000 $mol:.../f 1 1
-      $atom:r @atom:.../T  0.600000 0.000000 0.000000 $mol:.../r 1 1
+      $atom:f @atom:.../A -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:.../T  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -152,8 +152,8 @@ OXDNA2 {
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../T -0.600000 0.000000 0.000000 $mol:.../f 1 1
-      $atom:r @atom:.../A  0.600000 0.000000 0.000000 $mol:.../r 1 1
+      $atom:f @atom:.../T -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:.../A  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -169,8 +169,8 @@ OXDNA2 {
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../C -0.600000 0.000000 0.000000 $mol:.../f 1 1
-      $atom:r @atom:.../G  0.600000 0.000000 0.000000 $mol:.../r 1 1
+      $atom:f @atom:.../C -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:.../G  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -186,8 +186,8 @@ OXDNA2 {
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../G -0.600000 0.000000 0.000000 $mol:.../f 1 1
-      $atom:r @atom:.../C  0.600000 0.000000 0.000000 $mol:.../r 1 1
+      $atom:f @atom:.../G -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:.../C  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion

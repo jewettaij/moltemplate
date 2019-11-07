@@ -10,13 +10,12 @@ import "oxdna2.lt"  # <-- defines "OXDNA2"
 
 PolymerAT21 inherits OXDNA2 {
 
-  # Optional: Use "create_var{}" to share molecule-IDs between
-  # atoms in different monomers.  Here, we do this separately
-  # for atoms in the forward and reverse strands of the polymer.
+  # Optional: Use "create_var{}" to share molecule-IDs between atoms in
+  # different monomers.  (See chapter 9.6 of the moltemplate manual.)
   # (My apologies. I realize this detail is confusing.  If you
   #  don't care about the molecule-ID numbers, comment this out.)
 
-  create_var{ $mol:f $mol:r }
+  create_var{ $mol }
 
 
   # ----- IMPORTANT: -----

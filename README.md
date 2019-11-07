@@ -1,5 +1,9 @@
 [![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]
+[![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)]()
+[![GitHub All Releases](https://img.shields.io/github/downloads/jewettaij/moltemplate/total)]()
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)]()
+[![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
+[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=moltemplate.org%20online&url=https%3A%2F%2Fmoltemplate.org)]()
 
 Moltemplate
 ===========

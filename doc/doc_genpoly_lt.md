@@ -143,6 +143,8 @@ genpoly_lt.py
                    It was intended as a way to tell moltemplate to import files
                    containing definitions of the monomer subunits you will need.
                    For example: -header 'import "FILE_WHICH_DEFINES_Monomer.lt"'
+                   You can insert multiple lines of text at the beginning of the file
+                   by including multiple -header arguments in the argument list.
 
     -sequence sequence.txt
                    If you are building a heteropolymer, this argument allows
