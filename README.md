@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)
 [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
-[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=moltemplate.org%20online&url=https%3A%2F%2Fmoltemplate.org)](moltemplate.org)
+[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](moltemplate.org)
 [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
 
 Moltemplate
@@ -15,34 +15,34 @@ Moltemplate is a *general* cross-platform text-based molecule builder for
 Moltemplate was intended for building custom coarse-grained molecular models,
 but it can be used to prepare realistic all-atom simulations as well.
 It currently supports the
-[**OPLSAA**](./tree/master/examples/all_atom/force_field_OPLSAA),
-[**OPLSUA**](./tree/master/examples/all_atom/force_field_OPLSUA_united_atom),
-[**LOPLS**(2015)](./tree/master/examples/all_atom/force_field_OPLSAA/hexadecane),
-[**COMPASS**](./tree/master/examples/all_atom/force_field_COMPASS),
-[**AMBER**(GAFF,GAFF2)](./tree/master/examples/all_atom/force_field_AMBER),
-[**TraPPE**(1998)](./tree/master/examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
+[**OPLSAA**](./examples/all_atom/force_field_OPLSAA),
+[**OPLSUA**](./examples/all_atom/force_field_OPLSUA_united_atom),
+[**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
+[**COMPASS**](./examples/all_atom/force_field_COMPASS),
+[**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
+[**TraPPE**(1998)](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
 force fields, and the
-[**MOLC**](./tree/master/examples/coarse_grained/MOLC),
-[**mW**](./tree/master/examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
-[**ELBA**(water)](./tree/master/examples/coarse_grained/ELBAwater%2Bmethanol),
-[**oxDNA2**](./tree/master/examples/coarse_grained/DNA_models),
-[**MARTINI**(lipids)](./tree/master/examples/coarse_grained/MARTINI_examples/force_field_explicit),
-[**EFF**](./tree/master/examples/misc_examples/explicit_electrons)
+[**MOLC**](./examples/coarse_grained/MOLC),
+[**mW**](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
+[**ELBA**(water)](./examples/coarse_grained/ELBAwater%2Bmethanol),
+[**oxDNA2**](./examples/coarse_grained/DNA_models),
+[**MARTINI**(lipids)](./examples/coarse_grained/MARTINI_examples/force_field_explicit),
+[**EFF**](./examples/misc_examples/explicit_electrons)
 molecular models (and others).
-This repository includes approximately 50 [examples](./tree/master/examples).
+This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
 
 
 ### Documentation
 
 The best way to learn how to use moltemplate is to find an
-example which is similar to the system you wish to simulate.
+example which is similar to the system that you wish to simulate.
 In addition to the examples listed above, there are several
 introductory examples 
 [here](http://moltemplate.org/visual_examples.html).
 
 All moltemplate users should probably read chapter 4 of the
-[reference manual](./tree/master/doc/moltemplate_manual.pdf)
+[reference manual](./doc/moltemplate_manual.pdf)
 (It's only a few pages long.  The first 3 chapters are optional.)
 In addition, there are also several
 [talks/tutorials](http://moltemplate.org/doc/talks.html)
