@@ -2013,8 +2013,9 @@ class Ltemplify(object):
                                     i = int(atomtype_i_str)
                                     if ((not i) or
                                             BelongsToSel(i, self.atomtype_selection)):
-                                        #i_str = '@atom:type' + str(i)
-                                        i_str = '@atom:' + self.atomtypes_int2name[i]
+                                        ##i_str = '@atom:type' + str(i)
+                                        #i_str = '@atom:' + self.atomtypes_int2name[i]
+                                        i_str = str(i)
                                         tokens[0] = i_str
                                         self.l_data_pair_coeffs.append(
                                             (' ' * self.indent) + (' '.join(tokens)))
@@ -2066,10 +2067,12 @@ class Ltemplify(object):
                                     j = int(atomtype_j_str)
                                     if (((not i) or BelongsToSel(i, self.atomtype_selection)) and
                                             ((not j) or BelongsToSel(j, self.atomtype_selection))):
-                                        #i_str = '@atom:type' + str(i)
-                                        #j_str = '@atom:type' + str(j)
-                                        i_str = '@atom:' + self.atomtypes_int2name[i]
-                                        j_str = '@atom:' + self.atomtypes_int2name[j]
+                                        ##i_str = '@atom:type' + str(i)
+                                        ##j_str = '@atom:type' + str(j)
+                                        #i_str = '@atom:' + self.atomtypes_int2name[i]
+                                        #j_str = '@atom:' + self.atomtypes_int2name[j]
+                                        i_str = str(i)
+                                        j_str = str(j)
                                         tokens[0] = i_str
                                         tokens[1] = j_str
                                         self.l_data_pairij_coeffs.append(
@@ -3010,14 +3013,20 @@ class Ltemplify(object):
             line = self.l_data_pair_coeffs[i_line]
             tokens = line.strip().split()
             assert(len(tokens) > 0)
-            split_colon = tokens[0].split(':')
-            assert(len(split_colon) == 2)
-            atomtype = Intify(split_colon[1])
+            atomtypestr = tokens[0]
+            if atomtypestr.find('@atom:') == 0:
+                atomtypestr = atomtypestr[6:]
+            atomtype = Intify(atomtypestr)
             if ((not (atomtype in self.needed_atomtypes)) and
                 (not ((len(self.atomtype_selection) > 0) and
                       BelongsToSel(atomtype, self.atomtype_selection)))):
                 del self.l_data_pair_coeffs[i_line]
             else:
+                tokens[0] = Stringify(atomtype,
+                                      self.atomtypes_int2name,
+                                      '@','atom','type')
+                self.l_data_pair_coeffs[i_line] = ((' ' * self.indent) +
+                                                   (' '.join(tokens)))
                 i_line += 1
 
         # delete data_pairij_coeffs for atom types we no longer care about:
@@ -3026,12 +3035,17 @@ class Ltemplify(object):
             line = self.l_data_pairij_coeffs[i_line]
             tokens = line.strip().split()
             assert(len(tokens) > 0)
-            split_colon_I = tokens[0].split(':')
-            assert(len(split_colon_I) == 2)
-            atomtype_I = Intify(split_colon_I[1])
-            split_colon_J = tokens[1].split(':')
-            assert(len(split_colon_J) == 2)
-            atomtype_J = Intify(split_colon_J[1])
+
+            atomtypestr_I = tokens[0]
+            if atomtypestr_I.find('@atom:') == 0:
+                atomtypestr_I = atomtypestr[6:]
+            atomtype_I = Intify(atomtypestr_I)
+
+            atomtypestr_J = tokens[1]
+            if atomtypestr_J.find('@atom:') == 0:
+                atomtypestr_J = atomtypestr[6:]
+            atomtype_J = Intify(atomtypestr_J)
+
             if (((not (atomtype_I in self.needed_atomtypes)) and
                  (not ((len(self.atomtype_selection) > 0) and
                        BelongsToSel(atomtype_I, self.atomtype_selection))))
@@ -3041,6 +3055,14 @@ class Ltemplify(object):
                        BelongsToSel(atomtype_J, self.atomtype_selection))))):
                 del self.l_data_pairij_coeffs[i_line]
             else:
+                tokens[0] = Stringify(atomtype_I,
+                                      self.atomtypes_int2name,
+                                      '@','atom','type')
+                tokens[1] = Stringify(atomtype_J,
+                                      self.atomtypes_int2name,
+                                      '@','atom','type')
+                self.l_data_pairij_coeffs[i_line] = ((' ' * self.indent) +
+                                                     (' '.join(tokens)))
                 i_line += 1
 
         # delete in_pair_coeffs for atom we no longer care about:
@@ -4870,6 +4892,7 @@ class Ltemplify(object):
                 self.l_data_improper_coeffs.append((' ' * self.cindent) + '}')
                 out_file.write('\n')
                 out_file.write('\n'.join(self.l_data_improper_coeffs))
+                out_file.write('\n')
                 self.non_empty_output = True
             if len(self.l_data_pair_coeffs) > 0:
                 self.l_data_pair_coeffs.insert(
