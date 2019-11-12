@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
+# All rights reserved.
+
 """
     lttree_postprocess.py
     This is a stand-alone python script which checks the files created by

@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2017, California Institute of Technology
+# All rights reserved.
+
 g_program_name = __file__.split('/')[-1]  # = 'interpolate_mt.py'
 g_version_str = '0.1.0'
 g_date_str = '2019-8-22'

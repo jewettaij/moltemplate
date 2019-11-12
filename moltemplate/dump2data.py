@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+# Author: Andrew Jewett
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2014
+
 """
 dump2data.py
 
@@ -16,10 +21,6 @@ A reference DATA file is needed (argument).
 
 """
 
-# Authors: Andrew Jewett
-# License: New BSD License
-# Copyright (c) 2014
-# All rights reserved.
 
 #g_program_name = 'dump2data.py'
 g_program_name = __file__.split('/')[-1]

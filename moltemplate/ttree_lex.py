@@ -1,23 +1,28 @@
 # -*- coding: iso-8859-1 -*-
 ### -*- coding: utf-8 -*-
-# Author: Andrew Jewett (jewett.aij at g mail)
-#         http://www.moltemplate.org
-#         http://www.chem.ucsb.edu/~sheagroup
-# License: 3-clause BSD License  (See LICENSE.TXT)
-# Copyright (c) 2012, Regents of the University of California
-# All rights reserved.
 
-"""A lexical analyzer class for simple shell-like syntaxes.
-   This version has been modified slightly to work better with unicode.
-   It was forked from the version of shlex that ships with python 3.2.2.
-   A few minor features and functions have been added. """
-
+# Authors: Eric S. Raymond, 21 Dec 1998
+#          Andrew Jewett (jewett.aij at g mail)
+# LICENSE: The PSF license:
+# https://docs.python.org/3/license.html
+# The PSF license is apparently compatible with the GPL license.
+# (I am not sure whether it is compatible with the MIT license.)
+#
+# Contributions:
 # Module and documentation by Eric S. Raymond, 21 Dec 1998
 # Input stacking and error message cleanup added by ESR, March 2000
 # push_source() and pop_source() made explicit by ESR, January 2001.
 # Posix compliance, split(), string arguments, and
 # iterator interface by Gustavo Niemeyer, April 2003.
-# ("wordterminators" (unicode support) hack by Andrew Jewett September 2011)
+# Unicode support hack ("wordterminators") and numerous other hideous
+# ttree-specific hacks added by Andrew Jewett September 2011.
+
+
+"""A lexical analyzer class for simple shell-like syntaxes.
+   This version has been modified slightly to work better with unicode.
+   It was forked from the version of shlex that ships with python 3.2.2.
+   A few minor features and functions have been added.  -Andrew Jewett 2011 """
+
 
 import os.path
 import sys

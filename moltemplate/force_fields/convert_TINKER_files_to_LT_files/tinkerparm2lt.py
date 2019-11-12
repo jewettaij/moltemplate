@@ -1,5 +1,11 @@
 #! /usr/bin/env python
 
+# Author: Jason Lambert, Andrew Jewett (jewett.aij at g mail)
+#  (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2014
+
+
 """
 This standalone python script can be used to convert the force-fields 
 distributed with TINKER (".prm" files) into moltemplate (".lt") format.
@@ -16,7 +22,6 @@ to my knowledge, have not yet been implemented in LAMMPS as of 2017-2-01.)
 
 
 __author__ = 'Jason Lambert and Andrew Jewett'
-# (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)
 __version__ = '0.3.2'
 __date__ = '2018-6-15'
 

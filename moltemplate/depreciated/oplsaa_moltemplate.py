@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 #
+# Author: Jason Lambert
+#  (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2014
+#
 # The purpose of this script is to create a moltemplate lt file for the oplsaa.
 # forcefield.  This will assist researchers in building complex simulations using
 # this OPLS-UA and the OPLS-AA forcefields.

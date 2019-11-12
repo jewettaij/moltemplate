@@ -2,9 +2,8 @@
 # -*- coding: utf-8 -*-
 
 # Author: Andrew Jewett (jewett.aij at g mail)
-# License: 3-clause BSD License  (See LICENSE.TXT)
-# Copyright (c) 2012, Regents of the University of California
-# All rights reserved.
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
 
 """
 ltemplify.py
@@ -228,6 +227,25 @@ def BelongsToSel(i, sel):
             break
 
     return belongs
+
+
+
+def LookupVarName(i, int2name=None, default_name = ''):
+    if int2name and (i in int2name):
+        var_name = int2name[i]
+    else:
+        var_name = default_name + str(i)
+    return var_name
+
+
+
+def Stringify(i, int2name, prefix1, prefix2, default_name = ''):
+    var_name = LookupVarName(i, int2name, default_name)
+    if var_name.find(' ') != -1:
+        formatted_var_name = prefix1 + '{' + prefix2 + ':' + var_name + '}'
+    else:
+        formatted_var_name = prefix1 + prefix2 + ':' + var_name
+    return formatted_var_name
 
 
 
@@ -613,6 +631,9 @@ class Ltemplify(object):
 
         self.atomid2type = {}
         self.atomid2mol = {}
+
+        # molecule id names
+        self.molids_int2name = {} #(empty for now. perhaps I'll fill this later)
 
         # bond type names
         self.bondtypes_int2name = {}
@@ -2697,7 +2718,6 @@ class Ltemplify(object):
                                 continue
 
                             if (interaction_type == 'atom'):
-                                #self.atomtypes_int2name[type_int]=type_str
                                 self.atomtypes_int2name[type_int] = type_str
                                 self.atomtypes_name2int[type_str] = type_int
                                 ntypes += 1
@@ -2975,13 +2995,9 @@ class Ltemplify(object):
                       BelongsToSel(atomtype, self.atomtype_selection)))):
                 del self.l_data_masses[i_line]
             else:
-                atomtype_name = self.atomtypes_int2name[atomtype]
-                if atomtype_name.find(' ') != -1:
-                    tokens[0] = '@{atom:'+atomtype_name+'}'
-                else:
-                    tokens[0] = '@atom:'+atomtype_name
-                #if atomtype_name != 'type'+str(atomtype):
-                #    tokens.append('  # '+atomtype_name)
+                tokens[0]=Stringify(atomtype,
+                                    self.atomtypes_int2name,
+                                    '@','atom','type')
                 self.l_data_masses[i_line] = ((' ' * self.indent) +
                                               (' '.join(tokens)))
                 i_line += 1
@@ -2996,7 +3012,7 @@ class Ltemplify(object):
             assert(len(tokens) > 0)
             split_colon = tokens[0].split(':')
             assert(len(split_colon) == 2)
-            atomtype = self.atomtypes_name2int[split_colon[1]]
+            atomtype = Intify(split_colon[1])
             if ((not (atomtype in self.needed_atomtypes)) and
                 (not ((len(self.atomtype_selection) > 0) and
                       BelongsToSel(atomtype, self.atomtype_selection)))):
@@ -3012,10 +3028,10 @@ class Ltemplify(object):
             assert(len(tokens) > 0)
             split_colon_I = tokens[0].split(':')
             assert(len(split_colon_I) == 2)
-            atomtype_I = self.atomtypes_name2int[split_colon_I[1]]
+            atomtype_I = Intify(split_colon_I[1])
             split_colon_J = tokens[1].split(':')
             assert(len(split_colon_J) == 2)
-            atomtype_J = self.atomtypes_name2int[split_colon_J[1]]
+            atomtype_J = Intify(split_colon_J[1])
             if (((not (atomtype_I in self.needed_atomtypes)) and
                  (not ((len(self.atomtype_selection) > 0) and
                        BelongsToSel(atomtype_I, self.atomtype_selection))))
@@ -3149,31 +3165,22 @@ class Ltemplify(object):
                 for i in range(i_a_final, i_b_final + 1):
                     for j in range(j_a_final, j_b_final + 1):
                         if j >= i:
-                            atomtype_name_i = self.atomtypes_int2name[i]
-                            atomtype_name_j = self.atomtypes_int2name[j]
-                            if atomtype_name_i.find(' ') != -1:
-                                tokens[1] = '@{atom:' + atomtype_name_i + '}'
-                            else:
-                                tokens[1] = '@atom:' + atomtype_name_i
-                            if atomtype_name_j.find(' ') != -1:
-                                tokens[2] = '@{atom:' + atomtype_name_j + '}'
-                            else:
-                                tokens[2] = '@atom:' + atomtype_name_j
-
+                            tokens[1] = Stringify(i,
+                                                  self.atomtypes_int2name,
+                                                  '@','atom','type')
+                            tokens[2] = Stringify(j,
+                                                  self.atomtypes_int2name,
+                                                  '@','atom','type')
                             self.l_in_pair_coeffs.insert(i_line,
                                                          (' ' * self.indent) + (' '.join(tokens)))
                             i_line += 1
             else:
-                atomtype_name_i = self.atomtypes_int2name[int(tokens[1])]
-                atomtype_name_j = self.atomtypes_int2name[int(tokens[2])]
-                if atomtype_name_i.find(' ') != -1:
-                    tokens[1] = '@{atom:' + atomtype_name_i + '}'
-                else:
-                    tokens[1] = '@atom:' + atomtype_name_i
-                if atomtype_name_j.find(' ') != -1:
-                    tokens[2] = '@{atom:' + atomtype_name_j + '}'
-                else:
-                    tokens[2] = '@atom:' + atomtype_name_j
+                tokens[1] = Stringify(int(tokens[1]),
+                                      self.atomtypes_int2name,
+                                      '@','atom','type')
+                tokens[2] = Stringify(int(tokens[2]),
+                                      self.atomtypes_int2name,
+                                      '@','atom','type')
                 self.l_in_pair_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3234,35 +3241,23 @@ class Ltemplify(object):
                 if ((i in self.needed_atomtypes) or (self.max_sel_atomtype >= i)):
                     i_b_final = i
                     break
-            # if i_a_final and i_b_final:
-            #    if i_a_final == i_b_final:
-            #        i_str = '@atom:type'+str(i_a_final)
-            #        tokens[1] = i_str
-            #    else:
-            #        i_str = '@{atom:type'+str(i_a_final)+'}*@{atom:type'+str(i_b_final)+'}'
 
             if not (i_a_final and i_b_final and j_a_final and j_b_final):
                 del self.l_in_masses[i_line]
             elif ('*' in atomtype_i_str):
                 del self.l_in_masses[i_line]
                 for i in range(i_a_final, i_b_final + 1):
-                    #tokens[1] = '@atom:type'+str(i)
-                    atomtype_name = self.atomtypes_int2name[i]
-                    if atomtype_name.find(' ') != -1:
-                        tokens[1] = '@{atom:' + atomtype_name + '}'
-                    else:
-                        tokens[1] = '@atom:' + atomtype_name
+                    tokens[1] = Stringify(i,
+                                          self.atomtypes_int2name,
+                                          '@','atom','type')
                     self.l_in_masses.insert(i_line, (' ' * self.indent) +
                                             (' '.join(tokens)))
                     i_line += 1
             else:
                 assert(i_a == i_b)
-                #tokens[1] = '@atom:type'+str(i_a)
-                atomtype_name = self.atomtypes_int2name[i_a]
-                if atomtype_name.find(' ') != -1:
-                    tokens[1] = '@{atom:' + atomtype_name + '}'
-                else:
-                    tokens[1] = '@atom:' + atomtype_name
+                tokens[1] = Stringify(i_a,
+                                      self.atomtypes_int2name,
+                                      '@','atom','type')
                 self.l_in_masses[i_line] = (' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
 
@@ -3282,23 +3277,15 @@ class Ltemplify(object):
             # if ((atomid1 in self.needed_atomids) and
             #     (atomid2 in self.needed_atomids)):
             tokens[0] = '$bond:id' + str(bondid)
-
-            if bondtype in self.bondtypes_int2name:
-                type_str = self.bondtypes_int2name[bondtype]
-            else:
-                type_str = 'type' + str(bondtype)
-            if type_str.find(' ') != -1:
-                tokens[1] = '@{bond:' + type_str + '}'
-            else:
-                tokens[1] = '@bond:' + type_str
-            if self.atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
-            else:
-                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
-            if self.atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
-            else:
-                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
+            tokens[1] = Stringify(bondtype,
+                                  self.bondtypes_int2name,
+                                  '@','bond','type')
+            tokens[2] = Stringify(atomid1,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[3] = Stringify(atomid2,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
             if self.ignore_bond_types:
                 # Then instead of a "Bonds" section we want a "Bond List" 
                 # section which omits the bond type information (in tokens[1])
@@ -3319,7 +3306,9 @@ class Ltemplify(object):
             if (not (bondtype in self.needed_bondtypes)):
                 del self.l_data_bond_coeffs[i_line]
             else:
-                tokens[0] = '@bond:type' + str(bondtype)
+                tokens[0] = Stringify(bondtype,
+                                      self.bondtypes_int2name,
+                                      '@','bond','type')
                 self.l_data_bond_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3377,17 +3366,13 @@ class Ltemplify(object):
             if i_b > self.max_needed_bondtype:
                 i_b = self.max_needed_bondtype
 
-            # if i_a == i_b:
-            #    i_str = '@bond:type'+str(i_a)
-            #    tokens[1] = i_str
-            # else:
-            #    i_str = '@{bond:type'+str(j_a)+'}*@{bond:type'+str(j_b)+'}'
-
             if ('*' in bondtype_str):
                 del self.l_in_bond_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
                     if (i in self.needed_bondtypes):
-                        tokens[1] = '@bond:type' + str(i)
+                        tokens[1] = Stringify(i,
+                                              self.bondtypes_int2name,
+                                              '@','bond','type')
                         self.l_in_bond_coeffs.insert(i_line,
                                                      (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
@@ -3396,7 +3381,9 @@ class Ltemplify(object):
                     raise InputError('Error: number of bond types in data file is not consistent with the\n'
                                      '       number of bond types you have define bond_coeffs for.\n')
                 if (i_a == i_b) and (i_a in self.needed_bondtypes):
-                    tokens[1] = '@bond:type' + str(i_a)
+                    tokens[1] = Stringify(i_a,
+                                          self.bondtypes_int2name,
+                                          '@','bond','type')
                     self.l_in_bond_coeffs[i_line] = (
                         ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
@@ -3418,29 +3405,22 @@ class Ltemplify(object):
             atomid2 = Intify(tokens[3])
             atomid3 = Intify(tokens[4])
             # if ((atomid1 in self.needed_atomids) and
-            #    (atomid2 in self.needed_atomids)):
+            #     (atomid2 in self.needed_atomids) and
+            #     (atomid3 in self.needed_atomids)):
             tokens[0] = '$angle:id' + str(angleid)
 
-            if angletype in self.angletypes_int2name:
-                type_str = self.angletypes_int2name[angletype]
-            else:
-                type_str = 'type' + str(angletype)
-            if type_str.find(' ') != -1:
-                tokens[1] = '@{angle:' + type_str + '}'
-            else:
-                tokens[1] = '@angle:' + type_str
-            if self.atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
-            else:
-                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
-            if self.atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
-            else:
-                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
-            if self.atomids_int2name[atomid3].find(' ') != -1:
-                tokens[4] = '${atom:' + self.atomids_int2name[atomid3] + '}'
-            else:
-                tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
+            tokens[1] = Stringify(angletype,
+                                  self.angletypes_int2name,
+                                  '@','angle','type')
+            tokens[2] = Stringify(atomid1,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[3] = Stringify(atomid2,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[4] = Stringify(atomid3,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
             self.needed_angleids.add(angleid)
             self.needed_angletypes.add(angletype)
             self.l_data_angles[i_line] = (' ' * self.indent) + (' '.join(tokens))
@@ -3457,7 +3437,9 @@ class Ltemplify(object):
             if (not (angletype in self.needed_angletypes)):
                 del self.l_data_angle_coeffs[i_line]
             else:
-                tokens[0] = '@angle:type' + str(angletype)
+                tokens[0] = Stringify(angletype,
+                                      self.angletypes_int2name,
+                                      '@','angle','type')
                 self.l_data_angle_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3468,7 +3450,7 @@ class Ltemplify(object):
         #       angle_coeff, dihedral_coeff, and improper_coeff commands.
         #       THERE ARE NO bondbond_coeff commands, or bondangle_coeff commands,
         #       etc..., so we dont have to worry about l_in_bondbond_coeffs,...
-        # delete data_bondbond_coeffs for angletypes we no longer care about:
+        # Delete data_bondbond_coeffs for angletypes we no longer care about:
         i_line = 0
         while i_line < len(self.l_data_bondbond_coeffs):
             line = self.l_data_bondbond_coeffs[i_line]
@@ -3477,11 +3459,13 @@ class Ltemplify(object):
             if (not (angletype in self.needed_angletypes)):
                 del self.l_data_bondbond_coeffs[i_line]
             else:
-                tokens[0] = '@angle:type' + str(angletype)
+                tokens[0] = Stringify(angletype,
+                                      self.angletypes_int2name,
+                                      '@','angle','type')
                 self.l_data_bondbond_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
-        # delete data_bondangle_coeffs for angletypes we no longer care about:
+        # Delete data_bondangle_coeffs for angletypes we no longer care about:
         i_line = 0
         while i_line < len(self.l_data_bondangle_coeffs):
             line = self.l_data_bondangle_coeffs[i_line]
@@ -3490,13 +3474,15 @@ class Ltemplify(object):
             if (not (angletype in self.needed_angletypes)):
                 del self.l_data_bondangle_coeffs[i_line]
             else:
-                tokens[0] = '@angle:type' + str(angletype)
+                tokens[0] = Stringify(angletype,
+                                      self.angletypes_int2name,
+                                      '@','angle','type')
                 self.l_data_bondangle_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
         # --- end of class2specific ----
 
-        # delete in_angle_coeffs for angletypes we no longer care about:
+        # Delete in_angle_coeffs for angletypes we no longer care about:
         if len(self.needed_angletypes) > 0:
             for angletype in self.needed_angletypes:
                 assert(type(angletype) is int)
@@ -3548,17 +3534,13 @@ class Ltemplify(object):
             if i_b > self.max_needed_angletype:
                 i_b = self.max_needed_angletype
 
-            # if i_a == i_b:
-            #    i_str = '@angle:type'+str(i_a)
-            #    tokens[1] = i_str
-            # else:
-            #    i_str = '@{angle:type'+str(j_a)+'}*@{angle:type'+str(j_b)+'}'
-
             if ('*' in angletype_str):
                 del self.l_in_angle_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
                     if (i in self.needed_angletypes):
-                        tokens[1] = '@angle:type' + str(i)
+                        tokens[1] = Stringify(i,
+                                              self.angletypes_int2name,
+                                              '@','angle','type')
                         self.l_in_angle_coeffs.insert(i_line,
                                                       (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
@@ -3567,7 +3549,9 @@ class Ltemplify(object):
                     raise InputError('Error: number of angle types in data file is not consistent with the\n'
                                      '       number of angle types you have define angle_coeffs for.\n')
                 if (i_a == i_b) and (i_a in self.needed_angletypes):
-                    tokens[1] = '@angle:type' + str(i_a)
+                    tokens[1] = Stringify(i_a,
+                                          self.angletypes_int2name,
+                                          '@','angle','type')
                     self.l_in_angle_coeffs[i_line] = (
                         ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
@@ -3590,36 +3574,28 @@ class Ltemplify(object):
             atomid2 = Intify(tokens[3])
             atomid3 = Intify(tokens[4])
             atomid4 = Intify(tokens[5])
+
             # if ((atomid1 in self.needed_atomids) and
-            #    (atomid2 in self.needed_atomids)):
+            #     (atomid2 in self.needed_atomids) and
+            #     (atomid3 in self.needed_atomids) and
+            #     (atomid4 in self.needed_atomids)):
 
             tokens[0] = '$dihedral:id' + str(dihedralid)
-
-            if dihedraltype in self.dihtypes_int2name:
-                type_str = self.dihtypes_int2name[dihedraltype]
-            else:
-                type_str = 'type'+str(dihedraltype)
-            if type_str.find(' ') != -1:
-                tokens[1] = '@{dihedral:' + type_str + '}'
-            else:
-                tokens[1] = '@dihedral:' + type_str
-            if self.atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
-            else:
-                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
-            if self.atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
-            else:
-                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
-            if self.atomids_int2name[atomid3].find(' ') != -1:
-                tokens[4] = '${atom:' + self.atomids_int2name[atomid3] + '}'
-            else:
-                tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
-            if self.atomids_int2name[atomid4].find(' ') != -1:
-                tokens[5] = '${atom:' + self.atomids_int2name[atomid4] + '}'
-            else:
-                tokens[5] = '$atom:' + self.atomids_int2name[atomid4]
-
+            tokens[1] = Stringify(dihedraltype,
+                                  self.dihtypes_int2name,
+                                  '@','dihedral','type')
+            tokens[2] = Stringify(atomid1,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[3] = Stringify(atomid2,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[4] = Stringify(atomid3,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[5] = Stringify(atomid4,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
             self.needed_dihedralids.add(dihedralid)
             self.needed_dihedraltypes.add(dihedraltype)
             self.l_data_dihedrals[i_line] = (' ' * self.indent) + (' '.join(tokens))
@@ -3636,7 +3612,9 @@ class Ltemplify(object):
             if (not (dihedraltype in self.needed_dihedraltypes)):
                 del self.l_data_dihedral_coeffs[i_line]
             else:
-                tokens[0] = '@dihedral:type' + str(dihedraltype)
+                tokens[0] = Stringify(dihedraltype,
+                                      self.dihtypes_int2name,
+                                      '@','dihedral','type')
                 self.l_data_dihedral_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3658,7 +3636,9 @@ class Ltemplify(object):
             if (not (dihedraltype in self.needed_dihedraltypes)):
                 del self.l_data_middlebondtorsion_coeffs[i_line]
             else:
-                tokens[0] = '@dihedral:type' + str(dihedraltype)
+                tokens[0] = Stringify(dihedraltype,
+                                      self.dihtypes_int2name,
+                                      '@','dihedral','type')
                 self.l_data_middlebondtorsion_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3672,7 +3652,9 @@ class Ltemplify(object):
             if (not (dihedraltype in self.needed_dihedraltypes)):
                 del self.l_data_endbondtorsion_coeffs[i_line]
             else:
-                tokens[0] = '@dihedral:type' + str(dihedraltype)
+                tokens[0] = Stringify(dihedraltype,
+                                      self.dihtypes_int2name,
+                                      '@','dihedral','type')
                 self.l_data_endbondtorsion_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3686,7 +3668,9 @@ class Ltemplify(object):
             if (not (dihedraltype in self.needed_dihedraltypes)):
                 del self.l_data_angletorsion_coeffs[i_line]
             else:
-                tokens[0] = '@dihedral:type' + str(dihedraltype)
+                tokens[0] = Stringify(dihedraltype,
+                                      self.dihtypes_int2name,
+                                      '@','dihedral','type')
                 self.l_data_angletorsion_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3700,7 +3684,9 @@ class Ltemplify(object):
             if (not (dihedraltype in self.needed_dihedraltypes)):
                 del self.l_data_angleangletorsion_coeffs[i_line]
             else:
-                tokens[0] = '@dihedral:type' + str(dihedraltype)
+                tokens[0] = Stringify(dihedraltype,
+                                      self.dihtypes_int2name,
+                                      '@','dihedral','type')
                 self.l_data_angleangletorsion_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3714,7 +3700,9 @@ class Ltemplify(object):
             if (not (dihedraltype in self.needed_dihedraltypes)):
                 del self.l_data_bondbond13_coeffs[i_line]
             else:
-                tokens[0] = '@dihedral:type' + str(dihedraltype)
+                tokens[0] = Stringify(dihedraltype,
+                                      self.dihtypes_int2name,
+                                      '@','dihedral','type')
                 self.l_data_bondbond13_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3773,17 +3761,13 @@ class Ltemplify(object):
             if i_b > self.max_needed_dihedraltype:
                 i_b = self.max_needed_dihedraltype
 
-            # if i_a == i_b:
-            #    i_str = '@dihedral:type'+str(i_a)
-            #    tokens[1] = i_str
-            # else:
-            #    i_str = '@{dihedral:type'+str(j_a)+'}*@{dihedral:type'+str(j_b)+'}'
-
             if ('*' in dihedraltype_str):
                 del self.l_in_dihedral_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
                     if (i in self.needed_dihedraltypes):
-                        tokens[1] = '@dihedral:type' + str(i)
+                        tokens[1] = Stringify(i,
+                                              self.dihtypes_int2name,
+                                              '@','dihedral','type')
                         self.l_in_dihedral_coeffs.insert(i_line,
                                                          (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
@@ -3792,7 +3776,9 @@ class Ltemplify(object):
                     raise InputError('Error: number of dihedral types in data file is not consistent with the\n'
                                      '       number of dihedral types you have define dihedral_coeffs for.\n')
                 if (i_a == i_b) and (i_a in self.needed_dihedraltypes):
-                    tokens[1] = '@dihedral:type' + str(i_a)
+                    tokens[1] = Stringify(i_a,
+                                          self.dihtypes_int2name,
+                                          '@','dihedral','type')
                     self.l_in_dihedral_coeffs[i_line] = (
                         ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
@@ -3819,31 +3805,21 @@ class Ltemplify(object):
             tokens[0] = '$improper:id' + str(improperid)
             tokens[1] = '@improper:type' + str(impropertype)
 
-            if impropertype in self.imptypes_int2name:
-                type_str = self.imptypes_int2name[impropertype]
-            else:
-                type_str = 'type' + str(impropertype)
-            if type_str.find(' ') != -1:
-                tokens[1] = '@{improper:' + type_str + '}'
-            else:
-                tokens[1] = '@improper:' + type_str
-            if self.atomids_int2name[atomid1].find(' ') != -1:
-                tokens[2] = '${atom:' + self.atomids_int2name[atomid1] + '}'
-            else:
-                tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
-            if self.atomids_int2name[atomid2].find(' ') != -1:
-                tokens[3] = '${atom:' + self.atomids_int2name[atomid2] + '}'
-            else:
-                tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
-            if self.atomids_int2name[atomid3].find(' ') != -1:
-                tokens[4] = '${atom:' + self.atomids_int2name[atomid3] + '}'
-            else:
-                tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
-            if self.atomids_int2name[atomid4].find(' ') != -1:
-                tokens[5] = '${atom:' + self.atomids_int2name[atomid4] + '}'
-            else:
-                tokens[5] = '$atom:' + self.atomids_int2name[atomid4]
-
+            tokens[1] = Stringify(impropertype,
+                                  self.imptypes_int2name,
+                                  '@','improper','type')
+            tokens[2] = Stringify(atomid1,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[3] = Stringify(atomid2,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[4] = Stringify(atomid3,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[5] = Stringify(atomid4,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
             self.needed_improperids.add(improperid)
             self.needed_impropertypes.add(impropertype)
             self.l_data_impropers[i_line] = (' ' * self.indent) + (' '.join(tokens))
@@ -3861,7 +3837,9 @@ class Ltemplify(object):
             if (not (impropertype in self.needed_impropertypes)):
                 del self.l_data_improper_coeffs[i_line]
             else:
-                tokens[0] = '@improper:type' + str(impropertype)
+                tokens[0] = Stringify(impropertype,
+                                      self.imptypes_int2name,
+                                      '@','improper','type')
                 self.l_data_improper_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3882,7 +3860,9 @@ class Ltemplify(object):
             if (not (impropertype in self.needed_impropertypes)):
                 del self.l_data_angleangle_coeffs[i_line]
             else:
-                tokens[0] = '@improper:type' + str(impropertype)
+                tokens[0] = Stringify(impropertype,
+                                      self.imptypes_int2name,
+                                      '@','improper','type')
                 self.l_data_angleangle_coeffs[i_line] = (
                     ' ' * self.indent) + (' '.join(tokens))
                 i_line += 1
@@ -3942,17 +3922,13 @@ class Ltemplify(object):
             if (i_b > self.max_needed_impropertype):
                 i_b = self.max_needed_impropertype
 
-            # if i_a == i_b:
-            #    i_str = '@improper:type'+str(i_a)
-            #    tokens[1] = i_str
-            # else:
-            #    i_str = '@{improper:type'+str(j_a)+'}*@{improper:type'+str(j_b)+'}'
-
             if ('*' in impropertype_str):
                 del self.l_in_improper_coeffs[i_line]
                 for i in range(i_a, i_b + 1):
                     if (i in self.needed_impropertypes):
-                        tokens[1] = '@improper:type' + str(i)
+                        tokens[1] = Stringify(i,
+                                              self.imptypes_int2name,
+                                              '@','improper','type')
                         self.l_in_improper_coeffs.insert(i_line,
                                                          (' ' * self.indent) + (' '.join(tokens)))
                         i_line += 1
@@ -3961,7 +3937,9 @@ class Ltemplify(object):
                     raise InputError('Error: number of improper types in data file is not consistent with the\n'
                                      '       number of improper types you have define improper_coeffs for.\n')
                 if (i_a == i_b) and (i_a in self.needed_impropertypes):
-                    tokens[1] = '@improper:type' + str(i_a)
+                    tokens[1] = Stringify(i_a,
+                                          self.imptypes_int2name,
+                                          '@','improper','type')
                     self.l_in_improper_coeffs[i_line] = (
                         ' ' * self.indent) + (' '.join(tokens))
                     i_line += 1
@@ -3994,16 +3972,22 @@ class Ltemplify(object):
             tokens[0] = '$cmap:id' + str(cmapid)
             #tokens[1] = '@cmap:type' + str(cmaptype)
             tokens[1] = str(cmaptype)
-            #tokens[2] = '$atom:id'+str(atomid1)
-            #tokens[3] = '$atom:id'+str(atomid2)
-            #tokens[4] = '$atom:id'+str(atomid3)
-            #tokens[5] = '$atom:id'+str(atomid4)
-            #tokens[6] = '$atom:id'+str(atomid5)
-            tokens[2] = '$atom:' + self.atomids_int2name[atomid1]
-            tokens[3] = '$atom:' + self.atomids_int2name[atomid2]
-            tokens[4] = '$atom:' + self.atomids_int2name[atomid3]
-            tokens[5] = '$atom:' + self.atomids_int2name[atomid4]
-            tokens[6] = '$atom:' + self.atomids_int2name[atomid5]
+            tokens[2] = Stringify(atomid1,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[3] = Stringify(atomid2,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[4] = Stringify(atomid3,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[5] = Stringify(atomid4,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+            tokens[5] = Stringify(atomid5,
+                                  self.atomids_int2name,
+                                  '$','atom','id')
+
 
             self.needed_cmapids.add(cmapid)
             self.needed_cmaptypes.add(cmaptype)
@@ -4067,16 +4051,17 @@ class Ltemplify(object):
         #        i_b = self.max_needed_cmaptype
         #    
         #    # if i_a == i_b:
-        #    #    i_str = '@cmap:type'+str(i_a)
-        #    #    tokens[1] = i_str
-        #    # else:
-        #    #    i_str = '@{cmap:type'+str(j_a)+'}*@{cmap:type'+str(j_b)+'}'
+        #         tokens[1] = Stringify(atomid5,
+        #                               self.cmaptypes_int2name,
+        #                               '@','cmap','type')
         #    
         #    if ('*' in cmaptype_str):
         #        del self.l_in_cmap_coeffs[i_line]
         #        for i in range(i_a, i_b + 1):
         #            if (i in self.needed_cmaptypes):
-        #                tokens[1] = '@cmap:type' + str(i)
+        #               tokens[1] = Stringify(i,
+        #                                     self.cmaptypes_int2name,
+        #                                     '@','cmap','type')
         #                self.l_in_cmap_coeffs.insert(i_line,
         #                                             (' ' * self.indent) + (' '.join(tokens)))
         #                i_line += 1
@@ -4085,7 +4070,9 @@ class Ltemplify(object):
         #            raise InputError('Error: number of cmap types in data file is not consistent with the\n'
         #                             '       number of cmap types you have define cmap_coeffs for.\n')
         #        if (i_a == i_b) and (i_a in self.needed_cmaptypes):
-        #            tokens[1] = '@cmap:type' + str(i_a)
+        #            tokens[1] = Stringify(i_a,
+        #                                  self.cmaptypes_int2name,
+        #                                  '@','cmap','type')
         #            self.l_in_cmap_coeffs[i_line] = (
         #                ' ' * self.indent) + (' '.join(tokens))
         #            i_line += 1
@@ -4233,24 +4220,53 @@ class Ltemplify(object):
 
                         if specifier_style == 'type':
                             if a == b:
-                                tokens.append('@atom:type' + str(a))
+                                var_descr = Stringify(a,
+                                                      self.atomtypes_int2name,
+                                                      '@','atom','type')
+                                tokens.append(var_descr)
                             else:
-                                tokens.append('@{atom:type' + str(a) +
-                                              '}:@{atom:type' + str(b) + '}')
+                                var_name_a = LookupVarName(a,
+                                                           self.atomtypes_int2name,
+                                                           'type')
+                                var_name_b = LookupVarName(b,
+                                                           self.atomtypes_int2name,
+                                                           'type')
+                                tokens.append('@{atom:' + var_name_a +
+                                              '}:@{atom:' + var_name_b + '}')
 
                         if specifier_style == 'id':
                             if a == b:
-                                tokens.append('$atom:id' + str(a))
+                                var_descr = Stringify(a,
+                                                      self.atomids_int2name,
+                                                      '$','atom','id')
+                                tokens.append(var_descr)
                             else:
-                                tokens.append('${atom:id' + str(a)
-                                              + '}:${atom:id' + str(b) + '}')
+                                var_name_a = LookupVarName(a,
+                                                           self.atomids_int2name,
+                                                           'id')
+                                var_name_b = LookupVarName(b,
+                                                           self.atomids_int2name,
+                                                           'id')
+                                tokens.append('${atom:' + var_name_a +
+                                              '}:${atom:' + var_name_b + '}')
+
 
                         if specifier_style == 'molecule':
                             if a == b:
-                                tokens.append('$mol:id' + str(a))
+                                var_descr = Stringify(a,
+                                                      self.molids_int2name,
+                                                      '$','mol','id')
+                                tokens.append(var_descr)
                             else:
-                                tokens.append('${mol:id' + str(a) +
-                                              '}:${mol:id' + str(b) + '}')
+                                var_name_a = LookupVarName(a,
+                                                           self.molids_int2name,
+                                                           'id')
+                                var_name_b = LookupVarName(b,
+                                                           self.molids_int2name,
+                                                           'id')
+                                tokens.append('${atom:' + var_name_a +
+                                              '}:${atom:' + var_name_b + '}')
+
 
                     # Commenting out next two lines.  (This is handled later.)
                     #self.l_in_group[i_line] = ' '.join(tokens)
@@ -4358,9 +4374,12 @@ class Ltemplify(object):
                         types_hi = min(int(pattern[1]), self.max_needed_atomtype)
                 for i in range(types_lo, types_hi+1):
                     if i in self.needed_atomtypes:
+                        var_descr = Stringify(i,
+                                              self.atomtypes_int2name,
+                                              '@','atom','type')
                         self.l_new_set_static_commands.append((' ' * self.indent) +
                                                               ' '.join(tokens[0:2])+' '+
-                                                              '@atom:type'+str(i) + ' ' +
+                                                              var_descr + ' ' +
                                                               ' '.join(tokens[3:]))
             elif tokens[1] == 'atom':
                 pattern = tokens[2].split('*')
@@ -4377,9 +4396,12 @@ class Ltemplify(object):
                         atomids_hi = min(int(pattern[1]), self.max_needed_atomid)
                 for i in range(atomids_lo, atomids_hi+1):
                     if i in self.needed_atomids:
+                        var_descr = Stringify(i,
+                                              self.atomids_int2name,
+                                              '$','atom','id')
                         self.l_new_set_commands.append((' ' * self.indent) +
                                                        ' '.join(tokens[0:2])+' '+
-                                                       str(i) + ' ' +
+                                                       var_descr + ' ' +
                                                        ' '.join(tokens[3:]))
             elif tokens[1] == 'mol':
                 pattern = tokens[2].split('*')
@@ -4396,8 +4418,11 @@ class Ltemplify(object):
                         molids_hi = min(int(pattern[1]), self.max_needed_molid)
                 for i in range(molids_lo, molids_hi+1):
                     if i in self.needed_molids:
+                        var_descr = Stringify(i,
+                                              self.molids_int2name,
+                                              '$','mol','id')
                         self.l_new_set_commands.append(' '.join(tokens[0:2])+' '+
-                                                       str(i) + ' ' +
+                                                       var_descr + ' ' +
                                                        ' '.join(tokens[3:]))
             elif tokens[0] == 'group':
                 group_name = tokens[2]
@@ -4441,7 +4466,10 @@ class Ltemplify(object):
                     # do not belong to the selection
                     btype = int(tokens[i_token])
                     if int(tokens[i_token]) in self.needed_angletypes:
-                        tokens[i_token] = '@angle:type' + tokens[i_token]
+                        var_descr = Stringify(btype,
+                                              self.angletypes_int2name,
+                                              '@','angle','type')
+                        tokens[i_token] = var_descr
                         i_token += 1
                         delete_this_command = False
                     else:
@@ -4459,7 +4487,10 @@ class Ltemplify(object):
                     # do not belong to the selection
                     btype = int(tokens[i_token])
                     if int(tokens[i_token]) in self.needed_bondtypes:
-                        tokens[i_token] = '@bond:type' + tokens[i_token]
+                        var_descr = Stringify(btype,
+                                              self.bondtypes_int2name,
+                                              '@','bond','type')
+                        tokens[i_token] = var_descr
                         i_token += 1
                         delete_this_command = False
                     else:
@@ -4477,7 +4508,10 @@ class Ltemplify(object):
                     # do not belong to the selection
                     btype = int(tokens[i_token])
                     if int(tokens[i_token]) in self.needed_atomtypes:
-                        tokens[i_token] = '@atom:type' + tokens[i_token]
+                        var_descr = Stringify(btype,
+                                              self.atomtypes_int2name,
+                                              '@','atom','type')
+                        tokens[i_token] = var_descr
                         i_token += 1
                         delete_this_command = False
                     else:
@@ -4492,6 +4526,17 @@ class Ltemplify(object):
             #    delete_this_command = True
 
             if 'mol' in tokens:
+                # What does the 'mol' keyword do?
+                #               https://lammps.sandia.gov/doc/fix_shake.html
+                #               (Excerpt below:)
+                #
+                # mol value = template-ID
+                # template-ID = ID of molecule template specified
+                #               in a separate molecule command.  See:
+                #
+                # ltemplify.py does not yet know how to parse files read by the
+                # molecule command (https://lammps.sandia.gov/doc/molecule.html)
+                # so I ignore these commands for now.  -Andrew 2019-11-11
                 delete_this_command = True
 
             if not (group_name in groups_needed):

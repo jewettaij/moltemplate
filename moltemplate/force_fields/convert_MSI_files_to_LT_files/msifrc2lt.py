@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # Author: Andrew Jewett (jewett.aij at g mail)
-# License: 3-clause BSD License  (See LICENSE.TXT)
 # Copyright (c) 2017, California Institute of Technology
 # All rights reserved.
 

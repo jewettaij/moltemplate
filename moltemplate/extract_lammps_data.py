@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2014
+
 """
 extract_lammps_data.py is a simple script which extracts sections of text from
 a LAMMPS data file.

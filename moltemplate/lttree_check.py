@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 
 # Author: Andrew Jewett (jewett.aij at g mail)
-#         http://www.moltemplate.org
-#         http://www.chem.ucsb.edu/~sheagroup
-# License: 3-clause BSD License  (See LICENSE.TXT)
-# Copyright (c) 2011, Regents of the University of California
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
 # All rights reserved.
 
 """

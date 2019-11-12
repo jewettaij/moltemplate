@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij@gmail.com)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
+
+
 man_page_text = """
 Usage (example):
 

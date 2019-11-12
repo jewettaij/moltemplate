@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2017, California Institute of Technology
+# All rights reserved.
+
 """
    Generate a moltemplate (.lt) file containing a definition of a polymer
    molecule whose monomers are located at the positions specified in

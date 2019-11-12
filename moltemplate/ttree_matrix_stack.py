@@ -1,9 +1,6 @@
 # Author: Andrew Jewett (jewett.aij@gmail.com)
-#         http://www.moltemplate.org
-#         http://www.chem.ucsb.edu/~sheagroup
-# License: 3-clause BSD License  (See LICENSE.TXT)
-# Copyright (c) 2012, Regents of the University of California
-# All rights reserved.
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
 
 import random, math
 from collections import deque

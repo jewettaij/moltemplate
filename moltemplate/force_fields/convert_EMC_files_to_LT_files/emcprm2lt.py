@@ -1,5 +1,10 @@
 #!/usr/bin/python
 
+# Author: David Stelter
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2017
+# All rights reserved.
+
 import os, sys, getopt
 import datetime
 

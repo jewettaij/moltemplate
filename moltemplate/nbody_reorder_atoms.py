@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
+
 """
    Reorder the atoms in the Angles section of a data file to make sure that
    atoms have a "canonical order" (for example the first atom has a lower

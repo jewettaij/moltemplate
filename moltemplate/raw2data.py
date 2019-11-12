@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Author: Andrew Jewett
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2014
+
 import sys, io
 
 try:

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
+
 """
    Get rid of lines containing duplicate copies of the same atom in the "Atoms"
    section of a LAMMPS data file.  Duplicate lines which occur later are

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
+
 """
    Get rid of lines containing duplicate bonded nbody interactions in the
    corresponding section of a LAMMPS data file (such as bonds, angles,

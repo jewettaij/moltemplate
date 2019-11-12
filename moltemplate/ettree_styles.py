@@ -1,4 +1,6 @@
-
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
 
 espt_delim_atom_fields = set(["pos", "type", "v", "f", 
                               "bond", 

@@ -1,43 +1,47 @@
 #!/usr/bin/env bash
 
-  # cleanup_moltemplate.sh
-  # This script attempts to remove irrelevant information from LAMMPS 
-  # input scripts and data files (such as extra, unneeded atom types 
-  # and force field parameters).
-  #
-  # Unfortunately, the system.data and system.in.settings file which are
-  # created by moltemplate.sh often contain a lot of irrelevant information,
-  # such as definition of parameters for atom types defined in some force field
-  # file that the user is using, but not present in the system they are building
-  #
-  # In my experience, this extra information appears to be mostly harmless.
-  # (Loading this information does not seem to slow down LAMMPS significantly.)
-  # 
-  # However it can make visualization difficult in VMD.  (Technically, this
-  # extra information can take up megabytes of space in the system.data
-  # and system.in.settings files.  Additionally, when you run LAMMPS, an O(n^2)
-  # sized table is allocated to store the parameters for interactions between 
-  # every possible pair of atom types (n atom types), and this occupies
-  # significantly more memory if n is large.  For example, the "oplsaa.lt" file
-  # and "oplsaa.prm" (TINKER-format) file both define almost 1000 atom types.)
-  #
-  # Usage: Invoke this script with no arguments, from a directory
-  #        containing these files:
-  #          system.data, system.in.init, system.in.settings, system.in.charges
-  #        It will modify these files to remove unnecessary atoms and 
-  #        parameters.  (If your files have other names, you must rename 
-  #        them to match moltemplate file name conventions.)
-  #
-  # DO NOT USE THIS SCRIPT ON SIMULATIONS CONTAINING MANY-BODY PAIR STYLES,
-  # DREIDING-STYLE HYDROGEN BONDS, OR SIMS NEEDING NON-STANDARD AUXILIARY FILES.
-  # (This script relies on ltemplify.py and inherits its limitations.)
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013
 
-  PATH_TO_DATA_FILE="."
+# cleanup_moltemplate.sh
+# This script attempts to remove irrelevant information from LAMMPS 
+# input scripts and data files (such as extra, unneeded atom types 
+# and force field parameters).
+#
+# Unfortunately, the system.data and system.in.settings file which are
+# created by moltemplate.sh often contain a lot of irrelevant information,
+# such as definition of parameters for atom types defined in some force field
+# file that the user is using, but not present in the system they are building
+#
+# In my experience, this extra information appears to be mostly harmless.
+# (Loading this information does not seem to slow down LAMMPS significantly.)
+# 
+# However it can make visualization difficult in VMD.  (Technically, this
+# extra information can take up megabytes of space in the system.data
+# and system.in.settings files.  Additionally, when you run LAMMPS, an O(n^2)
+# sized table is allocated to store the parameters for interactions between 
+# every possible pair of atom types (n atom types), and this occupies
+# significantly more memory if n is large.  For example, the "oplsaa.lt" file
+# and "oplsaa.prm" (TINKER-format) file both define almost 1000 atom types.)
+#
+# Usage: Invoke this script with no arguments, from a directory
+#        containing these files:
+#          system.data, system.in.init, system.in.settings, system.in.charges
+#        It will modify these files to remove unnecessary atoms and 
+#        parameters.  (If your files have other names, you must rename 
+#        them to match moltemplate file name conventions.)
+#
+# DO NOT USE THIS SCRIPT ON SIMULATIONS CONTAINING MANY-BODY PAIR STYLES,
+# DREIDING-STYLE HYDROGEN BONDS, OR SIMS NEEDING NON-STANDARD AUXILIARY FILES.
+# (This script relies on ltemplify.py and inherits its limitations.)
 
-  pushd "$PATH_TO_DATA_FILE"
+PATH_TO_DATA_FILE="."
 
-  mkdir new_lt_file_TMP
-  cd new_lt_file_TMP
+pushd "$PATH_TO_DATA_FILE"
+
+mkdir new_lt_file_TMP
+cd new_lt_file_TMP
 
   # now run ltemplify.py
 
@@ -97,7 +101,7 @@
   mv -f system.data system.in.* ../
   cd ../
 
-  # Finally, delete all of the temporary files we generated
-  rm -rf new_lt_file_TMP
-  popd
+# Finally, delete all of the temporary files we generated
+rm -rf new_lt_file_TMP
+popd
 

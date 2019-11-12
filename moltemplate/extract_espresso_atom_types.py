@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Author: Andrew Jewett (jewett.aij at g mail)
+# License: MIT License  (See LICENSE.md)
+# Copyright (c) 2013, Regents of the University of California
+
 import sys
 
 def main():
