@@ -2996,7 +2996,7 @@ class Ltemplify(object):
             assert(len(tokens) > 0)
             split_colon = tokens[0].split(':')
             assert(len(split_colon) == 2)
-            atomtype = Intify(split_colon[1])
+            atomtype = self.atomtypes_name2int[split_colon[1]]
             if ((not (atomtype in self.needed_atomtypes)) and
                 (not ((len(self.atomtype_selection) > 0) and
                       BelongsToSel(atomtype, self.atomtype_selection)))):
@@ -3012,10 +3012,10 @@ class Ltemplify(object):
             assert(len(tokens) > 0)
             split_colon_I = tokens[0].split(':')
             assert(len(split_colon_I) == 2)
-            atomtype_I = Intify(split_colon_I[1])
+            atomtype_I = self.atomtypes_name2int[split_colon_I[1]]
             split_colon_J = tokens[1].split(':')
             assert(len(split_colon_J) == 2)
-            atomtype_J = Intify(split_colon_J[1])
+            atomtype_J = self.atomtypes_name2int[split_colon_J[1]]
             if (((not (atomtype_I in self.needed_atomtypes)) and
                  (not ((len(self.atomtype_selection) > 0) and
                        BelongsToSel(atomtype_I, self.atomtype_selection))))
