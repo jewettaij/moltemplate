@@ -1,0 +1,32 @@
+   I moved the MARTINI examples to here and wrote this warning because
+I noticed an inconsistency between MARTINI files from different sources.
+I think this some of the 3body angles in these lipids are missing.
+
+   To verify this, try running the "README_setup.sh" in these two directories:
+
+DPPC_single
+DPPC_single_explicit_ff
+
+(or equilvalently run "cd moltemplate_files; moltemplate.sh system.lt")
+Edit the "system.data" file generated in both cases.
+Scroll down to the "Angles" section, and compare the number of angles generated.
+The version that uses the "martini.lt" force field (located in "DPPC_single")
+generates a "system.data" file which only contains 8 angles.
+The original ITP file describing the DPPC lipid that I get directly from
+the http://cgmartini.nl web site also contains only 8 angles.  See:
+http://www.cgmartini.nl/images/parameters/lipids/PC/DPPC/martini_v2.0_DPPC_01.itp
+
+   However the version manually created by Saeed Momeni Bashusqeh
+(located in the "DPPC_single_explicit_ff" directory) has 11 angles.  Visually
+speaking, this version (with 11 angles) looks and behaves much better.
+(Specifically: The other DOPC and DPPC examples have an extremely sharp 
+bend near the head group.  In the manual version, a stiff angular spring
+at this location prevents this sharp bend from ocurring.)
+
+   Which version is correct?
+   If you know the answer, please contact me.
+
+   Until the source of this discrepancy is resolved, I will leave these files
+in this directory with this warning.
+ 
+Andrew  2019-11-12

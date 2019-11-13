@@ -1,0 +1,10 @@
+import "lipid.lt"
+
+lipid = new DPPC
+
+write_once("Data Boundary") {
+  -30.0   30.0  xlo xhi
+  -30.0   30.0  ylo yhi
+  -30.0   30.0  zlo zhi
+}
+

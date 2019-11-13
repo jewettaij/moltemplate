@@ -26,7 +26,6 @@ force fields, and the
 [**mW**](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
 [**ELBA**(water)](./examples/coarse_grained/ELBAwater%2Bmethanol),
 [**oxDNA2**](./examples/coarse_grained/DNA_models),
-[**MARTINI**(lipids)](./examples/coarse_grained/MARTINI_examples/force_field_explicit),
 [**EFF**](./examples/misc_examples/explicit_electrons)
 molecular models (and others).
 This repository includes approximately 50 [examples](./examples).
