@@ -884,14 +884,17 @@ class Ltemplify(object):
 
                                 if comment_text != '':
 
-                                    comment_tokens = comment_text.split()
-                                    #comment_tokens = SplitQuotedString(comment_text,
-                                    #                                   comment_char='')
+                                    # Assume the entire comment is the atom type
+                                    atomtype_name = comment_text.strip()
 
-                                    # Assume the first word after the comment
-                                    # character is the atom type name
-                                    atomtype_name = (self.prepend_atom_type +
-                                                     comment_tokens[0])
+                                    # COMMENTING OUT:
+                                    ## Assume the first word after the comment
+                                    ## character is the atom type name
+                                    #comment_tokens = comment_text.split()
+                                    ##comment_tokens = SplitQuotedString(comment_text,
+                                    ##                                   comment_char='')
+                                    #atomtype_name = (self.prepend_atom_type +
+                                    #                 comment_tokens[0])
 
                                 if BelongsToSel(atomtype, self.atomtype_selection):
 
@@ -4730,15 +4733,36 @@ class Ltemplify(object):
             if self.remove_coeffs_from_data_file:
                 if len(self.l_data_pair_coeffs) > 0:
                     for line in self.l_data_pair_coeffs:
-                        tokens = line.strip().split()
+                        #tokens = line.strip().split()
+                        tokens = SplitQuotedString(line.strip(),
+                                                   quotes='{',
+                                                   delimiters=' \t\r\f\n',
+                                                   escape='\\',
+                                                   comment_char='#',
+                                                   endquote='}')
                         atomtype_str = tokens[0]
-                        self.l_in_pair_coeffs.append((' ' * self.cindent) + '  pair_coeff ' + atomtype_str +
-                                                ' ' + atomtype_str + ' ' + ' '.join(tokens[1:]))
+                        self.l_in_pair_coeffs.append((' ' * self.cindent) +
+                                                     '  pair_coeff ' +
+                                                     atomtype_str + ' ' +
+                                                     atomtype_str + ' ' +
+                                                     ' '.join(tokens[1:]))
                     self.l_data_pair_coeffs = []
                 if len(self.l_data_pairij_coeffs) > 0:
                     for line in self.l_data_pairij_coeffs:
-                        self.l_in_pair_coeffs.append(
-                            (' ' * self.cindent) + '  pair_coeff ' + line.strip())
+                        #tokens = line.strip().split()
+                        tokens = SplitQuotedString(line.strip(),
+                                                   quotes='{',
+                                                   delimiters=' \t\r\f\n',
+                                                   escape='\\',
+                                                   comment_char='#',
+                                                   endquote='}')
+                        atomtypeI_str = tokens[0]
+                        atomtypeJ_str = tokens[1]
+                        self.l_in_pair_coeffs.append((' ' * self.cindent) +
+                                                     '  pair_coeff ' +
+                                                     atomtypeI_str + ' ' +
+                                                     atomtypeJ_str + ' ' +
+                                                     ' '.join(tokens[2:]))
                         self.l_data_pairij_coeffs = []
 
             if len(self.l_in_pair_coeffs) > 0:

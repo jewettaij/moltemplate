@@ -158,7 +158,7 @@ is a modified version of the
 [shlex.py](https://docs.python.org/3/library/shlex.html) file.
 On 2019-11-12 I realized that this file was released using the
 [PSF license](https://docs.python.org/3/license.html).
-Hence ([ttree_lex.py](./moltemplate/ttree_lex.py)) must also use this license.
+Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
 
 Please contact me if this is a problem.
 It would probably not be difficult to write a new version of *ttree_lex.py*

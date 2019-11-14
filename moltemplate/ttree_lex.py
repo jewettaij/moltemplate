@@ -509,7 +509,8 @@ def SplitQuotedString(string,
                       quotes='\'\"',
                       delimiters=' \t\r\f\n',
                       escape='\\',
-                      comment_char='#'):
+                      comment_char='#',
+                      endquote=None):
     tokens = []
     token = ''
     reading_token = True
@@ -535,12 +536,27 @@ def SplitQuotedString(string,
             else:
                 escaped_state = True
                 # and leave c (the '\' character) out of token
+        elif (c == quote_state) and (not escaped_state) and (quote_state != None):
+            quote_state = None
+            if include_endquote:
+                token += c
         elif (c in quotes) and (not escaped_state):
-            if (quote_state != None):
-                if (c == quote_state):
-                    quote_state = None
-            else:
-                quote_state = c
+            if quote_state == None:
+                if endquote != None:
+                    quote_state = endquote
+                else:
+                    quote_state = c
+                # Now deal with strings like
+                #    a "b" "c d" efg"h i j"
+                # Assuming quotes='"', then we want this to be split into:
+                #    ['a', 'b', 'c d', 'efg"h i j"']
+                # ...in other words, include the end quote if the token did
+                #    not begin with a quote
+                include_endquote = False
+                if token != '':
+                    # if this is not the first character in the token
+                    include_endquote = True
+                
             token += c
             reading_token = True
         else:

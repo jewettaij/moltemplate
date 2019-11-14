@@ -3,6 +3,8 @@
 test_ltemplify() {
   cd tests/
   cp -r ../examples/file_conversion_examples/convert_LAMMPS_to_LT_examples/cnad-cnt .
+
+    # test for basic ltemplify.py functionality
     cd cnad-cnt
       bash README_step1_run_ltemplify.sh
       assertTrue "cnt.lt file not created" "[ -s cnt.lt ]"
@@ -27,6 +29,99 @@ test_ltemplify() {
       assertTrue "system.data missing dihedrals" "[ $NUM_DIHEDRALS -gt 0 ]"
     cd ../
     rm -rf cnad-cnt
+
+    # test for the ability to infer type names from comments
+    mkdir test_parse_comments
+    cp input_script*.in input_data*.data test_parse_comments/
+    cd test_parse_comments
+      ltemplify.py input_script_w_coeffs.in input_data_no_coeffs.data > out.lt
+      NUM_PAIR_COEFFS=`awk "/pair_coeff/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks pair_coeffs" "[ $NUM_PAIR_COEFFS -gt 0 ]"
+      FOUND_GROUP_COMMAND=`awk "/group gEthylenes/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the group command" "[ $FOUND_GROUP_COMMAND -gt 0 ]"
+      FOUND_SHAKE_COMMAND=`awk "/fix fHCbonds gEthylenes shake/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the shake command" "[ $FOUND_SHAKE_COMMAND -gt 0 ]"
+      FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
+      N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output has not enough C atoms" "[ $NUM_PAIR_COEFFS -eq 28 ]"
+      N_spaces_ATOM_NAMES=`awk "/atom:H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like atom type names with spaces" "[ $N_spaces_ATOM_NAMES -eq 29 ]"
+      N_spaces_BOND_NAMES=`awk "/bond:C_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like bond type names with spaces" "[ $N_spaces_BOND_NAMES -eq 6 ]"
+      N_spaces_ANGLE_NAMES=`awk "/angle:H_C_C spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like angle type names with spaces" "[ $N_spaces_ANGLE_NAMES -eq 5 ]"
+      N_spaces_DIHEDRAL_NAMES=`awk "/dihedral:H_C_C_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like dihedral type names with spaces" "[ $N_spaces_DIHEDRAL_NAMES -eq 5 ]"
+      N_spaces_IMPROPER_NAMES=`awk "/improper:C_H_H_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like improper type names with spaces" "[ $N_spaces_IMPROPER_NAMES -eq 7 ]"
+    cd ../
+    rm -rf test_parse_comments/
+
+    mkdir test_parse_comments
+    cp input_script*.in input_data*.data test_parse_comments/
+    cd test_parse_comments
+      ltemplify.py input_script_no_coeffs.in input_data_w_coeffs.data > out.lt
+      NUM_PAIR_COEFFS=`awk "/pair_coeff/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks pair_coeffs" "[ $NUM_PAIR_COEFFS -gt 0 ]"
+      FOUND_GROUP_COMMAND=`awk "/group gEthylenes/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the group command" "[ $FOUND_GROUP_COMMAND -gt 0 ]"
+      FOUND_SHAKE_COMMAND=`awk "/fix fHCbonds gEthylenes shake/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the shake command" "[ $FOUND_SHAKE_COMMAND -gt 0 ]"
+      FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
+      N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output has not enough C atoms" "[ $NUM_PAIR_COEFFS -eq 28 ]"
+      N_spaces_ATOM_NAMES=`awk "/atom:H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like atom type names with spaces" "[ $N_spaces_ATOM_NAMES -eq 29 ]"
+      N_spaces_BOND_NAMES=`awk "/bond:C_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like bond type names with spaces" "[ $N_spaces_BOND_NAMES -eq 6 ]"
+      N_spaces_ANGLE_NAMES=`awk "/angle:H_C_C spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like angle type names with spaces" "[ $N_spaces_ANGLE_NAMES -eq 5 ]"
+      N_spaces_DIHEDRAL_NAMES=`awk "/dihedral:H_C_C_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like dihedral type names with spaces" "[ $N_spaces_DIHEDRAL_NAMES -eq 5 ]"
+      N_spaces_IMPROPER_NAMES=`awk "/improper:C_H_H_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like improper type names with spaces" "[ $N_spaces_IMPROPER_NAMES -eq 7 ]"
+    cd ../
+    rm -rf test_parse_comments/
+
+    mkdir test_parse_comments
+    cp input_script*.in input_data*.data test_parse_comments/
+    cd test_parse_comments
+      ltemplify.py -datacoeffs input_script_no_coeffs.in input_data_w_coeffs.data > out.lt
+      FOUND_DATA_PAIR_COEFFS=`awk "/Pair Coeffs/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks a Data Pair Coeffs section" "[ $FOUND_DATA_PAIR_COEFFS -gt 0 ]"
+      FOUND_DATA_PAIRIJ_COEFFS=`awk "/PairIJ Coeffs/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks a Data PairIJ Coeffs section" "[ $FOUND_DATA_PAIRIJ_COEFFS -gt 0 ]"
+      FOUND_DATA_BOND_COEFFS=`awk "/Bond Coeffs/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks a Data Bond Coeffs section" "[ $FOUND_DATA_BOND_COEFFS -gt 0 ]"
+      FOUND_DATA_ANGLE_COEFFS=`awk "/Angle Coeffs/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks a Data Angle Coeffs section" "[ $FOUND_DATA_ANGLE_COEFFS -gt 0 ]"
+      FOUND_DATA_DIHEDRAL_COEFFS=`awk "/Dihedral Coeffs/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks a Data Dihedral Coeffs section" "[ $FOUND_DATA_DIHEDRAL_COEFFS -gt 0 ]"
+      FOUND_DATA_IMPROPER_COEFFS=`awk "/Improper Coeffs/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output lacks a Data Improper Coeffs section" "[ $FOUND_DATA_IMPROPER_COEFFS -gt 0 ]"
+      FOUND_GROUP_COMMAND=`awk "/group gEthylenes/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the group command" "[ $FOUND_GROUP_COMMAND -gt 0 ]"
+      FOUND_SHAKE_COMMAND=`awk "/fix fHCbonds gEthylenes shake/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the shake command" "[ $FOUND_SHAKE_COMMAND -gt 0 ]"
+      FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
+      N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py output has not enough C atoms" "[ $NUM_PAIR_COEFFS -eq 28 ]"
+      N_spaces_ATOM_NAMES=`awk "/atom:H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like atom type names with spaces" "[ $N_spaces_ATOM_NAMES -eq 29 ]"
+      N_spaces_BOND_NAMES=`awk "/bond:C_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like bond type names with spaces" "[ $N_spaces_BOND_NAMES -eq 6 ]"
+      N_spaces_ANGLE_NAMES=`awk "/angle:H_C_C spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like angle type names with spaces" "[ $N_spaces_ANGLE_NAMES -eq 5 ]"
+      N_spaces_DIHEDRAL_NAMES=`awk "/dihedral:H_C_C_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like dihedral type names with spaces" "[ $N_spaces_DIHEDRAL_NAMES -eq 5 ]"
+      N_spaces_IMPROPER_NAMES=`awk "/improper:C_H_H_H spaces/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py doesn't like improper type names with spaces" "[ $N_spaces_IMPROPER_NAMES -eq 7 ]"
+    cd ../
+    rm -rf test_parse_comments/
+
   cd ../
 }
 

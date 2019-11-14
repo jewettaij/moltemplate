@@ -34,6 +34,7 @@ data_angle_coeffs = "Data Angle Coeffs"
 data_dihedral_coeffs = "Data Dihedral Coeffs"
 data_improper_coeffs = "Data Improper Coeffs"
 data_pair_coeffs = "Data Pair Coeffs"
+data_pairij_coeffs = "Data PairIJ Coeffs"
 
 # interactions-by-type (not id. This is not part of the LAMMPS standard.)
 data_bonds_by_type = "Data Bonds By Type"
