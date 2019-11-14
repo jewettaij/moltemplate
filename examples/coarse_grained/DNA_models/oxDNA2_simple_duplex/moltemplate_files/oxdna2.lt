@@ -80,7 +80,7 @@ OXDNA2 {
     }
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f 1.1 0.85 0.4  1.0 0.0 0.0 0.0
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
     }
   }
 
@@ -92,7 +92,7 @@ OXDNA2 {
     }
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f 1.1 0.85 0.4  1.0 0.0 0.0 0.0
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
     }
   }
 
@@ -105,7 +105,7 @@ OXDNA2 {
 
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f 1.1 0.85 0.4  1.0 0.0 0.0 0.0
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
     }
   }
 
@@ -117,17 +117,36 @@ OXDNA2 {
     }
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f 1.1 0.85 0.4  1.0 0.0 0.0 0.0
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
     }
   }
 
 
-  # We can also construct "monomers" consisting of base pairs, 
-  # useful for building double-stranded DNA.  (For example using
-  # "genpoly_lt.py").  It does not matter if the atoms in the
-  # monomer are covalently bonded to eachother.  (In this case,
-  # the atoms in the forward and reverse strands will end up
-  # getting assigned to different molecule-IDs: "f" and "r".)
+  # We can also construct "monomers" consisting of base pairs convenient
+  # for building double-stranded DNA.  (Moltemplate does not care if the
+  # atoms in each "monomer" object are covalently bonded to eachother.)
+  # These monomers are named "AT", "TA", "CG", "GC".
+  # Suppose you build a polymer using this sequence of commands
+  # monomers[0] = new AT
+  # monomers[1] = new AT.move(0,0,0.332).rot(34.3,0,0,1)
+  # monomers[2] = new CG.move(0,0,0.664).rot(68.6,0,0,1)
+  # monomers[3] = new CG.move(0,0,0.996).rot(102.9,0,0,1)
+  # monomers[4] = new TA.move(0,0,1.328).rot(137.2,0,0,1)
+  # Then the "f" strand ("f"<->"forward strand") will have this sequence: AACCT
+  #  and the "r" strand ("r"<->"reverse strand") will have this sequence: TTGGA
+  #
+  # Note: The "genpoly_lt.py" program can generate long lists of "new" commands
+  #       automatically using any sequence and a geometric curve you provide.
+  #       (It can also add bonds linking the backbone atoms together.)
+  # Note: When double-stranded DNA polymers are built this way, each
+  #       strand will have the same LAMMPS molecule-ID.  ("$mol:...")
+  #       For most users this is not an issue, since molecule-IDs are
+  #       typically only used for visualization and post-processing.
+  #       If you want the two strands to have different molecule-IDs,
+  #       then you will build the two polymers independently and make
+  #       sure they wrap around each other in a realistic way.
+  #       (This is not difficult.  Moltemplate includes examples of
+  #        double-stranded DNA built this way as well.)
 
   AT {
 
@@ -141,8 +160,8 @@ OXDNA2 {
 
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f  1.1 0.85 0.45  1.0 0.0 0.0 0.0
-      $atom:r  1.1 0.85 0.45  0.0 0.0 1.0 0.0
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
     }
   }
 
@@ -158,8 +177,8 @@ OXDNA2 {
 
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f  1.1 0.85 0.45  1.0 0.0 0.0 0.0
-      $atom:r  1.1 0.85 0.45  0.0 0.0 1.0 0.0
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
     }
   }
 
@@ -175,8 +194,8 @@ OXDNA2 {
 
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f  1.1 0.85 0.45  1.0 0.0 0.0 0.0
-      $atom:r  1.1 0.85 0.45  0.0 0.0 1.0 0.0
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
     }
   }
 
@@ -192,8 +211,8 @@ OXDNA2 {
 
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
-      $atom:f  1.1 0.85 0.45  1.0 0.0 0.0 0.0
-      $atom:r  1.1 0.85 0.45  0.0 0.0 1.0 0.0
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
     }
   }
 
