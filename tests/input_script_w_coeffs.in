@@ -1,0 +1,56 @@
+# ------------------------------- Initialization Section --------------------
+
+atom_style full
+units real
+bond_style harmonic
+angle_style harmonic
+dihedral_style opls
+improper_style harmonic
+pair_style lj/cut/coul/long 10.0 10.0
+pair_modify mix geometric
+special_bonds lj/coul 0.0 0.0 0.5
+kspace_style pppm 0.0001
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       lammps_data_file.data
+
+# ------------------------------- Settings Section --------------------------
+
+pair_coeff 1 1 0.076 3.55
+pair_coeff 2 2 0.03 2.42
+pair_coeff 1 2 0.05 2.90
+bond_coeff 1 340.0 1.08
+bond_coeff 2 549.0 1.34
+angle_coeff 1 35.0 117.0
+angle_coeff 2 35.0 120.0
+dihedral_coeff 1 0.0 14.0 0.0 0.0
+improper_coeff 1 15.0 180.0
+set type 1 charge -0.23
+set type 2 charge 0.115
+
+# ------------------------------- Run Section -------------------------------
+
+# -- Equilibration: part 1: initial minimization --
+
+# Note: In general, it's always a good idea to minimize the system at first.
+minimize 1.0e-5 1.0e-7 100000 400000
+
+# -- Equilibration part 2: temperature equilibration (NVT) --
+
+dump            dumpeq1 all custom 50 traj.lammpstrj id mol type x y z ix iy iz
+thermo_style    custom step temp pe etotal epair ebond eangle edihed press vol
+thermo          50
+thermo_modify   norm yes
+
+timestep        1.0
+
+group gEthylenes type 1 2
+fix fHCbonds gEthylenes shake 0.0001 20 10 b 1
+fix fxlan all langevin  900.0 900.0  120 48279
+fix fxnve all nve
+
+run             10000
+
+write_data   system_after_nvt.data
+
