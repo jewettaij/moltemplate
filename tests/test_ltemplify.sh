@@ -31,9 +31,8 @@ test_ltemplify() {
     rm -rf cnad-cnt
 
     # test for the ability to infer type names from comments
-    mkdir test_parse_comments
-    cp input_script*.in input_data*.data test_parse_comments/
-    cd test_parse_comments
+    cp -r test_ltemplify_files deleteme
+    cd deleteme
       ltemplify.py input_script_w_coeffs.in input_data_no_coeffs.data > out.lt
       NUM_PAIR_COEFFS=`awk "/pair_coeff/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py output lacks pair_coeffs" "[ $NUM_PAIR_COEFFS -gt 0 ]"
@@ -44,7 +43,7 @@ test_ltemplify() {
       FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
       N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
-      assertTrue "ltemplify.py output has not enough C atoms" "[ $NUM_PAIR_COEFFS -eq 28 ]"
+      assertTrue "ltemplify.py output has not enough C atoms" "[ $N_C_ATOM_NAMES -eq 28 ]"
       N_spaces_ATOM_NAMES=`awk "/atom:H spaces/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py doesn't like atom type names with spaces" "[ $N_spaces_ATOM_NAMES -eq 29 ]"
       N_spaces_BOND_NAMES=`awk "/bond:C_H spaces/{sum+=1} END{print sum}" < out.lt`
@@ -56,11 +55,10 @@ test_ltemplify() {
       N_spaces_IMPROPER_NAMES=`awk "/improper:C_H_H_H spaces/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py doesn't like improper type names with spaces" "[ $N_spaces_IMPROPER_NAMES -eq 7 ]"
     cd ../
-    rm -rf test_parse_comments/
+    rm -rf deleteme/
 
-    mkdir test_parse_comments
-    cp input_script*.in input_data*.data test_parse_comments/
-    cd test_parse_comments
+    cp -r test_ltemplify_files deleteme
+    cd deleteme
       ltemplify.py input_script_no_coeffs.in input_data_w_coeffs.data > out.lt
       NUM_PAIR_COEFFS=`awk "/pair_coeff/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py output lacks pair_coeffs" "[ $NUM_PAIR_COEFFS -gt 0 ]"
@@ -71,7 +69,7 @@ test_ltemplify() {
       FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
       N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
-      assertTrue "ltemplify.py output has not enough C atoms" "[ $NUM_PAIR_COEFFS -eq 28 ]"
+      assertTrue "ltemplify.py output has not enough C atoms" "[ $N_C_ATOM_NAMES -eq 28 ]"
       N_spaces_ATOM_NAMES=`awk "/atom:H spaces/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py doesn't like atom type names with spaces" "[ $N_spaces_ATOM_NAMES -eq 29 ]"
       N_spaces_BOND_NAMES=`awk "/bond:C_H spaces/{sum+=1} END{print sum}" < out.lt`
@@ -83,11 +81,10 @@ test_ltemplify() {
       N_spaces_IMPROPER_NAMES=`awk "/improper:C_H_H_H spaces/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py doesn't like improper type names with spaces" "[ $N_spaces_IMPROPER_NAMES -eq 7 ]"
     cd ../
-    rm -rf test_parse_comments/
+    rm -rf deleteme/
 
-    mkdir test_parse_comments
-    cp input_script*.in input_data*.data test_parse_comments/
-    cd test_parse_comments
+    cp -r test_ltemplify_files deleteme
+    cd deleteme
       ltemplify.py -datacoeffs input_script_no_coeffs.in input_data_w_coeffs.data > out.lt
       FOUND_DATA_PAIR_COEFFS=`awk "/Pair Coeffs/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py output lacks a Data Pair Coeffs section" "[ $FOUND_DATA_PAIR_COEFFS -gt 0 ]"
@@ -108,7 +105,7 @@ test_ltemplify() {
       FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
       N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
-      assertTrue "ltemplify.py output has not enough C atoms" "[ $NUM_PAIR_COEFFS -eq 28 ]"
+      assertTrue "ltemplify.py output has not enough C atoms" "[ $N_C_ATOM_NAMES -eq 28 ]"
       N_spaces_ATOM_NAMES=`awk "/atom:H spaces/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py doesn't like atom type names with spaces" "[ $N_spaces_ATOM_NAMES -eq 29 ]"
       N_spaces_BOND_NAMES=`awk "/bond:C_H spaces/{sum+=1} END{print sum}" < out.lt`
@@ -120,7 +117,7 @@ test_ltemplify() {
       N_spaces_IMPROPER_NAMES=`awk "/improper:C_H_H_H spaces/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py doesn't like improper type names with spaces" "[ $N_spaces_IMPROPER_NAMES -eq 7 ]"
     cd ../
-    rm -rf test_parse_comments/
+    rm -rf deleteme/
 
   cd ../
 }
