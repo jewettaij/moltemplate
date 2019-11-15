@@ -1,33 +1,62 @@
 import "oxdna2.lt"  # <-- defines "OXDNA2"
 
 
-# Now define the "PolymerAT21" molecule object.
-# (It consists of an array of "AT" base-pair "monomers".
-#  This double-stranded DNA model is represented by a single Polymer.
-#  Alternatively, if you prefer you can create one polymer for each
-#  strand of DNA.  That approach is slighly more tedious.)
-# (Once defined, we can make copies of it later.)
 
-PolymerAT21 inherits OXDNA2 {
+# Now define the "Polymer21" molecule object.
+# (This object is a double-stranded DNA and which is 21 base pairs long.)
+# Once defined, we can make copies of it later.
 
-  # Optional: Use "create_var{}" to share molecule-IDs between atoms in
-  # different monomers.  (See chapter 9.6 of the moltemplate manual.)
-  # (My apologies. I realize this detail is confusing.  If you
-  #  don't care about the molecule-ID numbers, comment this out.)
+Polymer21 inherits OXDNA2 {
+
+  # Optional: Use "create_var{ $mol }" to insure that all of the atoms in this
+  #  polymer share the same molecule-IDs.  (See chapter 9.6 of the manual.)
+  #  My apologies. I realize this detail is confusing.  Most uers don't care
+  #  about the molecule-ID numbers and can safely comment out this next line.)
 
   create_var{ $mol }
 
 
   # ----- IMPORTANT: -----
-  # Now create an array of 21 "AT monomers"
-  # (an array of base pairs consisting of "A" and "T")
-  # Each successive AT "monomer" will be shifted (in the +Z
+  # Now create an array of 21 base-pair "monomers", and specify their
+  # location and orientation
+  # Each successive "monomer" will be shifted (in the +Z
   # direction) by 0.332, and rotated by 34.3 degrees around Z.
 
-  monomers = new AT[21].move(0,0,0.332).rot(34.3,0,0,1)
+  new AT
+  new CG.rot(34.3,0,0,1).move(0,0,0.332)
+  new GC.rot(68.6,0,0,1).move(0,0,0.664)
+  new TA.rot(102.9,0,0,1).move(0,0,0.996)
+  new AT.rot(137.2,0,0,1).move(0,0,1.328)
+  new CG.rot(171.5,0,0,1).move(0,0,1.66)
+  new GC.rot(205.8,0,0,1).move(0,0,1.992)
+  new TA.rot(240.1,0,0,1).move(0,0,2.324)
+  new AT.rot(274.4,0,0,1).move(0,0,2.656)
+  new CG.rot(308.7,0,0,1).move(0,0,2.988)
+  new GC.rot(343.0,0,0,1).move(0,0,3.320)
+  new TA.rot(377.3,0,0,1).move(0,0,3.652)
+  new AT.rot(411.6,0,0,1).move(0,0,3.984)
+  new CG.rot(445.9,0,0,1).move(0,0,4.316)
+  new GC.rot(480.2,0,0,1).move(0,0,4.648)
+  new TA.rot(514.5,0,0,1).move(0,0,4.98)
+  new AT.rot(548.8,0,0,1).move(0,0,5.312)
+  new CG.rot(583.1,0,0,1).move(0,0,5.644)
+  new GC.rot(617.4,0,0,1).move(0,0,5.976)
+  new TA.rot(651.7,0,0,1).move(0,0,6.308)
+  new AT.rot(686.0,0,0,1).move(0,0,6.640)
+  new CG.rot(720.3,0,0,1).move(0,0,6.972)
+
+  # Note: In this case, each "Polymer" object actually contains two strands
+  #       of DNA (denoted "f"<-->forward and "r"<-->reverse).
+  # The forward strand has sequence: ACGTACGTACGTACGTACGTAC
+  # The reverse strand has sequence: GTACGTACGTACGTACGTACGT (opposite direction)
+  # There is also a version of this example where two different "Polymer"
+  # objects are generated (wrapped around each other).  Both behave
+  # the same way.  You can generate polymers like this automatically using
+  # the "genpoly_lt.py" python script (which is included with moltemplate).
 
   # optional: shift all of the monomers in the -Z direction
   # (so that the resulting polymer is centered at 0,0,0)
+
   monomers[*].move(0,0,-3.332)
 
   # ----- IMPORTANT: -----
@@ -80,5 +109,5 @@ PolymerAT21 inherits OXDNA2 {
     $bond:b39 @bond:Backbone $atom:monomers[19]/f $atom:monomers[20]/f
     $bond:b40 @bond:Backbone $atom:monomers[19]/r $atom:monomers[20]/r
   }
-} # PolymerAT21
+} # Polymer21
 

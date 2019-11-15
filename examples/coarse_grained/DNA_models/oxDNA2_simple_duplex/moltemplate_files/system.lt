@@ -1,6 +1,6 @@
-import "polymer.lt"  # <-- defines "PolymerAT21"
+import "polymer.lt"  # <-- defines "Polymer21"
 
-polymer = new PolymerAT21
+polymer = new Polymer21
 
 # At some point we must indicate the
 write_once("Data Boundary") {

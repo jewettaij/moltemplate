@@ -548,6 +548,7 @@ def RecursiveJoin(tokens_expr, delimiter=''):
         return ''.join(text_lstr, delimiter)
 
 
+
 #----------------------------------------------------------
 #----------------------------------------------------------
 #    The following code is specific to ttree.
@@ -576,11 +577,13 @@ def PtknsToStr(path_tokens):
     return text
 
 
+
 def StrToPtkns(path_string):
     """ The inverse of PtknsToStr(), this function splits a string like
         '/usr/local/../bin/awk' into ['usr','local','..','bin','awk'].
         For illustrative purposes only. Use text.split('/') directly instead."""
     return orig_text.split('/')
+
 
 
 def FindChild(name, node, dbg_loc):
@@ -638,6 +641,7 @@ def FindChild(name, node, dbg_loc):
     return None
 
 
+
 def FollowPath(path_tokens, starting_node, dbg_loc):
     """ FollowPath() returns the "last_node", a node whose position in the
         tree is indicated by a list of path_tokens, describing the names
@@ -678,6 +682,37 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         i0 = 1  # <- We've just processed the first token.  Skip over it later.
     else:
         i0 = 0
+        if ((not (path_tokens[0] in ('.','..','...'))) and
+            isinstance(starting_node,StaticObj)):
+            # In programming languages, when you want to instantiate a copy of
+            # a class (or refer to that type of class), you don't have to
+            # specify where that class was defined.  For example in C++
+            # class A { contents omitted.. };
+            # class B { contents omitted.. };
+            # class C { A a; B b; };
+            # In this example, in the definition of class C, the compiler knows
+            # that a is a variable of type "A", and b is a variable of type "B",
+            # and both "A" and "B" are defined outside the definition of "C".
+            # In order to get the same kind of behavior in moltemplate, we
+            # can insert an ellipsis "..." before the first token.
+
+            path_tokens.insert(0, '...')
+
+            # This is a hack, but it works.  Note that we should only do this
+            # for StaticObj nodes, because only these kinds of nodes correspond
+            # to class/object definitions.  The other kinds of nodes,
+            # InstanceObj nodes, correspond to instances (copies) of classes
+            # that were defined already.  We don't insert "..." in that case
+            # because it's almost never a good idea for members of an instance
+            # of a class to know about the members of the class that
+            # instantiated it (ie. the parent node in the instance tree).
+            # (The only exception I can think of is the "$mol:..." syntax
+            #  which is used to share the molecule-ID counter for atoms in
+            #  different instances of a molecule.  But in that case the user
+            #  must explicitly include "...".  We don't do this implicitly.)
+            # We also don't do this if the user explicitly wants to specify
+            # the exact path of the node.  (They can do that by beginning the
+            # path with '.', '..', '...').
 
     i = i0
     while i < len(path_tokens):
@@ -751,6 +786,7 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
     return len(path_tokens), node
 
 
+
 def PtknsToNode(path_tokens, starting_node, dbg_loc):
     """ PtknsToNode() is identical to def FollowPath() except
     that it raises syntax-error exceptions if the path is undefined."""
@@ -813,9 +849,11 @@ def PtknsToNode(path_tokens, starting_node, dbg_loc):
     return last_node
 
 
+
 def StrToNode(obj_name, starting_node, dbg_loc):
     path_tokens = obj_name.split('/')
     return PtknsToNode(path_tokens, starting_node, dbg_loc)
+
 
 
 def NodeListToPtkns(node_list, dbg_loc=None):
@@ -837,6 +875,7 @@ def NodeListToPtkns(node_list, dbg_loc=None):
                                      node_list[i - 1].name, '/') + '\")\n'
                                  '       This could be an internal error.')
     return path_tokens
+
 
 
 def NodeListToStr(node_list, dbg_loc=None):
@@ -863,6 +902,7 @@ def NodeListToStr(node_list, dbg_loc=None):
     return path_str
 
 
+
 def NodeToPtkns(node):
     ptkns = []
     nd = node
@@ -871,6 +911,7 @@ def NodeToPtkns(node):
         nd = nd.parent
     ptkns.reverse()
     return ptkns
+
 
 
 def NodeToStr(node):
@@ -885,6 +926,7 @@ def NodeToStr(node):
         path_str += '/' + ptkns[i]
         i += 1
     return path_str
+
 
 
 def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
@@ -950,6 +992,7 @@ def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
     return cat_node_ptkns + leaf_node_ptkns
 
 
+
 def CanonicalCatName(cat_name, cat_node, dbg_loc=None):
     # Determine the path of the cat node
     tkns = NodeToPtkns(cat_node)
@@ -961,6 +1004,7 @@ def CanonicalCatName(cat_name, cat_node, dbg_loc=None):
     return '/'.join(tkns)
 
 
+
 def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
     tkns = CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc)
     descr_str = tkns[0]
@@ -970,6 +1014,7 @@ def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
         else:
             descr_str += '/' + tkns[i]
     return descr_str
+
 
 
 def CollapsePath(path_tokens):
@@ -1000,6 +1045,7 @@ def CollapsePath(path_tokens):
         return ndelete  # <-- useful to let caller know an error ocurred
 
     return new_ptkns
+
 
 
 def FindCatNode(category_name, current_node, srcloc):
@@ -1037,6 +1083,7 @@ def FindCatNode(category_name, current_node, srcloc):
     return cat_node
 
 
+
 def RemoveNullTokens(in_ptkns):
     """This function just gets rid of useless empty tokens in the path ('', '.')
        (However if '' appears at the beginning of a path, we leave it alone.)
@@ -1050,6 +1097,7 @@ def RemoveNullTokens(in_ptkns):
     # (I'm sure there are ways to write this in python
     #  using fewer lines of code.  Sigh.)
     return out_ptkns
+
 
 
 def DescrToCatLeafPtkns(descr_str, dbg_loc):
@@ -1144,6 +1192,7 @@ def DescrToCatLeafPtkns(descr_str, dbg_loc):
     #  and replaced it with:
 
     return cat_name, RemoveNullTokens(cat_ptkns), leaf_ptkns
+
 
 
 def DescrToCatLeafNodes(descr_str,
@@ -1587,6 +1636,7 @@ def DescrToCatLeafNodes(descr_str,
     return cat_name, cat_node, leaf_node
 
 
+
 def DescrToVarBinding(descr_str, context_node, dbg_loc):
     """ DescrToVarBinding() is identical to LookupVar(), but it has a name
     that is harder to remember.  See comment for LookupVar() below.
@@ -1617,6 +1667,7 @@ def DescrToVarBinding(descr_str, context_node, dbg_loc):
     return var_binding
 
 
+
 # Wrappers:
 
 def LookupVar(descr_str, context_node, dbg_loc):
@@ -1632,6 +1683,7 @@ def LookupVar(descr_str, context_node, dbg_loc):
     return DescrToVarBinding(descr_str, context_node, dbg_loc)
 
 
+
 def LookupNode(obj_name, starting_node, dbg_loc):
     """ LookupNode() parses through a string like
           '../ClassA/NestedClassB'
@@ -1645,6 +1697,7 @@ def LookupNode(obj_name, starting_node, dbg_loc):
 
         """
     return StrToNode(obj_name, starting_node, dbg_loc)
+
 
 
 class SimpleCounter(object):
@@ -1670,6 +1723,7 @@ class SimpleCounter(object):
 
     def __copy__(self):  # makes a (deep) copy of the counter in its current state
         return SimpleCounter(self.n + self.nincr, self.nincr)
+
 
 
 class Category(object):
@@ -1723,6 +1777,7 @@ class Category(object):
             self.reserved_values = OrderedDict()
         else:
             self.reserved_values = reserved_values
+
 
 
 class StaticObj(object):
@@ -3247,6 +3302,7 @@ def RandomSelect(entries, weights):
     return entries[i]
 
 
+
 class InstanceObjBasic(object):
     """ A simplified version of InstanceObj.
         See the documentation/comments for InstanceObj for more details.
@@ -3327,6 +3383,8 @@ class InstanceObjBasic(object):
         # vb##    del cat.bindings[self]
         # vb##    del self.var_bindings[N-i]
         # vb##self.var_bindings = None
+
+
 
 
 class InstanceObj(InstanceObjBasic):
