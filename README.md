@@ -4,6 +4,8 @@
 [![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](http://moltemplate.org)
 [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
 
+
+
 Moltemplate
 ===========
 
@@ -155,7 +157,7 @@ moltemplate is available under the terms of the [MIT license](LICENSE.md).
 
 The remaining file, ([ttree_lex.py](./moltemplate/ttree_lex.py)),
 is a modified version of the 
-[shlex.py](https://docs.python.org/3/library/shlex.html) file.
+[shlex.py](https://docs.python.org/3/library/shlex.html) library.
 On 2019-11-12 I realized that this file was released using the
 [PSF license](https://docs.python.org/3/license.html).
 Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
@@ -173,5 +175,5 @@ but otherwise compatible with the PSF, GPL, and LGPL licenses.*
 
 ## Funding
 
-Moltemplate is currently funded by NIH grant R01GM120604
+Moltemplate is currently funded by NIH grant T32-AI007354-29
 (and previously by NSF grant 1056587).
