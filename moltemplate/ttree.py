@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2016-12-21'
-g_version_str = '0.85.0'
+g_date_str = '2019-11-17'
+g_version_str = '0.86.1'
 
 
 class ClassReference(object):
@@ -669,6 +669,8 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         return 0, starting_node
 
     node = starting_node
+
+
     # Is this path a relative path, or a full path?
     # If the path-string began with '/', then it's a full path.  This means
     # that after processing by split('/'), the first token will be ''
@@ -693,12 +695,8 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
             # In this example, in the definition of class C, the compiler knows
             # that a is a variable of type "A", and b is a variable of type "B",
             # and both "A" and "B" are defined outside the definition of "C".
-            # In order to get the same kind of behavior in moltemplate, we
-            # can insert an ellipsis "..." before the first token.
-
-            path_tokens.insert(0, '...')
-
-            # This is a hack, but it works.  Note that we should only do this
+            #
+            # Note that we should only do this
             # for StaticObj nodes, because only these kinds of nodes correspond
             # to class/object definitions.  The other kinds of nodes,
             # InstanceObj nodes, correspond to instances (copies) of classes
@@ -714,6 +712,24 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
             # the exact path of the node.  (They can do that by beginning the
             # path with '.', '..', '...').
 
+            # Now search over the "children" of this node
+            # for one who's name matches path_tokens[0].
+            # If not found, then move up to the parent node's children.
+            # (This is not an exhaustive tree search. Only the nodes which
+            #  are immediate children of this node's parents are searched.)
+            while node != None:
+                child = FindChild(path_tokens[0], node, dbg_loc)
+                if child is None:
+                    node = node.parent
+                else:
+                    node = child
+                    i0 = 1
+                    break
+            if node == None:
+                node = starting_node
+
+
+
     i = i0
     while i < len(path_tokens):
 
@@ -727,7 +743,7 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
                 node = node.parent
             i += 1
 
-        elif path_tokens[i] == '...':
+        elif (path_tokens[i] == '...'):
 
             node_before_ellipsis = node
             if i == len(path_tokens) - 1:
@@ -2845,6 +2861,7 @@ class StaticObj(object):
                             self._ExtractSuffix(object_name, lex)
 
                         path_tokens = obj_descr_str.split('/')
+
                         i_last_ptkn, staticobj = FollowPath(path_tokens,
                                                             self,
                                                             lex.GetSrcLoc())
