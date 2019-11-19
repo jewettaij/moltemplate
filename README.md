@@ -11,7 +11,8 @@ Moltemplate
 
 ##  Description
 
-Moltemplate is a *general* cross-platform text-based molecule builder for
+[Moltemplate](http://moltemplate.org)
+is a *general* cross-platform text-based molecule builder for
 [**LAMMPS**](https://lammps.sandia.gov) and
 [**ESPResSo**](http://espressomd.org).
 Moltemplate was intended for building custom coarse-grained molecular models,

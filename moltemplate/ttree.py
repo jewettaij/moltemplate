@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2019-11-17'
-g_version_str = '0.86.1'
+g_date_str = '2019-11-18'
+g_version_str = '0.86.2'
 
 
 class ClassReference(object):
@@ -642,7 +642,7 @@ def FindChild(name, node, dbg_loc):
 
 
 
-def FollowPath(path_tokens, starting_node, dbg_loc):
+def FollowPath(path_tokens, starting_node, dbg_loc, prefer_leaf_nodes=False):
     """ FollowPath() returns the "last_node", a node whose position in the
         tree is indicated by a list of path_tokens, describing the names
         of nodes connecting "starting_node" to "last_node".
@@ -670,7 +670,6 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
 
     node = starting_node
 
-
     # Is this path a relative path, or a full path?
     # If the path-string began with '/', then it's a full path.  This means
     # that after processing by split('/'), the first token will be ''
@@ -685,7 +684,9 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
     else:
         i0 = 0
         if ((not (path_tokens[0] in ('.','..','...'))) and
-            isinstance(starting_node,StaticObj)):
+            isinstance(starting_node, StaticObj)):
+
+            # SPECIAL CASE: Refer to objects outside the current scope.
             # In programming languages, when you want to instantiate a copy of
             # a class (or refer to that type of class), you don't have to
             # specify where that class was defined.  For example in C++
@@ -712,11 +713,11 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
             # the exact path of the node.  (They can do that by beginning the
             # path with '.', '..', '...').
 
-            # Now search over the "children" of this node
-            # for one who's name matches path_tokens[0].
-            # If not found, then move up to the parent node's children.
-            # (This is not an exhaustive tree search. Only the nodes which
-            #  are immediate children of this node's parents are searched.)
+            # To search for objects outside the current scope, search over the
+            # "children" of the current node for one who's name matches
+            # path_tokens[0].  If not found, then move up to the parent node's
+            # children.  (This is not an exhaustive tree search. Only the nodes
+            # which are immediate children of this node's parents are searched.)
             while node != None:
                 child = FindChild(path_tokens[0], node, dbg_loc)
                 if child is None:
@@ -728,7 +729,7 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
             if node == None:
                 node = starting_node
 
-
+    ## Main code below:
 
     i = i0
     while i < len(path_tokens):
@@ -750,6 +751,13 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
                 return i, node_before_ellipsis
 
             search_target = path_tokens[i + 1]
+
+            # To search for objects outside the current scope, search over the
+            # "children" of the current node for one who's name matches
+            # path_tokens[i+1].  If not found, then move up to the parent node's
+            # children.  (This is not an exhaustive tree search. Only the nodes
+            # which are immediate children of this node's parents are searched.)
+
             # Now search over the "children" of this node
             # for one who's name matches path_tokens[i].
             # If not found, then move up to the parent node's children.
@@ -800,6 +808,40 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
                 break
 
     return len(path_tokens), node
+
+
+
+
+
+def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
+
+    # find out if the match occurs in the scope of an ancestor
+    # (I admit that I do this search twice, once here, and once in FollowPath()
+    #  which is not very efficient.  But fortunately I only do this for
+    #  StaticObj variables and there aren't ever very many of them.
+    #  The code is ugly though.)
+    node = starting_node
+    implied_ancestor = False
+    if ((not (leaf_ptkns[0] in ('.','..','...'))) and
+        isinstance(starting_node, StaticObj)):
+        while node != None:
+            child = FindChild(leaf_ptkns[0], node, dbg_loc)
+            if child is None:
+                node = node.parent
+            else:
+                implied_ancestor = True
+                break
+
+    i_last_ptkn, last_node = FollowPath(leaf_ptkns, starting_node, dbg_loc)
+    
+    if (implied_ancestor and
+        (len(last_node.children) > 0)):
+        return 0, starting_node
+    else:
+        return i_last_ptkn, last_node
+
+
+
 
 
 
@@ -1479,9 +1521,10 @@ def DescrToCatLeafNodes(descr_str,
     # before.  Think of "CA" as a variable placeholder.
     #
     # So we follow the path tokens as far as we can:
-    i_last_ptkn, last_node = FollowPath(leaf_ptkns,
-                                        leaf_start_node,
-                                        dbg_loc)
+
+    i_last_ptkn, last_node = FollowPathCounterVar(leaf_ptkns,
+                                                  leaf_start_node,
+                                                  dbg_loc)
 
     # Did we find the node?
     if i_last_ptkn == len(leaf_ptkns):
