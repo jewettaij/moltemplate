@@ -24,27 +24,27 @@ Polymer21 inherits OXDNA2 {
   # Each successive "monomer" will be shifted (in the +Z
   # direction) by 0.332, and rotated by 34.3 degrees around Z.
 
-  monomer[0] = new AT
-  monomer[1] = new CG.rot(34.3,0,0,1).move(0,0,0.332)
-  monomer[2] = new GC.rot(68.6,0,0,1).move(0,0,0.664)
-  monomer[3] = new TA.rot(102.9,0,0,1).move(0,0,0.996)
-  monomer[4] = new AT.rot(137.2,0,0,1).move(0,0,1.328)
-  monomer[5] = new CG.rot(171.5,0,0,1).move(0,0,1.66)
-  monomer[6] = new GC.rot(205.8,0,0,1).move(0,0,1.992)
-  monomer[7] = new TA.rot(240.1,0,0,1).move(0,0,2.324)
-  monomer[8] = new AT.rot(274.4,0,0,1).move(0,0,2.656)
-  monomer[9] = new CG.rot(308.7,0,0,1).move(0,0,2.988)
-  monomer[10] = new GC.rot(343.0,0,0,1).move(0,0,3.320)
-  monomer[11] = new TA.rot(377.3,0,0,1).move(0,0,3.652)
-  monomer[12] = new AT.rot(411.6,0,0,1).move(0,0,3.984)
-  monomer[13] = new CG.rot(445.9,0,0,1).move(0,0,4.316)
-  monomer[14] = new GC.rot(480.2,0,0,1).move(0,0,4.648)
-  monomer[15] = new TA.rot(514.5,0,0,1).move(0,0,4.98)
-  monomer[16] = new AT.rot(548.8,0,0,1).move(0,0,5.312)
-  monomer[17] = new CG.rot(583.1,0,0,1).move(0,0,5.644)
-  monomer[18] = new GC.rot(617.4,0,0,1).move(0,0,5.976)
-  monomer[19] = new TA.rot(651.7,0,0,1).move(0,0,6.308)
-  monomer[20] = new AT.rot(686.0,0,0,1).move(0,0,6.640)
+  monomers[0] = new AT
+  monomers[1] = new CG.rot(34.3,0,0,1).move(0,0,0.332)
+  monomers[2] = new GC.rot(68.6,0,0,1).move(0,0,0.664)
+  monomers[3] = new TA.rot(102.9,0,0,1).move(0,0,0.996)
+  monomers[4] = new AT.rot(137.2,0,0,1).move(0,0,1.328)
+  monomers[5] = new CG.rot(171.5,0,0,1).move(0,0,1.66)
+  monomers[6] = new GC.rot(205.8,0,0,1).move(0,0,1.992)
+  monomers[7] = new TA.rot(240.1,0,0,1).move(0,0,2.324)
+  monomers[8] = new AT.rot(274.4,0,0,1).move(0,0,2.656)
+  monomers[9] = new CG.rot(308.7,0,0,1).move(0,0,2.988)
+  monomers[10] = new GC.rot(343.0,0,0,1).move(0,0,3.320)
+  monomers[11] = new TA.rot(377.3,0,0,1).move(0,0,3.652)
+  monomers[12] = new AT.rot(411.6,0,0,1).move(0,0,3.984)
+  monomers[13] = new CG.rot(445.9,0,0,1).move(0,0,4.316)
+  monomers[14] = new GC.rot(480.2,0,0,1).move(0,0,4.648)
+  monomers[15] = new TA.rot(514.5,0,0,1).move(0,0,4.98)
+  monomers[16] = new AT.rot(548.8,0,0,1).move(0,0,5.312)
+  monomers[17] = new CG.rot(583.1,0,0,1).move(0,0,5.644)
+  monomers[18] = new GC.rot(617.4,0,0,1).move(0,0,5.976)
+  monomers[19] = new TA.rot(651.7,0,0,1).move(0,0,6.308)
+  monomers[20] = new AT.rot(686.0,0,0,1).move(0,0,6.640)
 
   # Note: In this case, each "Polymer" object actually contains two strands
   #       of DNA (denoted "f"<-->forward and "r"<-->reverse).

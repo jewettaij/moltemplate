@@ -821,7 +821,7 @@ def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
     #  StaticObj variables and there aren't ever very many of them.
     #  The code is ugly though.)
     node = starting_node
-    implied_ancestor = False
+    found_in_ancestors = False
     if ((not (leaf_ptkns[0] in ('.','..','...'))) and
         isinstance(starting_node, StaticObj)):
         while node != None:
@@ -829,13 +829,28 @@ def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
             if child is None:
                 node = node.parent
             else:
-                implied_ancestor = True
+                found_in_ancestors = True
                 break
+
+    if (leaf_ptkns[0] == 'A'):
+        print('CONTINUEHERE')
 
     i_last_ptkn, last_node = FollowPath(leaf_ptkns, starting_node, dbg_loc)
     
-    if (implied_ancestor and
-        (len(last_node.children) > 0)):
+    if (found_in_ancestors and
+        ((len(last_node.children) > 0) or
+         (len(last_node.instance_commands) > 0) or
+         (len(last_node.categories) > 0))):
+        # It's only appropriate to look outside the current local scope
+        # (in the ancestors' scope) if this is a simple node.
+        # If this node has children, instance commands, or local categories,
+        # then it's not a simple leaf node.
+        # In that case, don't return nodes outside the current scope.
+        # In most cases, counter variables are simple nodes anyway.
+        # If we are returning something that isn't a simple node, something
+        # likely wen't wrong.  But I don't outlaw this.  I just prevent
+        # matching with non-simple-nodes outside the current scope
+        # (unless the user explicitly asked to do so).
         return 0, starting_node
     else:
         return i_last_ptkn, last_node
