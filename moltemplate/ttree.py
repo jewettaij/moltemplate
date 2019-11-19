@@ -832,9 +832,6 @@ def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
                 found_in_ancestors = True
                 break
 
-    if (leaf_ptkns[0] == 'A'):
-        print('CONTINUEHERE')
-
     i_last_ptkn, last_node = FollowPath(leaf_ptkns, starting_node, dbg_loc)
     
     if (found_in_ancestors and
