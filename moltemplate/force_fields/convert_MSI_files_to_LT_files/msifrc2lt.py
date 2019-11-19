@@ -3523,7 +3523,7 @@ def main():
                                                    reverse=True)]
 
         if len(charge_pair_priority) > 0:
-            sys.stdout.write("  # ---------- Charge By Bond (a.k.a. \"bond equivalences\") ----------\n")
+            sys.stdout.write("  # ---------- Charge By Bond (a.k.a. \"bond increments\") ----------\n")
             # Print rules for generating (2-body) "bond" interactions:
             sys.stdout.write('\n\n\n'
                              '  write_once("Data Charge By Bond") {\n')
