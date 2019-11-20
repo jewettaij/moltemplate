@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2019-11-18'
-g_version_str = '0.86.2'
+g_date_str = '2019-11-19'
+g_version_str = '0.86.3'
 
 
 class ClassReference(object):
