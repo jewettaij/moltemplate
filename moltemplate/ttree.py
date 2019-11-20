@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2016-12-21'
-g_version_str = '0.85.0'
+g_date_str = '2019-11-18'
+g_version_str = '0.86.2'
 
 
 class ClassReference(object):
@@ -548,6 +548,7 @@ def RecursiveJoin(tokens_expr, delimiter=''):
         return ''.join(text_lstr, delimiter)
 
 
+
 #----------------------------------------------------------
 #----------------------------------------------------------
 #    The following code is specific to ttree.
@@ -576,11 +577,13 @@ def PtknsToStr(path_tokens):
     return text
 
 
+
 def StrToPtkns(path_string):
     """ The inverse of PtknsToStr(), this function splits a string like
         '/usr/local/../bin/awk' into ['usr','local','..','bin','awk'].
         For illustrative purposes only. Use text.split('/') directly instead."""
     return orig_text.split('/')
+
 
 
 def FindChild(name, node, dbg_loc):
@@ -638,6 +641,7 @@ def FindChild(name, node, dbg_loc):
     return None
 
 
+
 def FollowPath(path_tokens, starting_node, dbg_loc):
     """ FollowPath() returns the "last_node", a node whose position in the
         tree is indicated by a list of path_tokens, describing the names
@@ -659,12 +663,13 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         smaller than len(path_tokens).
         We let the caller handle undefined paths. """
 
-    #print('    FollowPath() invoked on: ', path_tokens)
+    #sys.stderr.write('    FollowPath() invoked on: ' + str(path_tokens) + '\n')
 
     if len(path_tokens) == 0:
         return 0, starting_node
 
     node = starting_node
+
     # Is this path a relative path, or a full path?
     # If the path-string began with '/', then it's a full path.  This means
     # that after processing by split('/'), the first token will be ''
@@ -678,6 +683,56 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
         i0 = 1  # <- We've just processed the first token.  Skip over it later.
     else:
         i0 = 0
+        is_static_node = isinstance(starting_node, StaticObj)
+        is_path_explicit = (path_tokens[0] in ('.','..','...'))
+
+        if (is_static_node and (not is_path_explicit)):
+
+            # By default (unless disabled by explicitly specifying the path)
+            # allow references to objects outside the current node.  Example:
+            # In programming languages, when you want to instantiate a copy of
+            # a class (or refer to that type of class), you don't have to
+            # specify where that class was defined.  For example in C++
+            # class A { contents omitted.. };
+            # class B { contents omitted.. };
+            # class C { A a; B b; };
+            # In this example, in the definition of class C, the compiler knows
+            # that a is a variable of type "A", and b is a variable of type "B",
+            # and both "A" and "B" are defined outside the definition of "C".
+            #
+            # Note that we should only do this
+            # for StaticObj nodes, because only these kinds of nodes correspond
+            # to class/object definitions.  The other kinds of nodes,
+            # InstanceObj nodes, correspond to instances (copies) of classes
+            # that were defined already.  We don't insert "..." in that case
+            # because it's almost never a good idea for members of an instance
+            # of a class to know about the members of the class that
+            # instantiated it (ie. the parent node in the instance tree).
+            # (The only exception I can think of is the "$mol:..." syntax
+            #  which is used to share the molecule-ID counter for atoms in
+            #  different instances of a molecule.  But in that case the user
+            #  must explicitly include "...".  We don't do this implicitly.)
+            # We also don't do this if the user explicitly wants to specify
+            # the exact path of the node.  (They can do that by beginning the
+            # path with '.', '..', '...').
+
+            # To search for objects outside the current scope, search over the
+            # "children" of the current node for one who's name matches
+            # path_tokens[0].  If not found, then move up to the parent node's
+            # children.  (This is not an exhaustive tree search. Only the nodes
+            # which are immediate children of this node's parents are searched.)
+            while node != None:
+                child = FindChild(path_tokens[0], node, dbg_loc)
+                if child is None:
+                    node = node.parent
+                else:
+                    node = child
+                    i0 = 1
+                    break
+            if node == None:
+                node = starting_node
+
+    ## Main code below:
 
     i = i0
     while i < len(path_tokens):
@@ -692,13 +747,20 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
                 node = node.parent
             i += 1
 
-        elif path_tokens[i] == '...':
+        elif (path_tokens[i] == '...'):
 
             node_before_ellipsis = node
             if i == len(path_tokens) - 1:
                 return i, node_before_ellipsis
 
             search_target = path_tokens[i + 1]
+
+            # To search for objects outside the current scope, search over the
+            # "children" of the current node for one who's name matches
+            # path_tokens[i+1].  If not found, then move up to the parent node's
+            # children.  (This is not an exhaustive tree search. Only the nodes
+            # which are immediate children of this node's parents are searched.)
+
             # Now search over the "children" of this node
             # for one who's name matches path_tokens[i].
             # If not found, then move up to the parent node's children.
@@ -749,6 +811,91 @@ def FollowPath(path_tokens, starting_node, dbg_loc):
                 break
 
     return len(path_tokens), node
+
+
+
+
+
+def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
+    """
+    FollowPathCounterVar() is a variant of FollowPath().
+    This is confusing, so I'll explain this verbosely.  This function
+    was intended to be called by functions that are trying to decode
+    references to counter variables (such as "$atom:c5" and "@atom:C")
+    This function deals with an additional "edge case" that occasionally
+    occurs with counter variables.  Recall that counter variables are
+    internally implemented as nodes in the StaticObj and InstanceObj trees.
+    But the rules for looking up references to counter variable nodes
+    are slightly differently than the rules for lookup up other nodes.
+    Suppose a user refers to "@atom:C" within an object which is also named "C".
+    (Or perhaps one of the nodes visible to its ancestors is named "C".)
+    (Also suppose that "starting_node" is of type "StaticObj", because 
+    "InstanceObj" trees are handled differently.)  By default, FolowPath()
+    first searches locally for children nodes with names that match,
+    but if it fails to find them, it will search up the tree for ancestors
+    with children whose names match.  Sometimes when it does this, it will
+    encounter an ancestor node whose name (eg. "C") matches the name portion
+    of the counter variable you are trying to lookup (eg. "@atom:C").
+    This is not usually what we want because counter variables should always
+    leaf nodes (located at the ends of the branches), not parent nodes 
+    (located deeper in the tree), ...UNLESS the user explicitly asks for
+    such nodes (which is very rare).  Otherwise we should return "not found".
+    That's what this (messy) function does.
+    This is just an ugly hack that takes care of this edge case.
+    """
+
+    i_last_ptkn, last_node = FollowPath(leaf_ptkns, starting_node, dbg_loc)
+
+    # HACK:  I don't want to reimplement FollowPath().
+    #        Instead I run FollowPath() and then afterwards go back and try to
+    #        determine whether the special edge case mentioned above applies.
+    #        Specifically, I try to determine whether 1) the user neglected to
+    #        specify the path explicitly, and 2) if so, as a result did
+    #        FollowPath() matched with a node outside the scope of the
+    #        starting_node?, and 3) if that node is NOT a simple leaf node?,
+    #        ... THEN ignore the match and return not found.
+    #
+    #        Yes, I realize this is horrible code.
+    #
+    # Details:
+    #        Searching the ancestor tree a second time is redundant.
+    #        But since FollowPath() only searches the ancestors for
+    #        "StaticObj" nodes (not "InstanceObj" noces), this means we only
+    #        have to worry about this for "StaticObj" nodes, and there are few
+    #        of them (eg. the number of types of molecule objects
+    #        is typically much smaller than the number molcules).
+    #        Hence, in practice the redundant searching, does not 
+    #        slow down ttree.py at all, but it makes the code more ugly.
+
+    node = starting_node
+    erroneous_find_in_ancestors = False
+
+    is_static_node = isinstance(starting_node, StaticObj)
+    
+    if is_static_node:
+        is_simple_node = ((len(last_node.children) == 0) and
+                          (len(last_node.instance_commands) == 0) and
+                          (len(last_node.categories) == 0))
+        is_path_explicit = (leaf_ptkns[0] in ('.','..','...'))
+        if (not is_simple_node) and (not is_path_explicit):
+            # find out if the match occurs in the scope of an ancestor
+            while node != None:
+                child = FindChild(leaf_ptkns[0], node, dbg_loc)
+                if child is None:
+                    node = node.parent
+                else:
+                    erroneous_find_in_ancestors = True
+                    break
+
+    if erroneous_find_in_ancestors:
+        # let the caller know that the node was "not found"
+        return 0, starting_node
+    else:
+        return i_last_ptkn, last_node
+
+
+
+
 
 
 def PtknsToNode(path_tokens, starting_node, dbg_loc):
@@ -813,9 +960,11 @@ def PtknsToNode(path_tokens, starting_node, dbg_loc):
     return last_node
 
 
+
 def StrToNode(obj_name, starting_node, dbg_loc):
     path_tokens = obj_name.split('/')
     return PtknsToNode(path_tokens, starting_node, dbg_loc)
+
 
 
 def NodeListToPtkns(node_list, dbg_loc=None):
@@ -837,6 +986,7 @@ def NodeListToPtkns(node_list, dbg_loc=None):
                                      node_list[i - 1].name, '/') + '\")\n'
                                  '       This could be an internal error.')
     return path_tokens
+
 
 
 def NodeListToStr(node_list, dbg_loc=None):
@@ -863,6 +1013,7 @@ def NodeListToStr(node_list, dbg_loc=None):
     return path_str
 
 
+
 def NodeToPtkns(node):
     ptkns = []
     nd = node
@@ -871,6 +1022,7 @@ def NodeToPtkns(node):
         nd = nd.parent
     ptkns.reverse()
     return ptkns
+
 
 
 def NodeToStr(node):
@@ -885,6 +1037,7 @@ def NodeToStr(node):
         path_str += '/' + ptkns[i]
         i += 1
     return path_str
+
 
 
 def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
@@ -950,6 +1103,7 @@ def CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc):
     return cat_node_ptkns + leaf_node_ptkns
 
 
+
 def CanonicalCatName(cat_name, cat_node, dbg_loc=None):
     # Determine the path of the cat node
     tkns = NodeToPtkns(cat_node)
@@ -961,6 +1115,7 @@ def CanonicalCatName(cat_name, cat_node, dbg_loc=None):
     return '/'.join(tkns)
 
 
+
 def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
     tkns = CatLeafNodesToTkns(cat_name, cat_node, leaf_node, dbg_loc)
     descr_str = tkns[0]
@@ -970,6 +1125,7 @@ def CanonicalDescrStr(cat_name, cat_node, leaf_node, dbg_loc=None):
         else:
             descr_str += '/' + tkns[i]
     return descr_str
+
 
 
 def CollapsePath(path_tokens):
@@ -1000,6 +1156,7 @@ def CollapsePath(path_tokens):
         return ndelete  # <-- useful to let caller know an error ocurred
 
     return new_ptkns
+
 
 
 def FindCatNode(category_name, current_node, srcloc):
@@ -1037,6 +1194,7 @@ def FindCatNode(category_name, current_node, srcloc):
     return cat_node
 
 
+
 def RemoveNullTokens(in_ptkns):
     """This function just gets rid of useless empty tokens in the path ('', '.')
        (However if '' appears at the beginning of a path, we leave it alone.)
@@ -1050,6 +1208,7 @@ def RemoveNullTokens(in_ptkns):
     # (I'm sure there are ways to write this in python
     #  using fewer lines of code.  Sigh.)
     return out_ptkns
+
 
 
 def DescrToCatLeafPtkns(descr_str, dbg_loc):
@@ -1144,6 +1303,7 @@ def DescrToCatLeafPtkns(descr_str, dbg_loc):
     #  and replaced it with:
 
     return cat_name, RemoveNullTokens(cat_ptkns), leaf_ptkns
+
 
 
 def DescrToCatLeafNodes(descr_str,
@@ -1414,9 +1574,10 @@ def DescrToCatLeafNodes(descr_str,
     # before.  Think of "CA" as a variable placeholder.
     #
     # So we follow the path tokens as far as we can:
-    i_last_ptkn, last_node = FollowPath(leaf_ptkns,
-                                        leaf_start_node,
-                                        dbg_loc)
+
+    i_last_ptkn, last_node = FollowPathCounterVar(leaf_ptkns,
+                                                  leaf_start_node,
+                                                  dbg_loc)
 
     # Did we find the node?
     if i_last_ptkn == len(leaf_ptkns):
@@ -1587,6 +1748,7 @@ def DescrToCatLeafNodes(descr_str,
     return cat_name, cat_node, leaf_node
 
 
+
 def DescrToVarBinding(descr_str, context_node, dbg_loc):
     """ DescrToVarBinding() is identical to LookupVar(), but it has a name
     that is harder to remember.  See comment for LookupVar() below.
@@ -1617,6 +1779,7 @@ def DescrToVarBinding(descr_str, context_node, dbg_loc):
     return var_binding
 
 
+
 # Wrappers:
 
 def LookupVar(descr_str, context_node, dbg_loc):
@@ -1632,6 +1795,7 @@ def LookupVar(descr_str, context_node, dbg_loc):
     return DescrToVarBinding(descr_str, context_node, dbg_loc)
 
 
+
 def LookupNode(obj_name, starting_node, dbg_loc):
     """ LookupNode() parses through a string like
           '../ClassA/NestedClassB'
@@ -1645,6 +1809,7 @@ def LookupNode(obj_name, starting_node, dbg_loc):
 
         """
     return StrToNode(obj_name, starting_node, dbg_loc)
+
 
 
 class SimpleCounter(object):
@@ -1670,6 +1835,7 @@ class SimpleCounter(object):
 
     def __copy__(self):  # makes a (deep) copy of the counter in its current state
         return SimpleCounter(self.n + self.nincr, self.nincr)
+
 
 
 class Category(object):
@@ -1723,6 +1889,7 @@ class Category(object):
             self.reserved_values = OrderedDict()
         else:
             self.reserved_values = reserved_values
+
 
 
 class StaticObj(object):
@@ -2790,6 +2957,7 @@ class StaticObj(object):
                             self._ExtractSuffix(object_name, lex)
 
                         path_tokens = obj_descr_str.split('/')
+
                         i_last_ptkn, staticobj = FollowPath(path_tokens,
                                                             self,
                                                             lex.GetSrcLoc())
@@ -3247,6 +3415,7 @@ def RandomSelect(entries, weights):
     return entries[i]
 
 
+
 class InstanceObjBasic(object):
     """ A simplified version of InstanceObj.
         See the documentation/comments for InstanceObj for more details.
@@ -3327,6 +3496,8 @@ class InstanceObjBasic(object):
         # vb##    del cat.bindings[self]
         # vb##    del self.var_bindings[N-i]
         # vb##self.var_bindings = None
+
+
 
 
 class InstanceObj(InstanceObjBasic):

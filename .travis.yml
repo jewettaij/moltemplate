@@ -28,6 +28,6 @@ script:
   - bash tests/test_compass.sh
 
 
-# Thanks to Kate Ward, Martin Seener, and Davi Ortega:
+# Thanks to Kate Ward, Martin Seener, Davi Ortega, and Shyam Saladi:
 # https://github.com/kward/shunit2
 # https://www.sysorchestra.com/2014/10/12/travisshunit2/

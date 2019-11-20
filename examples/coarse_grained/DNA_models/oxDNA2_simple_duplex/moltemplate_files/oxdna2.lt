@@ -62,21 +62,32 @@ OXDNA2 {
   # (Note: This is safe to use when other molecule types are present.
   #  because @atom:* wildcards will not match atoms outside of OXDNA2.)
 
+} # OXDNA2
 
-  # Optional:
-  # In order to build a long polymer in moltemplate, you typically
-  # would define an object for each monomer.  Later you can make
-  # multiple copies of them and bond them together.  (See chapter 6
-  # of the moltemplate manual.  This is what "genpoly_lt.py" does.)
-  # In this case, we must define objects for "A", "C", "G", "T".
-  # (Each consisting of only one "atom", in this case.  This is.
-  #  unusual.  Moltemplate objects typically contain multiple atoms.)
 
-  A {
+
+
+# Optional:
+#
+# In order to build a long polymer in moltemplate, you typically
+# would define an object for each monomer.  Later you can make
+# multiple copies of them and bond them together.  (See chapter 6
+# of the moltemplate manual.  This is what "genpoly_lt.py" does.)
+# In this case, we must define objects for "A", "C", "G", "T".
+# (Each consisting of only one "atom", in this case.  This is.
+#  unusual.  Moltemplate objects typically contain multiple atoms.)
+#
+# To avoid polluting the global namespace (with "A", "C", "G", "T"...)
+# I encapsulate these monomer objects within "OXDNA2_MONOMERS"
+
+
+OXDNA2_MONOMERS {
+
+  A inherits OXDNA2 {
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
     write("Data Atoms") {
-      $atom:f @atom:.../A 0.000000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:A 0.000000 0.000000 0.000000 $mol:... 1 1
     }
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
@@ -84,11 +95,11 @@ OXDNA2 {
     }
   }
 
-  C {
+  C inherits OXDNA2 {
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
     write("Data Atoms") {
-      $atom:f @atom:.../C 0.000000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:C 0.000000 0.000000 0.000000 $mol:... 1 1
     }
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
@@ -96,11 +107,11 @@ OXDNA2 {
     }
   }
 
-  G {
+  G inherits OXDNA2 {
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
     write("Data Atoms") {
-      $atom:f @atom:.../G 0.000000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:G 0.000000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -109,11 +120,11 @@ OXDNA2 {
     }
   }
 
-  T {
+  T inherits OXDNA2 {
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
     write("Data Atoms") {
-      $atom:f @atom:.../T 0.000000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:G 0.000000 0.000000 0.000000 $mol:... 1 1
     }
     # AtomID, shape, quaternion
     write("Data Ellipsoids") {
@@ -128,10 +139,10 @@ OXDNA2 {
   # These monomers are named "AT", "TA", "CG", "GC".
   # Suppose you build a polymer using this sequence of commands
   # monomers[0] = new AT
-  # monomers[1] = new AT.move(0,0,0.332).rot(34.3,0,0,1)
-  # monomers[2] = new CG.move(0,0,0.664).rot(68.6,0,0,1)
-  # monomers[3] = new CG.move(0,0,0.996).rot(102.9,0,0,1)
-  # monomers[4] = new TA.move(0,0,1.328).rot(137.2,0,0,1)
+  # monomers[1] = new AT.rot(34.3,0,0,1).move(0,0,0.332)
+  # monomers[2] = new CG.rot(68.6,0,0,1).move(0,0,0.664)
+  # monomers[3] = new CG.rot(102.9,0,0,1).move(0,0,0.996)
+  # monomers[4] = new TA.rot(137.2,0,0,1).move(0,0,1.328)
   # Then the "f" strand ("f"<->"forward strand") will have this sequence: AACCT
   #  and the "r" strand ("r"<->"reverse strand") will have this sequence: TTGGA
   #
@@ -148,14 +159,14 @@ OXDNA2 {
   #       (This is not difficult.  Moltemplate includes examples of
   #        double-stranded DNA built this way as well.)
 
-  AT {
+  AT inherits OXDNA2 {
 
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../A -0.600000 0.000000 0.000000 $mol:... 1 1
-      $atom:r @atom:.../T  0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:A -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:T  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -165,14 +176,14 @@ OXDNA2 {
     }
   }
 
-  TA {
+  TA inherits OXDNA2 {
 
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../T -0.600000 0.000000 0.000000 $mol:... 1 1
-      $atom:r @atom:.../A  0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:T -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:A  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -182,14 +193,14 @@ OXDNA2 {
     }
   }
 
-  CG {
+  CG inherits OXDNA2 {
 
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../C -0.600000 0.000000 0.000000 $mol:... 1 1
-      $atom:r @atom:.../G  0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:C -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:G  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -199,14 +210,14 @@ OXDNA2 {
     }
   }
 
-  GC {
+  GC inherits OXDNA2 {
 
     # "atom_style hybrid bond ellipsoid" uses this format:
     # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
 
     write("Data Atoms") {
-      $atom:f @atom:.../G -0.600000 0.000000 0.000000 $mol:... 1 1
-      $atom:r @atom:.../C  0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:f @atom:G -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:C  0.600000 0.000000 0.000000 $mol:... 1 1
     }
 
     # AtomID, shape, quaternion
@@ -216,5 +227,5 @@ OXDNA2 {
     }
   }
 
-} #OXDNA2
+} #OXDNA2_MONOMERS
 
