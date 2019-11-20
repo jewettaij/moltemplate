@@ -642,7 +642,7 @@ def FindChild(name, node, dbg_loc):
 
 
 
-def FollowPath(path_tokens, starting_node, dbg_loc, prefer_leaf_nodes=False):
+def FollowPath(path_tokens, starting_node, dbg_loc):
     """ FollowPath() returns the "last_node", a node whose position in the
         tree is indicated by a list of path_tokens, describing the names
         of nodes connecting "starting_node" to "last_node".
@@ -663,7 +663,7 @@ def FollowPath(path_tokens, starting_node, dbg_loc, prefer_leaf_nodes=False):
         smaller than len(path_tokens).
         We let the caller handle undefined paths. """
 
-    #print('    FollowPath() invoked on: ', path_tokens)
+    #sys.stderr.write('    FollowPath() invoked on: ' + str(path_tokens) + '\n')
 
     if len(path_tokens) == 0:
         return 0, starting_node
@@ -683,10 +683,13 @@ def FollowPath(path_tokens, starting_node, dbg_loc, prefer_leaf_nodes=False):
         i0 = 1  # <- We've just processed the first token.  Skip over it later.
     else:
         i0 = 0
-        if ((not (path_tokens[0] in ('.','..','...'))) and
-            isinstance(starting_node, StaticObj)):
+        is_static_node = isinstance(starting_node, StaticObj)
+        is_path_explicit = (path_tokens[0] in ('.','..','...'))
 
-            # SPECIAL CASE: Refer to objects outside the current scope.
+        if (is_static_node and (not is_path_explicit)):
+
+            # By default (unless disabled by explicitly specifying the path)
+            # allow references to objects outside the current node.  Example:
             # In programming languages, when you want to instantiate a copy of
             # a class (or refer to that type of class), you don't have to
             # specify where that class was defined.  For example in C++
@@ -814,40 +817,78 @@ def FollowPath(path_tokens, starting_node, dbg_loc, prefer_leaf_nodes=False):
 
 
 def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
-
-    # find out if the match occurs in the scope of an ancestor
-    # (I admit that I do this search twice, once here, and once in FollowPath()
-    #  which is not very efficient.  But fortunately I only do this for
-    #  StaticObj variables and there aren't ever very many of them.
-    #  The code is ugly though.)
-    node = starting_node
-    found_in_ancestors = False
-    if ((not (leaf_ptkns[0] in ('.','..','...'))) and
-        isinstance(starting_node, StaticObj)):
-        while node != None:
-            child = FindChild(leaf_ptkns[0], node, dbg_loc)
-            if child is None:
-                node = node.parent
-            else:
-                found_in_ancestors = True
-                break
+    """
+    FollowPathCounterVar() is a variant of FollowPath().
+    This is confusing, so I'll explain this verbosely.  This function
+    was intended to be called by functions that are trying to decode
+    references to counter variables (such as "$atom:c5" and "@atom:C")
+    This function deals with an additional "edge case" that occasionally
+    occurs with counter variables.  Recall that counter variables are
+    internally implemented as nodes in the StaticObj and InstanceObj trees.
+    But the rules for looking up references to counter variable nodes
+    are slightly differently than the rules for lookup up other nodes.
+    Suppose a user refers to "@atom:C" within an object which is also named "C".
+    (Or perhaps one of the nodes visible to its ancestors is named "C".)
+    (Also suppose that "starting_node" is of type "StaticObj", because 
+    "InstanceObj" trees are handled differently.)  By default, FolowPath()
+    first searches locally for children nodes with names that match,
+    but if it fails to find them, it will search up the tree for ancestors
+    with children whose names match.  Sometimes when it does this, it will
+    encounter an ancestor node whose name (eg. "C") matches the name portion
+    of the counter variable you are trying to lookup (eg. "@atom:C").
+    This is not usually what we want because counter variables should always
+    leaf nodes (located at the ends of the branches), not parent nodes 
+    (located deeper in the tree), ...UNLESS the user explicitly asks for
+    such nodes (which is very rare).  Otherwise we should return "not found".
+    That's what this (messy) function does.
+    This is just an ugly hack that takes care of this edge case.
+    """
 
     i_last_ptkn, last_node = FollowPath(leaf_ptkns, starting_node, dbg_loc)
+
+    # HACK:  I don't want to reimplement FollowPath().
+    #        Instead I run FollowPath() and then afterwards go back and try to
+    #        determine whether the special edge case mentioned above applies.
+    #        Specifically, I try to determine whether 1) the user neglected to
+    #        specify the path explicitly, and 2) if so, as a result did
+    #        FollowPath() matched with a node outside the scope of the
+    #        starting_node?, and 3) if that node is NOT a simple leaf node?,
+    #        ... THEN ignore the match and return not found.
+    #
+    #        Yes, I realize this is horrible code.
+    #
+    # Details:
+    #        Searching the ancestor tree a second time is redundant.
+    #        But since FollowPath() only searches the ancestors for
+    #        "StaticObj" nodes (not "InstanceObj" noces), this means we only
+    #        have to worry about this for "StaticObj" nodes, and there are few
+    #        of them (eg. the number of types of molecule objects
+    #        is typically much smaller than the number molcules).
+    #        Hence, in practice the redundant searching, does not 
+    #        slow down ttree.py at all, but it makes the code more ugly.
+
+    node = starting_node
+    erroneous_find_in_ancestors = False
+
+    is_static_node = isinstance(starting_node, StaticObj)
     
-    if (found_in_ancestors and
-        ((len(last_node.children) > 0) or
-         (len(last_node.instance_commands) > 0) or
-         (len(last_node.categories) > 0))):
-        # It's only appropriate to look outside the current local scope
-        # (in the ancestors' scope) if this is a simple node.
-        # If this node has children, instance commands, or local categories,
-        # then it's not a simple leaf node.
-        # In that case, don't return nodes outside the current scope.
-        # In most cases, counter variables are simple nodes anyway.
-        # If we are returning something that isn't a simple node, something
-        # likely wen't wrong.  But I don't outlaw this.  I just prevent
-        # matching with non-simple-nodes outside the current scope
-        # (unless the user explicitly asked to do so).
+    if is_static_node:
+        is_simple_node = ((len(last_node.children) == 0) and
+                          (len(last_node.instance_commands) == 0) and
+                          (len(last_node.categories) == 0))
+        is_path_explicit = (leaf_ptkns[0] in ('.','..','...'))
+        if (not is_simple_node) and (not is_path_explicit):
+            # find out if the match occurs in the scope of an ancestor
+            while node != None:
+                child = FindChild(leaf_ptkns[0], node, dbg_loc)
+                if child is None:
+                    node = node.parent
+                else:
+                    erroneous_find_in_ancestors = True
+                    break
+
+    if erroneous_find_in_ancestors:
+        # let the caller know that the node was "not found"
         return 0, starting_node
     else:
         return i_last_ptkn, last_node
