@@ -4685,7 +4685,7 @@ class Ltemplify(object):
         ########################################
         """
 
-        out_fname = ''
+        out_fname = None
         if isinstance(out_file, str):  # is "out_file" a file or a file name?
             out_fname = out_file
             out_file = open(out_fname, 'w')
