@@ -588,24 +588,3 @@ DNAForceField {
 
 }  # DNAForceField
 
-
-
-
-
-
-
-
-  ### Notes:
-  #
-  # ANGLES CANNOT BE DETERMINED BY ATOM TYPE
-  # There are at least 3 different kinds of angles in this simple ladder model.
-  # The angle that the "wrungs" of the ladder make with the two strand backbones
-  # is either an "acute" angle (about 40 degrees) or an "obtuse" angle.  (It's
-  # not really obtuse, but larger than the acute angle. It's about 65 degrees.)
-  # There is no way to distinguish the acute angles from the "obtuse" angles
-  # by atom type alone for this coarse grained model with adding complexity.
-  #
-  # DIHEDRALS CANNOT BE DETERMINED BY ATOM TYPE
-  # There is no way to distinguish the major-groove from the minor-groove
-  # dihedral interactions by atom type alone without adding complexity.
-

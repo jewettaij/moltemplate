@@ -1,7 +1,9 @@
 This directory contains the analysis scripts and instructions that would be
 needed to measure the torsional persistence length of the DNA polymer
 
-First copy the ../moltemplate_files and ../run* scripts into this directory.
+First copy the ../moltemplate_files directory into this directory:
+
+cp -r ../moltemplate_files .
 
 Then run the following scripts:
 

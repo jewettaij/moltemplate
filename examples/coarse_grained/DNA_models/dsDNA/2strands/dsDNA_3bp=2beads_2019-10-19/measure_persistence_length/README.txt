@@ -2,7 +2,10 @@ This directory contains the analysis scripts and instructions that would be
 needed to measure the persistence length of the DNA polymer
 (as well as other geometrical properties you might be interested in).
 
-First copy the ../moltemplate_files and ../run* scripts into this directory.
+First copy the ../moltemplate_files and ../run* scripts into this directory:
+
+cp -r ../moltemplate_files .
+cp ../run*.in .
 
 Then run the following scripts:
 

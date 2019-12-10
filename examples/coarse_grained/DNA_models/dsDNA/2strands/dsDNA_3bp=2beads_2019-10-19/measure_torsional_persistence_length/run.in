@@ -1,0 +1,85 @@
+# -- Init Section --
+
+include system.in.init
+boundary f f p
+
+# -- Atom Definition Section --
+
+#read_data system.data
+read_data system_after_min.data
+#change_box all x final -20 20 y final -20 20 z final -300 300
+
+# -- Settings Section --
+
+include system.in.settings
+include confinement_hard_rounded_cylinder_R=0.75.in
+#include system.in.twist
+
+# -- Run Section --
+
+
+timestep        1.0   # By definition.  Masses should be adjusted accordingly.
+
+dump            1 all custom 500000 traj.lammpstrj id mol type x y z ix iy iz
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+
+#                        kB*Tstart   kB*Tstop   tdamp     randomseed
+
+fix fxlan all langevin   0.5961621   0.596162   200000.0    123456
+
+# Note: tdamp must be >> than the innertial t_m ~= sqrt( m / d^U/dr )
+#       which for our force field is about 15 (It should be ~= Nperiod
+#       which I picked to be 20).  Check "forcefield.lt" or "system.data"
+#       to find the mass.
+# To maximize sampling efficiency, make tdamp as large as you can,
+# just make sure it does not exceed the timescales you really care
+# about (such as the time needed for the chromosome to "fold").  
+# Keep it an order of magnitude or so shorter than that.
+
+
+
+fix fxnve all nve 
+
+
+###########
+# WARNING: DO NOT USE "fix recenter" in the presence of immobile objects
+# COMMENTING OUT: fix fxcen all recenter 0.0 0.0 0.0
+# THE ONlY EXCPETION TO THIS:  If the immobile object is completely smooth
+#                              with respect to motion in the x,y,z direction
+#                              In that case you can immobilize it in that
+#                              direction.
+# In this case, I have a smooth cylindrical barrier pointing in the Z direction.
+# So I turn off recentering in the x,y direction and center in the Z direction:
+fix fxcen all recenter NULL NULL 0.0
+###########
+
+
+# (See http://lammps.sandia.gov/doc/fix_langevin.html)
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo          20000  # time interval for printing out "thermo" data
+#thermo_modify   norm no
+thermo_modify   norm yes
+
+
+#balance 1.05 rcb
+#balance 1.05 shift xyz 20 1.05
+#run              10000
+#balance 1.05 shift xyz 20 1.05
+#run              10000
+#balance 1.05 shift xyz 20 1.05
+#run              20000
+#balance 1.05 shift xyz 20 1.05
+#run              50000
+#balance 1.05 shift xyz 20 1.05
+#run              100000
+#write_data  system_after_density_equil.data
+#balance 1.05 rcb
+#balance 1.05 shift xyz 20 1.05
+
+run              1000000000
+
+
