@@ -14,7 +14,7 @@ cd moltemplate_files
   # Example:
   #   genpoly_lt.py -helix 102.857  (calculated using the formula above)
 
-  genpoly_lt.py -helix 102.857 \
+  genpoly_lt.py -helix 102.7797 \
                 -bond Backbone a a \
                 -bond Backbone b b \
                 -dihedral MajorGroove b b a a 0 1 1 2 \

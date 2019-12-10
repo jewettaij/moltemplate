@@ -42,10 +42,12 @@ k_new = k_old * (σsim/σtarget)^2
 # persistence length and torsional persistence length of double-stranded DNA.
 # (50nm and 111nm, respectively).  This was usually done by hand, iteratively.
 # The resulting measured mechanical properties were:
-#                                             | simulated    | experimenal |
-# --------------------------------------------------------------------------
-# persistence length:                         |  48.7101 nm  |     50 nm   |
-# torsional persistence length:               | 109.9752 nm  |    110 nm   |
-# helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |
-# distance along the axis between base-pairs: |  0.32764 nm  |  0.332 nm   |
+#                                                |  this model  | experimenal |
+# ----------------------------------------------------------------------------
+# persistence length:                            |  48.7101 nm  |     50 nm   |
+# torsional persistence length:                  | 109.9752 nm  |    110 nm   |
+# helical twist angle between monomers (3bp):    | 102.7797 deg |  see below  |
+# -> helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |
+# distance along the axis between monomers (3bp):|  0.98293 nm  |  see below  |
+# -> distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |
 ##############################################################################
