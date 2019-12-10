@@ -1,0 +1,18 @@
+import "polymer.lt"
+import "twist_motors.lt"  # (optional)
+
+
+polymer = new Polymer
+
+
+
+
+# What kind of boundary conditions are we using?
+
+write_once("In Init") {
+  boundary s s s      # <-- periodicity in x y z directions
+}
+# "f" stands for "fixed"
+# "p" stands for "periodic"
+# "s" stands for "shrink-wrapped" (non-periodic)
+
