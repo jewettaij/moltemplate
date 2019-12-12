@@ -748,13 +748,15 @@ See section \ref{sec:custom_categories} for details.
   %       and the counter increment, $\Delta$, can be omitted.)
 \\
 \hline
-create\_var \{ \textit{$variable} \} &
+create\_var \{ \textit{\$variable} \} &
 Create a variable specific to this molecule object. 
 (Typically this is used to create molecule-ID numbers, 
 for a molecule built from smaller components.
 See section \ref{sec:2beadPolymer}.
-\textit{\textbf{Note:} For @variables use:
-  create\_var\_static \{ \textit{@variable} \} }
+\textit{
+  \textbf{Note:} For @variables use:
+  create\_var\_static \{ \textit{@variable} \}
+}
 )
 \\
 \hline
