@@ -62,7 +62,7 @@ def TDMAsolver(a, b, c, d):
 
 
 
-def CalcNaturalCubicSplineCoeffs(r, spline_exponent_alpha):
+def CalcNaturalCubicSplineCoeffs(r, spline_exponent_alpha=0.5):
     N = len(r)
     assert(N >= 4)
     D = len(r[0])
@@ -247,6 +247,37 @@ def SplineInterpCurvature2D(t, c3a, c3b, c1a, c1b, tcontrol):
 
 
 
+def ResampleCurve(x_orig, num_points, alpha=0.5):
+    """
+       Given a list (or numpy array) of points in n-dimensional space that lie
+    along some curve, this function returns a new list of "num_points" points
+    which are uniformly distributed along the original curve.  This is done
+    using cubic spline interpolation (which is tuned by the "alpha" parameter).
+
+    https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull%E2%80%93Rom_spline
+
+       Here "uniformly" means distributed at even intervals in the spline-
+    parameter-space, not in physical distance. (If the original points were
+    not uniformly distributed along the curve, then new points won't be either.)
+
+       This function has not been optimized for speed.
+    """
+
+    assert(len(x_orig) >= 4)
+    num_dimensions = len(x_orig[0])
+    x_new = np.zeros((num_points, num_dimensions))
+
+    c3a, c3b, c1a, c1b, tcontrol = \
+        CalcNaturalCubicSplineCoeffs(x_orig, alpha)
+    tmin = 0.0
+    tmax = tcontrol[-1]
+    for i in range(0, num_points):
+        t = tmin + i*((tmax - tmin) / (num_points-1))
+        x_new[i] = SplineInterpEval(t, c3a, c3b, c1a, c1b, tcontrol)
+
+    return x_new
+
+
 class InputError(Exception):
     """ A generic exception object containing a string for error reporting.
         (Raising this exception implies that the caller has provided
@@ -303,6 +334,9 @@ def main():
         if n_orig < 2:
             raise InputError("Input file contains less than two lines of coordinates.")
 
+        if n_orig < 4:
+            use_linear_interpolation = True
+
         if n_new < 2:
             raise InputError("Output file will contain less than two lines of coordinates.")
 
@@ -326,14 +360,7 @@ def main():
                         x_new[i_new][d] = scale*x_orig[n_orig-1][d]
 
         else:
-            # Figure out the spline parameters: c3a, c3b, c1a, c1b, and tcontrol:
-            c3a, c3b, c1a, c1b, tcontrol = \
-                 CalcNaturalCubicSplineCoeffs(x_orig, spline_exponent_alpha)
-            tmin = 0.0
-            tmax = tcontrol[-1]
-            for i in range(0, n_new):
-                t = tmin + i*((tmax - tmin) / (n_new-1))
-                x_new[i] = SplineInterpEval(t, c3a, c3b, c1a, c1b, tcontrol)
+            x_new = ResampleCurve(x_orig, n_new, spline_exponent_alpha)
 
         # print the coordates
         for i in range(0, n_new):
