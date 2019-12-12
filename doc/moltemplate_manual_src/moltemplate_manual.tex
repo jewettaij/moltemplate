@@ -737,7 +737,7 @@ See section \ref{sec:using_namespaces}.)
 \begin{tabular}[t]{l}
 \textbf{category} \textit{\$catname}($i_0$, $\Delta$)
 \\
-or \\
+\textit{or} \\
 \textbf{category} \textit{@catname}($i_0$, $\Delta$)
 \\
 \end{tabular}
@@ -748,19 +748,23 @@ See section \ref{sec:custom_categories} for details.
   %       and the counter increment, $\Delta$, can be omitted.)
 \\
 \hline
-create\_var \{ \textit{\$variable} \} &
+\begin{tabular}[t]{l}
+\textbf{create\_var} \{ \textit{\$variable} \}
+\\
+\textit{or} \\
+\textbf{create\_static\_var} \{ \textit{@variable} \}
+\\
+\end{tabular}
+&
 Create a variable specific to this molecule object. 
-(Typically this is used to create molecule-ID numbers, 
-for a molecule built from smaller components.
+(\textbf{create\_var} is typically used to create molecule-ID numbers
+that are shared between subunits of a larger molecule.
 See section \ref{sec:2beadPolymer}.
-\textit{
-  \textbf{Note:} For @variables use:
-  create\_var\_static \{ \textit{@variable} \}
-}
+\textbf{create\_var\_static} is typically used to define shared @atom types.
 )
 \\
 \hline
-replace \{ \textit{oldvariable} \textit{newvariable} \} &
+\textbf{replace} \{ \textit{oldvariable} \textit{newvariable} \} &
 Allow alternate names for the same variable.  This replaces all instances of \textit{oldvariable} with \textit{newvariable}.  Both variable names must have a ``@'' prefix.  This is typically used to reduce the length of long variables, for example to allow the shorthand ``@atom:C2'' to refer to ``@atom:C2\_bC2\_aC\_dC\_iC''
 \\
 \hline
