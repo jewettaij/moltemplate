@@ -6,8 +6,8 @@
 # All rights reserved.
 
 g_program_name = __file__.split('/')[-1]  # = 'interpolate_mt.py'
-g_version_str = '0.1.0'
-g_date_str = '2019-8-22'
+g_version_str = '0.2.0'
+g_date_str = '2019-12-11'
 
 g_usage_str = """
 Usage:
