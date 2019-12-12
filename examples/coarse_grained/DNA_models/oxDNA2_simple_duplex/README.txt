@@ -12,13 +12,13 @@ WARNING: As of 2019-11-02, this example has not been tested or optimized.
          to improve the simulation efficiency.
 
 ----
-Note: You must compile LAMMPS with the following optional packages installed:
-            user-cgdna  asphere
-      To do this, go to the "src" directory of your lammps installation and type
-      make yes-asphere
-      make yes-user-cgdna
-      make clean-all
-      make NAME_OF_TARGET    # <-- (eg. "make ubuntu", "make g++", "make linux")
+Note: If you get an error message (eg "Unknown pairstyle", "Unknown atom style")
+      then you need to download the LAMMPS source code from git and
+      compile LAMMPS with the following packages enabled:
+             USER-CGDNA   ASPHERE
+      See: https://lammps.sandia.gov/doc/Build_package.html
+           https://lammps.sandia.gov/doc/Build_cmake.html
+       (or https://lammps.sandia.gov/doc/Build_make.html)
 ----
 
 Instructions on how to build LAMMPS input files and

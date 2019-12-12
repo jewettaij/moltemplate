@@ -2117,10 +2117,12 @@ class StaticObj(object):
                 #print('Parse(): EOF encountered\n')
                 break
 
-            if ((cmd_token == 'write') or
-                (cmd_token == 'write_once') or
-                (cmd_token == 'create_var') or
-                (cmd_token == 'replace')):
+            if (cmd_token in ('write',
+                              'write_once',
+                              'create_var',
+                              'create_static_var',
+                              'replace')):
+
                 open_paren = lex.get_token()
 
                 #print('Parse():     open_paren=\"'+open_paren+'\"')
@@ -2143,7 +2145,8 @@ class StaticObj(object):
                     open_curly = lex.get_token()
                     srcloc = lex.GetSrcLoc()
 
-                if (cmd_token == 'create_var'):
+                if ((cmd_token == 'create_var') or
+                    (cmd_token == 'create_static_var')):
                     tmpl_filename = None
                     # This means: define the template without attaching
                     # a file name to it. (IE., don't write the contents
@@ -2179,7 +2182,8 @@ class StaticObj(object):
                 # sys.stdout.write('\n----------------\n')
 
                 if (cmd_token == 'write_once' or
-                        cmd_token == 'replace'):
+                    cmd_token == 'replace' or
+                    cmd_token == 'create_static_var'):
 
                     # Check for a particular bug:
                     #    Ordinary instance variables (preceded by a '$')
@@ -2201,7 +2205,8 @@ class StaticObj(object):
                 if cmd_token == 'write':
                     commands = self.instance_commands
                 elif (cmd_token == 'write_once' or
-                      cmd_token == 'replace'):
+                      cmd_token == 'replace' or
+                      cmd_token == 'create_static_var'):
                     commands = self.commands
                 elif (cmd_token == 'create_var'):
                     commands = self.instance_commands
@@ -3004,7 +3009,8 @@ class StaticObj(object):
 
                     else:
                         # Otherwise, the cmd_token is not any of these:
-                        # "write", "write_once", "replace", "create_vars"
+                        # "write", "write_once", "replace",
+                        # "create_var", "create_static_var",
                         # "delete", or "category".
                         # ... and it is ALSO not any of these:
                         # the name of a class (StaticObj), or
