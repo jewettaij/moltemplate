@@ -26,8 +26,9 @@ script:
   - bash tests/test_ltemplify.sh
   - bash tests/test_oplsaa.sh
   - bash tests/test_compass.sh
+  - python tests/test_genpoly_lt.py
 
 
-# Thanks to Kate Ward, Martin Seener, Davi Ortega, and Shyam Saladi:
+# Thanks to Kate Ward (shunit2), Martin Seener, Davi Ortega, and Shyam Saladi:
 # https://github.com/kward/shunit2
 # https://www.sysorchestra.com/2014/10/12/travisshunit2/
