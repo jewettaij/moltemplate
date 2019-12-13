@@ -59,5 +59,5 @@ of DNA in confined conditions.
 (The process of DNA relaxation and unknotting via topoisomerases
  can be simulated later.)
 
-*(Note: This simulation was prepared using [genpoly_lt.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md), [ndmansfield](https://github.com/jewettaij/ndmansfield), and [interpolate_mt.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_interpolate_mt.md).)*
+*(Note: This simulation was prepared using [genpoly_lt.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md), [ndmansfield](https://github.com/jewettaij/ndmansfield), and [interpolate_curve.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_interpolate_curve.md).)*
 

@@ -45,9 +45,9 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.14.2.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.14.3.zip',
 
-  version='2.14.2',
+  version='2.14.3',
 
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],
@@ -82,7 +82,7 @@ setup(
         'extract_lammps_data.py=moltemplate.extract_lammps_data:main',
         'ettree.py=moltemplate.ettree:main',
         'genpoly.py=moltemplate.ettree:main',
-        'interpolate_mt.py=moltemplate.interpolate_mt:main',
+        'interpolate_curve.py=moltemplate.interpolate_curve:main',
         'ltemplify.py=moltemplate.ltemplify:main',
         'lttree.py=moltemplate.lttree:main',
         'lttree_check.py=moltemplate.lttree_check:main',

@@ -32,12 +32,9 @@ describes the entire system.
 Normally, this is not very useful.
 
 
-ltemplify.py is *scriptable*:
-It can be run from the terminal
-(as explained below)
-or
-[from within python](https://github.com/sgsaenger/vipster/issues/35#issuecomment-529094485).
-
+Note: This program is both a stand-alone executable program (that can be run
+from the terminal) and a python library.  The former is documented below.
+*(The [python API is explained later](#Python-API).)*
 
 
 ### Typical Usage
@@ -491,3 +488,162 @@ This may not be what you want.
 (For example, this can be a problem if you are using a many-body pair style
 which requires you to specify "* *" for the atom types, such as
 *tersoff*, *eam*, or *sw*.)
+
+
+## Python API
+
+It is possible to access the functionality of *ltemplify.py* from 
+within python  (*without* invoking ltemplify.py using subprocess.run(), 
+os.system(), or writing files to the file system).
+To do that, you can create python strings containing the 
+contents of the LAMMPS data file (and input scripts) and use 
+Ltemplify.Convert() to convert them into MOLTEMPLATE (.LT) format.  
+ 
+However, (as you can probably tell) making this possible within python 
+was an afterthought.  Currently, the recommended way to do this is to pass the 
+same command line arguments (described above) to the constructor of the
+*Ltemplify* object.  *Then* invoke the *Convert()* function.
+
+*(Alternatively, you can also edit the data members of the Ltemplify object
+ directly after it is created, instead of using the command-line arguments.
+ But doing it that way exposes you to the horrifically messy contents
+ of the Ltemplify object.  Perhaps in the future, I will clean it up.)*
+
+```python
+class Ltemplify(object):
+    def __init__(self, argv):
+        """
+        The constructor requires a list of command line arguments to 
+        figure out the format of the output file we will generate.
+        This meaning of these arguments is explained above.
+        Note: You can either specify the input scripts and data files in the
+        argument list, OR specify them later by passing them as arguments
+        to the Convert() member function.  (The second approach is preferred.)
+        """
+    def Convert(self,
+                out_file,
+                input_data_file=None,
+                input_script_files=None):
+        """
+        Converts a data file (and, optionally, one or more input scripts)
+        into a new file ("out_file") which is in MOLTEMPLATE (.LT) format.
+        The arguments can be either filenames or StringIO objects.
+        The "input_script_file" argument can be a single string or StringIO
+        object, or a list of such objects.
+        """
+```
+
+## Usage example inside python
+
+The goal of this example is to demonstrate how to invoke the features of
+*ltemplify.py* from within python using strings instead of files.
+
+So I created long strings containing the contents of a LAMMPS data file,
+and several input scripts.  Then I convert these files into StringIO objects.
+Then I use Ltemplify.Convert() to convert them into MOLTEMPLATE (.LT) format.
+
+*(My apologies for this example being so long.)*
+
+*NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
+
+
+```python
+data_file_contents = \
+"""
+LAMMPS Description
+
+     6  atoms
+     5  bonds
+
+     2  atom types
+     # c2
+     # hc
+
+     2  bond types
+     # C-C
+     # C-H
+     
+  0.0 48.00 xlo xhi
+  0.0 48.00 ylo yhi
+  0.0 48.00 zlo zhi
+
+Masses
+
+1 12.011  # c2
+2 1.008   # hc
+
+Atoms  # full
+
+1 1 1 0.00 -0.6695 0.0 0.0
+2 1 1 0.00 0.6695 0.0 0.0
+3 1 2 0.00 -1.23422 -0.85446 0.0
+4 1 2 0.00 -1.23422 0.85446 0.0
+5 1 2 0.00 1.23422 -0.85446 0.0
+6 1 2 0.00 1.23422 0.85446 0.0
+
+Bonds
+
+1 2 1 2
+2 1 1 3
+3 1 1 4
+4 1 2 5
+5 1 2 6
+
+"""
+
+input_script_file1_contents = \
+"""
+  atom_style full
+  units real
+  bond_style harmonic
+  pair_style lj/cut/coul/long 10.0 10.0
+  pair_modify mix geometric
+  special_bonds lj/coul 0.0 0.0 0.5
+  kspace_style pppm 0.0001
+"""
+
+input_script_file2_contents = \
+"""
+  pair_coeff 1 1 0.076 3.55
+  pair_coeff 2 2 0.03 2.42
+  bond_coeff 1 340.0 1.08
+  bond_coeff 2 549.0 1.34
+  set type 1 charge -0.23
+  set type 2 charge 0.115
+  timestep   2.0
+  dump   1 all custom 5000 traj_nvt.lammpstrj id mol type x y z ix iy iz
+  fix    fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
+  run    200000
+"""
+
+import io
+data_file          = io.StringIO(data_file_contents)
+input_script_file1 = io.StringIO(input_script_file1_contents)
+input_script_file2 = io.StringIO(input_script_file2_contents)
+
+input_files = [input_script_file1, input_script_file2, data_file]
+
+args=['-atomstyle', 'full',
+      '-name','Ethylene inherits GAFF2',
+      '-mol', '1',
+      '-ignore-angles',
+      '-ignore-bond-types',
+      '-ignore-coeffs'])
+
+# Create an Ltemplify object with these settings:
+
+import moltemplate
+ltmp = moltemplate.ltemplify.Ltemplify(input_files, args)
+
+output_file = io.StringIO()
+# Now convert this to a file in MOLTEMPLATE format
+ltmp.convert(output_file, data_file, input_script_file)
+
+output_file.seek(0)
+output_file_contents = output_file.read()
+
+# ("output_file_contents" is a string containing the contents of the
+#  file in MOLTEMPLATE (.LT) format.)
+
+```
+

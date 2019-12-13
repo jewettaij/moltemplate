@@ -253,8 +253,13 @@ class Ltemplify(object):
 
     def __init__(self, argv):
         """
-        Read the command line arguments to figure out which files
-        we will need to read (and also how to modify the output format).
+        The constructor requires a list of command line arguments to 
+        figure out the format of the output file we will generate.
+        This meaning of these arguments is explained in "doc_ltemplify.md":
+       https://github.com/jewettaij/moltemplate/blob/master/doc/doc_ltemplify.md
+        Note: You can either specify the input scripts and data files in the
+        argument list, OR specify them later by passing them as arguments
+        to the Convert() member function.  The second approach is preferred.
         """
 
         self.atom_column_names = []
@@ -673,8 +678,11 @@ class Ltemplify(object):
                 input_script_files=None):
 
         """
-        Read the LAMMPS DATA file (and optional input script files)
-        and convert these files to moltemplate format.
+        Converts a data file (and, optionally, one or more input script files)
+        into a new file ("out_file") which is in MOLTEMPLATE (.LT) format.
+        The arguments can be either filenames or StringIO objects.
+        The "input_script_file" argument can be a single string or StringIO
+        object, or a list of such objects.
         (See doc_ltemplify.md for details.)
         """
         # We need to know the list of files we will read.
@@ -688,6 +696,8 @@ class Ltemplify(object):
         assert(input_data_file != None)
         if input_script_files == None:
             input_script_files = self.input_script_files
+        else if (not hasattr(input_script_files, '__getitem__')):
+            input_script_files = [input_script_files]
 
         # (Note: The "data" file is assumed to be the last entry in the list.)
         input_files = input_script_files + [input_data_file]

@@ -38,7 +38,8 @@ from .ltemplify import main, Ltemplify
 from .dump2data import main
 from .raw2data import main
 from .extract_lammps_data import main
-from .genpoly_lt import main
+from .genpoly_lt import main, GenPoly
+from .interpolate_curve import main, ResampleCurve, CalcNaturalCubicSplineCoeffs, SplineEval, SplineEvalD1, SplineEvalD2, SplineInterpEval, SplineInterpEvalD1, SplineInterpEvalD2, SplineCurvature2D, SplineInterpCurvature2D
 from .nbody_by_type import main
 
 __all__ = [# General modules for parsing and rendering text templates:
@@ -49,9 +50,9 @@ __all__ = [# General modules for parsing and rendering text templates:
            'nbody_reorder_atoms',
            # Coordinate transformations:
            'ttree_matrix_stack',
-           #'interpolate_mt', <-- requires numpy
            'recenter_coords',
            'genpoly_lt',
+           'interpolate_curve',
            'pdbsort',
            # LAMMPS specific:
            'lttree','lttree_styles','lttree_check','lttree_postprocess',

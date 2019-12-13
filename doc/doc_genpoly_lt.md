@@ -4,16 +4,20 @@ genpoly_lt.py
 
 ## Description
 
-   Generate a moltemplate file containing a definition of a Polymer
-   molecule containing monomers located at the positions specified in
-   "coords.raw" (a 3-column text file).  Monomers will be rotated so
-   that they point along the polymer axis direction (see "-dir-indices")
-   with an optional helical twist added (see "-helix").  Users can
-   specify one or more bonds connecting each monomer to the next monomer
-   (see "-bond").  Similarly, 3-body and 4-body angular interactions between
-   atoms in different monomers can either be generated automatically
-   (using the standard moltemplate "Angle By Type" rules)
-   OR generated manually (using "-angle", "-dihedral", "-improper" arguments).
+Generate a moltemplate file containing a definition of a Polymer
+molecule containing monomers located at the positions specified in
+"coords.raw" (a 3-column text file).  Monomers will be rotated so
+that they point along the polymer axis direction (see "-dir-indices")
+with an optional helical twist added (see "-helix").  Users can
+specify one or more bonds connecting each monomer to the next monomer
+(see "-bond").  Similarly, 3-body and 4-body angular interactions between
+atoms in different monomers can either be generated automatically
+(using the standard moltemplate "Angle By Type" rules)
+OR generated manually (using "-angle", "-dihedral", "-improper" arguments).
+
+Note: This program is both a stand-alone executable program (that can be run
+from the terminal) and a python library.  The former is documented below.
+*(The [python API is explained later](#Python-API).)*
 
 ## Usage:
 
@@ -270,3 +274,90 @@ and the "P_b" atom with the "O3p_b" atom (from the opposite strand, B).
 ```
 If you want to control the sequence of the polymer, replace the
 "-monomer-name" argument with "-sequence sequence.txt".
+
+
+
+## Python API
+
+It is possible to access the functionality of *genpoly_lt.py* from 
+within python  (*without* invoking genpoly_lt.py using subprocess.run(), 
+os.system(), or writing files to the file system).
+To do that, you can create python strings containing the 
+contents of the LAMMPS data file (and input scripts) and use 
+*GenPoly.WriteLTFile()* create a file in MOLTEMPLATE (.LT) format.  
+
+However, (as you can probably tell) making this possible within python 
+was an afterthought.  Currently, the easy way to do this is to pass
+the same command line arguments (described above) to *GenPoly.ParseArgs()*
+*Then* invoke the *GenPoly.WriteLTFile()* function.
+
+However you can also edit the data members of the GenPoly
+object directly after it is created, instead of using the command-line
+arguments.  The example below demonstrates how to specify the
+coordinates *(coords_multi)* and the names of the monomers
+*(name_sequence_multi)* so that you don't have specify this information
+in the argument list (or read any files from the file system).
+Perhaps in the future, I will clean this up.)*
+
+
+```python
+class GenPoly
+    """
+    Read coordinates from a file, and generate a list of \"new\" commands
+    in moltemplate format with the position of each monomer located
+    at these positions, oriented appropriately, with bonds (and angles,
+    dihedrals, etc...) connecting successive monomers together.
+    By default (if settings.cuts==False) only a single polymer is created.
+    However this class can create multiple polymers of different lengths.
+    The list of coordinates for each polymer are saved separately within
+    the "self.coords_multi" member.
+    """
+```
+
+## Usage example inside python
+
+*NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
+
+```python
+import moltemplate
+
+N = 4
+# Generate a zig-zag curve containing N points
+x_orig = np.array([[i, 0.5*i%2] for i in range(0,N)])
+
+# It's a really good idea to generate a smoother version of this curve:
+x_new = moltemplate.interpolate_curve.ResampleCurve(x_orig, 21, 0.5)
+
+# We want the spacing between monomers to be 0.332
+x_new *= 0.332 / ((sqrt(1+0.5**2)*len(x_orig)) / (len(x_new)-1))
+
+# Now use genpoly_lt.GenPoly to generate an LT file describing
+# a coarse-grained DNA molecule wrapped along this curve.
+# (Note: Since there is only one polymer, the "coords_multi"
+#  and "name_sequence_multi" arguments contain only one list each.
+#  More generally they could contain multiple lists, one for each
+#  polymer in the system.)
+
+gp = moltemplate.genpoly_lt.GenPoly()
+gp.coords_multi = [x_new]
+
+# Now specify the identity of each monomer in the polymer
+# (In this case each "monomer" is a DNA base-pair, with names like "AT", "GC".)
+gp.name_sequence_multi =[['AT', 'CG', 'GC', 'TA', 'AT', 'CG', 'GC', 'TA',
+                          'AT', 'CG', 'GC', 'TA', 'AT', 'CG', 'GC', 'TA',
+                          'AT', 'CG', 'GC', 'TA', 'AT']]
+
+# The remaining settings are parsed from an argument list
+gp.ParseArgs(['-helix', '34.2857', 
+              '-bond', 'Backbone', 'f', 'f',
+              '-bond', 'Backbone', 'r', 'r',
+              '-polymer-name', 'DNA_snippet',
+              '-inherits, 'OXDNA2',
+              '-header', 'import oxdna2.lt',
+              '-circular', 'no'])
+
+# Generate an .LT file and write it to the terminal (sys.stdout)
+import sys
+gp.WriteLTFile(sys.stdout)
+
+```

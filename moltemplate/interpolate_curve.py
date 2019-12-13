@@ -5,18 +5,18 @@
 # Copyright (c) 2017, California Institute of Technology
 # All rights reserved.
 
-g_program_name = __file__.split('/')[-1]  # = 'interpolate_mt.py'
-g_version_str = '0.2.0'
-g_date_str = '2019-12-11'
+g_program_name = __file__.split('/')[-1]  # = 'interpolate_curve.py'
+g_version_str = '0.3.0'
+g_date_str = '2019-12-12'
 
 g_usage_str = """
 Usage:
 
-   """ + g_program_name + """ Ndesired [scale] < coords_orig.raw > coords.raw
+   """ + g_program_name + """ Ndesired [scale] [alpha] < coords_orig.raw > coords.raw
 
 Example:
 
-   """ + g_program_name + """ 30117 3.0 < coords_orig.raw > coords.raw
+   """ + g_program_name + """ 30117 3.0 0.5 < coords_orig.raw > coords.raw
 
 """
 
@@ -29,8 +29,12 @@ import bisect
 
 
 ## Tri Diagonal Matrix Algorithm(a.k.a Thomas algorithm) solver stolen from:
-# https://gist.github.com/ofan666/1875903
+# https://gist.github.com/cbellei/8ab3ab8551b8dfc8b081c518ccd9ada9
+# (also taken from https://gist.github.com/ofan666/1875903)
 
+import numpy as np
+
+## Tri Diagonal Matrix Algorithm(a.k.a Thomas algorithm) solver
 def TDMAsolver(a, b, c, d):
     '''
     TDMA solver, a b c d can be NumPy array type or Python list type.
@@ -40,23 +44,20 @@ def TDMAsolver(a, b, c, d):
       where a_1=0, and c_n=0
 
     refer to http://en.wikipedia.org/wiki/Tridiagonal_matrix_algorithm
-
+    and to http://www.cfd-online.com/Wiki/Tridiagonal_matrix_algorithm_-_TDMA_(Thomas_algorithm)
     '''
-
-    nf = len(a)     # number of equations
-    ac, bc, cc, dc = list(map(np.array, (a, b, c, d)))     # copy the array
-    for it in range(1, nf):
-        mc = ac[it]/bc[it-1]
+    nf = len(d) # number of equations
+    ac, bc, cc, dc = map(np.array, (a, b, c, d)) # copy arrays
+    for it in xrange(1, nf):
+        mc = ac[it-1]/bc[it-1]
         bc[it] = bc[it] - mc*cc[it-1] 
         dc[it] = dc[it] - mc*dc[it-1]
-
-    xc = ac
+        	    
+    xc = bc
     xc[-1] = dc[-1]/bc[-1]
 
-    for il in range(nf-2, -1, -1):
+    for il in xrange(nf-2, -1, -1):
         xc[il] = (dc[il]-cc[il]*xc[il+1])/bc[il]
-
-    del bc, cc, dc  # delete variables from memory
 
     return xc
 
@@ -316,6 +317,9 @@ def main():
             scale = float(sys.argv[2])
         else:
             scale = 1.0
+
+        if len(sys.argv) > 3:
+            spline_exponent_alpha = float(sys.argv[3])            
 
         coords_orig = []
 
