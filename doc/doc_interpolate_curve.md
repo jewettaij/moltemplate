@@ -140,7 +140,10 @@ def ResampleCurve(x_orig,     # a list or array of points lying along the curve
 
 ## Usage example inside python
 
+*NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
+
 ```python
+import numpy as np
 N = 10
 # Generate a zig-zag curve containing N points
 x_orig = np.array([[i, i%2] for i in range(0,N)])
