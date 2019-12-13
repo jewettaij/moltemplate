@@ -862,8 +862,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.0.9'
-        g_date_str = '2019-11-07'
+        g_version_str = '0.1.0'
+        g_date_str = '2019-12-13'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
