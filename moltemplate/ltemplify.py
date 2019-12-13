@@ -696,7 +696,7 @@ class Ltemplify(object):
         assert(input_data_file != None)
         if input_script_files == None:
             input_script_files = self.input_script_files
-        else if (not hasattr(input_script_files, '__getitem__')):
+        elif (not hasattr(input_script_files, '__getitem__')):
             input_script_files = [input_script_files]
 
         # (Note: The "data" file is assumed to be the last entry in the list.)
