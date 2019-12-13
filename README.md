@@ -69,6 +69,8 @@ Moltemplate requires the Bourne-shell, and a recent version of python
 (2.7, 3.0 or higher), and can run on OS X, linux, or windows.
 (...if a suitable shell environment has been installed.  See below.)
 
+The *numpy* python module is also required.
+
 
 ## INSTALLATION INSTRUCTIONS
 

@@ -99,7 +99,10 @@ setup(
         'remove_duplicates_nbody.py=moltemplate.remove_duplicates_nbody:main',
         'renumber_DATA_first_column.py=moltemplate.renumber_DATA_first_column:main']},
 
-  # install_requires=['numpy', 'scipy'],
+  install_requires=[
+      'numpy',
+  ],
+
   setup_requires=['pytest-runner'],
   tests_require=['pytest'],
   zip_safe=True,
