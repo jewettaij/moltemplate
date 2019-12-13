@@ -316,8 +316,6 @@ class GenPoly
 
 ## Usage example inside python
 
-*NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
-
 ```python
 import math
 import numpy as np
