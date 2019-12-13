@@ -140,8 +140,6 @@ def ResampleCurve(x_orig,     # a list or array of points lying along the curve
 
 ## Usage example inside python
 
-*NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
-
 ```python
 import numpy as np
 N = 10

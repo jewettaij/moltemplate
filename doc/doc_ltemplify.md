@@ -544,8 +544,6 @@ Then I use Ltemplify.Convert() to convert them into MOLTEMPLATE (.LT) format.
 
 *(My apologies for this example being so long.)*
 
-*NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
-
 
 ```python
 data_file_contents = \
@@ -621,23 +619,23 @@ data_file          = io.StringIO(data_file_contents)
 input_script_file1 = io.StringIO(input_script_file1_contents)
 input_script_file2 = io.StringIO(input_script_file2_contents)
 
-input_files = [input_script_file1, input_script_file2, data_file]
+input_script_files = [input_script_file1, input_script_file2]
 
 args=['-atomstyle', 'full',
       '-name','Ethylene inherits GAFF2',
       '-mol', '1',
       '-ignore-angles',
       '-ignore-bond-types',
-      '-ignore-coeffs'])
+      '-ignore-coeffs']
 
 # Create an Ltemplify object with these settings:
 
 import moltemplate
-ltmp = moltemplate.ltemplify.Ltemplify(input_files, args)
+ltmp = moltemplate.ltemplify.Ltemplify(args)
 
 output_file = io.StringIO()
 # Now convert this to a file in MOLTEMPLATE format
-ltmp.convert(output_file, data_file, input_script_file)
+ltmp.Convert(output_file, data_file, input_script_files)
 
 output_file.seek(0)
 output_file_contents = output_file.read()

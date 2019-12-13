@@ -319,6 +319,8 @@ class GenPoly
 *NOTE: As of 2019-12-12, this example has NOT BEEN TESTED.*
 
 ```python
+import math
+import numpy as np
 import moltemplate
 
 N = 4
@@ -329,7 +331,7 @@ x_orig = np.array([[i, 0.5*i%2] for i in range(0,N)])
 x_new = moltemplate.interpolate_curve.ResampleCurve(x_orig, 21, 0.5)
 
 # We want the spacing between monomers to be 0.332
-x_new *= 0.332 / ((sqrt(1+0.5**2)*len(x_orig)) / (len(x_new)-1))
+x_new *= 0.332 / ((math.sqrt(1+0.5**2)*len(x_orig)) / (len(x_new)-1))
 
 # Now use genpoly_lt.GenPoly to generate an LT file describing
 # a coarse-grained DNA molecule wrapped along this curve.
@@ -346,13 +348,14 @@ gp.coords_multi = [x_new]
 gp.name_sequence_multi =[['AT', 'CG', 'GC', 'TA', 'AT', 'CG', 'GC', 'TA',
                           'AT', 'CG', 'GC', 'TA', 'AT', 'CG', 'GC', 'TA',
                           'AT', 'CG', 'GC', 'TA', 'AT']]
+gp.direction_vects = [1]
 
 # The remaining settings are parsed from an argument list
-gp.ParseArgs(['-helix', '34.2857', 
+gp.ParseArgs(['-helix', '34.2857',
               '-bond', 'Backbone', 'f', 'f',
               '-bond', 'Backbone', 'r', 'r',
               '-polymer-name', 'DNA_snippet',
-              '-inherits, 'OXDNA2',
+              '-inherits', 'OXDNA2',
               '-header', 'import oxdna2.lt',
               '-circular', 'no'])
 
