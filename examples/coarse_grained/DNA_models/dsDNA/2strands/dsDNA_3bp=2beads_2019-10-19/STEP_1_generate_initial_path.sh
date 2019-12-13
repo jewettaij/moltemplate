@@ -3,7 +3,7 @@
 
 DEST_FILE="moltemplate_files/init_crds_polymer_backbone.raw"
 rm -f "$DEST_FILE"
-NMONOMERS=32
+NMONOMERS=250
 LMONOMER=0.98293   #<--relaxed distance between monomers along the polymer axis
 PI=3.141592653589793
 RCIRCLE=`echo "$LMONOMER*$NMONOMERS/(2*$PI)" | bc -l`
