@@ -6,7 +6,7 @@ import moltemplate
 
 N = 4
 # Generate a zig-zag curve containing N points
-x_orig = np.array([[i, 0.5*i%2, 0.0] for i in range(0,N)])
+x_orig = np.array([[i, 0.5*(i%2), 0.0] for i in range(0,N)])
 
 # It's a really good idea to generate a smoother version of this curve:
 x_new = moltemplate.interpolate_curve.ResampleCurve(x_orig, 21, 0.5)
