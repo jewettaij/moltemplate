@@ -346,7 +346,6 @@ gp.coords_multi = [x_new]
 gp.name_sequence_multi =[['AT', 'CG', 'GC', 'TA', 'AT', 'CG', 'GC', 'TA',
                           'AT', 'CG', 'GC', 'TA', 'AT', 'CG', 'GC', 'TA',
                           'AT', 'CG', 'GC', 'TA', 'AT']]
-gp.direction_vects = [1]
 
 # The remaining settings are parsed from an argument list
 gp.ParseArgs(['-helix', '34.2857',
