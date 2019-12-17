@@ -15,17 +15,16 @@ filetype xyz
 
 output system.xyz
 
-# 1000 water molecules and 500 urea molecules will be put in a box
-# defined by the minimum coordinates x, y and z = 0. 0. 0. and maximum
-# coordinates 80. 80. 80. That is, they will be put in a cube of side
-# 80. (the keyword "inside cube 0. 0. 0. 80.") could be used as well.
+# 216 ethylene molecules and 108 benzene molecules in a box defined by the
+# minimum coordinates x, y and z = 0.0 0.0 0.0, and maximum coordinates
+# 48.0, 48.0, 48.0. That is, they will be put in a cube of size 48.
 
 structure ethylene.xyz
-  number 1000 
-  inside box 0. 0. 0. 80. 80. 80. 
+  number 216
+  inside box 0.0 0.0 0.0 48.0 48.0 48.0
 end structure
 
 structure benzene.xyz
-  number 500
-  inside box 0. 0. 0. 80. 80. 80. 
+  number 108
+  inside box 0.0 0.0 0.0 48.0 48.0 48.0
 end structure
