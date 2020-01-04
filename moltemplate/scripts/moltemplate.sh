@@ -7,7 +7,7 @@
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.14.4"
-G_DATE="2019-12-13"
+G_DATE="2020-1-03"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -586,11 +586,11 @@ while [ "$i" -lt "$ARGC" ]; do
             TRICLINIC="True"
             PI=3.1415926535897931
             BOXSIZE_X=$BOXSIZE_A
-            BOXSIZE_Y=`awk "BEGIN{print $BOXSIZE_B*sin($GAMMA*$PI/180.0)}"`
-            BOXSIZE_XY=`awk "BEGIN{print $BOXSIZE_B*cos($GAMMA*$PI/180.0)}"`
-            BOXSIZE_XZ=`awk "BEGIN{print $BOXSIZE_C*cos($BETA*$PI/180.0)}"`
-            BOXSIZE_YZ=`awk "BEGIN{ca=cos($ALPHA*$PI/180.0); cb=cos($BETA*$PI/180.0); cg=cos($GAMMA*$PI/180.0); sg=sin($GAMMA*$PI/180.0); c=$BOXSIZE_C; print c*(ca-(cg*cb))/sg}"`
-            BOXSIZE_Z=`awk "BEGIN{print sqrt(($BOXSIZE_C**2)-(($BOXSIZE_XZ**2)+($BOXSIZE_YZ**2)))}"`
+            BOXSIZE_Y=`awk -v PI="$PI" -v BX_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*sin(GAMMA*PI/180.0)}'`
+            BOXSIZE_XY=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*cos(GAMMA*PI/180.0)}'`
+            BOXSIZE_XZ=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_C*cos(BETA*PI/180.0)}'`
+            BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); c=BOXSIZE_C; print c*(ca-(cg*cb))/sg}'`
+            BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
         else
             BOXSIZE_X=$BOXSIZE_A
             BOXSIZE_Y=$BOXSIZE_B
@@ -1753,12 +1753,12 @@ if [ -z "$BOXSIZE_MINX" ] || [ -z "$BOXSIZE_MAXX" ] || [ -z "$BOXSIZE_MINY" ] ||
         MINMAX_BOUNDS=`awk 'BEGIN{first=1}{if (NF>=3){x=$1; y=$2; z=$3; if (first) {first=0; xmin=x; xmax=x; ymin=y; ymax=y; zmin=z; zmax=z;} else {if (x<xmin) xmin=x; if (x>xmax) xmax=x; if (y<ymin) ymin=y; if (y>ymax) ymax=y; if (z<zmin) zmin=z; if (z>zmax) zmax=z;}}} END{print xmin" "xmax" "ymin" "ymax" "zmin" "zmax;}' < "$tmp_atom_coords"`
 
         # ...and add a narrow margin (10%) around the boundaries:
-        BOXSIZE_MINX=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$2-$1; print $1-0.5*margin*width}"`
-        BOXSIZE_MAXX=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$2-$1; print $2+0.5*margin*width}"`
-        BOXSIZE_MINY=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$4-$3; print $3-0.5*margin*width}"`
-        BOXSIZE_MAXY=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$4-$3; print $4+0.5*margin*width}"`
-        BOXSIZE_MINZ=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$6-$5; print $5-0.5*margin*width}"`
-        BOXSIZE_MAXZ=`echo $MINMAX_BOUNDS | awk "{margin=0.1; width=$6-$5; print $6+0.5*margin*width}"`
+        BOXSIZE_MINX=`echo $MINMAX_BOUNDS | awk '{margin=0.1; width=$2-$1; print $1-0.5*margin*width}'`
+        BOXSIZE_MAXX=`echo $MINMAX_BOUNDS | awk '{margin=0.1; width=$2-$1; print $2+0.5*margin*width}'`
+        BOXSIZE_MINY=`echo $MINMAX_BOUNDS | awk '{margin=0.1; width=$4-$3; print $3-0.5*margin*width}'`
+        BOXSIZE_MAXY=`echo $MINMAX_BOUNDS | awk '{margin=0.1; width=$4-$3; print $4+0.5*margin*width}'`
+        BOXSIZE_MINZ=`echo $MINMAX_BOUNDS | awk '{margin=0.1; width=$6-$5; print $5-0.5*margin*width}'`
+        BOXSIZE_MAXZ=`echo $MINMAX_BOUNDS | awk '{margin=0.1; width=$6-$5; print $6+0.5*margin*width}'`
     else
         # By default, choose some reasonably large box:
         BOXSIZE_MINX="-100.0"
@@ -2170,7 +2170,7 @@ ls "${data_prefix}"* 2> /dev/null | while read file_name; do
     #SECTION_NAME="${file_name:$N_data_prefix}"
     #If using sh:
     #SECTION_NAME=`expr substr "$file_name" $(($N_data_prefix+1)) 1000000` <-- not posix compliant. AVOID
-    SECTION_NAME=`echo "" | awk "END{print substr(\"$file_name\",$((N_data_prefix+1)),1000000)}"`
+    SECTION_NAME=`echo "" | awk -v FN="$file_name" -v N="$N_data_prefix" 'END{print substr(FN,N+1,1000000)}'`
     # Create a new section in the data file
     # matching the portion of the name of
     # the file after the data_prefix.
@@ -2212,7 +2212,7 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     #SECTION_NAME="${file_name:$N_in_prefix}"
     #If using sh:
     #SECTION_NAME=`expr substr "$file_name" $(($N_in_prefix+1)) 1000000` <-- not posix compliant. AVOID
-    SECTION_NAME=`echo "" | awk "END{print substr(\"$file_name\",$((N_in_prefix+1)),1000000)}"`
+    SECTION_NAME=`echo "" | awk -v FN="$file_name" -v N="$N_in_prefix" 'END{print substr(FN,N+1,1000000)}'`
     #FILE_SUFFIX=`echo "$SECTION_NAME" | awk '{print tolower($0)}'`
     FILE_SUFFIX=`echo "$SECTION_NAME" | awk '{print tolower($0)}'|sed 's/ /./g'`
     # Create a new section in the lammps input script
