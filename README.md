@@ -104,7 +104,8 @@ If you continue to run into difficulty, try installing moltemplate into a tempor
     pip install .
     #(now do something useful with moltemplate...)
 
-(You will have to "run source ~/moltemplate/venv/bin/activate" beforehand every time you want to run moltemplate.
+(You will have to enter "source ~/moltemplate/venv/bin/activate"
+ into a terminal beforehand every time you want to run moltemplate.
 Virtual environments are
 [explained here](https://docs.python.org/3/tutorial/venv.html)
 If all this fails, then try installing moltemplate by manually updating your
