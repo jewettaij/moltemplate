@@ -162,13 +162,9 @@ moltemplate is available under the terms of the [MIT license](LICENSE.md).
 The remaining file, ([ttree_lex.py](./moltemplate/ttree_lex.py)),
 is a modified version of the 
 [shlex.py](https://docs.python.org/3/library/shlex.html) library.
-On 2019-11-12 I realized that this file was released using the
+which is released using the
 [PSF license](https://docs.python.org/3/license.html).
 Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
-
-Please contact me if this is a problem.
-It would probably not be difficult to write a new version of *ttree_lex.py*
-without any license restrictions.
 
 *Incidentally, the PSF is not a copyleft license, but it
 [is compatible with the the GPL license](https://docs.python.org/3/license.html).
