@@ -24,13 +24,27 @@ It currently supports the
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**TraPPE**(1998)](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
-force fields, and the
+force fields,
+the
+[**ATB**](https://atb.uq.edu.au) database,
+and the
 [**MOLC**](./examples/coarse_grained/MOLC),
 [**mW**](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
 [**ELBA**(water)](./examples/coarse_grained/ELBAwater%2Bmethanol),
 [**oxDNA2**](./examples/coarse_grained/DNA_models),
+and
 [**EFF**](./examples/misc_examples/explicit_electrons)
 molecular models (and others).
+Moltemplate is interoperable with
+[**ATB**](https://atb.uq.edu.au),
+[**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
+[**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
+[**CellPACK**](http://www.cellpack.org),
+[**LigParGen**](http://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
+[**Vipster**](https://sgsaenger.github.io/vipster),
+[**NanoHub struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf)
+[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html)
+and any other program that reads or generates LAMMPS data (LMPDAT) files.
 This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
 

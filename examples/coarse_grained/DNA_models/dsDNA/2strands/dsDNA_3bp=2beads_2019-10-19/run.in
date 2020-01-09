@@ -1,17 +1,23 @@
 # -- Init Section --
 
-include system.in.init
+# The forces between DNA strands depend on the salt concentration,
+# so we must specify the salt concentration beforehand.
+# We do this indirectly by specifying the Debye length.  Do this now.
+
+variable debye_length equal 1.0
+
+# Now specify the force field styles and atom styles:
+include         "system.in.init"
 
 # -- Atom Definition Section --
 
-#read_data system.data
-read_data system_after_min.data
-#change_box all x final -300 300 y final -300 300 z final -300 300
+# atom geometry and topology:
+read_data       "system.data"
 
 # -- Settings Section --
 
-
-include system.in.settings
+# force field parameters:
+include         "system.in.settings"
 
 
 # -- Run Section --

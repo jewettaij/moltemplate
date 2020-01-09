@@ -571,10 +571,7 @@ DNAForceField {
     bond_style      hybrid harmonic
     angle_style     hybrid harmonic
     dihedral_style  hybrid spherical
-
-    #pair_style      hybrid table linear 402
-
-    pair_style      hybrid yukawa 1.0 7.001  # the Debye-length is on the order of 1.0nm
+    pair_style      hybrid yukawa \$\{debye_length\} 7.001
     pair_modify     shift yes
     # If charges are needed, (assuming biopolymers), try one of:
     #dielectric      80.0
