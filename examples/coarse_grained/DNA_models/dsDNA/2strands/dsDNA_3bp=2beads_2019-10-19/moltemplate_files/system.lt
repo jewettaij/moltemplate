@@ -1,9 +1,22 @@
-import "polymer.lt"
+import "dnaforcefield.lt"
+import "dna_polymer.lt"    # <-- Defines the polymer model used for DNA
+dna_polymer = new DNAPolymer
+
+#import "wall.lt"          # <-- Defines the walls of the container
+
+import "cell_boundary.lt" # <-- Defines the cell wall and the boundary box
+cell_boundary = new CellBoundary
 
 
-polymer = new Polymer
 
+# What kind of boundary conditions are we using?
 
+write_once("In Init") {
+  boundary s s s      # <-- periodicity in x y z directions
+}
+# "f" stands for "fixed"
+# "p" stands for "periodic"
+# "s" stands for "shrink-wrapped" (non-periodic)
 
 
 # What kind of boundary conditions are we using?

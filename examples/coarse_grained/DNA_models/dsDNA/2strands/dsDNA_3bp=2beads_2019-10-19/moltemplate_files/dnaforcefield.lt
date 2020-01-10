@@ -148,20 +148,12 @@ DNAForceField {
     #---------- iteration 2 (second correction) -----------
     # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
     # HERE I AM USING THE SAME PARAMETERS FROM THE PREVIOUS ITERATION.
-    # IGNORE:  Measure the average and std-dev from the previous simulation:
-    # IGNORE:  μ_sim_iter1 = , σ_sim_iter1 = 
-    # IGNORE: ITER2: x0_iter2 = x0_iter1 + (μ_PDB - μ_sim_iter1)  = 
-    # IGNORE: ITER2: K_iter2  = K_iter1 * (σ_sim_iter1 / σ_PDB)^2 = 
     #
     #bond_coeff     @bond:BasePair  harmonic  298.52861  1.4790
     #
     #---------- iteration 3 (third correction) -----------
     # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
     # HERE I AM USING THE SAME PARAMETERS FROM THE PREVIOUS ITERATION.
-    # IGNORE:  Measure the average and std-dev from the previous simulation:
-    # IGNORE:  μ_sim_iter2 = , σ_sim_iter2 = 
-    # IGNORE: ITER3: x0_iter3 = x0_iter2 + (μ_PDB - μ_sim_iter2)  = 
-    # IGNORE: ITER3: K_iter3  = K_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
     #
     #bond_coeff     @bond:BasePair  harmonic  298.52861  1.4790
     #
@@ -173,26 +165,6 @@ DNAForceField {
     
     bond_coeff     @bond:BasePair  harmonic  281.3514  1.48169
     
-    #---------- iteration 5 (fifth correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    # μ_sim_iter4 = , σ_sim_iter4 = 
-    #ITER5: x0_iter5 = x0_iter4 + (μ_PDB - μ_sim_iter4)  = 
-    #ITER5: K_iter5  = K_iter4 * (σ_sim_iter4 / σ_PDB)^2 = 
-    #
-    #---------- iteration 6 (sixth correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    # μ_sim_iter5 = , σ_sim_iter5 = 
-    #ITER6: x0_iter6 = x0_iter5 + (μ_PDB - μ_sim_iter5)  = 
-    #ITER6: K_iter6  = K_iter5 * (σ_sim_iter5 / σ_PDB)^2 = 
-    #
-    #---------- iteration_7 (seventh correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    # μ_sim_iter6 = , σ_sim_iter6 = 
-    #ITER7: x0_iter7 = x0_iter6 + (μ_PDB - μ_sim_iter6)  = 
-    #ITER7: K_iter7  = K_iter6 * (σ_sim_iter6 / σ_PDB)^2 = 
-
-
-
 
 
 
@@ -215,20 +187,12 @@ DNAForceField {
     #---------- iteration 2 (second correction) -----------
     # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
     # HERE I AM USING THE SAME PARAMETERS FROM THE PREVIOUS ITERATION.
-    # IGNORE: Measure the average and std-dev from the previous simulation:
-    # IGNORE: μ_sim_iter1 = , σ_sim_iter1 = 
-    # IGNORE: ITER2: x0_iter2 = x0_iter1 + (μ_PDB - μ_sim_iter1)  = 
-    # IGNORE: ITER2: K_iter2  = K_iter1 * (σ_sim_iter1 / σ_PDB)^2 = 
     #
     #bond_coeff @bond:Backbone  harmonic  138.6763 1.63671
     #
     #---------- iteration 3 (third correction) -----------
     # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
     # USING THE SAME PARAMETERS AS THE PREVIOUS ITERATION
-    # IGNORE:  Measure the average and std-dev from the previous simulation:
-    # IGNORE:  μ_sim_iter2 = , σ_sim_iter2 = 
-    # IGNORE: ITER3: x0_iter3 = x0_iter2 + (μ_PDB - μ_sim_iter2)  = 
-    # IGNORE: ITER3: K_iter3  = K_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
     #
     #bond_coeff @bond:Backbone  harmonic  138.6763 1.63671
     #
@@ -240,24 +204,6 @@ DNAForceField {
     
     bond_coeff @bond:Backbone  harmonic  133.2793 1.63803
     
-    #---------- iteration 5 (fifth correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    # μ_sim_iter4 = , σ_sim_iter4 = 
-    #ITER5: x0_iter5 = x0_iter4 + (μ_PDB - μ_sim_iter4)  = 
-    #ITER5: K_iter5  = K_iter4 * (σ_sim_iter4 / σ_PDB)^2 = 
-    #
-    #---------- iteration 6 (sixth correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    # μ_sim_iter5 = , σ_sim_iter = 
-    #ITER6: x0_iter6 = x0_iter5 + (μ_PDB - μ_sim_iter5)  = 
-    #ITER6: K_iter6  = K_iter5 * (σ_sim_iter5 / σ_PDB)^2 = 
-    #
-    #---------- iteration_7 (seventh correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    # μ_sim_iter6 = , σ_sim_ite6 = 
-    #ITER7: x0_iter7 = x0_iter6 + (μ_PDB - μ_sim_iter6)  = 
-    #ITER7: K_iter7  = K_iter6 * (σ_sim_iter6 / σ_PDB)^2 = 
-
   }
 
 
@@ -382,24 +328,6 @@ DNAForceField {
     dihedral_coeff @dihedral:MajorGroove    spherical 1  &
                         20.8    1 80.6920 1     1 90 0         1 90 0
     
-    #---------- Iteration_5 (fifth correction) -----------
-    # Measure the persistence length, Lb from the previous simulation
-    #       φb0: μ_sim_iter4=, Lb_sim_iter4=, Lb_target=50.0
-    #ITER5: φb0_iter5 = φb0_iter4 + (μ_PDB - μ_sim_iter4)    = 
-    #ITER5: C3_iter5 = C3_iter4 * (Lb_target / Lb_sim_iter4) = 
-    #
-    #---------- Iteration_6 (sixth correction) -----------
-    # Measure the persistence length, Lb from the previous simulation
-    #       φb0: μ_sim_iter5=, Lb_sim_iter5=, Lb_target=50.0
-    #ITER6: φb0_iter6 = φb0_iter5 + (μ_PDB - μ_sim_iter5)    = 
-    #ITER6: C3_iter6 = C3_iter5 * (Lb_target / Lb_sim_iter5) = 
-    #
-    #---------- Iteration_7 (seventh correction) -----------
-    # Measure the persistence length, Lb from the previous simulation
-    #       φb0: μ_sim_iter6=, Lb_sim_iter6=, Lb_target=50.0
-    #ITER7: φb0_iter7 = φb0_iter6 + (μ_PDB - μ_sim_iter6)    = 
-    #ITER7: C3_iter7 = C3_iter6 * (Lb_target / Lb_sim_iter6) = 
-
 
 
 
@@ -453,14 +381,7 @@ DNAForceField {
     #   1428.963         1 -63.0 1         1 90.0 0   1 90.0 0
     #
     #---------- Iteration_2 (second correction) -----------
-    # SETTINGS FOR θ01 AND θ02 WILL BE CHOSEN MANUALLY, NOT USING METHOD BELOW
-    # IGNORE: Measure the average and std-dev from the previous simulation:
-    # IGNORE:         θ01: μ_sim_iter1 = , σ_sim_iter1 = 
-    # IGNORE: ITER2: θ01_iter2 = θ01_iter1 + (μ_PDB - μ_sim_iter1)    = 
-    # IGNORE: ITER2: C1_iter2  = C1_iter1 * (σ_sim_iter1 / σ_PDB)^2   = 
-    # IGNORE:   θ02: μ_sim_iter1 = , σ_sim_iter1 = 
-    # IGNORE: ITER2: θ02_iter2 = θ02_iter1 + (μ_PDB - μ_sim_iter1)    = 
-    # IGNORE: ITER2: C2_iter2  = C2_iter1 * (σ_sim_iter1 / σ_PDB)^2   = 
+    # SETTINGS FOR θ01 AND θ02 WILL BE CHOSEN MANUALLY
     # Measure the torsional persistence length, Lt from the previous simulation
     # SETTINGS FOR φt WILL BE CHOSEN AUTOMATICALLY USING THE METHOD BELOW:
     #  φt0: μ_sim_iter1=-63.166, Lt_sim_iter1=149.35593, Lt_target=111.0
@@ -473,18 +394,7 @@ DNAForceField {
     #   1061.9926         1 -62.0 1         1 90.0 0   1 90.0 0
     #
     #---------- Iteration_3 (third correction) -----------
-    # SETTINGS FOR θ01 AND θ02 WILL BE CHOSEN MANUALLY, NOT USING METHOD BELOW
-    # IGNORE:  Measure the average and std-dev from the previous simulation:
-    # IGNORE:        θ01: μ_sim_iter1 = , σ_sim_iter1 = 
-    # IGNORE: ITER3: θ01_iter3 = θ01_iter2 + (μ_PDB - μ_sim_iter2)  = 
-    # IGNORE: ITER3: C1_iter3  = C1_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
-    # IGNORE:        θ02: μ_sim_iter2 = , σ_sim_iter2 = 
-    # IGNORE: ITER3: θ02_iter3 = θ02_iter2 + (μ_PDB - μ_sim_iter2)  = 
-    # IGNORE: ITER3: C2_iter3  = C2_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
-    # IGNORE: Measure the torsional persistence length, Lt from previous sim
-    # IGNORE: φt0: μ_sim_iter2=-62.4373, Lt_sim_iter2=142.3311, Lt_target=111.0
-    # IGNORE: ITER3: φt0_iter3 = φt0_iter2 + (μ_PDB - μ_sim_iter2)  =
-    # IGNORE: ITER3: C_iter3   = C_iter2 * (Lt_target / Lt_sim_iter2) = 828.2180
+    # SETTINGS FOR θ01 AND θ02 WILL BE CHOSEN MANUALLY
     # CHOOSING C_iter3 MANUALLY.
     #
     #dihedral_coeff @dihedral:Torsion spherical 3  &
@@ -513,47 +423,6 @@ DNAForceField {
        90.0          0 0.000 0         0 0.00 0   1 41.0 1   &
        90.0          1 -62.0 1         1 90.0 0   1 90.0 0
     
-    #---------- Iteration_5 (fifth correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    #       θ01: μ_sim_iter4 = , σ_sim_iter4 = 
-    #ITER5: θ01_iter5 = θ01_iter4 + (μ_PDB - μ_sim_iter4)    = 
-    #ITER5: C1_iter5  = C1_iter4 * (σ_sim_iter4 / σ_PDB)^2   = 
-    #       θ02: μ_sim_iter4 = , σ_sim_iter4 = 
-    #ITER5: θ02_iter5 = θ02_iter4 + (μ_PDB - μ_sim_iter4)    = 
-    #ITER5: C2_iter5  = C2_iter4 * (σ_sim_iter4 / σ_PDB)^2   = 
-    # Measure the torsional persistence length, Lt from the previous simulation
-    #       φt0: μ_sim_iter4=, Lt_sim_iter4=, Lt_target=111.0
-    #ITER5: φt0_iter5    = φt0_iter4 + (μ_PDB - μ_sim_iter4) = 
-    #ITER5: C_iter5   = C_iter4 * (Lt_target / Lt_sim_iter4) = 
-    #
-    #---------- Iteration_6 (sixth correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    #       θ01: μ_sim_iter5 = , σ_sim_iter5 = 
-    #ITER6: θ01_iter6 = θ01_iter5 + (μ_PDB - μ_sim_iter5)    = 
-    #ITER6: C1_iter6  = C1_iter5 * (σ_sim_iter5 / σ_PDB)^2   = 
-    # Measure the average and std-dev from the previous simulation:
-    #       θ02: μ_sim_iter5 = , σ_sim_iter5 = 
-    #ITER6: θ02_iter6 = θ02_iter5 + (μ_PDB - μ_sim_iter5)    = 
-    #ITER6: C2_iter6  = C2_iter5 * (σ_sim_iter5 / σ_PDB)^2   = 
-    # Measure the torsional persistence length, Lt from the previous simulation
-    #       φt0: μ_sim_iter5=, Lt_sim_iter5=, Lt_target=111.0
-    #ITER6: φt0_iter6    = φt0_iter5 + (μ_PDB - μ_sim_iter5) = 
-    #ITER6: C3_iter6 = C3_iter5 * (Lt_target / Lt_sim_iter5) = 
-    #
-    #---------- Iteration_7 (seventh correction) -----------
-    # Measure the average and std-dev from the previous simulation:
-    #       θ01: μ_sim_iter6 = , σ_sim_iter6 = 
-    #ITER7: θ01_iter7 = θ01_iter6 + (μ_PDB - μ_sim_iter6)    = 
-    #ITER7: C1_iter7  = C1_iter6 * (σ_sim_iter6 / σ_PDB)^2   = 
-    # Measure the average and std-dev from the previous simulation:
-    #       θ02: μ_sim_iter6 = , σ_sim_iter6 = 
-    #ITER7: θ02_iter7 = θ02_iter6 + (μ_PDB - μ_sim_iter6)    = 
-    #ITER7: C2_iter7  = C2_iter6 * (σ_sim_iter6 / σ_PDB)^2   = 
-    # Measure the torsional persistence length, Lt from the previous simulation
-    #       φt0: μ_sim_iter6=, Lt_sim_iter6=, Lt_target=111.0
-    #ITER7: φt0_iter7    = φt0_iter6 + (μ_PDB - μ_sim_iter6) = 
-    #ITER7: C3_iter7 = C3_iter6 * (Lt_target / Lt_sim_iter6) = 
-
   }
 
 
