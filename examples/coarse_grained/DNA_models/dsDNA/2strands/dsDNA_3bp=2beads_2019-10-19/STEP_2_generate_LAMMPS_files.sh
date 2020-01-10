@@ -19,12 +19,12 @@ cd moltemplate_files
                 -bond Backbone b b \
                 -dihedral MajorGroove b b a a 0 1 1 2 \
                 -dihedral Torsion a a b b 1 0 0 1 \
-                -polymer-name 'Polymer' \
+                -polymer-name 'DNAPolymer' \
                 -inherits 'DNAForceField'  \
                 -monomer-name 'DNAMonomer' \
                 -header 'import "dnamonomer.lt"' \
 		-box 20,20,20 \
-                < init_crds_polymer_backbone.raw > polymer.lt
+                < init_crds_polymer_backbone.raw > dnapolymer.lt
 
   # The "-helix 0.0" parameter represents the twist-per-monomer (Δφ) at the
   # start of the simulation.  It is proportional to the "supercoil-density" (σ)
