@@ -1,6 +1,6 @@
-import "dnapolymer.lt"    # <-- Defines "DNAPolymer"
+import "dna_polymer.lt"    # <-- Defines "DNAPolymer"
 
-dnapolymer = new DNAPolymer
+dna_polymer = new DNAPolymer
 
 
 

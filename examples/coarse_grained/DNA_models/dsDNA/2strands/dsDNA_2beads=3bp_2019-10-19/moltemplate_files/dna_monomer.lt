@@ -17,7 +17,7 @@
 
 
 
-import "dnaforcefield.lt"   # defines "DNAForceField"
+import "dna_forcefield.lt"   # defines "DNAForceField"
 
 
 
