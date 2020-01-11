@@ -26,14 +26,9 @@ cd moltemplate_files
 		-box 20,20,20 \
                 < init_crds_polymer_backbone.raw > dnapolymer.lt
 
-  # The "-helix 0.0" parameter represents the twist-per-monomer (Δφ) at the
-  # start of the simulation.  It is proportional to the "supercoil-density" (σ)
-  # The formula for the twist-per-monomer which is:
-  #    Δφ = 360*σ*(Nbppm/10.5)     (in degrees)
-  # where "Nbppm" is the number of base pairs per monomer, and 10.5 is the
-  # natural period of DNA twist in the relaxed state in base-pairs.
-  # Example:
-  #   genpoly_lt.py -helix 102.857  (calculated using the formula above)
+  # (Note: The "-helix" parameter represents the twist-per-monomer (Δφ) at the
+  #        start of the simulation.  Example "genpoly_lt.py -helix 102.857 ...")
+
 
 
   # Then run moltemplate on "system.lt".
