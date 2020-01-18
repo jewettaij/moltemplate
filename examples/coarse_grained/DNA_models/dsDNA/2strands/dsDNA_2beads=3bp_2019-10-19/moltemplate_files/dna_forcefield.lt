@@ -23,12 +23,13 @@ DNAForceField {
   # For numerical stability, all oscillations in the simulation should not
   # occur faster than once every 30 timesteps.  Let's define Nperiod=30.
   # The mass, m, is determined by assuming that the timestep width, Δt=1, and
-  #    sqrt(k/m) = 2π/(Nperiod*Δt)    and solving for m
-  # (For harmonic forces, k is the largest spring constant. More geneally
-  # k should be an upper bound for the second derivative of the energy with
+  #    sqrt(k_max/m) = 2π/(Nperiod*Δt)    and solving for m
+  # --> m = (k_max*(Nperiod**2)/((2*pi)**2))
+  # (For harmonic forces, k is the largest spring constant. More generally
+  # k_max should be an upper bound for the second derivative of the energy with
   # respect to position, d^2U(r)/dr^2, which is accessible at this temperature.
   # This depends on the force-field you are using and the temperature.
-  #    In this case: I set k ≈ 750 kcal/mol / nm^2 when temperature is 300K.
+  #    In this case: I set k_max ≈ 750 kcal/mol / nm^2 (when temperature≈300K).
   # Here there are 2 types of particles in this DNA backbone: "A" and "B".
   # They correspond to the DNA backbone for the two opposite chains.  I gave
   # them different atom type names to make it easy to distinguish them visually

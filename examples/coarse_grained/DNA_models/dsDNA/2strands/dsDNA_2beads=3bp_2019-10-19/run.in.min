@@ -31,14 +31,23 @@ include         "system.in.settings"
 
 # Note: The minimization step is not necessary in this example.  However
 #       in general, it's always a good idea to minimize the system beforehand.
-#       (The "fShakeSPCE" fix was defined in system.in.settings. 
-#        It is incompatible with "minimize", so we disable it first.)
 thermo_style    custom step temp pe etotal epair ebond eangle edihed
 thermo          5
 dump            1 all custom 10000 traj_min.lammpstrj id mol type x y z ix iy iz
 min_style cg
 min_modify dmax 0.05
-fix fxcenter all recenter 0.0 0.0 0.0
+
+# To make visualization easier, keep the average position centered at 0,0,0.
+# (This will prevent the polymer from drifting away.)
+
+fix fxcen all recenter 0.0 0.0 0.0
+
+# Make sure the particles remain allocated evenly over the processors.
+# (roughly the same number of particles assigned to ever processor)
+
+fix fxbal all balance 500 1.03 shift xyz 20 1.03
+
+# Now minimize the system
 minimize 1.0e-4 1.0e-6 100000 400000
 
 

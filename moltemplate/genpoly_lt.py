@@ -35,20 +35,21 @@ g_usage_msg = """
 Usage:
 
    genpoly_lt.py  \\
+      [-polymer-name pname] \\
+      [-monomer-name mname] \\
+      [-sequence sequence.txt] \\
       [-bond btype a1 a2] \\
-      [-helix deltaphi] \\
-      [-axis x,y,z] \\
-      [-circular yes/no/connected] \\
-      [-dir-indices ia ib] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
       [-improper itype a1 a2 a3 a4 i1 i2 i3 i4] \\
-      [-monomer-name mname] \\
-      [-sequence sequence.txt] \\
-      [-polymer-name pname] \\
       [-inherits ForceFieldObject] \\
       [-header "import \"monomer.lt\""] \\
+      [-helix deltaphi] \\
+      [-axis x,y,z] \\
+      [-circular yes/no/connected] \\
       [-cuts cuts.txt] \\
+      [-polymer-directions polarities.txt \\
+      [-dir-indices ia ib] \\
       [-box paddingX,paddingY,paddingZ] \\
       < coords.raw > polymer.lt
 

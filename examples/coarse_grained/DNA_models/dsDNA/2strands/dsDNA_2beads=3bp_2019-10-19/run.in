@@ -25,7 +25,7 @@ include         "system.in.settings"
 
 timestep        1.0   # By definition.  Masses should be adjusted accordingly.
 
-dump            1 all custom 20000 traj.lammpstrj id mol type x y z ix iy iz
+dump            1 all custom 10000 traj.lammpstrj id mol type x y z ix iy iz
 
 # To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
 # (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
@@ -35,34 +35,26 @@ dump            1 all custom 20000 traj.lammpstrj id mol type x y z ix iy iz
 
 fix fxlan all langevin   0.5961621   0.596162   10000.0    123456
 
-# Note: LOWER BOUND for tdamp
-#       tdamp must be >> than the innertial t_m ~= sqrt( m / d^U/dr )
-#       (which for our force field is about 15.  It should be ~= Nperiod
-#       which I picked to be 20).  Check "forcefield.lt" or "system.data"
-#       to find the mass.
-#       UPPER BOUND for tdamp
-#       To maximize sampling efficiency, make tdamp as large as you can,
-#       just make sure it does not exceed the timescales you really care
-#       about (such as the time needed for the chromosome to "fold").  
-#       Keep it perhaps an order of magnitude or so shorter than that.
-# NOTE: AT SHORT TIMESCALES, THE DNA WILL NOT APPEAR TO MOVE REALISTICALLY
-#       IT MAY APPEAR TO BE DRAMATICALLY UNDERDAMPLED (BALLISTIC).
-#       DO NOT USE THESE SETTINGS FOR MAKING SHORT MOVIES OF DNA MOTION.
-#       (For that, reduce "tdamp" until the DNA motion appears diffusive.)
-
+ 
 
 fix fxnve all nve 
 
+# To make visualization easier, keep the average position centered at 0,0,0.
+# (This will prevent the polymer from drifting away.)
 
 fix fxcen all recenter 0.0 0.0 0.0
+
+# Make sure the particles remain allocated evenly over the processors.
+# (roughly the same number of particles assigned to ever processor)
+
+fix fxbal all balance 50000 1.03 shift xyz 20 1.03
 
 
 # (See http://lammps.sandia.gov/doc/fix_langevin.html)
 
 thermo_style    custom step temp pe etotal epair ebond eangle edihed
-thermo          5000  # time interval for printing out "thermo" data
-#thermo_modify   norm no
-thermo_modify   norm yes
+thermo          5000     # time interval for printing out "thermo" data
+thermo_modify   norm yes #(optional, makes energy numbers easier to understand)
 
 
 run              100000000

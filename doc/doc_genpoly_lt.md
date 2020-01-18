@@ -23,105 +23,29 @@ from the terminal) and a python library.  The former is documented below.
 
 ```
    genpoly_lt.py  \
+      [-polymer-name pname] \
+      [-monomer-name mname] \
+      [-sequence sequence.txt] \
       [-bond btype a1 a2] \
-      [-helix deltaphi] \
-      [-axis x,y,z] \
-      [-circular yes/no/connected] \
-      [-dir-indices ia ib] \
       [-angle    atype a1 a2 a3 i1 i2 i3] \
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \
       [-improper itype a1 a2 a3 a4 i1 i2 i3 i4] \
-      [-monomer-name mname] \
-      [-sequence sequence.txt] \
-      [-polymer-name pname] \
       [-inherits ForceFieldObject] \
       [-header "import monomer.lt"] \
+      [-helix deltaphi] \
+      [-axis x,y,z] \
+      [-circular yes/no/connected] \
       [-cuts cuts.txt] \
-      [-box paddingX,paddingY,paddingZ] \
       [-polymer-directions polarities.txt] \
+      [-dir-indices ia ib] \
+      [-box paddingX,paddingY,paddingZ] \
       < coords.raw > polymer.lt
 ```
 ## Arguments [optional]
 
-    -axis x,y,z  direction of the polymer axis in the original monomer object.
-             These three numbers (separated by commas with no spaces)
-             define the direction that the monomer subunit is pointing in.  
-             By default, the three numbers are 1 0 0 (ie, the X axis)
-
-    -helix deltaphi = Optionally, rotate each monomer around it's axis by
-             angle deltaphi (in degrees) beforehand
-
-    -circular keyword
-       keyword must be one of these:
-             "no"          The polymer is a linear chain with the two ends
-                           not connected.
-             "yes"         The polymer is a circular loop with the two ends
-                           connected pointing in similar directions.
-             "connected"   Connect the two ends together with bonds (and angles,
-                           and dihedrals, if applicable) to make a closed loop.
-                           But do not adjust the orientation of the first and
-                           last monomers so that they point towards eachother.
-                           (Use this if you plan to simulate an "infinitely"
-                           long polymer using periodic boundary conditions,
-                           with the two ends are connected on opposite sides.)
-
-    -dir-indices ia ib
-             The program attempts to orient each monomer in a direction that
-             the polymer is pointing.  By default, the program will
-             orient monomer i in the direction connecting the monomers before
-             and after it (monomers i-1 and i+1).  The user can override this
-             using the -dir-indices command line argument.  The ia and ib
-             arguments are integer offsets.  To point monomer i in the direction
-             connecting it to the following monomer (i+1), use -dir-indices 0 1
-	     (For circular polymers, the indices will be wrapped appropriately.)
-
-    -bond btype a1 a2
-             Add a bond between successive monomers of type btype.
-             between atoms named a1 and a2 (all three arguments are strings and
-             omit the @bond: and $atom: prefixes in moltemplate variables)
-             Multiple bonds between successive monomers can be added by having
-             "-bond bt a1 a2" appear several times in the argument list.
-             For example, double-stranded DNA can be implemented as a polymer
-             with 2 bonds connecting separate monomers (if each "monomer
-             corresponds to a base pair).
-
-    -angle atype a1 a2 a3 i1 i2 i3
-             Add a 3-body angle interaction between atoms a1 a2 a3 in monomers
-             i1 i2 and i3.  (The aname atype a1, a2, a3 arguments are strings
-             containing moltemplate variable names. The standard moltemplate
-             prefixes "$angle:", "@angle:", and "$atom:" should be omitted.
-             The i1, i2, i3 arguments are integer indices indicating the monomer
-             that each atom belongs to.
-                0 corresponds to the current monomer
-                1 corresponds to the next monomer
-                2 corresponds to the following monomer, etc...
-	     (For circular polymers, the indices will be wrapped appropriately.)
-             Multiple angles per monomer can be added by having:
-             "-angle aname atype a1 a2 a3 i1 i2 i3"
-             appear several times in the argument list.
-
-
-    -dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4
-             Add a 4-body dihedral interaction between atoms a1 a2 a3 a4 in
-             monomers i1 i2 and i3.  (The dname dtype a1, a2, a3, a4, arguments
-             are strings containing moltemplate variable names. The moltemplate
-             prefixes "$dihedral:", "@dihedral:", and "$atom:" should be omitted
-             The i1, i2, i3, i4 arguments are integer indices indicating the
-             monomer that each atom belongs to.  (See explanation above.)
-             Multiple dihedrals per monomer can be added by having:
-             "-dihedral dname dtype a1 a2 a3 a4 i1 i2 i3 i4"
-             appear several times in the argument list.
-
-    -improper itype a1 a2 a3 a4 i1 i2 i3 i4
-             Add a 4-body improper interaction between atoms a1 a2 a3 a4 in
-             monomers i1 i2 and i3.  (The iname itype a1, a2, a3, a4, arguments
-             are strings containing moltemplate variable names. The moltemplate
-             prefixes "$improper:", "@improper:", and "$atom:" should be omitted
-             The i1, i2, i3, i4 arguments are integer indices indicating the
-             that each atom belongs to.  (See explanation above.)
-             Multiple impropers per monomer can be added by having:
-             "-improper iname itype a1 a2 a3 a4 i1 i2 i3 i4"
-             appear several times in the argument list.
+    -polymer-name name
+                   Name of the moltemplate object that will be created.
+                   (By default "Polymer")
 
     -monomer-name name
                    Name of the moltemplate object that will be replicated along
@@ -133,7 +57,8 @@ from the terminal) and a python library.  The former is documented below.
                    heteropolymers or polymers with end-caps, then do not use the
                    "-monomer" argument.  Use the "-sequence" argument instead.
 
-                   You can include rotations or transformations to the monomer subunit before it is moved into position.  For example, it
+                   You can include rotations or transformations to the monomer
+                   subunit before it is moved into position.  For example, it
                    is often useful to to use a modified version of the monomer
                    whose initial coordinates are compressed to avoid collisions
                    with other monomers.  To do this, use something like
@@ -141,14 +66,6 @@ from the terminal) and a python library.  The former is documented below.
                    This would compress each monomer lengthwise by 0.5
                    and 0.7 laterally. (After minimization, each monomer should
                    expand back to its ordinary size and shape.)*
-
-    -header 'some text'
-                   This is a way to insert text at the beginning of the file.
-                   It was intended as a way to tell moltemplate to import files
-                   containing definitions of the monomer subunits you will need.
-                   For example: -header 'import "FILE_WHICH_DEFINES_Monomer.lt"'
-                   You can insert multiple lines of text at the beginning of the file
-                   by including multiple -header arguments in the argument list.
 
     -sequence sequence.txt
                    If you are building a heteropolymer, this argument allows
@@ -188,16 +105,83 @@ from the terminal) and a python library.  The former is documented below.
                    end-cap monomers at places which are before and after the
                    integers specified using the "-cuts" argument.
 
-    -polymer-name name
-                   Name of the moltemplate object that will be created.
-                   (By default "Polymer")
+    -bond btype a1 a2
+             Add a bond between successive monomers of type btype.
+             between atoms named a1 and a2 (all three arguments are strings and
+             omit the @bond: and $atom: prefixes in moltemplate variables)
+             Multiple bonds between successive monomers can be added by having
+             "-bond bt a1 a2" appear several times in the argument list.
+             For example, double-stranded DNA can be implemented as a polymer
+             with 2 bonds connecting separate monomers (if each "monomer
+             corresponds to a base pair).
 
-    -inherits ForceFieldObject
-                   "ForceFieldObject" is the name of a moltemplate object which
-                   defines any rules for creating angles, dihedrals, impropers
-                   which you want to be generated automatically.  Hopefully
-                   this is object was defined somewhere in the file that
-                   you imported using the "-header" argument.
+    -angle atype a1 a2 a3 i1 i2 i3
+             Add a 3-body angle interaction between atoms a1 a2 a3 in monomers
+             i1 i2 and i3.  (The aname atype a1, a2, a3 arguments are strings
+             containing moltemplate variable names. The standard moltemplate
+             prefixes "$angle:", "@angle:", and "$atom:" should be omitted.
+             The i1, i2, i3 arguments are integer indices indicating the monomer
+             that each atom belongs to.
+                0 corresponds to the current monomer
+                1 corresponds to the next monomer
+                2 corresponds to the following monomer, etc...
+	     (For circular polymers, the indices will be wrapped appropriately.)
+             Multiple angles per monomer can be added by having:
+             "-angle aname atype a1 a2 a3 i1 i2 i3"
+             appear several times in the argument list with different parameters
+          (NOTE: USUALLY THE "-angle" ARGUMENT IS NOT NEEDED IF YOU ARE USING
+                 A FORCE FIELD THAT AUTOMATICALLY GENERATES ANGLE INTERACTIONS.)
+
+    -dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4
+             Add a 4-body dihedral interaction between atoms a1 a2 a3 a4 in
+             monomers i1 i2 and i3.  (The dname dtype a1, a2, a3, a4, arguments
+             are strings containing moltemplate variable names. The moltemplate
+             prefixes "$dihedral:", "@dihedral:", and "$atom:" should be omitted
+             The i1, i2, i3, i4 arguments are integer indices indicating the
+             monomer that each atom belongs to.  (See explanation above.)
+             Multiple dihedrals per monomer can be added by having:
+             "-dihedral dname dtype a1 a2 a3 a4 i1 i2 i3 i4"
+             appear several times in the argument list with different parameters
+          (NOTE: USUALLY THE "-dihedral" ARGUMENT IS NOT NEEDED IF YOU ARE USING
+              A FORCE FIELD THAT AUTOMATICALLY GENERATES DIHEDRAL INTERACTIONS.)
+
+    -improper itype a1 a2 a3 a4 i1 i2 i3 i4
+             Add a 4-body improper interaction between atoms a1 a2 a3 a4 in
+             monomers i1 i2 and i3.  (The iname itype a1, a2, a3, a4, arguments
+             are strings containing moltemplate variable names. The moltemplate
+             prefixes "$improper:", "@improper:", and "$atom:" should be omitted
+             The i1, i2, i3, i4 arguments are integer indices indicating the
+             that each atom belongs to.  (See explanation above.)
+             Multiple impropers per monomer can be added by having:
+             "-improper iname itype a1 a2 a3 a4 i1 i2 i3 i4"
+             appear several times in the argument list with different parameters
+          (NOTE: USUALLY THE "-improper" ARGUMENT IS NOT NEEDED IF YOU ARE USING
+               A FORCE FIELD THAT AUTOMATICALLY GENERATES IMPROPER INTERACTIONS,
+               ...OR IF YOUR POLYMER DOES NOT CONTAIN BACKBONE IMPROPERS.)
+
+    -inherits FORCE_FIELD
+                   This allows you to add "inherits FORCE_FIELD" when
+                   defining the polymer object(s).  (It simply adds the text
+                   "inherits FORCE_FIELD" after the polymer name.) In this
+                   example, "FORCE_FIELD" is the name of a moltemplate object
+                   which defines any rules for creating angles, dihedrals,
+                   impropers which you want to be generated automatically.
+                   This FORCE_FIELD object can be defined elsewhere (such as in
+                   a separate file and imported using the "-header" argument).
+
+    -header 'some text'
+                   This is a convenient way to insert a line of text at the
+                   beginning of the file that will be created by genpoly_lt.py.
+                   You can put any text at the beginning of the file, but
+                   typically these are "import" statements.  For example:
+                   -header 'import "force_field.lt" # (<--defines FORCE_FIELD)'
+                   -header 'import "monomer.lt"     # (<--defines Monomer)'
+                   The imported .LT files typically contain definitions of
+                   monomers or force field parameters that the polymer needs.
+                   (They must appear at the beginning of the .LT file, before
+                   the polymer is defined or moltemplate will complain later.)
+                   As shown in the example, you can insert multiple lines of
+                   text at the beginning by using multiple -header arguments.
 
     -cuts cut_locations.txt
                    Cut the polymer in several places along its length.  This is
@@ -226,6 +210,28 @@ from the terminal) and a python library.  The former is documented below.
                    to orient them in the forward and backward directions.)
                    See the description of the *-sequence* argument for details.
 
+    -axis x,y,z  direction of the polymer axis in the original monomer object.
+             These three numbers (separated by commas with no spaces)
+             define the direction that the monomer subunit is pointing in.  
+             By default, the three numbers are 1 0 0 (ie, the X axis)
+
+    -helix deltaphi = Optionally, rotate each monomer around it's axis by
+             angle deltaphi (in degrees) beforehand
+
+    -circular keyword
+       keyword must be one of these:
+             "no"          The polymer is a linear chain with the two ends
+                           not connected.  (default)
+             "yes"         The polymer is a circular loop with the two ends
+                           connected pointing in similar directions.
+             "connected"   Connect the two ends together with bonds (and angles,
+                           and dihedrals, if applicable) to make a closed loop.
+                           But do not adjust the orientation of the first and
+                           last monomers so that they point towards eachother.
+                           (Use this if you plan to simulate an "infinitely"
+                           long polymer using periodic boundary conditions,
+                           with the two ends are connected on opposite sides.)
+
     -box paddingX,paddingY,paddingZ
                    This will cause the program to attempt to estimate the size
                    of the smallest rectangular box which encloses all of the
@@ -246,6 +252,20 @@ from the terminal) and a python library.  The former is documented below.
                    (In other words, read the coordinates from the
                    corresponding portion of the file in reverse order.
                    This feature is probably not useful to most users.)
+
+    -dir-indices ia ib
+             The program attempts to orient each monomer in a direction that
+             the polymer is pointing.  By default, the program will
+             orient monomer i in the direction connecting the monomers before
+             and after it (monomers i-1 and i+1).  The user can override this
+             using the -dir-indices command line argument.  The ia and ib
+             arguments are integer offsets.  To point monomer i in the direction
+             connecting it to the following monomer (i+1), use -dir-indices 0 1.
+             arguments are integer offsets.  To point monomer i in the direction
+             connecting it to the previous monomer (i-1), use -dir-indices 0 -1.
+             (Note: If the -polymer-directions argument is used, and the current
+             polymer has a direction of -1, the indices ia, ib will be flipped.)
+	     For circular polymers, the indices will be wrapped appropriately.
 
 ## Examples:
 
