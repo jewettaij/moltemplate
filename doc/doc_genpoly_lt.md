@@ -174,8 +174,8 @@ from the terminal) and a python library.  The former is documented below.
                    beginning of the file that will be created by genpoly_lt.py.
                    You can put any text at the beginning of the file, but
                    typically these are "import" statements.  For example:
-                   -header 'import "force_field.lt" # (<--defines FORCE_FIELD)'
-                   -header 'import "monomer.lt"     # (<--defines Monomer)'
+               -header 'import "force_field.lt" # (<--defines FORCE_FIELD)'
+               -header 'import "monomer.lt"     # (<--defines Monomer)'
                    The imported .LT files typically contain definitions of
                    monomers or force field parameters that the polymer needs.
                    (They must appear at the beginning of the .LT file, before

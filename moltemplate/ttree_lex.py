@@ -400,6 +400,7 @@ class TtreeShlex(object):
         "Hook called on a filename to be sourced."
         newfile = RemoveOuterQuotes(newfile)
         # This implements cpp-like semantics for relative-path inclusion.
+        newfile_full = newfile
         if isinstance(self.infile, str) and not os.path.isabs(newfile):
             newfile_full = os.path.join(os.path.dirname(self.infile), newfile)
         try:
