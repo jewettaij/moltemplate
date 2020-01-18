@@ -5,8 +5,8 @@
 #          Andrew Jewett (jewett.aij at g mail)
 # LICENSE: The PSF license:
 # https://docs.python.org/3/license.html
-# The PSF license is apparently compatible with the GPL license.
-# (I am not sure whether it is compatible with the MIT license.)
+# The PSF license is compatible with the GPL license.  It is not a copyleft
+# license.  It is apparently similar to the BSD and MIT licenses.
 #
 # Contributions:
 # Module and documentation by Eric S. Raymond, 21 Dec 1998

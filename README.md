@@ -180,11 +180,9 @@ which is released using the
 [PSF license](https://docs.python.org/3/license.html).
 Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
 
-*Incidentally, the PSF is not a copyleft license, but it
-[is compatible with the the GPL license](https://docs.python.org/3/license.html).
-(I suspect it is also compatible with the LGPL license.) 
-If my understanding is correct, the MIT license is less restrictive,
-but otherwise compatible with the PSF, GPL, and LGPL licenses.*
+*Incidentally, the PSF is not a copyleft license.
+It is similar to the BSD and MIT licenses and
+[is compatible with the the GPL license](https://docs.python.org/3/license.html).*
 
 
 ## Funding
