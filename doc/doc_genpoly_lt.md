@@ -327,7 +327,7 @@ class GenPoly
     in moltemplate format with the position of each monomer located
     at these positions, oriented appropriately, with bonds (and angles,
     dihedrals, etc...) connecting successive monomers together.
-    By default (if settings.cuts==False) only a single polymer is created.
+    By default, only a single polymer is created.
     However this class can create multiple polymers of different lengths.
     The list of coordinates for each polymer are saved separately within
     the "self.coords_multi" member.
