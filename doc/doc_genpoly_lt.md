@@ -345,18 +345,20 @@ N = 4
 # Generate a zig-zag curve containing N points
 x_orig = np.array([[i, 0.5*(i%2), 0.0] for i in range(0,N)])
 
-# It's a really good idea to generate a smoother version of this curve:
+# It's a good idea to generate a smoother version of this curve
+# with 21 different positions along the curve (21=number of monomers).
 x_new = moltemplate.interpolate_curve.ResampleCurve(x_orig, 21, 0.5)
 
-# We want the spacing between monomers to be 0.332
+# Optional:
+# We want the spacing between monomers to be 0.332nm per monomer.
 x_new *= 0.332 / ((math.sqrt(1+0.5**2)*len(x_orig)) / (len(x_new)-1))
 
 # Now use genpoly_lt.GenPoly to generate an LT file describing
-# a coarse-grained DNA molecule wrapped along this curve.
+# a coarse-grained DNA molecule placed at all of these locations (x_new).
 # (Note: Since there is only one polymer, the "coords_multi"
 #  and "name_sequence_multi" arguments contain only one list each.
 #  More generally they could contain multiple lists, one for each
-#  polymer in the system.)
+#  polymer in the system.  Don't worry about this detail.)
 
 gp = moltemplate.genpoly_lt.GenPoly()
 gp.coords_multi = [x_new]

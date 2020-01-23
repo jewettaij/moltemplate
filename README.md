@@ -179,10 +179,9 @@ is a modified version of the
 which is released using the
 [PSF license](https://docs.python.org/3/license.html).
 Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
-
-*Incidentally, the PSF is not a copyleft license.
+(*The PSF is not a copyleft license.
 It is similar to the BSD and MIT licenses and
-[is compatible with the the GPL license](https://docs.python.org/3/license.html).*
+[is compatible with the the GPL license](https://docs.python.org/3/license.html).)*
 
 
 ## Funding
