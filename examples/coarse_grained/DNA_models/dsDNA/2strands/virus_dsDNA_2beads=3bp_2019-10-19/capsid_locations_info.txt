@@ -1,0 +1,12 @@
+# This file was generated from the 3J3Q PDB file using this command:
+#    ./CENTER_PDB.sh 3j3q_1vu4_A_biomt.pdb > NEW_FILE.pdb
+# It requires a PDB file for the capsid containing BIOMT records.
+# This will generate the "pdb_protein_center_locations.txt" file.
+# (I discarded the NEW_FILE.pdb file in this case.  It wasn't needed.)
+# Rename it to something more sensible and convert from Angstroms to nm (1/10).
+# awk '{print $1/10" "$2/10" "$3/10}' < pdb_protein_center_locations.txt \
+#                                     > capsid_locations.txt
+#
+# Note: Sometimes you get better results if you select a particular atom from
+#       the protein (by editing the original PDB file to only include that atom)
+#       I had best results using the CA atom from residue 173 or chain B
