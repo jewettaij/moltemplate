@@ -9,7 +9,8 @@ along the curve matches the desired spacing between monomers in the polymer.
 
 Then the "genpoly_lt.py" tool is used to create a moltemplate file
 ("dna_polymer.lt") which defines a polymer which lies along the curve
-created in step 1 (see above).
+created in step 1 (see above).  The "genpoly_lt.py" program is explained here:
+https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 Then moltemplate is invoked to create a LAMMPS data file and input script
 containing the polymer (as well as the box that it is contained within).
    (See "STEP_2_generate_LAMMPS_files.sh" for details.)
@@ -20,7 +21,7 @@ Polymer Melts (Optional)
 
 Note: In this example, there was only 1 polymer, but you can create a
 system with multiple polymers (of various lengths) confined in the same box
-by running the "genpoly_lt.py" script with the "-cuts" argument.
+by running the "genpoly_lt.py" script with the "-cuts" argument in step 2.
 This is a useful way to generate polymer melts.
 
 -----------

@@ -300,11 +300,12 @@ If you want to control the sequence of the polymer, replace the
 ## Python API
 
 It is possible to access the functionality of *genpoly_lt.py* from 
-within python  (*without* invoking genpoly_lt.py using subprocess.run(), 
-os.system(), or writing files to the file system).
-To do that, you can create python strings containing the 
-contents of the LAMMPS data file (and input scripts) and use 
-*GenPoly.WriteLTFile()* create a file in MOLTEMPLATE (.LT) format.  
+within python.  To do that, you can create arrays of coordinates and
+python strings containing the names of the monomers in the polymer (see below).
+Then use *GenPoly.WriteLTFile()* create a file in MOLTEMPLATE (.LT) format
+(If you prefer, the text in that file can be redirected to a python string
+ using StringIO.  In this way it is not necessary to read or write files to
+ the file system.)
 
 However, (as you can probably tell) making this possible within python 
 was an afterthought.  Currently, the easy way to do this is to pass
