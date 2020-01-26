@@ -1,71 +1,72 @@
-# Check the prerequisites:
 
-if [ ! -f ndmansfield ] && ! which git; then
+# Step 1a)
+
+# This is a simulation of a polymer inside a container (a virus).
+# I will approximate the shape of the container as a sphere of radius R.
+# We need to generate a random curve of the correct length with a given
+# number of monomers which can fit within the container.
+# Since we will be approximating the shape of the curve as a lattice polymer,
+# we first need to figure out how big to make the lattice.
+
+R=24.0   # A sphere of this size can fit within the container.
+NMONOMERS=3058  # The number of monomers in the polymer.  (In this example
+                # the polymer is a coarse-grained model of DNA.  Each "monomer"
+                # represents 3 base-pairs of DNA and has length 0.996nm.)
+B=0.996  # ~= physical distance between consecutive "monomers" along the chain
+
+# L = the physical length of the polymer = B * NMONOMERS.  Calculate using awk:
+L=`awk -v n="$NMONOMERS" -v b="$B" 'BEGIN{print n*b}'`
+
+# The self-avoiding polymer visits every lattice site on an Nx * Ny * Nz lttice.
+# Let "delta" be the physical spacing of the points in the lattice.
+# Hence the length of the polymer, L (which is NMONOMERS*B), satisfies
+# this constraint:
+# 1) delta * Nx * Ny * Nz = L = NMONOMERS*B
+# Suppose it is a cubical lattice (Nx=Ny=Nz)
+# 2)  Suppose we want it to fit within the sphere of radius R.  In that case:
+#    --> R=delta*sqrt((Nx/2)**2+(Ny/2)**2+(Nz/2)**2) = delta * (Nx/2) * sqrt(3)
+#    Solving for Nx and delta in terms of R and L yeilds:
+#    --> delta = sqrt(R**3/L) * 2**(3/2) / (3)**(3/4)
+#    --> Nx = ceil( (L / delta)**(1/3) )
+#
+# In this case, this yields:
+# Nx=11
+# Ny=11
+# Nz=11
+# More generally, we can use awk to calculate the formula above:
+
+Nx=`awk -v R="$R" -v L="$L" 'BEGIN{delta=sqrt(R^3.0/L)*2^(3.0/2)/(3)^(3.0/4); Nx=(L/delta)^(1.0/3); if (Nx != int(Nx)) Nx=int(Nx)+1; print Nx}'`
+Ny=$Nx
+Nz=$Ny
+
+# Step 1b)
+# Generate a random self-avoiding polymer in a lattice of size Nx * Ny * Nz.
+# If the "ndmansfield" program we need has not been downloaded and compiled yet,
+# do it now.
+
+if [ ! -f ndmansfield ]; then
+  # Check the prerequisites:
+  if [ ! -f ndmansfield ] && ! which git; then
     # If "ndmansfield" was not installed then we will need git to install it.
     # ("ndmansfield" is a random curve generator useful for polymer simulations)
     echo 'Error: You must install git before running this script.' >&2
     exit 1
-fi
-
-
-# Step 0)
-# Copy the coordinates of the capsid to moltemplate_files/coords_wall.raw
-
-cp capsid_locations.txt moltemplate_files/coords_wall.raw
-
-# Step 1)
-# I will approximate the mature HIV capsid as a sphere of radius R
-# Generate a random self-avoiding polymer within this spherical region.
-
-R=24.0   # *the interior of the mature HIV capsid is at least 2*R in diameter)
-NMONOMERS=3058
-B=0.996  # ~= distance between consecutive monomers (3bp) along the chain
-
-# Let "delta" be the physical spacing of the points in the lattice.
-# The self-avoiding polymer visits every lattice site on an Nx * Ny * Nz lttice.
-# Hence the length of the polymer, L (which is NMONOMERS*B), satisfies
-# this constraint:
-# 1) delta * Nx * Ny * Nz = L = NMONOMERS*B
-#     Suppose it is a cubical lattice (Nx=Ny=Nz)
-#     Suppose we want it to fit within the sphere of radius R.  In that case:
-# 2) delta*sqrt((Nx/2)**2+(Ny/2)**2+(Nz/2)**2) = delta * (Nx/2) * sqrt(3) = R
-#    Solving for Nx and delta in terms of R and L yeilds:
-#    --> delta = sqrt(R**3 / L) / ((sqrt(3)/2)**(3/2))
-#    --> Nx = ceil( (L / delta)**(1/3) )
-#           = 11, in this case
-# NOTE: This is an extremely small, tight lattice.  It will take a great deal
-#       of careful energy minimization before the polymer is relaxed enough
-#       to be numerically stable (much less have a realistic conformation).
-
-Nx=11
-Ny=11
-Nz=11
-
-# Note: The polymer is only occupying a cube-shaped subvolume of the sphere
-#       (which itself is only occupying a subvolume of the actual container).
-#       After the polymer is allowed to expand to fill up the full container
-#       it should have a spacing equal to:
-#           a = sqrt(volume / (sin(pi/3)*L))
-#       where L is the physical length of the polymer in nm, L=NMONOMERS*B
-#       and volume is the volume of the container where it will be confined.
-#       For a sphere, volume = (4/3)*pi*R**3.)
-
-
-# If the program we need has not been compiled yet, do it now:
-# If you don't have the "ndmansfield_src" source code, you can download it using
-# git clone https://github.com/jewettaij/ndmansfield ndmansfield_src
-
-if [ ! -f ndmansfield ]; then
+  fi
+  # Download the source code for "ndmansfield"
   git clone https://github.com/jewettaij/ndmansfield ndmansfield_src
+  # Compile it
   cd ndmansfield_src/src/
   source setup_gcc.sh  # or "source setup_gcc_mac.sh" if you use a mac    
   make clean
   make
+  # Optional: Move the "ndmansfield" binary to the place where it will be used.
   mv -f ndmansfield ../../
   make clean
   cd ../../
 fi
 
+
+# Step 1c)
 # Now run "ndmansfield" to generate a random compact self-avoiding curve        
 
 if [ -z "$RANDOM_SEED" ]; then
@@ -92,16 +93,55 @@ Ntot=$(( Nx*Ny*Nz ))
 tail -n ${Ntot} ndmansfield_traj.raw > coords_lattice.raw
 
 
-# We will rescale these coordinates and use the rescaled coordinates to         
-# interpolate the coordinates of the physical polymer of physical length
-# NMONOMERS*B through the lattice.
-# The scaling factor should be (NMONOMERS*B)/(Nx*Ny*Nz)
-SCALE=`awk -v Nx="$Nx" -v Ny="$Ny" -v Nz="$Nz" -v NMONOMERS="$NMONOMERS" -v B="$B" 'BEGIN{print NMONOMERS*B/(Nx*Ny*Nz-1)}'`
+# Step 1d)
+# Interpolate the coordinates to obtain a smoother curve.
+# Also rescale these coordinates (multiply them by a constant).  What is that
+# constant?  The physical length of the polymer should be NMONOMERS*B
+# Hence, the scaling factor should be (NMONOMERS*B)/(Nx*Ny*Nz)
 
-recenter_coords.py 0 0 0 < coords_lattice.raw \
-          | interpolate_curve.py $NMONOMERS $SCALE \
+SCALE=`awk -v Nx="$Nx" -v Ny="$Ny" -v Nz="$Nz" -v L="$L" -v B="$B" 'BEGIN{print L/(Nx*Ny*Nz-1)}'`
+
+# Optional: Center the coordinates around the origin (0,0,0):
+recenter_coords.py 0 0 0 < coords_lattice.raw > coords_lattice_centered.raw
+
+# Then interpolate and rescale them:
+interpolate_curve.py $NMONOMERS $SCALE \
+          < coords_lattice_centered.raw \
           > moltemplate_files/init_crds_polymer_backbone.raw
 
+# The final curve (moltemplate_files/init_crds_polymer_backbone.raw)
+# should contain one point at every location where each monomer should go.
+# Documentation for "interpolate_curve.py" can be found here:
+# https://github.com/jewettaij/moltemplate/blob/master/doc/doc_interpolate_curve.md
+# NOTE: This is an extremely small, tight lattice.  This is not a realistic
+#       conformation of DNA, but we can relax the shape of the DNA later.
+
 # discard temporary files:
-rm -f ndmansfield_traj.raw  coords_lattice.raw
+rm -f ndmansfield_traj.raw  coords_lattice.raw coords_lattice_centered.raw
+
+
+# Step 1e)
+# This is a simulation of DNA inside a container.
+# The container is made from a collection of immobile particles through which
+# the polyer cannot pass (in this case, the capsid wall of a virus).
+# It is convenient to copy the coordinates of those immobile particles
+# into the same directory with the other moltemplate files.  Later we will
+# create another file (in moltemplate format) describing those particles.
+
+cp capsid_locations.txt moltemplate_files/coords_wall.raw
+
+# Note: If you are simulating the behavior of a bulk polymer melt
+#       (without a container), this step is not relevant to you.
+
+# Note: Estimate the final polymer density and spacing:
+#       After the polymer is allowed to expand to fill up the full container
+#       the distance between nearest-neighbor polymer strands should
+#           a = sqrt(volume / (sin(pi/3)*L))   <-- assumes hexagonal packing
+#       where L is the physical length of the polymer in nm, L=NMONOMERS*B
+#       and volume is the volume of the container where it will be confined
+#       (or the volume of the whole simulation box, if there is no container).
+#       In this example, initially, the polymer is only occupying a
+#       cube-shaped subvolume of the sphere (which itself is only occupying
+#       a subvolume of the actual container).  Consequently we expect the
+#       initial density to be somewhat higher.
 
