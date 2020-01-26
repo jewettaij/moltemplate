@@ -70,7 +70,7 @@ fi
 # Now run "ndmansfield" to generate a random compact self-avoiding curve        
 
 if [ -z "$RANDOM_SEED" ]; then
-    RANDOM_SEED=0  # In general
+    RANDOM_SEED=0  # If RANDOM_SEED was not defined, pick a default value
 fi
 
 ./ndmansfield -box $Nx $Ny $Nz -cyclic no -seed $RANDOM_SEED  \
