@@ -1,26 +1,26 @@
-
-# Step 1a)
-
 # This is a simulation of a polymer inside a container (a virus).
 # I will approximate the shape of the container as a sphere of radius R.
 # We need to generate a random curve of the correct length with a given
 # number of monomers which can fit within the container.
+
+# Step 1a)
+
 # Since we will be approximating the shape of the curve as a lattice polymer,
 # we first need to figure out how big to make the lattice.
 
-R=24.0   # A sphere of this size can fit within the container.
+R=24.0   # Assume the container can be approximated by a sphere of this radius.
 NMONOMERS=3058  # The number of monomers in the polymer.  (In this example
                 # the polymer is a coarse-grained model of DNA.  Each "monomer"
                 # represents 3 base-pairs of DNA and has length 0.996nm.)
-B=0.996  # ~= physical distance between consecutive "monomers" along the chain
+B=0.996  # The physical distance between consecutive "monomers" along the chain
 
 # L = the physical length of the polymer = B * NMONOMERS.  Calculate using awk:
 L=`awk -v n="$NMONOMERS" -v b="$B" 'BEGIN{print n*b}'`
 
-# The self-avoiding polymer visits every lattice site on an Nx * Ny * Nz lttice.
-# Let "delta" be the physical spacing of the points in the lattice.
-# Hence the length of the polymer, L (which is NMONOMERS*B), satisfies
-# this constraint:
+# Let us imagine an Nx*Ny*Nz lattice fitting inside the container.  Let "delta"
+# refer to the physical separation between the points in this lattice. The
+# self-avoiding polymer must visit every site in this Nx*Ny*Nz lattice.  The
+# length of the polymer, L (which is NMONOMERS*B), satisfies this constraint:
 # 1) delta * Nx * Ny * Nz = L = NMONOMERS*B
 # Suppose it is a cubical lattice (Nx=Ny=Nz)
 # 2)  Suppose we want it to fit within the sphere of radius R.  In that case:
@@ -39,6 +39,7 @@ Nx=`awk -v R="$R" -v L="$L" 'BEGIN{delta=sqrt(R^3.0/L)*2^(3.0/2)/(3)^(3.0/4); Nx
 Ny=$Nx
 Nz=$Ny
 
+
 # Step 1b)
 # Generate a random self-avoiding polymer in a lattice of size Nx * Ny * Nz.
 # If the "ndmansfield" program we need has not been downloaded and compiled yet,
@@ -56,7 +57,7 @@ if [ ! -f ndmansfield ]; then
   git clone https://github.com/jewettaij/ndmansfield ndmansfield_src
   # Compile it
   cd ndmansfield_src/src/
-  source setup_gcc.sh  # or "source setup_gcc_mac.sh" if you use a mac    
+  source setup_gcc.sh
   make clean
   make
   # Optional: Move the "ndmansfield" binary to the place where it will be used.

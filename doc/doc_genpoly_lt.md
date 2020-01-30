@@ -302,7 +302,7 @@ If you want to control the sequence of the polymer, replace the
 It is possible to access the functionality of *genpoly_lt.py* from 
 within python.  To do that, you can create arrays of coordinates and
 python strings containing the names of the monomers in the polymer (see below).
-Then use *GenPoly.WriteLTFile()* create a file in MOLTEMPLATE (.LT) format
+Then use *GenPoly.WriteLTFile()* create a file in MOLTEMPLATE (.LT) format.
 (If you prefer, the text in that file can be redirected to a python string
  using StringIO.  In this way it is not necessary to read or write files to
  the file system.)

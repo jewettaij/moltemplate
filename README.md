@@ -113,7 +113,7 @@ Make sure that your default pip install bin directory is in your PATH.  (This is
 If you continue to run into difficulty, try installing moltemplate into a temporary virtual environment by installing "*virtualenv*", downloading moltemplate (to "~/moltemplate" in the example below), and running these commands:
 
     cd ~/moltemplate
-    python3 -m venv venv     #(or "virtualenv venv" if using python2)
+    python -m venv venv     #(or "virtualenv venv" if using python2)
     source venv/bin/activate
     pip install .
     #(now do something useful with moltemplate...)
@@ -150,6 +150,13 @@ If you use the tcsh shell, typically you would edit your
 After making these changes, you may need to start a new terminal (shell) for the changes to take effect.  If you do not know what a `PATH` environment variable is and are curious, read:
     http://www.linfo.org/path_env_var.html
 (I receive this question often.)
+
+*(Warning:
+Do not install moltemplate this way if you are using "vipster",
+"cellpack2moltemplate", or other software that has a moltemplate python
+dependency.  In order to be able to be able to run "import moltemplate"
+within python, as these programs do, moltemplate must be installed using
+pip or setuptools.)*
 
 
 ### WINDOWS installation suggestions

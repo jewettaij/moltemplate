@@ -45,10 +45,10 @@ sampling techniques and/or allow the polymer to pass through itself.
 In LAMMPS the later can be done using any of the following pair styles:
 https://lammps.sandia.gov/doc/pair_table.html
 https://lammps.sandia.gov/doc/pair_fep_soft.html
-http://moltemplate.org/lammps_code/pair_lj_charmm_coul_charmm_inter.html
- (Search for "soft-core".  Note: This feature requires you to recompile LAMMPS.)
 https://lammps.sandia.gov/doc/pair_soft.html
 https://lammps.sandia.gov/doc/pair_gauss.html
+http://moltemplate.org/lammps_code/pair_lj_charmm_coul_charmm_inter.html
+ (Search for "soft-core".  Note: This feature requires you to recompile LAMMPS.)
 
 2) In the real HIV virus, DNA is coated with a positively charged protein
 ("nucleocapsid") which helps compact the DNA.  DNA may also interact with a

@@ -413,12 +413,12 @@ by installing ``virtualenv'',
 %downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
 and running these commands:
 \begin{verbatim}
-mkdir ~/moltemplate_v
-cd ~/moltemplate_v
-virtualenv venv
+mkdir ~/moltemplate
+cd ~/moltemplate
+python -m venv venv     #(or "virtualenv venv" if using python2)
 source venv/bin/activate
 pip install moltemplate
-   #(now do something useful with moltemplate...)
+#(now do something useful with moltemplate...)
 \end{verbatim}
 (You will have to enter ``source ~/moltemplate/venv/bin/activate''
  into a terminal beforehand every time you want to run moltemplate.)
@@ -478,6 +478,14 @@ setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
 
 \textit{Note: You may need to log out and then 
 log back in again for the changes to take effect.}
+
+
+\textit{Warning:
+Do not install moltemplate this way if you are using ``vipster'',
+``cellpack2moltemplate'', or other software that has a moltemplate python
+dependency.  In order to be able to be able to run "import moltemplate"
+within python, as these programs do, moltemplate must be installed using
+pip or setuptools.}
 
 
 \subsubsection*{WINDOWS installation suggestions}
