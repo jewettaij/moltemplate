@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.14.5"
-G_DATE="2020-1-17"
+G_VERSION="2.15.0"
+G_DATE="2020-2-03"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -318,6 +318,8 @@ Optional arguments:
                             by supplying a file (file.py) with symmetry rules.
                             See nbody_Dihedrals.py, nbody_Impropers.py (in the
                             moltemplate directory) to learn the file format.
+-molc              Additional post-processing for the file "In Settings". This
+                   options implicitly set also -overlay-bonds.
 
 EOF
 )
@@ -364,6 +366,7 @@ REMOVE_DUPLICATE_BONDS="true"
 REMOVE_DUPLICATE_ANGLES="true"
 REMOVE_DUPLICATE_DIHEDRALS="true"
 REMOVE_DUPLICATE_IMPROPERS="true"
+SETTINGS_MOLC=""
 CHECKFF=""
 RUN_VMD_AT_END=""
 
@@ -375,7 +378,6 @@ for A in "$@"; do
     if [ "$A_FIRSTCHAR" = "\$" ]; then
         A="\\$A" # put an extra slash in front to prevent expansion later
     fi
-
     ARGC=$((ARGC+1))
     eval ARGV${ARGC}=\"$A\"
 done
@@ -421,6 +423,10 @@ while [ "$i" -lt "$ARGC" ]; do
         unset REMOVE_DUPLICATE_IMPROPERS
     elif [ "$A" = "-vmd" ]; then
         RUN_VMD_AT_END="true"
+    elif [ "$A" = "-molc" ]; then
+        # Set the -overlay-bonds, if not specified otherwise.
+        unset REMOVE_DUPLICATE_BONDS
+	SETTINGS_MOLC="true"
     elif [ "$A" = "-raw" ]; then
         if [ "$i" -eq "$ARGC" ]; then
             echo "$SYNTAX_MSG" >&2
@@ -590,6 +596,7 @@ while [ "$i" -lt "$ARGC" ]; do
             BOXSIZE_XY=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*cos(GAMMA*PI/180.0)}'`
             BOXSIZE_XZ=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_C*cos(BETA*PI/180.0)}'`
             BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); c=BOXSIZE_C; print c*(ca-(cg*cb))/sg}'`
+            #BOXSIZE_Z=`awk "BEGIN{ca=cos($ALPHA*$PI/180.0); cb=cos($BETA*$PI/180.0); cg=cos($GAMMA*$PI/180.0); sg=sin($GAMMA*$PI/180.0); print $BOXSIZE_C*sqrt(1.+2*ca*cb*cg-ca**2-cb**2-cg**2)/sg}"`
             BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
         else
             BOXSIZE_X=$BOXSIZE_A
@@ -2073,7 +2080,11 @@ if [ -s "$in_settings" ]; then
     #echo "# \"$in_settings\" typically contains coeffs, fixes, groups & modify commands:" >> $OUT_FILE_INPUT_SCRIPT
     #echo "include \"$in_settings\"" >> $OUT_FILE_INPUT_SCRIPT
     #cat "$in_settings" >> $OUT_FILE_INPUT_SCRIPT
-    cp -f "$in_settings" $OUT_FILE_SETTINGS
+    if [ -z $SETTINGS_MOLC ]; then
+      cp -f "$in_settings" $OUT_FILE_SETTINGS
+    else
+      molc.sh "$in_settings" "$in_init" > $OUT_FILE_SETTINGS
+    fi
     echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_INPUT_SCRIPT
     echo "" >> $OUT_FILE_INPUT_SCRIPT
 fi
