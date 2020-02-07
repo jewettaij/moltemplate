@@ -1,20 +1,9 @@
 #!/bin/bash
 
 # Author: Otello M Roscioni  (roscioni at gmail)
-# License: GNU General Public License (https://www.gnu.org/licenses/gpl-3.0.txt)
+# License: MIT License  (See LICENSE.md) 
 # Copyright (c) 2020
 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# post-process the "In Settings" file for the MOLC force field.
 # Usage: molc.sh /path/to/In\ Settings
 
 # temporary directory
@@ -42,10 +31,10 @@ elif [ "$bstyle" == "p p p" ]
 then
   qstyle="coul/long/offcentre"
 else
-  echo "MOLC SYNTAX ERROR: Incorrect boundary conditions."
-  echo "Check the file In Init or your input LT script."
-  echo
-  echo "OFFENDING LINE: " $bstyle
+  echo "MOLC SYNTAX ERROR: Incorrect boundary conditions." >&2
+  echo "Check the file In Init or your input LT script." >&2
+  echo >&2
+  echo "OFFENDING LINE: " $bstyle >&2
   exit 0
 fi
 
@@ -59,10 +48,10 @@ for string in $(awk '{if(tolower($2)~/hybrid\/overlay/){print}}' "$1"); do
   # Consistency test.
   test=$(echo $string | awk '{printf "%s %s %s %g %g %g %g %s %g",$1,tolower($2),tolower($3),$4,$5,$6,$7,tolower($8),$9}')
   if [ "$test" != "$style" ]; then 
-  echo "MOLC SYNTAX ERROR: pair_style differs between atom types:"
-  echo $style
-  echo $test
-  echo "OFFENDING LINE: " $string
+  echo "MOLC SYNTAX ERROR: pair_style differs between atom types:" >&2
+  echo $style >&2
+  echo $test >&2
+  echo "OFFENDING LINE: " $string >&2
   exit 0
   fi
   
@@ -81,8 +70,8 @@ echo
 if [ "$qstyle" == "coul/long/offcentre" ]; then
   kstyle=$(awk '{if(tolower($1)~/kspace_style/){printf "%s %s",$2,$3; exit}}'  "$1")
   if [ -z "$kstyle" ]; then
-    echo "MOLC SYNTAX ERROR: kspace_style missing"
-    echo "Inconsistent bounday conditions."
+    echo "MOLC SYNTAX ERROR: kspace_style missing" >&2
+    echo "Inconsistent bounday conditions." >&2
     exit 0
   fi
   awk -v a=$kstyle -v b=$nq '{printf "kspace_style %s %i %s\n",a,b,$0}' $temp
