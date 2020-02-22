@@ -508,6 +508,7 @@ To use LAMMPS and moltemplate, You will also need to install (and learn how to u
 }
 
 
+
 \subsection{Moltemplate commands}
 
 %\begin{table}
@@ -789,11 +790,13 @@ All text following a ``\#'' character is treated as a comment and ignored.
 
 
 
-%\pagebreak
+\pagebreak
+
 \subsection{Common \$ and @ variables}
 
 (See section \ref{sec:variables} for details.) \\
-\begin{tabular}[h]{l|p{11cm}}
+%\begin{table}
+\begin{longtable}[h]{l|p{11cm}}
 \textbf{variable type} & \textbf{meaning}
 \\
 \hline
@@ -924,12 +927,12 @@ of fixed width $n$ characters.
 (This is useful for generating text files which require fixed-width columns.)
 \\
 \hline
-\end{tabular}
+\end{longtable}
 
 %\vspace{0.5cm}
 
 
-
+\pagebreak
 
 
 \subsection{Coordinate transformations}
@@ -938,8 +941,7 @@ of fixed width $n$ characters.
 (See sections \ref{sec:coords_intro}) and \ref{sec:arrays+xform}) for details.)
 \\
 \\
-%\begin{table}
-\begin{tabular}[h]{l|p{10cm}}
+\begin{longtable}[h]{l|p{10cm}}
 \textbf{suffix} & \textbf{meaning}
 \\
 \hline
@@ -998,16 +1000,39 @@ you want the scaling to occur.
 \begin{tabular}[t]{l}
   \textit{.quat($a,b,c,d$)} \\
   \textit{.quat($a,b,c,d,x_0,y_0,z_0$)} \\
-  \textit{.quatT($a,b,c,d$)} \\
-  \textit{.quatT($a,b,c,d,x_0,y_0,z_0$)} \\
+  %\textit{.quatT($a,b,c,d$)} \\
+  %\textit{.quatT($a,b,c,d,x_0,y_0,z_0$)} \\
 \end{tabular}
   &
  Rotate atom coordinates by the rotation corresponding
  to quaternion $a+b\mathbf{i}+c\mathbf{j}+b\mathbf{k}$
- (around \mbox{$(x_0,y_0,z_0)$}, if specified)
- The \textit{.quatT(a,b,c,d)} variant performs the inverse rotation.
- (Equivalent to \textit{.quat(a,-b,-c,-d)}.)
-  % Otherwise around $(0,0,0)$)
+ (around \mbox{$(x_0,y_0,z_0)$}, if specified).
+ %The \textit{.quatT(a,b,c,d)} variant performs the inverse rotation.
+ %(Equivalent to \textit{.quat(a,-b,-c,-d)}.)
+\\
+\hline
+\textit{.matrix($M_{1,1}$,$M_{1,2}$,$M_{1,3}$,$M_{2,1}$,}\\
+\textit{$M_{2,2}$,$M_{2,3}$,$M_{3,1}$,$M_{3,2}$,$M_{3,3}$)}
+&
+Apply a general linear coordinate transformation.
+\begin{eqnarray*}
+\left(\begin{array}{c}
+       x' \\
+       y' \\
+       z'
+\end{array}\right)
+=
+\left(\begin{array}{ccc}
+       M_{1,1} & M_{1,2} & M_{1,3} \\
+       M_{2,1} & M_{2,2} & M_{2,3} \\
+       M_{3,1} & M_{3,2} & M_{3,3}
+\end{array}\right)
+\left(\begin{array}{c}
+       x \\
+       y \\
+       z
+\end{array}\right)
+\end{eqnarray*}
 \\
 \hline
 \multicolumn{2}{c} {
@@ -1045,7 +1070,7 @@ Coordinate transformations introduced using the \textit{push()} command are appl
 In this example, the first transformation, ``rot()'', is applied to both ``monomer1'' and ``monomer2''.  The last transformation, ``move()'', is applied after ``rot()'' and only acts on ``monomer2''.
 \\
 \hline
-\end{tabular}
+\end{longtable}
 %\caption{Coordinate Transformation Commands}
 %\label{tab:transformation_commands}
 %\end{table}
@@ -1053,12 +1078,12 @@ In this example, the first transformation, ``rot()'', is applied to both ``monom
 
 %\vspace{2cm}
 
-
+\pagebreak
 
 \subsection{moltemplate.sh command line arguments:}
 \label{sec:args_table}
 %\begin{table}
-\begin{tabular}[h]{l|p{10cm}}
+\begin{longtable}[h]{l|p{10cm}}
 \textbf{argument} & \textbf{meaning}
 \\
 \hline
@@ -1192,10 +1217,6 @@ Invoke VMD after running moltemplate to view the system you have just created.
 %(Multiple directories must be separated by ':' characters.) 
 %\\
 %\hline
-\end{tabular}
-
-\begin{tabular}[h]{l|p{10cm}}
-\hline
 \begin{tabular}[t]{l}
 -dihedral-sym file.py
 \\
@@ -1232,7 +1253,7 @@ or \textit{full} versions of the atom type names are printed there.
 -molc &
 Helpful additional post-processing for users of the MOLC coarse-grained model.
 \\
-\end{tabular}
+\end{longtable}
 
 
 \pagebreak

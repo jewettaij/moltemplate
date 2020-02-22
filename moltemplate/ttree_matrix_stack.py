@@ -401,6 +401,21 @@ class AffineStack(object):
                     AffineCompose(Mtmp, moveCentBack, Mdest)
                     CopyMat(Mdest, Mtmp)
 
+            if transform_str.find('matrix(') == 0:
+                i_paren_close = transform_str.find(')')
+                if i_paren_close == -1:
+                    i_paren_close = len(transform_str)
+                args = transform_str[5:i_paren_close].split(',')
+                if (len(args) != 9):
+                    raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+                                     '       Invalid command: \"' + transform_str + '\"\n'
+                                     '       This command requires 9 numerical arguments.')
+                M = [[float(args[0]), float(args[1]), float(args[2]), 0.0],
+                     [float(args[3]), float(args[4]), float(args[5]), 0.0],
+                     [float(args[6]), float(args[7]), float(args[8]), 0.0]]
+                AffineCompose(Mtmp, M, Mdest)
+                CopyMat(Mdest, Mtmp)
+
             elif ((transform_str.find('quat(') == 0) or
                   (transform_str.find('quatT(') == 0)):
                 i_paren_close = transform_str.find(')')
