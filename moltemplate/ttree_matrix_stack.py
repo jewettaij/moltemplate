@@ -401,7 +401,7 @@ class AffineStack(object):
                     AffineCompose(Mtmp, moveCentBack, Mdest)
                     CopyMat(Mdest, Mtmp)
 
-            if transform_str.find('matrix(') == 0:
+            elif transform_str.find('matrix(') == 0:
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
