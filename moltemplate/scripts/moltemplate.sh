@@ -6,15 +6,15 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.15.0"
-G_DATE="2020-2-04"
+G_VERSION="2.16.0"
+G_DATE="2020-2-21"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
 
 # Check for python:
-# I prefer python over python3 because python3 requires slightly
-# more memory.  Use regular python (ie 2.7) when available.
+# I prefer python2 over python3 because python3 requires slightly more memory
+# (and has more bugs).  Use regular python (ie 2.7) when available.
 
 if which python > /dev/null; then
     PYTHON_COMMAND='python'
