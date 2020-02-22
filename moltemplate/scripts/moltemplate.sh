@@ -319,7 +319,7 @@ Optional arguments:
                             See nbody_Dihedrals.py, nbody_Impropers.py (in the
                             moltemplate directory) to learn the file format.
 -molc              Additional post-processing for the file "In Settings". This
-                   options implicitly set also -overlay-bonds.
+                   options implicitly set -overlay-bonds.
 
 EOF
 )
