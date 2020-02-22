@@ -21,7 +21,7 @@ cd moltemplate_files
                 -inherits 'DNAForceField'  \
                 -monomer-name 'DNAMonomer.scale(1,0.8,0.8)' \
                 -header 'import "dna_monomer.lt"' \
-		-box 20,20,20 \
+                -box 20,20,20 \
                 < init_crds_polymer_backbone.raw > dna_polymer.lt
 
   # (Note: The "-helix" parameter represents the twist-per-monomer (Δφ) at the
@@ -42,8 +42,7 @@ cd moltemplate_files
   # (Awk provides an easy way to do make this file.)
 
   echo 'import "wall_particle.lt"  #(defines "WallParticle")' > wall.lt
-  awk '{print "wall_particles["NR"]=new WallParticle.move("$1","$2","$3")\n"}'\
-      < coords_wall.raw >> wall.lt
+  awk '{print "wall_particles["(NR-1)"]=new WallParticle.move("$1","$2","$3")\n"}' < coords_wall.raw >> wall.lt
 
   # (Moltemplate will read this file and put WallParticles at these locations.)
 

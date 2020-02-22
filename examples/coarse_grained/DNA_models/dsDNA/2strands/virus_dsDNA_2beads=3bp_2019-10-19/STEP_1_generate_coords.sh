@@ -124,7 +124,7 @@ rm -f ndmansfield_traj.raw  coords_lattice.raw coords_lattice_centered.raw
 # Step 1e)
 # This is a simulation of DNA inside a container.
 # The container is made from a collection of immobile particles through which
-# the polyer cannot pass (in this case, the capsid wall of a virus).
+# the polymer cannot pass (in this case, the capsid wall of a virus).
 # It is convenient to copy the coordinates of those immobile particles
 # into the same directory with the other moltemplate files.  Later we will
 # create another file (in moltemplate format) describing those particles.
@@ -145,4 +145,3 @@ cp capsid_locations.txt moltemplate_files/coords_wall.raw
 #       cube-shaped subvolume of the sphere (which itself is only occupying
 #       a subvolume of the actual container).  Consequently we expect the
 #       initial density to be somewhat higher.
-

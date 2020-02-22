@@ -2027,7 +2027,7 @@ class StaticObj(object):
         The members/attributes of StaticObj are defined in the comment
         for StaticObj above.  """
 
-        # The following members are shared by both InstanceObj and StaticObj:
+        # - The following members are shared by both InstanceObj and StaticObj -
 
         self.name = name
 
@@ -2035,20 +2035,21 @@ class StaticObj(object):
 
         self.children = OrderedDict()  # Nested class definitions.
 
-        self.categories = OrderedDict()  # <- new variable categories that are only defined
-        # in the context of this molecule's type definition
+        self.categories = OrderedDict()  # new variable categories that are only
+        # defined in the context of this molecule's type definition
+
         self.commands = []         # Commands to carry out (only once)
 
-        # vb##self.var_bindings=[]     # List of variables assigned to this
-        # object.
-
-        self.srcloc_begin = None     # Keep track of location in user files
+        self.srcloc_begin = None   # Keep track of location in user files
         self.srcloc_end = None     # (useful for error message reporting)
 
-        self.deleted = False    # Users can delete static objects?
-        # (why not?)
+        # (Note: The "deleted" attribute is used by InstantceObjs not StaticObjs
+        #  However, since I use the same code to search through trees made
+        #  of both StaticObjs and InstanceObjs, and that code checks for the
+        #  "deleted" attribute, StaticObjs must have a "deleted" attribute too.)
+        self.deleted = False    # (see above)
 
-        # The following members are not shared with InstanceObj:
+        # - The following members are unique to StaticObj (not in InstanceObj) -
 
         self.class_parents = []  # classes we inherit traits from (this is
         # similar to the parent/child relationship
