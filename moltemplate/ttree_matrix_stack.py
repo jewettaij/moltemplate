@@ -951,6 +951,11 @@ def Matrix2Quaternion(M, q):
     q[1] = qx
     q[2] = qy
     q[3] = qz
+    # normalize q (necessary when M is not orthonormal)
+    qnorm = math.sqrt(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3])
+    for d in range(0,4):
+        q[d] /= qnorm
+    
 
 
 def MultQuat(dest, q1, q2):

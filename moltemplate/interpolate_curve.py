@@ -123,8 +123,8 @@ def CalcNaturalCubicSplineCoeffs(r, spline_exponent_alpha=0.5):
     for i in range(1, N-1):
         # h_dt[i] is the difference in "time" in the parametric curve 
         # between pairs of control points.  If spline_exponenent_alpha is 0
-        # then the time interval between control points is uniform.  (Typically,
-        # "spline_exponent_alpha" is 0.5 for centripital Catmull-Rom splines.)
+        # then the time interval between control points is uniform.
+        # ("spline_exponent_alpha" is 0.5 for centripital Catmull-Rom splines.)
         a_coeff[i]    =      h_dt[i-1]
         b_coeff[i]    = 2.0*(h_dt[i-1] + h_dt[i])
         c_coeff[i]    =      h_dt[i]
