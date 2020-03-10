@@ -29,8 +29,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2019-9-05'
-g_version_str = '0.80.1'
+g_date_str = '2020-3-10'
+g_version_str = '0.80.2'
 
 
 import sys
@@ -949,8 +949,8 @@ def main():
                              '      This sometimes means you have neglected to specify the atom style\n'
                              '      (using the \"-atomstyle\" command).  Alternatively it could indicate\n'
                              '      that the moltemplate file contains non-numeric text in one of the\n'
-                             '      .move(), .rot(), .scale() commands.  If neither of these scenarios\n'
-                             '      apply, then please report this bug. (jewett.aij at gmail dot com)\n')
+                             '      .move(), .rot(), .scale(), .matrix(), or .quat() commands. If neither of\n'
+                             '      these scenarios apply, please report this bug. (jewett.aij at gmail.com)\n')
             sys.exit(-1)
         else:
             sys.stderr.write('\n\n' + str(err) + '\n')
