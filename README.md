@@ -135,15 +135,15 @@ as well as the subdirectory where most of the python scripts are located.
 Suppose the directory with this README file is named "moltemplate"
 and is located in your home directory:
 
-If you use the bash shell, typically you would edit your
-`~/.profile`, `~/.bash_profile` or `~/.bashrc` files
+If you use the *BASH* shell, typically you would edit your
+`~/.bashrc` file (or `~/.profile`, `~/.bash_profile` files)
 to contain the following lines:
 
     export PATH="$PATH:$HOME/moltemplate/moltemplate"
     export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 
-If you use the tcsh shell, typically you would edit your
-`~/.login`, `~/.cshrc`, or `~/.tcshrc` files to contain the following lines:
+If you use the *TCSH* shell, typically you would edit your
+`~/.cshrc`, `~/.tcshrc` or `~/.login` files to contain the following lines:
 
     setenv PATH "$PATH:$HOME/moltemplate/moltemplate"
     setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
@@ -162,17 +162,24 @@ pip or setuptools.)*
 
 ### WINDOWS installation suggestions
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  I recommend installing [virtualbox](https://www.virtualbox.org) in windows together with a (debian-based) linux distribution with a lightweight desktop such as [xubuntu](https://xubuntu.org).  Alternatively, if you are using Windows 10 or later, you can try installing the "Windows Subsystem for Linux (WSL)", as explained
-[here](https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/)
-and
-[here](https://msdn.microsoft.com/en-us/commandline/wsl/faq),
+You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  I recommend installing [virtualbox](https://www.virtualbox.org) in windows together with a (debian-based) linux distribution with a lightweight desktop such as [xubuntu](https://xubuntu.org).  Alternatively, if you are using Windows 10 or later, you can try installing the
+[Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl)
+*(which is text only)*
 or
-[Hyper-V](https://blogs.windows.com/buildingapps/2018/09/17/run-ubuntu-virtual-machines-made-even-easier-with-hyper-v-quick-create/).
+[Hyper-V](https://www.nakivo.com/blog/run-linux-hyper-v/).
 Otherwise, if you are using an older version of windows, try installing
 [CYGWIN](https://www.cygwin.com/) instead.
 
-To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.
-If you are **NOT using WSL**, then you can also use a graphical text editor which might be easier for a beginner to use.  Such editors include Atom, Sublime, Notepad++, VSCode, and the graphical versione of emacs and vim.  ([Don't use these editors to edit files within the WSL environment.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
+To use LAMMPS and moltemplate, you will also need to install (and learn
+how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)
+If you are **NOT using WSL**, then you can use popular graphical text editors
+such as Atom, Sublime, Notepad++, VSCode,
+and the graphical versione of emacs and vim.
+([Don't use these editors to edit files within the WSL environment.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
+If you **ARE using WSL** then you are restricted to using non-graphical text
+editors which you can safely install and run from within the WSL terminal.
+These include: **nano**, **ne**, **emacs** (the text version),
+**vim** (the text version), and **jove**.
 
 
 ## License

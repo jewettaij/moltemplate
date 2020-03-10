@@ -313,10 +313,17 @@ the ``examples/'' subdirectory distributed with moltemplate.
 These examples are a good starting point for learning LAMMPS and moltemplate.
 
 
+
 \subsection*{License}
-Moltemplate.sh is publicly available at \url{http://moltemplate.org} 
-under the terms of the open-source 3-clause BSD license.
-\url{http://www.opensource.org/licenses/BSD-3-Clause}
+Moltemplate is open source and publicly available at
+\url{http://moltemplate.org}.
+With the exception of one file (\textit{ttree\_lex.py}) moltemplate is
+available under the terms of the \textit{MIT license}.
+The remaining file, (\textit{ttree\_lex.py})
+is a modified version of (\textit{shlex.py})
+which is available under the
+\textit{PSF license}
+(\url{https://docs.python.org/3/license.html}).
 
 
 
@@ -377,7 +384,7 @@ under the terms of the open-source 3-clause BSD license.
 \section{Installation}
 \label{sec:installation}
 
-There are two ways to install moltemplate:
+There are three ways to install moltemplate:
 
 \subsubsection*{Installation Method 1 (pip)}
 
@@ -392,20 +399,52 @@ If you receive an error regarding permissions, then run pip this way instead:
 \begin{verbatim}
 pip install moltemplate --user
 \end{verbatim}
-Make sure that your default pip install bin directory is in your PATH.  (This is usually something like \textapprox/.local/bin/ or \textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
+Make sure that your default pip install bin directory is in your \textit{PATH}.
+(This is usually something like \textapprox/.local/bin/ or
+\textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH
+should have been updated for you automatically.)
+Later, you can uninstall moltemplate using:
 \begin{verbatim}
 pip uninstall moltemplate
 \end{verbatim}
 
-\textit{Note: There are is a large variety of detailed moltemplate examples
-which will be omitted if you install moltemplate this way.
+\textit{Note: There are a large variety of detailed moltemplate
+examples which will be omitted if you install moltemplate this way.
 \textbf{Downloading the examples is strongly recommended.}}
-You can do this either by using git:
+You can do this either by using \textit{git},
+or by downloading them from the web page.  (See below.)
+(The examples are located in the \textit{examples/} subdirectory
+included with the download.)
+
+
+\subsubsection*{Installation Method 2 (git/webpage + pip)}
+
+\subsubsection*{Obtaining Moltemplate}
+The most up-to-date version of moltemplate can be downloaded using \textbf{git}.
 \begin{verbatim}
 git clone https://github.com/jewettaij/moltemplate ~/moltemplate
 \end{verbatim}
-or by visiting the \url{http://www.moltemplate.org} web site.
-They will be in the ``examples'' subdirectory.)
+Later, you can update the download to the latest version of moltemplate using:
+\begin{verbatim}
+git pull
+\end{verbatim}
+(This is the recommended way to download moltemplate.)
+
+Alternatively, if you don't have \textbf{git} installed,
+you can download moltemplate as a .tar.gz archive from
+\url{http://www.moltemplate.org}
+and then unpack it using:
+\begin{verbatim}
+tar -xzvf moltemplate_2020-2-22.tar.gz
+\end{verbatim}
+(The date will vary from version to version.)
+
+Then move the unpacked moltemplate directory
+to your home directory (\textapprox/) and run:
+\begin{verbatim}
+cd  ~/moltemplate
+pip install .  # (or "pip install --user", if that fails)
+\end{verbatim}
 
 \textit{If you run into difficulty with pip}, then try installing
 moltemplate into a temporary virtual environment
@@ -413,61 +452,43 @@ by installing ``virtualenv'',
 %downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
 and running these commands:
 \begin{verbatim}
-mkdir ~/moltemplate
 cd ~/moltemplate
 python -m venv venv     #(or "virtualenv venv" if using python2)
 source venv/bin/activate
-pip install moltemplate
+pip install .
 #(now do something useful with moltemplate...)
 \end{verbatim}
-(You will have to enter ``source ~/moltemplate/venv/bin/activate''
+(You will have to enter ``source \textapprox/moltemplate/venv/bin/activate''
  into a terminal beforehand every time you want to run moltemplate.)
 If all this fails, then try installing moltemplate by manually
 updating your \$PATH environment variable.  Instructions for doing that are included below.
 
 
-\subsubsection*{Installation Method 2}
+\subsubsection*{Installation Method 3 (updating your PATH)}
 
-Alternatively, you can download the moltemplate files and edit your
-PATH variable manually to include
+Alternatively, you can download the moltemplate files
+(as explained above) and edit your \textit{PATH} variable.
+The \textit{PATH} variable helps the shell
+(eg. \textit{BASH}) find the programs
+you type into the terminal.  You must edit the PATH variable to include
 the subdirectory where the moltemplate.sh script is located 
-(typically ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
+(eg. ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
 the directory containing the most of the python scripts
-(``\textapprox/moltemplate/moltemplate/'').
+(eg. ``\textapprox/moltemplate/moltemplate/'').
 
-\subsection*{Obtaining Moltemplate}
-The most up-to-date version of moltemplate can be downloaded using git.
-\begin{verbatim}
-git clone https://github.com/jewettaij/moltemplate ~/moltemplate
-\end{verbatim}
-Later, you can update to the latest version of moltemplate using:
-\begin{verbatim}
-git pull
-\end{verbatim}
-Alternatively, you can also download moltemplate as a .tar.gz archive from
-\url{http://www.moltemplate.org}
-and can unpack it using:
-\begin{verbatim}
-tar -xzvf moltemplate_2019-9-03.tar.gz
-\end{verbatim}
-(The date will vary from version to version.)
-Somewhat older versions of moltemplate are also bundled with the LAMMPS 
-source code and are located in the \textit{``tools''} subdirectory.
-
-
-If you use the \textbf{bash} shell, typically you would edit your 
-\mbox{$\sim$/.bash\_profile}, 
-\mbox{$\sim$/.bashrc}, or 
-\mbox{$\sim$/.profile} files
-and append the following lines:
+If you use the \textbf{BASH} shell, typically you would edit your 
+\mbox{$\sim$/.bashrc} file
+(or your \mbox{$\sim$/.bash\_profile},
+ or \mbox{$\sim$/.profile} file)
+and append the following lines to that file:
 \begin{verbatim}
 export PATH="$PATH:$HOME/moltemplate/moltemplate"
 export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 \end{verbatim}
-If instead you use the \textbf{tcsh} shell, typically you would edit your 
-\mbox{$\sim$/.login}, 
-\mbox{$\sim$/.cshrc}, or 
-\mbox{$\sim$/.tcshrc} files 
+If instead you use the \textbf{TCSH} shell, typically you would edit your 
+\mbox{$\sim$/.cshrc}, 
+\mbox{$\sim$/.tcshrc}, or
+\mbox{$\sim$/.login} files
 and append the following lines:
 \begin{verbatim}
 setenv PATH "$PATH:$HOME/moltemplate/moltemplate"
@@ -481,23 +502,47 @@ log back in again for the changes to take effect.}
 
 
 \textit{Warning:
-Do not install moltemplate this way if you are using ``vipster'',
-``cellpack2moltemplate'', or other software that has a moltemplate python
-dependency.  In order to be able to be able to run "import moltemplate"
-within python, as these programs do, moltemplate must be installed using
-pip or setuptools.}
+  Do not install moltemplate this way if you you plan to invoke moltemplate
+from within the python environment, \textbf{or} if you are using ``vipster'',
+``cellpack2moltemplate'' or other software that has a moltemplate python
+dependency.  In order to be able to be able to run "import moltemplate",
+as these programs do, moltemplate must be installed using pip (or setuptools).}
 
 
 \subsubsection*{WINDOWS installation suggestions}
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  If you are using Windows 10 or later, try installing the "Windows Subsystem for Linux (WSL)"
-\url{https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/}
-For more details, see the WSL FAQ:
-\url{https://msdn.microsoft.com/en-us/commandline/wsl/faq}
-If you are using an older version of windows, try following the tutorial written by Yanqing Fu instead:
-\url{https://sourceforge.net/p/lammps/mailman/message/32599824/}
+You can install both moltemplate and LAMMPS in windows, but you will first need to install the \textit{BASH} shell environment on your computer.
+I recommend installing
+\textbf{virtualbox}(\url{https://www.virtualbox.org}) in windows together
+with a (debian-based) linux distribution with a lightweight desktop such as
+\textbf{xubuntu}(\url{https://xubuntu.org}).
+Alternatively, if you are using Windows 10 or later, you can try installing the
+\textbf{Windows Subsystem for Linux (WSL)}
+(\textit{which is text only},
+ \url{https://docs.microsoft.com/en-us/windows/wsl})
+or
+\textbf{Hyper-V}
+(\url{https://www.nakivo.com/blog/run-linux-hyper-v/}).
+Otherwise, if you are using an older version of windows, try installing
+\textbf{CYGWIN}
+(\url{https://www.cygwin.com/}) instead.
 
-To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: nano, ne, emacs, vim, and jove.  (Unfortunately, as of 2017-5-17, graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
+To use LAMMPS and moltemplate, you will also need to install (and learn
+how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)
+If you are \textit{NOT using WSL}, then you 
+can use popular graphical text editors such as
+\textit{Atom}, \textit{Sublime},
+\textit{Notepad++}, \textit{VSCode},
+and the graphical versions of \textit{emacs} and \textit{vim}.
+(\textit{Note:} Don't use these editors if you are using the WSL environment.
+Under WSL, these editors may cause file system corruption.
+Avoid them for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
+If you \textit{ARE using WSL} then you are restricted to using
+non-graphical text editors which you can safely install and
+run from within the WSL terminal.
+These include: \textit{nano}, \textit{ne},
+\textit{emacs} (text version),
+\textit{vim} (text version), and \textit{jove}.
 
 
 \pagebreak
