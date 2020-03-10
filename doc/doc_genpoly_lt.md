@@ -33,8 +33,9 @@ from the terminal) and a python library.  The former is documented below.
       [-inherits ForceFieldObject] \
       [-header "import monomer.lt"] \
       [-helix deltaphi] \
-      [-rotations rotation_file.txt] \
-      [-quaternions quaternion_file.txt] \
+      [-helix-angles helix_angles_file.txt] \
+      [-orientations orientations_file.txt] \
+      [-quaternions quaternions_file.txt] \
       [-axis x,y,z] \
       [-circular yes/no/connected] \
       [-cuts cuts.txt] \
@@ -45,6 +46,7 @@ from the terminal) and a python library.  The former is documented below.
 ```
 ## Arguments [optional]
 
+```
     -polymer-name name
                    Name of the moltemplate object that will be created.
                    (By default "Polymer")
@@ -220,7 +222,7 @@ from the terminal) and a python library.  The former is documented below.
     -helix deltaphi = Optionally, rotate each monomer around it's axis by
              angle deltaphi (in degrees) beforehand
 
-    -helix-angles helix_angle_file.txt = Optionally, rotate each monomer around
+    -helix-angles helix_angles_file.txt = Optionally, rotate each monomer around
              it's axis by specifying a list of angles contained in a file
              (eg "helix_angles_file.txt").  This file contains one number per
              line (one line per monomer).  Each number represents the
@@ -317,7 +319,7 @@ from the terminal) and a python library.  The former is documented below.
                    "-helix-angles" and "-axis" arguments (if applicable).
                    (Consequently this argument can be supplied together with
                     the "-helix", "-helix-angles", and "-axis" arguments.)
-             
+```             
              
              
 
