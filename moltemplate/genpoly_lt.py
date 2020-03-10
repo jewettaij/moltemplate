@@ -337,7 +337,7 @@ class GPSettings(object):
                 if len(self.box_padding) == 1:
                     self.box_padding = self.box_padding * 3
                 del(argv[i:i + 2])
-            elif (argv[i].lower() in ('-rotation','-rotations')):
+            elif (argv[i].lower() in ('-orientations','-orientations')):
                 self.orientations_file = argv[i+1]
                 self.orientations_use_quats = False
                 del(argv[i:i + 2])
@@ -619,6 +619,13 @@ class GenPoly(object):
         instantiated once when the parent object is instantiated.)
 
         """
+
+        # make sure len(genpoly.orientations_multi) == len(genpoly.coords_multi)
+        if len(self.orientations_multi) == 0:
+            self.orientations_multi = [[] for entry in self.coords_multi]
+        # make sure len(self.helix_angles_multi) == len(self.coords_multi)
+        if len(self.helix_angles_multi) == 0:
+            self.helix_angles_multi = [[] for entry in self.coords_multi]
 
         outfile.write(self.settings.header + "\n\n\n")
 
@@ -994,9 +1001,6 @@ def main():
                 genpoly.orientations_multi = genpoly.ReadCoords(orientations_file, 4)
             else:
                 genpoly.orientations_multi = genpoly.ReadCoords(orientations_file, 9)
-        else:
-            genpoly.orientations_multi = [[] for entry in genpoly.coords_multi]
-            
 
         # Did the user specify a file with a list of helix angles?
         helix_angles_file = None
@@ -1013,9 +1017,6 @@ def main():
                 for j in range(0, len(genpoly.helix_angles_multi[i])):
                     assert(len(genpoly.helix_angles_multi[i][j]) == 1)
                     genpoly.helix_angles_multi[i][j] = genpoly.helix_angles_multi[i][j][0]
-        else:
-            genpoly.helix_angles_multi = [[] for entry in genpoly.coords_multi]
-
 
         # Now, check for polymer and sequence length inconsistencies:
         if (len(genpoly.coords_multi) != len(genpoly.name_sequence_multi)):

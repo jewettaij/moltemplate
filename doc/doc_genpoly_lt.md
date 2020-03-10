@@ -276,7 +276,7 @@ from the terminal) and a python library.  The former is documented below.
              polymer has a direction of -1, the indices ia, ib will be flipped.)
 	     For circular polymers, the indices will be wrapped appropriately.
 
-    -rotations rotations_file.txt
+    -orientations orientations_file.txt
              Specify the orientation of each monomer in the polymer by providing
              a 9-column text file containing a list of rotation matrices (R, 
              one for each monomer).  Each 3x3 matrix describes the orientation
