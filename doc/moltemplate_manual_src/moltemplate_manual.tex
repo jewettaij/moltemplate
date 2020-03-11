@@ -1495,11 +1495,11 @@ wat = new SPCE [1000]
 from the example above with 1000 lines:
 \begin{verbatim}
 wat1    = new SPCE
-wat2    = new SPCE.move(3.450, 0.0, 0.0)
-wat3    = new SPCE.move(6.900, 0.0, 0.0)
-wat4    = new SPCE.move(10.35, 0.0, 0.0)
+wat2    = new SPCE.move(3.1034, 0.00, 0.00)
+wat3    = new SPCE.move(6.2068, 0.00, 0.00)
+wat4    = new SPCE.move(9.3102, 0.00, 0.00)
   :           :
-wat1000 = new SPCE.move(34.50, 34.50, 34.50)
+wat1000 = new SPCE.move(31.034, 31.034, 31.034)
 \end{verbatim}
 Specifying geometry this way is tedious.
 Alternatively, moltemplate has simple commands for arranging multiple 
@@ -1507,13 +1507,13 @@ copies of a molecule in periodic, crystalline, toroidal, and helical
 1-D, 2-D, and 3-D lattices.  
 For example, you can generate a simple cubic lattice of 
 10$\times$10$\times$10 water molecules
-(with a 3.45 Angstrom spacing)
+(with a 3.1034 Angstrom spacing)
 using a single command 
 (which in this example we split into multiple lines)
 \begin{verbatim}
-wat  = new SPCE [10].move(0,0,3.45) 
-                [10].move(0,3.45,0) 
-                [10].move(3.45,0,0)
+wat  = new SPCE [10].move(0.00, 0.00, 3.1034) 
+                [10].move(0.00, 3.1034, 0.00) 
+                [10].move(3.1034, 0.00, 0.00)
 \end{verbatim}
 (See section \ref{sec:coordinates} for more details and examples.)
 This will create 1000 molecules with names like
@@ -1539,9 +1539,9 @@ We must specify the dimensions of the simulation boundary
 using the ``write\_once(``Data Boundary'')'' command.  
 \begin{verbatim}
 write_once("Data Boundary") {
-   0.0  34.5  xlo xhi
-   0.0  34.5  ylo yhi
-   0.0  34.5  zlo zhi
+   0.0  31.034  xlo xhi
+   0.0  31.034  ylo yhi
+   0.0  31.034  zlo zhi
 }
 \end{verbatim}
 This is usually specified in the outermost LT file 
