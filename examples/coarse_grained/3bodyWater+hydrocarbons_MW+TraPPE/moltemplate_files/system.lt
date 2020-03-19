@@ -5,9 +5,9 @@ import "watmw.lt"
 import "cyclododecane.lt"
 
 write_once("Data Boundary") {
-  0.000000   42.000 xlo xhi
-  0.000000   42.000 ylo yhi
-  0.000000   42.000 zlo zhi
+  0.000000   48.000 xlo xhi
+  0.000000   48.000 ylo yhi
+  0.000000   48.000 zlo zhi
 }
 
 wat = new WatMW [12].move(0, 0, 4.0)
