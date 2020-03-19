@@ -5,7 +5,7 @@ cd moltemplate_files
 
   # run moltemplate
 
-  moltemplate.sh -a "@atom:WatMW/mW 1" system.lt
+  moltemplate.sh -a "@atom:WatMW/MW 1" system.lt
 
   # Each atom type (eg "mW") must be assigned to an integer (because LAMMPS
   # does not understand descriptive names).  Normally LAMMPS does not care what
