@@ -52,10 +52,9 @@ This repository includes approximately 50 [examples](./examples).
 
 ### Documentation
 
-The best way to learn how to use moltemplate is to find an
-example which is similar to the system that you wish to simulate.
-In addition to the examples listed above, there are several
-introductory examples 
+The best way to learn how to use moltemplate is to find an example
+which is similar to the system that you wish to simulate and modify it.
+Some of the moltemplate examples are also demonstrated (with pictures)
 [here](http://moltemplate.org/visual_examples.html).
 
 All moltemplate users should probably read chapter 4 of the
@@ -190,8 +189,8 @@ moltemplate is available under the terms of the [MIT license](LICENSE.md).
 
 The remaining file, ([ttree_lex.py](./moltemplate/ttree_lex.py)),
 is a modified version of the 
-[shlex.py](https://docs.python.org/3/library/shlex.html) library.
-which is released using the
+[shlex.py](https://docs.python.org/3/library/shlex.html) library,
+which was released using the
 [PSF license](https://docs.python.org/3/license.html).
 Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
 (*The PSF is not a copyleft license.

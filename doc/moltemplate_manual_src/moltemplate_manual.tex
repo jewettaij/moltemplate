@@ -511,8 +511,9 @@ as these programs do, moltemplate must be installed using pip (or setuptools).}
 
 \subsubsection*{WINDOWS installation suggestions}
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the \textit{BASH} shell environment on your computer.
-I recommend installing
+You can install both moltemplate and LAMMPS in windows,
+but you will first need to install the \textit{BASH}
+shell environment on your computer.  I recommend installing
 \textbf{virtualbox}(\url{https://www.virtualbox.org}) in windows together
 with a (debian-based) linux distribution with a lightweight desktop such as
 \textbf{xubuntu}(\url{https://xubuntu.org}).
@@ -1511,9 +1512,9 @@ For example, you can generate a simple cubic lattice of
 using a single command 
 (which in this example we split into multiple lines)
 \begin{verbatim}
-wat  = new SPCE [10].move(0.00, 0.00, 3.1034) 
-                [10].move(0.00, 3.1034, 0.00) 
-                [10].move(3.1034, 0.00, 0.00)
+wat  = new SPCE [10].move(0.0, 0.0, 3.1034) 
+                [10].move(0.0, 3.1034, 0.0) 
+                [10].move(3.1034, 0.0, 0.0)
 \end{verbatim}
 (See section \ref{sec:coordinates} for more details and examples.)
 This will create 1000 molecules with names like

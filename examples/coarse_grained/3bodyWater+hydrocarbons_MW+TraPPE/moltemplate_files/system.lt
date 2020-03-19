@@ -5,9 +5,9 @@ import "watmw.lt"
 import "cyclododecane.lt"
 
 write_once("Data Boundary") {
-  0.000000   48.000 xlo xhi
-  0.000000   48.000 ylo yhi
-  0.000000   48.000 zlo zhi
+  0.000000   42.000 xlo xhi
+  0.000000   42.000 ylo yhi
+  0.000000   42.000 zlo zhi
 }
 
 wat = new WatMW [12].move(0, 0, 4.0)
@@ -24,7 +24,7 @@ cyclododecane[*][*][*].move(6.0,6.0,6.0)
 write_once("In Init") {
   # -- Tell LAMMPS we want to use two different pair styles 
   # -- (This overrides earlier settings.)
-  pair_style   hybrid  sw  lj/charmm/coul/charmm 9.0 11.0 9.0 11.0
+  pair_style   hybrid  sw  lj/cut 11.0
 }
 
 
@@ -53,10 +53,7 @@ write_once("In Settings") {
 # -- between atoms from different molecule types
 
 write_once("In Settings") {
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH2 lj/charmm/coul/charmm 0.11914784667210733 3.558
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH3 lj/charmm/coul/charmm 0.17390830404497651 3.458
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH4 lj/charmm/coul/charmm 0.21371654257637612 3.448
+  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH2 lj/cut 0.11914784667210733 3.558
+  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH3 lj/cut 0.17390830404497651 3.458
+  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH4 lj/cut 0.21371654257637612 3.448
 }
-
-
-
