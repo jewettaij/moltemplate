@@ -4,7 +4,7 @@ dump2data.py
 ## Description
 
 **dump2data.py** is a tool to extract coordinates from LAMMPS "dump" (trajectory) files.  It was originally designed to convert snapshots from trajectory files into LAMMPS DATA format (for restarting a simulation from where it left off).  However it also reads and writes .XYZ and .RAW (simple 3-column text format) coordinate files.
-Although it was written in python, **dump2data.py** is a stand-alone executable intended to be run from the terminal (shell).
+Although it was written in python, **dump2data.py** is a stand-alone executable intended to be run from the terminal (shell).  *It has not been optimized for speed.*
 
 ## Comparison with pizza.py
 **dump2data** duplicates some of the tools in
@@ -16,18 +16,25 @@ If you are willing to learn python, **pizza.py** can handle more some dump files
 
 ```
    dump2data.py [old_data_file]           \
-                [-xyz]                    \
                 [-raw]                    \
+                [-xyz]                    \
                 [-t time]                 \
                 [-tstart ta] [-tstop tb]  \
-                [-last]
+                [-last]                   \
                 [-interval n]             \
+                [-type atom_types]        \
+                [-id atom_ids]            \
+                [-mol mol_ids]            \
                 [-multi]                  \
                 [-center]                 \
                 [-scale x]                \
                 [-atomstyle style]        \
+                [-xyz-id]                 \
+                [-xyz-mol]                \
+                [-xyz-type-mol]           \
                 < DUMP_FILE > OUTPUT_FILE
 ```
+
 
 ## Examples
 
@@ -52,13 +59,21 @@ The resulting file ("traj.raw") will look like this:
 ```
 (Note: Blank lines are used to delimit different frames in the trajectory.  If you only want a single frame from the trajectory, you can specify it using the -t or -last arguments.  Alternately you can use the *head* and *tail* unix commands to extract a portion of the trajectory file containing the frame you are interested in beforehand.)
 
+   To limit the output to consider only atoms of a certain type, (for example,
+atom types 1,3,5,6, and 7), you can use the *"-type LIST"* argument (for example
+"-type 1,3,5-7").  You can also restrict the output to atoms or molecules
+with a certain range of ID numbers using the "-id" and "-mol" arguments.
+*(These arguments have have no effect if you are creating a ".data" file.
+They only work if you are using the '-raw' or '-xyz' arguments.)*
+
+
 ### Example creating XYZ (4-column ascii text) coordinate files
 
 You can extract the coordinates using the .XYZ format this way:
 ```
 dump2data.py -xyz < traj.lammpstrj > traj.xyz
 ```
-This generates a 4-column text file containing the atom-type (first column) followed by the xyz coordinates on each line of each atom (sorted by atomid).  If there are multiple frames in the trajectory file, it will concatenate them together this way:
+This generates a 4-column text file containing the atom-type (first column) followed by the xyz coordinates on each line of each atom (sorted by atomid).  (If you prefer the first column to be something else, you can use the "-xyz-id", "-xyz-mol", and "-xyz-type-mol" arguments instead.)  If there are multiple frames in the trajectory file, it will concatenate them together this way:
 ```
 8192
 LAMMPS data from timestep 50000
@@ -76,25 +91,32 @@ LAMMPS data from timestep 100000
        If you want the molecule-ID to appear in the first column use "-xyz-mol"
        If you want the atom-type AND molecule-ID to appear, use "-xyz-type-mol")
 
-## Example creating DATA files
 
-"dump2data.py" can also create lammps DATA files.  You must supply it with an existing DATA file containing the correct number of atoms and topology information.
+## Examples creating DATA files
 
-If your coordinates are stored in a DUMP file (eg "traj.lammpstrj"), you can create a new data file this way:
+"dump2data.py" (and "raw2data.py") can also create lammps DATA files.  You must supply them with an existing DATA file containing the correct number of atoms and topology information, and a file containing the coordinates of the atoms.
+
+If your coordinates are stored in a an ordinary 3-column text file ("RAW" file),
+you can create the new DATA file this way:
 ```
-dump2data.py -t 10000 data_file < traj.lammpstrj > new_file
+raw2data.py -atomstyle ATOM_STYLE data_file < coords.raw  > new_data_file
 ```
-Again, in this example, "10000" is the timestep for the frame you have selected.  You can use *-last* to select the last frame.  If you do not specify the frame you want, multiple data files may be created.  **WARNING: dump2data.py is slow**.  (If you have a long trajectory file, I recommend using the *tail* and *head* unix commands to extract the portion of the trajectory file containing the frame you want before reading it with dump2data.py.  This will be much faster than using the *-t* or *-last* commands.)
+where ATOMSTYLE is a quoted string, such as "full" or "hybrid sphere dipole".
+The "-atomstyle ATOM_STYLE" argument is optional.
+The default atom_style it is "full".
+
+If your coordinates are stored in a DUMP file (eg "traj.lammpstrj"), 
+you can create a new data file this way:
+```
+dump2data.py -t 10000 data_file < traj.lammpstrj > new_data_file
+```
+In this example, "10000" is the timestep for the frame you have selected.  You can use *-last* to select the last frame.  If you do not specify the frame you want, multiple data files may be created.  **WARNING: dump2data.py is slow**.  (If you have a long trajectory file, I recommend using the *tail* and *head* unix commands to extract the portion of the trajectory file containing the frame you want before reading it with dump2data.py.  This will be much faster than using the *-t* or *-last* commands.)
+
+(You can use the "-atomstyle" argument with *dump2data.py* as well.)
 
 Creating multiple data files:
 The "-multi" command line argument tells "dump2data.py" to generate a new data file for each frame in the trajectory/dump-file.  Those files will have names ending in ".1", ".2", ".3", ...  (If you use the *-interval* argument, frames in the trajectory whose timestep is not a multiple of the interval will be discarded.)  This (probably) occurs automatically whenever the trajectory file contains multiple frames unless you have specified the frame you want (using the *-t* or *-last* arguments)
 
-Reading simple 3-column coordinate files:
-If you have a file containing only the coordinates of the atoms (in sorted order), you can use "raw2data.py" to create a data file with those atoms coordinates.
-```
-raw2data.py -atomstyle ATOMSTYLE data_file < coords.raw  > new_data_file
-```
-(where ATOMSTYLE is a quoted string, such as "full" or "hybrid sphere dipole" discussed earlier.  Warning: "raw2data.py" is not a stand-alone script.  Make sure raw2data.py is located in the same directory with dump2data.py.)
 
 ### Examples using optional command line arguments
 
