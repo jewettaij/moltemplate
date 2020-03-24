@@ -60,7 +60,7 @@ try:
         data_boundary, data_pbc, data_prefix_no_space, in_init, in_settings, \
         in_prefix
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
-        LinTransform
+        LinTransform, Matrix2Quaternion, MultQuat
 except (ImportError, SystemError, ValueError):
     # not installed as a package
     from ttree import *
