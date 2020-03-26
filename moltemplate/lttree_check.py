@@ -92,8 +92,8 @@ if sys.version < '2.6':
 
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_check.py'
-g_version_str = '0.80.1'
-g_date_str = '2017-10-01'
+g_version_str = '0.81.0'
+g_date_str = '2020-3-25'
 
 
 # g_no_check_msg = \
@@ -102,6 +102,8 @@ g_date_str = '2017-10-01'
 
 g_no_check_msg = \
     '(To continue anyway, run moltemplate using the \"-nocheck\" argument.)\n'
+g_omit_pair_coeff_checking = False
+
 
 
 def CheckCommonVarNames(prefix, descr_str, suffix, srcloc):
@@ -900,6 +902,33 @@ def CheckSyntaxCheap(lex):
         sys.stderr.write('WARNING: \"' + in_settings + '\" file not found\n')
 
 
+
+
+def IsAtomRef(entry):
+    """
+    Is entry a template of the form:  @atom:b or @{atom:b}
+    """
+    return ((isinstance(entry, VarRef)) and
+            (entry.prefix in ('@', '@{')) and
+            (entry.nptr.cat_name == 'atom'))
+
+
+def IsAtomRefRange(entry):
+    """
+    Is entry a template of the form:  @{atom:b1}*@{atom:b3}   ?
+    """
+    is_range = ((len(entry) == 3) and
+                IsAtomRef(entry[0]) and
+                IsAtomRef(entry[2]) and
+                ((isinstance(entry[1], TextBlock) and
+                  (entry[1].text == '*'))))
+    global g_omit_pair_coeff_checking
+    if is_range:
+        g_omit_pair_coeff_checking = True
+    return is_range
+
+
+
 def CheckSyntaxStatic(context_node,
                       root_node,
                       atom_column_names,
@@ -1510,10 +1539,8 @@ def CheckSyntaxStatic(context_node,
                         # Ignore comment lines (postprocessing removes them)
                         pass
                     elif (not ((len(table[i]) > 0) and
-                               isinstance(table[i][0], VarRef) and
-                               (table[i][0].prefix in ('@', '@{')) and
-                               (table[i][0].nptr.cat_name == 'atom') and
-                               (table[i][0].nptr.cat_node == root_node))):
+                               (IsAtomRef(table[i][0]) or
+                                IsAtomRefRange(table[i][0])))):
                         raise InputError('----------------------------------------------------\n' +
                                          '     Syntax error near ' +
                                          ErrorLeader(table[i][0].srcloc.infile,
@@ -1525,8 +1552,13 @@ def CheckSyntaxStatic(context_node,
                                          '----------------------------------------------------\n' +
                                          g_no_check_msg)
                     else:
-                        data_pair_coeffs_defined.add((table[i][0].binding,
-                                                      table[i][0].binding))
+                        if g_omit_pair_coeff_checking:
+                            sys.stderr.write('--------------------------------------------------------------\n'
+                                             'WARNING: UNABLE TO CHECK THE "PairCoeff" SECTION.\n'
+                                         '         (This happens if you use @{atom:a}*@{atom:b} syntax.)\n')
+                        else:
+                            data_pair_coeffs_defined.add((table[i][0].binding,
+                                                          table[i][0].binding))
 
             elif filename == 'Data Bonds By Type':
                 table = TableFromTemplate(command.tmpl_list,
@@ -1919,14 +1951,12 @@ def CheckInFileSyntax(tmpl_list,
                     pass  # we dealt with this case earlier
 
                 elif (not ((len(table[i]) > 2) and
-                           (isinstance(table[i][1], VarRef)) and
-                           (table[i][1].prefix in ('@', '@{')) and
-                           (table[i][1].nptr.cat_name == 'atom') and
-                           (table[i][1].nptr.cat_node == root_node) and
-                           (isinstance(table[i][2], VarRef)) and
-                           (table[i][2].prefix in ('@', '@{')) and
-                           (table[i][2].nptr.cat_name == 'atom') and
-                           (table[i][2].nptr.cat_node == root_node))):
+                           (IsAtomRef(table[i][1]) or
+                            IsAtomRefRange(table[i][1]))
+                           and
+                           (IsAtomRef(table[i][2]) or
+                            IsAtomRefRange(table[i][2])))):
+
                     raise InputError('----------------------------------------------------\n' +
                                      '     Syntax error near ' +
                                      ErrorLeader(table[i][0].srcloc.infile,
@@ -1937,8 +1967,14 @@ def CheckInFileSyntax(tmpl_list,
                                      '----------------------------------------------------\n\n' +
                                      g_no_check_msg)
                 else:
-                    pair_coeffs_defined.add(
-                        (table[i][1].binding, table[i][2].binding))
+                    if g_omit_pair_coeff_checking:
+                        sys.stderr.write('--------------------------------------------------------------\n'
+                                         'WARNING: UNABLE TO CHECK "pair_coeff" COMMANDS.\n'
+                                         '         (This happens if you use @{atom:a}*@{atom:b} syntax.)\n')
+                        
+                    else:
+                        pair_coeffs_defined.add(
+                            (table[i][1].binding, table[i][2].binding))
 
 
 def LttreeCheckParseArgs(argv, settings, main=False, show_warnings=True):
@@ -1993,6 +2029,8 @@ def LttreeCheckParseArgs(argv, settings, main=False, show_warnings=True):
     return
 
 
+
+
 #######  control flow begins here: #######
 def main():
     sys.stderr.write(g_program_name + ' v' +
@@ -2000,6 +2038,7 @@ def main():
 
     try:
         # Parse the argument list and instantiate the lexer we will be using:
+        g_omit_pair_coeff_checking = False
 
         settings = LttreeSettings()
         LttreeCheckParseArgs([arg for arg in sys.argv], #(deep copy of sys.argv)
@@ -2302,7 +2341,8 @@ def main():
                         (not (atom_binding.nptr.cat_name,
                               atom_binding.nptr.cat_node,
                               atom_binding.nptr.leaf_node)
-                         in replace_var_pairs)):
+                         in replace_var_pairs) and
+                        (not g_omit_pair_coeff_checking)):
 
                         raise InputError('---------------------------------------------------------------------\n' +
                                          '     Syntax error: Missing pair coeff.\n\n' +
