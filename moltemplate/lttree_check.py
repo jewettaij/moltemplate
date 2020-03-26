@@ -1372,13 +1372,15 @@ def CheckSyntaxStatic(context_node,
                                                  '    Possible error near ' +
                                                  ErrorLeader(entry.srcloc.infile,
                                                              entry.srcloc.lineno) + '\n'
-                                                 'The wildcard symbol, \"*\", is not recommended within \"' + filename + '\".\n'
+                                                 'Wildcard symbols (\"*\", \"?\") are forbiddin within \"' + filename + '\".\n'
                                                  'It is safer to specify the parameters for each type explicitly.\n'
                                                  'To get past this error message, run moltemplate.sh with the \"-allow-wildcards\"\n'
-                                                 'argument.  If not all of the @atom,@bond,@angle,@dihedral,@improper types are\n'
-                                                 'included in the a*b range of values, then MAKE SURE that these types are\n'
-                                                 'assigned to connsecutively increasing integer values by first defining them in\n'
-                                                 'that order, or if that fails, by using the \"-a\" to assign the values manually\n')
+                                                 'argument.\n'
+                                                 '(Special case: If the \"*\" character is part of a LAMMPS-style \"*\" range\n'
+                                                 ' (eg \"@{atom:C1}*@{atom:C3}\", \"@{bond:B2}*@{bond:B5}\") then MAKE SURE that\n'
+                                                 ' the in-betwen types are assigned to connsecutively increasing integer values\n'
+                                                 ' by defining them in that order.  If that fails, use the \"-a\" argument\n'
+                                                 ' to assign these types to integers manually.)\n')
 
             if filename == 'Data Bond Coeffs':
                 # Commenting the next line out.  We did this already:
@@ -1743,14 +1745,16 @@ def CheckInFileSyntax(tmpl_list,
                                              '     Possible error near ' +
                                              ErrorLeader(entry.srcloc.infile,
                                                          entry.srcloc.lineno) + '\n'
-                                             'The wildcard symbol, \"*\", is not recommended within a \"' +
+                                             'Wildcard symbols (\"*\", \"?\") are forbidden within a \"' +
                                              table[i][0].text + '\".\n'
                                              'command. It is safer to specify the parameters for each bond type explicitly.\n'
                                              'To get past this error message, run moltemplate.sh with the \"-allow-wildcards\"\n'
-                                             'argument.  If not all of the @bond,@angle,@dihedral,@improper types are included\n'
-                                             'in the range, then MAKE SURE these @bond,@angle,@dihedral,@improper types are\n'
-                                             'assigned to connsecutively increasing integer values by first defining them in\n'
-                                             'that order, or if that fails, by using the \"-a\" to assign the values manually\n')
+                                             'argument.\n'
+                                             '(Special case: If the \"*\" character is part of a LAMMPS-style \"*\" range\n'
+                                             ' (eg \"@{atom:C1}*@{atom:C3}\", \"@{bond:B2}*@{bond:B5}\") then MAKE SURE that\n'
+                                             ' the in-betwen types are assigned to connsecutively increasing integer values\n'
+                                             ' by defining them in that order.  If that fails, use the \"-a\" argument\n'
+                                             ' to assign these types to integers manually.)\n')
 
             if ((isinstance(table[i][0], TextBlock)) and
                 ((table[i][0].text.lower() == 'bondcoeff') or
@@ -1935,13 +1939,15 @@ def CheckInFileSyntax(tmpl_list,
                                              '     Possible error near ' +
                                              ErrorLeader(entry.srcloc.infile,
                                                          entry.srcloc.lineno) + '\n'
-                                             'The wildcard symbol, \"*\", is not recommended within a \"pair_coeff\" command.\n'
+                                             'Wildcard symbols (\"*\", \"?\") are forbidden within \"pair_coeff\" commands.\n'
                                              'It is safer to specify the parameters for each bond type explicitly.\n'
                                              'To get past this error message, run moltemplate.sh with the \"-allow-wildcards\"\n'
-                                             'argument.  If not all of the @atom types are included in the range, then\n'
-                                             'MAKE SURE the relevant @atom types in the * range are assigned to\n'
-                                             'connsecutively increasing integer values by first defining them in that\n'
-                                             'order, or if that fails, by using the \"-a\" to assign the values manually.\n')
+                                             'argument.\n'
+                                             '(Special case: If the \"*\" character is part of a LAMMPS-style \"*\" range\n'
+                                             ' (eg \"@{atom:C1}*@{atom:C3}\", \"@{bond:B2}*@{bond:B5}\") then MAKE SURE that\n'
+                                             ' the in-betwen types are assigned to connsecutively increasing integer values\n'
+                                             ' by defining them in that order.  If that fails, use the \"-a\" argument\n'
+                                             ' to assign these types to integers manually.)\n')
 
                 if ((len(table[i]) > 2) and
                     ((isinstance(table[i][1], TextBlock) and

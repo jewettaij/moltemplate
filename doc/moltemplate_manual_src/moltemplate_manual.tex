@@ -1277,10 +1277,9 @@ Invoke VMD after running moltemplate to view the system you have just created.
 Normally moltemplate.sh reorders the atoms in each bond, angle, dihedral, and improper interaction before writing them to the DATA file in order to help avoid duplicate interactions between the same atoms if listed in different but equivalent orders.  Sometimes this is undesirable.  \textit{\textbf{To disable this behavior, set ``file.py'' to ``None''.}}  You can also manually choose alternate symmetry rules for unusual force fields. (Such as class2 force fields, dihedral\_style spherical, etc...  For an example of the file format for ``file.py'', see the ``nbody\_Impropers.py'' file.)
 \\
 \hline
--allow-wildcards &
-Allow the use of ``*'' and ``?'' characters within
-``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
-and ``improper\_coeff'' commands. (Default)
+-molc &
+Helpful additional post-processing for users of the \textbf{MOLC}
+coarse-grained model.
 \\
 \hline
 \begin{tabular}[t]{l}
@@ -1296,8 +1295,10 @@ or \textit{full} versions of the atom type names are printed there.
 (Default: short. See section \ref{sec:full_names} for details.)
 \\
 \hline
--molc &
-Helpful additional post-processing for users of the MOLC coarse-grained model.
+-forbid-wildcards &
+Forbid the use of ``*'' and ``?'' characters in
+``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
+and ``improper\_coeff'' commands.  (eg: ``bond\_coeff @bond:CH?? ...'', ``pair\_coeff @atom:C* @atom:C* ...''.  These are allowed by default.)
 \\
 \end{longtable}
 
