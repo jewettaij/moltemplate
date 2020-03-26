@@ -186,3 +186,7 @@ output_ttree/
 #temporary file created by moltemplate.sh for storing coordinates
 tmp_atom_coords.dat
 
+# Delete some additional files that are created by testing some of the examples:
+ndmansfield_src/
+ndmansfield
+

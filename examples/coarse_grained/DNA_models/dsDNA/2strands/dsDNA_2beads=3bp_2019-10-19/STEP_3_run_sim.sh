@@ -11,7 +11,8 @@
 # then you would run lammps on these files this way:
 
 
-lmp_mpi -i run.in.nvt
+lmp_mpi -i run.in.min
+lmp_mpi -i run.in
 
 
 
