@@ -189,4 +189,8 @@ tmp_atom_coords.dat
 # Delete some additional files that are created by testing some of the examples:
 ndmansfield_src/
 ndmansfield
+ndautocrr_src/
+ndautocrr
+adjacency_ubin_src/
+adjacency_ubin
 
