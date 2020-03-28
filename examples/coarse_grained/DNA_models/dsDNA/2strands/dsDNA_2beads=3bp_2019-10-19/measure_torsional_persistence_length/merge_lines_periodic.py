@@ -6,8 +6,8 @@ g_module_name  = g_filename
 g_program_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str     = '2017-2-12'
-g_version_str  = '0.2'
+g_date_str     = '2020-1-19'
+g_version_str  = '0.3.0'
 
 
 
