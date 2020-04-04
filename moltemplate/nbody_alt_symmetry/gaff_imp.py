@@ -91,3 +91,5 @@ def canonical_order(match):
             return ((atom3,atom1,atom2,atom0), (bond2,bond1,bond0))
     else:
         return ((atom1,atom3,atom2,atom0), (bond1,bond2,bond0))
+
+    
