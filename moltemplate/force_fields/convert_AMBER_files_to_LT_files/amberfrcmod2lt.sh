@@ -186,3 +186,11 @@ echo ""
 echo "}"
 echo ""
 echo ""
+
+# Delete the temporary files we created earlier
+rm -f "$FRCMOD_FILE.mass.lt"
+rm -f "$FRCMOD_FILE.pair.lt"
+rm -f "$FRCMOD_FILE.bond.lt"
+rm -f "$FRCMOD_FILE.angle.lt"
+rm -f "$FRCMOD_FILE.dihedral.lt"
+rm -f "$FRCMOD_FILE.improper.lt"

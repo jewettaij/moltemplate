@@ -202,3 +202,12 @@ echo ""
 echo "}"
 echo ""
 echo ""
+
+
+# Delete the temporary files we created earlier
+rm -f "$PARM_FILE.mass.lt"
+rm -f "$PARM_FILE.pair.lt"
+rm -f "$PARM_FILE.bond.lt"
+rm -f "$PARM_FILE.angle.lt"
+rm -f "$PARM_FILE.dihedral.lt"
+rm -f "$PARM_FILE.improper.lt"
