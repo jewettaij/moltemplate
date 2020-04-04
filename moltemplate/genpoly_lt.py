@@ -132,7 +132,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-bond':
                 if i + 3 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 4 strings.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 3 strings.\n')
                 # self.bonds_name.append(argv[i+1])
                 self.bonds_type.append(argv[i + 1])
                 self.bonds_atoms.append((argv[i + 2],
@@ -142,7 +142,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-angle':
                 if i + 7 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 3 integers.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 4 strings and 3 integers.\n')
                 # self.angles_name.append(argv[i+1])
                 self.angles_type.append(argv[i + 1])
                 self.angles_atoms.append((argv[i + 2],
@@ -160,7 +160,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-dihedral':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 6 strings and 4 integers.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.dihedrals_name.append(argv[i+1])
                 self.dihedrals_type.append(argv[i + 1])
                 self.dihedrals_atoms.append((argv[i + 2],
@@ -181,7 +181,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-improper':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 6 strings and 4 integers.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.impropers_name.append(argv[i+1])
                 self.impropers_type.append(argv[i + 1])
                 self.impropers_atoms.append((argv[i + 2],

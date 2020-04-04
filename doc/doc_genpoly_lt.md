@@ -248,7 +248,7 @@ from the terminal) and a python library.  The former is documented below.
                    of the smallest rectangular box which encloses all of the
                    coordinates in the coordinate file.  The user must supply 3
                    comma-separated numbers (no spaces) which indicate how much
-                   extra room is needed in the x,y,z directions, at both ends.
+                   extra room is needed in the ±x, ±y, ±z directions.
 
     -polymer-directions polarities.txt
                    Change the order that coordinates are read from the file.
