@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.17.2"
-G_DATE="2020-4-04"
+G_VERSION="2.17.3"
+G_DATE="2020-4-07"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -1261,6 +1261,22 @@ IFS="$IFS_BACKUP"
 
 
 
+# Find all the files created by lttree.py containing lines beginning with 
+# "pair_coeff", "bond_coeff", "angle_coeff", "dihedral_coeff", "improper_coeff".
+# These files need to be processed further.
+
+OUT_FILES_WITH_COEFF_COMMANDS=""
+for f in *.template; do
+    HAS_COEFF_COMMANDS=`awk 'BEGIN{has_coeffs=0} {if ((NF>0)&&(($1=="pair_coeff")||($1=="bond_coeff")||($1=="angle_coeff")||($1=="dihedral_coeff")||($1=="improper_coeff"))) has_coeffs=1} END{print has_coeffs}' < "$f"`
+    if [ "$HAS_COEFF_COMMANDS" -eq "1" ]; then
+        if [ -n "$OUT_FILES_WITH_COEFF_COMMANDS" ]; then
+            printf -v OUT_FILES_WITH_COEFF_COMMANDS "${OUT_FILES_WITH_COEFF_COMMANDS}\n$f"
+        else
+            OUT_FILES_WITH_COEFF_COMMANDS="$f"
+        fi
+    fi
+done
+
 
 
 # Deal with wildcard characters ('*', '?') in "_coeff" commands
@@ -1268,21 +1284,17 @@ IFS="$IFS_BACKUP"
 # Replace them with explicit variable names.  Do this before rendering
 #if [ -s "${in_settings}.template" ]; then
 echo "expanding wildcards in \"_coeff\" commands" >&2
-#ls "${in_prefix}"*.template 2> /dev/null | while read file_name; do
-for file_name in "${in_prefix}"*.template; do
-    if [ ! -f "$file_name" ]; then
-        # Special case: If there aren't any files which match the pattern
-        # ("${in_prefix}"*.template), then the bash glob expansion will 
-        # generate a list with only one entry ("${in_prefix}"*.template).
-        # In that case, there will be no file of that name, and we should skip
-        # this entry (or break out of the loop, since there's only one entry)
-        continue
-    fi
-    # invoking "postprocess_coeffs.py" can be very slow, so only do it if the
+
+OIFS=$IFS
+#IFS=$'\n'
+IFS="
+"
+for file_name in $OUT_FILES_WITH_COEFF_COMMANDS; do
+    #echo "  searching for \"_coeff\" commands in file \"$file_name\"" >&2
     # file contains both _coeff commands and wildcards *,? on the same line:
     if ! awk '{if (match($1,/'_coeff/') && match($0,/'[*,?]/')) exit 1}' < "$file_name"; then
 
-        echo "expanding wildcards in \"_coeff\" commands in \"$file_name\"" >&2
+        echo "  expanding wildcards in \"_coeff\" commands in \"$file_name\"">&2
         if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
             ERR_INTERNAL
         fi
@@ -1299,8 +1311,7 @@ for file_name in "${in_prefix}"*.template; do
     fi
 done
 #fi
-
-
+IFS=$OIFS
 
 
 
@@ -2212,7 +2223,8 @@ fi
 
 
 
-
+# Convert files with names like "In Settings" to "system.in.settings"
+# (or, more generally, "${OUT_FILE_INPUT_SCRIPT}in.settings")
 
 #N_in_prefix=`expr length "$in_prefix"` <-- not posix compliant. AVOID.
 N_in_prefix=${#in_prefix}  #<-- works even if $in_prefix contains spaces
