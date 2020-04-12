@@ -6,8 +6,8 @@
 # All rights reserved.
 
 g_program_name = __file__.split('/')[-1]  # = 'interpolate_curve.py'
-g_version_str = '0.3.0'
-g_date_str = '2019-12-12'
+g_version_str = '0.3.1'
+g_date_str = '2020-4-11'
 
 g_usage_str = """
 Usage:
@@ -355,13 +355,13 @@ def main():
 
                 if (i_new < n_new-1):
                     for d in range(0, g_dim):
-                        x_new[i_new][d] = scale*(x_orig[i_orig][d]
-                                                 +
-                                                 i_remainder*(x_orig[i_orig+1][d]-
-                                                              x_orig[i_orig][d]))
+                        x_new[i_new][d] = (x_orig[i_orig][d]
+                                           +
+                                           i_remainder*(x_orig[i_orig+1][d]-
+                                                        x_orig[i_orig][d]))
                 else:
                     for d in range(0, g_dim):
-                        x_new[i_new][d] = scale*x_orig[n_orig-1][d]
+                        x_new[i_new][d] = x_orig[n_orig-1][d]
 
         else:
             x_new = ResampleCurve(x_orig, n_new, spline_exponent_alpha)

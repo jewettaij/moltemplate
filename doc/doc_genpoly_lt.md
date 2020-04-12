@@ -273,7 +273,7 @@ from the terminal) and a python library.  The former is documented below.
              arguments are integer offsets.  To point monomer i in the direction
              connecting it to the following monomer (i+1), use -dir-indices 0 1.
              arguments are integer offsets.  To point monomer i in the direction
-             connecting it to the previous monomer (i-1), use -dir-indices 0 -1.
+             connecting it to the previous monomer (i-1), use -dir-indices -1 0.
              (Note: If the -polymer-directions argument is used, and the current
              polymer has a direction of -1, the indices ia, ib will be flipped.)
 	     For circular polymers, the indices will be wrapped appropriately.

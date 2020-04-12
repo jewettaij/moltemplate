@@ -585,9 +585,9 @@ class GenPoly(object):
         else:
             for i in range(1, N - 1):
                 for d in range(0, 3):
-                    self.direction_vects[i][d] = coords[
-                        i + self.settings.dir_index_offsets[1]][d] - coords[
-                            i + self.settings.dir_index_offsets[0]][d]
+                    self.direction_vects[i][d] = (coords[i + self.settings.dir_index_offsets[1]][d]
+                                                  -
+                                                  coords[i + self.settings.dir_index_offsets[0]][d])
 
             for d in range(0, 3):
                 self.direction_vects[0][d] = coords[1][d] - coords[0][d]
