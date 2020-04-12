@@ -335,7 +335,7 @@ class GPSettings(object):
                                      'by 3 numbers separated by commas (no spaces)\n')
                 self.box_padding = list(map(float, argv[i + 1].split(',')))
                 if len(self.box_padding) == 1:
-                    self.box_padding = self.box_padding * 3
+                    self.box_padding = [self.box_padding] * 3
                 del(argv[i:i + 2])
             elif (argv[i].lower() in ('-orientations','-orientations')):
                 self.orientations_file = argv[i+1]
@@ -427,8 +427,8 @@ class GenPoly(object):
         self.coords_multi = []  # a list-of-list-of-lists of numbers Nxnx3
         self.name_sequence_multi = []
         self.direction_vects = []
-        self.box_bounds_min = [0.0, 0.0, 0.0]
-        self.box_bounds_max = [0.0, 0.0, 0.0]
+        self.box_bounds_min = None
+        self.box_bounds_max = None
         self.N = 0
         self.orientations_multi = []
         self.helix_angles_multi = []
@@ -949,8 +949,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.0'
-        g_date_str = '2019-12-13'
+        g_version_str = '0.1.1'
+        g_date_str = '2020-4-11'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
