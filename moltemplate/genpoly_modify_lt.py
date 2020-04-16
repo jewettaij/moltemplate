@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.1.0'
-g_date_str     = '2020-4-07'
+g_version_str  = '0.1.1'
+g_date_str     = '2020-4-15'
 
 g_usage_msg = """
 
@@ -20,7 +20,7 @@ Usage:
       [-locations-periodic num_mods offset] \\
       [-locations-random num_mods] \\
       [-mod-width mod_width] \\
-      [-bond btype a1 a2] \\
+      [-bond btype a1 a2 i1 i2] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
       [-improper itype a1 a2 a3 a4 i1 i2 i3 i4] \\
@@ -385,17 +385,20 @@ class GPModSettings(object):
                 del(argv[i:i+7+2*natoms+1])
 
             elif argv[i].lower() == '-bond':
-                if i + 3 >= len(argv):
+                if i + 5 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 3 strings.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 3 strings and 2 integers.\n')
                 # self.bonds_name.append(argv[i+1])
                 self.bonds_type.append(argv[i + 1])
                 self.bonds_atoms.append((argv[i + 2],
                                          argv[i + 3]))
-                self.bonds_index_offsets.append((0, 1))
+                self.bonds_atoms.append((argv[i + 2],
+                                         argv[i + 3]))
+                self.bonds_index_offsets.append((argv[i + 4],
+                                                 argv[i + 5]))
                 if 1 > self.end_padding:
                     self.end_padding = 1
-                del(argv[i:i + 4])
+                del(argv[i:i + 6])
 
             elif argv[i].lower() == '-angle':
                 if i + 7 >= len(argv):

@@ -343,15 +343,16 @@ DNAForceField {
     # For the dihedral angle (φb), during ITERATION 0, we assume that:
     #        Probability(φb) ≈ exp(-U(φb) / kB*T)    where:
     #        U(φb) = C3*(1 - cos(φb-φb0))*sin(θ1)*sin(θ2)
-    #             ≈ C3*(1/2)(φb-φb0)^2*sin(θ10)*sin(θ20)
+    #             ≈ C3*(1/2)(φb-φb0)^2
     # From the PDB files, the observed distribution of φb angles is:
     #        Probability(θ) ≈ exp(-σ*(1/2)*(φb-μ)^2)   where
     # equating the two expressions for Probability(φb)  (converting deg->rad)
-    #    ==> φb0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2
+    #    ==> φb0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2 / Ctheta
+    #        where Ctheta=sin(θ10)*sin(θ20),  Converting degrees->radians again:
+    #         C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180) * sin(θ20*π/180))
     # φb:  μ_PDB = φb0 = 81.1037, σ_PDB = 6.17175 (in degrees)
-    #    ==>  C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180) * sin(θ20*π/180))
-    #             (Note: In this example, both θ10 and θ20 = 66.1769)
-    #           = 60.932639
+    #        θ10 = θ20 = 66.1769 (averaged measurements from many PDB files)
+    #    ==>  C3 ≈ 60.932639
     #
     #dihedral_coeff @dihedral:MajorGroove    spherical 1  &
     #                60.932639     1 81.1037 1     1 90 0         1 90 0
@@ -434,13 +435,13 @@ DNAForceField {
     # For the dihedral angle (φt), during ITERATION 0, we assume that:
     #        Probability(φt) ≈ exp(-U(φt) / kB*T)    where:
     #        U(φt) = C3*(1 - cos(φt-φt0))*sin(θ1)*sin(θ2)
-    #             ≈ C3*(1/2)(φt-φt0)^2*sin(θ10)*sin(θ20)
+    #              ≈ C3*(1/2)(φt-φt0)^2*sin(θ10)*sin(θ20)
     # equating the two expressions for Probability(φt)  (converting deg->rad)
-    #    ==> φt0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2
+    #    ==> φt0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2 / Ctheta
+    #        where Ctheta=sin(θ10)*sin(θ20),  Converting degrees->radians again:
     #         C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180)*sin(θ20*π/180))
-    #             (where, in this case, θ10 = 66.6748, θ20 = 39.1161
-    #              ...as measured from a representative subset of PDB files)
     # φt:  μ_PDB = φt0 = -63.7919, σ_PDB = 2.17443 (in degrees)
+    #        θ10 = 66.6748, θ20 = 39.1161 (averaged measurements from PDB files)
     #    ==>  C3 = 714.4815
     #
     #dihedral_coeff @dihedral:Torsion spherical 2  &
