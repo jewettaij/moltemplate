@@ -392,10 +392,13 @@ class GPModSettings(object):
                 self.bonds_type.append(argv[i + 1])
                 self.bonds_atoms.append((argv[i + 2],
                                          argv[i + 3]))
-                self.bonds_atoms.append((argv[i + 2],
-                                         argv[i + 3]))
-                self.bonds_index_offsets.append((argv[i + 4],
-                                                 argv[i + 5]))
+                offsets = (int(argv[i + 4]),
+                           int(argv[i + 5]))
+                if ((offsets[0] < 0) or
+                    (offsets[1] < 0)):
+                    raise InputError('Error: ' + argv[i] +
+                                     ' indices (i1 i2) must be >= 0\n')
+                self.bonds_index_offsets.append(offsets)
                 if 1 > self.end_padding:
                     self.end_padding = 1
                 del(argv[i:i + 6])
@@ -625,161 +628,161 @@ class GenPolyMod(object):
                               '\n')
 
 
-            if ((len(self.settings.bonds_type) > 0) or
-                (len(self.settings.angles_type) > 0) or
-                (len(self.settings.dihedrals_type) > 0) or
-                (len(self.settings.impropers_type) > 0)):
+        if ((len(self.settings.bonds_type) > 0) or
+            (len(self.settings.angles_type) > 0) or
+            (len(self.settings.dihedrals_type) > 0) or
+            (len(self.settings.impropers_type) > 0)):
 
-                outfile.write('\n'
-                              '  ########### Overriding dihedrals, angles, and impropers ##########\n'
-                              '\n'
-                              '  # Override the dihedrals (and angles, and impropers)\n'
-                              '  # at certain locations.  This feature is sometimes used to add additional\n'
-                              '  # bonded interactions to specific atoms in the polymer, or override\n'
-                              '  # existing such interactions.  This feature is sometimes used\n'
-                              '  # to turn off the dihedral (angle, improper) interactions\n'
-                              '  # at locations in the polymer (that would otherwise interfere with the\n'
-                              '  # behavior of other constraint forces (or twist motors) that we want to add.\n'
-                              '  # One could (for example) replace a dihedral interaction\n'
-                              '  # that constrains a dihedral angle, to one which exerts\n'
-                              '  # no forces, allowing that dihedral angle to spin freely.\n'
-                              '  # (One could also simply delete the dihedral angle, but that\n'
-                              '  #  option is more difficult to implement and undo later.)\n')
+            outfile.write('\n'
+                          '  ########### Overriding dihedrals, angles, and impropers ##########\n'
+                          '\n'
+                          '  # Override the dihedrals (and angles, and impropers)\n'
+                          '  # at certain locations.  This feature is sometimes used to add additional\n'
+                          '  # bonded interactions to specific atoms in the polymer, or override\n'
+                          '  # existing such interactions.  This feature is sometimes used\n'
+                          '  # to turn off the dihedral (angle, improper) interactions\n'
+                          '  # at locations in the polymer (that would otherwise interfere with the\n'
+                          '  # behavior of other constraint forces (or twist motors) that we want to add.\n'
+                          '  # One could (for example) replace a dihedral interaction\n'
+                          '  # that constrains a dihedral angle, to one which exerts\n'
+                          '  # no forces, allowing that dihedral angle to spin freely.\n'
+                          '  # (One could also simply delete the dihedral angle, but that\n'
+                          '  #  option is more difficult to implement and undo later.)\n')
 
-            if len(self.settings.bonds_type) > 0:
-                outfile.write('\n')
-                outfile.write('  write("Data Bonds") {\n')
-                WrapPeriodic.bounds_err = False
-                for i in range(0, self.settings.N):
-                    ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
-                    if WrapPeriodic.bounds_err:
-                        WrapPeriodic.bounds_err = False
-                        if not self.settings.connect_ends:
-                            continue
-                    if self.settings.is_mod_here[i]:
+        if len(self.settings.bonds_type) > 0:
+            outfile.write('\n')
+            outfile.write('  write("Data Bonds") {\n')
+            WrapPeriodic.bounds_err = False
+            for i in range(0, self.settings.N):
+                ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
+                if WrapPeriodic.bounds_err:
+                    WrapPeriodic.bounds_err = False
+                    if not self.settings.connect_ends:
+                        continue
+                if self.settings.is_mod_here[i]:
 
-                        for b in range(0, len(self.settings.bonds_type)):
-                            I = i + self.settings.bonds_index_offsets[b][0]
-                            J = i + self.settings.bonds_index_offsets[b][1]
-                            I = WrapPeriodic.Wrap(I, self.settings.N)
-                            J = WrapPeriodic.Wrap(J, self.settings.N)
-                            if WrapPeriodic.bounds_err:
-                                WrapPeriodic.bounds_err = False
-                                if not self.settings.connect_ends:
-                                    continue
-                            outfile.write('    $bond:gpm' + str(i + 1))
-                            if len(self.settings.bonds_type) > 1:
-                                outfile.write('_' + str(b + 1))
-                            outfile.write(' @bond:' + self.settings.bonds_type[b] +
-                                          ' $atom:mon[' + str(I) + ']/' + self.settings.bonds_atoms[b][0] +
-                                          ' $atom:mon[' + str(J) + ']/' + self.settings.bonds_atoms[b][1] +
-                                          '\n')
-                outfile.write('  }  # write("Data Bonds")\n')
+                    for b in range(0, len(self.settings.bonds_type)):
+                        I = i + self.settings.bonds_index_offsets[b][0]
+                        J = i + self.settings.bonds_index_offsets[b][1]
+                        I = WrapPeriodic.Wrap(I, self.settings.N)
+                        J = WrapPeriodic.Wrap(J, self.settings.N)
+                        if WrapPeriodic.bounds_err:
+                            WrapPeriodic.bounds_err = False
+                            if not self.settings.connect_ends:
+                                continue
+                        outfile.write('    $bond:gpm' + str(i + 1))
+                        if len(self.settings.bonds_type) > 1:
+                            outfile.write('_' + str(b + 1))
+                        outfile.write(' @bond:' + self.settings.bonds_type[b] +
+                                      ' $atom:mon[' + str(I) + ']/' + self.settings.bonds_atoms[b][0] +
+                                      ' $atom:mon[' + str(J) + ']/' + self.settings.bonds_atoms[b][1] +
+                                      '\n')
+            outfile.write('  }  # write("Data Bonds")\n')
 
-            if len(self.settings.angles_type) > 0:
-                outfile.write('\n')
-                outfile.write('  write("Data Angles") {\n')
-                WrapPeriodic.bounds_err = False
-                for i in range(0, self.settings.N):
-                    ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
-                    if WrapPeriodic.bounds_err:
-                        WrapPeriodic.bounds_err = False
-                        if not self.settings.connect_ends:
-                            continue
-                    if self.settings.is_mod_here[i]:
+        if len(self.settings.angles_type) > 0:
+            outfile.write('\n')
+            outfile.write('  write("Data Angles") {\n')
+            WrapPeriodic.bounds_err = False
+            for i in range(0, self.settings.N):
+                ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
+                if WrapPeriodic.bounds_err:
+                    WrapPeriodic.bounds_err = False
+                    if not self.settings.connect_ends:
+                        continue
+                if self.settings.is_mod_here[i]:
 
-                        for b in range(0, len(self.settings.angles_type)):
-                            I = i + self.settings.angles_index_offsets[b][0]
-                            J = i + self.settings.angles_index_offsets[b][1]
-                            K = i + self.settings.angles_index_offsets[b][2]
-                            I = WrapPeriodic.Wrap(I, self.settings.N)
-                            J = WrapPeriodic.Wrap(J, self.settings.N)
-                            K = WrapPeriodic.Wrap(K, self.settings.N)
-                            if WrapPeriodic.bounds_err:
-                                WrapPeriodic.bounds_err = False
-                                if not self.settings.connect_ends:
-                                    continue
-                            outfile.write('    $angle:gpm' + str(i + 1))
-                            if len(self.settings.angles_type) > 1:
-                                outfile.write('_' + str(b + 1))
-                            outfile.write(' @angle:' + self.settings.angles_type[b] +
-                                          ' $atom:mon[' + str(I) + ']/' + self.settings.angles_atoms[b][0] +
-                                          ' $atom:mon[' + str(J) + ']/' + self.settings.angles_atoms[b][1] +
-                                          ' $atom:mon[' + str(K) + ']/' + self.settings.angles_atoms[b][2] +
-                                          '\n')
-                outfile.write('  }  # write("Data Angles")\n')
+                    for b in range(0, len(self.settings.angles_type)):
+                        I = i + self.settings.angles_index_offsets[b][0]
+                        J = i + self.settings.angles_index_offsets[b][1]
+                        K = i + self.settings.angles_index_offsets[b][2]
+                        I = WrapPeriodic.Wrap(I, self.settings.N)
+                        J = WrapPeriodic.Wrap(J, self.settings.N)
+                        K = WrapPeriodic.Wrap(K, self.settings.N)
+                        if WrapPeriodic.bounds_err:
+                            WrapPeriodic.bounds_err = False
+                            if not self.settings.connect_ends:
+                                continue
+                        outfile.write('    $angle:gpm' + str(i + 1))
+                        if len(self.settings.angles_type) > 1:
+                            outfile.write('_' + str(b + 1))
+                        outfile.write(' @angle:' + self.settings.angles_type[b] +
+                                      ' $atom:mon[' + str(I) + ']/' + self.settings.angles_atoms[b][0] +
+                                      ' $atom:mon[' + str(J) + ']/' + self.settings.angles_atoms[b][1] +
+                                      ' $atom:mon[' + str(K) + ']/' + self.settings.angles_atoms[b][2] +
+                                      '\n')
+            outfile.write('  }  # write("Data Angles")\n')
 
-            if len(self.settings.dihedrals_type) > 0:
-                outfile.write('\n')
-                outfile.write('  write("Data Dihedrals") {\n')
-                WrapPeriodic.bounds_err = False
-                for i in range(0, self.settings.N):
-                    ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
-                    if WrapPeriodic.bounds_err:
-                        WrapPeriodic.bounds_err = False
-                        if not self.settings.connect_ends:
-                            continue
-                    if self.settings.is_mod_here[i]:
+        if len(self.settings.dihedrals_type) > 0:
+            outfile.write('\n')
+            outfile.write('  write("Data Dihedrals") {\n')
+            WrapPeriodic.bounds_err = False
+            for i in range(0, self.settings.N):
+                ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
+                if WrapPeriodic.bounds_err:
+                    WrapPeriodic.bounds_err = False
+                    if not self.settings.connect_ends:
+                        continue
+                if self.settings.is_mod_here[i]:
 
-                        for b in range(0, len(self.settings.dihedrals_type)):
-                            I = i + self.settings.dihedrals_index_offsets[b][0]
-                            J = i + self.settings.dihedrals_index_offsets[b][1]
-                            K = i + self.settings.dihedrals_index_offsets[b][2]
-                            L = i + self.settings.dihedrals_index_offsets[b][3]
-                            I = WrapPeriodic.Wrap(I, self.settings.N)
-                            J = WrapPeriodic.Wrap(J, self.settings.N)
-                            K = WrapPeriodic.Wrap(K, self.settings.N)
-                            L = WrapPeriodic.Wrap(L, self.settings.N)
-                            if WrapPeriodic.bounds_err:
-                                WrapPeriodic.bounds_err = False
-                                if not self.settings.connect_ends:
-                                    continue
-                            outfile.write('    $dihedral:gpm' + str(i + 1))
-                            if len(self.settings.dihedrals_type) > 1:
-                                outfile.write('_' + str(b + 1))
-                            outfile.write(' @dihedral:' + self.settings.dihedrals_type[b] +
-                                          ' $atom:mon[' + str(I) + ']/' + self.settings.dihedrals_atoms[b][0] +
-                                          ' $atom:mon[' + str(J) + ']/' + self.settings.dihedrals_atoms[b][1] +
-                                          ' $atom:mon[' + str(K) + ']/' + self.settings.dihedrals_atoms[b][2] +
-                                          ' $atom:mon[' + str(L) + ']/' + self.settings.dihedrals_atoms[b][3] +
-                                          '\n')
-                outfile.write('  }  # write("Data Dihedrals")\n')
+                    for b in range(0, len(self.settings.dihedrals_type)):
+                        I = i + self.settings.dihedrals_index_offsets[b][0]
+                        J = i + self.settings.dihedrals_index_offsets[b][1]
+                        K = i + self.settings.dihedrals_index_offsets[b][2]
+                        L = i + self.settings.dihedrals_index_offsets[b][3]
+                        I = WrapPeriodic.Wrap(I, self.settings.N)
+                        J = WrapPeriodic.Wrap(J, self.settings.N)
+                        K = WrapPeriodic.Wrap(K, self.settings.N)
+                        L = WrapPeriodic.Wrap(L, self.settings.N)
+                        if WrapPeriodic.bounds_err:
+                            WrapPeriodic.bounds_err = False
+                            if not self.settings.connect_ends:
+                                continue
+                        outfile.write('    $dihedral:gpm' + str(i + 1))
+                        if len(self.settings.dihedrals_type) > 1:
+                            outfile.write('_' + str(b + 1))
+                        outfile.write(' @dihedral:' + self.settings.dihedrals_type[b] +
+                                      ' $atom:mon[' + str(I) + ']/' + self.settings.dihedrals_atoms[b][0] +
+                                      ' $atom:mon[' + str(J) + ']/' + self.settings.dihedrals_atoms[b][1] +
+                                      ' $atom:mon[' + str(K) + ']/' + self.settings.dihedrals_atoms[b][2] +
+                                      ' $atom:mon[' + str(L) + ']/' + self.settings.dihedrals_atoms[b][3] +
+                                      '\n')
+            outfile.write('  }  # write("Data Dihedrals")\n')
 
-            if len(self.settings.impropers_type) > 0:
-                outfile.write('\n')
-                outfile.write('  write("Data Impropers") {\n')
-                WrapPeriodic.bounds_err = False
-                for i in range(0, self.settings.N):
-                    ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
-                    if WrapPeriodic.bounds_err:
-                        WrapPeriodic.bounds_err = False
-                        if not self.settings.connect_ends:
-                            continue
-                    if self.settings.is_mod_here[i]:
+        if len(self.settings.impropers_type) > 0:
+            outfile.write('\n')
+            outfile.write('  write("Data Impropers") {\n')
+            WrapPeriodic.bounds_err = False
+            for i in range(0, self.settings.N):
+                ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
+                if WrapPeriodic.bounds_err:
+                    WrapPeriodic.bounds_err = False
+                    if not self.settings.connect_ends:
+                        continue
+                if self.settings.is_mod_here[i]:
 
-                        for b in range(0, len(self.settings.impropers_type)):
-                            I = i + self.settings.impropers_index_offsets[b][0]
-                            J = i + self.settings.impropers_index_offsets[b][1]
-                            K = i + self.settings.impropers_index_offsets[b][2]
-                            L = i + self.settings.impropers_index_offsets[b][3]
-                            I = WrapPeriodic.Wrap(I, self.settings.N)
-                            J = WrapPeriodic.Wrap(J, self.settings.N)
-                            K = WrapPeriodic.Wrap(K, self.settings.N)
-                            L = WrapPeriodic.Wrap(L, self.settings.N)
-                            if WrapPeriodic.bounds_err:
-                                WrapPeriodic.bounds_err = False
-                                if not self.settings.connect_ends:
-                                    continue
-                            outfile.write('    $improper:gpm' + str(i + 1))
-                            if len(self.settings.impropers_type) > 1:
-                                outfile.write('_' + str(b + 1))
-                            outfile.write(' @improper:' + self.settings.impropers_type[b] +
-                                          ' $atom:mon[' + str(I) + ']/' + self.settings.impropers_atoms[b][0] +
-                                          ' $atom:mon[' + str(J) + ']/' + self.settings.impropers_atoms[b][1] +
-                                          ' $atom:mon[' + str(K) + ']/' + self.settings.impropers_atoms[b][2] +
-                                          ' $atom:mon[' + str(L) + ']/' + self.settings.impropers_atoms[b][3] +
-                                          '\n')
-                outfile.write('  }  # write("Data Impropers")  \n')
+                    for b in range(0, len(self.settings.impropers_type)):
+                        I = i + self.settings.impropers_index_offsets[b][0]
+                        J = i + self.settings.impropers_index_offsets[b][1]
+                        K = i + self.settings.impropers_index_offsets[b][2]
+                        L = i + self.settings.impropers_index_offsets[b][3]
+                        I = WrapPeriodic.Wrap(I, self.settings.N)
+                        J = WrapPeriodic.Wrap(J, self.settings.N)
+                        K = WrapPeriodic.Wrap(K, self.settings.N)
+                        L = WrapPeriodic.Wrap(L, self.settings.N)
+                        if WrapPeriodic.bounds_err:
+                            WrapPeriodic.bounds_err = False
+                            if not self.settings.connect_ends:
+                                continue
+                        outfile.write('    $improper:gpm' + str(i + 1))
+                        if len(self.settings.impropers_type) > 1:
+                            outfile.write('_' + str(b + 1))
+                        outfile.write(' @improper:' + self.settings.impropers_type[b] +
+                                      ' $atom:mon[' + str(I) + ']/' + self.settings.impropers_atoms[b][0] +
+                                      ' $atom:mon[' + str(J) + ']/' + self.settings.impropers_atoms[b][1] +
+                                      ' $atom:mon[' + str(K) + ']/' + self.settings.impropers_atoms[b][2] +
+                                      ' $atom:mon[' + str(L) + ']/' + self.settings.impropers_atoms[b][3] +
+                                      '\n')
+            outfile.write('  }  # write("Data Impropers")  \n')
 
         outfile.write('\n')
 
