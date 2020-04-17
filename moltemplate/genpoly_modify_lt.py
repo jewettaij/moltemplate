@@ -314,14 +314,14 @@ class GPModSettings(object):
                 natoms = 1
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by at least'+str(i+2+3*natoms)+
+                        'Error: ' + argv[i] + ' flag should be followed by at least '+str(3+3*natoms)+
                         'arguments .\n')
                 natoms = int(argv[i+1])
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' ' + str(natoms) +
-                        ' flag should be followed by '+str(i+3+3*natoms)+
-                        'arguments .\n')
+                        'Error: ' + argv[i] + ' ' + argv[i+1] +
+                        ' flag should be followed by '+str(3+3*natoms-1)+
+                        ' arguments .\n')
                 self.setatoms_natoms.append(natoms)
                 self.setatoms_filename.append(argv[i+2])
                 self.setatoms_attribute_name.append(argv[i+3])
@@ -353,13 +353,13 @@ class GPModSettings(object):
                 natoms = 1
                 if i+5+2*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by at least'+str(i+5+2*natoms)+
+                        'Error: ' + argv[i] + ' flag should be followed by at least'+str(5+2*natoms)+
                         'arguments .\n')
                 natoms = int(argv[i+1])
                 if i+5+2*natoms >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' ' + str(natoms) +
-                        ' flag should be followed by '+str(i+5+2*natoms)+
+                        ' flag should be followed by '+str(5+2*natoms)+
                         'arguments .\n')
                 self.fix_nbody_natoms.append(natoms)
                 self.fix_nbody_filename.append(argv[i+2])

@@ -367,24 +367,24 @@ class GPSettings(object):
 
         for b in range(0, len(self.bonds_type)):
             if len(self.bonds_type) > 1:
-                self.bonds_name.append('genpoly' + str(b + 1) + '_')
+                self.bonds_name.append('genp_bond' + str(b + 1) + '_')
             else:
-                self.bonds_name.append('genpoly')
+                self.bonds_name.append('genp_bond_')
         for b in range(0, len(self.angles_type)):
             if len(self.angles_type) > 1:
-                self.angles_name.append('genpoly' + str(b + 1) + '_')
+                self.angles_name.append('genp_angle' + str(b + 1) + '_')
             else:
-                self.angles_name.append('genpoly')
+                self.angles_name.append('genp_angle_')
         for b in range(0, len(self.dihedrals_type)):
             if len(self.dihedrals_type) > 1:
-                self.dihedrals_name.append('genpoly' + str(b + 1) + '_')
+                self.dihedrals_name.append('genp_dihedral' + str(b + 1) + '_')
             else:
-                self.dihedrals_name.append('genpoly')
+                self.dihedrals_name.append('genp_dihedral_')
         for b in range(0, len(self.impropers_type)):
             if len(self.impropers_type) > 1:
-                self.impropers_name.append('genpoly' + str(b + 1) + '_')
+                self.impropers_name.append('genp_improper' + str(b + 1) + '_')
             else:
-                self.impropers_name.append('genpoly')
+                self.impropers_name.append('genp_improper_')
 
 
 
@@ -783,10 +783,12 @@ class GenPoly(object):
                len(self.settings.bonds_type) ==
                len(self.settings.bonds_atoms) ==
                len(self.settings.bonds_index_offsets))
+
         if len(self.settings.bonds_type) > 0:
             outfile.write("\n"
                           "\n"
                           "write(\"Data Bonds\") {\n")
+
         WrapPeriodic.bounds_err = False
         for i in range(0, N):
             test = False
@@ -801,12 +803,11 @@ class GenPoly(object):
                         continue
                 outfile.write(
                     "  $bond:" + self.settings.bonds_name[b] + str(i + 1))
-                if len(self.settings.bonds_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @bond:" + self.settings.bonds_type[b] + " $atom:mon[" + str(I) + "]/" + self.settings.bonds_atoms[
                               b][0] + " $atom:mon[" + str(J) + "]/" + self.settings.bonds_atoms[b][1] + "\n")
         if len(self.settings.bonds_type) > 0:
             outfile.write("}  # write(\"Data Bonds\") {...\n\n\n")
+
 
         assert(len(self.settings.angles_name) ==
                len(self.settings.angles_type) ==
@@ -830,8 +831,6 @@ class GenPoly(object):
                         continue
                 outfile.write(
                     "  $angle:" + self.settings.angles_name[b] + str(i + 1))
-                if len(self.settings.angles_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @angle:" + self.settings.angles_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.angles_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.angles_atoms[b][1] +
@@ -839,6 +838,7 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.angles_type) > 0:
             outfile.write("}  # write(\"Data Angles\") {...\n\n\n")
+
 
         assert(len(self.settings.dihedrals_name) ==
                len(self.settings.dihedrals_type) ==
@@ -864,8 +864,6 @@ class GenPoly(object):
                         continue
                 outfile.write("  $dihedral:" +
                               self.settings.dihedrals_name[b] + str(i + 1))
-                if len(self.settings.dihedrals_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @dihedral:" + self.settings.dihedrals_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.dihedrals_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.dihedrals_atoms[b][1] +
@@ -874,6 +872,7 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.dihedrals_type) > 0:
             outfile.write("}  # write(\"Data Dihedrals\") {...\n\n\n")
+
 
         assert(len(self.settings.impropers_name) ==
                len(self.settings.impropers_type) ==
@@ -899,8 +898,6 @@ class GenPoly(object):
                         continue
                 outfile.write("  $improper:" +
                               self.settings.impropers_name[b] + str(i + 1))
-                if len(self.settings.impropers_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @improper:" + self.settings.impropers_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.impropers_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.impropers_atoms[b][1] +
