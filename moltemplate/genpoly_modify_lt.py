@@ -670,7 +670,7 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $bond:gpm' + str(i + 1))
+                        outfile.write('    $bond:gpm_bond' + str(i + 1))
                         if len(self.settings.bonds_type) > 1:
                             outfile.write('_' + str(b + 1))
                         outfile.write(' @bond:' + self.settings.bonds_type[b] +
@@ -702,7 +702,7 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $angle:gpm' + str(i + 1))
+                        outfile.write('    $angle:gpm_angle' + str(i + 1))
                         if len(self.settings.angles_type) > 1:
                             outfile.write('_' + str(b + 1))
                         outfile.write(' @angle:' + self.settings.angles_type[b] +
@@ -737,7 +737,7 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $dihedral:gpm' + str(i + 1))
+                        outfile.write('    $dihedral:gpm_dihedral' + str(i + 1))
                         if len(self.settings.dihedrals_type) > 1:
                             outfile.write('_' + str(b + 1))
                         outfile.write(' @dihedral:' + self.settings.dihedrals_type[b] +
@@ -773,7 +773,7 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $improper:gpm' + str(i + 1))
+                        outfile.write('    $improper:gpm_improper' + str(i + 1))
                         if len(self.settings.impropers_type) > 1:
                             outfile.write('_' + str(b + 1))
                         outfile.write(' @improper:' + self.settings.impropers_type[b] +
