@@ -725,7 +725,7 @@ def WriteFrameToData(out_file,
                     tokens[1] = xz_str
                     tokens[2] = yz_str
                     line = ' '.join(tokens)
-            if (line in set(['Masses', 'Velocities', 'Atoms',
+            if (line in set(['Masses', 'Velocities', 'Atoms','Ellipsoids',
                              'Bond Coeffs', 'Angle Coeffs',
                              'Dihedral Coeffs', 'Improper Coeffs',
                              'Bonds', 'Angles', 'Dihedrals', 'Impropers'])):
