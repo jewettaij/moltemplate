@@ -673,15 +673,16 @@ while [ "$i" -lt "$ARGC" ]; do
           xtilt[1]=$(echo "0.0 ${box[2]} ${box[5]} $(bc<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|tail -1) # max
           ytilt[0]=$(echo "0.0 ${box[8]}"|xargs -n1|sort -n|head -1) # min
           ytilt[1]=$(echo "0.0 ${box[8]}"|xargs -n1|sort -n|tail -1) # max
-          BOXSIZE_MINX=${box[0]}-${xtilt[0]}
-          BOXSIZE_MAXX=${box[1]}-${xtilt[1]}
-          BOXSIZE_MINY=${box[3]}-${ytilt[0]}
-          BOXSIZE_MAXY=${box[4]}-${ytilt[1]}
+          BOXSIZE_MINX=$(echo ${box[0]}" "${xtilt[0]} |awk '{print $1-$2}')
+          BOXSIZE_MAXX=$(echo ${box[1]}" "${xtilt[1]} |awk '{print $1-$2}')
+          BOXSIZE_MINY=$(echo ${box[3]}" "${ytilt[0]} |awk '{print $1-$2}')
+          BOXSIZE_MAXY=$(echo ${box[4]}" "${ytilt[1]} |awk '{print $1-$2}')
           BOXSIZE_MINZ=${box[6]}
           BOXSIZE_MAXZ=${box[7]}
           BOXSIZE_XY=${box[2]}
           BOXSIZE_XZ=${box[5]}
           BOXSIZE_YZ=${box[8]}
+	  TRICLINIC="True"
         fi
 
         # Save the coordinates.
