@@ -6,8 +6,8 @@
 # All rights reserved.
 
 g_program_name = __file__.split('/')[-1]  # = 'interpolate_curve.py'
-g_version_str = '0.3.0'
-g_date_str = '2019-12-12'
+g_version_str = '0.3.1'
+g_date_str = '2020-4-11'
 
 g_usage_str = """
 Usage:
@@ -123,8 +123,8 @@ def CalcNaturalCubicSplineCoeffs(r, spline_exponent_alpha=0.5):
     for i in range(1, N-1):
         # h_dt[i] is the difference in "time" in the parametric curve 
         # between pairs of control points.  If spline_exponenent_alpha is 0
-        # then the time interval between control points is uniform.  (Typically,
-        # "spline_exponent_alpha" is 0.5 for centripital Catmull-Rom splines.)
+        # then the time interval between control points is uniform.
+        # ("spline_exponent_alpha" is 0.5 for centripital Catmull-Rom splines.)
         a_coeff[i]    =      h_dt[i-1]
         b_coeff[i]    = 2.0*(h_dt[i-1] + h_dt[i])
         c_coeff[i]    =      h_dt[i]
@@ -355,13 +355,13 @@ def main():
 
                 if (i_new < n_new-1):
                     for d in range(0, g_dim):
-                        x_new[i_new][d] = scale*(x_orig[i_orig][d]
-                                                 +
-                                                 i_remainder*(x_orig[i_orig+1][d]-
-                                                              x_orig[i_orig][d]))
+                        x_new[i_new][d] = (x_orig[i_orig][d]
+                                           +
+                                           i_remainder*(x_orig[i_orig+1][d]-
+                                                        x_orig[i_orig][d]))
                 else:
                     for d in range(0, g_dim):
-                        x_new[i_new][d] = scale*x_orig[n_orig-1][d]
+                        x_new[i_new][d] = x_orig[n_orig-1][d]
 
         else:
             x_new = ResampleCurve(x_orig, n_new, spline_exponent_alpha)

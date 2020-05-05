@@ -109,7 +109,7 @@ for line_orig in in_file:
 
     # x_d contains the coordinates read from the 
     # most recent line in the current frame
-    x_d = map(float, tokens)
+    x_d = list(map(float, tokens))
     x_id.append(x_d)
 
 if len(x_id) > 0:

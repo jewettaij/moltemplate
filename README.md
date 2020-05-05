@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/jewettaij/moltemplate.svg?branch=master)](./.travis.yml)
 [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
+[![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
 [![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](http://moltemplate.org)
 [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
 
@@ -13,7 +14,7 @@ Moltemplate
 
 [Moltemplate](http://moltemplate.org)
 is a *general* cross-platform text-based molecule builder for
-[**LAMMPS**](https://lammps.sandia.gov) and
+[**LAMMPS**](https://lammps.sandia.gov) and *(the TCL version of)*
 [**ESPResSo**](http://espressomd.org).
 Moltemplate was intended for building custom coarse-grained molecular models,
 but it can be used to prepare realistic all-atom simulations as well.
@@ -51,10 +52,9 @@ This repository includes approximately 50 [examples](./examples).
 
 ### Documentation
 
-The best way to learn how to use moltemplate is to find an
-example which is similar to the system that you wish to simulate.
-In addition to the examples listed above, there are several
-introductory examples 
+The best way to learn how to use moltemplate is to find an example
+which is similar to the system that you wish to simulate and modify it.
+Some of the moltemplate examples are also demonstrated (with pictures)
 [here](http://moltemplate.org/visual_examples.html).
 
 All moltemplate users should probably read chapter 4 of the
@@ -134,15 +134,15 @@ as well as the subdirectory where most of the python scripts are located.
 Suppose the directory with this README file is named "moltemplate"
 and is located in your home directory:
 
-If you use the bash shell, typically you would edit your
-`~/.profile`, `~/.bash_profile` or `~/.bashrc` files
+If you use the *BASH* shell, typically you would edit your
+`~/.bashrc` file (or `~/.profile`, `~/.bash_profile` files)
 to contain the following lines:
 
     export PATH="$PATH:$HOME/moltemplate/moltemplate"
     export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 
-If you use the tcsh shell, typically you would edit your
-`~/.login`, `~/.cshrc`, or `~/.tcshrc` files to contain the following lines:
+If you use the *TCSH* shell, typically you would edit your
+`~/.cshrc`, `~/.tcshrc` or `~/.login` files to contain the following lines:
 
     setenv PATH "$PATH:$HOME/moltemplate/moltemplate"
     setenv PATH "$PATH:$HOME/moltemplate/moltemplate/scripts"
@@ -161,17 +161,24 @@ pip or setuptools.)*
 
 ### WINDOWS installation suggestions
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  I recommend installing [virtualbox](https://www.virtualbox.org) in windows together with a (debian-based) linux distribution with a lightweight desktop such as [xubuntu](https://xubuntu.org).  Alternatively, if you are using Windows 10 or later, you can try installing the "Windows Subsystem for Linux (WSL)", as explained
-[here](https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/)
-and
-[here](https://msdn.microsoft.com/en-us/commandline/wsl/faq),
+You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  I recommend installing [virtualbox](https://www.virtualbox.org) in windows together with a (debian-based) linux distribution with a lightweight desktop such as [xubuntu](https://xubuntu.org).  Alternatively, if you are using Windows 10 or later, you can try installing the
+[Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl)
+*(which is text only)*
 or
-[Hyper-V](https://blogs.windows.com/buildingapps/2018/09/17/run-ubuntu-virtual-machines-made-even-easier-with-hyper-v-quick-create/).
+[Hyper-V](https://www.nakivo.com/blog/run-linux-hyper-v/).
 Otherwise, if you are using an older version of windows, try installing
 [CYGWIN](https://www.cygwin.com/) instead.
 
-To use LAMMPS and moltemplate, you will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: **nano**, **ne**, **emacs**, **vim**, and **jove**.
-If you are **NOT using WSL**, then you can also use a graphical text editor which might be easier for a beginner to use.  Such editors include Atom, Sublime, Notepad++, VSCode, and the graphical versione of emacs and vim.  ([Don't use these editors to edit files within the WSL environment.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
+To use LAMMPS and moltemplate, you will also need to install (and learn
+how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)
+If you are **NOT using WSL**, then you can use popular graphical text editors
+such as Atom, Sublime, Notepad++, VSCode,
+and the graphical versione of emacs and vim.
+([Don't use these editors to edit files within the WSL environment.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
+If you **ARE using WSL** then you are restricted to using non-graphical text
+editors which you can safely install and run from within the WSL terminal.
+These include: **nano**, **ne**, **emacs** (the text version),
+**vim** (the text version), and **jove**.
 
 
 ## License
@@ -182,8 +189,8 @@ moltemplate is available under the terms of the [MIT license](LICENSE.md).
 
 The remaining file, ([ttree_lex.py](./moltemplate/ttree_lex.py)),
 is a modified version of the 
-[shlex.py](https://docs.python.org/3/library/shlex.html) library.
-which is released using the
+[shlex.py](https://docs.python.org/3/library/shlex.html) library,
+which was released using the
 [PSF license](https://docs.python.org/3/license.html).
 Hence [ttree_lex.py](./moltemplate/ttree_lex.py) must also use this license.
 (*The PSF is not a copyleft license.

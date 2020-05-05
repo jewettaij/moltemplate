@@ -59,12 +59,11 @@
 
 \subsubsection*{Warning:
   This manual does not explain how build molecules that use
-  all-atom force fields, or how to to run reactive
-  (a.k.a. ``active-matter'', ``MCA'') simulations.}
-  
+  all-atom force fields, or how to to run reactive (a.k.a. ``active-matter'')
+  simulations.}
 However numerous examples and README files are available to
 demonstrate how to run these kinds of simulations.
-Downloading these examples is \textit{highly recommended}.
+Downloading these examples is highly recommended.
 (See section \ref{sec:installation}.)
 
 \section{Introduction}
@@ -313,10 +312,17 @@ the ``examples/'' subdirectory distributed with moltemplate.
 These examples are a good starting point for learning LAMMPS and moltemplate.
 
 
+
 \subsection*{License}
-Moltemplate.sh is publicly available at \url{http://moltemplate.org} 
-under the terms of the open-source 3-clause BSD license.
-\url{http://www.opensource.org/licenses/BSD-3-Clause}
+Moltemplate is open source and publicly available at
+\url{http://moltemplate.org}.
+With the exception of one file (\textit{ttree\_lex.py}) moltemplate is
+available under the terms of the \textit{MIT license}.
+The remaining file, (\textit{ttree\_lex.py})
+is a modified version of (\textit{shlex.py})
+which is available under the
+\textit{PSF license}
+(\url{https://docs.python.org/3/license.html}).
 
 
 
@@ -377,7 +383,7 @@ under the terms of the open-source 3-clause BSD license.
 \section{Installation}
 \label{sec:installation}
 
-There are two ways to install moltemplate:
+There are three ways to install moltemplate:
 
 \subsubsection*{Installation Method 1 (pip)}
 
@@ -392,20 +398,52 @@ If you receive an error regarding permissions, then run pip this way instead:
 \begin{verbatim}
 pip install moltemplate --user
 \end{verbatim}
-Make sure that your default pip install bin directory is in your PATH.  (This is usually something like \textapprox/.local/bin/ or \textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH should have been updated for you automatically.)  Later, you can uninstall moltemplate using:
+Make sure that your default pip install bin directory is in your \textit{PATH}.
+(This is usually something like \textapprox/.local/bin/ or
+\textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH
+should have been updated for you automatically.)
+Later, you can uninstall moltemplate using:
 \begin{verbatim}
 pip uninstall moltemplate
 \end{verbatim}
 
-\textit{Note: There are is a large variety of detailed moltemplate examples
-which will be omitted if you install moltemplate this way.
+\textit{Note: There are a large variety of detailed moltemplate
+examples which will be omitted if you install moltemplate this way.
 \textbf{Downloading the examples is strongly recommended.}}
-You can do this either by using git:
+You can do this either by using \textit{git},
+or by downloading them from the web page.  (See below.)
+(The examples are located in the \textit{examples/} subdirectory
+included with the download.)
+
+
+\subsubsection*{Installation Method 2 (git/webpage + pip)}
+
+\subsubsection*{Obtaining Moltemplate}
+The most up-to-date version of moltemplate can be downloaded using \textbf{git}.
 \begin{verbatim}
 git clone https://github.com/jewettaij/moltemplate ~/moltemplate
 \end{verbatim}
-or by visiting the \url{http://www.moltemplate.org} web site.
-They will be in the ``examples'' subdirectory.)
+Later, you can update the download to the latest version of moltemplate using:
+\begin{verbatim}
+git pull
+\end{verbatim}
+(This is the recommended way to download moltemplate.)
+
+Alternatively, if you don't have \textbf{git} installed,
+you can download moltemplate as a .tar.gz archive from
+\url{http://www.moltemplate.org}
+and then unpack it using:
+\begin{verbatim}
+tar -xzvf moltemplate_2020-2-22.tar.gz
+\end{verbatim}
+(The date will vary from version to version.)
+
+Then move the unpacked moltemplate directory
+to your home directory (\textapprox/) and run:
+\begin{verbatim}
+cd  ~/moltemplate
+pip install .  # (or "pip install --user", if that fails)
+\end{verbatim}
 
 \textit{If you run into difficulty with pip}, then try installing
 moltemplate into a temporary virtual environment
@@ -413,61 +451,43 @@ by installing ``virtualenv'',
 %downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
 and running these commands:
 \begin{verbatim}
-mkdir ~/moltemplate
 cd ~/moltemplate
 python -m venv venv     #(or "virtualenv venv" if using python2)
 source venv/bin/activate
-pip install moltemplate
+pip install .
 #(now do something useful with moltemplate...)
 \end{verbatim}
-(You will have to enter ``source ~/moltemplate/venv/bin/activate''
+(You will have to enter ``source \textapprox/moltemplate/venv/bin/activate''
  into a terminal beforehand every time you want to run moltemplate.)
 If all this fails, then try installing moltemplate by manually
 updating your \$PATH environment variable.  Instructions for doing that are included below.
 
 
-\subsubsection*{Installation Method 2}
+\subsubsection*{Installation Method 3 (updating your PATH)}
 
-Alternatively, you can download the moltemplate files and edit your
-PATH variable manually to include
+Alternatively, you can download the moltemplate files
+(as explained above) and edit your \textit{PATH} variable.
+The \textit{PATH} variable helps the shell
+(eg. \textit{BASH}) find the programs
+you type into the terminal.  You must edit the PATH variable to include
 the subdirectory where the moltemplate.sh script is located 
-(typically ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
+(eg. ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
 the directory containing the most of the python scripts
-(``\textapprox/moltemplate/moltemplate/'').
+(eg. ``\textapprox/moltemplate/moltemplate/'').
 
-\subsection*{Obtaining Moltemplate}
-The most up-to-date version of moltemplate can be downloaded using git.
-\begin{verbatim}
-git clone https://github.com/jewettaij/moltemplate ~/moltemplate
-\end{verbatim}
-Later, you can update to the latest version of moltemplate using:
-\begin{verbatim}
-git pull
-\end{verbatim}
-Alternatively, you can also download moltemplate as a .tar.gz archive from
-\url{http://www.moltemplate.org}
-and can unpack it using:
-\begin{verbatim}
-tar -xzvf moltemplate_2019-9-03.tar.gz
-\end{verbatim}
-(The date will vary from version to version.)
-Somewhat older versions of moltemplate are also bundled with the LAMMPS 
-source code and are located in the \textit{``tools''} subdirectory.
-
-
-If you use the \textbf{bash} shell, typically you would edit your 
-\mbox{$\sim$/.bash\_profile}, 
-\mbox{$\sim$/.bashrc}, or 
-\mbox{$\sim$/.profile} files
-and append the following lines:
+If you use the \textbf{BASH} shell, typically you would edit your 
+\mbox{$\sim$/.bashrc} file
+(or your \mbox{$\sim$/.bash\_profile},
+ or \mbox{$\sim$/.profile} file)
+and append the following lines to that file:
 \begin{verbatim}
 export PATH="$PATH:$HOME/moltemplate/moltemplate"
 export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 \end{verbatim}
-If instead you use the \textbf{tcsh} shell, typically you would edit your 
-\mbox{$\sim$/.login}, 
-\mbox{$\sim$/.cshrc}, or 
-\mbox{$\sim$/.tcshrc} files 
+If instead you use the \textbf{TCSH} shell, typically you would edit your 
+\mbox{$\sim$/.cshrc}, 
+\mbox{$\sim$/.tcshrc}, or
+\mbox{$\sim$/.login} files
 and append the following lines:
 \begin{verbatim}
 setenv PATH "$PATH:$HOME/moltemplate/moltemplate"
@@ -481,23 +501,48 @@ log back in again for the changes to take effect.}
 
 
 \textit{Warning:
-Do not install moltemplate this way if you are using ``vipster'',
-``cellpack2moltemplate'', or other software that has a moltemplate python
-dependency.  In order to be able to be able to run "import moltemplate"
-within python, as these programs do, moltemplate must be installed using
-pip or setuptools.}
+  Do not install moltemplate this way if you you plan to invoke moltemplate
+from within the python environment, \textbf{or} if you are using ``vipster'',
+``cellpack2moltemplate'' or other software that has a moltemplate python
+dependency.  In order to be able to be able to run "import moltemplate",
+as these programs do, moltemplate must be installed using pip (or setuptools).}
 
 
 \subsubsection*{WINDOWS installation suggestions}
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  If you are using Windows 10 or later, try installing the "Windows Subsystem for Linux (WSL)"
-\url{https://solarianprogrammer.com/2017/04/15/install-wsl-windows-subsystem-for-linux/}
-For more details, see the WSL FAQ:
-\url{https://msdn.microsoft.com/en-us/commandline/wsl/faq}
-If you are using an older version of windows, try following the tutorial written by Yanqing Fu instead:
-\url{https://sourceforge.net/p/lammps/mailman/message/32599824/}
+You can install both moltemplate and LAMMPS in windows,
+but you will first need to install the \textit{BASH}
+shell environment on your computer.  I recommend installing
+\textbf{virtualbox}(\url{https://www.virtualbox.org}) in windows together
+with a (debian-based) linux distribution with a lightweight desktop such as
+\textbf{xubuntu}(\url{https://xubuntu.org}).
+Alternatively, if you are using Windows 10 or later, you can try installing the
+\textbf{Windows Subsystem for Linux (WSL)}
+(\textit{which is text only},
+ \url{https://docs.microsoft.com/en-us/windows/wsl})
+or
+\textbf{Hyper-V}
+(\url{https://www.nakivo.com/blog/run-linux-hyper-v/}).
+Otherwise, if you are using an older version of windows, try installing
+\textbf{CYGWIN}
+(\url{https://www.cygwin.com/}) instead.
 
-To use LAMMPS and moltemplate, You will also need to install (and learn how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)  Popular free text editors which you can safely install and run from within the WSL terminal include: nano, ne, emacs, vim, and jove.  (Unfortunately, as of 2017-5-17, graphical unix-friendly text editors such as Atom, VSCode, Notepad++, and sublime won't work with WSL, and may cause file system corruption.  Avoid these editors for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
+To use LAMMPS and moltemplate, you will also need to install (and learn
+how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)
+If you are \textit{NOT using WSL}, then you 
+can use popular graphical text editors such as
+\textit{Atom}, \textit{Sublime},
+\textit{Notepad++}, \textit{VSCode},
+and the graphical versions of \textit{emacs} and \textit{vim}.
+(\textit{Note:} Don't use these editors if you are using the WSL environment.
+Under WSL, these editors may cause file system corruption.
+Avoid them for now. (\url{https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/})
+If you \textit{ARE using WSL} then you are restricted to using
+non-graphical text editors which you can safely install and
+run from within the WSL terminal.
+These include: \textit{nano}, \textit{ne},
+\textit{emacs} (text version),
+\textit{vim} (text version), and \textit{jove}.
 
 
 \pagebreak
@@ -506,6 +551,7 @@ To use LAMMPS and moltemplate, You will also need to install (and learn how to u
 \section*{
 \textit{Note: New users should skip to section \ref{sec:tutorial}}
 }
+
 
 
 \subsection{Moltemplate commands}
@@ -789,11 +835,13 @@ All text following a ``\#'' character is treated as a comment and ignored.
 
 
 
-%\pagebreak
+\pagebreak
+
 \subsection{Common \$ and @ variables}
 
 (See section \ref{sec:variables} for details.) \\
-\begin{tabular}[h]{l|p{11cm}}
+%\begin{table}
+\begin{longtable}[h]{l|p{11cm}}
 \textbf{variable type} & \textbf{meaning}
 \\
 \hline
@@ -924,12 +972,12 @@ of fixed width $n$ characters.
 (This is useful for generating text files which require fixed-width columns.)
 \\
 \hline
-\end{tabular}
+\end{longtable}
 
 %\vspace{0.5cm}
 
 
-
+\pagebreak
 
 
 \subsection{Coordinate transformations}
@@ -938,8 +986,7 @@ of fixed width $n$ characters.
 (See sections \ref{sec:coords_intro}) and \ref{sec:arrays+xform}) for details.)
 \\
 \\
-%\begin{table}
-\begin{tabular}[h]{l|p{10cm}}
+\begin{longtable}[h]{l|p{10cm}}
 \textbf{suffix} & \textbf{meaning}
 \\
 \hline
@@ -998,16 +1045,39 @@ you want the scaling to occur.
 \begin{tabular}[t]{l}
   \textit{.quat($a,b,c,d$)} \\
   \textit{.quat($a,b,c,d,x_0,y_0,z_0$)} \\
-  \textit{.quatT($a,b,c,d$)} \\
-  \textit{.quatT($a,b,c,d,x_0,y_0,z_0$)} \\
+  %\textit{.quatT($a,b,c,d$)} \\
+  %\textit{.quatT($a,b,c,d,x_0,y_0,z_0$)} \\
 \end{tabular}
   &
  Rotate atom coordinates by the rotation corresponding
  to quaternion $a+b\mathbf{i}+c\mathbf{j}+b\mathbf{k}$
- (around \mbox{$(x_0,y_0,z_0)$}, if specified)
- The \textit{.quatT(a,b,c,d)} variant performs the inverse rotation.
- (Equivalent to \textit{.quat(a,-b,-c,-d)}.)
-  % Otherwise around $(0,0,0)$)
+ (around \mbox{$(x_0,y_0,z_0)$}, if specified).
+ %The \textit{.quatT(a,b,c,d)} variant performs the inverse rotation.
+ %(Equivalent to \textit{.quat(a,-b,-c,-d)}.)
+\\
+\hline
+\textit{.matrix($M_{1,1}$,$M_{1,2}$,$M_{1,3}$,$M_{2,1}$,}\\
+\textit{$M_{2,2}$,$M_{2,3}$,$M_{3,1}$,$M_{3,2}$,$M_{3,3}$)}
+&
+Apply a general linear coordinate transformation.
+\begin{eqnarray*}
+\left(\begin{array}{c}
+       x' \\
+       y' \\
+       z'
+\end{array}\right)
+=
+\left(\begin{array}{ccc}
+       M_{1,1} & M_{1,2} & M_{1,3} \\
+       M_{2,1} & M_{2,2} & M_{2,3} \\
+       M_{3,1} & M_{3,2} & M_{3,3}
+\end{array}\right)
+\left(\begin{array}{c}
+       x \\
+       y \\
+       z
+\end{array}\right)
+\end{eqnarray*}
 \\
 \hline
 \multicolumn{2}{c} {
@@ -1045,7 +1115,7 @@ Coordinate transformations introduced using the \textit{push()} command are appl
 In this example, the first transformation, ``rot()'', is applied to both ``monomer1'' and ``monomer2''.  The last transformation, ``move()'', is applied after ``rot()'' and only acts on ``monomer2''.
 \\
 \hline
-\end{tabular}
+\end{longtable}
 %\caption{Coordinate Transformation Commands}
 %\label{tab:transformation_commands}
 %\end{table}
@@ -1053,12 +1123,12 @@ In this example, the first transformation, ``rot()'', is applied to both ``monom
 
 %\vspace{2cm}
 
-
+\pagebreak
 
 \subsection{moltemplate.sh command line arguments:}
 \label{sec:args_table}
 %\begin{table}
-\begin{tabular}[h]{l|p{10cm}}
+\begin{longtable}[h]{l|p{10cm}}
 \textbf{argument} & \textbf{meaning}
 \\
 \hline
@@ -1192,10 +1262,6 @@ Invoke VMD after running moltemplate to view the system you have just created.
 %(Multiple directories must be separated by ':' characters.) 
 %\\
 %\hline
-\end{tabular}
-
-\begin{tabular}[h]{l|p{10cm}}
-\hline
 \begin{tabular}[t]{l}
 -dihedral-sym file.py
 \\
@@ -1210,10 +1276,9 @@ Invoke VMD after running moltemplate to view the system you have just created.
 Normally moltemplate.sh reorders the atoms in each bond, angle, dihedral, and improper interaction before writing them to the DATA file in order to help avoid duplicate interactions between the same atoms if listed in different but equivalent orders.  Sometimes this is undesirable.  \textit{\textbf{To disable this behavior, set ``file.py'' to ``None''.}}  You can also manually choose alternate symmetry rules for unusual force fields. (Such as class2 force fields, dihedral\_style spherical, etc...  For an example of the file format for ``file.py'', see the ``nbody\_Impropers.py'' file.)
 \\
 \hline
--allow-wildcards &
-Allow the use of ``*'' and ``?'' characters within
-``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
-and ``improper\_coeff'' commands. (Default)
+-molc &
+Helpful additional post-processing for users of the \textbf{MOLC}
+coarse-grained model.
 \\
 \hline
 \begin{tabular}[t]{l}
@@ -1229,10 +1294,12 @@ or \textit{full} versions of the atom type names are printed there.
 (Default: short. See section \ref{sec:full_names} for details.)
 \\
 \hline
--molc &
-Helpful additional post-processing for users of the MOLC coarse-grained model.
+-forbid-wildcards &
+Forbid the use of ``*'' and ``?'' characters in
+``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
+and ``improper\_coeff'' commands.  (eg: ``bond\_coeff @bond:CH?? ...'', ``pair\_coeff @atom:C* @atom:C* ...''.  These are allowed by default.)
 \\
-\end{tabular}
+\end{longtable}
 
 
 \pagebreak
@@ -1429,11 +1496,11 @@ wat = new SPCE [1000]
 from the example above with 1000 lines:
 \begin{verbatim}
 wat1    = new SPCE
-wat2    = new SPCE.move(3.450, 0.0, 0.0)
-wat3    = new SPCE.move(6.900, 0.0, 0.0)
-wat4    = new SPCE.move(10.35, 0.0, 0.0)
+wat2    = new SPCE.move(3.1034, 0.00, 0.00)
+wat3    = new SPCE.move(6.2068, 0.00, 0.00)
+wat4    = new SPCE.move(9.3102, 0.00, 0.00)
   :           :
-wat1000 = new SPCE.move(34.50, 34.50, 34.50)
+wat1000 = new SPCE.move(31.034, 31.034, 31.034)
 \end{verbatim}
 Specifying geometry this way is tedious.
 Alternatively, moltemplate has simple commands for arranging multiple 
@@ -1441,13 +1508,13 @@ copies of a molecule in periodic, crystalline, toroidal, and helical
 1-D, 2-D, and 3-D lattices.  
 For example, you can generate a simple cubic lattice of 
 10$\times$10$\times$10 water molecules
-(with a 3.45 Angstrom spacing)
+(with a 3.1034 Angstrom spacing)
 using a single command 
 (which in this example we split into multiple lines)
 \begin{verbatim}
-wat  = new SPCE [10].move(0,0,3.45) 
-                [10].move(0,3.45,0) 
-                [10].move(3.45,0,0)
+wat  = new SPCE [10].move(0.0, 0.0, 3.1034) 
+                [10].move(0.0, 3.1034, 0.0) 
+                [10].move(3.1034, 0.0, 0.0)
 \end{verbatim}
 (See section \ref{sec:coordinates} for more details and examples.)
 This will create 1000 molecules with names like
@@ -1473,9 +1540,9 @@ We must specify the dimensions of the simulation boundary
 using the ``write\_once(``Data Boundary'')'' command.  
 \begin{verbatim}
 write_once("Data Boundary") {
-   0.0  34.5  xlo xhi
-   0.0  34.5  ylo yhi
-   0.0  34.5  zlo zhi
+   0.0  31.034  xlo xhi
+   0.0  31.034  ylo yhi
+   0.0  31.034  zlo zhi
 }
 \end{verbatim}
 This is usually specified in the outermost LT file 

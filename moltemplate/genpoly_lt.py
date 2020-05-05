@@ -90,7 +90,7 @@ class GPSettings(object):
         #self.header = 'import \"forcefield.lt\"'
         self.header = ''
         self.name_monomer = 'Monomer'
-        self.name_sequence_filename = ''
+        self.name_sequence_file = ''
         self.name_polymer = ''
         self.inherits = ''
         self.dir_index_offsets = (-1,1)
@@ -113,6 +113,9 @@ class GPSettings(object):
         self.impropers_type = []
         self.impropers_atoms = []
         self.impropers_index_offsets = []
+        self.helix_angles_file = ''
+        self.orientations_file = ''
+        self.orientations_use_quats = False
 
     def ParseArgs(self, argv):
         i = 1
@@ -129,7 +132,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-bond':
                 if i + 3 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 4 strings.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 3 strings.\n')
                 # self.bonds_name.append(argv[i+1])
                 self.bonds_type.append(argv[i + 1])
                 self.bonds_atoms.append((argv[i + 2],
@@ -139,7 +142,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-angle':
                 if i + 7 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 3 integers.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 4 strings and 3 integers.\n')
                 # self.angles_name.append(argv[i+1])
                 self.angles_type.append(argv[i + 1])
                 self.angles_atoms.append((argv[i + 2],
@@ -157,7 +160,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-dihedral':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 6 strings and 4 integers.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.dihedrals_name.append(argv[i+1])
                 self.dihedrals_type.append(argv[i + 1])
                 self.dihedrals_atoms.append((argv[i + 2],
@@ -178,7 +181,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-improper':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 6 strings and 4 integers.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.impropers_name.append(argv[i+1])
                 self.impropers_type.append(argv[i + 1])
                 self.impropers_atoms.append((argv[i + 2],
@@ -206,7 +209,7 @@ class GPSettings(object):
                 if i + 1 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by a file name\n')
-                self.name_sequence_filename = argv[i + 1]
+                self.name_sequence_file = argv[i + 1]
                 del(argv[i:i + 2])
 
             elif (argv[i].lower() == '-cuts'):
@@ -332,7 +335,18 @@ class GPSettings(object):
                                      'by 3 numbers separated by commas (no spaces)\n')
                 self.box_padding = list(map(float, argv[i + 1].split(',')))
                 if len(self.box_padding) == 1:
-                    self.box_padding = self.box_padding * 3
+                    self.box_padding = [self.box_padding] * 3
+                del(argv[i:i + 2])
+            elif (argv[i].lower() in ('-orientations','-orientations')):
+                self.orientations_file = argv[i+1]
+                self.orientations_use_quats = False
+                del(argv[i:i + 2])
+            elif (argv[i].lower() in ('-quaternion','-quaternions')):
+                self.orientations_file = argv[i+1]
+                self.orientations_use_quats = True
+                del(argv[i:i + 2])
+            elif (argv[i].lower() in ('-helix-angle','-helix-angles')):
+                self.helix_angles_file = argv[i+1]
                 del(argv[i:i + 2])
 
             # elif ((argv[i][0] == '-') and (__name__ == '__main__')):
@@ -353,24 +367,24 @@ class GPSettings(object):
 
         for b in range(0, len(self.bonds_type)):
             if len(self.bonds_type) > 1:
-                self.bonds_name.append('genpoly' + str(b + 1) + '_')
+                self.bonds_name.append('genp_bond' + str(b + 1) + '_')
             else:
-                self.bonds_name.append('genpoly')
+                self.bonds_name.append('genp_bond_')
         for b in range(0, len(self.angles_type)):
             if len(self.angles_type) > 1:
-                self.angles_name.append('genpoly' + str(b + 1) + '_')
+                self.angles_name.append('genp_angle' + str(b + 1) + '_')
             else:
-                self.angles_name.append('genpoly')
+                self.angles_name.append('genp_angle_')
         for b in range(0, len(self.dihedrals_type)):
             if len(self.dihedrals_type) > 1:
-                self.dihedrals_name.append('genpoly' + str(b + 1) + '_')
+                self.dihedrals_name.append('genp_dihedral' + str(b + 1) + '_')
             else:
-                self.dihedrals_name.append('genpoly')
+                self.dihedrals_name.append('genp_dihedral_')
         for b in range(0, len(self.impropers_type)):
             if len(self.impropers_type) > 1:
-                self.impropers_name.append('genpoly' + str(b + 1) + '_')
+                self.impropers_name.append('genp_improper' + str(b + 1) + '_')
             else:
-                self.impropers_name.append('genpoly')
+                self.impropers_name.append('genp_improper_')
 
 
 
@@ -413,9 +427,12 @@ class GenPoly(object):
         self.coords_multi = []  # a list-of-list-of-lists of numbers Nxnx3
         self.name_sequence_multi = []
         self.direction_vects = []
-        self.box_bounds_min = [0.0, 0.0, 0.0]
-        self.box_bounds_max = [0.0, 0.0, 0.0]
+        self.box_bounds_min = None
+        self.box_bounds_max = None
         self.N = 0
+        self.orientations_multi = []
+        self.helix_angles_multi = []
+
 
     def ParseArgs(self, argv):
         """ 
@@ -427,15 +444,20 @@ class GenPoly(object):
         self.settings.ParseArgs(argv)
 
 
-    def ReadCoords(self, infile):
+
+    def ReadCoords(self, infile, ncolumns=3):
         """
-        Read x y z coordinates from a 3-column ASCII text file.
+        Read x y z coordinates from a multi-column ASCII text file.
         Store the coordinates in the self.coords_multi[][][] list.
         (Note: Information stored in self.settings.cuts and 
                self.settings.reverse_polymer_directions 
                is used to split the coordinate list into multiple lists
                and to determine the order that coordinates are read.)
+        This function can also be used to read other (multi-column) ASCII text
+        files by overriding the default value for "ncolumns".  (For example,
+        to read files with 4 numbers on each line, set ncolumns=4.)
         """
+
         filename = ''
         if isinstance(infile, str):
             filename = infile
@@ -446,19 +468,19 @@ class GenPoly(object):
                     'Error: file ' + filename +
                     ' could not be opened for reading\n')
 
+        coords_multi = []  # (do not confuse this with "self.coords_multi")
         coords = []
 
         lines = infile.readlines()
         for i in range(0, len(lines)):
             tokens = lines[i].strip().split()
-            if (len(tokens) == 3):
+            if (len(tokens) == ncolumns):
                 coords.append(list(map(float, tokens)))
 
         self.N = len(coords)
         if self.N < 2:
             err_msg = 'Error: Coordinate file must have at least 2 positions'
             raise InputError(err_msg+'.\n')
-                
 
         # Did the caller ask us to split the polymer into multiple polymers?
         if len(self.settings.cuts) > 0:
@@ -467,10 +489,10 @@ class GenPoly(object):
                 self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
-                self.coords_multi.append(coords[i:j])
+                coords_multi.append(coords[i:j])
                 i = j
         else:
-            self.coords_multi.append(coords)
+            coords_multi.append(coords)
 
         # Did the caller ask us to reverse the direction of any polymers?
         for i in range(0, len(self.settings.reverse_polymer_directions)):
@@ -481,6 +503,8 @@ class GenPoly(object):
         if filename != '':
             # Then we opened a new file with that name.  We should close it now.
             infile.close()
+
+        return coords_multi
 
 
 
@@ -561,9 +585,9 @@ class GenPoly(object):
         else:
             for i in range(1, N - 1):
                 for d in range(0, 3):
-                    self.direction_vects[i][d] = coords[
-                        i + self.settings.dir_index_offsets[1]][d] - coords[
-                            i + self.settings.dir_index_offsets[0]][d]
+                    self.direction_vects[i][d] = (coords[i + self.settings.dir_index_offsets[1]][d]
+                                                  -
+                                                  coords[i + self.settings.dir_index_offsets[0]][d])
 
             for d in range(0, 3):
                 self.direction_vects[0][d] = coords[1][d] - coords[0][d]
@@ -585,6 +609,8 @@ class GenPoly(object):
 
         self.direction_vects[-1] = self.settings.direction_orig
 
+
+
     def WriteLTFile(self, outfile):
         """ Write an moltemplate (.lt) file containing the definition of
         this polymer object.  (If multiple polymer objects were requested by
@@ -594,13 +620,23 @@ class GenPoly(object):
 
         """
 
+        # make sure len(genpoly.orientations_multi) == len(genpoly.coords_multi)
+        if len(self.orientations_multi) == 0:
+            self.orientations_multi = [[] for entry in self.coords_multi]
+        # make sure len(self.helix_angles_multi) == len(self.coords_multi)
+        if len(self.helix_angles_multi) == 0:
+            self.helix_angles_multi = [[] for entry in self.coords_multi]
+
         outfile.write(self.settings.header + "\n\n\n")
+
         if len(self.coords_multi) == 1:
             self.WritePolymer(outfile,
                               self.settings.name_polymer +
                               self.settings.inherits,
                               self.coords_multi[0],
-                              self.name_sequence_multi[0])
+                              self.name_sequence_multi[0],
+                              self.orientations_multi[0],
+                              self.helix_angles_multi[0])
         else:
             if self.settings.name_polymer != '':
                 outfile.write(self.settings.name_polymer + " {\n\n")
@@ -616,7 +652,9 @@ class GenPoly(object):
                                   self.settings.name_polymer + '_sub' + str(i + 1) +
                                   ih_str,
                                   self.coords_multi[i],
-                                  self.name_sequence_multi[i])
+                                  self.name_sequence_multi[i],
+                                  self.orientations_multi[i],
+                                  self.helix_angles_multi[i])
             outfile.write('\n\n'
                           '# Now instantiate all the polymers (once each)\n\n')
 
@@ -635,11 +673,15 @@ class GenPoly(object):
                 self.CalcBoxBoundaries(self.coords_multi[i])
             self.WriteBoxBoundaries(outfile)
 
+
+
     def WritePolymer(self,
                      outfile,
                      name_polymer,
                      coords,
-                     names_monomers):
+                     names_monomers,
+                     orientations=[],
+                     helix_angles=[]):
         """ Write a single polymer object to a file.
             This function is invoked by WriteLTFile()
 
@@ -669,38 +711,84 @@ class GenPoly(object):
 
         outfile.write("push(move(0,0,0))\n")
 
+        phi = 0.0
+
         for i in range(0, N):
             #im1 = i-1
             # if im1 < 0 or self.settings.connect_ends:
             #    if im1 < 0:
             #        im1 += N
             outfile.write("pop()\n")
-            outfile.write("push(rotvv(" +
-                          str(self.direction_vects[i - 1][0]) + "," +
-                          str(self.direction_vects[i - 1][1]) + "," +
-                          str(self.direction_vects[i - 1][2]) + "," +
-                          str(self.direction_vects[i][0]) + "," +
-                          str(self.direction_vects[i][1]) + "," +
-                          str(self.direction_vects[i][2]) + "))\n")
-            # Recall that self.direction_vects[-1] =
-            # self.settings.direction_orig  (usually 1,0,0)
+            if len(orientations) > 0:
+                assert(len(orientations) == N)
+                if self.settings.orientations_use_quats:
+                    assert(len(orientations[i]) == 4)
+                    outfile.write("push(quat(" +
+                                  str(orientations[i][0]) + "," +
+                                  str(orientations[i][1]) + "," +
+                                  str(orientations[i][2]) + "," +
+                                  str(orientations[i][3]) + "))\n")
+                else:
+                    assert(len(orientations[i]) == 9)
+                    outfile.write("push(matrix(" +
+                                  str(orientations[i][0]) + "," +
+                                  str(orientations[i][1]) + "," +
+                                  str(orientations[i][2]) + "," +
+                                  str(orientations[i][3]) + "," +
+                                  str(orientations[i][4]) + "," +
+                                  str(orientations[i][5]) + "," +
+                                  str(orientations[i][6]) + "," +
+                                  str(orientations[i][7]) + "," +
+                                  str(orientations[i][8]) + "))\n")
+            else:
+                # Otherwise, if no orientations were explicitly specified, then
+                # infer the orientation from the direction of the displacement.
+                outfile.write("push(rotvv(" +
+                              str(self.direction_vects[i - 1][0]) + "," +
+                              str(self.direction_vects[i - 1][1]) + "," +
+                              str(self.direction_vects[i - 1][2]) + "," +
+                              str(self.direction_vects[i][0]) + "," +
+                              str(self.direction_vects[i][1]) + "," +
+                              str(self.direction_vects[i][2]) + "))\n")
             outfile.write("push(move(" +
                           str(coords[i][0]) + "," +
                           str(coords[i][1]) + "," +
                           str(coords[i][2]) + "))\n")
 
             outfile.write("mon[" + str(i) + "] = new " +
-                          names_monomers[i] +
-                          ".rot(" + str(self.settings.delta_phi * i) + ",1,0,0)\n")
+                          names_monomers[i])
+
+            # If requested, apply additional rotations about the polymer axis
+            phi = 0.0
+            if len(helix_angles) > 0:
+                phi += helix_angles[i]
+            elif self.settings.delta_phi != 0.0:
+                phi = i * self.settings.delta_phi
+            # Recall that self.direction_vects[-1] =
+            # self.settings.direction_orig  (usually 1,0,0)
+            outfile.write(".rot(" + str(phi) +
+                          "," + str(self.settings.direction_orig[0]) +
+                          "," + str(self.settings.direction_orig[1]) +
+                          "," + str(self.settings.direction_orig[2]) +
+                          ")\n")
+            if len(orientations) > 0:
+                outfile.write("pop()\n")
+
+
+        outfile.write("pop()\n")
+        if len(orientations) == 0:
+            outfile.write("pop()\n"*N)
 
         assert(len(self.settings.bonds_name) ==
                len(self.settings.bonds_type) ==
                len(self.settings.bonds_atoms) ==
                len(self.settings.bonds_index_offsets))
+
         if len(self.settings.bonds_type) > 0:
             outfile.write("\n"
                           "\n"
                           "write(\"Data Bonds\") {\n")
+
         WrapPeriodic.bounds_err = False
         for i in range(0, N):
             test = False
@@ -715,12 +803,11 @@ class GenPoly(object):
                         continue
                 outfile.write(
                     "  $bond:" + self.settings.bonds_name[b] + str(i + 1))
-                if len(self.settings.bonds_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @bond:" + self.settings.bonds_type[b] + " $atom:mon[" + str(I) + "]/" + self.settings.bonds_atoms[
                               b][0] + " $atom:mon[" + str(J) + "]/" + self.settings.bonds_atoms[b][1] + "\n")
         if len(self.settings.bonds_type) > 0:
             outfile.write("}  # write(\"Data Bonds\") {...\n\n\n")
+
 
         assert(len(self.settings.angles_name) ==
                len(self.settings.angles_type) ==
@@ -744,8 +831,6 @@ class GenPoly(object):
                         continue
                 outfile.write(
                     "  $angle:" + self.settings.angles_name[b] + str(i + 1))
-                if len(self.settings.angles_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @angle:" + self.settings.angles_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.angles_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.angles_atoms[b][1] +
@@ -753,6 +838,7 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.angles_type) > 0:
             outfile.write("}  # write(\"Data Angles\") {...\n\n\n")
+
 
         assert(len(self.settings.dihedrals_name) ==
                len(self.settings.dihedrals_type) ==
@@ -778,8 +864,6 @@ class GenPoly(object):
                         continue
                 outfile.write("  $dihedral:" +
                               self.settings.dihedrals_name[b] + str(i + 1))
-                if len(self.settings.dihedrals_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @dihedral:" + self.settings.dihedrals_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.dihedrals_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.dihedrals_atoms[b][1] +
@@ -788,6 +872,7 @@ class GenPoly(object):
                               "\n")
         if len(self.settings.dihedrals_type) > 0:
             outfile.write("}  # write(\"Data Dihedrals\") {...\n\n\n")
+
 
         assert(len(self.settings.impropers_name) ==
                len(self.settings.impropers_type) ==
@@ -813,8 +898,6 @@ class GenPoly(object):
                         continue
                 outfile.write("  $improper:" +
                               self.settings.impropers_name[b] + str(i + 1))
-                if len(self.settings.impropers_type) > 1:
-                    outfile.write("_" + str(b + 1))
                 outfile.write(" @improper:" + self.settings.impropers_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.impropers_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.impropers_atoms[b][1] +
@@ -863,8 +946,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.0'
-        g_date_str = '2019-12-13'
+        g_version_str = '0.1.1'
+        g_date_str = '2020-4-11'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
@@ -884,13 +967,16 @@ def main():
         outfile = sys.stdout
 
         # Read the coordinates
-        genpoly.ReadCoords(infile)
+        genpoly.coords_multi = genpoly.ReadCoords(infile)
 
         # Did the user ask us to read a custom sequence of monomer type names?
-        if genpoly.settings.name_sequence_filename != '':
+        name_sequence_file = None
+        if isinstance(genpoly.settings.name_sequence_file, str):
+            if genpoly.settings.name_sequence_file != '':
+                name_sequence_file = open(genpoly.settings.name_sequence_file,'r')
+        if name_sequence_file:
             # Note: This will fill the contents of genpoly.name_sequence_multi
-            genpoly.ReadSequence(genpoly.settings.name_sequence_filename)
-
+            genpoly.ReadSequence(name_sequence_file)
         else:
             # Otherwise just fill genpoly.name_sequence_multi with
             #  repeated copies of genpoly.settings.name_monomer
@@ -898,13 +984,52 @@ def main():
             genpoly.name_sequence_multi = [[genpoly.settings.name_monomer
                                             for j in
                                             range(0, len(genpoly.coords_multi[i]))]
-                                           for i in range(0,len(genpoly.coords_multi))]
+                                           for i in range(0, len(genpoly.coords_multi))]
+
+        # Did the user specify a file with a list of orientations?
+        orientations_file = None
+        if isinstance(genpoly.settings.orientations_file, str):
+            if genpoly.settings.orientations_file != '':
+                orientations_file = open(genpoly.settings.orientations_file, 'r')
+        else:
+            orientations_file = genpoly.settings.orientations_file
+        if orientations_file:
+            if genpoly.settings.orientations_use_quats:
+                genpoly.orientations_multi = genpoly.ReadCoords(orientations_file, 4)
+            else:
+                genpoly.orientations_multi = genpoly.ReadCoords(orientations_file, 9)
+
+        # Did the user specify a file with a list of helix angles?
+        helix_angles_file = None
+        if isinstance(genpoly.settings.helix_angles_file, str):
+            if genpoly.settings.helix_angles_file != '':
+                helix_angles_file = open(genpoly.settings.helix_angles_file, 'r')
+        helix_angles_file = genpoly.settings.helix_angles_file
+        if helix_angles_file:
+            genpoly.helix_angles_multi = genpoly.ReadCoords(genpoly.settings.helix_angles_file, 1)
+            # Because I borrowed the ReadCoords() function to read the file,
+            # each "angle" is ended up being a list containing only one element
+            # (the angle).  Convert this list into the number stored there.
+            for i in range(0, len(genpoly.helix_angles_multi)):
+                for j in range(0, len(genpoly.helix_angles_multi[i])):
+                    assert(len(genpoly.helix_angles_multi[i][j]) == 1)
+                    genpoly.helix_angles_multi[i][j] = genpoly.helix_angles_multi[i][j][0]
 
         # Now, check for polymer and sequence length inconsistencies:
         if (len(genpoly.coords_multi) != len(genpoly.name_sequence_multi)):
             raise InputError('Error(' +
                              g_program_name + '):\n' +
                              '      The coordinate file and sequence file have different lengths.\n')
+        if ((len(genpoly.orientations_multi) > 0) and
+            (len(genpoly.orientations_multi) != len(genpoly.coords_multi))):
+            raise InputError('Error(' +
+                             g_program_name + '):\n' +
+                             '      The coordinate file and orientations/quats file have different lengths.\n')
+        if ((len(genpoly.helix_angles_multi) > 0) and
+            (len(genpoly.helix_angles_multi) != len(genpoly.coords_multi))):
+            raise InputError('Error(' +
+                             g_program_name + '):\n' +
+                             '      The coordinate file and helix_angles file have different lengths.\n')
         for i in range(0, len(genpoly.coords_multi)):
             if len(genpoly.name_sequence_multi[i]) > 0:
                 if (len(genpoly.coords_multi[i]) !=
@@ -912,6 +1037,20 @@ def main():
                     raise InputError('Error(' +
                                      g_program_name + '):\n' +
                                      '      The coordinate file and sequence file have different lengths.\n')
+            if ((len(genpoly.orientations_multi) > 0) and
+                (len(genpoly.orientations_multi[i]) > 0)):
+                if (len(genpoly.coords_multi[i]) !=
+                    len(genpoly.orientations_multi[i])):
+                    raise InputError('Error(' +
+                                     g_program_name + '):\n' +
+                                     '      The coordinate file and orientations/quats file have different lengths.\n')
+            if ((len(genpoly.helix_angles_multi) > 0) and
+                (len(genpoly.helix_angles_multi[i]) > 0)):
+                if (len(genpoly.coords_multi[i]) !=
+                    len(genpoly.helix_angles_multi[i])):
+                    raise InputError('Error(' +
+                                     g_program_name + '):\n' +
+                                     '      The coordinate file and helix_angles file have different lengths.\n')
 
 
 

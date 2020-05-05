@@ -1,3 +1,22 @@
+# --- Running LAMMPS ---
+#  -- Prerequisites: --
+# The "run.in.nvt" file is a LAMMPS input script containing
+# references to the input scripts and data files
+# you hopefully have created earlier with moltemplate.sh:
+#   system.in.init, system.in.settings, system.data
+# If not, carry out the instructions in "README_setup.sh".
+#
+#  -- Instructions: --
+# If "lmp_mpi" is the name of the command you use to invoke lammps,
+# then you would run lammps on these files this way:
 
-mpiexec -np 36 lmp_mpi run.in.min
-mpiexec -np 36 lmp_mpi run_increase_Udd=U0cd.in
+
+lmp_mpi -i run.in.min
+# This just performs a minimization.
+# (You might want to run more simulations later using different protocols.)
+
+
+
+# If you have compiled the MPI version of lammps, you can run lammps in parallel
+#mpirun -np 8 lmp_mpi -i run.in.min
+# (assuming you have 8 processors available)

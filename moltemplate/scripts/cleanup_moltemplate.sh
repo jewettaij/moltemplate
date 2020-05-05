@@ -74,10 +74,13 @@ cd new_lt_file_TMP
   echo "" >> system.lt
 
   # Now, run moltemplate on this new .LT file.
-  moltemplate.sh system.lt
+  # Interpret the system.lt literally. Don't check for duplicates("-overlay...")
+  moltemplate.sh system.lt \
+                 -overlay-bonds -overlay-angles \
+                 -overlay-dihedrals -overlay-impropers
   # This will create: "system.data" "system.in.init" "system.in.settings."
 
-  # That's it.  The new "system.data" and system.in.settings files should
+  # That's it.  The new "system.data" and "system.in.settings" files should
   # be ready to run in LAMMPS.
 
   # Special case: "set" commands

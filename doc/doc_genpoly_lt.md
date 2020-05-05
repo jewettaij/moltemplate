@@ -33,6 +33,9 @@ from the terminal) and a python library.  The former is documented below.
       [-inherits ForceFieldObject] \
       [-header "import monomer.lt"] \
       [-helix deltaphi] \
+      [-helix-angles helix_angles_file.txt] \
+      [-orientations orientations_file.txt] \
+      [-quaternions quaternions_file.txt] \
       [-axis x,y,z] \
       [-circular yes/no/connected] \
       [-cuts cuts.txt] \
@@ -43,6 +46,7 @@ from the terminal) and a python library.  The former is documented below.
 ```
 ## Arguments [optional]
 
+```
     -polymer-name name
                    Name of the moltemplate object that will be created.
                    (By default "Polymer")
@@ -218,6 +222,13 @@ from the terminal) and a python library.  The former is documented below.
     -helix deltaphi = Optionally, rotate each monomer around it's axis by
              angle deltaphi (in degrees) beforehand
 
+    -helix-angles helix_angles_file.txt = Optionally, rotate each monomer around
+             it's axis by specifying a list of angles contained in a file
+             (eg "helix_angles_file.txt").  This file contains one number per
+             line (one line per monomer).  Each number represents the
+             angle of that monomer relative to the previous monomer around
+             that axis.
+             
     -circular keyword
        keyword must be one of these:
              "no"          The polymer is a linear chain with the two ends
@@ -237,7 +248,7 @@ from the terminal) and a python library.  The former is documented below.
                    of the smallest rectangular box which encloses all of the
                    coordinates in the coordinate file.  The user must supply 3
                    comma-separated numbers (no spaces) which indicate how much
-                   extra room is needed in the x,y,z directions, at both ends.
+                   extra room is needed in the ±x, ±y, ±z directions.
 
     -polymer-directions polarities.txt
                    Change the order that coordinates are read from the file.
@@ -262,10 +273,55 @@ from the terminal) and a python library.  The former is documented below.
              arguments are integer offsets.  To point monomer i in the direction
              connecting it to the following monomer (i+1), use -dir-indices 0 1.
              arguments are integer offsets.  To point monomer i in the direction
-             connecting it to the previous monomer (i-1), use -dir-indices 0 -1.
+             connecting it to the previous monomer (i-1), use -dir-indices -1 0.
              (Note: If the -polymer-directions argument is used, and the current
              polymer has a direction of -1, the indices ia, ib will be flipped.)
 	     For circular polymers, the indices will be wrapped appropriately.
+
+    -orientations orientations_file.txt
+             Specify the orientation of each monomer in the polymer by providing
+             a 9-column text file containing a list of rotation matrices (R, 
+             one for each monomer).  Each 3x3 matrix describes the orientation
+             of that monomer relative to that monomer's original orientation
+             (*not* relative to to the previous monomer's orientation).
+             Each line in the file contains 9 numbers which are the entries of
+             a matrix:
+                R_11, R_12, R_13, R_21, R_22, R_23, R_31, R_32, R_33
+             This matrix applies the following coordinate transformation:
+               /x'\   / R_11 R_12 R_13 \ /x\
+               |y'| = | R_21 R_22 R_23 | |y|
+               \z'/   \ R_31 R_32 R_33 / \z/
+             (This can be any linear transformation, not just a rotation.)
+             Note: These transformations are applied *after*:
+                1) Coordinate transformations included in the monomer's name
+                   specified in the "-monomer-name" or "-sequence" arguments,
+                   for example: "EthyleneGlycol.move(0.2,-0.7,0).rot(180,1,0,0)"
+                2) Rotations around the axis specified by the "-helix" or
+                   "-helix-angles" and "-axis" arguments (if applicable).
+                   (Consequently this argument can be supplied together with
+                    the "-helix", "-helix-angles", and "-axis" arguments.)
+             
+    -quaternions quaternions_file.txt
+             Specify the orientation of each monomer in the polymer by providing
+             a 4-column text file containing a list of quaternions (one for
+             each monomer).  Each quaternion describes the orientation of
+             that monomer relative to that monomer's original orientation
+             (*not* relative to to the previous monomer's orientation).
+             Each quaternion has 4 numbers.  The first number is cos(θ/2)
+             (where θ is the rotation angle).  The remaining 3 numbers form
+             a vector (of length sin(θ/2)), pointing along the axis of
+             rotation.
+             Note: These rotations are applied *after*:
+                1) Coordinate transformations included in the monomer's name
+                   specified in the "-monomer-name" or "-sequence" arguments,
+                   for example: "EthyleneGlycol.move(0.2,-0.7,0).rot(180,1,0,0)"
+                2) Rotations around the axis specified by the "-helix" or
+                   "-helix-angles" and "-axis" arguments (if applicable).
+                   (Consequently this argument can be supplied together with
+                    the "-helix", "-helix-angles", and "-axis" arguments.)
+```             
+             
+             
 
 ## Examples:
 

@@ -260,10 +260,11 @@ class AffineStack(object):
         transform_commands = text.split(').')
         for transform_str in transform_commands:
             if transform_str.find('move(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[5:i_paren_close].split(',')
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
                 if (len(args) != 3):
                     raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
                                      '       Invalid command: \"' + transform_str + '\"\n'
@@ -274,28 +275,29 @@ class AffineStack(object):
                 AffineCompose(Mtmp, M, Mdest)
                 CopyMat(Mdest, Mtmp)
 
-            # if transform_str.find('movecm(') == 0:
+            # # if transform_str.find('movecm(') == 0:
             # #     assert(xcm != None)
-            #    i_paren_close = transform_str.find(')')
-            #    if i_paren_close == -1:
-            #        i_paren_close = len(transform_str)
-            #    args = transform_str[8:i_paren_close].split(',')
-            #    if (len(args) != 3):
-            #        raise InputError('Error near '+ErrorLeader(src_loc.infile, src_loc.lineno)+':\n'
-            #                         '       Invalid command: \"'+transform_str+'\"\n'
-            #                         '       This command requires 3 numerical arguments.')
-            #    M = [[1.0, 0.0, 0.0, float(args[0])-(xcm[0])],
-            #         [0.0, 1.0, 0.0, float(args[1])-(xcm[1])],
-            #         [0.0, 0.0, 1.0, float(args[2])-(xcm[2])]]
-            #    AffineCompose(Mtmp, M, Mdest)
-            #    CopyMat(Mdest, Mtmp)
+            # #     i_paren_open = transform_str.find('(')
+            # #     i_paren_close = transform_str.find(')')
+            # #     if i_paren_close == -1:
+            # #         i_paren_close = len(transform_str)
+            # #     args =transform_str[i_paren_open+1:i_paren_close].split(',')
+            # #     if (len(args) != 3):
+            # #         raise InputError('Error near '+ErrorLeader(src_loc.infile, src_loc.lineno)+':\n'
+            # #                          '       Invalid command: \"'+transform_str+'\"\n'
+            # #                          '       This command requires 3 numerical arguments.')
+            # #     M = [[1.0, 0.0, 0.0, float(args[0])-(xcm[0])],
+            # #         [0.0, 1.0, 0.0, float(args[1])-(xcm[1])],
+            # #          [0.0, 0.0, 1.0, float(args[2])-(xcm[2])]]
+            # #     AffineCompose(Mtmp, M, Mdest)
+            # #     CopyMat(Mdest, Mtmp)
 
             elif transform_str.find('move_rand(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[10:i_paren_close].split(',')
-
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
                 seed = 1
                 if len(args) in (2,4,7):
                     seed = int(args[0])
@@ -360,10 +362,11 @@ class AffineStack(object):
                 CopyMat(Mdest, Mtmp)
 
             elif transform_str.find('rot(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[4:i_paren_close].split(',')
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
                 center_v = None
                 if (len(args) == 7):
                     center_v = [float(args[4]), float(args[5]), float(args[6])]
@@ -401,12 +404,29 @@ class AffineStack(object):
                     AffineCompose(Mtmp, moveCentBack, Mdest)
                     CopyMat(Mdest, Mtmp)
 
-            elif ((transform_str.find('quat(') == 0) or
-                  (transform_str.find('quatT(') == 0)):
+            elif transform_str.find('matrix(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[5:i_paren_close].split(',')
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
+                if (len(args) != 9):
+                    raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
+                                     '       Invalid command: \"' + transform_str + '\"\n'
+                                     '       This command requires 9 numerical arguments.')
+                M = [[float(args[0]), float(args[1]), float(args[2]), 0.0],
+                     [float(args[3]), float(args[4]), float(args[5]), 0.0],
+                     [float(args[6]), float(args[7]), float(args[8]), 0.0]]
+                AffineCompose(Mtmp, M, Mdest)
+                CopyMat(Mdest, Mtmp)
+
+            elif ((transform_str.find('quat(') == 0) or
+                  (transform_str.find('quatT(') == 0)):
+                i_paren_open = transform_str.find('(')
+                i_paren_close = transform_str.find(')')
+                if i_paren_close == -1:
+                    i_paren_close = len(transform_str)
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
                 center_v = None
                 if (len(args) == 7):
                     center_v = [float(args[4]), float(args[5]), float(args[6])]
@@ -447,11 +467,11 @@ class AffineStack(object):
                     CopyMat(Mdest, Mtmp)
 
             # # elif transform_str.find('rotcm(') == 0:
-            # #     assert(xcm != None)
+            # #     i_paren_open = transform_str.find('(')
             # #     i_paren_close = transform_str.find(')')
             # #     if i_paren_close == -1:
             # #         i_paren_close = len(transform_str)
-            # #     args = transform_str[6:i_paren_close].split(',')
+            # #     args =transform_str[i_paren_open+1:i_paren_close].split(',')
             # #     if (len(args) != 4):
             # #         raise InputError('Error near '+ErrorLeader(src_loc.infile, src_loc.lineno)+':\n'
             # #                          '       Invalid command: \"'+transform_str+'\"\n'
@@ -479,10 +499,11 @@ class AffineStack(object):
             # #     CopyMat(Mdest, Mtmp)
 
             elif transform_str.find('rot_rand(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[9:i_paren_close].split(',')
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
 
                 seed = 1
                 if len(args) in (2,6):
@@ -538,10 +559,11 @@ class AffineStack(object):
 
 
             elif transform_str.find('rotvv(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[6:i_paren_close].split(',')
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
                 center_v = None
                 if (len(args) == 9):
                     center_v = [float(args[6]), float(args[7]), float(args[8])]
@@ -582,10 +604,11 @@ class AffineStack(object):
                     CopyMat(Mdest, Mtmp)
 
             elif transform_str.find('scale(') == 0:
+                i_paren_open = transform_str.find('(')
                 i_paren_close = transform_str.find(')')
                 if i_paren_close == -1:
                     i_paren_close = len(transform_str)
-                args = transform_str[6:i_paren_close].split(',')
+                args = transform_str[i_paren_open+1:i_paren_close].split(',')
 
                 if (len(args) == 1):
                     scale_v = [float(args[0]), float(args[0]), float(args[0])]
@@ -619,10 +642,11 @@ class AffineStack(object):
 
             # # elif transform_str.find('scalecm(') == 0:
             # #     assert(xcm != None)
+            # #     i_paren_open = transform_str.find('(')
             # #     i_paren_close = transform_str.find(')')
             # #     if i_paren_close == -1:
             # #         i_paren_close = len(transform_str)
-            # #     args = transform_str[8:i_paren_close].split(',')
+            # #     args =transform_str[i_paren_open+1:i_paren_close].split(',')
             # #
             # #     moveCMtoOrig = [[1.0, 0.0, 0.0, -xcm[0]],
             # #                     [0.0, 1.0, 0.0, -xcm[1]],
@@ -651,10 +675,11 @@ class AffineStack(object):
             # #     CopyMat(Mdest, Mtmp)
 
             #elif transform_str.find('read_xyz(') == 0:
+            #    i_paren_open = transform_str.find('(')
             #    i_paren_close = transform_str.find(')')
             #    if i_paren_close == -1:
             #        i_paren_close = len(transform_str)
-            #    args = transform_str[4:i_paren_close].split(',')
+            #    args = transform_str[i_paren_open+1:i_paren_close].split(',')
             #    if (len(args) != 1):
             #        raise InputError('Error near ' + ErrorLeader(src_loc.infile, src_loc.lineno) + ':\n'
             #                         '       Invalid command: \"' + transform_str + '\"\n'
@@ -890,17 +915,17 @@ def RotMatAXYZ(dest, angle, axis_x, axis_y, axis_z):
 
 def Quaternion2Matrix(q, M):
     """convert a quaternion (q) to a 3x3 rotation matrix (M)"""
-
-    M[0][0] =  (q[0]*q[0])-(q[1]*q[1])-(q[2]*q[2])+(q[3]*q[3])
-    M[1][1] = -(q[0]*q[0])+(q[1]*q[1])-(q[2]*q[2])+(q[3]*q[3])
-    M[2][2] = -(q[0]*q[0])-(q[1]*q[1])+(q[2]*q[2])+(q[3]*q[3])
-    M[0][1] = 2*(q[0]*q[1] - q[2]*q[3])
-    M[1][0] = 2*(q[0]*q[1] + q[2]*q[3])
-    M[1][2] = 2*(q[1]*q[2] - q[0]*q[3])
-    M[2][1] = 2*(q[1]*q[2] + q[0]*q[3])
-    M[0][2] = 2*(q[0]*q[2] + q[1]*q[3])
-    M[2][0] = 2*(q[0]*q[2] - q[1]*q[3])
-
+    s = 1.0 / (q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3])
+    s *= s  # (s = 1 if q is normalized)
+    M[0][0] = 1 - 2*s*((q[2]*q[2])+(q[3]*q[3]))
+    M[1][1] = 1 - 2*s*((q[1]*q[1])+(q[3]*q[3]))
+    M[2][2] = 1 - 2*s*((q[1]*q[1])+(q[2]*q[2]))
+    M[0][1] = 2*s*(q[1]*q[2] - q[3]*q[0])
+    M[1][0] = 2*s*(q[1]*q[2] + q[3]*q[0])
+    M[1][2] = 2*s*(q[2]*q[3] - q[1]*q[0])
+    M[2][1] = 2*s*(q[2]*q[3] + q[1]*q[0])
+    M[0][2] = 2*s*(q[1]*q[3] + q[2]*q[0])
+    M[2][0] = 2*s*(q[1]*q[3] - q[2]*q[0])
 
 
 def Matrix2Quaternion(M, q):
@@ -936,6 +961,11 @@ def Matrix2Quaternion(M, q):
     q[1] = qx
     q[2] = qy
     q[3] = qz
+    # normalize q (necessary when M is not orthonormal)
+    qnorm = math.sqrt(q[0]*q[0] + q[1]*q[1] + q[2]*q[2] + q[3]*q[3])
+    for d in range(0,4):
+        q[d] /= qnorm
+    
 
 
 def MultQuat(dest, q1, q2):

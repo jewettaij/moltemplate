@@ -8,10 +8,9 @@ DNAForceField {
   # Choosing the particle masses:
      
   write_once("Data Masses") {
-    @atom:A          17097.9497
-    @atom:B          17097.9497
+    @atom:A          2553.29
+    @atom:B          2553.29
   }
-
   # Why?  Molecular motion at small length scales is Brownian (not ballistic).
   # Consequently, particle masses do not matter.  We can choose the
   # them to be anything we like as long as the physical processes we are
@@ -21,7 +20,7 @@ DNAForceField {
   # stable.  This makes it much easier to combine radically different kinds
   # of coarse-grained molecules together in the same simulation later on.
   # For numerical stability, all oscillations in the simulation should not
-  # occur faster than once every 30 timesteps.  Let's define Nperiod=30.
+  # occur faster than once every 12 timesteps.  Let's define Nperiod=12.
   # The mass, m, is determined by assuming that the timestep width, Δt=1, and
   #    sqrt(k_max/m) = 2π/(Nperiod*Δt)    and solving for m
   # --> m = (k_max*(Nperiod**2)/((2*pi)**2))
@@ -29,7 +28,7 @@ DNAForceField {
   # k_max should be an upper bound for the second derivative of the energy with
   # respect to position, d^2U(r)/dr^2, which is accessible at this temperature.
   # This depends on the force-field you are using and the temperature.
-  #    In this case: I set k_max ≈ 750 kcal/mol / nm^2 (when temperature≈300K).
+  #    In this case: I set k_max ≈ 650 kcal/mol / nm^2 (when temperature≈300K).
   # Here there are 2 types of particles in this DNA backbone: "A" and "B".
   # They correspond to the DNA backbone for the two opposite chains.  I gave
   # them different atom type names to make it easy to distinguish them visually
@@ -343,15 +342,16 @@ DNAForceField {
     # For the dihedral angle (φb), during ITERATION 0, we assume that:
     #        Probability(φb) ≈ exp(-U(φb) / kB*T)    where:
     #        U(φb) = C3*(1 - cos(φb-φb0))*sin(θ1)*sin(θ2)
-    #             ≈ C3*(1/2)(φb-φb0)^2*sin(θ10)*sin(θ20)
+    #              ≈ C3*(1/2)(φb-φb0)^2
     # From the PDB files, the observed distribution of φb angles is:
     #        Probability(θ) ≈ exp(-σ*(1/2)*(φb-μ)^2)   where
     # equating the two expressions for Probability(φb)  (converting deg->rad)
-    #    ==> φb0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2
+    #    ==> φb0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2 / Ctheta
+    #        where Ctheta=sin(θ10)*sin(θ20),  Converting degrees->radians again:
+    #         C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180) * sin(θ20*π/180))
     # φb:  μ_PDB = φb0 = 81.1037, σ_PDB = 6.17175 (in degrees)
-    #    ==>  C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180) * sin(θ20*π/180))
-    #             (Note: In this example, both θ10 and θ20 = 66.1769)
-    #           = 60.932639
+    #        θ10 = θ20 = 66.1769 (averaged measurements from many PDB files)
+    #    ==>  C3 ≈ 60.932639
     #
     #dihedral_coeff @dihedral:MajorGroove    spherical 1  &
     #                60.932639     1 81.1037 1     1 90 0         1 90 0
@@ -434,13 +434,13 @@ DNAForceField {
     # For the dihedral angle (φt), during ITERATION 0, we assume that:
     #        Probability(φt) ≈ exp(-U(φt) / kB*T)    where:
     #        U(φt) = C3*(1 - cos(φt-φt0))*sin(θ1)*sin(θ2)
-    #             ≈ C3*(1/2)(φt-φt0)^2*sin(θ10)*sin(θ20)
+    #              ≈ C3*(1/2)(φt-φt0)^2*sin(θ10)*sin(θ20)
     # equating the two expressions for Probability(φt)  (converting deg->rad)
-    #    ==> φt0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2
+    #    ==> φt0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2 / Ctheta
+    #        where Ctheta=sin(θ10)*sin(θ20),  Converting degrees->radians again:
     #         C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180)*sin(θ20*π/180))
-    #             (where, in this case, θ10 = 66.6748, θ20 = 39.1161
-    #              ...as measured from a representative subset of PDB files)
     # φt:  μ_PDB = φt0 = -63.7919, σ_PDB = 2.17443 (in degrees)
+    #        θ10 = 66.6748, θ20 = 39.1161 (averaged measurements from PDB files)
     #    ==>  C3 = 714.4815
     #
     #dihedral_coeff @dihedral:Torsion spherical 2  &

@@ -1,3 +1,6 @@
+__author__      = "bhargavchava97(github), Andrew Jewett"
+
+
 try:
     from ..nbody_graph_search import Ugraph
 except:
@@ -73,6 +76,20 @@ def canonical_order(match):
     if atom0 <= atom3:
         #return ((atom0,atom1,atom2,atom3), (bond0, bond1, bond2))
         # But this is the same thing as:
-        return match
+        if atom0 <= atom1:
+            if atom1 <= atom3:
+                return match
+            else:
+                return ((atom0,atom3,atom2,atom1), (bond0,bond2,bond1))
+        else:
+            return ((atom1,atom0,atom2,atom3), (bond1,bond0,bond2))
+   
+    elif atom3 <= atom1:
+        if atom0 <= atom1:
+            return ((atom3,atom0,atom2,atom1), (bond2,bond0,bond1))
+        else:
+            return ((atom3,atom1,atom2,atom0), (bond2,bond1,bond0))
     else:
-        return ((atom3,atom1,atom2,atom0), (bond2,bond1,bond0))
+        return ((atom1,atom3,atom2,atom0), (bond1,bond2,bond0))
+
+    

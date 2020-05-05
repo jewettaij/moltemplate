@@ -1,6 +1,6 @@
 # Use this command to generate the LAMMPS input files:
 
-moltemplate.sh -a "@atom:/WatMW/mW 1" system.lt
+moltemplate.sh -a "@atom:/WatMW/MW 1" system.lt
 
 # The -a argument insures that the "mW" atom type is assigned to "1".
 # (This is necessary for the pair_coeff command to work.

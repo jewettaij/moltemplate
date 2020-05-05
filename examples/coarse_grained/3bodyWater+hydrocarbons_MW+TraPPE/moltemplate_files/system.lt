@@ -24,18 +24,17 @@ cyclododecane[*][*][*].move(6.0,6.0,6.0)
 write_once("In Init") {
   # -- Tell LAMMPS we want to use two different pair styles 
   # -- (This overrides earlier settings.)
-  pair_style   hybrid  sw  lj/charmm/coul/charmm 9.0 11.0 9.0 11.0
+  pair_style   hybrid  sw  lj/cut 11.0
 }
 
 
 write_once("In Settings") {
   # -- Now indicate which atom type(s) are simulated using the "sw" pair style 
-  # -- In this case only one of the atom types is used (the mW water "atom").
 
-  pair_coeff    * * sw system.in.sw mW NULL NULL NULL
+  pair_coeff    * * sw system.in.sw mW NULL NULL NULL   #(mW+3 other atom types)
 
-  # -- Unfortunately LAMMPS itself does not understand molemlate syntax, so
-  # -- the atoms are identified by order in the list, not by name.  (The "mW" 
+  # -- LAMMPS does not understand molemlate syntax, so the atoms
+  # -- are identified by order in the list, not by name.  (Here, the "mW" 
   # -- refers to to an identifier in the system.in.sw file, not watmw.lt.)
   # -- This command says that the first atom type corresponds to the "mW"
   # -- atom in system.in.sw, and to ignore the remaining three atom types
@@ -43,8 +42,8 @@ write_once("In Settings") {
   # --  We don't want to use the "sw" force field for interactions involving 
   # --  these atom types, so we put "NULL" there.)
   # -- Note: For this to work, you should probably run moltemplate this way:
-  # --     moltemplate.sh -a "@atom:WatMW/mW 1" system.lt
-  # -- This assigns the atom type named @atom:WatMW/mW to 1  (the first atom)
+  # --     moltemplate.sh -a "@atom:WatMW/MW 1" system.lt
+  # -- This assigns the atom type named @atom:WatMW/MW to 1  (the first atom)
 }
 
 
@@ -53,10 +52,7 @@ write_once("In Settings") {
 # -- between atoms from different molecule types
 
 write_once("In Settings") {
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH2 lj/charmm/coul/charmm 0.11914784667210733 3.558
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH3 lj/charmm/coul/charmm 0.17390830404497651 3.458
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH4 lj/charmm/coul/charmm 0.21371654257637612 3.448
+  pair_coeff @atom:WatMW/MW @atom:TraPPE/CH2 lj/cut 0.11914784667210733 3.558
+  pair_coeff @atom:WatMW/MW @atom:TraPPE/CH3 lj/cut 0.17390830404497651 3.458
+  pair_coeff @atom:WatMW/MW @atom:TraPPE/CH4 lj/cut 0.21371654257637612 3.448
 }
-
-
-

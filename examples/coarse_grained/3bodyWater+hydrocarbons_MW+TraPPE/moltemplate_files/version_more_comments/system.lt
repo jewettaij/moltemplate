@@ -24,7 +24,7 @@ cyclododecane[*][*][*].move(6.0,6.0,6.0)
 write_once("In Init") {
   # -- Tell LAMMPS we want to use two different pair styles 
   # -- (This overrides earlier settings.)
-  pair_style   hybrid  sw  lj/charmm/coul/charmm 9.0 11.0 9.0 11.0
+  pair_style   hybrid  sw  lj/cut 11.0
 }
 
 
@@ -65,16 +65,7 @@ write_once("In Settings") {
 #    between water & the CH2,CH3,CH4 atoms using Lorentz-Berthelot mixing rules
 
 write_once("In Settings") {
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH2 lj/charmm/coul/charmm 0.11914784667210733 3.558
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH3 lj/charmm/coul/charmm 0.17390830404497651 3.458
-  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH4 lj/charmm/coul/charmm 0.21371654257637612 3.448
+  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH2 lj/cut 0.11914784667210733 3.558
+  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH3 lj/cut 0.17390830404497651 3.458
+  pair_coeff @atom:WatMW/mW @atom:TraPPE/CH4 lj/cut 0.21371654257637612 3.448
 }
-
-
-
-
-
-
-
-
-

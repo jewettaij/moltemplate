@@ -24,8 +24,8 @@ A reference DATA file is needed (argument).
 
 #g_program_name = 'dump2data.py'
 g_program_name = __file__.split('/')[-1]
-g_date_str = '2019-4-29'
-g_version_str = '0.56.0'
+g_date_str = '2020-3-22'
+g_version_str = '0.57.0'
 
 import sys
 from collections import defaultdict
@@ -57,8 +57,11 @@ class MiscSettings(object):
         self.input_format = 'dump'
         self.multi = True
         self.skip_interval = 1
+        self.atom_type_intervals = []
+        self.atom_id_intervals = []
+        self.mol_id_intervals = []
         self.scale = None
-
+        self.in_coord_file_name = ''
 
 class AtomStyleSettings(object):
 
@@ -286,6 +289,42 @@ def ColNames2Vects(column_names):
     return vects
 
 
+
+def Str2IntervalUnion(s):
+    """
+    Convert strings like '1-3,5,9-7' into [[1,3],[5,5],[9,7]]
+    """
+    try:
+        tokens = s.split(',')
+        intervals = []
+        for token in tokens:
+            a_str = token
+            b_str = token
+            i_separator = token.find('-')
+            if i_separator == -1:
+                i_separator = token.find('*')
+            if i_separator == -1:
+                i_separator = token.find(':')
+            if i_separator != -1:
+                a_str = token[:i_separator]
+                b_str = token[i_separator+1:]
+            if (len(a_str) == 0) or (a_str in ('-','*',':')):
+                a = 0
+            else:
+                a = int(a_str)
+            if (len(b_str) == 0) or (b_str in ('-','*',':')):
+                b = 0
+            else:
+                b = int(b_str)
+            intervals.append((a,b))
+        return intervals
+    except (ValueError) as err:
+        sys.stderr.write('Error: Incorrect format in numeric interval: "'+s+'"\n')
+        sys.exit(-1)
+
+
+
+
 def ParseArgs(argv,
               misc_settings,
               data_settings,
@@ -298,8 +337,8 @@ def ParseArgs(argv,
     while i < len(argv):
         #sys.stderr.write('argv['+str(i)+'] = \"'+argv[i]+'\"\n')
         if ((argv[i].lower() == '-atomstyle') or
-                (argv[i].lower() == '-atom_style') or
-                (argv[i].lower() == '-atom-style')):
+            (argv[i].lower() == '-atom_style') or
+            (argv[i].lower() == '-atom-style')):
             in_init = []
             if i + 1 >= len(argv):
                 raise InputError('Error(dump2data): ' + argv[i] + ' flag should be followed by a an atom_style name.\n'
@@ -500,6 +539,23 @@ def ParseArgs(argv,
             misc_settings.scale = float(argv[i + 1])
             del(argv[i:i + 2])
 
+        elif (argv[i].lower() == '-id'):
+            misc_settings.atom_id_intervals += Str2IntervalUnion(argv[i+1])
+            del(argv[i:i + 2])
+
+        elif (argv[i].lower() == '-type'):
+            misc_settings.atom_type_intervals += Str2IntervalUnion(argv[i+1])
+            del(argv[i:i + 2])
+
+        elif (argv[i].lower() == '-mol'):
+            misc_settings.mol_id_intervals += Str2IntervalUnion(argv[i+1])
+            del(argv[i:i + 2])
+
+        elif ((argv[i].lower() == '-in') or
+              (argv[i].lower() == '-dump')):
+            misc_settings.in_coord_file_name = argv[i+1]
+            del(argv[i:i + 2])
+
         elif ((argv[i][0] == '-') and (__name__ == "__main__")):
             raise InputError(
                 'Error(dump2data): Unrecogized command line argument \"' + argv[i] + '\"\n')
@@ -507,7 +563,7 @@ def ParseArgs(argv,
             i += 1
 
     usage_examples = \
-        """    Typical usage:
+"""    Typical usage:
 dump2data.py orig_file.data < dump.lammpstrj > new_file.data
       (This extracts last frame, uses "full" atom_style.)
     Additional options:
@@ -792,6 +848,24 @@ def WriteFrameToData(out_file,
     return
 
 
+
+
+def InIntervalUnion(i, intervals):
+    """ 
+    Return whether integer i lies within in at least one of the intervals.
+    (Note: If 0 appears in the upper bound of an interval, it means +infinity.)
+    """
+    if len(intervals) == 0:
+        return True
+    accept = False
+    for interval in intervals:
+        assert(len(interval) == 2)
+        if (interval[0] <= i) and ((i <= interval[1]) or (interval[1] == 0)):
+            accept = True
+    return accept
+
+
+
 def main():
     sys.stderr.write(g_program_name + ' v' +
                      g_version_str + ' ' + g_date_str + ' ')
@@ -849,8 +923,10 @@ def main():
         finished_reading_frame = False
         read_last_frame = False
 
-        #in_coord_file = open('tmp_atom_coords.dat','r')
-        in_coord_file = sys.stdin
+        if misc_settings.in_coord_file_name != '':
+            in_coord_file = open(misc_settings.in_coord_file_name)
+        else:
+            in_coord_file = sys.stdin
 
         while True:
 
@@ -1275,6 +1351,23 @@ def main():
                         # Print out the coordinates in simple 3-column text
                         # format
                         for atomid, xyz in iter(sorted(frame_coords.items(), key=GetIntAtomID)):
+                            # Check and see if whether the atom is one of the
+                            # atoms that was selected by the user.  If not discard.
+                            # (I don't offer this feature for 'data' files because
+                            #  it is harder to implement for this file type.)
+                            if not InIntervalUnion(int(atomid),
+                                    misc_settings.atom_id_intervals):
+                                continue
+                            atype = frame_atomtypes[atomid]
+                            if not InIntervalUnion(int(atype),
+                                    misc_settings.atom_type_intervals):
+                                continue
+                            molid = frame_molids[atomid]
+                            if not InIntervalUnion(int(molid),
+                                    misc_settings.mol_id_intervals):
+                                continue
+
+                            # Write the coordinates
                             if misc_settings.scale == None:
                                 sys.stdout.write(
                                     str(xyz[0]) + ' ' + str(xyz[1]) + ' ' + str(xyz[2]) + '\n')
@@ -1296,6 +1389,21 @@ def main():
                         descr_str = 'LAMMPS data from timestep ' + frame_timestep_str
                         sys.stdout.write(descr_str + '\n')
                         for atomid, xyz in iter(sorted(frame_coords.items(), key=GetIntAtomID)):
+
+                            # Check and see if whether the atom is one of the
+                            # atoms that was selected by the user. If not discard.
+                            if not InIntervalUnion(int(atomid),
+                                    misc_settings.atom_id_intervals):
+                                continue
+                            atype = frame_atomtypes[atomid]
+                            if not InIntervalUnion(int(atype),
+                                    misc_settings.atom_type_intervals):
+                                continue
+                            molid = frame_molids[atomid]
+                            if not InIntervalUnion(int(molid),
+                                    misc_settings.mol_id_intervals):
+                                continue
+
                             if ((misc_settings.output_format == 'xyz') or
                                 (misc_settings.output_format == 'xyz-type)')):
                                 atomtype = frame_atomtypes.get(atomid)
@@ -1370,6 +1478,9 @@ def main():
 
                 if read_last_frame:
                     exit(0)
+
+        if misc_settings.in_coord_file_name != '':
+            in_coord_file.close()
 
         for warning_str in warning_strings:
             sys.stderr.write(warning_str + '\n')
