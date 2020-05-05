@@ -1,4 +1,7 @@
-# -------- REQUIREMENTS: ---------
+# Running LAMMPS on this file (eg. "lmp_mpi -i run.in.nvt") simulates a
+# vesicle at constant NVT conditions.
+#
+# -------- PREREQUISITES: ---------
 # 1) This example requires the "USER-MISC" package.  (Use "make yes-USER-MISC")
 #   http://lammps.sandia.gov/doc/Section_start.html#start_3
 # 2) It also may require additional features and bug fixes for LAMMPS.
@@ -8,9 +11,16 @@
 # 3) Unpack it
 # 4) copy the .cpp and .h files to the src folding of your lammps installation.
 # 5) Compile LAMMPS.
-# 6) Minimize the system using:
+# 6) Build the system using PACKMOL and MOLTEMPLATE
+#    (Follow the instructions in README_setup.sh, or run that file as a script.)
+# 7) Minimize the system using:
 #      lmp_mpi -i run.in.npt
 #    (assuming "lmp_mpi" is the name of the lammps binary you created in step 5)
+# 8) Compress the system using:
+#      lmp_mpi -i run.in.compress
+#    (Why? The software tool (PACKMOL) that we used to create the initial
+#     geometry for this example often leaves gaps in the packing of spherical
+#     surfaces.  Compressing the vesicle should help close these holes.)
 #
 # If LAMMPS complains about an "Invalid pair_style", or "Invalid dihedral_style"
 # then you made a mistake in the instructions above.
@@ -27,7 +37,15 @@ include         system.in.init
 #
 # Instead read the data file created by "run.in.min".
 
-read_data    system_after_min.data
+# Commenting out these old commands:
+#
+# read_data    system.data
+# read_data    system_after_min.data
+#
+# Instead, read the coordinates from the compression simulation:
+
+read_data    system_after_compression.data
+
 
 # ------------------------------- Settings Section --------------------------
 
@@ -35,24 +53,23 @@ include         system.in.settings
 
 # ------------------------------- Run Section -------------------------------
 
-# Just in case the previous minimization failed, try again.
-# (I don't know why this helps, but sometimes it does.  Magic.)
-
-minimize 1.0e-5 1.0e-7 5000 20000
-
-# Run main simulation
-
-timestep      10.0  # The time-step in Watson et. al 2011 was 0.002*3ps = 6fs
-dump          1 all custom 5000 traj_nvt.lammpstrj id mol type x y z ix iy iz
+timestep      1.0  # (the mass of each particle must be chosen accordingly)
+dump          1 all custom 500000 traj_nvt.lammpstrj id mol type x y z ix iy iz
 
 
 thermo_style  custom step temp pe etotal vol epair ebond eangle
 thermo        100  # time interval for printing out "thermo" data
-thermo_modify norm yes
+thermo_modify norm yes flush yes
 
 
+# distribute particles evenly on available processors:
+fix fxbal all balance 100000 1.05 shift xyz 20 1.05
 
-fix fxlan all langevin 300.0 300.0 120 48279
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# (Note: We are using "units lj", which means temperature is specified
+#  in units of energy.  kB*Temp = 0.001987207*300 kCal/mole = 0.5961621)
+fix fxlan all langevin 0.5961621 0.5961621 40000 48279
 fix fxnve all nve
 
 # Note: The energy scale "epsilon" = 2.75kJ/mole = 330.7485200981 Kelvin*kB.
@@ -60,7 +77,7 @@ fix fxnve all nve
 # Note: The langevin damping parameter "120" corresponds to 
 #       the 0.12ps damping time used in Watson et. al JCP 2011.
 
-run           40000000
+run           2000000
 
 write_data system_after_nvt.data
 

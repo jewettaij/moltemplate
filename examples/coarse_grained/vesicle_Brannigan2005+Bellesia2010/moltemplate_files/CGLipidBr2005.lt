@@ -33,7 +33,7 @@ CGLipidBr2005 {
 
   write_once("In Init") {
     # -- Default styles for "CGLipidBr2005" --
-    units           real
+    units           lj   #(temperature should be specified in energy units)
     atom_style      full
     # (Hybrid force field styles were used for portability.)
     bond_style      hybrid harmonic
@@ -76,13 +76,14 @@ CGLipidBr2005 {
     }
 
     # Define properties of the local (lipid-specific) atom:head type atom:
-    write_once("Data Masses") {
-      @atom:head  200.0
-    }
     write_once("In Settings") {
       pair_coeff @atom:head  @atom:head  lj/charmm/coul/charmm/inter 0.1643 7.5 0.4 0
       pair_coeff @atom:../int @atom:head lj/charmm/coul/charmm/inter 0.1643 7.5 0.4 0
       pair_coeff @atom:../tail @atom:head lj/charmm/coul/charmm/inter 0.1643 7.5 0.4 0
+    }
+    # masses were chosen so that a verlet timestep of 1.0 is numerically stable
+    write_once("Data Masses") {
+      @atom:head  5000.0
     }
 
   } #DPPC
@@ -105,22 +106,24 @@ CGLipidBr2005 {
       $angle:a2   @angle:../backbone  $atom:i   $atom:t1  $atom:t2
     }
     # Define properties of the local (lipid-specific) atom:head type atom:
-    write_once("Data Masses") {
-      @atom:head  200.0
-    }
     write_once("In Settings") {
       pair_coeff @atom:head  @atom:head  lj/charmm/coul/charmm/inter 0.1643 7.5 0.4 0
       pair_coeff @atom:../int @atom:head lj/charmm/coul/charmm/inter 0.1643 7.5 0.4 0
       pair_coeff @atom:../tail @atom:head lj/charmm/coul/charmm/inter 0.1643 7.5 0.4 0
+    }
+    # masses were chosen so that a verlet timestep of 1.0 is numerically stable
+    write_once("Data Masses") {
+      @atom:head  5000.0
     }
   } #DLPC
 
 
   # Particles and properties shared by all lipid types:
 
+  # masses were chosen so that a verlet timestep of 1.0 is numerically stable
   write_once("Data Masses") {
-    @atom:int     200.0
-    @atom:tail    200.0
+    @atom:int     5000.0
+    @atom:tail    5000.0
   }
 
   write_once("In Settings") {

@@ -13,8 +13,3 @@ always succeed at generating a spherical vesicle in a reasonable amount of time.
 (You may have to play with the .inp files in the packmol_files directory
  to get PACKMOL to produce any files at all.
 
-(NOTE: This example also demonstrantes how to use an external program
- ("packmol") to generate the coordinates for the atoms in the system.
- PLEASE USE "packmol", NOT "ppackmol". -the parallel version of "packmol".
- This is because "ppackmol" is more likely to get caught in infinite loops.)
-

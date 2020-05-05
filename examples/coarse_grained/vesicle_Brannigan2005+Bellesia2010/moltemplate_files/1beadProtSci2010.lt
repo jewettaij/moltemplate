@@ -134,7 +134,7 @@
   #  (These can be overridden later.)
 
   write_once("In Init") {
-    units           real
+    units           lj   #(temperature should be specified in energy units)
     atom_style      full
     bond_style      hybrid harmonic
     angle_style     hybrid harmonic
@@ -222,11 +222,11 @@
 
 
   #  --- Mass Units ---
-  # Typical amino acids weigh approximately 110.0 grams/mole.  (Rounding down):
+  #  masses were chosen so that a verlet timestep of 1.0 is numerically stable
   write_once("Data Masses") {
-    @atom:1beadProtSci2010/sH 100.0
-    @atom:1beadProtSci2010/sL 100.0
-    @atom:1beadProtSci2010/tN 100.0
+    @atom:1beadProtSci2010/sH 3000.0
+    @atom:1beadProtSci2010/sL 3000.0
+    @atom:1beadProtSci2010/tN 3000.0
   }
 
 } # 1beadProtSci2010 (namespace)

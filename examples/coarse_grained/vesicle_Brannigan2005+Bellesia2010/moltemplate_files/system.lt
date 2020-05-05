@@ -41,8 +41,8 @@ using namespace 1beadProtSci2010
 # step1) Creae 120 proteins.  Distribute them on the surface of the sphere.
 #
 # step2) Keeping the coordinates from step1 fixed, 
-#     a) first we add 14000 DPPC lipids to the inner monolayer
-#     b)  then we add 14000 DLPC lipids to the inner monolayer
+#     a) first we add 16000 DPPC lipids to the inner monolayer
+#     b)  then we add 16000 DLPC lipids to the inner monolayer
 #
 # step3) Keeping the coordinates from steps 1 and 2 fixed, 
 #     a) first we add 19000 DPPC lipids to the outer monolayer
@@ -58,9 +58,9 @@ using namespace 1beadProtSci2010
 proteins = new 4HelixInsideOut [120]
 
 # Step 2a)                  ---- inner monolayer ----
-dppc_in = new DPPC [14000]
+dppc_in = new DPPC [16000]
 # Step 2b)
-dlpc_in = new DLPC [14000]
+dlpc_in = new DLPC [16000]
 
 # Step 3a)                  ---- outer monolayer ----
 dppc_out = new DPPC [19000]
@@ -132,7 +132,7 @@ write_once("In Settings") {
   #  tails leaving the hydrophilic amino acids of the protein in the interior.
   #  In reality, these polar groups form hydrogen bonds with each other.)
 
-  pair_coeff @atom:1beadProtSci2010/sL @atom:1beadProtSci2010/sL lj/charmm/coul/charmm/inter  0.3286 6.0 0.4 -1
+  pair_coeff @atom:1beadProtSci2010/sL @atom:1beadProtSci2010/sL lj/charmm/coul/charmm/inter  0.3286 4.8 0.4 -1
 
   # However these hydrophilic amino acids are not attracted to 
   # the bilayer interior.
@@ -152,7 +152,7 @@ write_once("In Settings") {
 
 write_once("In Init") {
   # -- These styles override earlier settings --
-  units           real
+  units           lj   #(temperature should be specified in energy units)
   atom_style      full
   # (Hybrid force field styles were used for portability.)
   bond_style      hybrid harmonic

@@ -39,10 +39,10 @@ filetype xyz
 structure protein.xyz
   number 120
   atoms 68 69 70
-    inside sphere 0. 0. 0. 273.75
+    inside sphere 0. 0. 0. 276.3
   end atoms
   atoms 65 66 67 71 72 73
-    outside sphere 0. 0. 0. 325.0
+    outside sphere 0. 0. 0. 322.6
   end atoms
 end structure 
 

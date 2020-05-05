@@ -41,12 +41,11 @@ structure step1_proteins.xyz
 end structure
 
 
-# 14000 DPPC lipids will be put in a shell with their hydrophilic heads
+# 16000 DPPC lipids will be put in a shell with their hydrophilic heads
 # (atom 1) pointing inwards, and their tails (atom 5) pointing outwards.
 
-
 structure DPPC.xyz
-  number 14000
+  number 16000
   atoms 1
     inside sphere 0. 0. 0. 270.0
   end atoms
@@ -55,11 +54,11 @@ structure DPPC.xyz
   end atoms
 end structure 
 
-# 14000 DLPC lipids will be put in a shell with their hydrophilic heads
+# 16000 DLPC lipids will be put in a shell with their hydrophilic heads
 # (atom 1) pointing inwards, and their tails (atom 4) pointing outwards.
 
 structure DLPC.xyz
-  number 14000
+  number 16000
   atoms 1
     inside sphere 0. 0. 0. 273.0 
   end atoms

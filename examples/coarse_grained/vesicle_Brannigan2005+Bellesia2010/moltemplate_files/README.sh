@@ -12,11 +12,10 @@
 #  packmol < step1_proteins.inp
 #  packmol < step2_innerlayer.inp
 #  packmol < step3_outerlayer.inp
-#  cp step3_outerlayer.xyz ../system.xyz
+#  This creates a file named "../packmol_files/step3_outerlayer.xyz"
 #
-#  These steps could take a few hours.
+#  These steps could take a few hours (or an entire day).
 #
 # --- After you have done that, you can run moltemplate using this command: ---
 
-moltemplate.sh system.lt -xyz ../system.xyz
-
+moltemplate.sh -xyz ../packmol_files/step3_outerlayer.xyz system.lt

@@ -8,10 +8,13 @@
 # If not, carry out the instructions in "README_setup.sh".
 #
 #  -- Instructions: --
-# If "lmp_mpi" is the name of the command you use to invoke lammps,
-# then you would run lammps on these files this way:
+# Assuming "lmp_mpi" is the name of the LAMMPS binary,
+# run lammps in this order:
 
 lmp_mpi -i run.in.min  # Minimize the system (important, and very slow)
+
+lmp_mpi -i run.in.compress  # Compress the vesicle. (This helps close up any
+                            # remaining holes in the vesicle created by PACKMOL)
 
 lmp_mpi -i run.in.nvt  # Run a simulation at constant volume
 
