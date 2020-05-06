@@ -170,7 +170,7 @@ cd moltemplate_files
   genpoly_modify_lt.py \
     -polymer-name DNAPolymer \
     -length $N_MONOMERS \
-    -locations-periodic 100 0 \
+    -locations-periodic 400 0 \
     -dihedral Disable r c2 c2 r 0 0 1 1 \
     -fix-nbody 4 "fix_twist.in" fxTw all twist torque r c2 c2 r 0 0 1 1 "$TORQUE" \
     -set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 C1motor C1motor C1motor C1motor \

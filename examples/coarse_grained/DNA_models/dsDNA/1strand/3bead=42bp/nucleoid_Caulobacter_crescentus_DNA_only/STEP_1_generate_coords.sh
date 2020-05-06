@@ -18,8 +18,6 @@
 N_MONOMERS_HALF=47619 # The number of monomers in each direction.  (The total
                       # number monomers in the circle is twice this number.)
 
-N_MONOMERS_HALF=476 #*#
-
 L_MONOMER=13.944     # physical distance between monomers along the polymer axis
 
 rm -f crds.raw

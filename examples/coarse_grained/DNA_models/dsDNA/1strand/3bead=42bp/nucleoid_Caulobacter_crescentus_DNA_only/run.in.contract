@@ -37,8 +37,7 @@ comm_modify mode single cutoff 47.0 vel yes
 
 include fix_twist.in
 
-#*#dump 1 all custom 500000 traj_contract.lammpstrj id mol type x y z ix iy iz
-dump 1 all custom 10000 traj_contract.lammpstrj id mol type x y z ix iy iz
+dump 1 all custom 500000 traj_contract.lammpstrj id mol type x y z ix iy iz
 
 # (See http://lammps.sandia.gov/doc/fix_langevin.html)
 
@@ -74,8 +73,7 @@ fix fxdef all deform 10 x final -850 850
 # Keep the chain centered in the X direction (so that it does not drift)
 fix fxcen all recenter 0.0 NULL NULL
 
-#*#run 18000000
-run 100000
+run 18000000
 
 unfix fxcen
 unfix fxnve
