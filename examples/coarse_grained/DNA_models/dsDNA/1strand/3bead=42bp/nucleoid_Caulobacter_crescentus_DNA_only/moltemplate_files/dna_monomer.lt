@@ -1,0 +1,66 @@
+#  This file contains the definition of a molecule named "Monomer".
+#  Monomers are simply "L" shaped molecules consiting of 3 particles:
+# 
+#
+#                   @R
+#                   |
+#             -@C1--@C2-
+#
+#
+#  Eventually we will link multiple monomers together to form a 
+#  ladder-shaped polymer:
+#
+#
+#                   @R        @R        @R        @R
+#      ...          |         |         |         |        ...
+#             -@C1--@C2--@C1--@C2--@C1--@C2--@C1--@C2--
+#
+#
+#
+#
+# This polymer model is almost identical to the model used by 
+# Benedetti, F. Dorier J., Burnier, Y., and Stasiak, A.
+# Nucl. Acid. Res. (2014), 42(5):2848-2855
+# Although I use different atom names and angle names,
+# each atom and each angle has a comment to the far right
+# with the atom numbers used in that paper, and 
+# defining the angle in terms of the angles used in that paper.
+
+
+
+import "dna_forcefield.lt"
+
+
+
+DNAMonomer inherits DNAForceField {
+
+  write("Data Atoms") {
+    $atom:c1  $mol:...   @atom:C1   0.000    0.00000  0.00000  0.00000
+    $atom:c2  $mol:...   @atom:C2   0.000    7.00000  0.00000  0.00000
+    $atom:r   $mol:...   @atom:R    0.000    7.00000  7.00000  0.00000
+  }
+
+  # 2-body bonded interactions:
+
+  write("Data Bonds") {
+    $bond:backbone  @bond:Backbone  $atom:c1 $atom:c2
+    $bond:sidechain @bond:Sidechain $atom:c2 $atom:r
+  }
+
+
+  # Optional: Create a file containing visualzation preferences (for VMD)
+
+  write_once("vmd_commands.tcl") {
+    set sel [atomselect top "type @{atom:C1}"]
+    \$sel set radius 0.8
+    \$sel set name P
+    set sel [atomselect top "type @{atom:C2}"]
+    \$sel set radius 0.8
+    \$sel set name P
+    set sel [atomselect top "type @{atom:R}"]
+    \$sel set radius 0.7
+    \$sel set name R
+  }
+
+} # DNAmonomer
+
