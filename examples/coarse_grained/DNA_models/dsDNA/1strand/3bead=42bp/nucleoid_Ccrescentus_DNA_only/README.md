@@ -14,14 +14,16 @@ The tension is gradually relaxed by shortening the length of the simulation box,
 reduces, plectonemic supercoils form, gradually getting longer and more numerous
 as the tension is reduced.
 
-### Motivation
+## Motivation
 
 This was intended to mimic the process of DNA relaxation after the ParABS
 system has pulled the two origins of replication to opposite poles of the cell.
 The continued replication of DNA increases the slack and gradually reduces
 the tension in the (initially streched) polymer.
 
-### Implementation
+## Implementation
+
+### Twist motors
 
 During the simulation, many twist motors (distributed throughout the polymer)
 apply a constant torque at these locations in order to maintain a
@@ -34,12 +36,20 @@ new feature of LAMMPS called "fix twist".  (See prerequisites above.)
  polymer to break and/or pass-through itself during the simulation,
  as it does in the living cell.)
 
+### DNA model
+
+The earliest description of a DNA model similar to this one that I am aware of
+is provided in the appendix of this paper:
+F. Benedetti , J. Dorier, Y. Burnier, and A. Stasiak
+Nucleic Acids Research (2014) Vol. 42, No. 5, 2848-2855, doi:10.1093/nar/gkt1353
+
 
 ## Prerequisites
 
 This requires that LAMMPS has been compiled with the following packages enabled:
    MOLECULAR, USER-MISC
-It also requires that the "fix twist" feature has been enabled.
+
+It also requires that the "fix twist" feature has been enabled in LAMMPS.
 (As of 2019-5-05, you must download "fix_twist.cpp" and "fix_twist.h" from
  https://github.com/jewettaij/lammps/tree/fix_twist/src/USER-MISC
  and copy those 2 files into the "src/" subdirectory of our LAMMPS folder,

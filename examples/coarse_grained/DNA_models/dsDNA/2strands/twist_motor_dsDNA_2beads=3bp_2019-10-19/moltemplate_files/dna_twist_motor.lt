@@ -1,0 +1,92 @@
+import "dna_forcefield.lt"
+
+
+DNAForceField {
+
+  # The twist motor modifies the DNA changing particles
+  # of type A to Am and B to Bm at that location.
+  # These particles have increased mass to compensate for the stiffer
+  # springs that are attached to them.  (See "dna_forcefield.lt")
+
+  write_once("Data Masses") {
+    @atom:Am         25938.22
+    @atom:Bm         25938.22
+    @atom:Bm2        25938.22
+  }
+
+  # (Note: This will augment the existing "DNAForceField", not overwrite it.)
+
+  # Add additional features to the existing "DNAForceField" namespace, such as
+  # new atom types, bond types and dihedral types for motors that twist the DNA.
+
+  write_once("In Settings") {
+
+    # Twist motors replace existing bonded interactions on the polymer
+    # (and also effect nearby bonded interactions as well).
+    # We could delete these bonded interactions which are no longer needed.
+    # However it is easier to change their type (without deleting them)
+    # so that they no longer exert a force on their partner.
+    # 1) Define a type of bond which behaves like a broken bond
+
+    bond_coeff @bond:Disable  harmonic  0   0.996
+
+    # 2) Define a type of dihedral which exerts no force on the 4 atoms
+    dihedral_coeff @dihedral:Disable  spherical 1  0  0 0 0  0 0 0  0 0 0
+
+    # Now define the interactions between nearby atoms which are modified
+    # by the presence of a twist motor:
+
+    # Define a short bond which is the axis of the twist motor:
+    bond_coeff @bond:Motor    harmonic  1000 0.996
+
+    # Define the angle and dihedral interactions on either side of this motor.
+    # (Note: Here, we are using dihedral_style "spherical" which exerts both
+    #        4-body dihedral AND 3-body angle forces on the atoms.  For details:
+    #        https://lammps.sandia.gov/doc/dihedral_spherical.html )
+    dihedral_coeff @dihedral:MajorGrooveML  spherical 3  &
+        4000.0     1 130.346 1     1 90.0 0      1 90.0 0  &
+        4000.0     0 0.0 0         1 66.6748 1   0 0.0 0   &
+        4000.0     0 0.0 0         0 0.0 0       1 90.0 1  
+    # Note: 130.346 = 0.5*(180 + φb0)
+    #       66.6748 = θ2
+    #       (see "dna_forcefield.lt)
+
+    dihedral_coeff @dihedral:MajorGrooveMR  spherical 3  &
+        4000.0     1 158.308 1     1 90.0 0      1 90.0 0  &
+        4000.0     0 0.0 0         1 90.0 1      0 0.0 0   &
+        4000.0     0 0.0 0         0 0.0 0       1 39.1161 1
+    # Note: 158.308 = 0.5*(180+φminor)  where φminor= 360-(φb + 2*φt)=136.616
+    #       39.1161 = θ10
+    #       (see "dna_forcefield.lt)
+
+    # When I introduce a single-stranded break in the chain ONLY for the
+    # purpose of twisting it, I increase the bond-angle strengths in an
+    # attempt compensate for the loss of stiffness (due to the breakage).
+    #
+    #  NOTE: In this model, the DNA rotates around a bond that is pointing
+    #        parallel to the axis of the double-stranded DNA polymer.
+    #      Alternative approach (not used):
+    #  A more realistic coarse grained model might rotate around the original
+    #  unbroken peptide bond.  The peptide bonds in each of the two strands
+    #  are not pointing along the axis of the polymer.  Consequently as you 
+    #  rotate around one of them, a sharp V-shaped bend will develop in the
+    #  polymer as a result of twisting.
+    #  I try to avoid that because sudden sharp bends in the DNA will cause the
+    #  DNA to bump into things much more often as you twist it, slowing down
+    #  the simulation significantly without effecting the final result.)
+
+    #                                         qi=qj=3
+    #             i      j                  ke*qi*qj/eps_r      cutoff
+    #pair_coeff @atom:A @atom:A  yukawa   3.7357167978727794     7.001
+    #pair_coeff @atom:B @atom:B  yukawa   3.7357167978727794     7.001
+    # NEW MODEL:
+    # To speed up simulation:  Ignore all pairwise/nonbomded forces involving 
+    # B-strand particles.  Merge all the charge onto the A strand
+    #                                         qi=qj=6  (A-strand)
+    #             i      j                  ke*qi*qj/eps_r      cutoff
+    pair_coeff @atom:A* @atom:A*  yukawa  14.94286719149112       7.001
+    #                                         qi=qj=0  (B-strand reverse strand)
+    pair_coeff @atom:B* @atom:B*  yukawa   0.00000000000000       7.001
+  }
+
+} # additions to "DNAForceField"

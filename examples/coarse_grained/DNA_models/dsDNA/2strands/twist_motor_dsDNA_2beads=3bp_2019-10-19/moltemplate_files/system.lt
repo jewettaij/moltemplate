@@ -1,0 +1,16 @@
+import "dna_polymer.lt"    # <-- Defines "DNAPolymer"
+
+dna_polymer = new DNAPolymer
+
+
+
+
+# What kind of boundary conditions are we using?
+
+write_once("In Init") {
+  boundary s s s      # <-- periodicity in x y z directions
+}
+# "f" stands for "fixed"
+# "p" stands for "periodic"
+# "s" stands for "shrink-wrapped" (non-periodic)
+
