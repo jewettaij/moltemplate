@@ -669,8 +669,8 @@ while [ "$i" -lt "$ARGC" ]; do
         # the dump describe a bounding box around the system, not the system 
         # itself. See https://lammps.sandia.gov/doc/dump.html and https://lammps.sandia.gov/doc/Howto_triclinic.html
         if [ ${#box[@]} == 9 ]; then
-          xtilt[0]=$(echo "0.0 ${box[2]} ${box[5]} $(bc<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|head -1) # min
-          xtilt[1]=$(echo "0.0 ${box[2]} ${box[5]} $(bc<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|tail -1) # max
+          xtilt[0]=$(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|head -1) # min
+          xtilt[1]=$(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|tail -1) # max
           ytilt[0]=$(echo "0.0 ${box[8]}"|xargs -n1|sort -n|head -1) # min
           ytilt[1]=$(echo "0.0 ${box[8]}"|xargs -n1|sort -n|tail -1) # max
           BOXSIZE_MINX=$(echo ${box[0]}" "${xtilt[0]} |awk '{print $1-$2}')
