@@ -280,19 +280,17 @@ Optional arguments:
                  Other molecular structure formats may be supported later.)
 
 -dump dump_file An optional dump_file argument can be supplied as an argument
-                following "-dump". This option requires "-molc".
+                following "-dump".
 
-                This option should be used to overwrite the coordinate AND the
-                ellipsoid sections in the LAMMPS data file. The dump file MUST
-                be formatted in the following way:
-                "id type xu yu zu &
-                c_q[1] c_q[2] c_q[3] c_q[4] &
-                c_shape[1] c_shape[2] c_shape[3] &
-                vx vy vz angmomx angmomy angmomz mol"
-                
+                This option should be used to overwrite the coordinate section
+                in the LAMMPS data file. If present, it will also write the
+                Ellipsoids and Velocities sections.
+
+                For data style ellipsoid, the dump file MUST be formatted in
+                the following order:
+                "id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] ... "
                 Where:
-                compute q     all property/atom quatw quati quatj quatk
-                compute shape all property/atom shapex shapey shapez
+                compute q all property/atom quatw quati quatj quatk
 
 -a "@atom:x 1"
 -a assignments.txt
@@ -652,6 +650,10 @@ while [ "$i" -lt "$ARGC" ]; do
         # Read the box
         IFS=$CR
         box=( $(head -8 "$tmp_dump" | awk 'NR>5{for (i=1;i<=NF;i++){printf "%g\n",$i}}') )
+
+        # Find the columns of velocities.
+        vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
+        angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
 
         # Orthorombic box.
@@ -688,11 +690,27 @@ while [ "$i" -lt "$ARGC" ]; do
         # Save the coordinates.
         awk 'NR>9{print $3" "$4" "$5}' "$tmp_dump" > "$tmp_atom_coords"
 
-        # Save the orientations.
-        awk 'NR>9{print $6" "$7" "$8" "$9}' "$tmp_dump" > "$tmp_ellips_quat"
+        # Save the orientations. Make sure that the columns reserved for quaternions are not used to store velocities.
+        es=0
+        if [[ ${#vel[@]} == 3 && ${vel[2]} -le 9 ]]; then
+           ((es++))
+        fi
+        if [[ ${#angmom[@]} == 3 && ${angmom[2]} -le 9 ]]; then
+           ((es++))
+        fi
+        if [[ "$(sed  -n '10p;10q' "$tmp_dump" | awk '{print $6" "$7" "$8" "$9}' | wc -w)" == 4 && $es == 0 ]]; then
+           awk 'NR>9{print $6" "$7" "$8" "$9}' "$tmp_dump" > "$tmp_ellips_quat"
+        fi
 
-        # Save the velocities
-        awk 'NR>9{print $1" "$13" "$14" "$15" "$16" "$17" "$18}' "$tmp_dump" > "$data_velocities"
+        # Save the velocities. It should work with other atom styles, as long as the velocities are present.
+        if [[ ${#vel[@]} == 3 && ${#angmom[@]} == 0 ]]; then 
+           awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz}' "$tmp_dump" > "$data_velocities"
+
+        elif [[ ${#vel[@]} == 3 && ${#angmom[@]} == 3 ]]; then 
+           awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} -v ax=${angmom[0]} -v ay=${angmom[1]} -v az=${angmom[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz" "$ax" "$ay" "$az}' "$tmp_dump" > "$data_velocities"
+
+        fi
+
 
     elif [ "$A" = "-atomstyle" ] || [ "$A" = "-atom-style" ] || [ "$A" = "-atom_style" ]; then
         if [ "$i" -eq "$ARGC" ]; then
