@@ -1,9 +1,9 @@
-2beads=3bp model
+3bp2p model
 ====================
 
 This example demonstrates how to prepare a simulation of double-stranded (ds)
-DNA using the coarse-grained "3bp=2beads" model.
-
+DNA using the coarse-grained "3bp2p" (3 base-pairs = 2 particles) model.
+g
 ##    Features
 
 1) This model has a double-helical conformation with a major and minor grooves.
@@ -32,7 +32,6 @@ are compared with experiment below:
 | -> helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |
 | distance along the axis between monomers (3bp):|  0.98293 nm  |  see below  |
 | -> distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |
-|------------------------------------------------|--------------|-------------|
 
 ##    Prerequisites
 
