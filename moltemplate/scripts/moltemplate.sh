@@ -292,6 +292,8 @@ Optional arguments:
                 Where:
                 compute q all property/atom quatw quati quatj quatk
 
+                The box boundaries are also copied to the LAMMPS data file.
+
 -a "@atom:x 1"
 -a assignments.txt
                 The user can customize the numbers assigned to atom, bond,
