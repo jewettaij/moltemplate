@@ -8,6 +8,7 @@ Each directory contains one or more examples.
 
 Each example directory contains the following files and directories:
 
+| File or directory   | Explanation
 |---------------------|--------------------------------------------------------|
 | images/             | This folder has pictures of the molecules in the system|
 | moltemplate_files/  | This folder contains LT files and other auxiliary files|
