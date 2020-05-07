@@ -24,19 +24,15 @@ and are not effected by the mass of the particles of the model.)
 Geometrical and mechanical properties of this DNA model (simulated at T=300K)
 are compared with experiment below:
 
--------------------------------------------------------------------------------
 | property                                       |  this model  | experimenal |
--------------------------------------------------------------------------------
+|------------------------------------------------|--------------|-------------|
 | persistence length:                            |  48.7101 nm  |     50 nm   |
--------------------------------------------------------------------------------
 | torsional persistence length:                  | 109.9752 nm  |    110 nm   |
--------------------------------------------------------------------------------
 | helical twist angle between monomers (3bp):    | 102.7797 deg |  see below  |
 | -> helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |
--------------------------------------------------------------------------------
 | distance along the axis between monomers (3bp):|  0.98293 nm  |  see below  |
 | -> distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |
--------------------------------------------------------------------------------
+|------------------------------------------------|--------------|-------------|
 
 ##    Prerequisites
 

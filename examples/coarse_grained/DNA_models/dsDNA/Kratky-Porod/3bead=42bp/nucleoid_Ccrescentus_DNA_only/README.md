@@ -1,40 +1,38 @@
+Nucleoid model
+=========
+
 ## Description
 
 This is an example demonstrating how to build a model of the conformation of
 an entire bacterial chromosome (a long circular polymer of DNA), 4Mbp in length.
 This simulation was intended to mimic the process of DNA relaxation and
-supercoiling following the process of DNA replication in Caulobacter crescentus.
+supercoiling during the process of DNA replication in Caulobacter crescentus.
+
+## Summary:
 
 Initially the circular polymer is stretched in a straight-line conformation
 connecting opposite ends of the (circular) polymer to opposite ends of a
 long periodic box (to which they are attached).
-This creates a tension in the polymer.
-The tension is gradually relaxed by shortening the length of the simulation box,
-(while twisting the polymer).  As the box shrinks and the tension in the polymer
-reduces, plectonemic supercoils form, gradually getting longer and more numerous
-as the tension is reduced.
+Twist is applied to polymer to achieve a supercoiled
+conformation which mimics the degree of supercoiling measured in bacteria.
+The tension is gradually relaxed by shortening the length of the simulation box.
+As the box shrinks and the tension in the polymer reduces, plectonemic
+supercoils form, gradually getting longer and more numerous as the tension
+is reduced.
 
 ## Motivation
 
 This was intended to mimic the process of DNA relaxation after the ParABS
 system has pulled the two origins of replication to opposite poles of the cell.
 The continued replication of DNA increases the slack and gradually reduces
-the tension in the (initially streched) polymer.
+the tension in the (initially streched) polymer.  During this time, the
+DNA is supercoiled.  The goal of these simulations is to produce a circular
+polymer which is supercoiled in a similar way to the supercoils seen in
+bacterial nucleoids. (This simulation neglects to consider many of the important
+biological processes which probably also greatly effect the shape of the DNA,
+such as DNA-binding proteins ("NAPs"), transcription, and topoisomerases.)
 
 ## Implementation
-
-### Twist motors
-
-During the simulation, many twist motors (distributed throughout the polymer)
-apply a constant torque at these locations in order to maintain a
-final superhelical density of approximately 0.05 (+/- 5%).
-To implement these "twist motors" this simulation uses an experimental
-new feature of LAMMPS called "fix twist".  (See prerequisites above.)
-(Note: It's not strictly necessary to have this twist motors in the simulation.
- Just initiating the polymer in a twisted conformation also works.
- However using twist motors is much more robust if you later plan to allow the
- polymer to break and/or pass-through itself during the simulation,
- as it does in the living cell.)
 
 ### DNA model
 
@@ -43,6 +41,50 @@ is provided in the appendix of this paper:
 F. Benedetti , J. Dorier, Y. Burnier, and A. Stasiak
 Nucleic Acids Research (2014) Vol. 42, No. 5, 2848-2855, doi:10.1093/nar/gkt1353
 
+Moltemplate is used to arrange a coarse grained DNA polymer into a circle
+which has been stretched along the X-axis (see below)
+
+```    
+    linkers                                             linkers
+      |                                                   |
+      V                                                   V
+     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+        |                                               |
+     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+```
+Note that this is a periodic simulation.
+Linkers (bonds) were added that connect one end of the circle to the
+periodic image of the opposite end (on the other side of the periodic boundary).
+The length of the simulation box determines how stretched the polymer is.
+
+In this example, several simulations are necessary to create the final model:
+
+1) First we must minimize the system (first half of "STEP_3")
+2) Then we can un-stretch the circular DNA (second half of "STEP_3")
+by shortening the length of the simulation box.  At the end of this
+simulation, the length of the box equals the length of a typical
+Caulobacter crescentus cell.
+3) In the final simulation, the linkers are removed, and the system is
+allowed to relax further.  The topology of the system is now circular:
+
+```    
+        *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+        |                                               |
+        *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+```
+
+### Twist motors
+
+During the simulation, many twist motors (distributed throughout the polymer)
+apply a constant torque in order to maintain a
+final superhelical density of approximately 0.05 (+/- 5%).
+To implement these "twist motors" this simulation uses an experimental
+new feature of LAMMPS called "fix twist".  (See prerequisites above.)
+(Note: It's not strictly necessary to have this twist motors in the simulation.
+ Just initiating the polymer in a twisted conformation also works.
+ However using twist motors is much more robust if you later plan to allow the
+ polymer to break and/or pass-through itself during the simulation,
+ as it does in the living cell.)
 
 ## Prerequisites
 

@@ -1,0 +1,195 @@
+# GOAL:
+#   The conformation of the system prepared by moltemplate is not optimal.
+#   It probably contains sharp turns, or pairs of particles that are too
+#   close together.  If the simulation were begun using this conformation,
+#   there is a chance it would become numerically unstable.  That's why
+#   it's a good idea to "minimize" (relax) the positions of the particles
+#   before starting the main production run.
+#
+# PREREQUISITES:
+#
+#     You must use moltemplate.sh to create 3 files:
+#        system_linked.data  system.in.init  system.in.settings
+#     If not, follow the instructions in STEP_1 and STEP_2.
+
+# -- Init Section --
+
+include "system.in.init"
+
+# commenting out  (not needed here. useful when crowding agents are added):
+#include "system.in.init_minimize"
+
+boundary p f f
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data "system_linked.data"
+
+# Make sure the size of the simulation box is what we think it is
+change_box all y final -330 330 z final -330 330
+
+
+# ------------------------------- Settings Section --------------------------
+
+include "system.in.settings"
+include "system.in.types" #<--optional custom atom types for twist motors
+
+# Confine the polymer in a cylindrical tube that minics a bacterial cell wall
+include "confinement_hard_cylinder_R=320_K=10_Rmax=330.in"
+
+# Because of the large size of the initial simulation box, we must override
+# the default size of the neighbor bins and communication distance settings.
+# http://lammps.sandia.gov/doc/neighbor.html
+# http://lammps.sandia.gov/doc/comm_modify.html
+
+neighbor 25.0 bin
+#comm_modify mode single cutoff 43.0 vel yes   (<-fails on some lammps versions)
+comm_modify mode single cutoff 57.0 vel yes
+
+
+# ------------------------------- Run Section -------------------------------
+
+dump 1 all custom 20000 traj_min.lammpstrj id mol type x y z ix iy iz
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+
+# Note: tdamp must be >> than the innertial t_m ~= sqrt( m / d^U/dr )
+#       which for our force field is about 15 (It should be ~= Nperiod
+#       which I picked to be 20).  Check "forcefield.lt" or "system_linked.data"
+#       to find the mass.
+# To maximize sampling efficiency, make tdamp as large as you can,
+# just make sure it does not exceed the timescales you really care
+# about (such as the time needed for the chromosome to "fold").  
+# Keep it an order of magnitude or so shorter than that.
+
+velocity all create 0.5961621 4928459
+fix fxlan all langevin  0.5961621   0.5961621  10.0     123456
+fix fxnve all nve
+fix fxcen all recenter 0.0 0.0 0.0
+
+
+# (See http://lammps.sandia.gov/doc/fix_langevin.html)
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed lx
+thermo          100  # time interval for printing out "thermo" data
+#thermo_modify   norm yes  flush yes
+thermo_modify   norm yes
+
+
+fix fxbal all balance 20000 1.03 shift x 20 1.03
+
+# ---- Minimization procedure ----
+# In this example, minimization was implemented using Langevin dynamics.
+# We begin the simulation using a small timestep value, and a short Langevin
+# damping time (or equivalently, a large Langevin friction coefficient).
+# As the simulation becomes more equilibrated, we can gradually
+# increase both the timestep size and Langevin damping time.
+
+
+timestep 0.00001
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.0002     123456
+run 1000
+
+timestep 0.00002
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.0005     123456
+run 1000
+
+timestep 0.00005
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.001     123456
+run 1000
+
+timestep 0.0001
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.002     123456
+run 1000
+
+timestep 0.0002
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.005     123456
+run 1000
+
+timestep 0.0005
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.01     123456
+run 1000
+
+timestep 0.001
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.02     123456
+run 1000
+
+timestep 0.002
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.05     123456
+run 1000
+
+timestep 0.005
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.1     123456
+run 1000
+
+timestep 0.01
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.20     123456
+run 1000
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.50     123456
+run 1000
+
+timestep 0.02
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  0.50     123456
+run 1000
+
+timestep 0.05
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  1.0     123456
+run 1000
+
+timestep 0.1
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  2.0     123456
+run 1000
+
+timestep 0.2
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  5.0     123456
+run 1000
+
+timestep 0.5
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  10.0     123456
+run 1000
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  20.0     123456
+run 1000
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  50.0     123456
+run 1000
+
+timestep 1.0
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  100.0     123456
+run 1000
+
+unfix fxlan
+fix fxlan all langevin   0.5961621   0.5961621  1000.0     123456
+run 1000
+
+
+write_data  system_linked_after_min.data
+

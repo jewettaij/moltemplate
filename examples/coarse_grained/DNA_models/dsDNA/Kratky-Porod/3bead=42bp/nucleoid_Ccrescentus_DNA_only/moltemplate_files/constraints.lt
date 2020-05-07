@@ -1,8 +1,8 @@
 DNAPolymer {
   #(augment the definition of "DNAPolymer" by adding 2 bonds)
   write("Data Bonds") {
-    $bond:bond_link1 @bond:Periodic $atom:mon[0]/c1 $atom:mon[475]/c1
-    $bond:bond_link2 @bond:Periodic $atom:mon[476]/c1 $atom:mon[951]/c1
+    $bond:bond_link1 @bond:Periodic $atom:mon[0]/c1 $atom:mon[47618]/c1
+    $bond:bond_link2 @bond:Periodic $atom:mon[47619]/c1 $atom:mon[95237]/c1
   }
 
   write_once("In Settings") {

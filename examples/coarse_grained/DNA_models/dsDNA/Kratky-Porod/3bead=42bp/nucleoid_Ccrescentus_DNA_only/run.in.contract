@@ -1,3 +1,21 @@
+# GOAL:
+#   The conformation of the circular DNA is currently stretched in a straight
+#   line.
+#    
+#    linkers                                             linkers
+#      |                                                   |
+#      V                                                   V
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#        |                                               |
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#
+#   The opposite sides of the circular DNA are linked to each other
+#   accross the periodic boundary of the simulation box.  This keeps the
+#   polymer in a stretched conformation.
+#   This simulation will gradually unstretch the polymer by shrinking
+#   the length of the periodic simulation box, while simultaneously applying
+#   torque which encourages it to form supercoils as it relaxes.
+#   
 # PREREQUISITES:
 #
 #     You must use moltemplate.sh to create 3 files:
@@ -27,13 +45,19 @@ change_box all y final -330 330 z final -330 330
 include "system.in.settings"
 include "system.in.types" #<--optional custom atom types for twist motors
 
+# Confine the polymer in a cylindrical tube that minics a bacterial cell wall
 include "confinement_hard_cylinder_R=320_K=10_Rmax=330.in"
 
-neighbor 15.0 bin
-comm_modify mode single cutoff 47.0 vel yes
+# Because of the large size of the initial simulation box, we must override
+# the default size of the neighbor bins and communication distance settings.
+# http://lammps.sandia.gov/doc/neighbor.html
+# http://lammps.sandia.gov/doc/comm_modify.html
+
+neighbor 25.0 bin
+#comm_modify mode single cutoff 43.0 vel yes   (<-fails on some lammps versions)comm_modify mode single cutoff 57.0 vel yes
 
 
-# -- Run Section --
+# ------------------------------- Run Section -------------------------------
 
 include fix_twist.in
 
@@ -73,7 +97,7 @@ fix fxdef all deform 10 x final -850 850
 # Keep the chain centered in the X direction (so that it does not drift)
 fix fxcen all recenter 0.0 NULL NULL
 
-run 18000000
+run 180000000
 
 unfix fxcen
 unfix fxnve
@@ -83,11 +107,10 @@ unfix fxdef
 # Now let the polymer equilibrate for a little while without
 # changing the box size
 
-fix fxlan all langevin   0.5961621   0.596162   200000.0  3
+fix fxlan all langevin   0.5961621   0.596162   100000.0  3
 fix fxnve all nve
 fix fxcen all recenter 0.0 NULL NULL
-#run 2000000
-run 20000
+run 2000000
 unfix fxcen
 unfix fxnve
 unfix fxlan

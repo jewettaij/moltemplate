@@ -1,3 +1,5 @@
+simple confined DNA example
+==========
 This is an example demonstrating how to confine a polymer (eg. DNA)
 within an arbitrary shaped box (eg. the HIV viral capsid).
 
@@ -5,7 +7,7 @@ Initially, the conformation of the polymer is created with a combination
 of "ndmansfield" (a random self-avoiding-curve generator), smoothed with
 "interpolate_curve.py", and then re-scaled so that the spacing between points
 along the curve matches the desired spacing between monomers in the polymer.
-   (See "STEP_1_generate_coords.sh" for details.)
+(See "STEP_1_generate_coords.sh" for details.)
 
 Then the "genpoly_lt.py" tool is used to create a moltemplate file
 ("dna_polymer.lt") which defines a polymer which lies along the curve
@@ -13,27 +15,24 @@ created in step 1 (see above).  The "genpoly_lt.py" program is explained here:
 https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 Then moltemplate is invoked to create a LAMMPS data file and input script
 containing the polymer (as well as the box that it is contained within).
-   (See "STEP_2_generate_LAMMPS_files.sh" for details.)
+(See "STEP_2_generate_LAMMPS_files.sh" for details.)
 
------------
 
-Polymer Melts (Optional)
+## Polymer Melts (Optional)
 
 Note: In this example, there was only 1 polymer, but you can create a
 system with multiple polymers (of various lengths) confined in the same box
 by running the "genpoly_lt.py" script with the "-cuts" argument in step 2.
 This is a useful way to generate polymer melts.
 
------------
-
-Biological Details (Optional)
+## Biological Details (Optional)
 
 This example uses the "dsDNA_2beads=3bp_2019-10-19" DNA model, which has
 been tuned to have realistic geometry and mechanical properties of DNA,
 including a major/minor groove, helicity, length, persistence length,
 and torsional persistence length.
 
-WARNING: THIS IS NOT A REALISTIC MODEL OF DNA IN THE HIV VIRUS FOR THESE REASONS
+## WARNING: THIS IS NOT A REALISTIC MODEL OF DNA IN THE HIV VIRUS
 
 1) It is impossible to equilibrate a long confined polymer using this method.
 The length of the simulation is insufficient for the polymer to reach

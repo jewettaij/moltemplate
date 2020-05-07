@@ -284,7 +284,7 @@ cd moltemplate_files
   echo '' >> constraints.lt
   echo '  write_once("In Settings") {' >> constraints.lt
   echo "    # type of bond used to connect 2 ends of the polymer together" >> constraints.lt
-  echo "    bond_coeff @bond:Periodic harmonic 10.0 $L_MONOMER" >> constraints.lt
+  echo "    bond_coeff @bond:Periodic harmonic 10.0 $L_BOND" >> constraints.lt
   echo '  }' >> constraints.lt
   echo '}' >> constraints.lt
 

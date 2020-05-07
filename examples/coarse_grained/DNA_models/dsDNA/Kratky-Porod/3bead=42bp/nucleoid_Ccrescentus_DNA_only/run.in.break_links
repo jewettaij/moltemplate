@@ -1,11 +1,26 @@
+# GOAL:
+#   The conformation of the circular DNA is no longer stretched, however
+#   opposite ends of the circular polymer are connected to their periodic
+#   images accross the simulation box.
+#    
+#    linkers                                             linkers
+#      |                                                   |
+#      V                                                   V
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#        |                                               |
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#
+#   In this simulation we will break the linkers and allow the
+#   polymer to relax to a circular conformation.
+#    
+#        *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+#        |                                               |
+#        *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+#
 # PREREQUISITES:
 #
-#     You must use moltemplate.sh to create 3 files:
-#        system.data  system.in.init  system.in.settings
-#
-# In addition, you must minimize the system beforehand by running LAMMPS using
-# the "run.in.min" script.
-# This will generate the "system_after_min.data" file.
+#   You will need to run the simulations in STEP_3 ("run.in.contract")
+#   to produce the files that are needed for this stage of the simulation.
 
 
 # -- Init Section --
@@ -33,10 +48,16 @@ change_box all y final -330 330 z final -330 330
 include "system.in.settings"
 include "system.in.types" #<--optional custom atom types for twist motors
 
+# Confine the polymer in a cylindrical tube that minics a bacterial cell wall
 include "confinement_hard_cylinder_R=320_K=10_Rmax=330.in"
 
-neighbor 15.0 bin
-comm_modify mode single cutoff 47.0 vel yes
+# Because of the large size of the initial simulation box, we must override
+# the default size of the neighbor bins and communication distance settings.
+# http://lammps.sandia.gov/doc/neighbor.html
+# http://lammps.sandia.gov/doc/comm_modify.html
+
+neighbor 25.0 bin
+#comm_modify mode single cutoff 43.0 vel yes   (<-fails on some lammps versions)comm_modify mode single cutoff 57.0 vel yes
 
 
 # -- Run Section --
@@ -73,7 +94,7 @@ fix fxnve all nve
 # Keep the chain centered in the X direction (so that it does not drift)
 fix fxcen all recenter 0.0 NULL NULL
 
-run 8000000
+run 18000000
 
 unfix fxcen
 unfix fxnve

@@ -13,10 +13,10 @@ as rotary motors.
 There are two types of rotary motors implemented:
 
 1) Motors that apply a constant torque to the polymer
-https://www.youtube.com/watch?v=xU2QzDDmuyA
+https://www.youtube.com/watch?v=tnhUKxsAaqw
 
 2) Motors that twist at a constant rate
-https://www.youtube.com/watch?v=tnhUKxsAaqw
+https://www.youtube.com/watch?v=xU2QzDDmuyA
 
 ##    Prerequisites
 
