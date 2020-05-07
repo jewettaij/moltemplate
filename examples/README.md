@@ -8,7 +8,7 @@ Each directory contains one or more examples.
 
 Each example directory contains the following files and directories:
 
-|---------------------| -------------------------------------------------------|
+|---------------------|--------------------------------------------------------|
 | images/             | This folder has pictures of the molecules in the system|
 | moltemplate_files/  | This folder contains LT files and other auxiliary files|
 | README_setup.sh     | Instructions for how to use moltemplate (executable)   |
