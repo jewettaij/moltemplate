@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+ti#!/usr/bin/env bash
 # (note: Classic Bourne shell (#!/bin/sh) also worked at some point.)
 
 # Author: Andrew Jewett (jewett.aij at g mail)
@@ -673,12 +673,10 @@ while [ "$i" -lt "$ARGC" ]; do
         # the dump describe a bounding box around the system, not the system 
         # itself. See https://lammps.sandia.gov/doc/dump.html and https://lammps.sandia.gov/doc/Howto_triclinic.html
         if [ ${#box[@]} == 9 ]; then
-          xtilt[0]=$(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|head -1) # min
-          xtilt[1]=$(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n|tail -1) # max
-          ytilt[0]=$(echo "0.0 ${box[8]}"|xargs -n1|sort -n|head -1) # min
-          ytilt[1]=$(echo "0.0 ${box[8]}"|xargs -n1|sort -n|tail -1) # max
+          xtilt=( $(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n) )
+          ytilt=( $(echo "0.0 ${box[8]}"|xargs -n1|sort -n|head -1) )
           BOXSIZE_MINX=$(echo ${box[0]}" "${xtilt[0]} |awk '{print $1-$2}')
-          BOXSIZE_MAXX=$(echo ${box[1]}" "${xtilt[1]} |awk '{print $1-$2}')
+          BOXSIZE_MAXX=$(echo ${box[1]}" "${xtilt[3]} |awk '{print $1-$2}')
           BOXSIZE_MINY=$(echo ${box[3]}" "${ytilt[0]} |awk '{print $1-$2}')
           BOXSIZE_MAXY=$(echo ${box[4]}" "${ytilt[1]} |awk '{print $1-$2}')
           BOXSIZE_MINZ=${box[6]}
