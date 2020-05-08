@@ -674,7 +674,7 @@ while [ "$i" -lt "$ARGC" ]; do
         # itself. See https://lammps.sandia.gov/doc/dump.html and https://lammps.sandia.gov/doc/Howto_triclinic.html
         if [ ${#box[@]} == 9 ]; then
           xtilt=( $(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n) )
-          ytilt=( $(echo "0.0 ${box[8]}"|xargs -n1|sort -n|head -1) )
+          ytilt=( $(echo "0.0 ${box[8]}"|xargs -n1|sort -n) )
           BOXSIZE_MINX=$(echo ${box[0]}" "${xtilt[0]} |awk '{print $1-$2}')
           BOXSIZE_MAXX=$(echo ${box[1]}" "${xtilt[3]} |awk '{print $1-$2}')
           BOXSIZE_MINY=$(echo ${box[3]}" "${ytilt[0]} |awk '{print $1-$2}')
