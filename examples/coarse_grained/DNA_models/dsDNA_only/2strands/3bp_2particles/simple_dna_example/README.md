@@ -6,7 +6,7 @@ DNA using the coarse-grained "3bp2p" (3 base pairs = 2 particles) model.
 
 ##    Features
 
-1) This model has a double-helical conformation with a major and minor grooves.
+1) This model has a double-helical conformation with major and minor grooves.
 It can be used to model interaction of DNA with simple protein models
 that bind specifically to the major or minor grooves.
 2) The polymer can be bent arbitrarily far without kinking or numerical
