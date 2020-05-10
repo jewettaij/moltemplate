@@ -17,6 +17,11 @@ c) Enter:
    topo readlammpsdata system.data full
    animate write psf system.psf
 
+Suggestions for improving the appearance of the polymer
+can be found in the "README_visualize_long_polymers_VMD.txt" file
+located in the "suggestions_for_visualization" directory
+(which is outside this directory).
+
 2) 
 
 Later, to Load a trajectory in VMD:
