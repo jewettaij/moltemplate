@@ -93,7 +93,7 @@ fix fxlan all langevin   0.5961621   0.596162   5000000.0  3
 fix fxnve all nve
 
 # Lower the tension in the chain by compressing the system lengthwise
-fix fxdef all deform 10 x final -850 850
+fix fxdef all deform 10 x final -950 950
 # Keep the chain centered in the X direction (so that it does not drift)
 fix fxcen all recenter 0.0 NULL NULL
 
@@ -116,4 +116,4 @@ unfix fxnve
 unfix fxlan
 
 # Write the state of the system to a new file:
-write_data  system_linked_length=1700nm.data
+write_data  system_linked_length=1900nm.data

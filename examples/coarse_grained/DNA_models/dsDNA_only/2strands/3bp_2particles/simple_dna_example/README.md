@@ -24,14 +24,14 @@ and are not effected by the mass of the particles of the model.)
 Geometrical and mechanical properties of this DNA model (simulated at T=300K)
 are compared with experiment below:
 
-| property                                       |  this model  | experimenal |
-|------------------------------------------------|--------------|-------------|
-| persistence length:                            |  48.7101 nm  |     50 nm   |
-| torsional persistence length:                  | 109.9752 nm  |    110 nm   |
-| helical twist angle between monomers (3bp):    | 102.7797 deg |  see below  |
-| → helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |
-| distance along the axis between monomers (3bp):|  0.98293 nm  |  see below  |
-| → distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |
+| property                                       |  this model  | experimenal | ref |
+|------------------------------------------------|--------------|-------------|-----|
+| persistence length:                            |  48.7101 nm  |   46-48 nm  |  1  |
+| torsional persistence length:                  | 109.9752 nm  | 100-110 nm  |  1  |
+| helical twist angle between monomers (3bp):    | 102.7797 deg |  see below  |     |
+| → helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |  2  |
+| distance along the axis between monomers (3bp):|  0.98293 nm  |  see below  |     |
+| → distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |  2  |
 
 ##    Prerequisites
 
@@ -67,3 +67,9 @@ Finally, to run the LAMMPS simulation follow the instructions in this file:
 STEP_3_run_sim.sh
 You will have to edit the file to specify the name of the LAMMPS binary
 you are using (for example, "lmp_ubuntu"), and the number of processors
+
+## References
+
+1) Kriegel, F., Ermann, N., Forbes, R., Dulin, D., Dekker, N.H. and Lipfert, J., Nucleic Acids Research (2017), Vol. 45, No. 10, pp.5920-5929
+
+2) Sinden, Richard R. (1994-01-15). DNA structure and function (1st ed.). Academic Press. p. 398. ISBN 0-12-645750-6

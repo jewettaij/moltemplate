@@ -1,4 +1,4 @@
-examples
+Examples
 ================
 This directory contains examples for the
 "moltemplate" molecule builder for LAMMPS.

@@ -26,17 +26,17 @@ cd moltemplate_files
   # The "-helix 0.0" parameter represents the twist-per-monomer (Δφ) at the
   # start of the simulation.  It is proportional to the "supercoil-density" (σ)
   # The formula for the twist-per-monomer which is:
-  #    Δφ = -360*σ*(n_b/10.5)     (in degrees)
+  #    Δφ = 360*σ*(n_b/10.5)     (in degrees)
   # where n_b is the number of base pairs per monomer, and 10.5 is the
   # natural period of DNA twist in the relaxed state in base-pairs.
   # Example:
-  # genpoly_lt.py -helix -72.0 \
+  # genpoly_lt.py -helix 72.0 \
 
   # Incidentally, "0.5961621" = kB*T in kCal/mole (assuming T=300K)
 
   genpoly_lt.py \
       -circular yes \
-      -helix -14.1545 \
+      -helix 14.1545 \
       -bond Backbone c2 c1 \
       -dihedral Backbone r c2 c2 r 0 0 1 1 \
       -polymer-name 'DNAPolymer' \
@@ -156,7 +156,7 @@ cd moltemplate_files
 
   N_MONOMERS=`awk '{if ((NF>0) && (substr($1,1,1)!="#")) {n++}} END{print n}' < init_crds_polymer_backbone.raw`
 
-  TORQUE=1.10657  # in (kcal/mole)/radian
+  TORQUE=-1.10657 # in (kcal/mole)/radian
                   # SEE BELOW for an explanation how I estimated this number.
 
   # The "genpoly_modify_lt.py" script will add modifications to an existing
