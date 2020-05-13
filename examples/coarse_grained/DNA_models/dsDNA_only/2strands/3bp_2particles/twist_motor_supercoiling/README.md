@@ -58,3 +58,7 @@ Finally, to run the LAMMPS simulation follow the instructions in this file:
 STEP_3_run_sim.sh
 You will have to edit the file to specify the name of the LAMMPS binary
 you are using (for example, "lmp_ubuntu"), and the number of processors
+
+Note that the simulation was run without using a thermostat,
+so there is no random thermal motion in this simulation.
+(This can easily be switched on by editing the "run.in" file.)

@@ -110,7 +110,7 @@ cd moltemplate_files
   rm -rf output_ttree/
 
   # Optional: Delete other temporary files:
-  #rm -f init_crds_polymer_backbone.raw
+  rm -f init_crds_polymer_backbone.raw
   rm -f dna_polymer.lt
 
 cd ../

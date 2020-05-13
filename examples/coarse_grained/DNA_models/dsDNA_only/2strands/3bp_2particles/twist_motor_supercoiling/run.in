@@ -31,7 +31,13 @@ read_data       "system_after_min.data"
 # force field parameters:
 include         "system.in.settings"
 include         "system.in.types"
-include         "fix_twist_constant_rate.in"
+
+# load the twist motor settings (this will exert a constant torque)
+include         "fix_twist_torque_5_kcal_per_radian.in"
+
+# Note: To force twisting to occur at a constant rate, use this file instead:
+# include "fix_twist_constant_rate.in"
+
 
 # -- Run Section --
 
@@ -46,7 +52,10 @@ dump            1 all custom 200 traj.lammpstrj id mol type x y z ix iy iz
 
 #                        kB*Tstart   kB*Tstop   tdamp     randomseed
 
+# commenting out:
 #fix fxlan all langevin   0.5961621   0.596162  2000.0    123456
+
+# for this demonstration, turn off the thermostat (makes prettier movies)
 fix fxlan all langevin    0.0         0.0       5000.0    123456
 
  

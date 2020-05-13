@@ -7,4 +7,4 @@ interaction between bases (in DNA or RNA), then look outside this directory.
 
 (Note: At some point, some of the examples in this directory may include both
  DNA and RNA.  If so, any examples also containing RNA, either single or
- double-stranded, will be simple Kratky-Porod models only.  )
+ double-stranded, will be simple Kratky-Porod-like models only.)
