@@ -10,7 +10,7 @@
  (The DLPC model is a truncated version of DPPC. Modifications discussed below.)
  The protein model is described here:
       G. Bellesia, AI Jewett, and J-E Shea,
-      Protein Science, Vol19 141-154 (2010)
+      Protein Science, Vol 19, 141-154 (2010)
 
 --- PREREQUISITES: ---
 

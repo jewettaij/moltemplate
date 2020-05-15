@@ -1,6 +1,6 @@
 # "DNAForceField" is a moltemplate object containing only force-field 
 # information, atomic masses, and bond rules.
-# (Molecules are defined elsewhere and inherit the properties of DNAForceField.)
+# (Molecules are defined elsewhere and inherit these properties.)
 
 
 DNAForceField {
@@ -16,6 +16,8 @@ DNAForceField {
   # using a timestep (Δt) of 1.0 is numerically stable.  Using a
   # universal timestep such as 1.0 will make it easier in the future
   # to combine this DNA later with other coarse grained molecules.
+  # (See "dna_forcefield_more_comments.lt", located in the
+  #  "deriving_force_field_parameters" subdirectory, for details.)
   # Note: All masses are in units of  Δt^2*(energy_units)/(distance_units^2)
 
 
@@ -32,10 +34,10 @@ DNAForceField {
     #                                         qi=qj=6  (A-strand)
     #             i      j                  ke*qi*qj/eps_r      cutoff
 
-    pair_coeff @atom:A @atom:A   yukawa  14.94286719149112       7.001
+    pair_coeff @atom:A @atom:A   yukawa         14.943          7.001
 
     #                                         qi=qj=0  (B-strand reverse strand)
-    pair_coeff @atom:B @atom:B   yukawa   0.00000000000000       7.001
+    pair_coeff @atom:B @atom:B   yukawa          0.000          7.001
 
     # where    ke = 8.9875517873681764e09 J*m*C^-2 = 1/4*π*eps_0
     # and  qi = qj = -e = -1.6021766208e-19 C
@@ -43,6 +45,7 @@ DNAForceField {
     #  1 kcal = 6.0221409e+23 kcal/mole
     #     1 J = 1.4393262e+20 kcal/mole
     # and eps_r ~= is the relative dielectric permitivity = 80.0 for water
+    #    (Note: eps_r can vary by 15% at biologically relevant temperatures.)
     # and 1 m = 1.0e9 nm
     # In units of (kCal/mole)*nm*e^-2,  ke*qi*qj/eps_r = 0.415079644208
     # =8.9875517873681764e09*(6.0221409e+23/4184)*1e09*(1.6021766208e-19**2)/80
@@ -83,14 +86,14 @@ DNAForceField {
     # @bond:BasePair  is the bondlength between particles
     #                 in opposite strands
     
-    bond_coeff     @bond:BasePair  harmonic  281.3514  1.48169
+    bond_coeff     @bond:BasePair  harmonic  280  1.482
     
 
 
     # @bond:Backbone  is the bondlength between successive particles
     #                 belonging to the same strand.
     
-    bond_coeff @bond:Backbone  harmonic  133.2793 1.63803
+    bond_coeff @bond:Backbone  harmonic  135 1.637
     
   }
 
@@ -164,7 +167,7 @@ DNAForceField {
     # controls the helical pitch and torsional-persistence-length.
     
     dihedral_coeff @dihedral:MajorGroove    spherical 1  &
-                        20.8    1 80.6920 1     1 90 0         1 90 0
+                        20.8    1 80.7 1     1 90 0         1 90 0
     
 
 
