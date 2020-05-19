@@ -1,0 +1,62 @@
+# PREREQUISITES:
+#
+# 1)   You must copy the "fix_twist.cpp" and "fix_twist.h" files into
+#      LAMMPS' src/ subdirectory and recompile LAMMPS.
+#
+# 2)   You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#
+# ------------------------------- Initialization Section --------------------
+
+# The forces between DNA strands depend on the salt concentration,
+# so we must specify the salt concentration beforehand.
+# We do this indirectly by specifying the Debye length.  Do this now.
+
+variable debye_length equal 1.0
+
+# Now specify the force field styles and atom styles:
+include         "system.in.init"
+
+# ------------------------------- Atom Definition Section -------------------
+
+# atom geometry and topology:
+read_data       "system.data"
+
+# ------------------------------- Settings Section --------------------------
+
+# force field parameters:
+include         "system.in.settings"
+include         "system.in.types"
+include         "fix_twist.in"
+
+# ------------------------------- Run Section -------------------------------
+
+
+# -- minimization protocol --
+
+# Note: The minimization step is not necessary in this example.  However
+#       in general, it's always a good idea to minimize the system beforehand.
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo          5
+dump            1 all custom 10000 traj_min.lammpstrj id mol type x y z ix iy iz
+min_style cg
+min_modify dmax 0.05
+
+# To make visualization easier, keep the average position centered at 0,0,0.
+# (This will prevent the polymer from drifting away.)
+
+fix fxcen all recenter 0.0 0.0 0.0
+
+# Make sure the particles remain allocated evenly over the processors.
+# (roughly the same number of particles assigned to ever processor)
+
+fix fxbal all balance 500 1.03 shift xyz 20 1.03
+
+# Now minimize the system
+minimize 1.0e-7 1.0e-9 200000 500000
+
+
+# (The "write_restart" and "read_restart" commands were buggy in 2012, 
+#  but they should work also.  I prefer "write_data" and "read_data".)
+
+write_data   system_after_min.data

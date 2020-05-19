@@ -99,7 +99,6 @@ g_style_map = {'angle':     ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z
                'dipole':    ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z', 'mux', 'muy', 'muz'],
                'dpd':       ['atom-ID', 'atom-type', 'theta', 'x', 'y', 'z'],
                'electron':  ['atom-ID', 'atom-type', 'q', 'spin', 'eradius', 'x', 'y', 'z'],
-               #'ellipsoid': ['atom-ID', 'atom-type', 'x', 'y', 'z', 'quatw', 'quati', 'quatj', 'quatk'],
                'ellipsoid': ['atom-ID', 'atom-type', 'ellipsoidflag', 'density', 'x', 'y', 'z'],
                'full':      ['atom-ID', 'molecule-ID', 'atom-type', 'q', 'x', 'y', 'z'],
                'line':      ['atom-ID', 'molecule-ID', 'atom-type', 'lineflag', 'density', 'x', 'y', 'z'],

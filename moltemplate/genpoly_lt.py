@@ -50,7 +50,7 @@ Usage:
       [-cuts cuts.txt] \\
       [-polymer-directions polarities.txt \\
       [-dir-indices ia ib] \\
-      [-box paddingX,paddingY,paddingZ] \\
+      [-padding paddingX,paddingY,paddingZ] \\
       < coords.raw > polymer.lt
 
 """
@@ -329,7 +329,8 @@ class GPSettings(object):
                     raise InputError(
                         'Error: The two numbers following ' + argv[i] + ' must not be equal.\n')
                 del(argv[i:i + 3])
-            elif (argv[i].lower() == '-box'):
+            elif ((argv[i].lower() == '-padding') or
+                  (argv[i].lower() == '-box')):
                 if i + 1 >= len(argv):
                     raise InputError('Error: ' + argv[i] + ' flag should be followed ' +
                                      'by 3 numbers separated by commas (no spaces)\n')

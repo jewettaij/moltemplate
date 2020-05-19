@@ -41,7 +41,7 @@ from the terminal) and a python library.  The former is documented below.
       [-cuts cuts.txt] \
       [-polymer-directions polarities.txt] \
       [-dir-indices ia ib] \
-      [-box paddingX,paddingY,paddingZ] \
+      [-padding paddingX,paddingY,paddingZ] \
       < coords.raw > polymer.lt
 ```
 ## Arguments [optional]
@@ -243,7 +243,7 @@ from the terminal) and a python library.  The former is documented below.
                            long polymer using periodic boundary conditions,
                            with the two ends are connected on opposite sides.)
 
-    -box paddingX,paddingY,paddingZ
+    -padding paddingX,paddingY,paddingZ
                    This will cause the program to attempt to estimate the size
                    of the smallest rectangular box which encloses all of the
                    coordinates in the coordinate file.  The user must supply 3

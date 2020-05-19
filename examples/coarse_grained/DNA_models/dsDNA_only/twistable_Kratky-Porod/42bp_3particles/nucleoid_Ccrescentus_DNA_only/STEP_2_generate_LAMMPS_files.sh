@@ -21,6 +21,15 @@ cd moltemplate_files
   # Use "genpoly_lt.py" to create a polymer which follows the curve 
   # traced by the coordinates that we copied into this directory earlier.
   # (Note: "genpoly_lt.py" is distributed and installed along with moltemplate.)
+  # The "genpoly_lt.py" program generates a moltemplate file (.LT file)
+  # describing the polymer you want to simulate.  You must specify the
+  # name of the moltemplate object which will be used as the monomer subunit
+  # in the final polymer (eg. "DNAMonomer"), as well as any bonds (or angles
+  # or dihedrals) linking one monomer to the next monomer, as well as the
+  # helical twist angle (if applicable).  All of the details regarding
+  # the behaviour of the polymer are contained in the "dnamonomer.lt" file
+  # which defines the "DNAMonomer" object, as well as a link to the file
+  # which defines "DNAForceField" (which DNAMonomer uses).
   #
   # Notes on the arguments:
   # The "-helix 0.0" parameter represents the twist-per-monomer (Δφ) at the
@@ -30,20 +39,20 @@ cd moltemplate_files
   # where n_b is the number of base pairs per monomer, and 10.5 is the
   # natural period of DNA twist in the relaxed state in base-pairs.
   # Example:
-  # genpoly_lt.py -helix 72.0 \
+  # genpoly_lt.py -helix -72.0 \
 
   # Incidentally, "0.5961621" = kB*T in kCal/mole (assuming T=300K)
 
   genpoly_lt.py \
       -circular yes \
-      -helix 14.1545 \
+      -helix -14.1545 \
       -bond Backbone c2 c1 \
       -dihedral Backbone r c2 c2 r 0 0 1 1 \
       -polymer-name 'DNAPolymer' \
       -inherits 'DNAForceField'  \
       -monomer-name 'DNAMonomer' \
       -header 'import "dna_monomer.lt"' \
-      -box ${L_BOND},500,500 \
+      -padding ${L_BOND},500,500 \
       < init_crds_polymer_backbone.raw > dna_polymer.lt
 
 
@@ -147,8 +156,9 @@ cd moltemplate_files
   # If you don't want twist motors added to the polymer,
   # comment out this entire section.
 
-  echo "" >> dna_polymer.lt
-  echo "" >> dna_polymer.lt
+  echo '' >> dna_polymer.lt
+  echo 'import "dna_twist_motor.lt"' >> dna_polymer.lt
+  echo '' >> dna_polymer.lt
 
   # How many monomers are there in the polymer?
   # We can infer that from the number of non-empty lines in the
@@ -156,7 +166,7 @@ cd moltemplate_files
 
   N_MONOMERS=`awk '{if ((NF>0) && (substr($1,1,1)!="#")) {n++}} END{print n}' < init_crds_polymer_backbone.raw`
 
-  TORQUE=-1.10657 # in (kcal/mole)/radian
+  TORQUE=1.10657  # in (kcal/mole)/radian
                   # SEE BELOW for an explanation how I estimated this number.
 
   # The "genpoly_modify_lt.py" script will add modifications to an existing
@@ -173,11 +183,11 @@ cd moltemplate_files
     -locations-periodic 400 0 \
     -dihedral Disable r c2 c2 r 0 0 1 1 \
     -fix-nbody 4 "fix_twist.in" fxTw all twist torque r c2 c2 r 0 0 1 1 "$TORQUE" \
-    -set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 C1motor C1motor C1motor C1motor \
+    -set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 Rmotor C1motor C1motor Rmotor \
     >> dna_polymer.lt
 
-  # TORQUE = Twist Motor strength
-  # Set the twist equal to the torque necessary to introduce a supercoil
+  # How did we choose the TORQUE (twist motor strength) parameter?
+  # This would be the torque necessary to introduce a supercoil
   # density of σ (which is usually measured by experiment to be ~ 0.03-0.05).
   # This is difficult to know because it depends on the shape of the polymer.
   # The torque necessary to introduce a supercoil density σ into a straight

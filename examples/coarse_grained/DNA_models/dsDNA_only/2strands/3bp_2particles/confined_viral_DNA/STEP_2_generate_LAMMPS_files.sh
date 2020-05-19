@@ -21,7 +21,7 @@ cd moltemplate_files
                 -inherits 'DNAForceField'  \
                 -monomer-name 'DNAMonomer.scale(1,0.8,0.8)' \
                 -header 'import "dna_monomer.lt"' \
-                -box 20,20,20 \
+                -padding 20,20,20 \
                 < init_crds_polymer_backbone.raw > dna_polymer.lt
 
   # (Note: The "-helix" parameter represents the twist-per-monomer (Δφ) at the
