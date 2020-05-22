@@ -31,14 +31,15 @@ are compared with experiment below:
 | helical twist angle between monomers (3bp):    | 102.7797 deg |  see below  |     |
 | → helical twist angle between base-pairs:     |  34.2599 deg |   34.3 deg  |  2  |
 | distance along the axis between monomers (3bp):|  0.98293 nm  |  see below  |     |
-| → distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |  2  |
+| → distance along the axis between base-pairs: |  0.32764 nm  |   0.332 nm  |  3  |
 
 ##    Prerequisites
 
 LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
 If you receive this error message (or something similar):
-dihedral_style spherical: Unknown dihedral style
-you must recompile LAMMPS. (https://lammps.sandia.gov/doc/Build_package.html)
+"dihedral_style spherical: Unknown dihedral style", then you must follow
+[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+and recompile LAMMPS.
 
 ##    WARNING
 
@@ -72,4 +73,6 @@ you are using (for example, "lmp_ubuntu"), and the number of processors
 
 1) Kriegel, F., Ermann, N., Forbes, R., Dulin, D., Dekker, N.H. and Lipfert, J., Nucleic Acids Research (2017), Vol. 45, No. 10, pp.5920-5929
 
-2) Sinden, Richard R. (1994-01-15). DNA structure and function (1st ed.). Academic Press. p. 398. ISBN 0-12-645750-6
+2) Sinden, Richard R. (1994-01-15). "DNA structure and function" (1st ed.). Academic Press. p. 398. ISBN 0-12-645750-6
+
+3) Theodore J. Zwang, Sylvia Hurlimann, Michael G. Hill, and Jacque-line K. Barton, J Am Chem Soc (2016), 138(48):15551-15554, "Helix-dependent Spin Filtering through the DNA Duplex"

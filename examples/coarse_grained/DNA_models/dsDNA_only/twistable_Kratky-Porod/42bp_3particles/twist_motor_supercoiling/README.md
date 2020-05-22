@@ -18,18 +18,28 @@ https://www.youtube.com/watch?v=tnhUKxsAaqw
 2) Motors that twist at a constant rate
 https://www.youtube.com/watch?v=xU2QzDDmuyA
 
+Note: The polymer shown in those videos ("3bp2p") is different than the
+      polymer used in this example ("42bp3p"), however the behavior
+      of the twist motors is the same.
+
 ##    Prerequisites
 
 LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
-If you receive this error message (or something similar):
-dihedral_style spherical: Unknown dihedral style
-you must recompile LAMMPS. (https://lammps.sandia.gov/doc/Build_package.html)
+(https://lammps.sandia.gov/doc/Build_package.html)
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.
 (As of 2019-5-05, you must download "fix_twist.cpp" and "fix_twist.h" from
  https://github.com/jewettaij/lammps/tree/fix_twist/src/USER-MISC
  and copy those 2 files into the "src/" subdirectory of our LAMMPS folder,
  and re-compile LAMMPS.  Hopefully in the future this won't be necessary.)
+
+After enabling the packages you need (and, if necessary copying the
+"fix_twist.cpp" and "fix_twist.h" files), you must (re)compile LAMMPS
+to enable the features that this example uses.
+
+If, when running LAMMPS, you receive this error message
+"Unknown dihedral style", "Unknown fix", or something similar,
+it means you did not successfully follow the instructions above.
 
 ##    WARNING
 

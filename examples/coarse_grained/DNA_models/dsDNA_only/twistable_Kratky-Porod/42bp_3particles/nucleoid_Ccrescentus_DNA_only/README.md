@@ -92,14 +92,22 @@ new feature of LAMMPS called "fix twist".  (See "prerequisites" section.)
 
 ## Prerequisites
 
-This requires that LAMMPS has been compiled with the following packages enabled:
-   MOLECULAR, USER-MISC
+LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
+(https://lammps.sandia.gov/doc/Build_package.html)
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.
 (As of 2019-5-05, you must download "fix_twist.cpp" and "fix_twist.h" from
  https://github.com/jewettaij/lammps/tree/fix_twist/src/USER-MISC
  and copy those 2 files into the "src/" subdirectory of our LAMMPS folder,
  and re-compile LAMMPS.  Hopefully in the future this won't be necessary.)
+
+After enabling the packages you need (and, if necessary copying the
+"fix_twist.cpp" and "fix_twist.h" files), you must (re)compile LAMMPS
+to enable the features that this example uses.
+
+If, when running LAMMPS, you receive this error message
+"Unknown dihedral style", "Unknown fix", or something similar,
+it means you did not successfully follow the instructions above.
 
 
 ## How to run the simulation

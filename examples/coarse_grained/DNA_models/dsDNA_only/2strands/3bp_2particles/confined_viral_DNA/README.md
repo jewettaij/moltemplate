@@ -17,6 +17,13 @@ Then moltemplate is invoked to create a LAMMPS data file and input script
 containing the polymer (as well as the box that it is contained within).
 (See "STEP_2_generate_LAMMPS_files.sh" for details.)
 
+##    Prerequisites
+
+LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
+If you receive this error message (or something similar):
+"dihedral_style spherical: Unknown dihedral style", then you must follow
+[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+and recompile LAMMPS.
 
 ## Polymer Melts (Optional)
 
