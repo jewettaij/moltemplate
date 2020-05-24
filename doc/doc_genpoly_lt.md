@@ -119,9 +119,8 @@ from the terminal) and a python library.  The former is documented below.
              with 2 bonds connecting separate monomers (if each "monomer
              corresponds to a base pair).  If you want to add bonds between
              atoms in non-consecutive monomers, then you can instead use the
-             [genpoly_modify_lt.py](doc_genpoly_modify_lt.md)
-             program to add modifications to the polymer later
-             (That program supports the "-bond btype a1 a2 i1 i2"
+             genpoly_modify_lt.py program to add modifications to the polymer
+             later.  (That program supports the "-bond btype a1 a2 i1 i2"
              argument allowing you to specify monomer indices i1, i2.)
 
     -angle atype a1 a2 a3 i1 i2 i3
