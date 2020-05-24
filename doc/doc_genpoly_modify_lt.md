@@ -33,7 +33,7 @@ However this program can be used to modify any polymer (not just DNA).
       [-length num_monomers] \\
       [-locations filename] \\
       [-locations-periodic num_mods offset] \\
-      [-locations-random num_mods] \\
+      [-locations-random num_mods seed] \\
       [-mod-width mod_width] \\
       [-bond btype a1 a2 i1 i2] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
@@ -70,11 +70,13 @@ However this program can be used to modify any polymer (not just DNA).
              monomer will be modified.)  The length of the polymer need not
              be a multiple of num_mods.
 
-    -locations-random num_mods
+    -locations-random num_mods seed
              Alternatively, you can distribute these modifications randomly
-             along the length of the polymer.  Care is taken to avoid
-             overlap with each other.  You can control the minimum spacing
-             between modifications using the "-mod-width" argument.
+             along the length of the polymer.  In addition to the number of
+             modifications, you must also specify a seed for the random number
+             generator. (Any integer will do.)  Care is taken to avoid overlap
+             with each other.  You can control the minimum spacing between
+             modifications using the "-mod-width" argument.
 
     -mod-width mod_width
              Specify the minimum "width" of a modification generated using

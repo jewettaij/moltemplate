@@ -18,7 +18,7 @@ Usage:
       [-length num_monomers] \\
       [-locations filename] \\
       [-locations-periodic num_mods offset] \\
-      [-locations-random num_mods] \\
+      [-locations-random num_mods seed] \\
       [-mod-width mod_width] \\
       [-bond btype a1 a2 i1 i2] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
@@ -95,6 +95,7 @@ class GPModSettings(object):
         self.end_padding = 0  # (this should equal to the maximum index offset)
         self.nmods = 0
         self.mods_evenly_spaced = False
+        self.rand_seed = 0
         self.periodic_offset = 0
         self.mod_width = 1
         self.is_mod_here = [] # where should we make these modifications?
@@ -171,6 +172,7 @@ class GPModSettings(object):
         is_site_occupied = [ False for i in range(0, Navailable)]
         for i in range(0, self.nmods):
             is_site_occupied[i] = True
+        random.seed(self.rand_seed)
         random.shuffle(is_site_occupied)
 
         # Now fill the self.is_mod_here[] array, adding padding when necessary
@@ -261,10 +263,11 @@ class GPModSettings(object):
             elif argv[i].lower() in ('-locations-random', '-locationsrandom',
                                      '-loc-rand', '-locrand'):
                 if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a number\n')
+                    raise InputError('Error: '+argv[i]+' flag should be followed by 2 integers (n,seed)\n')
                 self.mods_evenly_spaced = False
                 self.nmods=int(argv[i+1])
-                del(argv[i:i + 2])
+                self.rand_seed = int(argv[i+2])
+                del(argv[i:i + 3])
 
             elif argv[i].lower() in ('-mod-width', '-modwidth'):
                 if i+1 >= len(argv):
@@ -670,9 +673,10 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $bond:gpm_bond' + str(i + 1))
                         if len(self.settings.bonds_type) > 1:
-                            outfile.write('_' + str(b + 1))
+                            outfile.write('    $bond:gpm_bond'+str(b+1)+'_'+str(i+1))
+                        else:
+                            outfile.write('    $bond:gpm_bond_'+str(i+1))
                         outfile.write(' @bond:' + self.settings.bonds_type[b] +
                                       ' $atom:mon[' + str(I) + ']/' + self.settings.bonds_atoms[b][0] +
                                       ' $atom:mon[' + str(J) + ']/' + self.settings.bonds_atoms[b][1] +
@@ -702,9 +706,10 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $angle:gpm_angle' + str(i + 1))
                         if len(self.settings.angles_type) > 1:
-                            outfile.write('_' + str(b + 1))
+                            outfile.write('    $angle:gpm_angle'+str(b+1)+'_'+str(i+1))
+                        else:
+                            outfile.write('    $angle:gpm_angle_'+str(i+1))
                         outfile.write(' @angle:' + self.settings.angles_type[b] +
                                       ' $atom:mon[' + str(I) + ']/' + self.settings.angles_atoms[b][0] +
                                       ' $atom:mon[' + str(J) + ']/' + self.settings.angles_atoms[b][1] +
@@ -737,9 +742,10 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $dihedral:gpm_dihedral' + str(i + 1))
                         if len(self.settings.dihedrals_type) > 1:
-                            outfile.write('_' + str(b + 1))
+                            outfile.write('    $dihedral:gpm_dihedral'+str(b+1)+'_'+str(i+1))
+                        else:
+                            outfile.write('    $dihedral:gpm_dihedral_'+str(i+1))
                         outfile.write(' @dihedral:' + self.settings.dihedrals_type[b] +
                                       ' $atom:mon[' + str(I) + ']/' + self.settings.dihedrals_atoms[b][0] +
                                       ' $atom:mon[' + str(J) + ']/' + self.settings.dihedrals_atoms[b][1] +
@@ -773,9 +779,10 @@ class GenPolyMod(object):
                             WrapPeriodic.bounds_err = False
                             if not self.settings.connect_ends:
                                 continue
-                        outfile.write('    $improper:gpm_improper' + str(i + 1))
                         if len(self.settings.impropers_type) > 1:
-                            outfile.write('_' + str(b + 1))
+                            outfile.write('    $improper:gpm_improper'+str(b+1)+'_'+str(i+1))
+                        else:
+                            outfile.write('    $improper:gpm_improper_'+str(i+1))
                         outfile.write(' @improper:' + self.settings.impropers_type[b] +
                                       ' $atom:mon[' + str(I) + ']/' + self.settings.impropers_atoms[b][0] +
                                       ' $atom:mon[' + str(J) + ']/' + self.settings.impropers_atoms[b][1] +

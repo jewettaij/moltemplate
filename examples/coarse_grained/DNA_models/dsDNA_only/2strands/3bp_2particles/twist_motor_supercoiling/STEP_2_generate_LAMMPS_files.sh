@@ -82,7 +82,9 @@ cd moltemplate_files
   # -fix-nbody 4 "fix_twist_rate_5.0_100_14400.in" fxTw all twist torque b a a b 1 1 2 2 "5.0 100 14400"
   # (WARNING:  Simulation can become numerically unstable if twisted too far.)
 
-  # OPTIONAL Delete the bond interfering with the twist motor.
+
+  # ---------- OPTIONAL -------------------------------------
+  # --- Delete the bond interfering with the twist motor. ---
   echo '' >> dna_polymer.lt
   echo 'DNAPolymer {' >> dna_polymer.lt
   # Note: We already disabled this bond using "-bond Disable b b 1 2"
@@ -93,8 +95,13 @@ cd moltemplate_files
   #       have names like "genp_bondi_j", where "j" indicates the monomer (from
   #       mod_locations.txt) and "i" represents the bond-per-monomer (2 here).
   awk -v N=$N_MONOMERS '{print "  delete genp_bond2_"($1+2)%N}' < mod_locations.txt >> dna_polymer.lt
-  awk -v N=$N_MONOMERS '{print "  delete gpm_bond"($1+1)%N"_2"}' < mod_locations.txt >> dna_polymer.lt
+  awk -v N=$N_MONOMERS '{print "  delete gpm_bond2_"($1+1)%N}' < mod_locations.txt >> dna_polymer.lt
   echo '}' >> dna_polymer.lt
+  # ---------- OPTIONAL -------------------------------------
+
+
+
+
 
   # Then run moltemplate on "system.lt".
   # (Note: "system.lt" contains a reference to the polymer file we created.)
