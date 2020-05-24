@@ -271,7 +271,7 @@ class GPModSettings(object):
                     raise InputError('Error: '+argv[i]+' flag should be followed by an integer.\n')
                 self.mod_width=int(argv[i+1])
                 if self.mod_width < 1:
-                    raise InputError('Error: '+argv[i]+' flag should be followed by an integer > 1.\n')
+                    raise InputError('Error: '+argv[i]+' flag should be followed by an integer >= 1.\n')
                 del(argv[i:i + 2])
 
             elif argv[i].lower() == '-length':

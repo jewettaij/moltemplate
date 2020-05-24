@@ -114,14 +114,19 @@ from the terminal) and a python library.  The former is documented below.
              between atoms named a1 and a2 (all three arguments are strings and
              omit the @bond: and $atom: prefixes in moltemplate variables)
              Multiple bonds between successive monomers can be added by having
-             "-bond bt a1 a2" appear several times in the argument list.
+             "-bond btype a1 a2" appear several times in the argument list.
              For example, double-stranded DNA can be implemented as a polymer
              with 2 bonds connecting separate monomers (if each "monomer
-             corresponds to a base pair).
+             corresponds to a base pair).  If you want to add bonds between
+             atoms in non-consecutive monomers, then you can instead use the
+             [genpoly_modify_lt.py](doc_genpoly_modify_lt.md)
+             program to add modifications to the polymer later
+             (That program supports the "-bond btype a1 a2 i1 i2"
+             argument allowing you to specify monomer indices i1, i2.)
 
     -angle atype a1 a2 a3 i1 i2 i3
              Add a 3-body angle interaction between atoms a1 a2 a3 in monomers
-             i1 i2 and i3.  (The aname atype a1, a2, a3 arguments are strings
+             i1 i2 and i3.  (The atype a1, a2, a3 arguments are strings
              containing moltemplate variable names. The standard moltemplate
              prefixes "$angle:", "@angle:", and "$atom:" should be omitted.
              The i1, i2, i3 arguments are integer indices indicating the monomer
@@ -138,7 +143,7 @@ from the terminal) and a python library.  The former is documented below.
 
     -dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4
              Add a 4-body dihedral interaction between atoms a1 a2 a3 a4 in
-             monomers i1 i2 and i3.  (The dname dtype a1, a2, a3, a4, arguments
+             monomers i1 i2 and i3.  (The dtype a1, a2, a3, a4, arguments
              are strings containing moltemplate variable names. The moltemplate
              prefixes "$dihedral:", "@dihedral:", and "$atom:" should be omitted
              The i1, i2, i3, i4 arguments are integer indices indicating the
@@ -151,7 +156,7 @@ from the terminal) and a python library.  The former is documented below.
 
     -improper itype a1 a2 a3 a4 i1 i2 i3 i4
              Add a 4-body improper interaction between atoms a1 a2 a3 a4 in
-             monomers i1 i2 and i3.  (The iname itype a1, a2, a3, a4, arguments
+             monomers i1 i2 and i3.  (The itype a1, a2, a3, a4, arguments
              are strings containing moltemplate variable names. The moltemplate
              prefixes "$improper:", "@improper:", and "$atom:" should be omitted
              The i1, i2, i3, i4 arguments are integer indices indicating the
@@ -230,7 +235,12 @@ from the terminal) and a python library.  The former is documented below.
              that axis.
              
     -circular keyword
-       keyword must be one of these:
+       Inform the program that the polymer is circular.
+       In order to enable interactions between monomers at opposite ends of a
+       circular polymer, you must use the "-circular yes" or "-circle connected"
+       arguments.  This allows you to use monomer indices in the polymer which
+       may wrap around the polymer.  (Otherwise an error is generated.)
+       "keyword" must be one of these choices:
              "no"          The polymer is a linear chain with the two ends
                            not connected.  (default)
              "yes"         The polymer is a circular loop with the two ends
