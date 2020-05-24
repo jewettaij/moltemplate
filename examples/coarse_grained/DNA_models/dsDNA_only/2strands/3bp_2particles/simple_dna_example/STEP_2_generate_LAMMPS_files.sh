@@ -12,7 +12,8 @@ cd moltemplate_files
   # helical twist angle (if applicable).  All of the details regarding
   # the behaviour of the polymer are contained in the "dnamonomer.lt" file
   # which defines the "DNAMonomer" object, as well as a link to the file
-  # which defines "DNAForceField" (which DNAMonomer uses).
+  # which defines "DNAForceField" (which DNAMonomer uses).  For details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 
   genpoly_lt.py -helix 102.7797 \
                 -bond Backbone a a \
