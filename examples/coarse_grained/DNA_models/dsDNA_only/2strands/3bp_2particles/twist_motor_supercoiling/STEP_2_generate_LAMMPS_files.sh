@@ -13,7 +13,8 @@ cd moltemplate_files
   # helical twist angle (if applicable).  All of the details regarding
   # the behaviour of the polymer are contained in the "dnamonomer.lt" file
   # which defines the "DNAMonomer" object, as well as a link to the file
-  # which defines "DNAForceField" (which DNAMonomer uses).
+  # which defines "DNAForceField" (which DNAMonomer uses).  For details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 
   genpoly_lt.py -circular yes \
                 -helix 102.7797 \
@@ -55,7 +56,8 @@ cd moltemplate_files
   # many modifications to the polymer.
   # In our case it will modify the polymer to add a twist motor.
   # The position of that motor is in the file "mod_locations.txt"
-  # (which currently only has one entry).
+  # (which currently only has one entry).  For more details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_modify_lt.md
 
   genpoly_modify_lt.py \
       -circular yes \

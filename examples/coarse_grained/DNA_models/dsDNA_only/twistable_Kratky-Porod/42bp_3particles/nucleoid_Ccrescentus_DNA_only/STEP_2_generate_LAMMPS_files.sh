@@ -32,7 +32,7 @@ cd moltemplate_files
   # which defines "DNAForceField" (which DNAMonomer uses).
   #
   # Notes on the arguments:
-  # The "-helix 0.0" parameter represents the twist-per-monomer (Δφ) at the
+  # The "-helix" parameter represents the twist-per-monomer (Δφ) at the
   # start of the simulation.  It is proportional to the "supercoil-density" (σ)
   # The formula for the twist-per-monomer which is:
   #    Δφ = 360*σ*(n_b/10.5)     (in degrees)
@@ -40,8 +40,8 @@ cd moltemplate_files
   # natural period of DNA twist in the relaxed state in base-pairs.
   # Example:
   # genpoly_lt.py -helix -72.0 \
-
-  # Incidentally, "0.5961621" = kB*T in kCal/mole (assuming T=300K)
+  # For details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 
   genpoly_lt.py \
       -circular yes \
@@ -176,6 +176,8 @@ cd moltemplate_files
   # Here we use it to add twist motors (and disable any preexisting dihedral
   # interactions that would otherwise prevent those twist motors from spinning).
   # (We also change the atom types for visualization purposes only.)
+  # For more details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_modify_lt.md
 
   genpoly_modify_lt.py \
     -polymer-name DNAPolymer \
@@ -380,6 +382,8 @@ cd ../
   #    -Ldebye-cut 0.0 \
   #    -escale 0.5961621 \
   #    >> dna_forcefield_nb.lt
+  #
+  # Incidentally, "0.5961621" = kB*T in kCal/mole (assuming T=300K)
   #
   ## Define the interaction between the DNAForceField/R particles with all
   ## other particles ("*"). Set the barrier-height to 0 to turn off these forces

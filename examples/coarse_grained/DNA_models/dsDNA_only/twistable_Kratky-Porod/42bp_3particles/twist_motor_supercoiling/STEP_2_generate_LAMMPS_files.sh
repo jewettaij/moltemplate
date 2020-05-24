@@ -19,7 +19,7 @@ cd moltemplate_files
   # which defines "DNAForceField" (which DNAMonomer uses).
 
   # Notes on the arguments:
-  # The "-helix 0.0" parameter represents the twist-per-monomer (Δφ) at the
+  # The "-helix" parameter represents the twist-per-monomer (Δφ) at the
   # start of the simulation.  It is proportional to the "supercoil-density" (σ)
   # The formula for the twist-per-monomer which is:
   #    Δφ = 360*σ*(n_b/10.5)     (in degrees)
@@ -27,6 +27,8 @@ cd moltemplate_files
   # natural period of DNA twist in the relaxed state in base-pairs.
   # Example:
   # genpoly_lt.py -helix -14.1545 \
+  # For details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 
   genpoly_lt.py \
       -circular yes \
@@ -169,7 +171,8 @@ cd moltemplate_files
   # many modifications to the polymer.
   # In our case it will modify the polymer to add a twist motor.
   # The position of that motor is in the file "mod_locations.txt"
-  # (which currently only has one entry).
+  # (which currently only has one entry).  For more details, see:
+  # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_modify_lt.md
 
   genpoly_modify_lt.py \
     -polymer-name DNAPolymer \
