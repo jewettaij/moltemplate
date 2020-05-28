@@ -13,10 +13,13 @@
 
 lmp_mpi -i run.in.min  # Minimize the system (important, and very slow)
 
-lmp_mpi -i run.in.compress  # Compress the vesicle. (This helps close up any
-                            # remaining holes in the vesicle created by PACKMOL)
+lmp_mpi -i run.in.make_uniform  # Trap the lipids between concentric spherical
+                                # shells and equilibrate.  This insures
+                                # that the lipids are distributed uniformly
+                                # on the spherical surface.  (Unfortunately,
+                                # PACKMOL does not guarantee this.)
 
-lmp_mpi -i run.in.nvt  # Run a simulation at constant volume
+lmp_mpi -i run.in.nvt  # Run a simulation at constant volume (production run)
 
 
 
