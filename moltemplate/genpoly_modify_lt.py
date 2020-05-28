@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.1.1'
-g_date_str     = '2020-4-15'
+g_version_str  = '0.2.0'
+g_date_str     = '2020-5-25'
 
 g_usage_msg = """
 
@@ -58,6 +58,248 @@ class InputError(Exception):
 
     def __repr__(self):
         return str(self)
+
+
+
+
+def FindNearestAvailableSite(I, # target index. look for a position closest to I
+                             width,  # number of needed consecutive vacant sites
+                             occupancy,     # an array of True,False values
+                             is_periodic):  # consider "wrap around" indexing?
+    """
+    Look for an interval containing "width" vacant sites in the occupancy array
+    (an array of True or False values) whose start is nearest to location I.
+    """
+    N = len(occupancy)
+    # Check and see if site I is available.  If not, skip to the next site,
+    # (either before or after this site).
+    if is_periodic:
+        j_stop = N // 2
+    else:
+        j_stop = max(-width+N-I, I)
+    occupied = True
+    for j in range(0, j_stop):
+        occupied = True
+        for s in (-1, 1):
+            if I+s*j < 0:
+                continue
+            if I+s*j >= N:
+                continue
+            # Is location "I+s*j" available for an object of size "width"?
+            # If so, all sites from [I+s*j, I+s*j+width) must not be occupied.
+            occupied = False
+            for d in range(0, width):
+                if not is_periodic:
+                    if I+s*j+d < 0:
+                        occupied = True
+                        continue
+                    if I+s*j+d >= N:
+                        occupied = True
+                        continue
+                if occupancy[(I+s*j+d) % N]:
+                    occupied = True
+                    break
+            if not occupied:
+                break
+        if not occupied:
+            break
+    if occupied:
+        return -1
+    else:
+        return I+s*j
+
+
+
+
+def DistributePeriodic(widths,       # width of each object (>0)
+                       occupancy,   # already occupied sites in the lattice
+                       is_periodic=False, # is the lattice periodic?
+                       offset=None):     # shift placment of first object?
+    """
+    n = len(widths)
+    N = len(occupancy)
+    Choose n integers from the interval [0,...,N-1] which are as
+    evenly-spaced as possible, subject to the following constraints:
+    1) Each of the n integers represents the position of an object which
+       occupies "width" sites in a lattice with sites numbered [0, ..., N-1].
+    2) Objects must avoid sites on the lattice which are already occupied.
+    3) OPTIONAL: By default, the first integer is chosen arbitrarily.
+       However you can specify the position of the first integer by providing
+       an "offset" argument (an integer >=0). It will be the first of the n
+       integers generated (or the closest available site to that location).
+    The function returns a list of the n chosen integers.
+    """
+
+    n = len(widths)
+    max_width = max(widths)
+    N = len(occupancy)
+    locations = [-1 for i in range(0, n)]
+
+    if is_periodic:
+        Nreduced = N
+    else:
+        Nreduced = N - max_width
+    # the next if statement is probably unnecessary (nobody invokes it this way)
+    if offset == None:
+        if is_periodic:
+            offset = 0
+        else:
+            offset = Nreduced / (2*n)
+    for i in range(0, n):
+        I = offset + (N*i) // n  # next location?
+        # If we didn't have to worry about occupancy, then we would de done now.
+        # However if it is occupied, we have to find nearby unnoccupied sites:
+        J = FindNearestAvailableSite(I, widths[i], occupancy, is_periodic)
+        if J == -1:
+            raise InputError('Error('+g_program_name+
+                             '): Not enough available sites.\n')
+        else:
+            locations[i] = J
+            for d in range(0, widths[i]):
+                assert(occupancy[(J+d) % N] == False)
+                occupancy[(J+d) % N] = True
+
+    for i in range(0, n):          # error check: make sure that we remembered
+        assert(locations[i] != -1) # to specify all the entries in locations[]
+
+    return locations
+
+
+
+
+def _DistributeRandom(widths,           # width of each object (>0)
+                      occupancy,        # already occupied sites
+                      is_periodic=False, # is the lattice periodic?
+                      rand_seed=None):  # specify the random seed
+    """
+    Generate random non-overlapping integers in a 1-D lattice, taking care to
+    avoid previously occupied lattice sites. Each integer has width "widths[i]",
+    meaning that it occupies "widths[i]" sites on the lattice.  (The algorithm
+    places each integer by inserting random amounts of space between them,
+    taking into consideration their widths and the total lattice size.) Overlaps
+    between integers with eachother and previously occupied sites are avoided.
+    When there are previously occupied lattice sites, the algorithm used here
+    is not smart enough to guarantee that it will place the objects in a truly
+    random way, or even succeed in placing them at all.
+    Running time: O(N), where N is the number of sites in the lattice.
+    """
+
+    n = len(widths)
+    N = len(occupancy)
+    locations = [-1 for i in range(0, n)]
+
+    # "Nreduced" is the number of available sites in the "reduced" lattice.
+    # Putting objects of width 1 (lattice site) in the reduced lattice
+    # gives you the same number of choices that you would have by putting
+    # objects of variable width in the original lattice.
+    # So we will place width 1 objects in the reduced lattice, randomize their
+    # position, and then figure out where they would be in the original lattice
+    # by inserting widths[i]-1 new lattice sites following each object placment.
+    # (Unfortunately, by placing objects in the reduced lattice, it's not
+    #  obvious where they end up in the original lattice.  So its difficult
+    #  to take into consideration which sites in the original lattice previously
+    #  occupied and not available.  We will have to correct for overlaps with
+    #  previously occupied sites later.  This is a limitation of this approach.)
+
+    sum_widths = 0
+    for i in range(0, n):
+        sum_widths += widths[i]
+
+    Nreduced = N - (sum_widths - n)  # size of the reduced lattice
+
+    if Nreduced < n:
+        raise InputError('Error('+g_program_name+'): Not enough space.\n')
+    occupancy_reduced = [ -1 for i in range(0, Nreduced)]
+    for i in range(0, n):
+        occupancy_reduced[i] = i
+    if rand_seed != None:
+        random.seed(rand_seed)
+    random.shuffle(occupancy_reduced)
+    offset = 0
+    if is_periodic:
+        # (complicated boring detail)  By definition, each modification
+        # occupies "self.mod_width" monomers in the polymer.
+        # In principle, the modification could occupy sites on the
+        # polymer which cross the boundary between the last monomer
+        # and the first monomer.  To allow this to happen, assume this does
+        # not happen (as we have done so far), and then cyclically shift
+        # the entries.  (The shift amount should be a random integer from
+        # 0, max(widths)-1)
+        offset = random.randint(0, max(widths)-1)
+
+    # Index variables
+    # i  =  which integer are we generating (ie. which object are we locating)
+    # Ir =  which position in the reduced size lattice are we considering?
+    # I  =  which position in the full size lattice are we considering?
+
+    I = 0
+    for Ir in range(0, Nreduced):
+        i = occupancy_reduced[Ir]
+        if i != -1:
+            # Then "I" is the target site (in the original lattice) for
+            # the i'th object we want to place.  Figure out whether site "I"
+            # is available.  If not, find the nearest available site.
+            J = FindNearestAvailableSite(I+offset,
+                                         widths[i],
+                                         occupancy,
+                                         is_periodic)
+            if J == -1:
+                return None   #packing was unsuccessful during this attempt
+            locations[i] = J
+            for d in range(0, widths[i]):
+                assert(occupancy[(J+d) % N] == False)
+                occupancy[(J+d) % N] = True
+            I += widths[i]
+        else:
+            I += 1
+
+    for i in range(0, n):          # error check: make sure that we remembered
+        assert(locations[i] != -1) # to specify all the entries in locations[]
+
+    return locations
+
+
+
+
+def DistributeRandom(widths,           # the width of each object (>0)
+                     occupancy,        # already occupied sites
+                     is_periodic=False, # is the lattice periodic?
+                     rand_seed=None,   # specify the random seed
+                     num_attempts=20): # number of randomly generated attempts
+    """
+    Generate random non-overlapping integers in a 1-D lattice, taking care to
+    avoid previously occupied lattice sites. Each integer has width "widths[i]",
+    meaning that it occupies "widths[i]" sites on the lattice.  (The algorithm
+    places each integer by inserting random amounts of space between them,
+    taking into consideration their widths and the total lattice size.) Overlaps
+    between integers with eachother and previously occupied sites are avoided.
+    When there are previously occupied lattice sites, the algorithm used here
+    is not smart enough to guarantee that it will place the objects in a truly
+    random way, or even succeed in placing them all.  So this function will
+    attempt random placements a certain number of times before giving up.
+    However, for sparsely occupied lattices, the number of attempts before
+    success is O(1), and each attempt requires O(N) time (N=size of lattice)
+    resulting in a running time of O(N), in that case.
+    """
+    if rand_seed == None:
+        rand_seed = random.randrange(sys.maxsize)
+
+    for i in range(0, num_attempts):
+        occupancy_cpy = [I for I in occupancy] # a fresh copy of occupancy array
+        L = _DistributeRandom(widths,
+                              occupancy_cpy,
+                              rand_seed+i,
+                              None)
+        if L != None:
+            for I in range(0, len(occupancy)):  # if successful, then
+                occupancy[I] = occupancy_cpy[I] # copy back into occupancy array
+            break
+    if L == None:
+        raise InputError('Error('+g_program_name+
+                         '): Not enough space.\n'+
+                         '      (Quit after '+str(num_attempts)+
+                         ' packing attempts.)\n')
+    return L
 
 
 
