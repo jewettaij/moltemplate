@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.17.8"
-G_DATE="2020-5-25"
+G_VERSION="2.17.9"
+G_DATE="2020-5-29"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -16,7 +16,9 @@ echo "" >&2
 # I prefer python2 over python3 because python3 requires slightly more memory
 # (and has more bugs).  So use python2 (2.7) when available.
 
-if which python > /dev/null; then
+if which python3 > /dev/null; then
+    PYTHON_COMMAND='python3'
+elif which python > /dev/null; then
     PYTHON_COMMAND='python'
 else
     echo "Error:  $G_PROGRAM_NAME requires python" >&2
