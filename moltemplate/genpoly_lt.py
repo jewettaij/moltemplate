@@ -126,13 +126,13 @@ class GPSettings(object):
                 (argv[i].lower() == '-i')):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a file name.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name.\n')
                 self.infile_name = argv[i + 1]
                 del(argv[i:i + 2])
             elif argv[i].lower() == '-bond':
                 if i + 3 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 3 strings.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 3 strings.\n')
                 # self.bonds_name.append(argv[i+1])
                 self.bonds_type.append(argv[i + 1])
                 self.bonds_atoms.append((argv[i + 2],
@@ -142,7 +142,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-angle':
                 if i + 7 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 4 strings and 3 integers.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 4 strings and 3 integers.\n')
                 # self.angles_name.append(argv[i+1])
                 self.angles_type.append(argv[i + 1])
                 self.angles_atoms.append((argv[i + 2],
@@ -160,7 +160,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-dihedral':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.dihedrals_name.append(argv[i+1])
                 self.dihedrals_type.append(argv[i + 1])
                 self.dihedrals_atoms.append((argv[i + 2],
@@ -181,7 +181,7 @@ class GPSettings(object):
             elif argv[i].lower() == '-improper':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.impropers_name.append(argv[i+1])
                 self.impropers_type.append(argv[i + 1])
                 self.impropers_atoms.append((argv[i + 2],
@@ -202,25 +202,25 @@ class GPSettings(object):
             elif (argv[i].lower() == '-monomer-name'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a string\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a string\n')
                 self.name_monomer = argv[i + 1]
                 del(argv[i:i + 2])
             elif (argv[i].lower() == '-sequence'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name\n')
                 self.name_sequence_file = argv[i + 1]
                 del(argv[i:i + 2])
 
             elif (argv[i].lower() == '-cuts'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name\n')
                 try:
                     f = open(argv[i + 1], "r")
                 except IOError:
                     raise InputError(
-                        'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
+                        'Error: File "' + argv[i + 1] + '" could not be opened for reading\n')
                 for line_orig in f:
                     line = line_orig.strip()
                     ic = line.find('#')
@@ -238,12 +238,12 @@ class GPSettings(object):
             elif (argv[i].lower() == '-polymer-directions'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a file name\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name\n')
                 try:
                     f = open(argv[i + 1], "r")
                 except IOError:
                     raise InputError(
-                        'Error: file ' + argv[i + 1] + ' could not be opened for reading\n')
+                        'Error: File "' + argv[i + 1] + '" could not be opened for reading\n')
                 for line_orig in f:
                     line = line_orig.strip()
                     ic = line.find('#')
@@ -268,13 +268,13 @@ class GPSettings(object):
             elif (argv[i].lower() == '-polymer-name'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a string\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a string\n')
                 self.name_polymer = argv[i + 1]
                 del(argv[i:i + 2])
             elif (argv[i].lower() == '-inherits'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a string\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a string\n')
                 self.inherits = argv[i + 1]
                 if self.inherits.find('inherits ') == 0:
                     self.inherits = ' ' + self.inherits
@@ -286,20 +286,20 @@ class GPSettings(object):
             elif (argv[i].lower() == '-header'):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a string (usually in quotes)\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a string (usually in quotes)\n')
                 if self.header != '':
                     self.header += '\n'
                 self.header += argv[i + 1]
                 del(argv[i:i + 2])
             elif argv[i].lower() == '-axis':
                 if i + 1 >= len(argv):
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed ' +
+                    raise InputError('Error: The ' + argv[i] + ' flag should be followed ' +
                                      'by 3 numbers separated by commas (no spaces)\n')
                 self.direction_orig = list(map(float, argv[i + 1].split(',')))
                 del(argv[i:i + 2])
             elif argv[i].lower() == '-circular':
                 if i + 1 >= len(argv):
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed by an argument\n' +
+                    raise InputError('Error: The ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
                 if argv[i + 1].lower() == 'yes':
                     self.connect_ends = True
@@ -311,19 +311,19 @@ class GPSettings(object):
                     self.connect_ends = False
                     self.is_circular = False
                 else:
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed by an argument\n' +
+                    raise InputError('Error: The ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
                 del(argv[i:i + 2])
             elif argv[i].lower() == '-helix':
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a number (angle in degrees)\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a number (angle in degrees)\n')
                 self.delta_phi = float(argv[i + 1])
                 del(argv[i:i + 2])
             elif (argv[i].lower() == '-dir-indices'):
                 if i + 2 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by two integers\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by two integers\n')
                 self.dir_index_offsets = (int(argv[i + 1]), int(argv[i + 2]))
                 if self.dir_index_offsets[0] == self.dir_index_offsets[1]:
                     raise InputError(
@@ -332,7 +332,7 @@ class GPSettings(object):
             elif ((argv[i].lower() == '-padding') or
                   (argv[i].lower() == '-box')):
                 if i + 1 >= len(argv):
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed ' +
+                    raise InputError('Error: The ' + argv[i] + ' flag should be followed\n' +
                                      'by 3 numbers separated by commas (no spaces)\n')
                 self.box_padding = list(map(float, argv[i + 1].split(',')))
                 if len(self.box_padding) == 1:

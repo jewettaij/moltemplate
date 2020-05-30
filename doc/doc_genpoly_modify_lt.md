@@ -8,6 +8,11 @@ Modify an existing polymer by adding (or overriding) bonds, or bonded
 interactions, changing atom types, or adding constraint fixes
 at *selected monomers* within an existing polymer created with
 [genpoly_lt.py](doc_genpoly_lt.md).
+Like genpoly_lt.py, this program creates (or augments) a moltemplate LT file
+containing the definition of a polymer.  You will have to use moltemplate.sh
+to convert this polymer(s) into a system that can be simulated in LAMMPS.
+(This program does not communicate with LAMMPS directly.)
+
 Unlike *genpoly_lt.py*, these modifications are typically made to
 only a subset of the monomers in the polymer.
 This program is a convenient way to adding the same modification
@@ -16,6 +21,14 @@ The user typically supplies a file specifying the locations along
 the polymer where you would like the modification to occur.
 (You can also distribute them automatically at periodic or randomly
  spaced locations.)
+
+When you run this program, the same modification is made
+(typically multipe times) along the length of your polymer.
+However if you need to make multiple different *kinds* of modifications
+to the polymer, you can invoke this program multiple times at different
+locations, concatenating the results each time to the end of the LT file
+that describes your polymer
+
 
 ### Purpose
 
@@ -34,7 +47,7 @@ However this program can be used to modify any polymer (not just DNA).
       [-locations filename] \\
       [-locations-periodic num_mods offset] \\
       [-locations-random num_mods seed] \\
-      [-mod-width mod_width] \\
+      [-width mod_width] \\
       [-bond btype a1 a2 i1 i2] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
@@ -76,14 +89,16 @@ However this program can be used to modify any polymer (not just DNA).
              modifications, you must also specify a seed for the random number
              generator. (Any integer will do.)  Care is taken to avoid overlap
              with each other.  You can control the minimum spacing between
-             modifications using the "-mod-width" argument.
+             modifications using the "-width" argument.
 
-    -mod-width mod_width
+    -width mod_width
              Specify the minimum "width" of a modification generated using
              the "-locations-random" argument.  Equivalently, this is (1+) the
              minimum space allowed between randomly generated modifications.
              (If left unspecified, it is 1 by default.  This means that the
              modification can be placed at successive monomers along the chain.)
+             If you plan to add multiple different kinds of modifications,
+             you can use the -widths argument instead.  (See examples below.)
 
     -bond btype a1 a2 i1 i2
              Add a bond interaction between atoms a1 and a2 in monomers, located
@@ -249,6 +264,179 @@ However this program can be used to modify any polymer (not just DNA).
        
 
 ```
+
+## Multiple types of modifications
+
+If you plan to insert multiple *different types* of modifications to the same
+polymer, then things are more complicated because you have to figure out
+where to place these modifications on the polymer *while preventing overlaps*.
+This issue arises, for example, if you have many different kinds of proteins
+that you wish to bind to a long DNA polymer (and each of them potentially
+occupies a different amount of space on that polymer, or is distributed
+in a different way).
+
+In such cases are complicated and you may prefer to write your own script
+to generate your own polymer from scratch.  Alternately, you could
+create a script which generates the positions of these modifications
+and then use "genpoly_modify_lt.py" along with the "-locations" argument
+to modify an existing polymer for you.
+
+In this portion of the documentation, I try to explain the procedure that
+I use to create custom polymers.
+While this procedure is messy, it works for a wide variety of polymers.
+No extra scripts are required, but (again) many users my prefer to bypass
+this process and create their own polymer builder from scratch.
+
+Recall that all of the modifications made by the "genpoly_modify_lt.py" program
+are identical.  So if you have multiple different *types* of modifications
+you want to make, you must invoke the "genpoly_modify_lt.py" program
+multiple times, once for each type of modification.  Each time, you can
+supply it with a different file containing a list of integers
+(the -locations file) specifying where you want to modify the polymer.
+However you must take care to insure that the different kinds of
+modifications are placed at locations on the polymer that do not
+overlap with each other.
+
+To help generate the list of non-overlapping integers that you would need, this
+program also has some additional features.  For example, you could use the
+"-widths", "-locations-random", and "-write-locations" arguments to generate a
+list of locations where various types of modifications could be made to a
+polymer (without modifying your polymer).
+Then you would run the program again to make those modifications.  As mentioned
+above, you would do this separately, once for each *type* of modification, each
+time reading the corresponding portion of the list of numbers that you already
+created earlier.
+
+Alternatively, you could generate the list of integers
+in several different stages, using the "-write-occupancy" and "-read-occupancy"
+arguments to make sure the resulting integers do not overlap.  This would
+allow you to create mixtures of modifications, placing some of them
+at regular periodic intervals (or some other distribution you come up with),
+and then fitting the remaining modifications around them randomly.
+
+```
+    -widths file
+             Not all of the modifications need have the same width.  This
+             allows you to specify a file containing N positive integers
+             (one on each line, where N=number of modifications).  (This is
+             typically used when combined with both the -locations-random and
+             -write-locations arguments.)
+
+    -write-locations file.txt
+             If you are using the -locations-random or -locations-periodic
+             arguments, then this argument will cause the program to create a
+             file of integers indicating where the modifications will be placed.
+             You can use this file to place those objects by invoking this
+             program later with the -locations argument.  For example, if the
+             first half of the modifications you want to make are of type A
+             and the second half of modifications are of type B, you can
+             "-locations-random" argument to place these modifications
+             randomly on the polymer, and save them to a file using the
+             "-write-locations" argument.
+             THEN, later you can invoke this program twice to generate the
+             LT file that will actually modify the polymer:
+             once using the first half of the file to make type A modifications
+             once using the scond half of the file to make type B modifications
+
+    -read-occupancy file.txt
+             While placing the modifications onto the polymer, you can request
+             that some of the sites on the polymer are occupied and unavailable.
+             The file argument should be the name of a text file containing a
+             list of integers from 0 to N-1, where N is the length of the
+             polymer.
+
+    -write-occupancy file.txt
+             Write a file containing a list of integers specifying which
+             sites on the polymer are occupied (and cannot be used).
+
+    -locations-random-attempts max_attempts
+             The algorithm I use with the "-locations-random" argument
+             to insert modifications on a polymer is not guaranteed to succeed
+             if the user has restricted certain sites using the -read-occupancy
+             argument.  It might be simply impossible to fit the desired number
+             of modifications along the polymer.  In other cases, it might be
+             possible, however the program may fail to do it on the first
+             attempt.  This argument allows you to specify how many attempts
+             you wish to make before giving up.  A higher number increases the
+             chance of success at the cost of slower running times.
+```
+
+### Example combining multiple types of modifications on the same polymer.
+
+First we create a polymer.
+This example is from the "18bp3p" coarse grained
+[DNA example](../examples/coarse_grained/DNA_models/).
+```
+  genpoly_lt.py \
+      -helix 0 \
+      -bond Backbone c2 c1 \
+      -dihedral Backbone r c2 c2 r 0 0 1 1 \
+      -polymer-name 'DNAPolymer' \
+      -inherits 'DNAForceField'  \
+      -monomer-name 'DNAMonomer' \
+      -header 'import "dna_monomer.lt"' \
+      < init_crds_polymer_backbone.raw \
+      > dna_polymer.lt
+```
+(Note: The "init_crds_polymer_backbone.raw" file contains 9851 lines containing
+ x,y,z coordinates where we want to place the 9851 monomers in the polymer.
+ See [genpoly_lt.py documentation](doc_genpoly_lt.md) for details.)
+
+In the next step, we figure out where to distribute 30
+modifications (of width 2) at even (ie. periodic) intervals
+along the polymer of length 9851.
+```
+  genpoly_modify_lt.py \
+     -length 9851 \
+     -locations-periodic 30 0 \
+     -width 2 \
+     -write-occupancy polymer_occupancy.txt \
+     -write-locations locations_twist_motors.txt
+```
+Now add 514 additional modifications (of width 2) to the polymer, taking
+care not to overlap with the modifications you made in the previous step.
+```
+  genpoly_modify_lt.py \
+     -length 9851 \
+     -locations-random 514 0 \
+     -locations-random-attempts 50 \
+     -width 2 \
+     -read-occupancy polymer_occupancy.txt \
+     -write-occupancy polymer_occupancy.txt \
+     -write-locations locations_bends.txt
+```
+Then we actually modify the polymer.
+We place one kind of modification at the positions in the
+"locations_twist_motors.txt" file by invoking "genpoly_modify_lt.py" again.
+(See the
+[twist_motor_supercoiling](examples/coarse_grained/DNA_models/dsDNA_only/twistable_Kratky-Porod/42bp_3particles)
+example for details.)
+```
+  genpoly_modify_lt.py \
+     -polymer-name DNAPolymer \
+     -length 9851 \
+     -locations mod_locations.txt \
+     -dihedral Disable r c2 c2 r 0 0 1 1 \
+     -fix-nbody 4 "fix_twist.in" fxTw all twist torque r c2 c2 r 0 0 1 1 1.105 \
+     -set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 Rm C1m C1m Rm \
+    >> dna_polymer.lt
+```
+*(Note: We used "-width 2" above because this modification changes two different
+monomers located at i+0 and i+1, as indicated by the "0 0 1 1" arguments above)*
+
+Finally, we place the other kind of modification at the positions in the
+"locations_bends.txt" file by invoking "genpoly_modify_lt.py" again.
+```
+  genpoly_modify_lt.py \
+     -polymer-name DNAPolymer \
+     -length 9851 \
+     -locations locations_bends.txt \
+     -angle Bend c2 c1 c2 0 1 1 \
+     -dihedral Disable r c2 c2 r 0 0 1 1 \
+     >> dna_polymer.lt
+```
+At the end of this process, the "dna_polymer.lt" file contains
+both types of modifications (twists and bends).
 
 
 ### Warning when using multiple polymers

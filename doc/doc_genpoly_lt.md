@@ -42,6 +42,7 @@ from the terminal) and a python library.  The former is documented below.
       [-polymer-directions polarities.txt] \
       [-dir-indices ia ib] \
       [-padding paddingX,paddingY,paddingZ] \
+      [-in coords.raw] \
       < coords.raw > polymer.lt
 ```
 ## Arguments [optional]
@@ -328,6 +329,12 @@ from the terminal) and a python library.  The former is documented below.
                    "-helix-angles" and "-axis" arguments (if applicable).
                    (Consequently this argument can be supplied together with
                     the "-helix", "-helix-angles", and "-axis" arguments.)
+
+    -in coords.raw
+            The "-in" argument allows you to specify the name of a file with
+            coordinates, instead of reading the coordinates from the standard
+            input.  (On rare occasions, such as while debugging, this can be
+            more convenient.  Most people will have no use for this feature.)
 ```             
              
              

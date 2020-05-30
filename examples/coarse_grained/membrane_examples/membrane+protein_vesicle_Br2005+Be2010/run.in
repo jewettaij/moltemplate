@@ -74,8 +74,6 @@ fix fxnve all nve
 
 # Note: The energy scale "epsilon" = 2.75kJ/mole = 330.7485200981 Kelvin*kB.
 #       So a temperature of 300.0 Kelvin corresponds to 0.907033536873*epsilon.
-# Note: The langevin damping parameter "120" corresponds to 
-#       the 0.12ps damping time used in Watson et. al JCP 2011.
 
 run           2000000
 
