@@ -252,7 +252,7 @@ cd moltemplate_files
   # Now move the files that LAMMPS needs into the directory where we plan
   # to run LAMMPS (the parent directory)
 
-  mv -f system.in* system.data system.psf fix_twist*.in delete_link_bonds.in pair_*.in table_*.dat vmd_commands.tcl ../
+  mv -f system.in* system.data fix_twist*.in delete_link_bonds.in pair_*.in table_*.dat vmd_commands.tcl ../
   
   
 
