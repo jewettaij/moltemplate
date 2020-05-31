@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.0'
-g_date_str     = '2020-5-29'
+g_version_str  = '0.3.1'
+g_date_str     = '2020-5-30'
 
 g_usage_msg = """
 
@@ -387,8 +387,8 @@ class GPModSettings(object):
                     continue
                 I = int(line)
                 if ((I < 0) or (self.N <= I)):
-                    raise InputError('Error: Expected a number from 0 to '+str(N-1)+' on each line\n'
-                                     '       of file "'+mod_locations_file+'"\n'
+                    raise InputError('Error: Expected a number from 0 to '+str(self.N-1)+' on each line\n'
+                                     '       of file "'+mod_locations_filename+'"\n'
                                      '       (NOTE: Indexing begins at 0, not 1.)\n')
                 self.locations.append(I)
             self.nmods = len(self.locations)
