@@ -9,7 +9,7 @@ tolerance  3.0      # minimal distance between atoms in different molecules
                     # (you should also consider changing the "discale" 
                     #  parameter.  I think discale=1.0 by default.)
 
-seed       12345    # seed for random number generator
+seed       123456   # seed for random number generator
 
 # The file type of input and output files is XYZ
 

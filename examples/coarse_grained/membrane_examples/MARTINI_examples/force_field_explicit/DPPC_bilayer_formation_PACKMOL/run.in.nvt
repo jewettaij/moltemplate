@@ -19,7 +19,7 @@ include         "system.in.init"
 
 #read_data       "system.data"
 #read_data       "system_after_min.data"    
-read_data       "system_after_npt.data"
+read_data       "system_after_anneal.data"
 
 # ------------------------------- Settings Section --------------------------
 
