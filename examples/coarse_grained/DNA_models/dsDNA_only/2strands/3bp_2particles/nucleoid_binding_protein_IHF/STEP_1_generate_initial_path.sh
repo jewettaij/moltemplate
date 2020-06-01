@@ -5,8 +5,7 @@ DEST_FILE="moltemplate_files/init_crds_polymer_backbone.raw"
 rm -f "$DEST_FILE"
 
 N_MONOMERS=59105
-N_MONOMERS=591
-N_IHF=535
+N_IHF=1070
 L_MONOMER=0.98293   # relaxed distance between monomers along the polymer
 WIDTH_IHF=10        # how many monomers is IHF bound to?
 
