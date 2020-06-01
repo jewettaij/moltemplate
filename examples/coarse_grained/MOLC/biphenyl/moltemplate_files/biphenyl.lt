@@ -1,0 +1,81 @@
+# MOLC CG force field definition of the molecule: biphenyl.
+# Model fitted on the corresponding GROMOS-ATB molid: 817
+#
+# 4 May 2020
+#
+# WARNING: The syntax of the bond_coeff command may change as the
+#          MOLC code evolves.  I will try to keep this example up to date.
+#          Please report any problems to the github issue tracker
+#          https://github.com/jewettaij/moltemplate/issues   
+#          or to my email (jewett dot aij  at  gmail dot com)
+
+
+
+
+Biphenyl {
+
+  write("Data Atoms"){
+       $atom:phe1 @atom:phe -2.1949534 -0.00007734130   0.0011688453 $mol:. 1 1.2028597
+       $atom:phe2 @atom:phe  2.1949796  0.00023420536  -0.0012211334 $mol:. 1 1.2028597
+  }
+
+  write("Data Ellipsoids"){
+     $atom:phe1 6.1883 6.1883 3.1969  -0.6991896931  -0.1121862209   0.1140455843  -0.6968081728
+     $atom:phe2 6.1883 6.1883 3.1969  -0.6988856957   0.1126183105   0.1133973837   0.6971491475
+  }
+
+  write("Data Bonds"){
+     $bond:b1      @bond:bp    $atom:phe1  $atom:phe2
+  }
+
+  write_once("In Settings") {
+    mass @atom:phe  77.1055
+
+    pair_style hybrid/overlay gayberne 1.0 1.0 -3.0 14. coul/long/offcentre 14. 4 &
+    @atom:phe   0.000000    2.310098    0.000000    0.1686 &
+    @atom:phe   0.000000    0.552204    0.000000   -0.3984 &
+    @atom:phe   2.272832   -0.225805    0.000000    0.1149 &
+    @atom:phe  -2.272832   -0.225805    0.000000    0.1149
+
+    # Electrostatics (after the DATA file).
+    kspace_style    pppm/offcentre 1e-4 4 &
+    @atom:phe   0.000000    2.310098    0.000000    0.1686 &
+    @atom:phe   0.000000    0.552204    0.000000   -0.3984 &
+    @atom:phe   2.272832   -0.225805    0.000000    0.1149 &
+    @atom:phe  -2.272832   -0.225805    0.000000    0.1149
+
+    # Pairwise parameters.
+    pair_coeff * * coul/long/offcentre
+    pair_coeff @atom:phe @atom:phe gayberne 2.4424 3.6961 0.248813 0.248813 1 0.248813 0.248813 1 14.
+
+    # 1-2 Bonded potential.
+    bond_style ellipsoid
+    special_bonds lj/coul 0.0 0.5 1.0
+
+    # Bonded potential.
+    bond_coeff @bond:bp &
+    poly 2    10.4323   -6.51572    2.39456    55.3894    4.15279  &
+    cos_half  4   0.257778   -0.00504    1.53591    0.09664          0  0.00242963    1.64322  -0.106706        0  &
+    poly 2    1.00001    1.42113    1.00125    4.14927    0.16503  &
+    cos_half  2    1.16872    0.01859    1.56921   -0.67019    6.28319  &
+    poly 2   0.996539    1.41458    1.00469    3.94726    0.17817  &
+    poly 2  -0.120537          0          1    5.96438         -1  &
+    poly 2   0.986231    1.39588    1.01413    3.29551    0.21038  &
+    cos_half  2    1.16844    0.01874    1.56707   -0.67082    6.28319  &
+    poly 2   0.981217    1.39336    1.01918    3.26297    0.21571  &
+    cos_half  5   0.238383   -0.00367    1.51548    0.14536          0  0.00183253    1.68167  -0.130601        0 0.00457856    1.61509  &
+    poly 2    1.22193    1.75347     1.2213    28.8548    0.01794  &
+    poly 2  -0.628596          0          1    110.079         -1  &
+    poly 2    1.07654    1.81094    1.27079    22.1142    0.03054  &
+    poly 2   0.939386     1.0114    1.62574    26.1697    0.02414  &
+    poly 2 -0.0168358          0          1    87.5374          1  &
+    poly 2    1.01114    1.76015    1.29541    23.5318    0.03215
+  }
+
+  write_once("In Init"){
+    units           real
+    boundary        p p p
+    atom_style      hybrid molecular ellipsoid
+  }
+
+} # Biphenyl

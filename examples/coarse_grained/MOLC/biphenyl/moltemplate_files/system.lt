@@ -1,0 +1,28 @@
+# Create a box of 1000 BP molecules.
+#
+#   Run moltemplate.sh using:
+#moltemplate.sh -atomstyle "hybrid molecular ellipsoid" -overlay-bonds system.lt
+
+
+# First define the "Biphenyl" molecule (and its force field)
+import "biphenyl.lt"
+
+# Then create a 10x10x10 array of "Biphenyl" in a lattice with spacing 12
+
+molecules = new Biphenyl [10].move(12,0,0)
+                         [10].move(0,12,0)
+                         [10].move(0,0,12)
+
+# These molecules currently have x,y,z positions between 0 and (10-1)*12.
+# Center the system by shifting all the molecules in the -x,-y,-z direction.
+
+molecules[*][*][*].move(-66,-66,-66)
+
+# Specify the size of the simulation box: 120 x 120 x 120
+write_once("Data Boundary") {
+-60 60 xlo xhi
+-60 60 ylo yhi
+-60 60 zlo zhi
+}
+
+
