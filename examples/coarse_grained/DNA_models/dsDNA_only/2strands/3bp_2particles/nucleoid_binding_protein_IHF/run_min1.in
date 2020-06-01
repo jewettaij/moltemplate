@@ -1,0 +1,65 @@
+# PREREQUISITES:
+#
+#      You must use moltemplate.sh to create 5 files:
+#  system.data system.in.init system.in.settings system.in.types fix_twist.in
+#
+# ------------------------------- Initialization Section --------------------
+
+# The forces between DNA strands depend on the salt concentration,
+# so we must specify the salt concentration beforehand.
+# We do this indirectly by specifying the Debye length.  Do this now.
+
+variable debye_length equal 1.0
+
+# Now read the settings which specify the force field styles we will use:
+include         "system.in.init"
+
+boundary p p p
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       "system.data"
+change_box all y final -500 500 z final -500 500
+
+# ------------------------------- Settings Section --------------------------
+
+include system.in.settings
+include system.in.types
+# extra settings for this simulation:
+include fix_twist.in  # optional: turn on the torque in the twist motors
+include confinement_hard_cylinder_R=450_K=10_Rmax=480.in # put it in a cylinder
+
+# For extremely large simulations like this one, the default neighbor-list
+# bin size and communication distance must be overridden to prevent LAMMPS from
+# creating too many neighbor bins. (LAMMPS is currently not optimized for these
+# kinds of huge simulations with extremely non-uniform density.)
+# http://lammps.sandia.gov/doc/neighbor.html
+# http://lammps.sandia.gov/doc/comm_modify.html
+#
+# Perhaps we don't need this.  Leaving this commented out for now...
+#neighbor 25.0 bin
+#comm_modify mode single cutoff 57.0 vel yes
+
+# ------------------------------- Run Section -------------------------------
+
+
+# -- minimization protocol --
+
+# How often do we save the conformation to a file?
+dump dmAll all custom 100 traj_min1.lammpstrj id mol type x y z ix iy iz
+
+# How frequently do we report statistics to the user?
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo          20
+thermo_modify   norm yes flush yes
+
+#min_style fire  #<--does not seem to work as well
+
+min_style hftn
+min_modify dmax 0.01
+fix fxcen all recenter 0.0 0.0 0.0
+
+minimize 1.0e-9 1.0e-12 100000 200000
+
+
+write_data   system_after_min1.data

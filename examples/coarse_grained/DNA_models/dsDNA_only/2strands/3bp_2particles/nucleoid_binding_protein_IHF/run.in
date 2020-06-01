@@ -1,0 +1,139 @@
+# PREREQUISITES:
+#
+# 1)   You must use moltemplate.sh to create 5 files:
+#  system.data system.in.init system.in.settings system.in.types fix_twist.in
+# 2)   You must run LAMMPS using the "run_min1.in" input script.
+#  mpiexec -np 8 lmp_mpi -i run_min1.in
+# 3)   You must run LAMMPS using the "run_min2.in" input script.
+#  mpiexec -np 8 lmp_mpi -i run_min2.in
+#
+# ------------ Init Section ------------
+
+# The forces between DNA strands depend on the salt concentration,
+# so we must specify the salt concentration beforehand.
+# We do this indirectly by specifying the Debye length.  Do this now.
+
+variable debye_length equal 1.0
+
+# Now read the settings which specify the force field styles we will use:
+include system.in.init
+
+boundary p p p
+
+
+# ------------ Atom Definition Section ------------
+
+read_data system_after_min2.data
+
+# Make sure the size of the simulation box is what we think it is.
+# Otherwise the tension in the chain will not be accurate.
+change_box all y final -500 500 z final -500 500
+
+
+# ------------ Settings Section ------------
+
+include system.in.settings
+include system.in.types
+include fix_twist.in    # <-- turns on the torque in the twist motors
+
+
+# Optional: Confine the polymer in a cylinder
+include confinement_hard_cylinder_R=450_K=10_Rmax=480.in
+
+
+# ------------ Run Section ------------
+
+timestep        1.0   # By definition.  Masses should be adjusted accordingly.
+
+# How often do we save the conformation to a file?
+dump dmAll all custom 500000 traj.lammpstrj id mol type x y z ix iy iz
+
+# How frequently do we report statistics to the user?
+thermo_style    custom step temp pe etotal epair ebond eangle edihed pxx lx
+thermo          1000  # time interval for printing out "thermo" data
+thermo_modify   norm yes flush yes
+
+
+
+# Make sure particles remain evenly dispatched to different processors
+# http://lammps.sandia.gov/doc/fix_balance.html
+fix fxbal all balance 1000000 1.03 shift x 20 1.03
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+
+#                        kB*Tstart   kB*Tstop    tdamp    randomseed
+fix fxlan all langevin   0.5961621   0.596162  1000000.0  1
+# (See http://lammps.sandia.gov/doc/fix_langevin.html)
+
+# In general, to maximize sampling efficiency, make tdamp as large as you can,
+# without exceeding the timescales you really care about (such as the time the
+# protein or chromosome needs to "fold", [ie. collapse into it's final shape]).
+# (Keep it at least order of magnitude shorter than that timescale.)
+#
+# However at the beginning of the simulation, we want to use much shorter
+# "tdamp" parameters.  Initially the system is at high energy (temperature)
+# and we want theLangevin damping to suck some of that excess energy away
+# quickly so that the simulation does not become numerically unstable.
+# We will increase "tdamp" later.
+
+unfix fxlan
+#                        kB*Tstart   kB*Tstop   tdamp    randomseed
+fix fxlan all langevin   0.5961621   0.596162   2000.0   1
+
+
+# Now specify the tension in the polymer.  We do this by applying a negative
+# pressure in the x direction.  The magnitude of the pressure we use is
+# explained in the "README_convert_tension_to_pressure.txt" file.
+# Start with a relatively high tension (-0.8*kB*T/nm), and let it equilibrate.
+# Then we can gradually reduce the tension down to 0.
+#                     pstart     pstop      pdamp(time-units)
+fix fxnph all nph x  -4.769e-07 -4.769e-07  1000.0
+
+# Other ways to control box size:
+# http://lammps.sandia.gov/doc/change_box.html
+# http://lammps.sandia.gov/doc/fix_deform.html
+# http://lammps.sandia.gov/doc/fix_nh.html
+
+fix fxcen all recenter 0.0 NULL NULL
+#*#run 1000000
+run 20000
+unfix fxcen
+unfix fxnph
+unfix fxlan
+
+
+# Now reduce the tension in the DNA from 0.8 kB*T/nm to 0.5 kB*T/nm
+#                        kB*Tstart   kB*Tstop    tdamp     randomseed
+#*#fix fxlan all langevin   0.5961621   0.596162  200000.0    2
+fix fxlan all langevin   0.5961621   0.596162  2000.0    2
+#                     pstart     pstop      pdamp(time-units)
+fix fxnph all nph x  -4.769e-07 -2.981e-07  1000.0
+fix fxcen all recenter 0.0 NULL NULL
+#*#run 5000000
+run 50000
+unfix fxcen
+unfix fxnph
+unfix fxlan
+
+
+# Now reduce the tension in the DNA from 0.5 kB*T/nm to 0
+#                        kB*Tstart   kB*Tstop    tdamp     randomseed
+
+#*#fix fxlan all langevin   0.5961621   0.596162   5000000.0  3
+fix fxlan all langevin   0.5961621   0.596162   10000.0  3
+
+#                     pstart     pstop      pdamp(time-units)
+fix fxnph all nph x -2.981e-07   0.0        1000.0
+fix fxcen all recenter 0.0 NULL NULL
+#run 140000000
+run 1000000
+unfix fxcen
+unfix fxnph
+unfix fxlan
+
+# Hopefully the DNA has equilibrated to a conformation similar to what it would
+# have at zero tension and zero pressure (other than cylindrical confinement).
+
+write_data  system_pressure=0.data
