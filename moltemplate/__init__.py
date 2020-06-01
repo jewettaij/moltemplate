@@ -38,7 +38,8 @@ from .ltemplify import main, Ltemplify
 from .dump2data import main
 from .raw2data import main
 from .extract_lammps_data import main
-from .genpoly_lt import main, GenPoly
+from .genpoly_lt import main, GenPoly, GPSettings
+from .genpoly_modify_lt import main, GenPolyMod, GPModSettings, DistributePeriodic, DistributeRandom
 from .interpolate_curve import main, ResampleCurve, CalcNaturalCubicSplineCoeffs, SplineEval, SplineEvalD1, SplineEvalD2, SplineInterpEval, SplineInterpEvalD1, SplineInterpEvalD2, SplineCurvature2D, SplineInterpCurvature2D
 from .nbody_by_type import main
 
