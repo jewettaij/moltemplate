@@ -20,8 +20,8 @@ and pressure.
 
 Note: This simulation protocol assumes that IHF binds to DNA irreversibly.
 More general interactions between NAPs and DNA may be easier to simulate
-(at this low resolution) with the aid of LAMMPS features like
-fix bond/react or other fixes which have similar features.
+(at this low resolution) with the aid of new LAMMPS features like
+*fix bond/react*.
 
 ##    Prerequisites
 
@@ -57,16 +57,18 @@ run a short simulation are provided below
 The following file contain instructions explaining how to generate
 the curve that you want the DNA polymer to follow.
 (You can also run it as an executable.)
-
+```
    ./STEP_1_generate_initial_path.sh
-
+```
 The next file explains how to convert this curve into a moltemplate file, and
 how to run moltemplate on that file. (You can also run it as an executable.)
-
+```
    ./STEP_2_generate_LAMMPS_files.sh
-
+```
 Finally, to run the LAMMPS simulation follow the instructions in this file:
-STEP_3_run_sim.sh
+```
+   STEP_3_run_sim.sh
+```
 You will have to edit the file to specify the name of the LAMMPS binary
 you are using (for example, "lmp_ubuntu"), and the number of processors.
 
