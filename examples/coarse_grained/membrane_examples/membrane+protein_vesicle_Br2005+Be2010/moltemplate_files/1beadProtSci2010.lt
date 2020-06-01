@@ -152,12 +152,16 @@
   #   In this protein model, "epsilon" represents the free energy 
   # bonus for bringing two hydrophobic amino acids together.  
   # Here I choose to set epsilon to 1.806551818181818 kCal/mole.
-  # This value was chosen so that a temperature of 300 Kelvin lies at 
+  # This value was chosen so that a temperature of 345 Kelvin lies at 
   # 0.33 epsilon, which is the unfolding temperature of the marginally stable 
   # "ASF1" protein model from the Bellesia et al 2010 paper.
+  # I chose to make this protein stable at 345 degrees instead of 300 degrees
+  # in order to compensate for needing to run the simulations at higher
+  # temperatures than normal.  At 300L, the lipid model we are using
+  # is prone to be trapped in the "gel" phase at 300K, when in a vesicle.
   #   This choice insures that both the "ASF1" model from that paper,
   # as well as the much more stable "AUF2" protein we use here (which
-  # unfolds at 0.42*eps) should definitely remain stable at 300 degrees Kelvin,
+  # unfolds at 0.42*eps) should definitely remain stable at 345 degrees Kelvin,
   # in the bulk at least.  (However it's not clear that these energy
   # parameters will work well for a protein in membrane.  Perhaps I'll
   # run some tests and fine tune these parameters for this scenario.)
@@ -170,9 +174,9 @@
   #              i       j            pairstylename            eps sig K L
   #
   write_once("In Settings") {
-    pair_coeff @atom:sH @atom:sH lj/charmm/coul/charmm/inter  1.8065518 4.8 1 -1
-    pair_coeff @atom:sL @atom:sL lj/charmm/coul/charmm/inter  1.8065518 4.8 1 0
-    pair_coeff @atom:tN @atom:tN lj/charmm/coul/charmm/inter  1.8065518 4.8 1 0
+    pair_coeff @atom:sH @atom:sH lj/charmm/coul/charmm/inter 2.07753457 4.8 1 -1
+    pair_coeff @atom:sL @atom:sL lj/charmm/coul/charmm/inter 2.07753457 4.8 1 0
+    pair_coeff @atom:tN @atom:tN lj/charmm/coul/charmm/inter 2.07753457 4.8 1 0
   }
 
   # The exact value of the bond_coeff does not matter too much as long as 
@@ -183,7 +187,7 @@
   #   bond_coeff     bondType            bondstylename    k    r0
 
   write_once("In Settings") {
-    bond_coeff @bond:1beadProtSci2010/backbone harmonic  10.0  4.8
+    bond_coeff @bond:1beadProtSci2010/backbone harmonic  11.5  4.8
   }
 
 
@@ -195,7 +199,7 @@
 
   #   angle_coeff  angleType  anglestylename   k   theta0
   write_once("In Settings") {
-    angle_coeff @angle:backbone   harmonic   100.0  105.0
+    angle_coeff @angle:backbone   harmonic   115.0  105.0
   }
 
 
@@ -214,10 +218,10 @@
   }
 
   write_once("In Settings") {
-    dihedral_coeff @dihedral:delta60_0 fourier 2 2.167862 3 0 2.167862 1 -60.0
-    dihedral_coeff @dihedral:delta65_0 fourier 2 2.167862 3 0 2.167862 1 -65.0
-    dihedral_coeff @dihedral:turn      fourier 1 0.361310 3 0
-    # Note: 2.167862=1.2*epsilon and 0.361310=0.2*epsilon.
+    dihedral_coeff @dihedral:delta60_0 fourier 2 2.49304 3 0 2.49304 1 -60.0
+    dihedral_coeff @dihedral:delta65_0 fourier 2 2.49304 3 0 2.49304 1 -65.0
+    dihedral_coeff @dihedral:turn      fourier 1 0.41551 3 0
+    # Note: 2.49304=1.2*epsilon and 0.41551=0.2*epsilon.
   }
 
 

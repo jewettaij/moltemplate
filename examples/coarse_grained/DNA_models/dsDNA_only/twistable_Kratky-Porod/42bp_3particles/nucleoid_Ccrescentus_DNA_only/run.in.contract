@@ -48,13 +48,16 @@ include "system.in.types" #<--optional custom atom types for twist motors
 # Confine the polymer in a cylindrical tube that minics a bacterial cell wall
 include "confinement_hard_cylinder_R=320_K=10_Rmax=330.in"
 
-# Because of the large size of the initial simulation box, we must override
-# the default size of the neighbor bins and communication distance settings.
+# For extremely large simulations like this one, the default neighbor-list
+# bin size and communication distance must be overridden to prevent LAMMPS from
+# creating too many neighbor bins. (LAMMPS is currently not optimized for these
+# kinds of huge simulations with extremely non-uniform density.)
 # http://lammps.sandia.gov/doc/neighbor.html
 # http://lammps.sandia.gov/doc/comm_modify.html
 
 neighbor 25.0 bin
-#comm_modify mode single cutoff 43.0 vel yes   (<-fails on some lammps versions)comm_modify mode single cutoff 57.0 vel yes
+#comm_modify mode single cutoff 43.0 vel yes  (<-fails on some lammps versions)
+comm_modify mode single cutoff 57.0 vel yes
 
 
 # ------------------------------- Run Section -------------------------------

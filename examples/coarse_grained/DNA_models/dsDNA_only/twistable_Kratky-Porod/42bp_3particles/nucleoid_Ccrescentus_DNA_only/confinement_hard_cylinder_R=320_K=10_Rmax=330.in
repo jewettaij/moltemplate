@@ -15,7 +15,8 @@
 #                           |    |    |    |
 #                          \|/  \|/  \|/  \|/
 #                           V    V    V    V
-
+# OPTIONAL: We don't really need to put spherical caps in the end of the
+#           cylinder, so I commented out the next two lines
 #region rSphereL sphere -350000.0  0  0  330.0   side in
 #region rSphereR sphere  350000.0  0  0  330.0   side in
 
@@ -37,7 +38,7 @@
 #                        \|/    \|/   \|/    \|/    \|/   \|/
 #                         V      V     V      V      V     V
 region  rCyl     cylinder x     0.0   0.0   330.0 -350000.0 350000.0  side in
-#region  rRod     union 3 rSphereL rCyl rSphereR  
+#region  rCapsule union 3 rSphereL rCyl rSphereR  
 
 
 
@@ -57,7 +58,7 @@ region  rCyl     cylinder x     0.0   0.0   330.0 -350000.0 350000.0  side in
 #                                             \|/   \|/   \|/
 #                                              V     V     V
 
-#fix fxWall all wall/region rRod harmonic      1.0   0.0   10.0
+#fix fxWall all wall/region rCapsule harmonic  1.0   0.0   10.0
 fix fxWall all wall/region rCyl harmonic      1.0   0.0   10.0
 
 

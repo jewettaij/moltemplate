@@ -1,16 +1,14 @@
- This example shows how to build a multicomponent spherical vesicle.
- The lipid bilayer is composed of two different lipids (DPPC and DLPC).
- The vesicle also contains trans-membrane protein inclusions.
+ This example shows how to build a multicomponent spherical vesicle
+ made from DPPC lipids and 120 trans-membrane protein inclusions.
 
  The coordinates for the vesicle are constructed by PACKMOL (see below).
 
  The DPPC lipid model is described here:
       G. Brannigan, P.F. Philips, and F.L.H. Brown,
       Physical Review E, Vol 72, 011915 (2005)
- (The DLPC model is a truncated version of DPPC. Modifications discussed below.)
- The protein model is described here:
+ The protein model is based on the model described here:
       G. Bellesia, AI Jewett, and J-E Shea,
-      Protein Science, Vol 19, 141-154 (2010)
+      Protein Science, Vol19 141-154 (2010)
 
 --- PREREQUISITES: ---
 
@@ -30,15 +28,15 @@ before compiling LAMMPS.
 3) This example may require additional features to be added to LAMMPS.
 If LAMMPS complains about an "Invalid pair_style", then
  a) download the "additional_lammps_code" from
-    http://moltemplate.org     (upper-left corner menu)
+    http://moltemplate.org     (Click on the "LAMMPS Code" menu, upper-right)
  b) unpack it
- c) copy the .cpp and .h files to the src folding of your lammps installation.
+ c) copy the .cpp and .h files to the "src" folding of your lammps installation.
  d) (re)compile LAMMPS.
 
 ------ Details -------
 
 This example contains a coarse-grained model of a 4-helix bundle protein
-inserted into a lipid bilayer (made from a mixture of DPPC and DLPC).
+inserted into a lipid bilayer.
 
     -- Protein Model: --
 
@@ -58,14 +56,6 @@ and:
 
 As in Watson(JCP 2011), rigid bond-length constraints
 have been replaced by harmonic bonds.
-
-A truncated version of this lipid (named "DLPC") has also been added.
-The bending stiffness of each lipid has been increased to compensate
-for the additional disorder resulting from mixing two different types
-of lipids together.  (Otherwise pores appear.)
-Unlike the original "DPPC" molecule model, the new "DPPC" and "DLPC" models
-have not been carefully parameterized to reproduce the correct behavior in
-a lipid bilayer mixture.
 
     -- Interactions between the proteins and lipids --
 
@@ -100,15 +90,15 @@ step3) Run LAMMPS:
         Type these commands into the shell.
         (This could take days.)
 
-lmp_linux -i run.in.min  # Minimize the system (important, and very slow)
-
-lmp_linux -i run.in.nvt  # Run a simulation at constant volume
+lmp_mpi -i run.in.min  # Minimize the system (important, and very slow)
+lmp_mpi -i run.in.make_uniform
+lmp_mpi -i run_T=360K.in  # Run a simulation at constant tmperature
 
 If you have compiled the MPI version of lammps, you can run lammps in parallel:
 
-mpirun -np 4 lmp_linux -i run.in.min
-  or
-mpirun -np 4 lmp_linux -i run.in.nvt
+mpiexec -np 4 lmp_mpi -i run.in.min
+mpiexec -np 4 lmp_mpi -i run.in.make_uniform
+mpiexec -np 4 lmp_mpi -i run.in_T=360K
 
 (Assuming you have 4 cores, for example.)
 

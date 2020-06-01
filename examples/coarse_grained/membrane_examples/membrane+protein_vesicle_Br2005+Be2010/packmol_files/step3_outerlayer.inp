@@ -41,30 +41,17 @@ structure step2_innerlayer.xyz
 end structure
 
 
-# 19000 DPPC lipids will be put in a shell with their hydrophilic heads
+# 38000 DPPC lipids will be put in a shell with their hydrophilic heads
 # (atom 1) pointing outwards, and their tails (atom 5) pointing inwards.
 
 
 structure DPPC.xyz
-  number 19000
+  number 38000
   atoms 5
     inside sphere 0. 0. 0. 310.0
   end atoms
   atoms 1
     outside sphere 0. 0. 0. 336.0
-  end atoms
-end structure 
-
-# 19000 DLPC lipids will be put in a shell with their hydrophilic heads
-# (atom 1) pointing outwards, and their tails (atom 4) pointing inwards.
-
-structure DLPC.xyz
-  number 19000
-  atoms 4
-    inside sphere 0. 0. 0. 313.0 
-  end atoms
-  atoms 1
-    outside sphere 0. 0. 0. 332.0
   end atoms
 end structure 
 
