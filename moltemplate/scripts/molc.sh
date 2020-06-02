@@ -112,7 +112,7 @@ grep --color=none -e 'bond_coeff' "$1"
 echo
 
 # 6. Extra Stuff which may be present in the Settings.
-grep --color=none -e 'group\|neigh' "$1"
+grep --color=none -e 'group\|neigh\|replicate' "$1"
 
 # final clean-up.
 rm -f $temp
