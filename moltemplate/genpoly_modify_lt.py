@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.1'
-g_date_str     = '2020-5-30'
+g_version_str  = '0.3.2'
+g_date_str     = '2020-6-01'
 
 g_usage_msg = """
 
@@ -741,7 +741,8 @@ class GPModSettings(object):
             self.LoadModLocations(mod_locations_filename)
 
         if self.nmods == 0:
-            raise InputError('Error: You have not specified the modifications you want to make.\n')
+            #raise InputError('Error: You have not specified the modifications you want to make.\n')
+            sys.stderr.write('WARNING: You have not specified the modifications you want to make.\n')
 
         # The self.widths member should be a list containing self.nmods integers
         if len(self.widths) == 1:   # If the user supplied only one number, then

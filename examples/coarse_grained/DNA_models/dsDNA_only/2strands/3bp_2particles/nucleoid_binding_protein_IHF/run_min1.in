@@ -46,7 +46,7 @@ include confinement_hard_cylinder_R=450_K=10_Rmax=480.in # put it in a cylinder
 # -- minimization protocol --
 
 # How often do we save the conformation to a file?
-dump dmAll all custom 100 traj_min1.lammpstrj id mol type x y z ix iy iz
+dump dmAll all custom 1000000 traj_min1.lammpstrj id mol type x y z ix iy iz
 
 # How frequently do we report statistics to the user?
 thermo_style    custom step temp pe etotal epair ebond eangle edihed

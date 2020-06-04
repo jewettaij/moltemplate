@@ -58,7 +58,7 @@ timestep      0.1   # Initially the system is under a great deal of strain
                     # later during the main simulation.)
 
 # How often do we save the conformation to a file?
-dump dmAll all custom 10000 traj_min2.lammpstrj id mol type x y z ix iy iz
+dump dmAll all custom 50000 traj_min2.lammpstrj id mol type x y z ix iy iz
 
 # How frequently do we report statistics to the user?
 thermo_style    custom step temp pe etotal epair ebond eangle edihed pxx xhi

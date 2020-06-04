@@ -55,7 +55,7 @@ Here we use
 to generate an initial (space-filling) curve for the shape of the polymer.
 Then we use *interpolate_curve.py* to smooth and rescale this curve before
 using
-[*genpoly_lt.py*]https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md)
+[*genpoly_lt.py*](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md)
 to build a polymer which can be simulated with the help of
 [*moltemplate.sh*](https://github.com/jewettaij/moltemplate)
 and
