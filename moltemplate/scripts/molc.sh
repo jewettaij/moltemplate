@@ -12,6 +12,9 @@ temp=output_molc.$$
 # Set Internal Field Separator to "newline".
 IFS=$'\n'
 
+# 0. Commands which may be present in the Settings and must be defined *before* the pair styles.
+grep --color=none -e 'replicate' "$1"
+
 # 1. Print the masses.
 grep --color=none "mass " "$1"
 echo
@@ -112,7 +115,7 @@ grep --color=none -e 'bond_coeff' "$1"
 echo
 
 # 6. Extra Stuff which may be present in the Settings.
-grep --color=none -e 'group\|neigh\|replicate' "$1"
+grep --color=none -e 'group\|neigh\' "$1"
 
 # final clean-up.
 rm -f $temp
