@@ -12,6 +12,7 @@ L_BOND=6.972           # length of the bonds connecting monomers
 L_MONOMER=13.944       # length of each monomer (Note: In this model, each
                        # monomer has 3 particles, and two different bonds
                        # along the backbone.  Hence its length equals 2 bonds.
+N_TWIST_MOTORS=400     # number of twist motors to insert into the polymer
 
 
 # Create LAMMPS input files this way:
@@ -182,7 +183,7 @@ cd moltemplate_files
   genpoly_modify_lt.py \
     -polymer-name DNAPolymer \
     -length $N_MONOMERS \
-    -locations-periodic 400 0 \
+    -locations-periodic $N_TWIST_MOTORS 0 \
     -dihedral Disable r c2 c2 r 0 0 1 1 \
     -fix-nbody 4 "fix_twist.in" fxTw all twist torque r c2 c2 r 0 0 1 1 "$TORQUE" \
     -set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 Rmotor C1motor C1motor Rmotor \

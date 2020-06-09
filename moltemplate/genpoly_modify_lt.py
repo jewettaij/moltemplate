@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.2'
-g_date_str     = '2020-6-01'
+g_version_str  = '0.3.3'
+g_date_str     = '2020-6-07'
 
 g_usage_msg = """
 
@@ -684,13 +684,10 @@ class GPModSettings(object):
                                      '       ("yes", "no", or "connected")\n')
                 if argv[i + 1].lower() == 'yes':
                     self.connect_ends = True
-                    self.is_circular = True
                 elif argv[i + 1].lower() == 'connected':
                     self.connect_ends = True
-                    self.is_circular = False
                 elif argv[i + 1].lower() == 'no':
                     self.connect_ends = False
-                    self.is_circular = False
                 else:
                     raise InputError('Error: The ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
@@ -773,13 +770,13 @@ class GPModSettings(object):
         if self.gen_locations_method == 'periodic':
             self.locations = DistributePeriodic(self.widths,
                                                 self.occupancy,
-                                                self.is_circular,
+                                                self.connect_ends,
                                                 self.periodic_offset)
 
         elif self.gen_locations_method == 'random':
             self.locations = DistributeRandom(self.widths,
                                               self.occupancy,
-                                              self.is_circular,
+                                              self.connect_ends,
                                               self.rand_seed,
                                               self.rand_num_attempts)
         self.nmods = len(self.locations)
