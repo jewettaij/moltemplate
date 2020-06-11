@@ -1,6 +1,6 @@
 # Build a new DATA file which contains the topology from the original 
 # system.data file, and the coordinates from the latest simulation result
-# (which should be stored in the "system_linked_length=1700nm.data" file).
+# (which should be stored in the "system_linked_length=1900nm.data" file).
 
 # You can do this by editing the text files by hand,
 # extracting the text in the "Atoms" section from the new data file
@@ -9,12 +9,12 @@
 #
 # (Note "extract_lammps_data.py" is a program that comes with moltemplate.)
 
-TARGET_FILE="system_length=1700nm.data"
+TARGET_FILE="system_length=1900nm.data"
 
 extract_lammps_data.py Header < system.data > old_header.tmp
-extract_lammps_data.py Header < system_linked_length=1700nm.data >new_header.tmp
+extract_lammps_data.py Header < system_linked_length=1900nm.data >new_header.tmp
 extract_lammps_data.py Masses < system.data > old_masses.tmp
-extract_lammps_data.py Atoms < system_linked_length=1700nm.data > new_atoms.tmp
+extract_lammps_data.py Atoms < system_linked_length=1900nm.data > new_atoms.tmp
 extract_lammps_data.py -n Header Masses Atoms < system.data > old_after_atoms.tmp
 
 cat old_header.tmp  > "$TARGET_FILE"

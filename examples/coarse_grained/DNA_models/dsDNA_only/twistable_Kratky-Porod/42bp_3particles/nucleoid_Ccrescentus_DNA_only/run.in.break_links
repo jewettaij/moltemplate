@@ -32,7 +32,7 @@ boundary p f f
 
 #read_data "system_linked.data"
 #read_data "system_linked_after_min.data"
-read_data system_length=1700nm.data
+read_data system_length=1900nm.data
 
 # The following file contains a command which can be used
 # to break the bonds that link the circular polymer to its periodic image.
@@ -100,4 +100,4 @@ unfix fxcen
 unfix fxnve
 unfix fxlan
 
-write_data  system_length=1700nm_relaxed.data
+write_data  system_length=1900nm_relaxed.data

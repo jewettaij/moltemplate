@@ -3,7 +3,7 @@
 # The "run.in.break_links" file is a LAMMPS input script containing
 # references to the input scripts and data files you hopefully have
 # created earlier.  In particular you need this file:
-#   system_length=1700nm.data
+#   system_length=1900nm.data
 # If you don't have it, carry out the instructions in
 # STEP_1, STEP_2, STEP_3, and STEP_4.
 
