@@ -9,28 +9,30 @@
 #
 # (Note "extract_lammps_data.py" is a program that comes with moltemplate.)
 
-TARGET_FILE="system_length=1900nm.data"
+FILE_NEW_TOPO="system.data"
+FILE_COORDS="system_linked_length=1900nm.data"
+FILE_TARGET="system_length=1900nm.data"
 
-extract_lammps_data.py Header < system.data > old_header.tmp
-extract_lammps_data.py Header < system_linked_length=1900nm.data >new_header.tmp
-extract_lammps_data.py Masses < system.data > old_masses.tmp
-extract_lammps_data.py Atoms < system_linked_length=1900nm.data > new_atoms.tmp
-extract_lammps_data.py -n Header Masses Atoms < system.data > old_after_atoms.tmp
+extract_lammps_data.py Header < "$FILE_NEW_TOPO" > old_header.tmp
+extract_lammps_data.py Header < "$FILE_COORDS" > new_header.tmp
+extract_lammps_data.py Masses < "$FILE_NEW_TOPO" > old_masses.tmp
+extract_lammps_data.py Atoms < "$FILE_COORDS" > new_atoms.tmp
+extract_lammps_data.py -n Header Masses Atoms < "$FILE_NEW_TOPO" > old_after_atoms.tmp
 
-cat old_header.tmp  > "$TARGET_FILE"
-grep "bond types" new_header.tmp >> "$TARGET_FILE"
-grep " xlo " new_header.tmp >> "$TARGET_FILE"
-echo "" >> "$TARGET_FILE"
-echo "Masses   # full" >> "$TARGET_FILE"
-echo "" >> "$TARGET_FILE"
-cat old_masses.tmp >> "$TARGET_FILE"
-echo "" >> "$TARGET_FILE"
-echo "Atoms   # full" >> "$TARGET_FILE"
-echo "" >> "$TARGET_FILE"
-cat new_atoms.tmp >> "$TARGET_FILE"
-echo "" >> "$TARGET_FILE"
-cat old_after_atoms.tmp >> "$TARGET_FILE"
-echo "" >> "$TARGET_FILE"
+cat old_header.tmp  > "$FILE_TARGET"
+grep "bond types" new_header.tmp >> "$FILE_TARGET"
+grep " xlo " new_header.tmp >> "$FILE_TARGET"
+echo "" >> "$FILE_TARGET"
+echo "Masses   # full" >> "$FILE_TARGET"
+echo "" >> "$FILE_TARGET"
+cat old_masses.tmp >> "$FILE_TARGET"
+echo "" >> "$FILE_TARGET"
+echo "Atoms   # full" >> "$FILE_TARGET"
+echo "" >> "$FILE_TARGET"
+cat new_atoms.tmp >> "$FILE_TARGET"
+echo "" >> "$FILE_TARGET"
+cat old_after_atoms.tmp >> "$FILE_TARGET"
+echo "" >> "$FILE_TARGET"
 
 rm -f old*.tmp new*.tmp
 
