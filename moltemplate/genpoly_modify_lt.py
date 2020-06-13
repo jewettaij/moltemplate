@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.3'
-g_date_str     = '2020-6-07'
+g_version_str  = '0.3.4'
+g_date_str     = '2020-6-12'
 
 g_usage_msg = """
 
@@ -287,8 +287,8 @@ def DistributeRandom(widths,           # the width of each object (>0)
         occupancy_cpy = [i for i in occupancy] # a fresh copy of occupancy array
         L = _DistributeRandom(widths,
                               occupancy_cpy,
-                              rand_seed + a,
-                              None)
+                              is_periodic,
+                              rand_seed + a)
         if L != None:
             for i in range(0, len(occupancy)):  # if successful, then
                 occupancy[i] = occupancy_cpy[i] # copy back into occupancy array
