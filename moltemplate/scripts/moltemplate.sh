@@ -7,7 +7,7 @@
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.17.10"
-G_DATE="2020-5-29"
+G_DATE="2020-6-12"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
