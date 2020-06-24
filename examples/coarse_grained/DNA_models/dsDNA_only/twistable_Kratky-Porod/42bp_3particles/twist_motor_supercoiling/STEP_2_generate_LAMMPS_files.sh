@@ -39,7 +39,7 @@ cd moltemplate_files
       -inherits 'DNAForceField'  \
       -monomer-name 'DNAMonomer' \
       -header 'import "dna_monomer.lt"' \
-      -padding 30,30,30 \
+      -padding 30,30,110 \
       < init_crds_polymer_backbone.raw > dna_polymer.lt
 
   # (Note: The "-helix" parameter represents the twist-per-monomer (Δφ) at the

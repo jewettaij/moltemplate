@@ -26,7 +26,7 @@ cd moltemplate_files
                 -inherits 'DNAForceField'  \
                 -monomer-name 'DNAMonomer' \
                 -header 'import "dna_monomer.lt"' \
-                -padding 20,20,20 \
+                -padding 20,20,60 \
                 < init_crds_polymer_backbone.raw > dna_polymer.lt
 
 
