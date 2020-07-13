@@ -32,6 +32,10 @@
 # dihedral types, this means at least one of your atom types is incorrect.
 
 
+# This file was generated automatically using:
+# msifrc2lt.py -no-hybrid -name COMPASS
+
+
 COMPASS {
 
 
@@ -403,16 +407,6 @@ COMPASS {
   #  AngleType AtomType1 AtomType2 AtomType3  [BondType1 BondType2]
 
   write_once("Data Angles By Type") {
-    @angle:n3~p4=~o2~X~X~X  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~ao2~d*~i*
-    @angle:n3~p4=~n3~X~X~X  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
-    @angle:n2=~p4=~n3~X~X~X  @atom:*~p*~b*~an2=~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
-    @angle:h1~p4=~n3~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
-    @angle:c3a~p4=~n3~X~X~X  @atom:*~p*~b*~ac3a~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
-    @angle:h1~o2~p4=~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~ao2~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
-    @angle:c4~o2~p4=~X~X~X  @atom:*~p*~b*~ac4~d*~i*  @atom:*~p*~b*~ao2~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
-    @angle:h1~n3~p4=~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
-    @angle:c4~n3~p4=~X~X~X  @atom:*~p*~b*~ac4~d*~i*  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
-    @angle:h1~o2z~si4~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~ao2z~d*~i*  @atom:*~p*~b*~asi4~d*~i*
     @angle:c3a~o2~c3a~c3a~o2h~c3a  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bo2h~ao2~d*~i*  @atom:*~p*~bc3a~ac3a~d*~i*
     @angle:c3a~o2~c3a~c3a~o2e~c3a  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bo2e~ao2~d*~i*  @atom:*~p*~bc3a~ac3a~d*~i*
     @angle:c3a~o2~c3a~c3a~o2~c3a  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bo2~ao2~d*~i*  @atom:*~p*~bc3a~ac3a~d*~i*
@@ -426,6 +420,16 @@ COMPASS {
     @angle:h1~c3a~o2~h1~c3a~o2h  @atom:*~p*~bh1~ah1~d*~i*  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bo2h~ao2~d*~i*
     @angle:h1~c3a~o2~h1~c3a~o2e  @atom:*~p*~bh1~ah1~d*~i*  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bo2e~ao2~d*~i*
     @angle:h1~c3a~o2~h1~c3a~o2  @atom:*~p*~bh1~ah1~d*~i*  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bo2~ao2~d*~i*
+    @angle:n3~p4=~o2~X~X~X  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~ao2~d*~i*
+    @angle:n3~p4=~n3~X~X~X  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
+    @angle:n2=~p4=~n3~X~X~X  @atom:*~p*~b*~an2=~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
+    @angle:h1~p4=~n3~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
+    @angle:c3a~p4=~n3~X~X~X  @atom:*~p*~b*~ac3a~d*~i*  @atom:*~p*~b*~ap4=~d*~i*  @atom:*~p*~b*~an3~d*~i*
+    @angle:h1~o2~p4=~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~ao2~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
+    @angle:c4~o2~p4=~X~X~X  @atom:*~p*~b*~ac4~d*~i*  @atom:*~p*~b*~ao2~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
+    @angle:h1~n3~p4=~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
+    @angle:c4~n3~p4=~X~X~X  @atom:*~p*~b*~ac4~d*~i*  @atom:*~p*~b*~an3~d*~i*  @atom:*~p*~b*~ap4=~d*~i*
+    @angle:h1~o2z~si4~X~X~X  @atom:*~p*~b*~ah1~d*~i*  @atom:*~p*~b*~ao2z~d*~i*  @atom:*~p*~b*~asi4~d*~i*
     @angle:si4~si4~si4~si4~si4~si4  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~d*~i*
     @angle:h1~si4~si4~h1~si4~si4  @atom:*~p*~bh1~ah1~d*~i*  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~d*~i*
     @angle:c4~si4~si4~c4~si4~si4  @atom:*~p*~bc4~ac4~d*~i*  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~d*~i*
@@ -528,36 +532,6 @@ COMPASS {
 
 
   write_once("In Settings") {
-    angle_coeff @angle:n3~p4=~o2~X~X~X   108.3000 86.7690 -5.1750 -17.6710  # (ver=1.0, ref=4)
-    angle_coeff @angle:n3~p4=~o2~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:n3~p4=~o2~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:n3~p4=~n3~X~X~X   107.1000 85.7690 -5.7790 -17.4890  # (ver=1.0, ref=4)
-    angle_coeff @angle:n3~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:n3~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:n2=~p4=~n3~X~X~X   123.2150 89.9230 -32.6120 -21.0960  # (ver=1.0, ref=4)
-    angle_coeff @angle:n2=~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:n2=~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~p4=~n3~X~X~X   103.9780 68.2570 -9.2210 -14.1740  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:c3a~p4=~n3~X~X~X   108.1650 70.9770 -11.5480 -15.1090  # (ver=1.0, ref=4)
-    angle_coeff @angle:c3a~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:c3a~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~o2~p4=~X~X~X   117.0000 26.0310 -5.8280 -5.6200  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~o2~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~o2~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:c4~o2~p4=~X~X~X   118.2830 35.0010 -10.3600 -7.8700  # (ver=1.0, ref=4)
-    angle_coeff @angle:c4~o2~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:c4~o2~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~n3~p4=~X~X~X   120.0830 25.0010 -6.1170 -5.4570  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~n3~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~n3~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:c4~n3~p4=~X~X~X   120.0830 25.0010 -6.1170 -5.4570  # (ver=1.0, ref=4)
-    angle_coeff @angle:c4~n3~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:c4~n3~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    angle_coeff @angle:h1~o2z~si4~X~X~X   122.8000 23.7764 -19.8152 9.6331  # (ver=1.0, ref=2)
-    angle_coeff @angle:h1~o2z~si4~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=2)
-    angle_coeff @angle:h1~o2z~si4~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
     angle_coeff @angle:c3a~o2~c3a~c3a~o2h~c3a   0.0 0.0 0.0 0.0  # (ver=1.0, ref=7)
     angle_coeff @angle:c3a~o2~c3a~c3a~o2h~c3a   bb 0.0000 1.3768 1.3768  # (ver=1.0, ref=7)
     angle_coeff @angle:c3a~o2~c3a~c3a~o2h~c3a   ba 0.0 0.0 1.3768 1.3768  # (ver=1.0, ref=7)
@@ -597,6 +571,36 @@ COMPASS {
     angle_coeff @angle:h1~c3a~o2~h1~c3a~o2   0.0 0.0 0.0 0.0  # (ver=1.0, ref=3)
     angle_coeff @angle:h1~c3a~o2~h1~c3a~o2   bb 4.5800 1.0982 1.3768  # (ver=1.0, ref=3)
     angle_coeff @angle:h1~c3a~o2~h1~c3a~o2   ba 0.0 0.0 1.0982 1.3768  # (ver=1.0, ref=3)
+    angle_coeff @angle:n3~p4=~o2~X~X~X   108.3000 86.7690 -5.1750 -17.6710  # (ver=1.0, ref=4)
+    angle_coeff @angle:n3~p4=~o2~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:n3~p4=~o2~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:n3~p4=~n3~X~X~X   107.1000 85.7690 -5.7790 -17.4890  # (ver=1.0, ref=4)
+    angle_coeff @angle:n3~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:n3~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:n2=~p4=~n3~X~X~X   123.2150 89.9230 -32.6120 -21.0960  # (ver=1.0, ref=4)
+    angle_coeff @angle:n2=~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:n2=~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~p4=~n3~X~X~X   103.9780 68.2570 -9.2210 -14.1740  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:c3a~p4=~n3~X~X~X   108.1650 70.9770 -11.5480 -15.1090  # (ver=1.0, ref=4)
+    angle_coeff @angle:c3a~p4=~n3~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:c3a~p4=~n3~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~o2~p4=~X~X~X   117.0000 26.0310 -5.8280 -5.6200  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~o2~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~o2~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:c4~o2~p4=~X~X~X   118.2830 35.0010 -10.3600 -7.8700  # (ver=1.0, ref=4)
+    angle_coeff @angle:c4~o2~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:c4~o2~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~n3~p4=~X~X~X   120.0830 25.0010 -6.1170 -5.4570  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~n3~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~n3~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:c4~n3~p4=~X~X~X   120.0830 25.0010 -6.1170 -5.4570  # (ver=1.0, ref=4)
+    angle_coeff @angle:c4~n3~p4=~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:c4~n3~p4=~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    angle_coeff @angle:h1~o2z~si4~X~X~X   122.8000 23.7764 -19.8152 9.6331  # (ver=1.0, ref=2)
+    angle_coeff @angle:h1~o2z~si4~X~X~X   bb 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    angle_coeff @angle:h1~o2z~si4~X~X~X   ba 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
     angle_coeff @angle:si4~si4~si4~si4~si4~si4   114.2676 24.9501 -19.5949 0.0000  # (ver=1.0, ref=10)
     angle_coeff @angle:si4~si4~si4~si4~si4~si4   bb 6.0704 2.3384 2.3384  # (ver=1.0, ref=10)
     angle_coeff @angle:si4~si4~si4~si4~si4~si4   ba 8.9899 8.9899 2.3384 2.3384  # (ver=1.0, ref=10)
@@ -878,20 +882,6 @@ COMPASS {
 
 
   write_once("Data Dihedrals By Type") {
-    @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dc3prime~i*  @atom:*~p*~b*~a*~dn3m~i*  @atom:*~p*~b*~a*~dc3prime~i*  @atom:*~p*~b*~a*~do1~i*
-    @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dc4~i*  @atom:*~p*~b*~a*~dc4~i*  @atom:*~p*~b*~a*~dn3o~i*  @atom:*~p*~b*~a*~do1=~i*
-    @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~d*~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~d*~i*
-    @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~d*~i*  @atom:*~p*~b*~a*~dc3a~i*  @atom:*~p*~b*~a*~dn2=~i*  @atom:*~p*~b*~a*~d*~i*
-    @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~d*~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~d*~i*
-    @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~do2~i*
-    @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dn2=~i*
-    @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dh1~i*
-    @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~do2~i*
-    @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dn2=~i*
-    @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dh1~i*
-    @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2z~i*  @atom:*~p*~b*~a*~dsi4~i*  @atom:*~p*~b*~a*~do2z~i*
-    @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2z~i*  @atom:*~p*~b*~a*~dsi4~i*  @atom:*~p*~b*~a*~dh1~i*
-    @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dc4~i*  @atom:*~p*~b*~a*~dsi4~i*  @atom:*~p*~b*~a*~do2z~i*  @atom:*~p*~b*~a*~dh1~i*
     @dihedral:h1~si4~si4~si4~h1~si4~si4~si4~h1~si4~si4~si4  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
     @dihedral:h1~si4~c4~h1~h1~si4~c4~h1~h1~si4~c4~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
     @dihedral:c4~si4~c4~h1~c4~si4~c4~h1~c4~si4~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
@@ -902,6 +892,9 @@ COMPASS {
     @dihedral:c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bh1~ah1~dh1~i*
     @dihedral:c4~c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
     @dihedral:c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bn3m~an3m~dn3m~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~d*~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~d*~i*
+    @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~d*~i*  @atom:*~p*~b*~a*~dc3a~i*  @atom:*~p*~b*~a*~dn2=~i*  @atom:*~p*~b*~a*~d*~i*
+    @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~d*~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~d*~i*
     @dihedral:X~si4~si4~X~si4~si4~si4~si4~si4~si4~si4~si4  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~d*~i*
     @dihedral:X~si4~si4~X~si4~si4~si4~h1~si4~si4~si4~h1  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bh1~ah1~d*~i*
     @dihedral:X~si4~si4~X~si4~si4~si4~c4~si4~si4~si4~c4  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc4~ac4~d*~i*
@@ -919,35 +912,6 @@ COMPASS {
     @dihedral:X~c4~si4~X~c4~c4~si4~o2z~c4~c4~si4~o2z  @atom:*~p*~bc4~ac4~d*~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~d*~i*
     @dihedral:X~c4~si4~X~c4~c4~si4~h1~c4~c4~si4~h1  @atom:*~p*~bc4~ac4~d*~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bh1~ah1~d*~i*
     @dihedral:X~c4~si4~X~c4~c4~si4~c4~c4~c4~si4~c4  @atom:*~p*~bc4~ac4~d*~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc4~ac4~d*~i*
-    @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
-    @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a  @atom:*~p*~bo2z~ao2z~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*
-    @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a  @atom:*~p*~bh1~ah1~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*
-    @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
-    @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
-    @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*
-    @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*
-    @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*
-    @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*  @atom:*~p*~bn1t~an1t~dn1t~i*
-    @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*  @atom:*~p*~bn1t~an1t~dn1t~i*
-    @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*
-    @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*
-    @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bc4~ac4~dc4~i*
-    @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*
-    @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*
-    @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*
-    @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*
-    @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bn3o~an3o~dn3o~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bn3o~an3o~dn3o~i*
-    @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn3o~an3o~dn3o~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3o~an3o~dn3o~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
-    @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3o~an3o~dn3o~i*
-    @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3o~an3o~dn3o~i*
     @dihedral:X~n2=~p4=~X~p4=~n2=~p4=~o2~p4=~n2=~p4=~o2  @atom:*~p*~bp4=~ap4=~d*~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bo2~ao2~d*~i*
     @dihedral:X~n2=~p4=~X~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=  @atom:*~p*~bp4=~ap4=~d*~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~d*~i*
     @dihedral:X~n2=~p4=~X~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1  @atom:*~p*~bp4=~ap4=~d*~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~d*~i*
@@ -967,55 +931,10 @@ COMPASS {
     @dihedral:X~c3a~p4=~X~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~d*~i*
     @dihedral:X~c3a~p4=~X~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~d*~i*
     @dihedral:X~c3a~p4=~X~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bc3a~ac3a~d*~i*
-    @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
-    @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
-    @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bo2~ao2~do2~i*
-    @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
-    @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
-    @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
-    @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
-    @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
-    @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
-    @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bh1~ah1~dh1~i*
-    @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
-    @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
-    @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
-    @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
-    @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
-    @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
-    @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
-    @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
-    @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
-    @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
-    @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
-    @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
-    @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
-    @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
-    @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
-    @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
-    @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
-    @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
-    @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
     @dihedral:X~o2z~si4~X~si4~o2z~si4~o2z~si4~o2z~si4~o2z  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~d*~i*
     @dihedral:X~o2z~si4~X~si4~o2z~si4~h1~si4~o2z~si4~h1  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bh1~ah1~d*~i*
     @dihedral:X~o2z~si4~X~si4~o2z~si4~c4~si4~o2z~si4~c4  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc4~ac4~d*~i*
     @dihedral:X~o2z~si4~X~si4~o2z~si4~c3a~si4~o2z~si4~c3a  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc3a~ac3a~d*~i*
-    @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
-    @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
-    @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
     @dihedral:X~c4~c4~X~si4~c4~c4~si4~si4~c4~c4~si4  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~d*~i*
     @dihedral:X~c4~c4~X~si4~c4~c4~o2n~si4~c4~c4~o2n  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~d*~i*
     @dihedral:X~c4~c4~X~si4~c4~c4~o2h~si4~c4~c4~o2  @atom:*~p*~bsi4~asi4~d*~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~d*~i*
@@ -1241,6 +1160,91 @@ COMPASS {
     @dihedral:X~c3a~c3a~X~c3a~c3a~c3a~c4~c3a~c3a~c3a~c4  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc4~ac4~d*~i*
     @dihedral:X~c3a~c3a~X~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3prime~ac3prime~d*~i*
     @dihedral:X~c3a~c3a~X~c3a~c3a~c3a~c3a~c3a~c3a~c3a~c3a  @atom:*~p*~bc3a~ac3a~d*~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~d*~i*
+    @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a  @atom:*~p*~bo2z~ao2z~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*
+    @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a  @atom:*~p*~bh1~ah1~d*~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*
+    @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dc3prime~i*  @atom:*~p*~b*~a*~dn3m~i*  @atom:*~p*~b*~a*~dc3prime~i*  @atom:*~p*~b*~a*~do1~i*
+    @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dc4~i*  @atom:*~p*~b*~a*~dc4~i*  @atom:*~p*~b*~a*~dn3o~i*  @atom:*~p*~b*~a*~do1=~i*
+    @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~do2~i*
+    @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dn2=~i*
+    @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dh1~i*
+    @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~do2~i*
+    @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dn2=~i*
+    @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~dn3~i*  @atom:*~p*~b*~a*~dp4=~i*  @atom:*~p*~b*~a*~dh1~i*
+    @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2z~i*  @atom:*~p*~b*~a*~dsi4~i*  @atom:*~p*~b*~a*~do2z~i*
+    @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dh1~i*  @atom:*~p*~b*~a*~do2z~i*  @atom:*~p*~b*~a*~dsi4~i*  @atom:*~p*~b*~a*~dh1~i*
+    @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X  @atom:*~p*~b*~a*~dc4~i*  @atom:*~p*~b*~a*~dsi4~i*  @atom:*~p*~b*~a*~do2z~i*  @atom:*~p*~b*~a*~dh1~i*
+    @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
+    @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
+    @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
+    @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*
+    @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*
+    @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*
+    @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*  @atom:*~p*~bn1t~an1t~dn1t~i*
+    @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bn2z~an2z~dn2z~i*  @atom:*~p*~bn2t~an2t~dn2t~i*  @atom:*~p*~bn1t~an1t~dn1t~i*
+    @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*
+    @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*
+    @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bc4~ac4~dc4~i*
+    @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*
+    @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*
+    @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3m~an3m~dn3m~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*
+    @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3prime~ac3prime~dc3prime~i*
+    @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bn3o~an3o~dn3o~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bn3o~an3o~dn3o~i*
+    @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn3o~an3o~dn3o~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3o~an3o~dn3o~i*  @atom:*~p*~bo1=~ao1=~do1=~i*
+    @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3o~an3o~dn3o~i*
+    @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bn3o~an3o~dn3o~i*
+    @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
+    @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
+    @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bo2~ao2~do2~i*
+    @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
+    @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
+    @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
+    @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bn2=~an2=~dn2=~i*
+    @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
+    @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bp4=~ap4=~dp4=~i*
+    @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bh1~ah1~dh1~i*
+    @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
+    @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
+    @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
+    @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
+    @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2  @atom:*~p*~bo2n~ao2n~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
+    @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
+    @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
+    @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
+    @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
+    @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
+    @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
+    @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
+    @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
+    @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
+    @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2n~ao2n~do2~i*
+    @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2h~ao2~do2~i*
+    @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bo2e~ao2~do2~i*
+    @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2h~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
+    @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bc3a~ac3a~dc3a~i*  @atom:*~p*~bo2e~ao2~do2~i*  @atom:*~p*~bc4~ac4~dc4~i*
+    @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
+    @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
+    @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bsi4~asi4~dsi4~i*  @atom:*~p*~bo2z~ao2z~do2z~i*  @atom:*~p*~bsi4~asi4~dsi4~i*
     @dihedral:h1~c4~c4~h1~h1~c4~c4~h1~h1~c4~c4~h1  @atom:*~p*~bh1~ah1~dh1~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
     @dihedral:c4~c4~c4~h1~c4~c4~c4~h1~c4~c4~c4~h1  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bh1~ah1~dh1~i*
     @dihedral:c4~c4~c4~c4~c4~c4~c4~c4~c4~c4~c4~c4  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*  @atom:*~p*~bc4~ac4~dc4~i*
@@ -1273,90 +1277,6 @@ COMPASS {
 
 
   write_once("In Settings") {
-    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   -0.4066 0.0 1.2513 0.0 -0.7507 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   0.0000 0.0 1.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.0500 0.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.0500 0.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.0500 0.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:h1~si4~si4~si4~h1~si4~si4~si4~h1~si4~si4~si4   0.0 0.0 0.0 0.0 0.0 0.0  # (ver=1.0, ref=10)
     dihedral_coeff @dihedral:h1~si4~si4~si4~h1~si4~si4~si4~h1~si4~si4~si4   mbt 0.0 0.0 0.0 2.3384  # (ver=1.0, ref=10)
     dihedral_coeff @dihedral:h1~si4~si4~si4~h1~si4~si4~si4~h1~si4~si4~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4783 2.3384  # (ver=1.0, ref=10)
@@ -1417,6 +1337,24 @@ COMPASS {
     dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=   at -0.3188 -0.0548 -0.3038 -0.2851 2.3997 -1.5747 121.9556 121.5420  # (ver=1.0, ref=7)
     dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=   aat -3.3556 121.9556 121.5420  # (ver=1.0, ref=7)
     dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=~c3prime~n3m~c3prime~o1=   bb13 0.0 1.3850 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~n3~p4=~X~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   0.0000 0.0 1.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~c3a~n2=~X~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:X~o2~p4=~X~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
     dihedral_coeff @dihedral:X~si4~si4~X~si4~si4~si4~si4~si4~si4~si4~si4   0.0000 0.0 0.0000 0.0 -0.0657 0.0  # (ver=1.0, ref=10)
     dihedral_coeff @dihedral:X~si4~si4~X~si4~si4~si4~si4~si4~si4~si4~si4   mbt 0.0 0.0 0.0 2.3384  # (ver=1.0, ref=10)
     dihedral_coeff @dihedral:X~si4~si4~X~si4~si4~si4~si4~si4~si4~si4~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 2.3384 2.3384  # (ver=1.0, ref=10)
@@ -1519,180 +1457,6 @@ COMPASS {
     dihedral_coeff @dihedral:X~c4~si4~X~c4~c4~si4~c4~c4~c4~si4~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 112.6700 113.1855  # (ver=1.0, ref=10)
     dihedral_coeff @dihedral:X~c4~si4~X~c4~c4~si4~c4~c4~c4~si4~c4   aat 0.0 112.6700 113.1855  # (ver=1.0, ref=10)
     dihedral_coeff @dihedral:X~c4~si4~X~c4~c4~si4~c4~c4~c4~si4~c4   bb13 0.0 1.5300 1.8995  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   -0.3500 0.0 0.0000 0.0 -0.0657 0.0  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   mbt 0.0 0.0 0.0 1.8995  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 2.3384  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 112.6700 113.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   aat 0.0 112.6700 113.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   bb13 0.0 1.5300 2.3384  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   0.0000 0.0 0.0000 0.0 -0.0231 0.0  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   mbt 0.0 0.0 0.0 1.8634  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.6400 1.4170  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 114.9060 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   aat 0.0 114.9060 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   bb13 0.0 1.6400 1.4170  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   0.0000 0.0 0.0000 0.0 -0.0231 0.0  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   mbt 0.0 0.0 0.0 1.8634  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4783 1.4170  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 109.5932 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   aat 0.0 109.5932 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   bb13 0.0 1.4783 1.4170  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   0.0000 0.0 1.5093 0.0 0.0000 0.0  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   mbt 0.0000 6.2168 0.0000 1.4170  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.8634  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   at 0.0000 4.5914 0.0000 0.0000 1.1079 0.0000 117.9400 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   aat 0.0 117.9400 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   bb13 0.0 1.0982 1.8634  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   0.0000 0.0 4.3270 0.0 0.0000 0.0  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   mbt 0.0000 11.1576 0.0000 1.4170  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.8634  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   at 0.0000 -5.5448 0.0000 0.0000 4.3281 0.0000 118.9000 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   aat 0.0 118.9000 120.0000  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   bb13 0.0 1.4170 1.8634  # (ver=1.0, ref=10)
-    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   0.0000 0.0 0.0000 0.0 -0.2259 0.0  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   mbt 0.0 0.0 0.0 1.5300  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.4814  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   at 0.0 0.0 0.0 0.0 0.0 0.0 110.7700 110.9900  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   aat 0.0 110.7700 110.9900  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   bb13 0.0 1.1010 1.4814  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   0.0000 0.0 0.0000 0.0 -0.2021 0.0  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   mbt 0.0 0.0 0.0 1.4814  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.2343  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   at 0.0 0.0 0.0 0.0 0.0 0.0 110.9900 113.5017  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   aat 0.0 110.9900 113.5017  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   bb13 0.0 1.5300 1.2343  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   0.0000 0.0 0.0000 0.0 -0.2181 0.0  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   mbt 0.0 0.0 0.0 1.4814  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.2343  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   at 0.0 0.0 0.0 0.0 0.0 0.0 107.9744 113.5017  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   aat 0.0 107.9744 113.5017  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   bb13 0.0 1.1010 1.2343  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   0.0000 0.0 0.0000 0.0 -0.1823 0.0  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   mbt 0.0 0.0 0.0 1.2343  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4814 1.1354  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   at 0.0 0.0 0.0 0.0 0.0 0.0 113.5017 171.6211  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   aat 0.0 113.5017 171.6211  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   bb13 0.0 1.4814 1.1354  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   0.0000 0.0 0.0000 0.0 -0.2637 0.0  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   mbt 0.0 0.0 0.0 1.2343  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0221 1.1354  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   at 0.0 0.0 0.0 0.0 0.0 0.0 110.0345 171.6211  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   aat 0.0 110.0345 171.6211  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   bb13 0.0 1.0221 1.1354  # (ver=1.0, ref=9)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   0.0000 0.0 3.4040 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   mbt 0.0000 5.2012 0.0000 1.4170  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.3950  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   at 0.0 0.0 0.0 0.0 0.0 0.0 117.9400 120.7640  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   aat 0.0 117.9400 120.7640  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   bb13 0.0 1.0982 1.3950  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   mbt -13.7686 -2.5959 1.1934 1.5140  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   ebt 0.7800 1.3339 0.3268 0.4160 -0.1140 0.7099 1.1010 1.3750  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   at -0.0071 0.8005 13.2959 0.1212 1.4427 -0.0241 107.8594 100.3182  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   aat -13.9734 107.8594 100.3182  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   bb13 0.0 1.1010 1.3750  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   mbt 0.0000 0.0000 -1.0000 1.5140  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   ebt 2.9036 0.5307 0.1439 0.0536 0.0354 0.3853 1.1010 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   at 0.0800 0.3339 14.4728 -0.2083 0.7308 -2.0667 107.8594 119.3000  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   aat -23.1923 107.8594 119.3000  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   bb13 0.0 1.1010 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   0.8905 0.0 3.2644 0.0 0.2646 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   mbt 0.4552 7.3091 0.2842 1.3750  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   ebt 0.0882 -2.4309 -0.7426 -4.2421 10.1102 1.6824 1.4200 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   at -0.0327 1.0059 2.3573 1.9052 2.7261 5.9732 109.0000 118.9855  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   aat -32.9368 109.0000 118.9855  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   bb13 0.0 1.4200 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   -2.5594 0.0 2.2013 0.0 0.0325 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   mbt 0.0 0.0 0.0 1.3750  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4200 1.5140  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 109.0000 100.3182  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   aat 0.0 109.0000 100.3182  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   bb13 0.0 1.4200 1.5140  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   0.0000 0.0 2.0521 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   mbt 0.0 0.0 0.0 1.3850  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.3950 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0700 121.5420  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   aat 0.0 120.0700 121.5420  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   bb13 0.0 1.3950 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   0.0000 0.0 3.4040 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   mbt 0.0000 5.2012 0.0000 1.4170  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.3950  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 120.7640  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   aat 0.0 118.9000 120.7640  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   bb13 0.0 1.4170 1.3950  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   0.0000 0.0 0.7800 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   mbt 0.0000 2.4002 0.0000 1.4890  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   at 0.0 0.0 0.0 0.0 0.0 0.0 116.0640 125.5320  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   aat 0.0 116.0640 125.5320  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   bb13 0.0 1.4170 1.2160  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   0.9513 0.0 0.1155 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   mbt 7.7147 4.2557 -1.0118 1.4200  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   ebt 0.2282 2.2998 -0.4473 0.9589 0.9190 -0.6015 1.3750 1.1010  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   at 0.0971 -0.8699 -0.3142 -0.0401 2.8061 -0.4990 109.0000 108.7280  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   aat -13.1500 109.0000 108.7280  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   bb13 0.0 1.3750 1.1010  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   0.1302 0.0 -0.3250 0.0 0.1134 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   mbt 9.9416 2.6421 2.2333 1.4200  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   ebt 0.2560 0.8133 -0.0728 -1.2164 -0.1715 -0.0964 1.3750 1.5300  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   at 0.7229 -0.9159 -0.0890 -0.6765 1.4492 -0.4620 109.0000 111.2700  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   aat -15.7082 109.0000 111.2700  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   bb13 0.0 1.3750 1.5300  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   0.0000 0.0 0.6500 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   mbt 0.0 0.0 0.0 1.3950  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.3850  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   at 0.0 0.0 0.0 0.0 0.0 0.0 120.7640 120.0700  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   aat 0.0 120.7640 120.0700  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   bb13 0.0 1.4170 1.3850  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   0.0000 0.0 2.1670 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4890 1.0982  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 116.0640 117.9400  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   aat 0.0 116.0640 117.9400  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   bb13 0.0 1.4890 1.0982  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   0.0000 0.0 4.6282 0.0 0.0000 0.0  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   mbt 0.0000 3.8762 0.0000 1.4170  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4890  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 116.0640  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   aat 0.0 118.9000 116.0640  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   bb13 0.0 1.4170 1.4890  # (ver=1.0, ref=7)
-    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   0.0000 0.0 2.0000 0.0 0.0000 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   mbt 0.0 0.0 0.0 1.4020  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4350 1.2100  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   at 0.0000 0.0000 0.0000 0.0000 0.0000 -3.0000 108.5000 112.8000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   aat 0.0 108.5000 112.8000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   bb13 0.0 1.4350 1.2100  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   0.0000 0.0 -0.4000 0.0 -0.2000 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   mbt 0.0 0.0 0.0 1.4350  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.4020  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   at 0.0 0.0 0.0 0.0 0.0 0.0 105.0000 108.5000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   aat 0.0 105.0000 108.5000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   bb13 0.0 1.5300 1.4020  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   mbt 0.0 0.0 0.0 1.4740  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.2100  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   at 0.0000 -0.3086 0.0000 0.0000 1.0352 0.0000 107.0000 117.5000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   aat -16.2615 107.0000 117.5000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   bb13 0.0 1.1010 1.2100  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   0.0000 0.0 1.1600 0.0 0.0000 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   mbt 0.0 0.0 0.0 1.4300  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.2100  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   at 0.0000 0.0000 0.0000 0.0000 -3.4207 0.0000 118.8000 117.7000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   aat -18.0436 118.8000 117.7000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   bb13 0.0 1.4170 1.2100  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   0.0000 0.0 2.9126 0.0 0.0000 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.4300  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   at 0.0000 -8.0369 0.0000 0.0000 0.0000 0.0000 117.9400 118.8000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   aat 2.1508 117.9400 118.8000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   bb13 0.0 1.0982 1.4300  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   0.0000 0.0 7.2124 0.0 0.0000 0.0  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4300  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   at 0.0000 7.7594 0.0000 0.0000 0.0000 0.0000 118.9000 118.8000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   aat -34.9681 118.9000 118.8000  # (ver=1.0, ref=6)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   bb13 0.0 1.4170 1.4300  # (ver=1.0, ref=6)
     dihedral_coeff @dihedral:X~n2=~p4=~X~p4=~n2=~p4=~o2~p4=~n2=~p4=~o2   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
     dihedral_coeff @dihedral:X~n2=~p4=~X~p4=~n2=~p4=~o2~p4=~n2=~p4=~o2   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
     dihedral_coeff @dihedral:X~n2=~p4=~X~p4=~n2=~p4=~o2~p4=~n2=~p4=~o2   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5980 1.6000  # (ver=1.0, ref=4)
@@ -1807,258 +1571,6 @@ COMPASS {
     dihedral_coeff @dihedral:X~c3a~p4=~X~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0010 110.2310  # (ver=1.0, ref=4)
     dihedral_coeff @dihedral:X~c3a~p4=~X~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a   aat 0.0 120.0010 110.2310  # (ver=1.0, ref=4)
     dihedral_coeff @dihedral:X~c3a~p4=~X~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a   bb13 0.0 1.4170 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   1.8000 0.0 0.5000 0.0 2.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   mbt 0.0000 0.0000 0.0000 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5980 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 125.0000 135.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   aat 0.0 125.0000 135.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   bb13 0.0 1.5980 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4300 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 110.0330 135.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   aat 0.0 110.0330 135.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   bb13 0.0 1.4300 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0310 1.6000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0000 112.2150  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   aat 0.0 120.0000 112.2150  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   bb13 0.0 1.0310 1.6000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0310 1.4300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0000 110.0330  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   aat -3.7880 120.0000 110.0330  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   bb13 0.0 1.0310 1.4300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   0.0000 0.0 0.0000 0.0 -0.3690 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8000 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 119.3000 120.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   aat -11.1020 119.3000 120.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   bb13 0.0 1.8000 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.7890 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 109.6000 120.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   aat 0.0 109.6000 120.0000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   bb13 0.0 1.7890 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   0.0000 0.0 0.0000 0.0 -0.0680 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   mbt 0.0 0.0 0.0 1.8000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   at 0.0 0.0 0.0 0.0 0.0 0.0 110.8860 119.3000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   aat -19.9340 110.8860 119.3000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   bb13 0.0 1.1010 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   0.0000 0.0 0.0000 0.0 -0.0680 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   mbt 0.0 0.0 0.0 1.8000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.4300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 110.8860 102.9000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   aat -16.0180 110.8860 102.9000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   bb13 0.0 1.1010 1.4300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   0.0000 0.0 0.0000 0.0 -0.0680 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   mbt 0.0 0.0 0.0 1.8000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8000 1.1010  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 102.5000 110.8860  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   aat -25.5460 102.5000 110.8860  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   bb13 0.0 1.8000 1.1010  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   1.2660 0.0 -0.7740 0.0 0.0380 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   mbt -0.4140 -2.8620 0.0070 1.4740  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   at -1.8950 1.2210 -0.7460 0.1100 0.0650 0.1090 107.4990 117.2000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   aat -9.6280 107.4990 117.2000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   bb13 0.0 1.1010 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   -5.0720 0.0 -0.4980 0.0 -0.4380 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   mbt -2.3800 2.5290 -0.7300 1.4740  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   at -2.5230 2.8480 2.0590 -3.6920 4.0610 -1.5440 117.3170 117.2000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   aat -8.8980 117.3170 117.2000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   bb13 0.0 1.5300 1.0310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   -0.1510 0.0 0.0100 0.0 -0.1860 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   mbt -3.5150 -2.2980 -1.2770 1.5300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.4740  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   at -2.0980 1.8610 -1.6890 -0.1220 1.8930 -0.5670 110.7700 117.3170  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   aat -27.5060 110.7700 117.3170  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   bb13 0.0 1.1010 1.4740  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   0.0970 0.0 0.0720 0.0 -0.2580 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   mbt 0.0000 0.0000 0.0000 1.5300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.4740  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   at -2.0980 1.8610 -1.6890 -0.1220 1.8930 -0.5670 112.6700 117.3170  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   aat 0.0000 112.6700 117.3170  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   bb13 0.0 1.5300 1.4740  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   -0.2720 0.0 1.1900 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   mbt 0.0 0.0 0.0 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0010 109.6000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   aat 0.0 120.0010 109.6000  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   bb13 0.0 1.4170 1.5980  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   -0.2720 0.0 1.1900 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   mbt 0.0 0.0 0.0 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0010 108.2310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   aat 0.0 120.0010 108.2310  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   bb13 0.0 1.4170 1.4300  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   0.0000 0.0 2.2700 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 117.9400 120.0010  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   aat 0.0 117.9400 120.0010  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   bb13 0.0 1.0982 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   0.0000 0.0 5.4770 0.0 0.0000 0.0  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 120.0010  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   aat 0.0 118.9000 120.0010  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   bb13 0.0 1.4170 1.7890  # (ver=1.0, ref=4)
-    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   0.1863 0.0 -0.4338 0.0 -0.2121 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   mbt 0.0000 0.9241 -0.5889 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   ebt -1.7554 1.3145 0.2263 0.2493 0.6803 0.0000 1.1010 0.9494  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   at -3.4060 1.6396 0.0737 0.0000 -0.2810 -0.5944 108.7280 105.8000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   aat -10.5093 108.7280 105.8000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   bb13 0.0 1.1010 0.9494  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   0.5302 0.0 0.0000 0.0 -0.3966 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   mbt -6.8007 -4.6546 -1.4101 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   ebt -0.1620 0.1564 -1.1408 -0.6054 1.3339 0.9648 1.4200 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   at -0.6653 0.4340 -0.7777 0.5144 1.6393 -1.8234 104.5000 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   aat -16.4438 104.5000 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   bb13 0.0 1.4200 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   0.5302 0.0 0.0000 0.0 -0.3966 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   mbt -6.8007 -4.6546 -1.4101 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   ebt -0.1620 0.1564 -1.1408 -0.6054 1.3339 0.9648 1.4200 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   at -0.6653 0.4340 -0.7777 0.5144 1.6393 -1.8234 104.5000 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   aat -16.4438 104.5000 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   bb13 0.0 1.4200 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   0.9513 0.0 0.1155 0.0 0.0720 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   mbt 0.0 0.0 0.0 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   aat 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   bb13 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   0.9513 0.0 0.1155 0.0 0.0720 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   mbt 0.0 0.0 0.0 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   aat 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   bb13 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   -0.6732 0.0 -0.4778 0.0 -0.1670 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   mbt 1.2472 0.0000 0.7485 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   ebt -0.5800 0.9004 0.0000 0.0000 0.5343 0.9025 1.5300 0.9494  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   at -3.5903 2.5225 0.4888 0.8726 -0.3577 0.3888 111.2700 105.8000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   aat -12.1038 111.2700 105.8000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   bb13 0.0 1.5300 0.9494  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   -0.4000 0.0 -0.4028 0.0 -0.2450 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   mbt -5.9288 -2.7007 -0.3175 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   ebt -0.2456 1.0517 -0.7795 0.4741 1.2635 0.5576 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   at -2.7466 1.4877 -0.8955 0.5676 0.9450 0.0703 111.2700 104.5000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   aat -19.0059 111.2700 104.5000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   -0.4000 0.0 -0.4028 0.0 -0.2450 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   mbt -5.9288 -2.7007 -0.3175 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   ebt -0.2456 1.0517 -0.7795 0.4741 1.2635 0.5576 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   at -2.7466 1.4877 -0.8955 0.5676 0.9450 0.0703 111.2700 104.5000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   aat -19.0059 111.2700 104.5000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4350 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 105.0000 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   aat -14.0484 105.0000 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   bb13 0.0 1.4350 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4350 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 105.0000 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   aat -14.0484 105.0000 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   bb13 0.0 1.4350 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4350 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 105.0000 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   aat -14.0484 105.0000 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   bb13 0.0 1.4350 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   aat -14.0484 111.2700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   bb13 0.0 1.4200 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   aat -14.0484 111.2700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   bb13 0.0 1.4200 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   -0.1435 0.0 0.2530 0.0 -0.0905 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   mbt -16.7975 -1.2296 -0.2750 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   ebt 0.9681 0.9551 0.0436 0.5903 0.6669 0.8584 1.1010 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   at 2.3668 2.4920 -1.0122 -0.1892 0.4918 0.7273 110.7700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   aat -20.2006 110.7700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   bb13 0.0 1.1010 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   -0.1435 0.0 0.2530 0.0 -0.0905 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   mbt -16.7975 -1.2296 -0.2750 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   ebt 0.9681 0.9551 0.0436 0.5903 0.6669 0.8584 1.1010 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   at 2.3668 2.4920 -1.0122 -0.1892 0.4918 0.7273 110.7700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   aat -20.2006 110.7700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   bb13 0.0 1.1010 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   -0.1435 0.0 0.2530 0.0 -0.0905 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   mbt -16.7975 -1.2296 -0.2750 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   ebt 0.9681 0.9551 0.0436 0.5903 0.6669 0.8584 1.1010 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   at 2.3668 2.4920 -1.0122 -0.1892 0.4918 0.7273 110.7700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   aat -20.2006 110.7700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   bb13 0.0 1.1010 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   0.7137 0.0 0.2660 0.0 -0.2545 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   mbt -21.8842 -7.6764 -0.6868 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   ebt -0.3190 0.4411 -0.7174 1.1538 0.8409 -0.9138 1.5300 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   at 0.5623 -0.3041 -0.4015 0.9672 -0.7566 -1.2331 112.6700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   aat -29.0420 112.6700 105.0000  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   bb13 0.0 1.5300 1.4350  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   0.7137 0.0 0.2660 0.0 -0.2545 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   mbt -21.8842 -7.6764 -0.6868 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   ebt -0.3190 0.4411 -0.7174 1.1538 0.8409 -0.9138 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   at 0.5623 -0.3041 -0.4015 0.9672 -0.7566 -1.2331 112.6700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   aat -29.0420 112.6700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   0.7137 0.0 0.2660 0.0 -0.2545 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   mbt -21.8842 -7.6764 -0.6868 1.5300  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   ebt -0.3190 0.4411 -0.7174 1.1538 0.8409 -0.9138 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   at 0.5623 -0.3041 -0.4015 0.9672 -0.7566 -1.2331 112.6700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   aat -29.0420 112.6700 111.2700  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   0.0000 0.0 1.5000 0.0 0.0000 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   mbt 0.0 0.0 0.0 1.3768  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   aat 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   bb13 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   0.0000 0.0 1.5000 0.0 0.0000 0.0  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   mbt 0.0 0.0 0.0 1.3768  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   aat 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
-    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   bb13 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
     dihedral_coeff @dihedral:X~o2z~si4~X~si4~o2z~si4~o2z~si4~o2z~si4~o2z   0.0000 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:X~o2z~si4~X~si4~o2z~si4~o2z~si4~o2z~si4~o2z   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:X~o2z~si4~X~si4~o2z~si4~o2z~si4~o2z~si4~o2z   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.6400 1.6400  # (ver=1.0, ref=2)
@@ -2083,24 +1595,6 @@ COMPASS {
     dihedral_coeff @dihedral:X~o2z~si4~X~si4~o2z~si4~c3a~si4~o2z~si4~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 159.0000 114.9060  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:X~o2z~si4~X~si4~o2z~si4~c3a~si4~o2z~si4~c3a   aat 0.0 159.0000 114.9060  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:X~o2z~si4~X~si4~o2z~si4~c3a~si4~o2z~si4~c3a   bb13 0.0 1.6400 1.8634  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   -0.2250 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.6400 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 110.7000 159.0000  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   aat 0.0 110.7000 159.0000  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   bb13 0.0 1.6400 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   0.0000 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4783 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 107.4000 159.0000  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   aat 0.0 107.4000 159.0000  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   bb13 0.0 1.4783 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   0.0000 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8995 1.6400  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 114.9060 159.0000  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   aat 0.0 114.9060 159.0000  # (ver=1.0, ref=2)
-    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   bb13 0.0 1.8995 1.6400  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:X~c4~c4~X~si4~c4~c4~si4~si4~c4~c4~si4   0.0000 0.0 0.0000 0.0 -0.1530 0.0  # (ver=1.0, ref=1)
     dihedral_coeff @dihedral:X~c4~c4~X~si4~c4~c4~si4~si4~c4~c4~si4   mbt 0.0 0.0 0.0 1.5300  # (ver=1.0, ref=1)
     dihedral_coeff @dihedral:X~c4~c4~X~si4~c4~c4~si4~si4~c4~c4~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8995 1.8995  # (ver=1.0, ref=1)
@@ -3451,6 +2945,516 @@ COMPASS {
     dihedral_coeff @dihedral:X~c3a~c3a~X~c3a~c3a~c3a~c3a~c3a~c3a~c3a~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 118.9000  # (ver=1.0, ref=1)
     dihedral_coeff @dihedral:X~c3a~c3a~X~c3a~c3a~c3a~c3a~c3a~c3a~c3a~c3a   aat 0.0 118.9000 118.9000  # (ver=1.0, ref=1)
     dihedral_coeff @dihedral:X~c3a~c3a~X~c3a~c3a~c3a~c3a~c3a~c3a~c3a~c3a   bb13 0.0 1.4170 1.4170  # (ver=1.0, ref=1)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   0.0000 0.0 0.0000 0.0 -0.0231 0.0  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   mbt 0.0 0.0 0.0 1.8634  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.6400 1.4170  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 114.9060 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   aat 0.0 114.9060 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~o2z~si4~c3a~c3a~o2z~si4~c3a~c3a   bb13 0.0 1.6400 1.4170  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   0.0000 0.0 0.0000 0.0 -0.0231 0.0  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   mbt 0.0 0.0 0.0 1.8634  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4783 1.4170  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   at 0.0 0.0 0.0 0.0 0.0 0.0 109.5932 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   aat 0.0 109.5932 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:X~si4~c3a~c3a~h1~si4~c3a~c3a~h1~si4~c3a~c3a   bb13 0.0 1.4783 1.4170  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   -0.4066 0.0 1.2513 0.0 -0.7507 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~n3m~c3prime~o1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~n3o~o1=~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~o2~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~n2=~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   5.7080 0.0 2.1180 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2~p4=~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~o2~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~n2=~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n3~p4=~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.0500 0.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~o2z~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.0500 0.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~o2z~si4~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   0.0000 0.0 0.0000 0.0 -0.0500 0.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   mbt 0.0 0.0 0.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0 120.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   aat 0.0 120.0 120.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~h1~X~X~X~X~X~X~X~X   bb13 0.0 1.0 1.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   -0.3500 0.0 0.0000 0.0 -0.0657 0.0  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   mbt 0.0 0.0 0.0 1.8995  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 2.3384  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 112.6700 113.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   aat 0.0 112.6700 113.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c4~c4~si4~si4~c4~c4~si4~si4~c4~c4~si4~si4   bb13 0.0 1.5300 2.3384  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   0.0000 0.0 1.5093 0.0 0.0000 0.0  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   mbt 0.0000 6.2168 0.0000 1.4170  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.8634  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   at 0.0000 4.5914 0.0000 0.0000 1.1079 0.0000 117.9400 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   aat 0.0 117.9400 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c3a~c3a~si4~h1~c3a~c3a~si4~h1~c3a~c3a~si4   bb13 0.0 1.0982 1.8634  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   0.0000 0.0 4.3270 0.0 0.0000 0.0  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   mbt 0.0000 11.1576 0.0000 1.4170  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.8634  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   at 0.0000 -5.5448 0.0000 0.0000 4.3281 0.0000 118.9000 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   aat 0.0 118.9000 120.0000  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   bb13 0.0 1.4170 1.8634  # (ver=1.0, ref=10)
+    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   0.0000 0.0 0.0000 0.0 -0.2259 0.0  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   mbt 0.0 0.0 0.0 1.5300  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.4814  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   at 0.0 0.0 0.0 0.0 0.0 0.0 110.7700 110.9900  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   aat 0.0 110.7700 110.9900  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~c4~n2z~h1~c4~c4~n2z~h1~c4~c4~n2z   bb13 0.0 1.1010 1.4814  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   0.0000 0.0 0.0000 0.0 -0.2021 0.0  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   mbt 0.0 0.0 0.0 1.4814  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.2343  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   at 0.0 0.0 0.0 0.0 0.0 0.0 110.9900 113.5017  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   aat 0.0 110.9900 113.5017  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~c4~n2z~n2t~c4~c4~n2z~n2t~c4~c4~n2z~n2t   bb13 0.0 1.5300 1.2343  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   0.0000 0.0 0.0000 0.0 -0.2181 0.0  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   mbt 0.0 0.0 0.0 1.4814  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.2343  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   at 0.0 0.0 0.0 0.0 0.0 0.0 107.9744 113.5017  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   aat 0.0 107.9744 113.5017  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c4~n2z~n2t~h1~c4~n2z~n2t~h1~c4~n2z~n2t   bb13 0.0 1.1010 1.2343  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   0.0000 0.0 0.0000 0.0 -0.1823 0.0  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   mbt 0.0 0.0 0.0 1.2343  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4814 1.1354  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   at 0.0 0.0 0.0 0.0 0.0 0.0 113.5017 171.6211  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   aat 0.0 113.5017 171.6211  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:c4~n2z~n2t~n1t~c4~n2z~n2t~n1t~c4~n2z~n2t~n1t   bb13 0.0 1.4814 1.1354  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   0.0000 0.0 0.0000 0.0 -0.2637 0.0  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   mbt 0.0 0.0 0.0 1.2343  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0221 1.1354  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   at 0.0 0.0 0.0 0.0 0.0 0.0 110.0345 171.6211  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   aat 0.0 110.0345 171.6211  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~n2z~n2t~n1t~h1~n2z~n2t~n1t~h1~n2z~n2t~n1t   bb13 0.0 1.0221 1.1354  # (ver=1.0, ref=9)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   0.0000 0.0 3.4040 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   mbt 0.0000 5.2012 0.0000 1.4170  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.3950  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   at 0.0 0.0 0.0 0.0 0.0 0.0 117.9400 120.7640  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   aat 0.0 117.9400 120.7640  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3m~h1~c3a~c3a~n3m~h1~c3a~c3a~n3m   bb13 0.0 1.0982 1.3950  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   mbt -13.7686 -2.5959 1.1934 1.5140  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   ebt 0.7800 1.3339 0.3268 0.4160 -0.1140 0.7099 1.1010 1.3750  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   at -0.0071 0.8005 13.2959 0.1212 1.4427 -0.0241 107.8594 100.3182  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   aat -13.9734 107.8594 100.3182  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o2~h1~c4~c3prime~o2e~h1~c4~c3prime~o2   bb13 0.0 1.1010 1.3750  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   mbt 0.0000 0.0000 -1.0000 1.5140  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   ebt 2.9036 0.5307 0.1439 0.0536 0.0354 0.3853 1.1010 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   at 0.0800 0.3339 14.4728 -0.2083 0.7308 -2.0667 107.8594 119.3000  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   aat -23.1923 107.8594 119.3000  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:h1~c4~c3prime~o1=~h1~c4~c3prime~o1=~h1~c4~c3prime~o1=   bb13 0.0 1.1010 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   0.8905 0.0 3.2644 0.0 0.2646 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   mbt 0.4552 7.3091 0.2842 1.3750  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   ebt 0.0882 -2.4309 -0.7426 -4.2421 10.1102 1.6824 1.4200 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   at -0.0327 1.0059 2.3573 1.9052 2.7261 5.9732 109.0000 118.9855  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   aat -32.9368 109.0000 118.9855  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~o1=~c4~o2e~c3prime~o1=~c4~o2~c3prime~o1=   bb13 0.0 1.4200 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   -2.5594 0.0 2.2013 0.0 0.0325 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   mbt 0.0 0.0 0.0 1.3750  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4200 1.5140  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 109.0000 100.3182  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   aat 0.0 109.0000 100.3182  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~c3prime~c4~c4~o2e~c3prime~c4~c4~o2~c3prime~c4   bb13 0.0 1.4200 1.5140  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   0.0000 0.0 2.0521 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   mbt 0.0 0.0 0.0 1.3850  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.3950 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0700 121.5420  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   aat 0.0 120.0700 121.5420  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=~c3a~n3m~c3prime~o1=   bb13 0.0 1.3950 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   0.0000 0.0 3.4040 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   mbt 0.0000 5.2012 0.0000 1.4170  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.3950  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 120.7640  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   aat 0.0 118.9000 120.7640  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m~c3a~c3a~c3a~n3m   bb13 0.0 1.4170 1.3950  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   0.0000 0.0 0.7800 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   mbt 0.0000 2.4002 0.0000 1.4890  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   at 0.0 0.0 0.0 0.0 0.0 0.0 116.0640 125.5320  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   aat 0.0 116.0640 125.5320  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=~c3a~c3a~c3prime~o1=   bb13 0.0 1.4170 1.2160  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   0.9513 0.0 0.1155 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   mbt 7.7147 4.2557 -1.0118 1.4200  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   ebt 0.2282 2.2998 -0.4473 0.9589 0.9190 -0.6015 1.3750 1.1010  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   at 0.0971 -0.8699 -0.3142 -0.0401 2.8061 -0.4990 109.0000 108.7280  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   aat -13.1500 109.0000 108.7280  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~h1~c3prime~o2e~c4~h1~c3prime~o2~c4~h1   bb13 0.0 1.3750 1.1010  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   0.1302 0.0 -0.3250 0.0 0.1134 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   mbt 9.9416 2.6421 2.2333 1.4200  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   ebt 0.2560 0.8133 -0.0728 -1.2164 -0.1715 -0.0964 1.3750 1.5300  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   at 0.7229 -0.9159 -0.0890 -0.6765 1.4492 -0.4620 109.0000 111.2700  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   aat -15.7082 109.0000 111.2700  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~o2~c4~c4~c3prime~o2e~c4~c4~c3prime~o2~c4~c4   bb13 0.0 1.3750 1.5300  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   0.0000 0.0 0.6500 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   mbt 0.0 0.0 0.0 1.3950  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.3850  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   at 0.0 0.0 0.0 0.0 0.0 0.0 120.7640 120.0700  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   aat 0.0 120.7640 120.0700  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime~c3a~c3a~n3m~c3prime   bb13 0.0 1.4170 1.3850  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   0.0000 0.0 2.1670 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4890 1.0982  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 116.0640 117.9400  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   aat 0.0 116.0640 117.9400  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1~c3prime~c3a~c3a~h1   bb13 0.0 1.4890 1.0982  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   0.0000 0.0 4.6282 0.0 0.0000 0.0  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   mbt 0.0000 3.8762 0.0000 1.4170  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4890  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 116.0640  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   aat 0.0 118.9000 116.0640  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime~c3a~c3a~c3a~c3prime   bb13 0.0 1.4170 1.4890  # (ver=1.0, ref=7)
+    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   0.0000 0.0 2.0000 0.0 0.0000 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   mbt 0.0 0.0 0.0 1.4020  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4350 1.2100  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   at 0.0000 0.0000 0.0000 0.0000 0.0000 -3.0000 108.5000 112.8000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   aat 0.0 108.5000 112.8000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~o2~n3o~o1=~c4~o2n~n3o~o1=~c4~o2n~n3o~o1=   bb13 0.0 1.4350 1.2100  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   0.0000 0.0 -0.4000 0.0 -0.2000 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   mbt 0.0 0.0 0.0 1.4350  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.4020  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   at 0.0 0.0 0.0 0.0 0.0 0.0 105.0000 108.5000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   aat 0.0 105.0000 108.5000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c4~c4~o2~n3o~c4~c4~o2n~n3o~c4~c4~o2n~n3o   bb13 0.0 1.5300 1.4020  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   mbt 0.0 0.0 0.0 1.4740  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.2100  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   at 0.0000 -0.3086 0.0000 0.0000 1.0352 0.0000 107.0000 117.5000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   aat -16.2615 107.0000 117.5000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c4~n3o~o1=~h1~c4~n3o~o1=~h1~c4~n3o~o1=   bb13 0.0 1.1010 1.2100  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   0.0000 0.0 1.1600 0.0 0.0000 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   mbt 0.0 0.0 0.0 1.4300  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.2100  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   at 0.0000 0.0000 0.0000 0.0000 -3.4207 0.0000 118.8000 117.7000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   aat -18.0436 118.8000 117.7000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=~c3a~c3a~n3o~o1=   bb13 0.0 1.4170 1.2100  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   0.0000 0.0 2.9126 0.0 0.0000 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.4300  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   at 0.0000 -8.0369 0.0000 0.0000 0.0000 0.0000 117.9400 118.8000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   aat 2.1508 117.9400 118.8000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:h1~c3a~c3a~n3o~h1~c3a~c3a~n3o~h1~c3a~c3a~n3o   bb13 0.0 1.0982 1.4300  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   0.0000 0.0 7.2124 0.0 0.0000 0.0  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4300  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   at 0.0000 7.7594 0.0000 0.0000 0.0000 0.0000 118.9000 118.8000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   aat -34.9681 118.9000 118.8000  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o~c3a~c3a~c3a~n3o   bb13 0.0 1.4170 1.4300  # (ver=1.0, ref=6)
+    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   1.8000 0.0 0.5000 0.0 2.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   mbt 0.0000 0.0000 0.0000 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5980 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 125.0000 135.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   aat 0.0 125.0000 135.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=~n2=~p4=   bb13 0.0 1.5980 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   0.0000 0.0 0.0000 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4300 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 110.0330 135.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   aat 0.0 110.0330 135.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~p4=~n2=~p4=~h1~p4=~n2=~p4=~h1~p4=~n2=~p4=   bb13 0.0 1.4300 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0310 1.6000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0000 112.2150  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   aat 0.0 120.0000 112.2150  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~o2~h1~n2=~p4=~o2~h1~n2=~p4=~o2   bb13 0.0 1.0310 1.6000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0310 1.4300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0000 110.0330  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   aat -3.7880 120.0000 110.0330  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~n2=~p4=~h1~h1~n2=~p4=~h1~h1~n2=~p4=~h1   bb13 0.0 1.0310 1.4300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   0.0000 0.0 0.0000 0.0 -0.3690 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8000 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 119.3000 120.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   aat -11.1020 119.3000 120.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1   bb13 0.0 1.8000 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   0.0000 0.0 0.0000 0.0 -0.3500 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   mbt 0.0 0.0 0.0 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.7890 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 109.6000 120.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   aat 0.0 109.6000 120.0000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~p4=~n2=~h1~c3a~p4=~n2=~h1~c3a~p4=~n2=~h1   bb13 0.0 1.7890 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   0.0000 0.0 0.0000 0.0 -0.0680 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   mbt 0.0 0.0 0.0 1.8000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   at 0.0 0.0 0.0 0.0 0.0 0.0 110.8860 119.3000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   aat -19.9340 110.8860 119.3000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~n2=~h1~c4~p4=~n2=~h1~c4~p4=~n2=   bb13 0.0 1.1010 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   0.0000 0.0 0.0000 0.0 -0.0680 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   mbt 0.0 0.0 0.0 1.8000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.4300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 110.8860 102.9000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   aat -16.0180 110.8860 102.9000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~p4=~h1~h1~c4~p4=~h1~h1~c4~p4=~h1   bb13 0.0 1.1010 1.4300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   0.0000 0.0 0.0000 0.0 -0.0680 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   mbt 0.0 0.0 0.0 1.8000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8000 1.1010  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 102.5000 110.8860  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   aat -25.5460 102.5000 110.8860  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~p4=~c4~h1~c4~p4=~c4~h1~c4~p4=~c4~h1   bb13 0.0 1.8000 1.1010  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   1.2660 0.0 -0.7740 0.0 0.0380 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   mbt -0.4140 -2.8620 0.0070 1.4740  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   at -1.8950 1.2210 -0.7460 0.1100 0.0650 0.1090 107.4990 117.2000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   aat -9.6280 107.4990 117.2000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~n2=~h1~h1~c4~n2=~h1~h1~c4~n2=~h1   bb13 0.0 1.1010 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   -5.0720 0.0 -0.4980 0.0 -0.4380 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   mbt -2.3800 2.5290 -0.7300 1.4740  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   at -2.5230 2.8480 2.0590 -3.6920 4.0610 -1.5440 117.3170 117.2000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   aat -8.8980 117.3170 117.2000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=~h1   bb13 0.0 1.5300 1.0310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   -0.1510 0.0 0.0100 0.0 -0.1860 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   mbt -3.5150 -2.2980 -1.2770 1.5300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.1010 1.4740  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   at -2.0980 1.8610 -1.6890 -0.1220 1.8930 -0.5670 110.7700 117.3170  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   aat -27.5060 110.7700 117.3170  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~c4~n2=~h1~c4~c4~n2=~h1~c4~c4~n2=   bb13 0.0 1.1010 1.4740  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   0.0970 0.0 0.0720 0.0 -0.2580 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   mbt 0.0000 0.0000 0.0000 1.5300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.5300 1.4740  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   at -2.0980 1.8610 -1.6890 -0.1220 1.8930 -0.5670 112.6700 117.3170  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   aat 0.0000 112.6700 117.3170  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c4~c4~c4~n2=~c4~c4~c4~n2=~c4~c4~c4~n2=   bb13 0.0 1.5300 1.4740  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   -0.2720 0.0 1.1900 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   mbt 0.0 0.0 0.0 1.7890  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0010 109.6000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   aat 0.0 120.0010 109.6000  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=~c3a~c3a~p4=~n2=   bb13 0.0 1.4170 1.5980  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   -0.2720 0.0 1.1900 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   mbt 0.0 0.0 0.0 1.7890  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 120.0010 108.2310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   aat 0.0 120.0010 108.2310  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1   bb13 0.0 1.4170 1.4300  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   0.0000 0.0 2.2700 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.0982 1.7890  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 117.9400 120.0010  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   aat 0.0 117.9400 120.0010  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c3a~c3a~p4=~h1~c3a~c3a~p4=~h1~c3a~c3a~p4=   bb13 0.0 1.0982 1.7890  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   0.0000 0.0 5.4770 0.0 0.0000 0.0  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   mbt 0.0 0.0 0.0 1.4170  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.7890  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   at 0.0 0.0 0.0 0.0 0.0 0.0 118.9000 120.0010  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   aat 0.0 118.9000 120.0010  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=~c3a~c3a~c3a~p4=   bb13 0.0 1.4170 1.7890  # (ver=1.0, ref=4)
+    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   0.1863 0.0 -0.4338 0.0 -0.2121 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   mbt 0.0000 0.9241 -0.5889 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   ebt -1.7554 1.3145 0.2263 0.2493 0.6803 0.0000 1.1010 0.9494  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   at -3.4060 1.6396 0.0737 0.0000 -0.2810 -0.5944 108.7280 105.8000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   aat -10.5093 108.7280 105.8000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~o2~h1~h1~c4~o2h~h1~h1~c4~o2~h1   bb13 0.0 1.1010 0.9494  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   0.5302 0.0 0.0000 0.0 -0.3966 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   mbt -6.8007 -4.6546 -1.4101 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   ebt -0.1620 0.1564 -1.1408 -0.6054 1.3339 0.9648 1.4200 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   at -0.6653 0.4340 -0.7777 0.5144 1.6393 -1.8234 104.5000 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   aat -16.4438 104.5000 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2h~c4~h1~c4~o2~c4~h1   bb13 0.0 1.4200 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   0.5302 0.0 0.0000 0.0 -0.3966 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   mbt -6.8007 -4.6546 -1.4101 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   ebt -0.1620 0.1564 -1.1408 -0.6054 1.3339 0.9648 1.4200 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   at -0.6653 0.4340 -0.7777 0.5144 1.6393 -1.8234 104.5000 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   aat -16.4438 104.5000 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~o2~c4~h1~c4~o2e~c4~h1~c4~o2~c4~h1   bb13 0.0 1.4200 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   0.9513 0.0 0.1155 0.0 0.0720 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   mbt 0.0 0.0 0.0 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   aat 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2h~c4~h1~c3a~o2~c4~h1   bb13 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   0.9513 0.0 0.1155 0.0 0.0720 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   mbt 0.0 0.0 0.0 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   at 0.0 0.0 0.0 0.0 0.0 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   aat 0.0 102.9695 108.7280  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~o2~c4~h1~c3a~o2e~c4~h1~c3a~o2~c4~h1   bb13 0.0 1.3768 1.1010  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   -0.6732 0.0 -0.4778 0.0 -0.1670 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   mbt 1.2472 0.0000 0.7485 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   ebt -0.5800 0.9004 0.0000 0.0000 0.5343 0.9025 1.5300 0.9494  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   at -3.5903 2.5225 0.4888 0.8726 -0.3577 0.3888 111.2700 105.8000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   aat -12.1038 111.2700 105.8000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2~h1   bb13 0.0 1.5300 0.9494  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   -0.4000 0.0 -0.4028 0.0 -0.2450 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   mbt -5.9288 -2.7007 -0.3175 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   ebt -0.2456 1.0517 -0.7795 0.4741 1.2635 0.5576 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   at -2.7466 1.4877 -0.8955 0.5676 0.9450 0.0703 111.2700 104.5000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   aat -19.0059 111.2700 104.5000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2~c4   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   -0.4000 0.0 -0.4028 0.0 -0.2450 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   mbt -5.9288 -2.7007 -0.3175 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   ebt -0.2456 1.0517 -0.7795 0.4741 1.2635 0.5576 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   at -2.7466 1.4877 -0.8955 0.5676 0.9450 0.0703 111.2700 104.5000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   aat -19.0059 111.2700 104.5000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2~c4   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4350 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 105.0000 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   aat -14.0484 105.0000 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2n~o2n~c4~c4~o2n   bb13 0.0 1.4350 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4350 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 105.0000 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   aat -14.0484 105.0000 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2h~o2n~c4~c4~o2   bb13 0.0 1.4350 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4350 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 105.0000 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   aat -14.0484 105.0000 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2n~c4~c4~o2e~o2n~c4~c4~o2   bb13 0.0 1.4350 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   aat -14.0484 111.2700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2n~o2~c4~c4~o2n   bb13 0.0 1.4200 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2h~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2h~c4~c4~o2e~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   aat -14.0484 111.2700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2n~o2~c4~c4~o2n   bb13 0.0 1.4200 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2h~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   1.1000 0.0 -0.0500 0.0 -0.1441 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   mbt -17.2585 -3.6157 -0.8364 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   ebt 1.0165 0.7553 -0.4609 1.0165 0.7553 -0.4609 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   at 0.5511 0.9737 -0.6673 0.5511 0.9737 -0.6673 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   aat -14.0484 111.2700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2~c4~c4~o2~o2e~c4~c4~o2e~o2~c4~c4~o2   bb13 0.0 1.4200 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   -0.1435 0.0 0.2530 0.0 -0.0905 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   mbt -16.7975 -1.2296 -0.2750 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   ebt 0.9681 0.9551 0.0436 0.5903 0.6669 0.8584 1.1010 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   at 2.3668 2.4920 -1.0122 -0.1892 0.4918 0.7273 110.7700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   aat -20.2006 110.7700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2n~h1~c4~c4~o2n   bb13 0.0 1.1010 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   -0.1435 0.0 0.2530 0.0 -0.0905 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   mbt -16.7975 -1.2296 -0.2750 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   ebt 0.9681 0.9551 0.0436 0.5903 0.6669 0.8584 1.1010 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   at 2.3668 2.4920 -1.0122 -0.1892 0.4918 0.7273 110.7700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   aat -20.2006 110.7700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2h~h1~c4~c4~o2   bb13 0.0 1.1010 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   -0.1435 0.0 0.2530 0.0 -0.0905 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   mbt -16.7975 -1.2296 -0.2750 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   ebt 0.9681 0.9551 0.0436 0.5903 0.6669 0.8584 1.1010 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   at 2.3668 2.4920 -1.0122 -0.1892 0.4918 0.7273 110.7700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   aat -20.2006 110.7700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:h1~c4~c4~o2~h1~c4~c4~o2e~h1~c4~c4~o2   bb13 0.0 1.1010 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   0.7137 0.0 0.2660 0.0 -0.2545 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   mbt -21.8842 -7.6764 -0.6868 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   ebt -0.3190 0.4411 -0.7174 1.1538 0.8409 -0.9138 1.5300 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   at 0.5623 -0.3041 -0.4015 0.9672 -0.7566 -1.2331 112.6700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   aat -29.0420 112.6700 105.0000  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2n~c4~c4~c4~o2n   bb13 0.0 1.5300 1.4350  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   0.7137 0.0 0.2660 0.0 -0.2545 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   mbt -21.8842 -7.6764 -0.6868 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   ebt -0.3190 0.4411 -0.7174 1.1538 0.8409 -0.9138 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   at 0.5623 -0.3041 -0.4015 0.9672 -0.7566 -1.2331 112.6700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   aat -29.0420 112.6700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2h~c4~c4~c4~o2   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   0.7137 0.0 0.2660 0.0 -0.2545 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   mbt -21.8842 -7.6764 -0.6868 1.5300  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   ebt -0.3190 0.4411 -0.7174 1.1538 0.8409 -0.9138 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   at 0.5623 -0.3041 -0.4015 0.9672 -0.7566 -1.2331 112.6700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   aat -29.0420 112.6700 111.2700  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c4~c4~c4~o2~c4~c4~c4~o2e~c4~c4~c4~o2   bb13 0.0 1.5300 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   0.0000 0.0 1.5000 0.0 0.0000 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   mbt 0.0 0.0 0.0 1.3768  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   aat 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2h~c4~c3a~c3a~o2~c4   bb13 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   0.0000 0.0 1.5000 0.0 0.0000 0.0  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   mbt 0.0 0.0 0.0 1.3768  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   at 0.0 0.0 0.0 0.0 0.0 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   aat 0.0 123.4200 102.9695  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:c3a~c3a~o2~c4~c3a~c3a~o2e~c4~c3a~c3a~o2~c4   bb13 0.0 1.4170 1.4200  # (ver=1.0, ref=3)
+    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   -0.2250 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.6400 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 110.7000 159.0000  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   aat 0.0 110.7000 159.0000  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4~o2z~si4   bb13 0.0 1.6400 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   0.0000 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.4783 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 107.4000 159.0000  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   aat 0.0 107.4000 159.0000  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:h1~si4~o2z~si4~h1~si4~o2z~si4~h1~si4~o2z~si4   bb13 0.0 1.4783 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   0.0000 0.0 0.0000 0.0 -0.0100 0.0  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   mbt 0.0 0.0 0.0 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   ebt 0.0 0.0 0.0 0.0 0.0 0.0 1.8995 1.6400  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   at 0.0 0.0 0.0 0.0 0.0 0.0 114.9060 159.0000  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   aat 0.0 114.9060 159.0000  # (ver=1.0, ref=2)
+    dihedral_coeff @dihedral:c4~si4~o2z~si4~c4~si4~o2z~si4~c4~si4~o2z~si4   bb13 0.0 1.8995 1.6400  # (ver=1.0, ref=2)
     dihedral_coeff @dihedral:h1~c4~c4~h1~h1~c4~c4~h1~h1~c4~c4~h1   -0.1432 0.0 0.0617 0.0 -0.1530 0.0  # (ver=1.0, ref=1)
     dihedral_coeff @dihedral:h1~c4~c4~h1~h1~c4~c4~h1~h1~c4~c4~h1   mbt -14.2610 -0.5322 -0.4864 1.5300  # (ver=1.0, ref=1)
     dihedral_coeff @dihedral:h1~c4~c4~h1~h1~c4~c4~h1~h1~c4~c4~h1   ebt 0.2130 0.3120 0.0777 0.2130 0.3120 0.0777 1.1010 1.1010  # (ver=1.0, ref=1)
@@ -3575,8 +3579,6 @@ COMPASS {
   #  ImproperType AtmType1 AtmType2 AtmType3 AtmType3 [BondType1 Bnd2 Bnd3]
 
   write_once("Data Impropers By Type (cenJsortIKL)") {
-    @improper:c3a~o1=~c3prime~n3m~X~X~X~X  @atom:*~p*~b*~a*~d*~ic3a @atom:*~p*~b*~a*~d*~io1= @atom:*~p*~b*~a*~d*~ic3prime @atom:*~p*~b*~a*~d*~in3m
-    @improper:c3a~c3prime~c3prime~n3m~X~X~X~X  @atom:*~p*~b*~a*~d*~ic3a @atom:*~p*~b*~a*~d*~ic3prime @atom:*~p*~b*~a*~d*~ic3prime @atom:*~p*~b*~a*~d*~in3m
     @improper:h1~si4~h1~si4~h1~si4~h1~si4  @atom:*~p*~b*~ah1~d*~ih1 @atom:*~p*~b*~asi4~d*~isi4 @atom:*~p*~b*~ah1~d*~ih1 @atom:*~p*~b*~asi4~d*~isi4
     @improper:h1~si4~si4~si4~h1~si4~si4~si4  @atom:*~p*~b*~ah1~d*~ih1 @atom:*~p*~b*~asi4~d*~isi4 @atom:*~p*~b*~asi4~d*~isi4 @atom:*~p*~b*~asi4~d*~isi4
     @improper:h1~si4~h1~h1~h1~si4~h1~h1  @atom:*~p*~b*~ah1~d*~ih1 @atom:*~p*~b*~asi4~d*~isi4 @atom:*~p*~b*~ah1~d*~ih1 @atom:*~p*~b*~ah1~d*~ih1
@@ -3598,6 +3600,8 @@ COMPASS {
     @improper:c4~c4~c4~c4~c4~c4~c4~c4  @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ac4~d*~ic4
     @improper:c3a~c4~h1~h1~c3a~c4~h1~h1  @atom:*~p*~b*~ac3a~d*~ic3a @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ah1~d*~ih1 @atom:*~p*~b*~ah1~d*~ih1
     @improper:c3a~c4~c4~h1~c3a~c4~c4~h1  @atom:*~p*~b*~ac3a~d*~ic3a @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ah1~d*~ih1
+    @improper:c3a~o1=~c3prime~n3m~X~X~X~X  @atom:*~p*~b*~a*~d*~ic3a @atom:*~p*~b*~a*~d*~io1= @atom:*~p*~b*~a*~d*~ic3prime @atom:*~p*~b*~a*~d*~in3m
+    @improper:c3a~c3prime~c3prime~n3m~X~X~X~X  @atom:*~p*~b*~a*~d*~ic3a @atom:*~p*~b*~a*~d*~ic3prime @atom:*~p*~b*~a*~d*~ic3prime @atom:*~p*~b*~a*~d*~in3m
     @improper:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4  @atom:*~p*~b*~ac3a~d*~ic3a @atom:*~p*~b*~ac3a~d*~ic3a @atom:*~p*~b*~ac3a~d*~ic3a @atom:*~p*~b*~asi4~d*~isi4
     @improper:c4~c3prime~o1=~o2~c4~c3prime~o1=~o2  @atom:*~p*~b*~ac4~d*~ic4 @atom:*~p*~b*~ac3prime~d*~ic3prime @atom:*~p*~b*~ao1=~d*~io1= @atom:*~p*~b*~ao2~d*~io2
     @improper:c3a~c3prime~n3m~o1=~c3a~c3prime~n3m~o1=  @atom:*~p*~b*~ac3a~d*~ic3a @atom:*~p*~b*~ac3prime~d*~ic3prime @atom:*~p*~b*~an3m~d*~in3m @atom:*~p*~b*~ao1=~d*~io1=
@@ -3628,10 +3632,6 @@ COMPASS {
 
 
   write_once("In Settings") {
-    improper_coeff @improper:c3a~o1=~c3prime~n3m~X~X~X~X    30.0000 -0.0  # (ver=1.0, ref=7)
-    improper_coeff @improper:c3a~o1=~c3prime~n3m~X~X~X~X   aa 0.0 0.0 0.0 120.0 120.0 120.0  # (ver=1.0, ref=7)
-    improper_coeff @improper:c3a~c3prime~c3prime~n3m~X~X~X~X    0.0000 -0.0  # (ver=1.0, ref=7)
-    improper_coeff @improper:c3a~c3prime~c3prime~n3m~X~X~X~X   aa 0.0 0.0 0.0 120.0 120.0 120.0  # (ver=1.0, ref=7)
     improper_coeff @improper:h1~si4~h1~si4~h1~si4~h1~si4    0.0 0.0  # (ver=1.0, ref=10)
     improper_coeff @improper:h1~si4~h1~si4~h1~si4~h1~si4   aa 0.0 0.0 1.6082 108.6051 112.0893 112.0893  # (ver=1.0, ref=10)
     improper_coeff @improper:h1~si4~si4~si4~h1~si4~si4~si4    0.0 0.0  # (ver=1.0, ref=10)
@@ -3674,6 +3674,10 @@ COMPASS {
     improper_coeff @improper:c3a~c4~h1~h1~c3a~c4~h1~h1   aa 2.3794 0.0 2.3794 111.0000 111.0000 107.6600  # (ver=1.0, ref=1)
     improper_coeff @improper:c3a~c4~c4~h1~c3a~c4~c4~h1    0.0 0.0  # (ver=1.0, ref=1)
     improper_coeff @improper:c3a~c4~c4~h1~c3a~c4~c4~h1   aa 0.0 0.0 1.0827 108.4000 111.0000 110.7700  # (ver=1.0, ref=1)
+    improper_coeff @improper:c3a~o1=~c3prime~n3m~X~X~X~X    30.0000 -0.0  # (ver=1.0, ref=7)
+    improper_coeff @improper:c3a~o1=~c3prime~n3m~X~X~X~X   aa 0.0 0.0 0.0 120.0 120.0 120.0  # (ver=1.0, ref=7)
+    improper_coeff @improper:c3a~c3prime~c3prime~n3m~X~X~X~X    0.0000 -0.0  # (ver=1.0, ref=7)
+    improper_coeff @improper:c3a~c3prime~c3prime~n3m~X~X~X~X   aa 0.0 0.0 0.0 120.0 120.0 120.0  # (ver=1.0, ref=7)
     improper_coeff @improper:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4    5.3654 0.0  # (ver=1.0, ref=10)
     improper_coeff @improper:c3a~c3a~c3a~si4~c3a~c3a~c3a~si4   aa 0.0 0.0 0.0 118.9000 120.0000 120.0000  # (ver=1.0, ref=10)
     improper_coeff @improper:c4~c3prime~o1=~o2~c4~c3prime~o1=~o2    46.9264 0.0  # (ver=1.0, ref=7)

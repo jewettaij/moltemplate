@@ -34,8 +34,8 @@ it is manually, for all of the carbon atoms in that kind of molecule.
 
 
 __author__ = 'Andrew Jewett'
-__version__ = '0.3.0'
-__date__ = '2020-7-12'
+__version__ = '0.3.1'
+__date__ = '2020-7-13'
 
 
 import sys
@@ -121,6 +121,15 @@ class MyOrderedSet(object):
     def next(self):
         return self.__next__()
     # no need to bother with set unions and intersections
+
+
+def CountChar(container, x):
+    """ Count the number of time x appears in the container C """
+    n = 0
+    for y in container:
+        if y == x:
+            n += 1
+    return n
 
 
 def NSplitQuotedString(string,
@@ -354,8 +363,8 @@ def DetermineNumericPriority(is_auto,
                                 # will be a positive number.  Otherwise the
                                 # numeric priority will be a negative number
                                 # (...corresponding to a higher priority
-                                #  I don't like this complicated priority system
-                                #  but I didn't invent it.  It's not my fault.)
+                                #  I don't like this complicated priority
+                                #  sytem, but I didn't invent it.)
 
 
 def IsAutoAtom(atom_name):
@@ -1244,7 +1253,7 @@ def main():
         angle2class2_ba_or = OrderedDict()
         angle2priority = OrderedDict()  # What is the priority of this interaction?
         angle2priority_or = OrderedDict()
-        angle_is_secondary_or = OrderedDict()
+        angle_no_primary_or = OrderedDict()
         angle2style = OrderedDict()    # What LAMMPS angle style (formula)
                                        # is used for a given interaction?
         angle2style_or = OrderedDict()
@@ -1286,7 +1295,7 @@ def main():
         #dihedral2sym_bb13 = OrderedDict()
         dihedral2priority = OrderedDict()  # What is the priority of this interaction?
         dihedral2priority_or = OrderedDict()
-        dihedral_is_secondary_or = OrderedDict()
+        dihedral_no_primary_or = OrderedDict()
         dihedral2style = OrderedDict()    # What LAMMPS dihedral style (formula)
                                           # is used for a given interaction?
         dihedral2style_or = OrderedDict()
@@ -1350,7 +1359,7 @@ def main():
 
         improper2priority = OrderedDict() # What is the priority of this interaction?
         improper2priority_or = OrderedDict()
-        improper_is_secondary_or = OrderedDict()
+        improper_no_primary_or = OrderedDict()
         improper2style = OrderedDict()    # What LAMMPS improper style (formula)
                                           # is used for a given interaction?
         improper2style_or = OrderedDict()
@@ -1716,7 +1725,8 @@ def main():
                     (section_is_auto,
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:4],
-                                              float(charge_pair_ver[bond_name])))
+                                              float(charge_pair_ver[bond_name])),
+                     CountChar(bond_name, 'X'))
                 bond2chargepair[bond_name] = (delta_q[0] + ' ' + delta_q[1])
 
 
@@ -1733,7 +1743,8 @@ def main():
                     (section_is_auto,
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:4],
-                                              float(bond2ver[bond_name])))
+                                              float(bond2ver[bond_name])),
+                     CountChar(bond_name, 'X'))
                 r0 = tokens[4]
                 k = tokens[5]
                 if not section_is_auto:
@@ -1759,7 +1770,8 @@ def main():
                     (section_is_auto,
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:4],
-                                              float(bond2ver[bond_name])))
+                                              float(bond2ver[bond_name])),
+                     CountChar(bond_name, 'X'))
                 r0 = tokens[4]
                 D = tokens[5]
                 alpha = tokens[6]
@@ -1788,7 +1800,8 @@ def main():
                     (section_is_auto,
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:4],
-                                              float(bond2ver[bond_name])))
+                                              float(bond2ver[bond_name])),
+                     CountChar(bond_name, 'X'))
                 r0 = tokens[4]
                 if not section_is_auto:
                     bond2r0[bond_name] = r0
@@ -1849,11 +1862,13 @@ def main():
                     DetermineNumericPriority(section_is_auto,
                                              tokens[2:5],
                                              float(angle2ver[angle_name]))
-                angle_is_secondary_or[angle_name] = False
+                angle_no_primary_or[angle_name] = False
                 angle2priority[angle_name] = \
                     (section_is_auto,
-                     angle_is_secondary_or[angle_name],
-                     angle2priority_or[angle_name])
+                     angle_no_primary_or[angle_name],
+                     angle2priority_or[angle_name],
+                     CountChar(angle_name, 'X'),
+                     0)
                 theta0 = tokens[5]
                 k = tokens[6]
                 if not section_is_auto:
@@ -1894,11 +1909,16 @@ def main():
                     DetermineNumericPriority(section_is_auto,
                                              tokens[2:5],
                                              float(angle2ver_or[ang_name_orig]))
-                angle_is_secondary_or[ang_name_orig] = False
+                angle_no_primary_or[ang_name_orig] = False
+
+                # Commenting out.  This will be set later on:
                 #angle2priority[ang_name_orig] = \
                 #    (section_is_auto,
-                #     angle_is_secondary_or[ang_name_orig],
-                #     angle2priority_or[ang_name_orig])
+                #     angle_no_primary_or[ang_name_orig],
+                #     angle2priority_or[ang_name_orig],
+                #     CountChar(ang_name_orig, 'X'),
+                #     CountChar(ang_name_full, 'X')-CountChar(ang_name_orig, 'X'))
+
                 theta0 = tokens[5]
                 if not section_is_auto:
                     angle2theta0_or[ang_name_orig] = theta0
@@ -1950,7 +1970,7 @@ def main():
                     angle2ver_ba_or[ang_name_orig] = version
                     angle2ref_ba_or[ang_name_orig] = reference
                 if not ang_name_orig in angle2params_or:
-                    angle_is_secondary_or[ang_name_orig] = True   #only cross terms have been defined so far
+                    angle_no_primary_or[ang_name_orig] = True   #only cross terms have been defined so far
                     angle2params_or[ang_name_orig] = ['0.0', '0.0', '0.0', '0.0']  # default value
                     angle2ver_or[ang_name_orig] = version
                     angle2ref_or[ang_name_orig] = reference
@@ -2005,11 +2025,13 @@ def main():
                     DetermineNumericPriority(section_is_auto,
                                              tokens[2:6],
                                              float(dihedral2ver[dihedral_name]))
-                dihedral_is_secondary_or[dihedral_name] = False
+                dihedral_no_primary_or[dihedral_name] = False
                 dihedral2priority[dihedral_name] = \
                     (section_is_auto,
-                     dihedral_is_secondary_or[dihedral_name],
-                     dihedral2priority_or[dihedral_name])
+                     dihedral_no_primary_or[dihedral_name],
+                     dihedral2priority_or[dihedral_name],
+                     CountChar(dihedral_name, 'X'),
+                     0)
                 K = tokens[6]
                 n = tokens[7]
                 d = tokens[8]
@@ -2044,11 +2066,14 @@ def main():
                     DetermineNumericPriority(section_is_auto,
                                              tokens[2:6],
                                              float(version))
-                dihedral_is_secondary_or[dih_name_orig] = False
+                dihedral_no_primary_or[dih_name_orig] = False
+                # Commenting out.  This will be set later on:
                 #dihedral2priority[dih_name_orig] = \
                 #    (section_is_auto,
-                #     dihedral_is_secondary_or[dih_name_orig],
-                #     dihedral2priority_or[dih_name_orig])
+                #     dihedral_no_primary_or[dih_name_orig],
+                #     dihedral2priority_or[dih_name_orig],
+                #     CountChar(dih_name_orig, 'X'),
+                #     CountChar(dih_name_full, 'X')-CountChar(dih_name_orig, 'X'))
                 V1 = tokens[6]
                 phi0_1 = tokens[7]
                 V2 = phi0_2 = V3 = phi0_3 = '0.0'
@@ -2115,7 +2140,7 @@ def main():
                 dihedral2ver_mbt_or[dih_name_orig] = version
                 dihedral2ref_mbt_or[dih_name_orig] = reference
                 if not dih_name_orig in dihedral2params_or:
-                    dihedral_is_secondary_or[dih_name_orig] = True   #only cross terms have been defined so far
+                    dihedral_no_primary_or[dih_name_orig] = True   #only cross terms have been defined so far
                     dihedral2params_or[dih_name_orig] = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0']
                     dihedral2ver_or[dih_name_orig] = version
                     dihedral2ref_or[dih_name_orig] = reference
@@ -2174,7 +2199,7 @@ def main():
                 else:
                     assert(False)
                 if not dih_name_orig in dihedral2params_or:
-                    dihedral_is_secondary_or[dih_name_orig] = True   #only cross terms have been defined so far
+                    dihedral_no_primary_or[dih_name_orig] = True   #only cross terms have been defined so far
                     dihedral2params_or[dih_name_orig] = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0']
                     dihedral2ver_or[dih_name_orig] = version
                     dihedral2ref_or[dih_name_orig] = reference
@@ -2241,7 +2266,7 @@ def main():
                     assert(False)
 
                 if not dih_name_orig in dihedral2params_or:
-                    dihedral_is_secondary_or[dih_name_orig] = True   #only cross terms have been defined so far
+                    dihedral_no_primary_or[dih_name_orig] = True   #only cross terms have been defined so far
                     dihedral2params_or[dih_name_orig] = ['0.0', '0.0', '0.0', '0.0', '0.0', '0.0'] # default value
                     dihedral2ver_or[dih_name_orig] = version
                     dihedral2ref_or[dih_name_orig] = reference
@@ -2274,11 +2299,13 @@ def main():
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:6],
                                               float(improper2ver[imsym,improper_name]))
-                improper_is_secondary_or[imp_name_orig] = False
+                improper_no_primary_or[imp_name_orig] = False
                 improper2priority[imsym,improper_name] = \
                     (section_is_auto,
-                     improper_is_secondary_or[imp_name_orig],
-                     improper2priority_or[improper_name])
+                     improper_no_primary_or[imp_name_orig],
+                     improper2priority_or[improper_name],
+                     CountChar(improper_name, 'X'),
+                     0)
                 K = tokens[6]
                 n = tokens[7]
                 chi0 = tokens[8]
@@ -2325,11 +2352,14 @@ def main():
                      DetermineNumericPriority(section_is_auto,
                                               tokens[2:6],
                                               float(improper2ver_or[imp_name_orig]))
-                improper_is_secondary_or[imp_name_orig] = False
+                improper_no_primary_or[imp_name_orig] = False
+                # Commenting out.  This will be set later on:
                 #improper2priority[imp_name_orig] = \
                 #    (section_is_auto,
-                #     improper_is_secondary_or[imp_name_orig],
-                #     improper2priority_or[imp_name_orig])
+                #     improper_no_primary_or[imp_name_orig],
+                #     improper2priority_or[imp_name_orig],
+                #     CountChar(imp_name_orig, 'X'),
+                #     CountChar(imp_name_full, 'X')-CountChar(imp_name_orig, 'X'))
                 K = tokens[6]
                 chi0 = tokens[7]
 
@@ -2382,7 +2412,7 @@ def main():
                 K = tokens[6]
                 improper2style_or[imp_name_orig] = 'class2'
                 if not imp_name_orig in improper2params_or:
-                    improper_is_secondary_or[imp_name_orig] = True   #only cross terms have been defined so far
+                    improper_no_primary_or[imp_name_orig] = True   #only cross terms have been defined so far
                     improper2params_or[imp_name_orig] = ['0.0', '0.0']
                     improper2ver_or[imp_name_orig] = version
                     improper2ref_or[imp_name_orig] = reference
@@ -2636,8 +2666,10 @@ def main():
                         angle2style[ang_name_full] = 'class2'
                         angle2priority[ang_name_full] = \
                             (is_auto,
-                             angle_is_secondary_or[ang_name_orig],
+                             angle_no_primary_or[ang_name_orig],
                              angle2priority_or[ang_name_orig],
+                             CountChar(ang_name_orig, 'X'),
+                             CountChar(ang_name_full, 'X')-CountChar(ang_name_orig, 'X'),
                              angle2priority_bb,
                              angle2priority_ba)
 
@@ -2668,7 +2700,7 @@ def main():
                 # Then we were unable to define cross terms for this interaction
                 # because at least one of the bond lengths could not be determined.
                 # This usually occurs because most of the .FRC files which are
-                # in circulation are incomplete.  We have to handle this gracefully.
+                # in circulation are noprimary.  We have to handle this gracefully.
                 ang_name_full = (ang_name_orig + '~X~X~X~X~X~X')
                 version = angle2ver_or[ang_name_orig]
                 reference = angle2ref_or[ang_name_orig]
@@ -2677,9 +2709,12 @@ def main():
                 angle2style[ang_name_full] = 'class2'
                 angle2params[ang_name_full] = ' '.join(angle2params_or[ang_name_orig])
                 angle2priority[ang_name_full] = \
-                    (True,  #section_is_auto,
-                     True,  #angle_is_secondary_or[ang_name_orig],
-                     angle2priority_or[ang_name_orig])
+                    (False,  #section_is_auto,
+                     False,  #angle_no_primary_or[ang_name_orig],
+                     angle2priority_or[ang_name_orig],
+                     CountChar(ang_name_orig, 'X'),
+                     CountChar(ang_name_full, 'X')-CountChar(ang_name_orig, 'X'))
+
                 # substitute zeros for all the cross term interactions
                 angle2class2_bb[ang_name_full] = '0.0 1.0 1.0'
                 angle2ref_bb[ang_name_full] = reference
@@ -3017,8 +3052,10 @@ def main():
                             dihedral2ref[dih_name_full] = dihedral2ref_or[dih_name_orig]
                             dihedral2priority[dih_name_full] = \
                                 (is_auto,
-                                 dihedral_is_secondary_or[dih_name_orig],
+                                 dihedral_no_primary_or[dih_name_orig],
                                  dihedral2priority_or[dih_name_orig],
+                                 CountChar(dih_name_orig, 'X'),
+                                 CountChar(dih_name_full, 'X')-CountChar(dih_name_orig, 'X'),
                                  dihedral2priority_mbt,
                                  dihedral2priority_ebt,
                                  dihedral2priority_bb13,
@@ -3054,7 +3091,7 @@ def main():
                 # Then we were unable to define cross terms for this interaction because
                 # at least one of the bond lengths or bond angles could not be determined.
                 # This usually occurs because most of the .FRC files which are
-                # in circulation are incomplete.  We have to handle this gracefully.
+                # in circulation are noprimary.  We have to handle this gracefully.
                 dih_name_full = (dih_name_orig + '~X~X~X~X~X~X~X~X~X~X~X~X')
                 reference = dihedral2ref_or[dih_name_orig]
                 version = dihedral2ver_or[dih_name_orig]
@@ -3062,9 +3099,11 @@ def main():
                 dihedral2ver[dih_name_full] = version
                 dihedral2style[dih_name_full] = 'class2'
                 dihedral2priority[dih_name_full] = \
-                    (True,  #section_is_auto,
-                     True,  #dihedral_is_secondary_or[ang_name_orig],
-                     dihedral2priority_or[dih_name_orig])  # CONTINUEHERE
+                    (False,  #section_is_auto,
+                     False,  #dihedral_no_primary_or[ang_name_orig],
+                     dihedral2priority_or[dih_name_orig],
+                     CountChar(dih_name_orig, 'X'),  # CONTINUEHERE
+                     CountChar(dih_name_full, 'X')-CountChar(dih_name_orig, 'X'))
 
                 dihedral2params[dih_name_full] = ' '.join(dihedral2params_or[dih_name_orig])
                 # substitute zeros for all the cross term interactions
@@ -3390,8 +3429,10 @@ def main():
                         improper2ver[imsym,imp_name_full] = version
                         improper2priority[imsym,imp_name_full] = \
                             (is_auto,
-                             improper_is_secondary_or[imp_name_orig],
+                             improper_no_primary_or[imp_name_orig],
                              improper2priority_or[imp_name_orig],
+                             CountChar(imp_name_orig, 'X'),
+                             CountChar(imp_name_full, 'X')-CountChar(imp_name_orig, 'X'),
                              improper2priority_aa)
 
                         if len(improper2params) > num_impropers:
@@ -3413,7 +3454,7 @@ def main():
                 # Then we were unable to define cross terms for this interaction because
                 # at least one of the equilibrium rest angles could not be determined.
                 # This usually occurs because most of the .FRC files which are
-                # in circulation are incomplete.  We have to handle this gracefully.
+                # in circulation are noprimary.  We have to handle this gracefully.
                 imp_name_full = (imp_name_orig + '~X~X~X~X~X~X~X~X~X')
                 reference = improper2ref_or[imp_name_orig]
                 version = improper2ver_or[imp_name_orig]
@@ -3426,9 +3467,11 @@ def main():
                 # THEN YOU DON'T HAVE TO WORRY ABOUT THIS.
                 improper2style[imsym,imp_name_full] = 'class2'
                 improper2priority[imsym,imp_name_full] = \
-                    (True,  #section_is_auto,
-                     True,  #improper_is_secondary_or[ang_name_orig],
-                     improper2priority_or[imp_name_orig])  # CONTINUEHERE
+                    (False,  #section_is_auto,
+                     False,  #improper_no_primary_or[ang_name_orig],
+                     improper2priority_or[imp_name_orig],
+                     CountChar(imp_name_orig, 'X'),  # CONTINUEHERE
+                     CountChar(imp_name_full, 'X')-CountChar(imp_name_orig, 'X'))
 
                 # substitute zeros for the cross term interactions
                 improper2class2_aa[imsym,imp_name_full] = '0.0 0.0 0.0 120.0 120.0 120.0'
@@ -3926,8 +3969,8 @@ def main():
                     angle_is_auto2 = IsAutoInteraction(anames[13])
                     # THE NEXT 3 LINES ARE FOR DEBUGGING PRIORITY ORDER
                     # COMMENTING OUT:
-                    #print(dihedral2priority[dihedral_name])
-                    #print(ang_names)
+                    #sys.stderr.write('dihedral2priority['+dihedral_name+']='+str(dihedral2priority[dihedral_name])+'\n')
+                    #sys.stderr.write(str(ang_names)+'\n')
                     #continue
 
                 if ((dihedral_is_auto or
