@@ -64,7 +64,7 @@ except NameError:
 # in words or tokens parsed by TtreeShlex.  Otherwise it is identical to shlex.
 try:
     from .ttree_lex import TtreeShlex, SplitQuotedString, EscCharStrToChar, \
-        SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildcard, \
+        SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, HasWildcard, HasRE, \
         InputError, ErrorLeader, OSrcLoc, TextBlock, VarRef, VarBinding, \
         TemplateLexer
 except (ImportError, SystemError, ValueError):
@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2019-11-19'
-g_version_str = '0.86.3'
+g_date_str = '2020-7-09'
+g_version_str = '0.86.4'
 
 
 class ClassReference(object):
@@ -4451,12 +4451,14 @@ def AutoAssignVals(cat_node,
                     # category counter without incrementing it.
                     var_binding.value = str(cat.counter.query())
 
-                elif HasWildcard(var_binding.full_name):
+                elif (HasWildcard(var_binding.full_name) or
+                      HasRE(var_binding.full_name)):
                     #   -- The wildcard hack ---
                     # Variables containing * or ? characters in their names
-                    # are not allowed.  These are not variables, but patterns
-                    # to match with other variables.  Represent them by the
-                    # (full-path-expanded) string containing the * or ?.
+                    # are not allowed.  This is also true of regular
+                    # expressions.  These are not variables, but patterns to
+                    # match with other variables.  Represent them by the (full-
+                    # path-expanded) string containing the * or ? or regex.
                     var_binding.value = var_binding.full_name
 
                 else:
@@ -4824,9 +4826,10 @@ def WriteVarBindingsFile(node):
                     or
                     (isinstance(node, StaticObj) and isinstance(nd, StaticObj))):
 
-                # Now omit variables whos names contain "*" or "?"
-                # (these are actually not variables, but wildcard patterns)
-                if not HasWildcard(var_binding.full_name):
+                # Now omit variables whos names contain "*" or "?" or regex
+                # (these are not variables, but pattern matching strings)
+                if not (HasWildcard(var_binding.full_name) or
+                        HasRE(var_binding.full_name)):
                     if len(var_binding.refs) > 0:
                         usage_example = '       #' +\
                             ErrorLeader(var_binding.refs[0].srcloc.infile,

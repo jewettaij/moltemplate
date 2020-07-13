@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.4'
-g_date_str     = '2020-6-12'
+g_version_str  = '0.3.5'
+g_date_str     = '2020-7-10'
 
 g_usage_msg = """
 
@@ -185,6 +185,8 @@ def _DistributeRandom(widths,           # width of each object (>0)
     """
 
     Nm = len(widths)
+    if Nm == 0:
+        return []
     N = len(occupancy)
     locations = [-1 for im in range(0, Nm)]
 

@@ -160,8 +160,7 @@ def main():
             # If the second token is surrounded by '/' characters, interpret
             # it as a regular expression.
             token1_is_re = ((len(tokens) >= 2) and
-                            (len(tokens[1]) >= 2) and
-                            (tokens[1][0] == '/') and (tokens[1][-1] == '/'))
+                            HasRE(tokens[1]))
             # If the second token contains wildcard characters, interpret
             # it as a wildcard (ie. glob) expression.
             token1_is_wild = ((len(tokens) >= 2) and
@@ -173,7 +172,7 @@ def main():
                 (tokens[0].find('bond_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = typestr[1:-1]
+                    regex_str = tokens[1][3:] #*#
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -188,7 +187,7 @@ def main():
                 (tokens[0].find('angle_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = typestr[1:-1]
+                    regex_str = tokens[1][3:] #*#
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -203,7 +202,7 @@ def main():
                 (tokens[0].find('dihedral_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = typestr[1:-1]
+                    regex_str = tokens[1][3:] #*#
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -218,7 +217,7 @@ def main():
                 (tokens[0].find('improper_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = typestr[1:-1]
+                    regex_str = tokens[1][3:] #*#
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -286,12 +285,8 @@ def main():
                 ################
                 # If surrounded by '/' characters, the token is meant to be
                 # interpreted as a regular expression.
-                token1_is_re = ((len(tokens[1]) >= 2) and
-                                (tokens[1][0] == '/') and
-                                (tokens[1][-1] == '/'))
-                token2_is_re = ((len(tokens[2]) >= 2) and
-                                (tokens[2][0] == '/') and
-                                (tokens[2][-1] == '/'))
+                token1_is_re = HasRE(tokens[1])
+                token2_is_re = HasRE(tokens[2])
                 # If the token contains wildcard characters, interpret
                 # it as a wildcard (ie. glob) expression.
                 token1_is_wild = (HasWildcard(tokens[1])   #contain '*' or '?'
@@ -303,7 +298,7 @@ def main():
 
                 if token1_is_re:
                     atom_types1 = atom_types
-                    regex_str = tokens[1][1:-1]
+                    regex_str = tokens[1][3:]
                     typepattern1 = re.compile(regex_str)
                 elif token1_is_wild:
                     atom_types1 = atom_types
@@ -312,7 +307,7 @@ def main():
 
                 if token2_is_re:
                     atom_types2 = atom_types
-                    regex_str = tokens[2][1:-1]
+                    regex_str = tokens[2][3:]
                     typepattern2 = re.compile(regex_str)
                 elif token2_is_wild:
                     atom_types2 = atom_types

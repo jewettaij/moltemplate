@@ -228,6 +228,10 @@ def main():
                 use_hybrid = True
                 del argv[i:i + 1]
     
+            elif argv[i] == '-no-hybrid':
+                use_hybrid = False
+                del argv[i:i + 1]
+
             elif (argv[i] == '-zeropad' or argv[i] == '-zero-pad'):
                 if (i + 1 >= len(argv)) or (argv[i+1][1:] == '-'):
                     raise Exception(

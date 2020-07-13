@@ -6,9 +6,9 @@ from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
 
 from .ttree_lex import TtreeShlex, split, LineLex, SplitQuotedString, \
     EscCharStrToChar, SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, \
-    HasWildcard, InputError, ErrorLeader, SrcLoc, OSrcLoc, TextBlock, VarRef, \
-    VarNPtr, VarBinding, SplitTemplate, SplitTemplateMulti, TableFromTemplate, \
-    ExtractCatName, DeleteLinesWithBadVars, TemplateLexer
+    HasWildcard, HasRE, InputError, ErrorLeader, SrcLoc, OSrcLoc, TextBlock, \
+    VarRef, VarNPtr, VarBinding, SplitTemplate, SplitTemplateMulti, \
+    TableFromTemplate, ExtractCatName, DeleteLinesWithBadVars, TemplateLexer
 
 from .nbody_graph_search import Disconnected, NotUndirected, Edge, Vertex, \
      Dgraph, Ugraph, SortVertsByDegree, DFS, GraphMatcher 
