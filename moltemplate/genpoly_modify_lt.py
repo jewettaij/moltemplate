@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.5'
-g_date_str     = '2020-7-10'
+g_version_str  = '0.3.6'
+g_date_str     = '2020-7-17'
 
 g_usage_msg = """
 
@@ -131,7 +131,9 @@ def DistributePeriodic(widths,       # width of each object (>0)
     """
 
     Nm = len(widths)
-    max_width = max(widths)
+    max_width = 0        
+    if Nm > 0:
+        max_width = max(widths)
     N = len(occupancy)
     locations = [-1 for im in range(0, Nm)]
 

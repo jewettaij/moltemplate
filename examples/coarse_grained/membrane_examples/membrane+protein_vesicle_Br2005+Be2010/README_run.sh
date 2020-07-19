@@ -11,20 +11,23 @@
 # Assuming "lmp_mpi" is the name of the LAMMPS binary,
 # run lammps in this order:
 
-lmp_mpi -i run.in.min  # Minimize the system (important, and very slow)
+lmp_serial -i run.in.min  # Minimize the system (important and very slow)
 
-lmp_mpi -i run.in.make_uniform  # Trap the lipids between concentric spherical
-                                # shells and equilibrate.  This insures
-                                # that the lipids are distributed uniformly
-                                # on the spherical surface.  (Unfortunately,
-                                # PACKMOL does not guarantee this.)
+lmp_serial -i run.in.make_uniform  # Trap the lipids between concentric
+                             # spherical shells and equilibrate.  This insures
+                             # that the lipids are distributed uniformly
+                             # on the spherical surface.  (Unfortunately,
+                             # PACKMOL does not guarantee this.)
 
-lmp_mpi -i run.in.nvt  # Run a simulation at constant volume (production run)
+lmp_serial -i run_T=345K.in # Let the vesicle relax and equilibrate.
+                            # (Temperature was chosen to avoid the membrane
+                            #  gel phase which occurs with this model in
+                            #  vesicles of this size.)
 
 
 
-# If you have compiled the MPI version of lammps, you can run lammps in parallel
-#mpirun -np 4 lmp_mpi -i run.in.min
-#or
-#mpirun -np 4 lmp_mpi -i run.in.nvt
-# (assuming you have 4 processors available)
+#If you have compiled the MPI version of lammps, you can run lammps in parallel
+# mpirun -np 16 lmp_mpi -i run.in.min
+#   or
+# mpirun -np 16 lmp_mpi -i run.in.nvt
+# (assuming you have 16 processors available)
