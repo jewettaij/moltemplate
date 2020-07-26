@@ -7,7 +7,7 @@
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.18.2"
-G_DATE="2020-7-19"
+G_DATE="2020-7-25"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -78,13 +78,13 @@ raw2data.py
 EOF
 )
 
-
-
+# Save the default Internal Field Separator and define "newline" as an alternative IFS.
 OIFS=$IFS
-#IFS=$'\n'
-IFS="
+#CR=$'\n'
+CR="
 "
 
+IFS=$CR
 for f in $MOLTEMPLATE_FILES_NEEDED; do
     if [ ! -s "${PY_SCR_DIR}/$f" ]; then
         echo "Error: Missing file \"${PY_SCR_DIR}/$f\"" >&2
@@ -178,13 +178,16 @@ in_charges="In Charges"
 # ---------------------------------------------------------------
 
 tmp_atom_coords="tmp_atom_coords.dat"  #<-temporary file for storing coordinates
-
+tmp_dump="tmp_dump.dat"
+tmp_ellips_quat="tmp_ellips_quat.dat"
 
 
 MOLTEMPLATE_TEMP_FILES=$(cat <<EOF
 *.template
 ttree_assignments.txt
 $tmp_atom_coords
+$tmp_dump
+$tmp_ellips_quat
 $data_masses
 $data_pair_coeffs
 $data_pairij_coeffs
@@ -222,10 +225,8 @@ $in_settings
 EOF
 )
 
-OIFS=$IFS
-#IFS=$'\n'
-IFS="
-"
+
+IFS=$CR
 for f in $MOLTEMPLATE_TEMP_FILES; do
     #echo "removing [$f]"
     rm -f "$f"
@@ -242,7 +243,7 @@ Syntax example:
 Usage:
 
 moltemplate.sh [-atomstyle style] \
-               [-pdb/-xyz coord_file] \
+               [-pdb/-xyz/-dump coord_file] \
                [-a assignments.txt] file.lt
 
 Optional arguments:
@@ -273,6 +274,22 @@ Optional arguments:
                 to the LAMMPS data file.
                 (Support for triclinic cells is experimental as of 2012-2-13.
                  Other molecular structure formats may be supported later.)
+
+-dump dump_file An optional dump_file argument can be supplied as an argument
+                following "-dump".
+
+                This option should be used to overwrite the coordinate section
+                in the LAMMPS data file. If present, it will also write the
+                Ellipsoids and Velocities sections.
+
+                For data style ellipsoid, the dump file MUST be formatted in
+                the following order:
+                "id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] ... "
+                Where:
+                compute q all property/atom quatw quati quatj quatk
+
+                The box boundaries are also copied to the LAMMPS data file.
+
 -a "@atom:x 1"
 -a assignments.txt
                 The user can customize the numbers assigned to atom, bond,
@@ -345,11 +362,12 @@ fi
 
 # --- Did the user specify a file containing atomic coordinates?
 
-rm -f "$tmp_atom_coords"
+rm -f "$tmp_atom_coords" "$tmp_dump" "$tmp_ellips_quat"
 
 # Optional files containing atom coordinates:
 PDB_FILE=""
 XYZ_FILE=""
+DUMP_FILE=""
 RAW_FILE=""
 LT_FILE=""
 OUT_FILE_BASE="system"
@@ -520,7 +538,7 @@ while [ "$i" -lt "$ARGC" ]; do
         # a string is numeric.
         #http://rosettacode.org/wiki/Determine_if_a_string_is_numeric#AWK
 
-        awk 'function isnum(x){return(x==x+0)} BEGIN{targetframe=1;framecount=0} {if (isnum($0)) {framecount++} else{if (framecount==targetframe){  if (NF>0) { if ((NF==3) && isnum($1)) {print $1" "$2" "$3} else if ((NF==4) && isnum($2)) {print $2" "$3" "$4} }}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
+        awk 'function isnum(x){return(x==x+0)} BEGIN{targetframe=1;framecount=0} {if (isnum($0)) {framecount++} else{if (framecount==targetframe){  if (NF>0) { if ((NF==3) && isnum($1)) {print $1" "$2" "$3} else if ((NF>3) && (NR>2) && isnum($2)) {print $2" "$3" "$4} }}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
 
     elif [ "$A" = "-pdb" ]; then
         if [ "$i" -eq "$ARGC" ]; then
@@ -578,22 +596,20 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         if [ `echo "$ALPHA!=90.0"|bc` -eq 1 ] || [ `echo "$BETA!=90.0"|bc` -eq 1 ] || [ `echo "$GAMMA!=90.0"|bc` -eq 1 ]; then
             # I transform the parameters from one format to the other by inverting
-            # the transformation formula from the LAMMPS documentation (which matches
+            # the transformation formula from the LAMMPS documentation 
+            # https://lammps.sandia.gov/doc/Howto_triclinic.html  (which matches
             # http://www.ccl.net/cca/documents/molecular-modeling/node4.html)
-            # Disclaimer:
-            # As of September 2012, I have not tested the code below. I think the
-            # equations are correct, but I don't know if their are special cases
-            # that require the coordinates to be rotated or processed beforehand.
-            # This is an experimental feature.
             TRICLINIC="True"
             PI=3.1415926535897931
             BOXSIZE_X=$BOXSIZE_A
-            BOXSIZE_Y=`awk -v PI="$PI" -v BX_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*sin(GAMMA*PI/180.0)}'`
+            BOXSIZE_Y=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*sin(GAMMA*PI/180.0)}'`
             BOXSIZE_XY=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*cos(GAMMA*PI/180.0)}'`
-            BOXSIZE_XZ=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_C*cos(BETA*PI/180.0)}'`
-            BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); c=BOXSIZE_C; print c*(ca-(cg*cb))/sg}'`
-            #BOXSIZE_Z=`awk "BEGIN{ca=cos($ALPHA*$PI/180.0); cb=cos($BETA*$PI/180.0); cg=cos($GAMMA*$PI/180.0); sg=sin($GAMMA*$PI/180.0); print $BOXSIZE_C*sqrt(1.+2*ca*cb*cg-ca**2-cb**2-cg**2)/sg}"`
-            BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
+            BOXSIZE_XZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v BETA="$BETA"   'BEGIN{print BOXSIZE_C*cos(BETA*PI/180.0)}'`
+            BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*(ca-(cg*cb))/sg}'`
+            BOXSIZE_Z=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*sqrt(1.+2*ca*cb*cg-ca**2-cb**2-cg**2)/sg}'`
+            #BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
+            # The two expressions for "BOXSIZE_Z" should be algebraically equivalent, but I
+            # might have made a mistake. Thanks, Otello for fixing this code. -A 2020-7-25.
         else
             BOXSIZE_X=$BOXSIZE_A
             BOXSIZE_Y=$BOXSIZE_B
@@ -608,6 +624,92 @@ while [ "$i" -lt "$ARGC" ]; do
         BOXSIZE_MAXX=$BOXSIZE_X
         BOXSIZE_MAXY=$BOXSIZE_Y
         BOXSIZE_MAXZ=$BOXSIZE_Z
+
+    # Contributing author for read DUMP: Otello M Roscioni.
+    elif [ "$A" = "-dump" ]; then
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "$SYNTAX_MSG" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+        DUMP_FILE=$A
+        if [ ! -s "$DUMP_FILE" ]; then
+            echo "$SYNTAX_MSG" >&2
+            echo "-----------------------" >&2
+            echo "" >&2
+            echo "Error: Unable to open DUMP-file \"$DUMP_FILE\"." >&2
+            echo "       (File is empty or does not exist.)" >&2
+            exit 8
+        fi
+
+        # Reorder the last frame of a DUMP file, as the atoms are dumped randomly.
+        last=$(head -4 "$DUMP_FILE" | awk 'NR==4{print $1+9}')
+        tail -$last "$DUMP_FILE" | head -9 > "$tmp_dump"
+        tail -$last "$DUMP_FILE" | tail -n+10 | sort -n >> "$tmp_dump"
+
+        # Read the box
+        IFS=$CR
+        box=( $(head -8 "$tmp_dump" | awk 'NR>5{for (i=1;i<=NF;i++){printf "%g\n",$i}}') )
+
+        # Find the columns of velocities.
+        vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
+        angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
+        IFS=$OIFS
+
+        # Orthorombic box.
+        if [ ${#box[@]} == 6 ]; then
+          BOXSIZE_MINX=${box[0]}
+          BOXSIZE_MAXX=${box[1]}
+          BOXSIZE_MINY=${box[2]}
+          BOXSIZE_MAXY=${box[3]}
+          BOXSIZE_MINZ=${box[4]}
+          BOXSIZE_MAXZ=${box[5]}
+        fi
+
+        # Triclinic box.
+        # For triclinic systems the first two columns of "ITEM: BOX BOUNDS" in 
+        # the dump describe a bounding box around the system, not the system 
+        # itself. See https://lammps.sandia.gov/doc/dump.html and https://lammps.sandia.gov/doc/Howto_triclinic.html
+        if [ ${#box[@]} == 9 ]; then
+          xtilt=( $(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n) )
+          ytilt=( $(echo "0.0 ${box[8]}"|xargs -n1|sort -n) )
+          BOXSIZE_MINX=$(echo ${box[0]}" "${xtilt[0]} |awk '{print $1-$2}')
+          BOXSIZE_MAXX=$(echo ${box[1]}" "${xtilt[3]} |awk '{print $1-$2}')
+          BOXSIZE_MINY=$(echo ${box[3]}" "${ytilt[0]} |awk '{print $1-$2}')
+          BOXSIZE_MAXY=$(echo ${box[4]}" "${ytilt[1]} |awk '{print $1-$2}')
+          BOXSIZE_MINZ=${box[6]}
+          BOXSIZE_MAXZ=${box[7]}
+          BOXSIZE_XY=${box[2]}
+          BOXSIZE_XZ=${box[5]}
+          BOXSIZE_YZ=${box[8]}
+	        TRICLINIC="True"
+        fi
+
+        # Save the coordinates.
+        awk 'NR>9{print $3" "$4" "$5}' "$tmp_dump" > "$tmp_atom_coords"
+
+        # Save the orientations. Make sure that the columns reserved for quaternions are not used to store velocities.
+        es=0
+        if [[ ${#vel[@]} == 3 && ${vel[2]} -le 9 ]]; then
+           ((es++))
+        fi
+        if [[ ${#angmom[@]} == 3 && ${angmom[2]} -le 9 ]]; then
+           ((es++))
+        fi
+        if [[ "$(sed  -n '10p;10q' "$tmp_dump" | awk '{print $6" "$7" "$8" "$9}' | wc -w)" == 4 && $es == 0 ]]; then
+           awk 'NR>9{print $6" "$7" "$8" "$9}' "$tmp_dump" > "$tmp_ellips_quat"
+        fi
+
+        # Save the velocities. It should work with other atom styles, as long as the velocities are present.
+        if [[ ${#vel[@]} == 3 && ${#angmom[@]} == 0 ]]; then 
+           awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz}' "$tmp_dump" > "$data_velocities"
+
+        elif [[ ${#vel[@]} == 3 && ${#angmom[@]} == 3 ]]; then 
+           awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} -v ax=${angmom[0]} -v ay=${angmom[1]} -v az=${angmom[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz" "$ax" "$ay" "$az}' "$tmp_dump" > "$data_velocities"
+
+        fi
+
 
     elif [ "$A" = "-atomstyle" ] || [ "$A" = "-atom-style" ] || [ "$A" = "-atom_style" ]; then
         if [ "$i" -eq "$ARGC" ]; then
@@ -777,10 +879,8 @@ fi
 # from inside the standard LAMMPS files generated by the user:
 # (Users are free to put whatever weird characters they want in other
 #  (custom) auxilliary files.  But not in the standard LAMMPS files.)
-OIFS=$IFS
-#IFS=$'\n'
-IFS="
-"
+
+IFS=$CR
 for file in $MOLTEMPLATE_TEMP_FILES; do
     if [ -e "$file" ]; then
         #dos2unix < "$file" > "$file.dos2unix"
@@ -947,7 +1047,7 @@ fi
 FILE_angles_by_type1=""
 FILE_angles_by_type2=""
 #for FILE in "$data_angles_by_type"*.template; do
-IFS_BACKUP="$IFS"
+
 IFS=$(echo -en "\n\b")
 for FILE in `ls -v "$data_angles_by_type"*.template 2> /dev/null`; do
 
@@ -1043,17 +1143,13 @@ for FILE in `ls -v "$data_angles_by_type"*.template 2> /dev/null`; do
     mv -f ttree_assignments.tmp ttree_assignments.txt
     rm -f gen_angles.template.tmp new_angles.template.tmp
 done
-IFS="$IFS_BACKUP"
-
-
-
+IFS=$OIFS
 
 
 
 FILE_dihedrals_by_type1=""
 FILE_dihedrals_by_type2=""
 #for FILE in "$data_dihedrals_by_type"*.template; do
-IFS_BACKUP="$IFS"
 IFS=$(echo -en "\n\b")
 for FILE in `ls -v "$data_dihedrals_by_type"*.template 2> /dev/null`; do
 
@@ -1149,7 +1245,7 @@ for FILE in `ls -v "$data_dihedrals_by_type"*.template 2> /dev/null`; do
     mv -f ttree_assignments.tmp ttree_assignments.txt
     rm -f gen_dihedrals.template.tmp new_dihedrals.template.tmp
 done
-IFS="$IFS_BACKUP"
+IFS=$OIFS
 
 
 
@@ -1158,7 +1254,6 @@ IFS="$IFS_BACKUP"
 FILE_impropers_by_type1=""
 FILE_impropers_by_type2=""
 #for FILE in "$data_impropers_by_type"*.template; do
-IFS_BACKUP="$IFS"
 IFS=$(echo -en "\n\b")
 for FILE in `ls -v "$data_impropers_by_type"*.template 2> /dev/null`; do
 
@@ -1253,7 +1348,7 @@ for FILE in `ls -v "$data_impropers_by_type"*.template 2> /dev/null`; do
     mv -f ttree_assignments.tmp ttree_assignments.txt
     rm -f gen_impropers.template.tmp new_impropers.template.tmp
 done
-IFS="$IFS_BACKUP"
+IFS=$OIFS
 
 
 
@@ -1281,10 +1376,8 @@ done
 #if [ -s "${in_settings}.template" ]; then
 echo "expanding wildcards in \"_coeff\" commands" >&2
 
-OIFS=$IFS
-#IFS=$'\n'
-IFS="
-"
+
+IFS=$CR
 for file_name in $OUT_FILES_WITH_COEFF_COMMANDS; do
     #echo "  searching for \"_coeff\" commands in file \"$file_name\"" >&2
     # file contains both _coeff commands and wildcards *,? on the same line:
@@ -1984,8 +2077,27 @@ fi
 if [ -s "$data_ellipsoids" ]; then
     echo "Ellipsoids" >> "$OUT_FILE_DATA"
     echo "" >> "$OUT_FILE_DATA"
-    cat "$data_ellipsoids" >> "$OUT_FILE_DATA"
-    echo "" >> "$OUT_FILE_DATA"
+
+    # Replace the Quaternion section, if a dump has been used to write the DATA file.
+    if [ -s "$tmp_ellips_quat" ]; then 
+
+       NATOMS=`awk 'END{print NR}' "$data_ellipsoids"`
+       NATOMCRDS=`awk 'END{print NR}' "$tmp_ellips_quat"`
+       if [ $NATOMS -ne $NATOMCRDS ]; then
+           echo "Error: Number of atoms in coordinate file provided by user ($NATOMCRDS)" >&2
+           echo "does not match the number of atoms generated in ttree file ($NATOMS)" >&2
+           exit 14
+       fi
+
+       # Merge the two files.
+       paste -d " " "$data_ellipsoids" "$tmp_ellips_quat" |\
+       awk '{print $1" "$2" "$3" "$4" "$9" "$10" "$11" "$12}' >> "$OUT_FILE_DATA"
+       echo "" >> "$OUT_FILE_DATA"
+
+    else
+       cat "$data_ellipsoids" >> "$OUT_FILE_DATA"
+       echo "" >> "$OUT_FILE_DATA"
+    fi
 fi
 
 if [ -s "$data_triangles" ]; then
@@ -2137,8 +2249,6 @@ else
 fi
 
 
-
-
 # ############## CLEAN UP ################
 
 # A lot of files have been created along the way.
@@ -2157,10 +2267,7 @@ fi
 
 
 # Move temporary files into the "output_ttree/" directory:
-OIFS=$IFS
-#IFS=$'\n'
-IFS="
-"
+IFS=$CR
 rm -f ttree_replacements.txt >/dev/null 2>&1 || true
 for file in $MOLTEMPLATE_TEMP_FILES; do
     if [ -e "$file" ]; then
