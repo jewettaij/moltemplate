@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.18.2"
-G_DATE="2020-7-25"
+G_VERSION="2.18.3"
+G_DATE="2020-7-26"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -606,10 +606,9 @@ while [ "$i" -lt "$ARGC" ]; do
             BOXSIZE_XY=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*cos(GAMMA*PI/180.0)}'`
             BOXSIZE_XZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v BETA="$BETA"   'BEGIN{print BOXSIZE_C*cos(BETA*PI/180.0)}'`
             BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*(ca-(cg*cb))/sg}'`
-            BOXSIZE_Z=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*sqrt(1.+2*ca*cb*cg-ca**2-cb**2-cg**2)/sg}'`
-            #BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
-            # The two expressions for "BOXSIZE_Z" should be algebraically equivalent, but I
-            # might have made a mistake. Thanks, Otello for fixing this code. -A 2020-7-25.
+            BOXSIZE_Z=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*sqrt(1.0+2*ca*cb*cg-ca*ca-cb*cb-cg*cg)/sg}'`
+            #BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C*BOXSIZE_C)-((BOXSIZE_XZ*BOXSIZE_XZ)+(BOXSIZE_YZ*BOXSIZE_YZ)))}'`
+            # Note: The two expressions for "BOXSIZE_Z" are algebraically equivalent.
         else
             BOXSIZE_X=$BOXSIZE_A
             BOXSIZE_Y=$BOXSIZE_B

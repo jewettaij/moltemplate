@@ -24,8 +24,8 @@ A reference DATA file is needed (argument).
 
 #g_program_name = 'dump2data.py'
 g_program_name = __file__.split('/')[-1]
-g_date_str = '2020-3-22'
-g_version_str = '0.57.0'
+g_date_str = '2020-7-26'
+g_version_str = '0.58.0'
 
 import sys
 from collections import defaultdict
@@ -99,7 +99,7 @@ g_style_map = {'angle':     ['atom-ID', 'molecule-ID', 'atom-type', 'x', 'y', 'z
                'dipole':    ['atom-ID', 'atom-type', 'q', 'x', 'y', 'z', 'mux', 'muy', 'muz'],
                'dpd':       ['atom-ID', 'atom-type', 'theta', 'x', 'y', 'z'],
                'electron':  ['atom-ID', 'atom-type', 'q', 'spin', 'eradius', 'x', 'y', 'z'],
-               'ellipsoid': ['atom-ID', 'atom-type', 'x', 'y', 'z', 'quatw', 'quati', 'quatj', 'quatk'],
+               'ellipsoid': ['atom-ID', 'atom-type', 'ellipsoidflag', 'density', 'x', 'y', 'z'],
                'full':      ['atom-ID', 'molecule-ID', 'atom-type', 'q', 'x', 'y', 'z'],
                'line':      ['atom-ID', 'molecule-ID', 'atom-type', 'lineflag', 'density', 'x', 'y', 'z'],
                'meso':      ['atom-ID', 'atom-type', 'rho', 'e', 'cv', 'x', 'y', 'z'],
@@ -725,7 +725,7 @@ def WriteFrameToData(out_file,
                     tokens[1] = xz_str
                     tokens[2] = yz_str
                     line = ' '.join(tokens)
-            if (line in set(['Masses', 'Velocities', 'Atoms','Ellipsoids',
+            if (line in set(['Masses', 'Velocities', 'Atoms', 'Ellipsoids',
                              'Bond Coeffs', 'Angle Coeffs',
                              'Dihedral Coeffs', 'Improper Coeffs',
                              'Bonds', 'Angles', 'Dihedrals', 'Impropers'])):
@@ -1162,7 +1162,7 @@ def main():
                     if (i_ix != -1) and (not x_already_unwrapped):
                         ix = int(tokens[i_ix])
                         if (misc_settings.center_frame or
-                                (misc_settings.output_format != 'data')):
+                            (misc_settings.output_format != 'data')):
                             #sys.stderr.write('atomid='+str(atomid)+', ix = '+str(ix)+', avec='+str(avec)+'\n')
                             x += ix * avec[0]
                             y += ix * avec[1]
@@ -1175,7 +1175,7 @@ def main():
                     if (i_iy != -1) and (not y_already_unwrapped):
                         iy = int(tokens[i_iy])
                         if (misc_settings.center_frame or
-                                (misc_settings.output_format != 'data')):
+                            (misc_settings.output_format != 'data')):
                             #sys.stderr.write('atomid='+str(atomid)+', iy = '+str(iy)+', bvec='+str(bvec)+'\n')
                             x += iy * bvec[0]
                             y += iy * bvec[1]
@@ -1188,7 +1188,7 @@ def main():
                     if (i_iz != -1) and (not z_already_unwrapped):
                         iz = int(tokens[i_iz])
                         if (misc_settings.center_frame or
-                                (misc_settings.output_format != 'data')):
+                            (misc_settings.output_format != 'data')):
                             #sys.stderr.write('atomid='+str(atomid)+', iz = '+str(iz)+', cvec='+str(cvec)+'\n')
                             x += iz * cvec[0]
                             y += iz * cvec[1]
@@ -1240,18 +1240,22 @@ def main():
                         name_vz = dump_column_names[i_vz]
                         i_vx_data = 0
                         I_data = -1
-                        # This code is ugly and inneficient.
+                        # This code is dreadful and inneficient.
                         # I never want to touch this code again. (Hope it
                         # works)
                         while i_vx_data < len(data_settings.column_names):
                             if name_vx == data_settings.column_names[i_vx_data]:
                                 I_data = 0
                                 while I_data < len(data_settings.ii_vects):
-                                    if ii_vects[I] == data_settings.ii_vects[I_data]:
+                                    if (dump_column_names[ii_vects[I][0]] ==
+                                        data_settings.column_names[data_settings.ii_vects[I_data][0]]):
+                                        # (This checks the first component, ([0]) I should also 
+                                        # check [1] and [2], but the code is slow enough already.
+                                        # THIS IS TERRIBLE CODE.
                                         break
                                     I_data += 1
 
-                            if (0 < I_data) and (I_data < len(data_settings.ii_vects)):
+                            if (0 <= I_data) and (I_data < len(data_settings.ii_vects)):
                                 break
 
                             i_vx_data += 1
@@ -1310,10 +1314,10 @@ def main():
 
                     write_this_frame = True
                     if (misc_settings.tstart and
-                            (int(frame_timestep_str) < misc_settings.tstart)):
+                        (int(frame_timestep_str) < misc_settings.tstart)):
                         write_this_frame = False
                     if (misc_settings.tstop and
-                            (int(frame_timestep_str) > misc_settings.tstop)):
+                        (int(frame_timestep_str) > misc_settings.tstop)):
                         write_this_frame = False
                         read_last_frame = True
 
@@ -1334,7 +1338,7 @@ def main():
                     else:
                         assert(misc_settings.timestep_str)
                         if (int(frame_timestep_str) >=
-                                int(misc_settings.timestep_str)):
+                            int(misc_settings.timestep_str)):
                             write_this_frame = True
                             read_last_frame = True
 

@@ -1,6 +1,6 @@
 This example using the electron Force Field (eFF) was created by
 Andres Jaramillo-Botero and distributed with LAMMPS in the
-"examples/USERS/eff/CH4" subdirectory.
+"examples/USER/eff/CH4" subdirectory.
 The files from that example were converted into moltemplate format using
 "ltemplify.py" and then edited by hand (to rename the atom types,
 and replace all of the "pair_coeff ..." commands with "pair_coeff * *")
