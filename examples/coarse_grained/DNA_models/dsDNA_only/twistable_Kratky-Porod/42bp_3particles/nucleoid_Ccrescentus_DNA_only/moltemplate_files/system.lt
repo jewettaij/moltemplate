@@ -1,0 +1,41 @@
+import "dna_polymer.lt"           # <--Defines the polymer model we are using
+
+import "dna_twist_motor.lt"       # <--Defines @dihedral:Disable, @atom:C1motor
+                                  #    (These are needed to make modifications
+                                  #     to the polymer to enable twist motors.)
+
+
+
+
+# -- PLEASE IGNORE --
+# -- no longer needed (only useful when particles are smaller than Debye length)
+#import "dna_forcefield_nb.lt"    # <--Defines tabular pair interactions for DNA
+#import "optional_nonbonded.lt"   # <--Defines extra pair interactions needed
+#                                 #    to allow the chain to pass through itself
+# -------------------
+
+
+
+# Now create an instance of the polymer using the "new" command:
+
+dna_polymer = new DNAPolymer
+
+
+
+
+import "constraints.lt"           # <-- If there are any extra bonds or other
+                                  #     constraints that effect this polymer,
+                                  #     they will appear inside this file.
+                                  #     (If not, the file should be blank.)
+
+
+
+
+# What kind of boundary conditions are we using?
+write_once("In Init") {
+  boundary p f f          # <-- periodicity in x y z directions
+}
+# "p" stands for "periodic"
+# "f" stands for "fixed" (non-periodic)
+# "s" stands for "shrink-wrapped" (non-periodic)
+

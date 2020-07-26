@@ -1,0 +1,213 @@
+# "DNAForceField" is a moltemplate object containing only force-field 
+# information, atomic masses, and bond rules.
+# (Molecules are defined elsewhere and inherit these properties.)
+
+
+DNAForceField {
+
+  # Choosing the particle masses:
+     
+  write_once("Data Masses") {
+    @atom:A          2553.29
+    @atom:B          2553.29
+  }
+
+  # Note: These masses were chosen in order to insure that a simulation
+  # using a timestep (Δt) of 1.0 is numerically stable.  Using a
+  # universal timestep such as 1.0 will make it easier in the future
+  # to combine this DNA later with other coarse grained molecules.
+  # (See "dna_forcefield_more_comments.lt", located in the
+  #  "deriving_force_field_parameters" subdirectory, for details.)
+  # Note: All masses are in units of  Δt^2*(energy_units)/(distance_units^2)
+
+
+  # Now choose the forces acting on these particles
+
+  write_once("In Settings") {
+
+    # Repulsion between the DNA is dominated by electrostatics
+    # Each base-pair has a net charge of -2e (-e per nucleic acid) due
+    # to the phosphate in the backbone.  There's a nice picture here:
+    #http://www.mit.edu/~kardar/teaching/projects/dna_packing_website/electro.html
+    # To speed up simulation:  Ignore all pairwise/nonbomded forces involving 
+    # B-strand particles.  Merge all the charge onto the A strand
+    #                                         qi=qj=6  (A-strand)
+    #             i      j                  ke*qi*qj/eps_r      cutoff
+
+    pair_coeff @atom:A @atom:A   yukawa         14.943          7.001
+
+    #                                         qi=qj=0  (B-strand reverse strand)
+    pair_coeff @atom:B @atom:B   yukawa          0.000          7.001
+
+    # where    ke = 8.9875517873681764e09 J*m*C^-2 = 1/4*π*eps_0
+    # and  qi = qj = -e = -1.6021766208e-19 C
+    # and 1 J = (1/4184)*1kCal ("thermochemical calorie")
+    #  1 kcal = 6.0221409e+23 kcal/mole
+    #     1 J = 1.4393262e+20 kcal/mole
+    # and eps_r ~= is the relative dielectric permitivity = 80.0 for water
+    #    (Note: eps_r can vary by 15% at biologically relevant temperatures.)
+    # and 1 m = 1.0e9 nm
+    # In units of (kCal/mole)*nm*e^-2,  ke*qi*qj/eps_r = 0.415079644208
+    # =8.9875517873681764e09*(6.0221409e+23/4184)*1e09*(1.6021766208e-19**2)/80
+    # HOWEVER, IN THIS POLYMER MODEL, EACH ATOM REPRESENTS 3 NUCLEIC ACIDS
+    # So its charge should be -3e (or -6e and 0) --> ke*qi*qj/eps_r is
+    #   ke*qi*qj/eps_r = 3.7357167978727794   (-3e)
+    #   ke*qi*qj/eps_r = 14.942867191491118   (-6e)
+    # (Double check: I should get something like 0.71*kB*T, since
+    #  kB*T = 0.001987207*300kCal/mole, and 0.71 is the Bjerrum length in water)
+    #https://en.wikipedia.org/wiki/Coulomb's_law
+  }
+
+
+  write_once("In Settings") {
+    # To increase the simulation speed, only calculate 
+    # interactions between atoms in one of the two strands:
+    group gGhostStrand type @atom:B
+    group gHardStrand type @atom:A
+    neigh_modify exclude group gGhostStrand all
+  }
+
+
+  # 2-body (bonded) interactions:
+  #
+  #   Ubond(r) = (k/2)*(r-0)^2
+  #       however LAMMPS uses this formula instead:
+  #            =   K * (r-0)^2       (K=k/2)
+  #
+  #   http://lammps.sandia.gov/doc/bond_harmonic.html
+  #
+  #   The corresponding command is:
+  #
+  #   bond_coeff     bondType    bondstylename   K    r0
+  #
+
+  write_once("In Settings") {
+
+    # @bond:BasePair  is the bondlength between particles
+    #                 in opposite strands
+    
+    bond_coeff     @bond:BasePair  harmonic  280  1.482
+    
+
+
+    # @bond:Backbone  is the bondlength between successive particles
+    #                 belonging to the same strand.
+    
+    bond_coeff @bond:Backbone  harmonic  135 1.637
+    
+  }
+
+
+  # 3-body angular interactions are USUALLY handled in LAMMPS by adding
+  # lines to the "Data Angles" section, and defining an angle_coeff.
+  # However in this particular implementation, we are using
+  # "dihedral_style spherical" which couples the 3-body interactions
+  # AND the 4-body torsion angle interactions together in the same interaction.
+  # For "dihedral_style spherical", the forumula for the energy used depends on
+  # both the 3-body bond angles (θ1, θ2) and the torsion angle (φ).
+  #
+  #                     __@------------------>@
+  #                      /|    /          \    `\
+  #                     /    θ1            θ2_  .`\
+  #                    /  <-'                 `--->`\
+  #                   /                           .  `\
+  #                  /                             .   `\
+  #                 /                               .    `\_
+  #                /                                 .  φ  _@       
+  #               /                                   .   _/|
+  #              @                                     .-'
+  #
+  # The general formula for the energy is an expansion.  First I'll show the
+  # general formula, and then, later I'll show the specific formula we want.
+  #
+  # General formula below:
+  # E(φ,θ1,θ2) =
+  #    \sum_{i=1}^N C_i * Φ_i(φ) * Θ_{1i}(θ1) * Θ_{2i}(θ2)
+  #   Where:
+  # Φ_{i}(φ)    =   u_i - \mathrm{cos}((φ  - a_i)*K_i) \\
+  # Θ_{1i}(θ1)  =   v_i - \mathrm{cos}((θ1 - b_i)*L_i) \\
+  # Θ_{2i}(θ2)  =   w_i - \mathrm{cos}((θ2 - c_i)*M_i)
+  #
+  # In general, the LAMMPS command is:
+  #
+  # dihedral_coeff @dihedral:TYPE_NAME   spherical  n   &
+  #       C_1   K_1  a_1  u_1    L_1  b_1  v_1    M_1  c_1  w_1     &
+  #       C_2   K_2  a_2  u_2    L_2  b_2  v_2    M_2  c_2  w_2     &
+  #        :     :    :    :      :    :    :     :    :    :
+  #       C_n   K_n  a_n  u_n    L_n  b_n  v_n    M_n  c_n  w_n     &
+  #
+  # However, in this model, we use the simpler equation with only 3 terms:
+  #
+  # E(φ,θ1,θ2) =
+  #         C1*(1-cos(θ1-θ10)) +
+  #         C2*(1-cos(θ2-θ20)) +
+  #         C3*(1-cos(φ-φ0)) * sin(θ1-θ10) * sin(θ2-θ20)
+  #
+  # The last term (which depends on the torsion-angle, φ) is multiplied by
+  # sin(θ1) * sin(θ2) in order to avoid the singularity which would
+  # otherwise occur as either θ1 or θ2 approaches 0 or 180 degrees.
+  #
+  # And consequently, the lammps command we should use has the following form:
+  #
+  # dihedral_coeff @dihedral:TYPE_NAME   spherical  3               &
+  #       C1    0  0   0        1 θ10     0         0  0      0     &
+  #       C2    0  0   0        0  0      0         1 θ20     0     &
+  #       C3    1  φ0  1        1 90.0    0         1 90.0    0      
+
+  write_once("In Settings") {
+
+    # @dihedral:MajorGroove
+    #
+    # The @dihedral:MajorGroove interaction (defined below) essentially controls
+    # how easy it is to bend the DNA perpendicular to its axis, which determines
+    # its persistence length.  For this dihedral interaction, we don't need
+    # add 3-body angle terms, since these are handled by @dihedral:Torsion.
+    #
+    # In contrast, the @dihedral:Torsion interaction essentially
+    # controls the helical pitch and torsional-persistence-length.
+    
+    dihedral_coeff @dihedral:MajorGroove    spherical 1  &
+                        20.8    1 80.7 1     1 90 0         1 90 0
+    
+
+
+    # @dihedral:Torsion
+    #
+    # In contrast, the @dihedral:Torsion interaction
+    # essentially controls helical pitch and torsional-persistence-length.
+    
+    dihedral_coeff @dihedral:Torsion spherical 3  &
+       180.000       0 0.000 0         1 70.0 1   0 0.00 0   &
+       90.0          0 0.000 0         0 0.00 0   1 41.0 1   &
+       90.0          1 -62.0 1         1 90.0 0   1 90.0 0
+    
+  }
+
+
+
+
+
+  # LAMMPS supports a large number of force-field styles.  We must select
+  # which ones we need.  This information belongs in the "In Init" section.
+  # (Hybrid styles used for portability. These choices can be overridden later.)
+
+  write_once("In Init") {
+    # (Hybrid force fields were not necessary but are used for portability.)
+    units           lj     # <-- temperature has units of energy, kB=1
+    atom_style      full
+    bond_style      hybrid harmonic
+    angle_style     hybrid harmonic
+    dihedral_style  hybrid spherical
+    pair_style      hybrid yukawa \$\{debye_length\} 7.001
+    pair_modify     shift yes
+    # If charges are needed, (assuming biopolymers), try one of:
+    #dielectric      80.0
+    #pair_style      hybrid lj/cut/coul/debye 1.0 4.0
+    # or (for short distances, below a couple nm)
+    #pair_style      hybrid lj/charmm/coul/charmm/implicit 0.9 1.1
+
+    pair_modify     mix arithmetic
+    special_bonds   lj 0.0 0.0 0.0
+  }
+
+}  # DNAForceField

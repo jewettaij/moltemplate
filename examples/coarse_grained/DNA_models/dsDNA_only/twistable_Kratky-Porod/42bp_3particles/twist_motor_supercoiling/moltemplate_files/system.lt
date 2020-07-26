@@ -1,0 +1,28 @@
+import "dna_polymer.lt"           # <--Defines the polymer model we are using
+
+
+
+# -- PLEASE IGNORE --
+# -- no longer needed (only useful when particles are smaller than Debye length)
+#import "dna_forcefield_nb.lt"    # <--Defines tabular pair interactions for DNA
+#import "optional_nonbonded.lt"   # <--Defines extra pair interactions needed
+#                                 #    to allow the chain to pass through itself
+# -------------------
+
+
+
+# Now create an instance of the polymer using the "new" command:
+
+dna_polymer = new DNAPolymer
+
+
+
+
+# What kind of boundary conditions are we using?
+write_once("In Init") {
+  boundary p p p          # <-- periodicity in x y z directions
+}
+# "p" stands for "periodic"
+# "f" stands for "fixed" (non-periodic)
+# "s" stands for "shrink-wrapped" (non-periodic)
+

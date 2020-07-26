@@ -1,0 +1,122 @@
+# GOAL:
+#   The conformation of the circular DNA is currently stretched in a straight
+#   line.
+#    
+#    linkers                                             linkers
+#      |                                                   |
+#      V                                                   V
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#        |                                               |
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#
+#   The opposite sides of the circular DNA are linked to each other
+#   accross the periodic boundary of the simulation box.  This keeps the
+#   polymer in a stretched conformation.
+#   This simulation will gradually unstretch the polymer by shrinking
+#   the length of the periodic simulation box, while simultaneously applying
+#   torque which encourages it to form supercoils as it relaxes.
+#   
+# PREREQUISITES:
+#
+#     You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#
+# In addition, you must minimize the system beforehand by running LAMMPS using
+# the "run.in.min" script.
+# This will generate the "system_linked_after_min.data" file.
+
+
+# -- Init Section --
+
+include "system.in.init"
+boundary p f f
+
+# ------------------------------- Atom Definition Section -------------------
+
+#read_data "system_linked.data"
+read_data "system_linked_after_min.data"
+
+# Make sure the size of the simulation box is what we think it is
+change_box all y final -330 330 z final -330 330
+
+
+# ------------------------------- Settings Section --------------------------
+
+include "system.in.settings"
+include "system.in.types" #<--optional custom atom types for twist motors
+
+# Confine the polymer in a cylindrical tube that minics a bacterial cell wall
+include "confinement_hard_cylinder_R=320_K=10_Rmax=330.in"
+
+# For extremely large simulations like this one, the default neighbor-list
+# bin size and communication distance must be overridden to prevent LAMMPS from
+# creating too many neighbor bins. (LAMMPS is currently not optimized for these
+# kinds of huge simulations with extremely non-uniform density.)
+# http://lammps.sandia.gov/doc/neighbor.html
+# http://lammps.sandia.gov/doc/comm_modify.html
+
+neighbor 25.0 bin
+#comm_modify mode single cutoff 43.0 vel yes  (<-fails on some lammps versions)
+comm_modify mode single cutoff 57.0 vel yes
+
+
+# ------------------------------- Run Section -------------------------------
+
+include fix_twist.in
+
+dump 1 all custom 500000 traj_contract.lammpstrj id mol type x y z ix iy iz
+
+# (See http://lammps.sandia.gov/doc/fix_langevin.html)
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed lx
+thermo          5000  # time interval for printing out "thermo" data
+thermo_modify   norm yes flush yes
+
+# Ways to control simulation box size:
+# http://lammps.sandia.gov/doc/fix_deform.html    <-- this is what I used here
+# http://lammps.sandia.gov/doc/fix_nh.html
+# http://lammps.sandia.gov/doc/change_box.html
+
+fix fxbal all balance 1000000 1.03 shift x 20 1.03
+# http://lammps.sandia.gov/doc/fix_balance.html
+
+velocity all create 0.5961621 4928459
+
+timestep 1.0   # By definition.  (Masses should be adjusted accordingly.)
+
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+# To maximize diffusion rate (sampling efficiency), make tdamp as large as you
+# can.  Just make sure it does not exceed the timescales you really care about.
+# (Keep it an order of magnitude or so shorter than that.)
+#                           kB*Tstart   kB*Tstop   tdamp      randomseed
+fix fxlan all langevin   0.5961621   0.596162   5000000.0  3
+fix fxnve all nve
+
+# Lower the tension in the chain by compressing the system lengthwise
+fix fxdef all deform 10 x final -950 950
+# Keep the chain centered in the X direction (so that it does not drift)
+fix fxcen all recenter 0.0 NULL NULL
+
+run 180000000
+
+unfix fxcen
+unfix fxnve
+unfix fxlan
+unfix fxdef
+
+# Now let the polymer equilibrate for a little while without
+# changing the box size
+
+fix fxlan all langevin   0.5961621   0.596162   100000.0  3
+fix fxnve all nve
+fix fxcen all recenter 0.0 NULL NULL
+run 2000000
+unfix fxcen
+unfix fxnve
+unfix fxlan
+
+# Write the state of the system to a new file:
+write_data  system_linked_length=1900nm.data

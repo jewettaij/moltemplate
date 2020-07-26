@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.1.1'
-g_date_str     = '2020-4-15'
+g_version_str  = '0.3.6'
+g_date_str     = '2020-7-17'
 
 g_usage_msg = """
 
@@ -18,8 +18,8 @@ Usage:
       [-length num_monomers] \\
       [-locations filename] \\
       [-locations-periodic num_mods offset] \\
-      [-locations-random num_mods] \\
-      [-mod-width mod_width] \\
+      [-locations-random num_mods seed] \\
+      [-width mod_width] \\
       [-bond btype a1 a2 i1 i2] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
@@ -62,6 +62,251 @@ class InputError(Exception):
 
 
 
+def FindNearestAvailableSite(i, # target index. look for a position closest to i
+                             width,  # number of needed consecutive vacant sites
+                             occupancy,     # an array of True,False values
+                             is_periodic):  # consider "wrap around" indexing?
+    """
+    Look for an interval containing "width" vacant sites in the occupancy array
+    (an array of True or False values) whose start is nearest to location i.
+    """
+    N = len(occupancy)
+    # Check and see if site i is available.  If not, skip to the next site,
+    # (either before or after this site).
+    if is_periodic:
+        j_stop = N // 2
+    else:
+        j_stop = max(-width+N-i, i)
+    occupied = True
+    for j in range(0, j_stop):
+        occupied = True
+        for s in (-1, 1):
+            if i+s*j < 0:
+                continue
+            if i+s*j >= N:
+                continue
+            # Is location "i+s*j" available for an object of size "width"?
+            # If so, all sites from [i+s*j, i+s*j+width) must not be occupied.
+            occupied = False
+            for d in range(0, width):
+                if not is_periodic:
+                    if i+s*j+d < 0:
+                        occupied = True
+                        continue
+                    if i+s*j+d >= N:
+                        occupied = True
+                        continue
+                if occupancy[(i+s*j+d) % N]:
+                    occupied = True
+                    break
+            if not occupied:
+                break
+        if not occupied:
+            break
+    if occupied:
+        return -1
+    else:
+        return i+s*j
+
+
+
+
+def DistributePeriodic(widths,       # width of each object (>0)
+                       occupancy,   # already occupied sites in the lattice
+                       is_periodic=False, # is the lattice periodic?
+                       offset=None):     # shift placment of first object?
+    """
+    Nm = len(widths)
+    N = len(occupancy)
+    Choose n integers from the interval [0,...,N-1] which are as
+    evenly-spaced as possible, subject to the following constraints:
+    1) Each of the n integers represents the position of an object which
+       occupies "width" sites in a lattice with sites numbered [0, ..., N-1].
+    2) Objects must avoid sites on the lattice which are already occupied.
+    3) OPTIONAL: By default, the first integer is chosen arbitrarily.
+       However you can specify the position of the first integer by providing
+       an "offset" argument (an integer >=0). It will be the first of the n
+       integers generated (or the closest available site to that location).
+    The function returns a list of the n chosen integers.
+    """
+
+    Nm = len(widths)
+    max_width = 0        
+    if Nm > 0:
+        max_width = max(widths)
+    N = len(occupancy)
+    locations = [-1 for im in range(0, Nm)]
+
+    if is_periodic:
+        Nreduced = N
+    else:
+        Nreduced = N - max_width
+    # the next if statement is probably unnecessary (nobody invokes it this way)
+    if offset == None:
+        if is_periodic:
+            offset = 0
+        else:
+            offset = Nreduced / (2*Nm)
+    for im in range(0, Nm):
+        i = offset + (N*im) // Nm  # next location?
+        # If we didn't have to worry about occupancy, then we would de done now.
+        # However if it is occupied, we have to find nearby unnoccupied sites:
+        J = FindNearestAvailableSite(i, widths[im], occupancy, is_periodic)
+        if J == -1:
+            raise InputError('Error('+g_program_name+
+                             '): Not enough available sites.\n')
+        else:
+            locations[im] = J
+            for d in range(0, widths[im]):
+                assert(occupancy[(J+d) % N] == False)
+                occupancy[(J+d) % N] = True
+
+    for im in range(0, Nm):          # error check: make sure that we remembered
+        assert(locations[im] != -1) # to specify all the entries in locations[]
+
+    return locations
+
+
+
+
+def _DistributeRandom(widths,           # width of each object (>0)
+                      occupancy,        # already occupied sites
+                      is_periodic=False, # is the lattice periodic?
+                      rand_seed=None):  # specify the random seed
+    """
+    Generate random non-overlapping integers in a 1-D lattice, taking care to
+    avoid previously occupied lattice sites. Each integer has width "widths[im]",
+    meaning that it occupies "widths[im]" sites on the lattice.  (The algorithm
+    places each integer by inserting random amounts of space between them,
+    taking into consideration their widths and the total lattice size.) Overlaps
+    between integers with eachother and previously occupied sites are avoided.
+    When there are previously occupied lattice sites, the algorithm used here
+    is not smart enough to guarantee that it will place the objects in a truly
+    random way, or even succeed in placing them at all.
+    Running time: O(N), where N is the number of sites in the lattice.
+    """
+
+    Nm = len(widths)
+    if Nm == 0:
+        return []
+    N = len(occupancy)
+    locations = [-1 for im in range(0, Nm)]
+
+    # "Nreduced" is the number of available sites in the "reduced" lattice.
+    # Putting objects of width 1 (lattice site) in the reduced lattice
+    # gives you the same number of choices that you would have by putting
+    # objects of variable width in the original lattice.
+    # So we will place width 1 objects in the reduced lattice, randomize their
+    # position, and then figure out where they would be in the original lattice
+    # by inserting widths[im]-1 new lattice sites following each object placment.
+    # (Unfortunately, by placing objects in the reduced lattice, it's not
+    #  obvious where they end up in the original lattice.  So its difficult
+    #  to take into consideration which sites in the original lattice previously
+    #  occupied and not available.  We will have to correct for overlaps with
+    #  previously occupied sites later.  This is a limitation of this approach.)
+
+    sum_widths = 0
+    for im in range(0, Nm):
+        sum_widths += widths[im]
+
+    Nreduced = N - (sum_widths - Nm)  # size of the reduced lattice
+
+    if Nreduced < Nm:
+        raise InputError('Error('+g_program_name+'): Not enough space.\n')
+    occupancy_reduced = [ -1 for im in range(0, Nreduced)]
+    for im in range(0, Nm):
+        occupancy_reduced[im] = im
+    if rand_seed != None:
+        random.seed(rand_seed)
+    random.shuffle(occupancy_reduced)
+    offset = 0
+    if is_periodic:
+        # (complicated boring detail)  By definition, each modification
+        # occupies "self.widths[im]" monomers in the polymer.
+        # In principle, the modification could occupy sites on the
+        # polymer which cross the boundary between the last monomer
+        # and the first monomer.  To allow this to happen, assume this does
+        # not happen (as we have done so far), and then cyclically shift
+        # the entries.  (The shift amount should be a random integer from
+        # 0, max(widths)-1)
+        offset = random.randint(0, max(widths)-1)
+
+    # Index variables
+    # im  =  which integer are we generating (ie. which object are we locating)
+    # Ir =  which position in the reduced size lattice are we considering?
+    # I  =  which position in the full size lattice are we considering?
+
+    i = 0
+    for ir in range(0, Nreduced):
+        im = occupancy_reduced[ir]
+        if im != -1:
+            # Then "i" is the target site (in the original lattice) for
+            # the im'th object we want to place.  Figure out whether site "i"
+            # is available.  If not, find the nearest available site.
+            J = FindNearestAvailableSite(i+offset,
+                                         widths[im],
+                                         occupancy,
+                                         is_periodic)
+            if J == -1:
+                return None   #packing was unsuccessful during this attempt
+            locations[im] = J
+            for d in range(0, widths[im]):
+                assert(occupancy[(J+d) % N] == False)
+                occupancy[(J+d) % N] = True
+            i += widths[im]
+        else:
+            i += 1
+
+    for im in range(0, Nm):         # error check: make sure that we remembered
+        assert(locations[im] != -1) # to specify all the entries in locations[]
+
+    return locations
+
+
+
+def DistributeRandom(widths,           # the width of each object (>0)
+                     occupancy,        # already occupied sites
+                     is_periodic=False, # is the lattice periodic?
+                     rand_seed=None,   # specify the random seed
+                     num_attempts=20): # number of randomly generated attempts
+    """
+    Generate random non-overlapping integers in a 1-D lattice, taking care to
+    avoid previously occupied lattice sites. Each integer has width "widths[im]",
+    meaning that it occupies "widths[im]" sites on the lattice.  (The algorithm
+    places each integer by inserting random amounts of space between them,
+    taking into consideration their widths and the total lattice size.) Overlaps
+    between integers with eachother and previously occupied sites are avoided.
+    When there are previously occupied lattice sites, the algorithm used here
+    is not smart enough to guarantee that it will place the objects in a truly
+    random way, or even succeed in placing them all.  So this function will
+    attempt random placements a certain number of times before giving up.
+    However, for sparsely occupied lattices, the number of attempts before
+    success is O(1), and each attempt requires O(N) time (N=size of lattice)
+    resulting in a running time of O(N), in that case.
+    """
+    if rand_seed == None:
+        rand_seed = random.randrange(sys.maxsize)
+
+    for a in range(0, num_attempts):
+        occupancy_cpy = [i for i in occupancy] # a fresh copy of occupancy array
+        L = _DistributeRandom(widths,
+                              occupancy_cpy,
+                              is_periodic,
+                              rand_seed + a)
+        if L != None:
+            for i in range(0, len(occupancy)):  # if successful, then
+                occupancy[i] = occupancy_cpy[i] # copy back into occupancy array
+            break
+    if L == None:
+        raise InputError('Error('+g_program_name+
+                         '): Not enough space.\n'+
+                         '      (Quit after '+str(num_attempts)+
+                         ' packing attempts.)\n')
+    return L
+
+
+
+
 class WrapPeriodic(object):
     """ 
     Wrap() returns the remainder of i % N.  I wrote this pointless-looking
@@ -92,14 +337,17 @@ class GPModSettings(object):
         self.polymer_name = ''
         self.N = 0    # (number of monomers in the polymer (including end caps))
         self.connect_ends = False # are first and last monomers bonded together?
-        self.end_padding = 0  # (this should equal to the maximum index offset)
+        self.index_range = 0  # (this should equal to the maximum index offset)
+        self.locations = []
         self.nmods = 0
-        self.mods_evenly_spaced = False
+        self.widths = [1]
+        self.occupancy = []
+        self.write_locations_file = ''
+        self.write_occupancy_file = ''
+        self.gen_locations_method = ''
+        self.rand_seed = 0
+        self.rand_num_attempts = 50
         self.periodic_offset = 0
-        self.mod_width = 1
-        self.is_mod_here = [] # where should we make these modifications?
-        self.escale = 1.0
-        self.escale_name = ''
         self.bonds_name = []
         self.bonds_type = []
         self.bonds_atoms = []
@@ -138,84 +386,24 @@ class GPModSettings(object):
         try:
             loc_file = open(mod_locations_filename, 'r')
             lines = loc_file.readlines()
-            for i in range(0, len(lines)):
-                line = lines[i].strip()
+            for line in lines:
                 if ((len(line) == 0) or (line[0] == '#')):
                     continue
-                n = int(lines[i])
-                if ((i < 0) or (self.N <= i)):
-                    raise InputError('Error: Expected a number from 0 to '+str(N-1)+' on each line\n'
-                                     '       of file "'+mod_locations_file+'"\n'
+                I = int(line)
+                if ((I < 0) or (self.N <= I)):
+                    raise InputError('Error: Expected a number from 0 to '+str(self.N-1)+' on each line\n'
+                                     '       of file "'+mod_locations_filename+'"\n'
                                      '       (NOTE: Indexing begins at 0, not 1.)\n')
-                self.is_mod_here[n] = True
+                self.locations.append(I)
+            self.nmods = len(self.locations)
+
         except (ValueError, InputError) as err:
-            sys.stderr.write('Error: Unable to read file "'+mod_locations_filename+'"\n'
+            raise InputError('Error: Unable to read file "'+mod_locations_filename+'"\n'
                              '       -or- file has the wrong format (integers (>=0) on separate lines.)\n'
                              'Details:\n'+
                              str(err)+'\n')
             sys.exit(-1)
 
-
-
-    def ChooseRandomModLocations(self):
-        # "Navailable" is the number of available "sites" on the polymer
-        # where the modification could be located.
-        if self.connect_ends:
-            Navailable = (self.N - (self.nmods*(self.mod_width-1)))
-        else:
-            Navailable = (self.N - ((self.nmods-1)*(self.mod_width-1) +
-                                    max(self.mod_width-1, self.end_padding)))
-        if Navailable < self.nmods:
-            raise InputError('Error: Too many mods added (or mods are too wide) for a polymer of length '+str(self.N)+'\n'
-                             '       (Try reducing the -nmods or -mod-width parameters.)\n')
-        is_site_occupied = [ False for i in range(0, Navailable)]
-        for i in range(0, self.nmods):
-            is_site_occupied[i] = True
-        random.shuffle(is_site_occupied)
-
-        # Now fill the self.is_mod_here[] array, adding padding when necessary
-        self.is_mod_here = [ False for i in range(0, self.N) ]
-        j = 0
-        for i in range(0, Navailable):
-            if is_site_occupied[i]:
-                assert(j + (self.mod_width-1) < self.N)
-                self.is_mod_here[j] = True
-                j += self.mod_width
-            else:
-                j += 1
-
-        if self.connect_ends:
-            # (complicated boring detail)  By definition, each modification
-            # occupies "self.mod_width" monomers in the polymer.
-            # In principle, the modification could occupy sites on the
-            # polymer which cross the boundary between the last monomer
-            # and the first monomer.  To allow this to happen, assume this does
-            # not happen (as we have done so far), and then cyclically shift
-            # the entries.  (The shift amount should be a random integer from
-            # 0, self.mod_width-1)
-            iso_cpy = [x for x in self.is_mod_here]
-            shift = random.randint(0, self.mod_width-1)
-            for i in range(0, self.N):
-                self.is_mod_here[i] = iso_cpy[(i+shift) % self.N]
-
-        return self.nmods
-
-
-    def ChoosePeriodicModLocations(self):
-        if self.connect_ends:
-            Navailable = self.N
-        else:
-            Navailable = self.N - self.end_padding
-        if self.periodic_offset == None:
-            self.periodic_offset = Navailable / (2*self.nmods)
-            if self.connect_ends:
-                self.periodic_offset = 0
-        for i in range(0, Navailable):
-            ip1 = WrapPeriodic.Wrap(i+1, self.N)
-            if ( ((-1+i-self.periodic_offset)*self.nmods) // Navailable <
-                 ((i-self.periodic_offset)*self.nmods) // Navailable ):
-                self.is_mod_here[i] = True
-                sys.stderr.write('Modification made beginning at mon['+str(i)+']\n')
 
 
     def ParseArgs(self, argv):
@@ -225,7 +413,7 @@ class GPModSettings(object):
 
         """
         mod_locations_filename = ''
-        pmod = 0
+        occupied_monomers = []
         i = 1
         while i < len(argv):
 
@@ -233,75 +421,91 @@ class GPModSettings(object):
 
             if (argv[i].lower() in ('-loc', '-locations')):
                 if i + 1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a file name.\n')
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by a file name.\n')
                 mod_locations_filename = argv[i+1]
-                self.mods_evenly_spaced = False
-                del(argv[i:i + 2])
-
-            #elif argv[i].lower() == '-pmod':
-            #    if i+1 >= len(argv):
-            #        raise InputError('Error: '+argv[i]+' flag should be followed by a number\n')
-            #    try:
-            #        pmod=int(argv[i+1])
-            #    except ValueError:
-            #        pmod=float(argv[i+1])
-            #    del(argv[i:i + 2])
-
-            elif argv[i].lower() in ('-locations-periodic',
-                                     '-locationsperiodic',
-                                     '-loc-periodic',
-                                     '-locperiodic'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a number\n')
-                self.nmods = int(argv[i+1])
-                self.mods_evenly_spaced = True
-                self.periodic_offset = int(argv[i+2])
-                del(argv[i:i + 3])
-
-            elif argv[i].lower() in ('-locations-random', '-locationsrandom',
-                                     '-loc-rand', '-locrand'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a number\n')
-                self.mods_evenly_spaced = False
-                self.nmods=int(argv[i+1])
-                del(argv[i:i + 2])
-
-            elif argv[i].lower() in ('-mod-width', '-modwidth'):
-                if i+1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by an integer.\n')
-                self.mod_width=int(argv[i+1])
-                if self.mod_width < 1:
-                    raise InputError('Error: '+argv[i]+' flag should be followed by an integer > 1.\n')
                 del(argv[i:i + 2])
 
             elif argv[i].lower() == '-length':
                 if i + 1 >= len(argv):
-                    raise InputError('Error: '+argv[i]+' flag should be followed by a positive integer.\n')
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by a positive integer.\n')
                 self.N = int(argv[i+1])
                 del(argv[i:i+2])
 
             elif (argv[i].lower() in ('-polymer-name','-polymername')):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a file name.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name.\n')
                 self.polymer_name = argv[i + 1]
+                del(argv[i:i + 2])
+
+            elif argv[i].lower() in ('-locations-periodic',
+                                     '-locationsperiodic',
+                                     '-loc-periodic',
+                                     '-locperiodic'):
+                if i+2 >= len(argv):
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by 2 integers.\n')
+                self.nmods = int(argv[i+1])
+                self.gen_locations_method = 'periodic'
+                self.periodic_offset = int(argv[i+2])
+                del(argv[i:i + 3])
+
+            elif argv[i].lower() in ('-locations-random', '-locationsrandom',
+                                     '-loc-rand', '-locrand'):
+                if i+2 >= len(argv):
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by 2 integers (n,seed)\n')
+                self.gen_locations_method = 'random'
+                self.nmods=int(argv[i+1])
+                self.rand_seed = int(argv[i+2])
+                del(argv[i:i + 3])
+
+            elif argv[i].lower() in '-locations-random-attempts':
+                if i+1 >= len(argv):
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by an integer\n')
+                self.rand_num_attempts = int(argv[i+1])
+                del(argv[i:i + 2])
+
+            elif argv[i].lower() in ('-width', '-widths'):
+                if i+1 >= len(argv):
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by an integer or a file name.\n')
+                try:
+                    try:
+                        f = open(argv[i+1], 'r')
+                        lines = f.readlines()
+                        self.widths = []
+                        for line in lines:
+                            if line.strip() != '':
+                                self.widths.append(int(line))
+                        f.close()
+                    except (IOError, OSError) as e:
+                        self.widths=[int(argv[i+1])]
+                except (ValueError) as e:
+                    raise InputError('Error: '+argv[i]+' argument must be followed by a number (or a file of numbers).\n')
+                for width in self.widths:
+                    if width < 1:
+                        raise InputError('Error: The number(s) supplied to the '+argv[i]+' argument must be >= 1.\n')
+                del(argv[i:i + 2])
+
+            elif argv[i].lower() in '-write-locations':
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name.\n')
+                self.write_locations_file = argv[i + 1]
+                del(argv[i:i + 2])
+
+            elif argv[i].lower() in '-write-occupancy':
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name.\n')
+                self.write_occupancy_file = argv[i + 1]
                 del(argv[i:i + 2])
 
             elif ((argv[i].lower() == '-in') or
                 (argv[i].lower() == '-i')):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a file name.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by a file name.\n')
                 self.infile_name = argv[i + 1]
                 del(argv[i:i + 2])
-
-            #elif ((argv[i].lower() == '-escale') or
-            #      (argv[i].lower() == '-kT')):
-            #    if i+2 >= len(argv):
-            #        raise InputError('Error: '+argv[i]+' flag should be followed by a number and a string\n')
-            #    self.escale = float(argv[i+1])
-            #    self.escale_name = argv[i+2]
-            #    del(argv[i:i+3])
 
             elif (argv[i].lower() in ('-set-atoms', '-set-atom', '-set')):
 
@@ -314,12 +518,12 @@ class GPModSettings(object):
                 natoms = 1
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by at least '+str(3+3*natoms)+
+                        'Error: The ' + argv[i] + ' flag should be followed by at least '+str(3+3*natoms)+
                         'arguments .\n')
                 natoms = int(argv[i+1])
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' ' + argv[i+1] +
+                        'Error: The ' + argv[i] + ' ' + argv[i+1] +
                         ' flag should be followed by '+str(3+3*natoms-1)+
                         ' arguments .\n')
                 self.setatoms_natoms.append(natoms)
@@ -336,8 +540,8 @@ class GPModSettings(object):
                     if offset < 0:
                         raise InputError(
                             'Error: ' + argv[i] + ' offset indices must be >= 0\n')
-                    if offset > self.end_padding:
-                        self.end_padding = offset
+                    if offset > self.index_range:
+                        self.index_range = offset
                 self.setatoms_index_offsets.append(offsets)
                 attributes = []
                 for j in range(0, natoms):
@@ -353,12 +557,12 @@ class GPModSettings(object):
                 natoms = 1
                 if i+5+2*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by at least'+str(5+2*natoms)+
+                        'Error: The ' + argv[i] + ' flag should be followed by at least'+str(5+2*natoms)+
                         'arguments .\n')
                 natoms = int(argv[i+1])
                 if i+5+2*natoms >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' ' + str(natoms) +
+                        'Error: The ' + argv[i] + ' ' + str(natoms) +
                         ' flag should be followed by '+str(5+2*natoms)+
                         'arguments .\n')
                 self.fix_nbody_natoms.append(natoms)
@@ -378,8 +582,8 @@ class GPModSettings(object):
                         raise InputError(
                             'Error: ' + argv[i] + ' offset indices must be >= 0\n')
                     offsets.append(offset)
-                    if offset > self.end_padding:
-                        self.end_padding = offset
+                    if offset > self.index_range:
+                        self.index_range = offset
                 self.fix_nbody_index_offsets.append(offsets)
                 self.fix_nbody_params.append(argv[i+7+2*natoms])
                 del(argv[i:i+7+2*natoms+1])
@@ -387,7 +591,7 @@ class GPModSettings(object):
             elif argv[i].lower() == '-bond':
                 if i + 5 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 3 strings and 2 integers.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 3 strings and 2 integers.\n')
                 # self.bonds_name.append(argv[i+1])
                 self.bonds_type.append(argv[i + 1])
                 self.bonds_atoms.append((argv[i + 2],
@@ -399,14 +603,14 @@ class GPModSettings(object):
                     raise InputError('Error: ' + argv[i] +
                                      ' indices (i1 i2) must be >= 0\n')
                 self.bonds_index_offsets.append(offsets)
-                if 1 > self.end_padding:
-                    self.end_padding = 1
+                if 1 > self.index_range:
+                    self.index_range = 1
                 del(argv[i:i + 6])
 
             elif argv[i].lower() == '-angle':
                 if i + 7 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 4 strings and 3 integers.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 4 strings and 3 integers.\n')
                 # self.angles_name.append(argv[i+1])
                 self.angles_type.append(argv[i + 1])
                 self.angles_atoms.append((argv[i + 2],
@@ -421,14 +625,14 @@ class GPModSettings(object):
                     raise InputError('Error: ' + argv[i] +
                                      ' indices (i1 i2 i3) must be >= 0\n')
                 for offset in offsets:
-                    if offset > self.end_padding:
-                        self.end_padding = offset
+                    if offset > self.index_range:
+                        self.index_range = offset
                 self.angles_index_offsets.append(offsets)
                 del(argv[i:i + 8])
 
             elif argv[i].lower() == '-dihedral':
                 if i + 9 >= len(argv):
-                    raise InputError('Error: ' + argv[i] +
+                    raise InputError('Error: The ' + argv[i] +
                                      ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.dihedrals_name.append(argv[i+1])
                 self.dihedrals_type.append(argv[i + 1])
@@ -447,15 +651,15 @@ class GPModSettings(object):
                     raise InputError('Error: ' + argv[i] +
                                      ' indices (i1 i2 i3 i4) must be >= 0\n')
                 for offset in offsets:
-                    if offset > self.end_padding:
-                        self.end_padding = offset
+                    if offset > self.index_range:
+                        self.index_range = offset
                 self.dihedrals_index_offsets.append(offsets)
                 del(argv[i:i + 10])
 
             elif argv[i].lower() == '-improper':
                 if i + 9 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by 5 strings and 4 integers.\n')
                 # self.impropers_name.append(argv[i+1])
                 self.impropers_type.append(argv[i + 1])
                 self.impropers_atoms.append((argv[i + 2],
@@ -473,28 +677,45 @@ class GPModSettings(object):
                     raise InputError('Error: ' + argv[i] +
                                      ' indices (i1 i2 i3 i4) must be >= 0\n')
                 for offset in offsets:
-                    if offset > self.end_padding:
-                        self.end_padding = offset
+                    if offset > self.index_range:
+                        self.index_range = offset
                 self.impropers_index_offsets.append(offsets)
                 del(argv[i:i + 10])
 
             elif argv[i].lower() == '-circular':
                 if i + 1 >= len(argv):
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed by an argument\n' +
+                    raise InputError('Error: The ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
                 if argv[i + 1].lower() == 'yes':
                     self.connect_ends = True
-                    self.is_circular = True
                 elif argv[i + 1].lower() == 'connected':
                     self.connect_ends = True
-                    self.is_circular = False
                 elif argv[i + 1].lower() == 'no':
                     self.connect_ends = False
-                    self.is_circular = False
                 else:
-                    raise InputError('Error: ' + argv[i] + ' flag should be followed by an argument\n' +
+                    raise InputError('Error: The ' + argv[i] + ' flag should be followed by an argument\n' +
                                      '       ("yes", "no", or "connected")\n')
                 del(argv[i:i + 2])
+
+            elif argv[i].lower() in ('-read-occupancy', '-occupancy'):
+                if i+1 >= len(argv):
+                    raise InputError('Error: The '+argv[i]+' flag should be followed by a file name.\n')
+                try:
+                    try:
+                        f = open(argv[i+1], 'r')
+                        lines = f.readlines()
+                        occupied_monomers = []
+                        for line in lines:
+                            if line.strip() != '':
+                                occupied_monomers.append(int(line))
+                        f.close()
+                    except (IOError, OSError) as e:
+                        raise InputError('Error: Unable to open file "'+argv[i+1]+'" for reading.\n')
+                except (ValueError) as e:
+                    raise InputError('Error: The "'+argv[i+1]+'" text file should contain\n'
+                                     '       a list of numbers.  (One number per line.)\n')
+                del(argv[i:i + 2])
+
 
             elif ((argv[i].lower() == '-help') or (argv[i].lower() == '--help') 
                   or
@@ -502,6 +723,7 @@ class GPModSettings(object):
                 sys.stderr.write('\n'+g_usage_msg+'\n')
                 exit(0)
             
+
             elif ((argv[i][0] == '-') and (__name__ == '__main__')):
             
                 raise InputError('Error('+g_program_name+'):\n'+\
@@ -514,16 +736,60 @@ class GPModSettings(object):
         if self.N == 0:
             raise InputError('Error: You must specify the length of the polymer\n'
                              '       using the "-length N" argument.\n')
-        self.is_mod_here = [ False for i in range(0, self.N) ]
+        self.occupancy = [ False for i in range(0, self.N) ]
 
         if mod_locations_filename != '':
             self.LoadModLocations(mod_locations_filename)
-        elif self.mods_evenly_spaced:
-            self.ChoosePeriodicModLocations()
-        else:
-            self.ChooseRandomModLocations()
 
+        if self.nmods == 0:
+            #raise InputError('Error: You have not specified the modifications you want to make.\n')
+            sys.stderr.write('WARNING: You have not specified the modifications you want to make.\n')
 
+        # The self.widths member should be a list containing self.nmods integers
+        if len(self.widths) == 1:   # If the user supplied only one number, then
+            self.widths = self.nmods * self.widths # use it for all the numbers.
+        elif len(self.widths) != self.nmods:
+            raise InputError('Error: The number of entries in the -widths file does ('+str(len(self.widths))+')\n'
+                             '       does not match the number of modifications you requested (using the\n'
+                             '       "-locations-random" or "-locations-periodic" arguments).\n')
+
+        for i in range(0, self.nmods):
+            # make sure each "width" is at least as large as self.index_range
+            # (index_range equals the range of index offsets specified in the
+            #  -angle, -dihedral, -improper, -set-atoms, -fix-nbody arguments.)
+            if self.widths[i] < self.index_range:
+                self.widths[i] = self.index_range
+
+        if len(occupied_monomers) > 0:
+            for i in occupied_monomers:
+                if not ((0 <= i) and (i < self.N)):
+                    raise InputError('Error: Encountered an invalide number in the occupancy file ('+str(i)+').\n'
+                                     '       The integers in the occupancy file must lie between 0 and N-1,\n'
+                                     '       where "N" is the number of monomers in the polymer ('+str(self.N)+').\n')
+                assert(len(self.occupancy) == self.N)
+                self.occupancy[i] = True
+
+        if mod_locations_filename != '':
+            pass
+        if self.gen_locations_method == 'periodic':
+            self.locations = DistributePeriodic(self.widths,
+                                                self.occupancy,
+                                                self.connect_ends,
+                                                self.periodic_offset)
+
+        elif self.gen_locations_method == 'random':
+            self.locations = DistributeRandom(self.widths,
+                                              self.occupancy,
+                                              self.connect_ends,
+                                              self.rand_seed,
+                                              self.rand_num_attempts)
+        self.nmods = len(self.locations)
+
+        # Now that we know where all of the modifications will go, make sure
+        # we update the "occupancy" array. (We might have done this already.)
+        for i in range(0, self.nmods):
+            for j in range(0, self.widths[i]):
+                self.occupancy[self.locations[i]+j % self.N] = True
 
 
 
@@ -544,6 +810,9 @@ class GenPolyMod(object):
 
     def WriteLTFile(self, outfile):
 
+        if self.settings.nmods == 0:
+            return
+
         if self.settings.polymer_name != '':
             outfile.write(self.settings.polymer_name + ' {\n')
             outfile.write('\n'
@@ -561,31 +830,31 @@ class GenPolyMod(object):
                               '  write("'+self.settings.setatoms_filename[b]+
                               '") {\n')
                 WrapPeriodic.bounds_err = False
-                for i in range(0, self.settings.N):
+                for im in range(0, self.settings.nmods):
+                    i = self.settings.locations[im]
                     ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
                     if WrapPeriodic.bounds_err:
                         WrapPeriodic.bounds_err = False
                         if not self.settings.connect_ends:
                             continue
-                    if self.settings.is_mod_here[i]:
-                        natoms = self.settings.setatoms_natoms[b]
-                        for n in range(0, natoms):
-                            I = i + self.settings.setatoms_index_offsets[b][n]
-                            I = WrapPeriodic.Wrap(I, self.settings.N)
-                            outfile.write('    set atom $atom:mon[' + str(I) + ']/' + self.settings.setatoms_atoms[b][n] +
-                                          ' ' + self.settings.setatoms_attribute_name[b])
-                            attribute=self.settings.setatoms_attributes[b][n]
-                            if ((self.settings.setatoms_attribute_name[b] == 'type') and
-                                (attribute.find('@atom:') != 0)):
-                                attribute = '@atom:' + attribute
-                            elif ((self.settings.setatoms_attribute_name[b] == 'mol') and
-                                (attribute.find('$mol:') != 0)):
-                                attribute = '$mol:' + attribute
-                            outfile.write(' ' + attribute + '\n')
-                        if WrapPeriodic.bounds_err:
-                            WrapPeriodic.bounds_err = False
-                            if not self.settings.connect_ends:
-                                continue
+                    natoms = self.settings.setatoms_natoms[b]
+                    for n in range(0, natoms):
+                        I = i + self.settings.setatoms_index_offsets[b][n]
+                        I = WrapPeriodic.Wrap(I, self.settings.N)
+                        outfile.write('    set atom $atom:mon[' + str(I) + ']/' + self.settings.setatoms_atoms[b][n] +
+                                      ' ' + self.settings.setatoms_attribute_name[b])
+                        attribute=self.settings.setatoms_attributes[b][n]
+                        if ((self.settings.setatoms_attribute_name[b] == 'type') and
+                            (attribute.find('@atom:') != 0)):
+                            attribute = '@atom:' + attribute
+                        elif ((self.settings.setatoms_attribute_name[b] == 'mol') and
+                            (attribute.find('$mol:') != 0)):
+                            attribute = '$mol:' + attribute
+                        outfile.write(' ' + attribute + '\n')
+                    if WrapPeriodic.bounds_err:
+                        WrapPeriodic.bounds_err = False
+                        if not self.settings.connect_ends:
+                            continue
                 outfile.write('  }  # set atom '+self.settings.setatoms_attribute_name[b]+' ...\n'
                               '\n')
 
@@ -605,24 +874,24 @@ class GenPolyMod(object):
                               ' ' + self.settings.fix_nbody_group[b] + 
                               ' ' + self.settings.fix_nbody_fixname[b])
                 WrapPeriodic.bounds_err = False
-                for i in range(0, self.settings.N):
+                for im in range(0, self.settings.nmods):
+                    i = self.settings.locations[im]
                     ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
                     if WrapPeriodic.bounds_err:
                         WrapPeriodic.bounds_err = False
                         if not self.settings.connect_ends:
                             continue
-                    if self.settings.is_mod_here[i]:
-                        outfile.write(' '+self.settings.fix_nbody_keyword[b])
-                        natoms = self.settings.fix_nbody_natoms[b]
-                        for n in range(0, natoms):
-                            I = i + self.settings.fix_nbody_index_offsets[b][n]
-                            I = WrapPeriodic.Wrap(I, self.settings.N)
-                            outfile.write(' $atom:mon[' + str(I) + ']/' + self.settings.fix_nbody_atoms[b][n])
-                        outfile.write(' '+self.settings.fix_nbody_params[b])
-                        if WrapPeriodic.bounds_err:
-                            WrapPeriodic.bounds_err = False
-                            if not self.settings.connect_ends:
-                                continue
+                    outfile.write(' '+self.settings.fix_nbody_keyword[b])
+                    natoms = self.settings.fix_nbody_natoms[b]
+                    for n in range(0, natoms):
+                        I = i + self.settings.fix_nbody_index_offsets[b][n]
+                        I = WrapPeriodic.Wrap(I, self.settings.N)
+                        outfile.write(' $atom:mon[' + str(I) + ']/' + self.settings.fix_nbody_atoms[b][n])
+                    outfile.write(' '+self.settings.fix_nbody_params[b])
+                    if WrapPeriodic.bounds_err:
+                        WrapPeriodic.bounds_err = False
+                        if not self.settings.connect_ends:
+                            continue
                 outfile.write('\n'
                               '  }  # write("fix ...\n'
                               '\n')
@@ -653,140 +922,139 @@ class GenPolyMod(object):
             outfile.write('\n')
             outfile.write('  write("Data Bonds") {\n')
             WrapPeriodic.bounds_err = False
-            for i in range(0, self.settings.N):
+            for im in range(0, self.settings.nmods):
+                i = self.settings.locations[im]
                 ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                if self.settings.is_mod_here[i]:
-
-                    for b in range(0, len(self.settings.bonds_type)):
-                        I = i + self.settings.bonds_index_offsets[b][0]
-                        J = i + self.settings.bonds_index_offsets[b][1]
-                        I = WrapPeriodic.Wrap(I, self.settings.N)
-                        J = WrapPeriodic.Wrap(J, self.settings.N)
-                        if WrapPeriodic.bounds_err:
-                            WrapPeriodic.bounds_err = False
-                            if not self.settings.connect_ends:
-                                continue
-                        outfile.write('    $bond:gpm_bond' + str(i + 1))
-                        if len(self.settings.bonds_type) > 1:
-                            outfile.write('_' + str(b + 1))
-                        outfile.write(' @bond:' + self.settings.bonds_type[b] +
-                                      ' $atom:mon[' + str(I) + ']/' + self.settings.bonds_atoms[b][0] +
-                                      ' $atom:mon[' + str(J) + ']/' + self.settings.bonds_atoms[b][1] +
-                                      '\n')
+                for b in range(0, len(self.settings.bonds_type)):
+                    I = i + self.settings.bonds_index_offsets[b][0]
+                    J = i + self.settings.bonds_index_offsets[b][1]
+                    I = WrapPeriodic.Wrap(I, self.settings.N)
+                    J = WrapPeriodic.Wrap(J, self.settings.N)
+                    if WrapPeriodic.bounds_err:
+                        WrapPeriodic.bounds_err = False
+                        if not self.settings.connect_ends:
+                            continue
+                    if len(self.settings.bonds_type) > 1:
+                        outfile.write('    $bond:gpm_bond'+str(b+1)+'_'+str(i+1))
+                    else:
+                        outfile.write('    $bond:gpm_bond_'+str(i+1))
+                    outfile.write(' @bond:' + self.settings.bonds_type[b] +
+                                  ' $atom:mon[' + str(I) + ']/' + self.settings.bonds_atoms[b][0] +
+                                  ' $atom:mon[' + str(J) + ']/' + self.settings.bonds_atoms[b][1] +
+                                  '\n')
             outfile.write('  }  # write("Data Bonds")\n')
 
         if len(self.settings.angles_type) > 0:
             outfile.write('\n')
             outfile.write('  write("Data Angles") {\n')
             WrapPeriodic.bounds_err = False
-            for i in range(0, self.settings.N):
+            for im in range(0, self.settings.nmods):
+                i = self.settings.locations[im]
                 ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                if self.settings.is_mod_here[i]:
-
-                    for b in range(0, len(self.settings.angles_type)):
-                        I = i + self.settings.angles_index_offsets[b][0]
-                        J = i + self.settings.angles_index_offsets[b][1]
-                        K = i + self.settings.angles_index_offsets[b][2]
-                        I = WrapPeriodic.Wrap(I, self.settings.N)
-                        J = WrapPeriodic.Wrap(J, self.settings.N)
-                        K = WrapPeriodic.Wrap(K, self.settings.N)
-                        if WrapPeriodic.bounds_err:
-                            WrapPeriodic.bounds_err = False
-                            if not self.settings.connect_ends:
-                                continue
-                        outfile.write('    $angle:gpm_angle' + str(i + 1))
-                        if len(self.settings.angles_type) > 1:
-                            outfile.write('_' + str(b + 1))
-                        outfile.write(' @angle:' + self.settings.angles_type[b] +
-                                      ' $atom:mon[' + str(I) + ']/' + self.settings.angles_atoms[b][0] +
-                                      ' $atom:mon[' + str(J) + ']/' + self.settings.angles_atoms[b][1] +
-                                      ' $atom:mon[' + str(K) + ']/' + self.settings.angles_atoms[b][2] +
-                                      '\n')
+                for b in range(0, len(self.settings.angles_type)):
+                    I = i + self.settings.angles_index_offsets[b][0]
+                    J = i + self.settings.angles_index_offsets[b][1]
+                    K = i + self.settings.angles_index_offsets[b][2]
+                    I = WrapPeriodic.Wrap(I, self.settings.N)
+                    J = WrapPeriodic.Wrap(J, self.settings.N)
+                    K = WrapPeriodic.Wrap(K, self.settings.N)
+                    if WrapPeriodic.bounds_err:
+                        WrapPeriodic.bounds_err = False
+                        if not self.settings.connect_ends:
+                            continue
+                    if len(self.settings.angles_type) > 1:
+                        outfile.write('    $angle:gpm_angle'+str(b+1)+'_'+str(i+1))
+                    else:
+                        outfile.write('    $angle:gpm_angle_'+str(i+1))
+                    outfile.write(' @angle:' + self.settings.angles_type[b] +
+                                  ' $atom:mon[' + str(I) + ']/' + self.settings.angles_atoms[b][0] +
+                                  ' $atom:mon[' + str(J) + ']/' + self.settings.angles_atoms[b][1] +
+                                  ' $atom:mon[' + str(K) + ']/' + self.settings.angles_atoms[b][2] +
+                                  '\n')
             outfile.write('  }  # write("Data Angles")\n')
 
         if len(self.settings.dihedrals_type) > 0:
             outfile.write('\n')
             outfile.write('  write("Data Dihedrals") {\n')
             WrapPeriodic.bounds_err = False
-            for i in range(0, self.settings.N):
+            for im in range(0, self.settings.nmods):
+                i = self.settings.locations[im]
                 ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                if self.settings.is_mod_here[i]:
-
-                    for b in range(0, len(self.settings.dihedrals_type)):
-                        I = i + self.settings.dihedrals_index_offsets[b][0]
-                        J = i + self.settings.dihedrals_index_offsets[b][1]
-                        K = i + self.settings.dihedrals_index_offsets[b][2]
-                        L = i + self.settings.dihedrals_index_offsets[b][3]
-                        I = WrapPeriodic.Wrap(I, self.settings.N)
-                        J = WrapPeriodic.Wrap(J, self.settings.N)
-                        K = WrapPeriodic.Wrap(K, self.settings.N)
-                        L = WrapPeriodic.Wrap(L, self.settings.N)
-                        if WrapPeriodic.bounds_err:
-                            WrapPeriodic.bounds_err = False
-                            if not self.settings.connect_ends:
-                                continue
-                        outfile.write('    $dihedral:gpm_dihedral' + str(i + 1))
-                        if len(self.settings.dihedrals_type) > 1:
-                            outfile.write('_' + str(b + 1))
-                        outfile.write(' @dihedral:' + self.settings.dihedrals_type[b] +
-                                      ' $atom:mon[' + str(I) + ']/' + self.settings.dihedrals_atoms[b][0] +
-                                      ' $atom:mon[' + str(J) + ']/' + self.settings.dihedrals_atoms[b][1] +
-                                      ' $atom:mon[' + str(K) + ']/' + self.settings.dihedrals_atoms[b][2] +
-                                      ' $atom:mon[' + str(L) + ']/' + self.settings.dihedrals_atoms[b][3] +
-                                      '\n')
+                for b in range(0, len(self.settings.dihedrals_type)):
+                    I = i + self.settings.dihedrals_index_offsets[b][0]
+                    J = i + self.settings.dihedrals_index_offsets[b][1]
+                    K = i + self.settings.dihedrals_index_offsets[b][2]
+                    L = i + self.settings.dihedrals_index_offsets[b][3]
+                    I = WrapPeriodic.Wrap(I, self.settings.N)
+                    J = WrapPeriodic.Wrap(J, self.settings.N)
+                    K = WrapPeriodic.Wrap(K, self.settings.N)
+                    L = WrapPeriodic.Wrap(L, self.settings.N)
+                    if WrapPeriodic.bounds_err:
+                        WrapPeriodic.bounds_err = False
+                        if not self.settings.connect_ends:
+                            continue
+                    if len(self.settings.dihedrals_type) > 1:
+                        outfile.write('    $dihedral:gpm_dihedral'+str(b+1)+'_'+str(i+1))
+                    else:
+                        outfile.write('    $dihedral:gpm_dihedral_'+str(i+1))
+                    outfile.write(' @dihedral:' + self.settings.dihedrals_type[b] +
+                                  ' $atom:mon[' + str(I) + ']/' + self.settings.dihedrals_atoms[b][0] +
+                                  ' $atom:mon[' + str(J) + ']/' + self.settings.dihedrals_atoms[b][1] +
+                                  ' $atom:mon[' + str(K) + ']/' + self.settings.dihedrals_atoms[b][2] +
+                                  ' $atom:mon[' + str(L) + ']/' + self.settings.dihedrals_atoms[b][3] +
+                                  '\n')
             outfile.write('  }  # write("Data Dihedrals")\n')
 
         if len(self.settings.impropers_type) > 0:
             outfile.write('\n')
             outfile.write('  write("Data Impropers") {\n')
             WrapPeriodic.bounds_err = False
-            for i in range(0, self.settings.N):
+            for im in range(0, self.settings.nmods):
+                i = self.settings.locations[im]
                 ip1 = WrapPeriodic.Wrap(i+1, self.settings.N)
                 if WrapPeriodic.bounds_err:
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                if self.settings.is_mod_here[i]:
-
-                    for b in range(0, len(self.settings.impropers_type)):
-                        I = i + self.settings.impropers_index_offsets[b][0]
-                        J = i + self.settings.impropers_index_offsets[b][1]
-                        K = i + self.settings.impropers_index_offsets[b][2]
-                        L = i + self.settings.impropers_index_offsets[b][3]
-                        I = WrapPeriodic.Wrap(I, self.settings.N)
-                        J = WrapPeriodic.Wrap(J, self.settings.N)
-                        K = WrapPeriodic.Wrap(K, self.settings.N)
-                        L = WrapPeriodic.Wrap(L, self.settings.N)
-                        if WrapPeriodic.bounds_err:
-                            WrapPeriodic.bounds_err = False
-                            if not self.settings.connect_ends:
-                                continue
-                        outfile.write('    $improper:gpm_improper' + str(i + 1))
-                        if len(self.settings.impropers_type) > 1:
-                            outfile.write('_' + str(b + 1))
-                        outfile.write(' @improper:' + self.settings.impropers_type[b] +
-                                      ' $atom:mon[' + str(I) + ']/' + self.settings.impropers_atoms[b][0] +
-                                      ' $atom:mon[' + str(J) + ']/' + self.settings.impropers_atoms[b][1] +
-                                      ' $atom:mon[' + str(K) + ']/' + self.settings.impropers_atoms[b][2] +
-                                      ' $atom:mon[' + str(L) + ']/' + self.settings.impropers_atoms[b][3] +
-                                      '\n')
+                for b in range(0, len(self.settings.impropers_type)):
+                    I = i + self.settings.impropers_index_offsets[b][0]
+                    J = i + self.settings.impropers_index_offsets[b][1]
+                    K = i + self.settings.impropers_index_offsets[b][2]
+                    L = i + self.settings.impropers_index_offsets[b][3]
+                    I = WrapPeriodic.Wrap(I, self.settings.N)
+                    J = WrapPeriodic.Wrap(J, self.settings.N)
+                    K = WrapPeriodic.Wrap(K, self.settings.N)
+                    L = WrapPeriodic.Wrap(L, self.settings.N)
+                    if WrapPeriodic.bounds_err:
+                        WrapPeriodic.bounds_err = False
+                        if not self.settings.connect_ends:
+                            continue
+                    if len(self.settings.impropers_type) > 1:
+                        outfile.write('    $improper:gpm_improper'+str(b+1)+'_'+str(i+1))
+                    else:
+                        outfile.write('    $improper:gpm_improper_'+str(i+1))
+                    outfile.write(' @improper:' + self.settings.impropers_type[b] +
+                                  ' $atom:mon[' + str(I) + ']/' + self.settings.impropers_atoms[b][0] +
+                                  ' $atom:mon[' + str(J) + ']/' + self.settings.impropers_atoms[b][1] +
+                                  ' $atom:mon[' + str(K) + ']/' + self.settings.impropers_atoms[b][2] +
+                                  ' $atom:mon[' + str(L) + ']/' + self.settings.impropers_atoms[b][3] +
+                                  '\n')
             outfile.write('  }  # write("Data Impropers")  \n')
 
-        outfile.write('\n')
-
         if self.settings.polymer_name != '':
+            outfile.write('\n')
             outfile.write('}  # ' + self.settings.polymer_name + '\n')
             outfile.write('\n')
 
@@ -813,6 +1081,19 @@ def main():
                              'Unrecogized command line argument "'+argv[1]+
                              '"\n\n'+
                              g_usage_msg)
+
+        if gen_poly_mod.settings.write_locations_file != '':
+            f = open(gen_poly_mod.settings.write_locations_file, 'w')
+            for im in range(0, gen_poly_mod.settings.nmods):
+                f.write(str(gen_poly_mod.settings.locations[im])+'\n')
+            f.close()
+
+        if gen_poly_mod.settings.write_occupancy_file != '':
+            f = open(gen_poly_mod.settings.write_occupancy_file, 'w')
+            for i in range(0, gen_poly_mod.settings.N):
+                if gen_poly_mod.settings.occupancy[i]:
+                    f.write(str(i)+'\n')
+            f.close()
 
         # Convert all of this information to moltemplate (LT) format:
         gen_poly_mod.WriteLTFile(outfile)

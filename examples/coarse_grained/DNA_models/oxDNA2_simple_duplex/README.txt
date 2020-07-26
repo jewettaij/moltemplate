@@ -1,11 +1,12 @@
 
 This is a simple example demonstrating how to build a short straight
-coarse-grained helical double-stranded DNA polymer
-using the oxDNA2 force field with moltemplate.
+coarse-grained helical double-stranded DNA polymer using the oxDNA2
+force field with moltemplate.
 
 This is based on the corresponding LAMMPS example located in this subdirectory:
 examples/USER/cgdna/examples/oxDNA2/duplex1/
-...which is distributed with LAMMPS.
+...which is distributed with LAMMPS.  (The conversion into MOLTEMPLATE format
+was done automatically using the "ltemplify.py" file converter.)
 
 WARNING: As of 2019-11-02, this example has not been tested or optimized.
          You should probably alter with the timestep, and langevin-settings

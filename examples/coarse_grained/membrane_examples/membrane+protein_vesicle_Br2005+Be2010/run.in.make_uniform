@@ -1,0 +1,239 @@
+# This simulation compresses the vesicle between two concentric spheres.
+# This allows the density of lipids to equilibrate without allowing the
+# lipids to deviate much from a spherical shape.
+# (Later, in run.in, we allow the lipids to move anywhere they want.)
+#
+#  (Why? The software tool (PACKMOL) that we used to create the initial
+#   geometry for this example often leaves gaps in the packing of spherical
+#   surfaces, or fails to pack the lipids with uniform density in
+#   certain directions.  If you start a simulation with the original PACKMOL
+#   packing, bulges and holes will quickly develop on at least one side
+#   of the lipid bilayer.  This protocol greatly reduces this problem.)
+#
+# After you have run this simulation, you can run an ordinary simulation
+# with no constraints.
+#
+# -------- PREREQUISITES: ---------
+# 1) This example requires the "USER-MISC" package.  (Use "make yes-USER-MISC")
+#   http://lammps.sandia.gov/doc/Section_start.html#start_3
+# 2) It also may require additional features and bug fixes for LAMMPS.
+#   So, after typing "make yes-user-misc" in to the shell, ...
+#   be sure to download and copy the "additional_lammps_code" from 
+#   http://moltemplate.org     (upper-left corner menu)
+# 3) Unpack it
+# 4) copy the .cpp and .h files to the src folding of your lammps installation.
+# 5) Compile LAMMPS.
+# 6) Build the system using PACKMOL and MOLTEMPLATE
+#    (Follow the instructions in README_setup.sh, or run that file as a script.)
+# 7) Minimize the system using:
+#      lmp_mpi -i run.in.npt
+#    (assuming "lmp_mpi" is the name of the lammps binary you created in step 5)
+#
+# If LAMMPS complains about an "Invalid pair_style", or "Invalid dihedral_style"
+# then you made a mistake in the instructions above.
+#
+# ------------------------------ Initialization Section ---------------------
+
+include         system.in.init
+
+# ------------------------------ Atom Definition Section --------------------
+
+# Commenting out:
+# read_data       system.data
+#
+# Instead read the data file created by "run.in.min".
+
+read_data    system_after_min.data
+
+# ------------------------------ Settings Section ---------------------------
+
+include         system.in.settings
+
+# ------------------------------ Constraints  -------------------------------
+
+# How to compress the system using "fix wall/region"
+#
+# Define "rSphere", a spherical region
+#
+#                         sphere_center radius
+#                           x0   y0   z0  rc0
+#                           |    |    |    |
+#                          \|/  \|/  \|/  \|/
+#                           V    V    V    V
+
+region rSphereOut sphere   0.0  0.0  0.0  430.0   side in
+region rSphereIn  sphere   0.0  0.0  0.0  250.0   side out
+
+# Now apply an inward force applied to every particle which lies outside a
+# spherical region (of radius rc0-rc).  (Particles with r < rc0-rc feel
+# no force.)  The energy of each particle (due to the confinement force) is:
+#
+# Uexternal(r) = k*(rsurf-rc)^2 
+#       where "rsurf" = the distance from the particle to the surface = rc0 - r
+#              = k*((rc0-rc) - r)^2
+#                 
+#                                                  k   ignore  rc
+#                                                  |     |     |
+#                                                 \|/   \|/   \|/
+#                                                  V     V     V
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  65.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.0002 0.0  46.0
+
+# This will sandwhich the lipids between two concentric spheres
+# The external force applied by theses spheres is the sum of
+# two potentials of the form:
+#
+# Uexternal(r) = k*((rc0-rc) - r)^2    (if (rc0-rc) < r < rc0,  0 otherwise)
+# 
+# Note that rc0-rc = the radius above which inward forces apply
+#           rc0-rc = 365.0  (for fxWallOut)
+# Note that rc0-rc = the radius below which outward forces apply
+#           rc0-rc = 296.0  (for fxWallIn)
+#               
+#
+# For a (confusing) explanation of these commands, see:
+# http://lammps.sandia.gov/doc/fix_wall_region.html
+# http://lammps.sandia.gov/doc/region.html
+
+# ------------------------------ Run Section --------------------------------
+
+timestep      1.0  # (The particle masses must be adjusted accordingly.)
+dump          1 all custom 20000 traj_make_uniform.lammpstrj id mol type x y z ix iy iz
+
+
+thermo_style  custom step temp pe etotal vol epair ebond eangle
+#*#thermo        1  # time interval for printing out "thermo" data
+thermo        100  # time interval for printing out "thermo" data
+thermo_modify norm yes flush yes
+
+
+# distribute particles evenly on available processors:
+fix fxbal all balance 100000 1.05 shift xyz 20 1.05
+
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# (Note: We are using "units lj", which means temperature is specified
+#  in units of energy.  kB*Temp = 0.001987207*300 kCal/mole = 0.5961621)
+fix fxlan all langevin 0.5961621 0.5961621 40 482790
+fix fxnve all nve
+
+# Note: The energy scale "epsilon" = 2.75kJ/mole = 330.7485200981 Kelvin*kB.
+#       So a temperature of 300.0 Kelvin corresponds to 0.907033536873*epsilon.
+# Note: A langevin damping parameter "120" would correspond to 
+#       the 0.12ps damping time used in Watson et. al JCP 2011.
+
+run           5000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  65.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.005  0.0  46.0
+fix fxlan all langevin 0.5961621 0.5961621 500 482791
+run           5000
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  65.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.005  0.0  46.0
+fix fxlan all langevin 0.5961621 0.5961621 500 482791
+run           5000
+unfix fxWallIn
+unfix fxWallOut
+
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  65.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.005  0.0  46.0
+fix fxlan all langevin 0.5961621 0.5961621 10000 482792
+run           25000
+unfix fxWallIn
+unfix fxWallOut
+
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  60.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.001  0.0  51.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482793
+run           10000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  55.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.001  0.0  56.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482794
+run           10000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  55.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.001  0.0  56.0
+fix fxlan all langevin 0.5961621 0.5961621 10000 482794
+run           20000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.005  0.0  50.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.001  0.0  61.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482795
+run           10000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.002  0.0  45.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.0005 0.0  61.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482796
+run           10000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.001  0.0  40.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.0005 0.0  61.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482797
+run           10000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.001  0.0  40.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.0005 0.0  61.0
+fix fxlan all langevin 0.5961621 0.5961621 10000 482797
+run           30000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.0004 0.0  35.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.0002 0.0  61.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482798
+run           20000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxWallOut all wall/region rSphereOut harmonic 0.0002  0.0  35.0
+fix fxWallIn  all wall/region rSphereIn  harmonic 0.00004 0.0  61.0
+fix fxlan all langevin 0.5961621 0.5961621 400 482799
+run           20000
+unfix fxlan
+unfix fxWallIn
+unfix fxWallOut
+
+fix fxlan all langevin 0.5961621 0.5961621 50 482800
+run           5000
+unfix fxlan
+
+fix fxlan all langevin 0.5961621 0.5961621 400 482800
+run           15000
+unfix fxlan
+
+fix fxlan all langevin 0.5961621 0.5961621 10000 482800
+run           40000
+unfix fxlan
+
+write_data system_uniform.data

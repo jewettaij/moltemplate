@@ -3,7 +3,7 @@
 # Author: Andrew Jewett (jewett.aij at g mail)
 #         http://www.chem.ucsb.edu/~sheagroup
 # License: 3-clause BSD License  (See LICENSE.TXT)
-# Copyright (c) 2011, Regents of the University of California
+# Copyright (c) 2013, Regents of the University of California
 # All rights reserved.
 
 man_page_text = """
@@ -244,7 +244,7 @@ def GenInteractions_lines(lines_atoms,
                                  'Offending line:\n' +
                                  '\"' + line + '\"\n'
                                  'Expected either ' +
-                                 str(1 + g_bond_pattern.GetNumVerts()) + ' or ' +
+                                 str(1 + g_bond_pattern.GetNumVerts()) + ' or '+
                                  str(1 + g_bond_pattern.GetNumVerts() +
                                      g_bond_pattern.GetNumEdges())
                                  + ' colunms.'))
@@ -254,8 +254,8 @@ def GenInteractions_lines(lines_atoms,
 
             for typestr in tokens[1:]:
                 if ((len(typestr) >= 2) and
-                        (typestr[0] == '/') and (typestr[-1] == '/')):
-                    regex_str = typestr[1:-1]
+                    HasRE(typestr)):
+                    regex_str = typestr[3:]
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(EscCharStrToChar(typestr))

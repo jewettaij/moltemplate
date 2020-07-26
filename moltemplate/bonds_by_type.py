@@ -161,9 +161,8 @@ def LookupBondTypes(bond_types,
             typepattern = []
 
             for typestr in tokens[1:]:
-                if ((len(typestr) >= 2) and
-                        (typestr[0] == '/') and (typestr[-1] == '/')):
-                    regex_str = typestr[1:-1]
+                if ttree_lex.HasRE(typestr):
+                    regex_str = typestr[3:]
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))

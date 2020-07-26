@@ -1,0 +1,57 @@
+# Define extra features that we need to add to the "DNAForceField" object
+# which will enable us to add motors that twist the polymer.
+# In particular, this file defines "@dihedral:Disable" and "@atom:C1motor".
+
+
+DNAForceField {  #<-- augment the contents of the "DNAForceField" object
+
+  # Wherever there is a twist-motor, turn off the normal dihedral interactions
+  # so that they don't intefere with this motor (added later using fix twist)
+  # Here we provide a dihedral interaction with the forces set to 0.
+  write_once("In Settings") {
+    dihedral_coeff @dihedral:Disable table table_dihedral.dat ZEROS
+  }
+
+  # OPTIONAL: Create a new type of particle (@atom:C1motor)
+  #           This particle is useful during visualization of the polymer
+  #           (You can change the types of the atoms in the motor to this type.
+  #            Then, if you display this type of particle with a different
+  #            color, you can see where the twist motors were added.)
+  #
+  # Define the mass of "@atom:C1motor"
+  write_once("Data Masses") {
+    @atom:C1motor  506.6059
+    @atom:Rmotor   506.6059
+  }
+  # note to self: remember to update this if you modify "dna_forcefield.lt"
+
+  # For nonbonded forces, this particle should behave exactly like the C1 atom.
+  # "@atom:C1motor" should have the same mass and pair interactions as C1.
+  # If, later on, modifications are made to C1 in "dna_forcefield.lt", then
+  # hopefully I will remember to copy them here as well.  (I might forget.)
+
+  # Define the nonbonded interactions of "@atom:C1motor"
+  write_once("In Settings") {
+
+    #                 AtomI   AtomJ   pair_style   A       B          r_cutoff
+
+    pair_coeff @atom:C1motor @atom:C*   gauss    -32.0  0.0102862067  17.43
+    pair_coeff @atom:Rmotor  @atom:*    gauss      0.0  0.0102862067  17.43
+
+    # https://lammps.sandia.gov/doc/pair_gauss.html
+
+    # ---- OLD METHOD (does not work well for beads larger than Debye length)---
+    ## Interaction between C1motor particles and between C1 and C2 is the same.
+    #pair_coeff @atom:C1motor @atom:C*  table table_dna_U0=inf.dat DNA_U0=inf
+    #pair_coeff @atom:Rmotor  @atom:*   table table_dna_U0=0.dat   DNA_U0=0
+    #
+    ## Alternate method of specifying nonbonded forces using pair_style yukawa:
+    ##pair_coeff @atom:C1motor @atom:C1motor yukawa  732.20049    8.01
+    # ---- OLD METHOD (does not work well for beads larger than Debye length)---
+
+    ## Add @atom:C1motor to group gDNA
+    #group gDNA type @atom:C1motor
+    group gDNA type @atom:C1 @atom:C2 @atom:R @atom:C1motor @atom:Rmotor
+  }
+}
+

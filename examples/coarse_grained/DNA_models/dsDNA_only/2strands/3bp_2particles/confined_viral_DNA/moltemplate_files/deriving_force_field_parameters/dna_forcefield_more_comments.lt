@@ -1,0 +1,501 @@
+# "DNAForceField" is a moltemplate object containing only force-field 
+# information, atomic masses, and bond rules.
+# (Molecules are defined elsewhere and inherit the properties of DNAForceField.)
+
+
+DNAForceField {
+
+  # Choosing the particle masses:
+     
+  write_once("Data Masses") {
+    @atom:A          2553.29
+    @atom:B          2553.29
+  }
+  # Why?  Molecular motion at small length scales is Brownian (not ballistic).
+  # Consequently, particle masses do not matter.  We can choose the
+  # them to be anything we like as long as the physical processes we are
+  # interested in occur at zoomed-out timescales where the motion of each
+  # particle appears random (diffusive, brownian).  For convenience
+  # all masses are chosen to insure that a timestep (Δt) of 1.0 is numerically
+  # stable.  This makes it much easier to combine radically different kinds
+  # of coarse-grained molecules together in the same simulation later on.
+  # For numerical stability, all oscillations in the simulation should not
+  # occur faster than once every 12 timesteps.  Let's define Nperiod=12.
+  # The mass, m, is determined by assuming that the timestep width, Δt=1, and
+  #    sqrt(k_max/m) = 2π/(Nperiod*Δt)    and solving for m
+  # --> m = (k_max*(Nperiod**2)/((2*pi)**2))
+  # (For harmonic forces, k is the largest spring constant. More generally
+  # k_max should be an upper bound for the second derivative of the energy with
+  # respect to position, d^2U(r)/dr^2, which is accessible at this temperature.
+  # This depends on the force-field you are using and the temperature.
+  #    In this case: I set k_max ≈ 650 kcal/mol / nm^2 (when temperature≈300K).
+  # Here there are 2 types of particles in this DNA backbone: "A" and "B".
+  # They correspond to the DNA backbone for the two opposite chains.  I gave
+  # them different atom type names to make it easy to distinguish them visually
+  # Note: All masses are in units of  Δt^2*(energy_units)/(distance_units^2)
+
+
+  # Now choose the forces acting on these particles
+
+  write_once("In Settings") {
+    # Repulsion between the DNA is dominated by electrostatics
+    # Each base-pair has a net charge of -2e (-e per nucleic acid) due
+    # to the phosphate in the backbone.  There's a nice picture here:
+    #http://www.mit.edu/~kardar/teaching/projects/dna_packing_website/electro.html
+    # COMMENTING OUT THE ORIGINAL MODEL:
+    # All particles have charge. Each particle corresponds to 3 bases
+    #                                         qi=qj=3
+    #             i      j                  ke*qi*qj/eps_r      cutoff
+    #pair_coeff @atom:A @atom:A  yukawa   3.7357167978727794     7.001
+    #pair_coeff @atom:B @atom:B  yukawa   3.7357167978727794     7.001
+    # NEW MODEL:
+    # To speed up simulation:  Ignore all pairwise/nonbomded forces involving 
+    # B-strand particles.  Merge all the charge onto the A strand
+    #                                         qi=qj=6  (A-strand)
+    #             i      j                  ke*qi*qj/eps_r      cutoff
+    pair_coeff @atom:A @atom:A   yukawa  14.94286719149112       7.001
+    #                                         qi=qj=0  (B-strand reverse strand)
+    pair_coeff @atom:B @atom:B   yukawa   0.00000000000000       7.001
+
+    # where    ke = 8.9875517873681764e09 J*m*C^-2 = 1/4*π*eps_0
+    # and  qi = qj = -e = -1.6021766208e-19 C
+    # and 1 J = (1/4184)*1kCal ("thermochemical calorie")
+    #  1 kcal = 6.0221409e+23 kcal/mole
+    #     1 J = 1.4393262e+20 kcal/mole
+    # and eps_r ~= is the relative dielectric permitivity = 80.0 for water
+    # and 1 m = 1.0e9 nm
+    # In units of (kCal/mole)*nm*e^-2,  ke*qi*qj/eps_r = 0.415079644208
+    # =8.9875517873681764e09*(6.0221409e+23/4184)*1e09*(1.6021766208e-19**2)/80
+    # HOWEVER, IN THIS POLYMER MODEL, EACH ATOM REPRESENTS 3 NUCLEIC ACIDS.
+    # SO ITS CHARGE SHOULD BE -3e not -e. Hence ke*qi*qj/eps_r is 9 times larger
+    # ke*qi*qj/eps_r = 3.7357167978727794
+    # (Double check: I should get something like 0.71*kB*T, since
+    #  kB*T = 0.001987207*300kCal/mole, and 0.71 is the Bjerrum length in water)
+    #https://en.wikipedia.org/wiki/Coulomb's_law
+  }
+
+
+  write_once("In Settings") {
+    # To increase the simulation speed, only calculate 
+    # interactions between atoms in one of the two strands:
+    group gGhostStrand type @atom:B
+    group gHardStrand type @atom:A
+    neigh_modify exclude group gGhostStrand all
+  }
+
+
+  #    Determining the force-field from statistics:
+
+  # Bond spring-constants are estimated using the approximation for 
+  # the distribution of bond-distances for a 1-dimensional spring.
+  #    P(|x-x0|) = A * exp(-0.5*((x-x0)/σ)^2)
+  # (Here "A" is a normalization constant which we ignore, 
+  #  and "σ" is the standard-deviation of the spring-length, which we can 
+  #  measure independently.  One could do this by running an all-atom
+  #  simulation.  However, here I measure the statistics for these distances
+  #  from the structures present in the PDB-database.)
+  #
+  #    In a simulation at thermal equilibrium, this should satisfy the
+  # Boltzmann distribution.  For a spring in 1-dimension, this is:
+  # 
+  #    P(|x-x0|) = A * exp(-0.5*k*(x-x0)^2 / (kB*T))
+  #
+  # where
+  #    k = the spring constant used in the simulation
+  # kB*T  = 1.0 in reduced units (units lj)
+  #   (kB = boltzmanns_constant=0.001987207 in units of(kCal/mole)*(Kelvin^-1))
+  #
+  # Setting the two distributions equal to each-other implies k/kB*T = (1/σ)^2
+  # which gives us a very crude estimate for "k" used in the simulation:
+  #
+  #    k = kB*T / σ^2      (Note: LAMMPS uses K instead of k, where K=k/2)
+  #
+  # I match the harmonic spring constants for angles and dihedrals the same way.
+  #
+  # (For a spring in 2-D, P(|r-r0|) = A*|r-r0| * exp(-0.5*k*|r-r0|^2 / (kB*T))
+  #               in 3-D, P(|r-r0|) = A*|r-r0|^2*exp(-0.5*k*|r-r0|^2 / (kB*T))
+  #  assuming there are no other constraints on the spring's motion and it can
+  #  rotate freely.  I am inclined to ignore these prefactors of |r-r0| and 
+  #  |r-r0|^2, because they typically do not effect the distribution very much.
+  #  (And, usually there are other bonds or forces which prevent the orientation
+  #   of the spring from changing much, relative to the rest of the molecule.)
+
+
+
+
+  # 2-body (bonded) interactions:
+  #
+  #   Ubond(r) = (k/2)*(r-0)^2
+  #       however LAMMPS uses this formula instead:
+  #            =   K * (r-0)^2       (K=k/2)
+  #
+  #   http://lammps.sandia.gov/doc/bond_harmonic.html
+  #
+  #   The corresponding command is:
+  #
+  #   bond_coeff     bondType    bondstylename   K    r0
+  #
+
+  write_once("In Settings") {
+    # @bond:BasePair  is the bondlength between particles
+    #                 in opposite strands
+    #---------- iteration 0 (initial guess) -----------
+    #ITER0: μ_PDB = 1.47854, σ_PDB = 0.0313502, 
+    #       x0_iter0 = 1.47854, K_iter0 ≈ 0.5*kB*T/σ^2 = 303.28696
+    # Average distance between base pairs is 1.47854, σ=0.0313498,K≈0.5*kB*T/σ^2
+    #
+    #bond_coeff     @bond:BasePair  harmonic  303.28696  1.47854
+    #
+    #---------- iteration 1 (first correction) -----------
+    # Measure the average and std-dev from the previous simulation:
+    # μ_sim_iter0 = 1.47808, σ_sim_iter0 = 0.0311033
+    #ITER1: x0_iter1 = x0_iter0 + (μ_PDB - μ_sim_iter0)  = 1.4790
+    #ITER1: K_iter1  = K_iter0 * (σ_sim_iter0 / σ_PDB)^2 =  298.52861
+    #
+    #bond_coeff     @bond:BasePair  harmonic  298.52861  1.4790
+    #
+    #---------- iteration 2 (second correction) -----------
+    # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
+    # HERE I AM USING THE SAME PARAMETERS FROM THE PREVIOUS ITERATION.
+    # IGNORE:  Measure the average and std-dev from the previous simulation:
+    # IGNORE:  μ_sim_iter1 = , σ_sim_iter1 = 
+    # IGNORE: ITER2: x0_iter2 = x0_iter1 + (μ_PDB - μ_sim_iter1)  = 
+    # IGNORE: ITER2: K_iter2  = K_iter1 * (σ_sim_iter1 / σ_PDB)^2 = 
+    #
+    #bond_coeff     @bond:BasePair  harmonic  298.52861  1.4790
+    #
+    #---------- iteration 3 (third correction) -----------
+    # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
+    # HERE I AM USING THE SAME PARAMETERS FROM THE PREVIOUS ITERATION.
+    # IGNORE:  Measure the average and std-dev from the previous simulation:
+    # IGNORE:  μ_sim_iter2 = , σ_sim_iter2 = 
+    # IGNORE: ITER3: x0_iter3 = x0_iter2 + (μ_PDB - μ_sim_iter2)  = 
+    # IGNORE: ITER3: K_iter3  = K_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
+    #
+    #bond_coeff     @bond:BasePair  harmonic  298.52861  1.4790
+    #
+    #---------- iteration 4 (fourth correction) -----------
+    # Measure the average and std-dev from the previous simulation:
+    # μ_sim_iter3 = 1.47585, σ_sim_iter3 = 0.0304349
+    #ITER4: x0_iter4 = x0_iter3 + (μ_PDB - μ_sim_iter3)  = 1.48169
+    #ITER4: K_iter4  = K_iter3 * (σ_sim_iter3 / σ_PDB)^2 = 281.3514
+    
+    bond_coeff     @bond:BasePair  harmonic  281.3514  1.48169
+    
+
+
+
+
+
+    # @bond:Backbone  is the bondlength between successive particles
+    #                 belonging to the same strand.
+    #---------- iteration 0 (initial guess) -----------
+    #ITER0: μ_PDB = 1.64388, σ_PDB = 0.0462906, 
+    #       x0_iter0 = 1.64388, K_iter0 ≈ 0.5*kB*T/σ^2 = 139.10692
+    #
+    #bond_coeff @bond:Backbone  harmonic  139.10692 1.64103
+    #
+    #---------- iteration 1 (first correction) -----------
+    # Measure the average and std-dev from the previous simulation:
+    # μ_sim_iter0 = 1.64535, σ_sim_iter0 = 0.0462189
+    # ITER1: x0_iter1 = x0_iter0 + (μ_PDB - μ_sim_iter0) = 1.63671
+    # ITER1: K_iter1  = K_iter0 * (σ_sim_iter0 / σ_PDB)^2 = 138.6763
+    #
+    #bond_coeff @bond:Backbone  harmonic  138.6763 1.63671
+    #
+    #---------- iteration 2 (second correction) -----------
+    # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
+    # HERE I AM USING THE SAME PARAMETERS FROM THE PREVIOUS ITERATION.
+    # IGNORE: Measure the average and std-dev from the previous simulation:
+    # IGNORE: μ_sim_iter1 = , σ_sim_iter1 = 
+    # IGNORE: ITER2: x0_iter2 = x0_iter1 + (μ_PDB - μ_sim_iter1)  = 
+    # IGNORE: ITER2: K_iter2  = K_iter1 * (σ_sim_iter1 / σ_PDB)^2 = 
+    #
+    #bond_coeff @bond:Backbone  harmonic  138.6763 1.63671
+    #
+    #---------- iteration 3 (third correction) -----------
+    # TOO LAZY TO UPDATE THE BOND PARAMETERS (THEY BARELY CHANGE, ANYWAY)
+    # USING THE SAME PARAMETERS AS THE PREVIOUS ITERATION
+    # IGNORE:  Measure the average and std-dev from the previous simulation:
+    # IGNORE:  μ_sim_iter2 = , σ_sim_iter2 = 
+    # IGNORE: ITER3: x0_iter3 = x0_iter2 + (μ_PDB - μ_sim_iter2)  = 
+    # IGNORE: ITER3: K_iter3  = K_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
+    #
+    #bond_coeff @bond:Backbone  harmonic  138.6763 1.63671
+    #
+    #---------- iteration 4 (fourth correction) -----------
+    # Measure the average and std-dev from the previous simulation:
+    # μ_sim_iter3 = 1.64256, σ_sim_iter3 = 0.0453809
+    #ITER4: x0_iter4 = x0_iter3 + (μ_PDB - μ_sim_iter3)  = 1.63803
+    #ITER4: K_iter4  = K_iter3 * (σ_sim_iter3 / σ_PDB)^2 = 133.2793
+    
+    bond_coeff @bond:Backbone  harmonic  133.2793 1.63803
+    
+  }
+
+
+  # 3-body angular interactions are USUALLY handled in LAMMPS by adding
+  # lines to the "Data Angles" section, and defining an angle_coeff.
+  # However in this particular implementation, we are using
+  # "dihedral_style spherical" which couples the 3-body interactions
+  # AND the 4-body torsion angle interactions together in the same interaction.
+  # For "dihedral_style spherical", the forumula for the energy used depends on
+  # both the 3-body bond angles (θ1, θ2) and the torsion angle (φ).
+  #
+  #                     __@------------------>@
+  #                      /|    /          \    `\
+  #                     /    θ1            θ2_  .`\
+  #                    /  <-'                 `--->`\
+  #                   /                           .  `\
+  #                  /                             .   `\
+  #                 /                               .    `\_
+  #                /                                 .  φ  _@       
+  #               /                                   .   _/|
+  #              @                                     .-'
+  #
+  # The general formula for the energy is an expansion.  First I'll show the
+  # general formula, and then, later I'll show the specific formula we want.
+  #
+  # General formula below:
+  # E(φ,θ1,θ2) =
+  #    \sum_{i=1}^N C_i * Φ_i(φ) * Θ_{1i}(θ1) * Θ_{2i}(θ2)
+  #   Where:
+  # Φ_{i}(φ)    =   u_i - \mathrm{cos}((φ  - a_i)*K_i) \\
+  # Θ_{1i}(θ1)  =   v_i - \mathrm{cos}((θ1 - b_i)*L_i) \\
+  # Θ_{2i}(θ2)  =   w_i - \mathrm{cos}((θ2 - c_i)*M_i)
+  #
+  # In general, the LAMMPS command is:
+  #
+  # dihedral_coeff @dihedral:TYPE_NAME   spherical  n   &
+  #       C_1   K_1  a_1  u_1    L_1  b_1  v_1    M_1  c_1  w_1     &
+  #       C_2   K_2  a_2  u_2    L_2  b_2  v_2    M_2  c_2  w_2     &
+  #        :     :    :    :      :    :    :     :    :    :
+  #       C_n   K_n  a_n  u_n    L_n  b_n  v_n    M_n  c_n  w_n     &
+  #
+  # However, in this model, we use the simpler equation with only 3 terms:
+  #
+  # E(φ,θ1,θ2) =
+  #         C1*(1-cos(θ1-θ10)) +
+  #         C2*(1-cos(θ2-θ20)) +
+  #         C3*(1-cos(φ-φ0)) * sin(θ1-θ10) * sin(θ2-θ20)
+  #
+  # The last term (which depends on the torsion-angle, φ) is multiplied by
+  # sin(θ1) * sin(θ2) in order to avoid the singularity which would
+  # otherwise occur as either θ1 or θ2 approaches 0 or 180 degrees.
+  #
+  # And consequently, the lammps command we should use has the following form:
+  #
+  # dihedral_coeff @dihedral:TYPE_NAME   spherical  3               &
+  #       C1    0  0   0        1 θ10     0         0  0      0     &
+  #       C2    0  0   0        0  0      0         1 θ20     0     &
+  #       C3    1  φ0  1        1 90.0    0         1 90.0    0      
+
+  write_once("In Settings") {
+
+    # @dihedral:MajorGroove
+    #
+    # The @dihedral:MajorGroove interaction (defined below) essentially controls
+    # how easy it is to bend the DNA perpendicular to its axis, which determines
+    # its persistence length.  For this dihedral interaction, we don't need
+    # add 3-body angle terms, since these are handled by @dihedral:Torsion.
+    #
+    # In contrast, the @dihedral:Torsion interaction essentially
+    # controls the helical pitch and torsional-persistence-length.
+    #    
+    #---------- Iteration_0 (initial guess) -----------
+    # For the dihedral angle (φb), during ITERATION 0, we assume that:
+    #        Probability(φb) ≈ exp(-U(φb) / kB*T)    where:
+    #        U(φb) = C3*(1 - cos(φb-φb0))*sin(θ1)*sin(θ2)
+    #              ≈ C3*(1/2)(φb-φb0)^2
+    # From the PDB files, the observed distribution of φb angles is:
+    #        Probability(θ) ≈ exp(-σ*(1/2)*(φb-μ)^2)   where
+    # equating the two expressions for Probability(φb)  (converting deg->rad)
+    #    ==> φb0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2 / Ctheta
+    #        where Ctheta=sin(θ10)*sin(θ20),  Converting degrees->radians again:
+    #         C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180) * sin(θ20*π/180))
+    # φb:  μ_PDB = φb0 = 81.1037, σ_PDB = 6.17175 (in degrees)
+    #        θ10 = θ20 = 66.1769 (averaged measurements from many PDB files)
+    #    ==>  C3 ≈ 60.932639
+    #
+    #dihedral_coeff @dihedral:MajorGroove    spherical 1  &
+    #                60.932639     1 81.1037 1     1 90 0         1 90 0
+    #
+    #---------- Iteration_1 (first correction) -----------
+    # Measure the persistence length, Lb from the previous simulation
+    #       φb0: μ_sim_iter0=81.229, Lb_sim_iter0=90.08601, Lb_target=50.0
+    #ITER1: φb0_iter1    = φb0_iter0 + (μ_PDB - μ_sim_iter0) = 80.9225
+    #ITER1: C3_iter1 = C3_iter0 * (Lb_target / Lb_sim_iter0) = 37.3503
+    #
+    #dihedral_coeff @dihedral:MajorGroove    spherical 1  &
+    #                  37.3503      1 80.9225 1     1 90 0         1 90 0
+    #
+    #---------- Iteration_2 (second correction) -----------
+    # Measure the persistence length, Lb from the previous simulation
+    #       φb0: μ_sim_iter1=81.1588, Lb_sim_iter1=79.12049, Lb_target=50.0
+    #ITER2: φb0_iter2    = φb0_iter1 + (μ_PDB - μ_sim_iter1) = 80.8674
+    #ITER2: C3_iter2 = C3_iter1 * (Lb_target / Lb_sim_iter1) = 23.60343
+    #
+    #dihedral_coeff @dihedral:MajorGroove    spherical 1  &
+    #                  23.60343     1 80.8674 1     1 90 0         1 90 0
+    #
+    #---------- Iteration_3 (third correction) -----------
+    # Measure the persistence length, Lb from the previous simulation
+    #       φb0: μ_sim_iter2=81.2021, Lb_sim_iter2=57.36967, Lb_target=50.0
+    #ITER3: φb0_iter3    = φb0_iter2 + (μ_PDB - μ_sim_iter2) = 80.7690
+    #ITER3: C3_iter3 = C3_iter2 * (Lb_target / Lb_sim_iter2) = 20.5713
+    #
+    #dihedral_coeff @dihedral:MajorGroove    spherical 1  &
+    #                    21.0     1 80.7690 1     1 90 0         1 90 0
+    #
+    #---------- Iteration_4 (fourth correction) -----------
+    # Measure the persistence length, Lb from the previous simulation
+    #       φb0: μ_sim_iter3=81.1807, Lb_sim_iter3=50.72943, Lb_target=50.0
+    #ITER4: φb0_iter4 = φb0_iter3 + (μ_PDB - μ_sim_iter3)    = 80.6920
+    #ITER4: C3_iter4 = C3_iter3 * (Lb_target / Lb_sim_iter3) = 20.8
+    
+    dihedral_coeff @dihedral:MajorGroove    spherical 1  &
+                        20.8    1 80.6920 1     1 90 0         1 90 0
+    
+
+
+    # @dihedral:Torsion
+    #
+    # In contrast, the @dihedral:Torsion interaction
+    # essentially controls helical pitch and torsional-persistence-length.
+
+    #---------- Iteration_0 (initial guess) -----------
+    # For Iteration_0, assume that:
+    #        Probability(θ) ~= exp(-U(θ)/kB*T), where:
+    #        U(θ) = C*(1 - cos(θ-θ0)) ≈ C*(1/2)*(θ-θ0)^2
+    #                    (independent of everything else)
+    # equating the two expressions for Probability(θ)  (converting deg->rad)
+    #    ==> θ0 = μ  and  C ≈ kB*T/(σ*π/180)^2
+    #        (units: kB*T = 0.001987207*300 kCal/mole = 0.5961621 kCal/mole)
+    # θ1: μ_PDB = 66.6748, σ_PDB = 4.11554 (in degrees)
+    #    ==> C1 = 115.54628
+    # θ2: μ_PDB = 39.1161, σ_PDB = 5.53557 (in degrees)
+    #    ==> C2 = 63.86824
+    # For the dihedral angle (φt), during ITERATION 0, we assume that:
+    #        Probability(φt) ≈ exp(-U(φt) / kB*T)    where:
+    #        U(φt) = C3*(1 - cos(φt-φt0))*sin(θ1)*sin(θ2)
+    #              ≈ C3*(1/2)(φt-φt0)^2*sin(θ10)*sin(θ20)
+    # equating the two expressions for Probability(φt)  (converting deg->rad)
+    #    ==> φt0 = μ  and  C3 ≈ kB*T/(σ*π/180)^2 / Ctheta
+    #        where Ctheta=sin(θ10)*sin(θ20),  Converting degrees->radians again:
+    #         C3 ≈ (kB*T/(σ*π/180)^2)/(sin(θ10*π/180)*sin(θ20*π/180))
+    # φt:  μ_PDB = φt0 = -63.7919, σ_PDB = 2.17443 (in degrees)
+    #        θ10 = 66.6748, θ20 = 39.1161 (averaged measurements from PDB files)
+    #    ==>  C3 = 714.4815
+    #
+    #dihedral_coeff @dihedral:Torsion spherical 2  &
+    #       115.54628    0 0.0 0          1 66.6748 1    0 0.00000 0   &
+    #        63.86824    0 0.0 0          0 0.00000 0    1 39.1161 1   &
+    #        714.4815    1 -63.7919 1     1 90 0         1 90 0
+    #
+    #---------- Iteration_1 (first correction) -----------
+    # FOR ITERATION 1, I UPDATED THE PARAMETERS BY HAND.
+    # NOTICED THAT THE TORSIONAL PERSISTENCE LENGTH WAS FAR TOO SMALL,
+    # SO I DOUBLED C1, C2, C3.  AT THE TIME I JUSTIFIED THIS CHOICE IN
+    # ORDER TO COMPENSATE FOR THE FACT THAT I ONLY APPLY THIS DIHEDRAL
+    # INTERACTION TO ATOMS ON THE + SIDE OF EACH WRUNG OF THE DNA LADDER.
+    # (There is also a - side.  Future iterations will be handled rigorously.)
+    #  φt0: μ_sim_iter0=NOT_MEASURED, Lt_sim_iter0=NOT_MEASURED, Lt_target=111.0
+    #
+    #dihedral_coeff @dihedral:Torsion spherical 3  &
+    #   231.0926         0 0.000 0         1 69.0 1   0 0.00 0   &
+    #   127.7365         0 0.000 0         0 0.00 0   1 40.0 1   &
+    #   1428.963         1 -63.0 1         1 90.0 0   1 90.0 0
+    #
+    #---------- Iteration_2 (second correction) -----------
+    # SETTINGS FOR θ01 AND θ02 WILL BE CHOSEN MANUALLY, NOT USING METHOD BELOW
+    # IGNORE: Measure the average and std-dev from the previous simulation:
+    # IGNORE:         θ01: μ_sim_iter1 = , σ_sim_iter1 = 
+    # IGNORE: ITER2: θ01_iter2 = θ01_iter1 + (μ_PDB - μ_sim_iter1)    = 
+    # IGNORE: ITER2: C1_iter2  = C1_iter1 * (σ_sim_iter1 / σ_PDB)^2   = 
+    # IGNORE:   θ02: μ_sim_iter1 = , σ_sim_iter1 = 
+    # IGNORE: ITER2: θ02_iter2 = θ02_iter1 + (μ_PDB - μ_sim_iter1)    = 
+    # IGNORE: ITER2: C2_iter2  = C2_iter1 * (σ_sim_iter1 / σ_PDB)^2   = 
+    # Measure the torsional persistence length, Lt from the previous simulation
+    # SETTINGS FOR φt WILL BE CHOSEN AUTOMATICALLY USING THE METHOD BELOW:
+    #  φt0: μ_sim_iter1=-63.166, Lt_sim_iter1=149.35593, Lt_target=111.0
+    #ITER2: φt0_iter2  = φt0_iter1 + (μ_PDB - μ_sim_iter1)   = NOT_UPDATED
+    #ITER2: C3_iter2  = C_iter1 * (Lt_target / Lt_sim_iter1) = 1061.9926
+    #
+    #dihedral_coeff @dihedral:Torsion spherical 3  &
+    #   231.0926         0 0.000 0         1 70.0 1   0 0.00 0   &
+    #   127.7364         0 0.000 0         0 0.00 0   1 41.0 1   &
+    #   1061.9926         1 -62.0 1         1 90.0 0   1 90.0 0
+    #
+    #---------- Iteration_3 (third correction) -----------
+    # SETTINGS FOR θ01 AND θ02 WILL BE CHOSEN MANUALLY, NOT USING METHOD BELOW
+    # IGNORE:  Measure the average and std-dev from the previous simulation:
+    # IGNORE:        θ01: μ_sim_iter1 = , σ_sim_iter1 = 
+    # IGNORE: ITER3: θ01_iter3 = θ01_iter2 + (μ_PDB - μ_sim_iter2)  = 
+    # IGNORE: ITER3: C1_iter3  = C1_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
+    # IGNORE:        θ02: μ_sim_iter2 = , σ_sim_iter2 = 
+    # IGNORE: ITER3: θ02_iter3 = θ02_iter2 + (μ_PDB - μ_sim_iter2)  = 
+    # IGNORE: ITER3: C2_iter3  = C2_iter2 * (σ_sim_iter2 / σ_PDB)^2 = 
+    # IGNORE: Measure the torsional persistence length, Lt from previous sim
+    # IGNORE: φt0: μ_sim_iter2=-62.4373, Lt_sim_iter2=142.3311, Lt_target=111.0
+    # IGNORE: ITER3: φt0_iter3 = φt0_iter2 + (μ_PDB - μ_sim_iter2)  =
+    # IGNORE: ITER3: C_iter3   = C_iter2 * (Lt_target / Lt_sim_iter2) = 828.2180
+    # CHOOSING C_iter3 MANUALLY.
+    #
+    #dihedral_coeff @dihedral:Torsion spherical 3  &
+    #   210.0          0 0.000 0         1 70.0 1   0 0.00 0   &
+    #   105.0          0 0.000 0         0 0.00 0   1 41.0 1   &
+    #   105.0          1 -62.0 1         1 90.0 0   1 90.0 0
+    #
+    #---------- Iteration_4 (fourth correction) -----------
+    # Measure the average and std-dev from the previous simulation:
+    #       θ01: μ_sim_iter3 = 70.0779, σ_sim_iter3 = 3.42895
+    # IGNORE: ITER4: θ01_iter4 = θ01_iter3 + (μ_PDB - μ_sim_iter3)  =SET_BY_HAND
+    # IGNORE: ITER4: C1_iter4  = C1_iter3 * (σ_sim_iter3 / σ_PDB)^2 = SEE_BELOW
+    #       θ02: μ_sim_iter3 = 41.196, σ_sim_iter3 = 4.34968
+    # IGNORE: ITER4: θ02_iter4 = θ02_iter3 + (μ_PDB - μ_sim_iter3)  =SET_BY_HAND
+    # IGNORE: ITER4: C2_iter4  = C2_iter3 * (σ_sim_iter3 / σ_PDB)^2 = SEE_BELOW
+    # Measure the torsional persistence length, Lt from the previous simulation
+    #       φt0: μ_sim_iter3=-63.4017, Lt_sim_iter3=126.3709, Lt_target=111.0
+    #ITER4: φt0_iter4 = φt0_iter3 + (μ_PDB - μ_sim_iter3)    = SET_BY_HAND
+    #ITER4: C_iter4   = C_iter3 * (Lt_target / Lt_sim_iter3) = SET_BY_HAND(90.0)
+    # USING THE FOLLOWING PROCEDURE TO UPDATE C1, C2, C3:
+    #       C1 = 2*C, C2 = C, C3 = C
+    
+    
+    dihedral_coeff @dihedral:Torsion spherical 3  &
+       180.000       0 0.000 0         1 70.0 1   0 0.00 0   &
+       90.0          0 0.000 0         0 0.00 0   1 41.0 1   &
+       90.0          1 -62.0 1         1 90.0 0   1 90.0 0
+    
+  }
+
+
+
+
+
+  # LAMMPS supports a large number of force-field styles.  We must select
+  # which ones we need.  This information belongs in the "In Init" section.
+  # (Hybrid styles used for portability. These choices can be overridden later.)
+
+  write_once("In Init") {
+    # (Hybrid force fields were not necessary but are used for portability.)
+    units           lj     # <-- temperature has units of energy, kB=1
+    atom_style      full
+    bond_style      hybrid harmonic
+    angle_style     hybrid harmonic
+    dihedral_style  hybrid spherical
+    pair_style      hybrid yukawa \$\{debye_length\} 7.001
+    pair_modify     shift yes
+    # If charges are needed, (assuming biopolymers), try one of:
+    #dielectric      80.0
+    #pair_style      hybrid lj/cut/coul/debye 1.0 4.0
+    # or (for short distances, below a couple nm)
+    #pair_style      hybrid lj/charmm/coul/charmm/implicit 0.9 1.1
+
+    pair_modify     mix arithmetic
+    special_bonds   lj 0.0 0.0 0.0
+  }
+
+}  # DNAForceField
+
+

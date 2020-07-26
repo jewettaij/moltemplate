@@ -1,0 +1,84 @@
+# Running LAMMPS on this file (eg. "lmp_mpi -i run.in.nvt") simulates a
+# vesicle at constant NVT conditions.
+#
+# THIS SIMULATION WAS RUN AT HIGH TEMPERATURE (345K) IN ORDER
+# TO ENCOURAGE THE LIPIDS TO FORM A SMOOTH SPHERICAL VESICLE.
+# (At 300K, the lipids used in this particular coarse-grained model tend to be
+#  stuck in a "gel"-like phase when arranged in a small vesicle shape, leading
+#  to lumps and discontinuities.  We raised the temperature to avoid this.)
+#
+# -------- PREREQUISITES: ---------
+# 1) This example requires the "USER-MISC" package.  (Use "make yes-USER-MISC")
+#   http://lammps.sandia.gov/doc/Section_start.html#start_3
+# 2) It also may require additional features and bug fixes for LAMMPS.
+#   So, after typing "make yes-user-misc" in to the shell, ...
+#   be sure to download and copy the "additional_lammps_code" from 
+#   http://moltemplate.org     (upper-left corner menu)
+# 3) Unpack it
+# 4) copy the .cpp and .h files to the src folding of your lammps installation.
+# 5) Compile LAMMPS.
+# 6) Build the system using PACKMOL and MOLTEMPLATE
+#    (Follow the instructions in README_setup.sh, or run that file as a script.)
+# 7) Minimize the system using:
+#      lmp_mpi -i run.in.npt
+#    (assuming "lmp_mpi" is the name of the lammps binary you created in step 5)
+# 8) Distribute the lipids uniformly on the spherical surface using:
+#      lmp_mpi -i run.in.make_uniform
+#    (Why? The software tool (PACKMOL) that we used to create the initial
+#     geometry for this example often leaves gaps in the packing of spherical
+#     surfaces.  The "make_uniform" step should help close these holes.)
+#
+# If LAMMPS complains about an "Invalid pair_style", or "Invalid dihedral_style"
+# then you made a mistake in the instructions above.
+#
+# ------------------------------- Initialization Section --------------------
+
+include         system.in.init
+
+# ------------------------------- Atom Definition Section -------------------
+
+# Commenting out:
+#
+# read_data       system.data
+#
+# Instead read the data file created by "run.in.min".
+
+# Commenting out these old commands:
+#
+# read_data    system.data
+# read_data    system_after_min.data
+#
+# Instead, read the coordinates from the uniform simulation:
+
+read_data    system_uniform.data
+
+
+# ------------------------------- Settings Section --------------------------
+
+include         system.in.settings
+
+# ------------------------------- Run Section -------------------------------
+
+timestep    1.0  # (the mass of each particle must be chosen accordingly)
+dump        1 all custom 500000 traj_T=345K.lammpstrj id mol type x y z ix iy iz
+
+
+thermo_style  custom step temp pe etotal vol epair ebond eangle
+thermo        100  # time interval for printing out "thermo" data
+thermo_modify norm yes flush yes
+
+
+# distribute particles evenly on available processors:
+fix fxbal all balance 100000 1.05 shift xyz 20 1.05
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# (Note: We are using "units lj", which means temperature is specified
+#  in units of energy.  kB*Temp = 0.001987207*345 kCal/mole = 0.685586415)
+fix fxlan all langevin 0.685586415 0.685586415 40000 48279
+fix fxnve all nve
+
+run           5000000   # (This might not be long enough for equilibration.)
+
+write_data system_T=345K.data
+

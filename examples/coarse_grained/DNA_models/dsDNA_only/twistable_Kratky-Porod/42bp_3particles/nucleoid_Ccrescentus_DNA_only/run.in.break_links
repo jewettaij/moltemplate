@@ -1,0 +1,103 @@
+# GOAL:
+#   The conformation of the circular DNA is no longer stretched, however
+#   opposite ends of the circular polymer are connected to their periodic
+#   images accross the simulation box.
+#    
+#    linkers                                             linkers
+#      |                                                   |
+#      V                                                   V
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#        |                                               |
+#     ~~~*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*~~~
+#
+#   In this simulation we will break the linkers and allow the
+#   polymer to relax to a circular conformation.
+#    
+#        *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+#        |                                               |
+#        *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
+#
+# PREREQUISITES:
+#
+#   You will need to run the simulations in STEP_3 ("run.in.contract")
+#   to produce the files that are needed for this stage of the simulation.
+
+
+# -- Init Section --
+
+include "system.in.init"
+boundary p f f
+
+# ------------------------------- Atom Definition Section -------------------
+
+#read_data "system_linked.data"
+#read_data "system_linked_after_min.data"
+read_data system_length=1900nm.data
+
+# The following file contains a command which can be used
+# to break the bonds that link the circular polymer to its periodic image.
+# Do that now before we begin the final simulation
+
+
+# Make sure the size of the simulation box is what we think it is
+change_box all y final -330 330 z final -330 330
+
+
+# ------------------------------- Settings Section --------------------------
+
+include "system.in.settings"
+include "system.in.types" #<--optional custom atom types for twist motors
+
+# Confine the polymer in a cylindrical tube that minics a bacterial cell wall
+include "confinement_hard_cylinder_R=320_K=10_Rmax=330.in"
+
+# Because of the large size of the initial simulation box, we must override
+# the default size of the neighbor bins and communication distance settings.
+# http://lammps.sandia.gov/doc/neighbor.html
+# http://lammps.sandia.gov/doc/comm_modify.html
+
+neighbor 25.0 bin
+#comm_modify mode single cutoff 43.0 vel yes   (<-fails on some lammps versions)comm_modify mode single cutoff 57.0 vel yes
+
+
+# -- Run Section --
+
+include fix_twist.in
+
+dump 1 all custom 500000 traj.lammpstrj id mol type x y z ix iy iz
+
+# (See http://lammps.sandia.gov/doc/fix_langevin.html)
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed lx
+thermo          5000  # time interval for printing out "thermo" data
+thermo_modify   norm yes flush yes
+
+fix fxbal all balance 1000000 1.03 shift x 20 1.03
+# http://lammps.sandia.gov/doc/fix_balance.html
+
+velocity all create 0.5961621 4928459
+
+timestep 1.0   # By definition.  (Masses should be adjusted accordingly.)
+
+reset_timestep 182000000
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+# To maximize diffusion rate (sampling efficiency), make tdamp as large as you
+# can.  Just make sure it does not exceed the timescales you really care about.
+# (Keep it an order of magnitude or so shorter than that.)
+#                        kB*Tstart   kB*Tstop   tdamp      randomseed
+fix fxlan all langevin   0.5961621   0.596162   2000000.0  3
+fix fxnve all nve
+
+# Keep the chain centered in the X direction (so that it does not drift)
+fix fxcen all recenter 0.0 NULL NULL
+
+run 18000000
+
+unfix fxcen
+unfix fxnve
+unfix fxlan
+
+write_data  system_length=1900nm_relaxed.data

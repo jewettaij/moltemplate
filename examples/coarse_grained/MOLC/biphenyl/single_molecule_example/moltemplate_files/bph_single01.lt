@@ -1,0 +1,58 @@
+# Single molecule of biphenyl in gas phase. No PBC.
+# Executed with the command:
+# moltemplate.sh -atomstyle "hybrid molecular ellipsoid" -overlay-bonds bph_single01.lt  
+
+import "G071_molc.lt"
+
+mol = new G071[1]
+
+# Simulation box
+write_once("Data Boundary") {
+-50 50 xlo xhi
+-50 50 ylo yhi
+-50 50 zlo zhi
+}
+
+write_once("In Init"){
+variable run  string bph_single01 
+echo            log
+log             \$\{run\}.log
+units           real
+boundary        p p p
+atom_style      hybrid molecular ellipsoid
+
+# Neighbour list.
+neighbor        1.0 bin
+neigh_modify    check yes one 5000
+}
+
+write_once("In Run"){
+# Physical observables.
+compute q               all property/atom quatw quati quatj quatk
+compute shape           all property/atom shapex shapey shapez
+compute temp_trasl      all temp
+compute temp_rot        all temp/asphere dof rotate
+compute temp_rototrasl  all temp/asphere dof all
+compute press_trasl     all pressure temp_trasl
+
+# Output.
+thermo          1000
+thermo_style custom step etotal evdwl ecoul elong ebond ke pe temp press cpu 
+thermo_modify temp temp_rototrasl
+thermo_modify press press_trasl
+thermo_modify flush yes
+
+dump 1 all custom 100 \$\{run\}.dump &
+id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] &
+c_shape[1] c_shape[2] c_shape[3] vx vy vz &
+angmomx angmomy angmomz mol
+
+# Thermodynamics.
+timestep        10.
+fix             1 all momentum 1 linear 1 1 1 angular
+fix             2 all nve/asphere
+fix             3 all langevin 300. 300. 100. 2335 angmom 0.9
+fix_modify      3 temp temp_rototrasl
+run             1000000
+}
+

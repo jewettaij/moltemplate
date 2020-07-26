@@ -50,6 +50,7 @@ __all__ = ["TtreeShlex",
            "RemoveOuterQuotes",
            "MaxLenStr",
            "HasWildcard",
+           "HasRE",
            "MatchesPattern",
            #"IsRegex",
            "InputError",
@@ -115,7 +116,7 @@ class TtreeShlex(object):
         self.quotes = '\'"'
         self.escape = '\\'
         self.escapedquotes = '"'
-        self.operators = '='
+        self.operators = '='  #binary numeric operators like +-*/ might be added
         self.state = ' '
         self.pushback = deque()
         self.lineno = 1
@@ -557,7 +558,6 @@ def SplitQuotedString(string,
                 if token != '':
                     # if this is not the first character in the token
                     include_endquote = True
-                
             token += c
             reading_token = True
         else:
@@ -671,12 +671,13 @@ def MaxLenStr(s1, s2):
         return s1
 
 
-# def IsRegex(pat):
-#    """
-#    Check to see if string (pat) is bracketed by slashes.
-#
-#    """
-#    return (len(pat)>=2) and (pat[0]=='/') and (pat[-1] == '/')
+def HasRE(pat):
+    """
+    Returns true if a string (pat) begins with 're.'
+
+    """
+    return pat.find('re.') == 0
+
 
 def HasWildcard(pat):
     """
@@ -1552,6 +1553,7 @@ class TemplateLexer(TtreeShlex):
             self.operators + \
             self.escape + \
             self.commenters
+
         #  Note:
         # self.whitespace = ' \t\r\f\n'
         # self.quotes     = '\'"'
@@ -1572,6 +1574,7 @@ class TemplateLexer(TtreeShlex):
                      simplify_output=False,
                      terminators='}',
                      other_esc_chars='{',
+                     var_terminators='{}(),', #(var_delim, spaces also included)  CONTINUEHERE COMMA BREAKS compass_published.lt
                      keep_terminal_char=True):
         """
            ReadTemplate() reads a block of text (between terminators)
@@ -1658,7 +1661,7 @@ class TemplateLexer(TtreeShlex):
         commented_state = False
         var_paren_depth = 0  # This is non-zero iff we are inside a
         # bracketed variable's name for example: "${var}"
-        var_terminators = self.whitespace + self.newline + self.var_delim + '{}'
+        var_terminators += self.whitespace + self.newline + self.var_delim
 
         tmpl_list = []  # List of alternating tuples of text_blocks and
         # variable names (see format comment above)
@@ -1754,6 +1757,7 @@ class TemplateLexer(TtreeShlex):
                         # immediately follow the '$' character (as in "${var}")
                         elif var_paren_depth > 0:
                             var_paren_depth += 1
+                            var_descr_plist.append(nextchar)
 
                 elif nextchar in self.var_close_paren:
                     #sys.stdout.write('   ReadTemplate() readmode found }.\n')
@@ -1770,6 +1774,9 @@ class TemplateLexer(TtreeShlex):
                             if var_paren_depth == 0:
                                 var_suffix = nextchar
                                 terminate_var = True
+                            else:
+                                var_descr_plist.append(nextchar)
+
 
                 elif nextchar in var_terminators:
                     #sys.stdout.write('   ReadTemplate() readmode found var_terminator \"'+nextchar+'\"\n')

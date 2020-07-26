@@ -1,0 +1,126 @@
+# --- Prerequisites ---
+#   You must follow the instructions in README_setup.sh to use moltemplate.sh
+#   to create the following files which LAMMPS can read:
+#       system.data system.in.init system.in.settings
+
+# --- Init Section ---
+
+
+include "system.in.init"
+
+
+# --- Atom Definition Section ---
+
+
+read_data "system.data"
+
+
+# --- Settings Section ---
+
+
+include "system.in.settings"
+
+
+# --- Run Section ---
+
+
+# Neighbour list.
+neighbor        1.0 bin
+neigh_modify    check yes one 5000
+
+
+# ---
+
+
+# Physical observables.
+compute q               all property/atom quatw quati quatj quatk
+compute shape           all property/atom shapex shapey shapez
+compute temp_trasl      all temp
+compute temp_rot        all temp/asphere dof rotate
+compute temp_rototrasl  all temp/asphere dof all
+compute press_trasl     all pressure temp_trasl
+compute myMSD all msd com yes
+
+# Output.
+thermo          200
+thermo_style custom step etotal evdwl ecoul elong ebond ke pe temp press vol density &
+               c_myMSD[1] c_myMSD[2] c_myMSD[3] c_myMSD[4] cpu
+thermo_modify temp temp_rototrasl
+thermo_modify press press_trasl
+thermo_modify flush yes
+
+# Thermodynamics.
+fix             1 all momentum 10 linear 1 1 1 angular rescale
+
+# Create a trajectory file for the shrink simulation:
+
+dump dmShrink all custom 1000 traj_shrink.lammpstrj &
+id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] &
+c_shape[1] c_shape[2] c_shape[3] vx vy vz &
+angmomx angmomy angmomz mol
+
+
+# 1. Shrink the cell to a density of ~1 g/cm3
+timestep        5
+fix             2 all nve/asphere
+fix             3 all langevin 300. 300. 100. 35785 angmom 0.9
+fix_modify      3 temp temp_rototrasl
+fix 4 all deform 1 x scale .95 y scale .95 z scale .95 units box remap x
+label    cycle1
+variable i loop 12
+  print "*** Shrinking step \$i/12 ***"
+  run    50000
+  next   i
+jump SELF cycle1
+variable i delete
+
+# Create a trajectory file for the annealing simulation
+
+undump dmShrink
+dump dmAnneal all custom 1000 traj_anneal.lammpstrj &
+id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] &
+c_shape[1] c_shape[2] c_shape[3] vx vy vz &
+angmomx angmomy angmomz mol
+
+
+# 2. 4 ns annealing, NPT ensemble.
+unfix 2
+unfix 3
+unfix 4   
+timestep        10
+fix             2 all nph/asphere iso 1. 1. 10000.
+fix_modify      2 press press_trasl
+fix             3 all langevin 300. 380. 100. 66639 angmom 0.9
+fix_modify      3 temp temp_rototrasl
+run             100000
+unfix 3
+fix             3 all langevin 380. 380. 100. 131575 angmom 0.9
+fix_modify      3 temp temp_rototrasl
+run             200000
+unfix 3
+fix             3 all langevin 380. 300. 100. 766228 angmom 0.9
+fix_modify      3 temp temp_rototrasl
+run             100000
+
+
+# Create a trajectory file for the main production simulation
+
+undump dmAnneal
+dump dmProduction all custom 1000 trajl.lammpstrj &
+id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] &
+c_shape[1] c_shape[2] c_shape[3] vx vy vz &
+angmomx angmomy angmomz mol
+
+
+# Compute the g(r)
+comm_modify cutoff      24  # (needed to avoid error using compute ... rdf)
+compute myRDF           all rdf 400 1 1 cutoff 20
+fix     fix_rdf         all ave/time 1000   2000    3000000 c_myRDF[*] file output.rdf mode vector
+
+# 4. 40 ns production trajectory at 300K.
+unfix 3
+timestep        20.
+fix             3 all langevin 300. 300. 100. 598114 angmom 0.9
+fix_modify      3 temp temp_rototrasl
+run             2000000
+

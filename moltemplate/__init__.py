@@ -6,9 +6,9 @@ from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
 
 from .ttree_lex import TtreeShlex, split, LineLex, SplitQuotedString, \
     EscCharStrToChar, SafelyEncodeString, RemoveOuterQuotes, MaxLenStr, \
-    HasWildcard, InputError, ErrorLeader, SrcLoc, OSrcLoc, TextBlock, VarRef, \
-    VarNPtr, VarBinding, SplitTemplate, SplitTemplateMulti, TableFromTemplate, \
-    ExtractCatName, DeleteLinesWithBadVars, TemplateLexer
+    HasWildcard, HasRE, InputError, ErrorLeader, SrcLoc, OSrcLoc, TextBlock, \
+    VarRef, VarNPtr, VarBinding, SplitTemplate, SplitTemplateMulti, \
+    TableFromTemplate, ExtractCatName, DeleteLinesWithBadVars, TemplateLexer
 
 from .nbody_graph_search import Disconnected, NotUndirected, Edge, Vertex, \
      Dgraph, Ugraph, SortVertsByDegree, DFS, GraphMatcher 
@@ -38,7 +38,8 @@ from .ltemplify import main, Ltemplify
 from .dump2data import main
 from .raw2data import main
 from .extract_lammps_data import main
-from .genpoly_lt import main, GenPoly
+from .genpoly_lt import main, GenPoly, GPSettings
+from .genpoly_modify_lt import main, GenPolyMod, GPModSettings, DistributePeriodic, DistributeRandom
 from .interpolate_curve import main, ResampleCurve, CalcNaturalCubicSplineCoeffs, SplineEval, SplineEvalD1, SplineEvalD2, SplineInterpEval, SplineInterpEvalD1, SplineInterpEvalD2, SplineCurvature2D, SplineInterpCurvature2D
 from .nbody_by_type import main
 

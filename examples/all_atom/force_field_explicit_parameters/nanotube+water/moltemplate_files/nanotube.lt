@@ -23,8 +23,8 @@ nanotube = new GrapheneXZ.move(0, 5.457193512764, 0)            # 5.45 = R
                                                                 #2.13= d*1.5
 
 
-                  # Note: The length is 12 hexegons, the circumference is
-                  # 14 hexegons (~=25.56 and 34.43 Angstroms, respectively).
+                  # Note: The length is 12 hexagons, the circumference is
+                  # 14 hexagons (~=25.56 and 34.43 Angstroms, respectively).
 
 
 # Move all of the unit-cells in the nanotube between the two graphene sheets.

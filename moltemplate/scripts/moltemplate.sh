@@ -6,22 +6,18 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.17.6"
-G_DATE="2020-5-5"
+G_VERSION="2.18.2"
+G_DATE="2020-7-25"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
 
 # Check for python:
-# I prefer python2 over python3 because python3 requires slightly more memory
-# (and has more bugs).  So use python2 (2.7) when available.
 
-if which python2 > /dev/null; then
-    PYTHON_COMMAND='python2'
-elif which python3 > /dev/null; then
-    PYTHON_COMMAND='python3'
+if which python > /dev/null; then
+    PYTHON_COMMAND='python'
 else
-    echo "Error:  $G_PROGRAM_NAME requires python or python3" >&2
+    echo "Error:  $G_PROGRAM_NAME requires python" >&2
     exit 1
 fi
 
@@ -600,7 +596,8 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
         if [ `echo "$ALPHA!=90.0"|bc` -eq 1 ] || [ `echo "$BETA!=90.0"|bc` -eq 1 ] || [ `echo "$GAMMA!=90.0"|bc` -eq 1 ]; then
             # I transform the parameters from one format to the other by inverting
-            # the transformation formula from the LAMMPS documentation (which matches
+            # the transformation formula from the LAMMPS documentation 
+            # https://lammps.sandia.gov/doc/Howto_triclinic.html  (which matches
             # http://www.ccl.net/cca/documents/molecular-modeling/node4.html)
             TRICLINIC="True"
             PI=3.1415926535897931
@@ -611,6 +608,8 @@ while [ "$i" -lt "$ARGC" ]; do
             BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*(ca-(cg*cb))/sg}'`
             BOXSIZE_Z=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*sqrt(1.+2*ca*cb*cg-ca**2-cb**2-cg**2)/sg}'`
             #BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
+            # The two expressions for "BOXSIZE_Z" should be algebraically equivalent, but I
+            # might have made a mistake. Thanks, Otello for fixing this code. -A 2020-7-25.
         else
             BOXSIZE_X=$BOXSIZE_A
             BOXSIZE_Y=$BOXSIZE_B
@@ -684,7 +683,7 @@ while [ "$i" -lt "$ARGC" ]; do
           BOXSIZE_XY=${box[2]}
           BOXSIZE_XZ=${box[5]}
           BOXSIZE_YZ=${box[8]}
-	  TRICLINIC="True"
+	        TRICLINIC="True"
         fi
 
         # Save the coordinates.

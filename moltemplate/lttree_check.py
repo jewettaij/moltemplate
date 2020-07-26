@@ -862,7 +862,11 @@ def CheckSyntaxCheap(lex):
     if (data_atoms not in fnames_found):
         sys.stderr.write('WARNING: \"' + data_atoms + '\" file not found\n')
     if (data_masses not in fnames_found):
-        sys.stderr.write('WARNING: \"' + data_masses + '\" file not found\n')
+        sys.stderr.write('WARNING: \"' + data_masses + '\" file not found\n'
+                         '         (This is not necessarily a problem.  There are other ways to specify\n'
+                         '          the mass, and there are other ways to integrate the equations of\n'
+                         '          motion. ATB users, for example, can ignore this message.)\n')
+
     # if (data_bonds not in fnames_found):
     #    sys.stderr.write('--------------------------------------------------\n'
     #                     'WARNING: \"'+data_bonds+'\" file not found\n'

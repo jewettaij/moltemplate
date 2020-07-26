@@ -42,6 +42,7 @@ printed to the standard-out.
 
 
 import sys
+import re
 import gc
 
 try:
@@ -58,8 +59,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2018-6-09'
-g_version_str = '0.2.0'
+g_date_str = '2020-7-07'
+g_version_str = '0.3.0'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -156,13 +157,26 @@ def main():
             if (not line_orig) or (line_orig == ''):
                 break
             tokens = line_orig.strip().split('@')
+            # If the second token is surrounded by '/' characters, interpret
+            # it as a regular expression.
+            token1_is_re = ((len(tokens) >= 2) and
+                            HasRE(tokens[1]))
+            # If the second token contains wildcard characters, interpret
+            # it as a wildcard (ie. glob) expression.
+            token1_is_wild = ((len(tokens) >= 2) and
+                              HasWildcard(tokens[1]) #does it contain '*' or '?'
+                              and 
+                              (tokens[1][0] != '{')) #(ignore * or ? in {})
 
             if ((len(tokens) >= 2) and
                 (tokens[0].find('bond_coeff') == 0) and
-                #does this token contain '*' or '?'
-                HasWildcard(tokens[1]) and
-                (tokens[1][0:1] != '{')):  #(don't pattern match * in {})?'
-                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
+                (token1_is_re or token1_is_wild)):
+                if token1_is_re:
+                    regex_str = tokens[1][3:] #*#
+                    left_paren = text_after = ''
+                    typepattern = re.compile(regex_str)
+                else:
+                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for btype in bond_types:
                     if MatchesPattern(btype, typepattern):
                         #assert(left_paren == '')
@@ -170,11 +184,14 @@ def main():
                         sys.stdout.write('@'.join(tokens) + '\n')
 
             elif ((len(tokens) >= 2) and
-                  (tokens[0].find('angle_coeff') == 0) and
-                  #does this token contain '*' or '?'
-                  HasWildcard(tokens[1]) and
-                  (tokens[1][0:1] != '{')):
-                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
+                (tokens[0].find('angle_coeff') == 0) and
+                (token1_is_re or token1_is_wild)):
+                if token1_is_re:
+                    regex_str = tokens[1][3:] #*#
+                    left_paren = text_after = ''
+                    typepattern = re.compile(regex_str)
+                else:
+                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for antype in angle_types:
                     if MatchesPattern(antype, typepattern):
                         #assert(left_paren == '')
@@ -182,11 +199,14 @@ def main():
                         sys.stdout.write('@'.join(tokens) + '\n')
 
             elif ((len(tokens) >= 2) and
-                  (tokens[0].find('dihedral_coeff') == 0) and
-                  #does this token contain '*' or '?'
-                  HasWildcard(tokens[1]) and
-                  (tokens[1][0:1] != '{')):  #(don't pattern match * in {})
-                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
+                (tokens[0].find('dihedral_coeff') == 0) and
+                (token1_is_re or token1_is_wild)):
+                if token1_is_re:
+                    regex_str = tokens[1][3:] #*#
+                    left_paren = text_after = ''
+                    typepattern = re.compile(regex_str)
+                else:
+                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for dtype in dihedral_types:
                     if MatchesPattern(dtype, typepattern):
                         #assert(left_paren == '')
@@ -194,11 +214,14 @@ def main():
                         sys.stdout.write('@'.join(tokens) + '\n')
 
             elif ((len(tokens) >= 2) and
-                  (tokens[0].find('improper_coeff') == 0) and
-                  #does this token contain '*' or '?'
-                  HasWildcard(tokens[1]) and
-                  (tokens[1][0:1] != '{')):  #(don't pattern match * in {})
-                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
+                (tokens[0].find('improper_coeff') == 0) and
+                (token1_is_re or token1_is_wild)):
+                if token1_is_re:
+                    regex_str = tokens[1][3:] #*#
+                    left_paren = text_after = ''
+                    typepattern = re.compile(regex_str)
+                else:
+                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for itype in improper_types:
                     if MatchesPattern(itype, typepattern):
                         #assert(left_paren == '')
@@ -258,16 +281,40 @@ def main():
                     text_after2 = ''
                     typepattern2 = tokens[2]
                     del tokens[3]
-                if (HasWildcard(tokens[1]) and
-                    (tokens[1][0:1] != '{')):  #(don't pattern match * in {})
+
+                ################
+                # If surrounded by '/' characters, the token is meant to be
+                # interpreted as a regular expression.
+                token1_is_re = HasRE(tokens[1])
+                token2_is_re = HasRE(tokens[2])
+                # If the token contains wildcard characters, interpret
+                # it as a wildcard (ie. glob) expression.
+                token1_is_wild = (HasWildcard(tokens[1])   #contain '*' or '?'
+                                  and (tokens[1][0] != '{'))  #ignore * in {}
+                token2_is_wild = (HasWildcard(tokens[2])   #contain '*' or '?'
+                                  and (tokens[2][0] != '{'))  #ignore * in {}
+                ################
+
+
+                if token1_is_re:
+                    atom_types1 = atom_types
+                    regex_str = tokens[1][3:]
+                    typepattern1 = re.compile(regex_str)
+                elif token1_is_wild:
                     atom_types1 = atom_types
                 else:
                     atom_types1 = set([typepattern1])
-                if (HasWildcard(tokens[2]) and
-                    (tokens[2][0:1] != '{')):  #(don't pattern match * in {})
+
+                if token2_is_re:
+                    atom_types2 = atom_types
+                    regex_str = tokens[2][3:]
+                    typepattern2 = re.compile(regex_str)
+                elif token2_is_wild:
                     atom_types2 = atom_types
                 else:
                     atom_types2 = set([typepattern2])
+
+
                 for atype1 in atom_types1:
                     #sys.stderr.write('atype1 = \"'+str(atype1)+'\"\n')
                     if MatchesPattern(atype1, typepattern1):

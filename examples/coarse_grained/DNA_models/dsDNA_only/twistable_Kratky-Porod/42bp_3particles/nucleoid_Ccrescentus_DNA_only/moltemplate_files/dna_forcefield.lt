@@ -1,0 +1,257 @@
+
+DNAForceField {
+
+  write_once("Data Masses") {
+    @atom:C1       506.6059
+    @atom:C2       506.6059
+    @atom:R        506.6059
+  }
+
+  # Why?  Molecular motion at small length scales is Brownian (not ballistic).
+  # Consequently, particle masses do not matter.  We can choose the
+  # them to be anything we like as long as the physical processes we are
+  # interested in occur at zoomed-out timescales where the motion of each
+  # particle appears random (diffusive, brownian).  For convenience
+  # all masses are chosen to insure that a timestep (Δt) of 1.0 is numerically
+  # stable.  This makes it much easier to combine radically different kinds
+  # of coarse-grained molecules together in the same simulation later on.
+  # For numerical stability, all oscillations in the simulation should not
+  # occur faster than once every 20 timesteps.  Let's define Nperiod=20.
+  # The mass, m, is determined by assuming that the timestep width, Δt=1, and
+  #    sqrt(k_max/m) = 2π/(Nperiod*Δt)    and solving for m
+  # --> m = k_max * ((Nperiod*Δt)/(2*pi))**2
+  # (For harmonic forces, k is the largest spring constant. More generally
+  # k_max should be an upper bound for the second derivative of the energy with
+  # respect to position, d^2U(r)/dr^2, which is accessible at this temperature.
+  # This depends on the force-field you are using and the temperature.
+  #    In this case: I set k_max ≈ 50 kcal/mol / nm^2 (when temperature≈300K).
+  # AT HIGH TEMPERATURES AND PRESSURES, WE MIGHT NEED TO INCREASE k_max AND m.
+  # Note: All masses are in units of  Δt^2*(energy_units)/(distance_units^2)
+
+  # Ubond(r) = k*(r-r0)^2   
+
+  # Define properties of the backbone and sidechain bonds
+  write_once("In Settings") {
+    bond_coeff     @bond:Backbone   harmonic   25.0   6.972
+    bond_coeff     @bond:Sidechain  harmonic   25.0   6.972
+  }
+
+  #  Rules for determining 3 and 4-body bonded interactions by type
+
+  # 3-body interactions in this example are listed by atomType and bondType
+  # The atomIDs involved are determined automatically.  The forumula used is:
+  #
+  # Uangle(theta) = K*(theta-theta0)^2   
+  #     (k in energy/rad^2, theta0 in degrees)
+  #
+  # The corresponding command is:
+  #
+  #  angle_coeff angleType  anglestylename  K  theta0
+
+  write_once("In Settings") {
+        # The next two angle constraints are unrelated to persistence length
+    angle_coeff @angle:CCCstiff harmonic  200.0 180.0  # = 180-alpha
+    angle_coeff @angle:RCC      harmonic  200.0  90.0  # = gamma
+        # @angle:CCCbendy defines the persistence length of the polymer
+        # persistence_length = k_angle * B / (kB*T) (B=length of monomer,T=temp)
+        # k_angle = persistence_length*kB*T / B,
+        # K_angle = k_angle/2   (LAMMPS uses K_angle, not k_angle)
+        # B = 42 DNA base pairs = 42*0.332nm = 13.944nm, then
+        # K_angle = k_angle/2 = (1/2)*50*(0.001987207*300.0)/B = 1.06885
+        # which corresponds to a persistence length of 50.0 (in monomers)
+        # The real persistence
+	# If 1 monomer <==> 12bp <==> 4nm, use this:
+    #angle_coeff @angle:CCCbendy harmonic 1.06885 180.0
+        # To prevent numeric explosions for large angles (approaching 180 deg)
+        # we need to add some additional constraints.  
+        # This means the mechanical properties of the polymer at short length
+        # scales are no longer accurate.  (For coarse-grained models, this is
+        # okay.)  We do this using a non quadratic function, stored in a table,
+        # and then run simulations to measure the resulting persistence length.
+    angle_coeff @angle:CCCbendy table   table_angle.dat  CCC
+  }
+
+  # angle-type      atomType1 atomType2 atomType3
+
+  write_once("Data Angles By Type") {
+    @angle:CCCstiff    @atom:C1* @atom:C2  @atom:C1* @bond:Backbone @bond:Backbone
+    @angle:CCCbendy    @atom:C2  @atom:C1* @atom:C2  @bond:Backbone @bond:Backbone
+    @angle:RCC         @atom:R   @atom:C2  @atom:C1* @bond:Sidechain @bond:Backbone
+  }
+
+  # 4-body interactions in this example are listed by atomType and bondType
+  # The atomIDs involved are determined automatically.  The forumula used is:
+  #
+  # Udihedral(phi) = k * (1 + cos(n*phi - d))
+  #
+  #     If n=1, and if k < 0, then the minima is at d
+  #
+  #     The "d" parameter is in degrees,  "k" is in (kcal/mol)(radians^-2)
+  #
+  #        ...    ~= -k * (1/2)*(n*phi - d)^2   +   higher-order-terms...
+  #
+  #               =  As before, we can estimate |k| from statistics using:
+  #                   |k|≈kB*T/δ^2  (δ=standard deviation in radians)
+  #                   |k|≈kB*T/(δ*pi/180)^2  (δ=standard deviation in degrees)
+  #                  ...noting that "k" must be negative for the minima to
+  #                     be located at angle "d"
+  #
+  #
+  # The corresponding command is 
+  # dihedral_coeff dihedralType dihedralstylename  K  n   d  w
+  #     "w" is a parameter which is only relevant if you are running an all-
+  #     atom force-field using the CHARMM force-field.  Otherwise set it to 0.
+  # http://lammps.sandia.gov/doc/dihedral_charmm.html
+
+
+  write_once("In Settings") {
+    # If the torsional persistence length L_t = 111.0
+    #   (...as measured from simulations using parameters determined by
+    #   conformational fluctuations in DNA structures found in the PDB database)
+    # ...AND 1 monomer <==> 42bp (0.34nm per bp) then the "k" value should be
+    #                                      k = (L_t/(42*0.34))*kB*T
+    #                                        = 4.634033
+    #dihedral_coeff @dihedral:Backbone  charmm  4.634033 1 180 0.0
+    #
+    # COMMENTING OUT (because at 180 degrees, the barrier is too low)
+    #                (it can easilly spin 360 deg at normal temperatures)
+    #                (we need a way to prevent this, perhaps using "fix twist")
+    #                (or "dihedral_style table")
+
+    dihedral_coeff @dihedral:Backbone table table_dihedral.dat RCCR
+  }
+
+  # dihedral-type      atomType1 atomType2 atomType3 atomType4   bondType1  BondType2  BondType3
+
+  write_once("Data Dihedrals By Type") {
+    @dihedral:Backbone   @atom:R  @atom:C2  @atom:C1  @atom:R  @bond:Sidechain @bond:Backbone @bond:Sidechain
+  }
+
+
+
+  write_once("In Settings") {
+
+    # Using large size coarse grained particles with large spacing creates
+    # several different kinds of artifacts.  If hard-sphere-like Lennard-Jones
+    # repulsion is used, then chains will have a rough, lumpy shape.
+    # To make the chain as smooth as possible (without increasing the
+    # number of particles), use a Gaussian repulsive potential
+    # U(r)=-A*exp(-r^2/2σ^2)whose width (σ) equals half the separation between
+    # particles on the backbone of the polymer chain.  LAMMPS uses this formula:
+    #   U(r) = -A*exp(-B*r^2),   where B=1/(2σ^2)
+    #   If σ = (1/2) space between backbone particles =
+    #        = (1/2)*(1/2)*42bp*(0.332nm/bp)
+    #        = 3.486
+    #  --> B = 0.041144827
+    # The height of the Gaussian (A) is proportional to the energetic barrier
+    # for 2 chains crossing. (Taking into account the multiple particles that
+    # make up the chain, the energy barrier for two perpendicular chains to
+    # cross each other is approximately 1.58*A for this choice of σ.)
+    #   Comment regarding choice of mass:
+    # For reasonable A values, Gaussians are much smoother than LJ potentials,
+    # so you can get away with using smaller mass values for Gaussian U(r).
+    # For determining the mass, the maximum second derivative of U(r) is needed.
+    # k_max >= d^U/dr^2 = A*(1/σ**2)*(r**2/σ**2-1)*exp(-r**2/(2*σ**2))
+    # Ignoring the peak at r=0, the maximum 2nd deriv occurs at r = σ * sqrt(3)
+    #      --> d^U/dr^2 ≈ 1.17482 (if A = 32.00)
+    #          which is << k from the bonded interactions (so ignore d^U/dr^2)
+    #
+    #            AtomI   AtomJ   pair_style    A      B         r_cutoff
+
+    pair_coeff @atom:C* @atom:C*   gauss    -32.0  0.041144827  10.458
+
+    # https://lammps.sandia.gov/doc/pair_gauss.html
+    # (note: C* is equivalent to both C1 and C2, in this example)
+
+    # Turn off interactions between R and all other particles (*)
+    pair_coeff @atom:R  @atom:*    gauss     -0.0  0.041144827  10.458
+
+    # ---- OLD METHOD (does not work well for beads larger than Debye length)---
+    # Repulsion between the DNA is dominated by electrostatics.
+    # Each base-pair has a net charge of -2e (-e per nucleic acid) due
+    # to the phosphate in the backbone.  There's a nice picture here:
+    #http://www.mit.edu/~kardar/teaching/projects/dna_packing_website/electro.html
+    ## I use pair_style table to implement a yukawa potential (GPU accelerated).
+    # pair_coeff @atom:C*  @atom:C*   table table_dna_U0=inf.dat DNA_U0=inf
+    #
+    ## Note: In some cases, later on we might use neigh_modify exclude 
+    ##       to turn off interactions between @atom:C2 and other particles.
+    ## Definitely turn off interactions between @atom:R and all other particles
+    # pair_coeff @atom:R   @atom:*    table table_dna_U0=0.dat DNA_U0=0
+    #
+    ## ALTERNATIVE APPROACH #1:   Use LAMMPS' pair_style yukawa (low resolution)
+    ## Each monomer represents 42 base pairs 
+    ## However there are two particles per monomer along the backbone
+    ## ("C1" and "C2"), each of which has charge zi=zj=-42 (in units of e).
+    ##
+    ##              i       j                      ke*zi*zj/eps_r cutoff
+    ##pair_coeff @atom:C* @atom:C*           yukawa  732.20049   12.01
+    ##pair_coeff @atom:R  @atom:*            yukawa   0.000      12.01
+    ##
+    ## where    ke = 8.9875517873681764e09 J*m*C^-2 = 1/4*pi*eps_0
+    ## and  qi = qj = -e = -1.6021766208e-19 C
+    ## and 1 J = (1/4184)*1kCal ("thermochemical calorie")
+    ##  1 kcal = 6.0221409e+23 kcal/mole
+    ##     1 J = 1.4393262e+20 kcal/mole
+    ## and eps_r ~= is the relative dielectric permitivity = 80.0 for water
+    ## and 1 m = 1.0e9 nm
+    ## In units of (kCal/mole)*nm*e^-2
+    ## ke=8.9875517873681764e09*(6.0221409e+23/4184)*1e09*(1.6021766208e-19**2)
+    ##    = 33.2063715 and
+    ## ke/eps_r = 0.415079644208
+    ## (Double check: I should get something like 0.71*kB*T, since
+    ##  kB*T=0.001987207*300kCal/mole, and 0.71 is the Bjerrum length in water)
+    ##https://en.wikipedia.org/wiki/Coulomb's_law
+    ##
+    ## ALTERNATIVE APPROACH #2:   Use LAMMPS'  pair_style lj/cut/coul/debye
+    ##    (This works too, but it includes LJ interactions which we don't need.)
+    # --------- OLD METHOD (does not work well for large beads) ---------
+  }
+
+  write_once("In Settings") {
+    # Define the group of particles consisting of DNA
+    group gDNA type @atom:C1 @atom:C2 @atom:R
+
+    # To speed up the simulation, disable non-bonded interactions between the
+    # "phantom" particles which were only added to provide torsion angle forces)
+    group gPhantom type @atom:R
+    neigh_modify exclude group gPhantom all check no
+  }
+
+
+
+  # --------------------------------------------------------------------
+  #
+  # At some point we need to specify which force-field styles we want.
+  # LAMMPS also allows you to customize the kinds of properties you want each
+  # atom to have (the "atom_style"), such as charge, molecule-id, dipole etc.
+  # I typically specify this here.  Doing it this way means that all systems
+  # built from "Monomers" (which import "monomer.lt") share these atom-styles 
+  # and force-field styles by default.  You can override these settings later.
+
+  write_once("In Init") {
+    # Default styles for polymers built using "monomer.lt"
+
+    units           lj
+    atom_style      full
+
+    bond_style      hybrid harmonic
+    #angle_style     hybrid harmonic
+    angle_style     hybrid harmonic table linear 181
+    #dihedral_style  hybrid charmm
+    dihedral_style  hybrid table linear 360
+
+    pair_style      hybrid gauss 10.458
+    #pair_style      hybrid table linear 64
+    ##pair_style      hybrid yukawa 1.0 8.1 # Debye-length ~1.0nm
+
+    #pair_modify     mix arithmetic
+    special_bonds   lj 0.0 0.0 0.0
+  }
+
+} # DNAforcefield
+
+
+
+
+

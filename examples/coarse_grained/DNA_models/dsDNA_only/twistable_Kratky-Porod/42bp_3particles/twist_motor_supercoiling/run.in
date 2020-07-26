@@ -1,0 +1,83 @@
+# PREREQUISITES:
+#
+# 1)   You must copy the "fix_twist.cpp" and "fix_twist.h" files into
+#      LAMMPS' src/ subdirectory and recompile LAMMPS.
+#
+# 2)   You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#
+# 3)   You must minimize the system first by running LAMMPS using the
+#      "run.in.min" input script file.  (Example "lmp_ubuntu -i run.in.min")
+#
+# -- Init Section --
+
+# The forces between DNA strands depend on the salt concentration,
+# so we must specify the salt concentration beforehand.
+# We do this indirectly by specifying the Debye length.  Do this now.
+
+variable debye_length equal 1.0
+
+# Now specify the force field styles and atom styles:
+include         "system.in.init"
+
+# -- Atom Definition Section --
+
+# atom geometry and topology:
+#read_data       "system.data"  #<-- this also works
+read_data       "system_after_min.data"
+
+# -- Settings Section --
+
+# force field parameters:
+include         "system.in.settings"
+include         "system.in.types"
+
+# load the twist motor settings (this will exert a constant torque)
+include         "fix_twist.in"
+
+# Note: To force twisting to occur at a constant rate, use this file instead:
+# include "fix_twist_constant_rate.in"
+
+
+# -- Run Section --
+
+
+timestep        1.0   # By definition.  Masses should be adjusted accordingly.
+
+dump            1 all custom 200 traj.lammpstrj id mol type x y z ix iy iz
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+
+#                        kB*Tstart   kB*Tstop   tdamp     randomseed
+
+# commenting out:
+#fix fxlan all langevin   0.5961621   0.596162  2000.0    123456
+
+# for this demonstration, turn off the thermostat (makes prettier movies)
+fix fxlan all langevin    0.0         0.0       4000.0    123456
+
+ 
+
+fix fxnve all nve 
+
+# To make visualization easier, keep the average position centered at 0,0,0.
+# (This will prevent the polymer from drifting away.)
+
+fix fxcen all recenter 0.0 0.0 0.0
+
+# Make sure the particles remain allocated evenly over the processors.
+# (roughly the same number of particles assigned to ever processor)
+
+fix fxbal all balance 50000 1.03 shift xyz 20 1.03
+
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo          100     # time interval for printing out "thermo" data
+thermo_modify   norm yes #(optional, makes energy numbers easier to understand)
+
+run             200000
+
+write_data  system_after_equilibration.data
+
