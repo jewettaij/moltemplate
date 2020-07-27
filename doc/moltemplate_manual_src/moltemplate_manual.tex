@@ -71,11 +71,52 @@ Downloading these examples is highly recommended.
 
 
 Moltemplate is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
-LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build even larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
+LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
 
 Moltemplate is extremely flexible.
 It supports all LAMMPS force-field styles and nearly all atom-styles
 (now and in the future).
+
+\subsection*{\textit{All-atom simulations}}
+\label{sec:all_atom_limitations}
+Moltemplate was designed for coarse-grained simulations.
+To prepare realistic all-atom simulations,
+you can \textit{either} use the \textbf{ATB} service
+(\url{https://atb.uq.edu.au}) to download a realistic LT file describing
+your molecules, \textit{or} create an LT file by hand.
+In the later case, if you want to use one of the force-field parameter
+sets included with moltemplate (eg. OPLSAA, GAFF2, COMPASS),
+you must choose the \textit{type} of each atom in the molecule by hand.
+\textit{\textbf{Moltemplate does not assign atom types automatically.}}
+For example, to create an LT file for a molecule that contains
+a carbon atom, you must choose which \textit{type} of carbon
+atom is most appropriate for that atom.
+(For most force fields, there are many types of carbon atoms to choose from.)
+To do that, you must choose a force field (eg. OPLSAA), and read the
+force field's LT file (eg. ``oplsaa.lt''), and choose from the list of atom
+type descriptions in that file, the one which most closely matches that atom.
+(Its partial charge may also need to be adjusted.)
+ %Moltemplate comes with examples of simple molecules built this way.
+This is not difficult for simple organic molecules like polyethelene or benzene,
+but it is not trivial for complex molecules like proteins and many ligands.
+
+Unlike other molecule builders, moltemplate does not infer atom types
+from their local bond environment or from information from PDB files.
+Moltemplate also does not repair incomplete PDB files or calculate
+atomic partial charges using physics.  While moltemplate can read PDB files, 
+\textit{\textbf{moltemplate currently only reads atomic coordinates from PDB
+files and discards all other information.}}
+
+\subsubsection*{Strategy for preparing all atom simulations}
+Consequently, for complex molecules, users are currently
+encouraged to either use \textbf{ATB} \cite{ATB},
+\textit{\textbf{or}} prepare simulation files using a different
+molecule building program that supports automatic atom type (and charge)
+assignment, and save (or convert) the resulting files to LAMMPS DATA format.
+Once in LAMMPS DATA format, they can be converted into moltemplate format
+(if desired) using the ``ltemplify.py'' utility.
+(See appendix \ref{sec:ltemplify}.)
+
 
 
   % OLD VERSION
@@ -87,6 +128,7 @@ It supports all LAMMPS force-field styles and nearly all atom-styles
   %%Unlimited levels of object composition, nesting, and inheritance are supported.)
   %Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be moved, deleted and replaced).
 
+\subsection*{Requirements}
 
 Moltemplate requires the Bourne-shell, and a recent version of python (2.7 or 3.0 or higher), and can run on OS X, linux, or windows (if a suitable shell environment has been installed).  
 \textbf{A substantial amount of memory is needed} to run moltemplate.
@@ -152,11 +194,11 @@ moltemplate.sh -atomstyle "full" system.lt
 moltemplate.sh -xyz coords.xyz -atomstyle "full" -vmd system.lt
 \end{verbatim}
 In the first example, the coordinates of the atoms in the 
-system are built from commands inside the "system.lt" file.
+system are built from commands inside the ``system.lt'' file.
 In the second example coordinates for the atoms are read from an XYZ-file,
-and then invokes VMD to visualize the system just created. 
+and then VMD is invoked to visualize the system just created. 
 (PDB-files and other coordinate formats are also supported.
-Note: The "full" atom style was used in this example, but other
+Note: The ``full'' atom style was used in this example, but other
 LAMMPS atom styles are supported, including hybrid styles.)
 
 Either of these commands will construct a LAMMPS data file and a 
@@ -176,42 +218,42 @@ Existing LAMMPS input/data files can be converted into
 
 
 
-\subsubsection*{Warning: All-atom force fields}
-
-Although moltemplate was designed for building coarse-grained molecules,
-popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
-converted into LT format, and more are planned.  Moltemplate
-users can build molecules, using these force-field rules to generate
-angles, dihedrals, and impropers interactions for their molecules automatically
-(and lookup their corresponding force field parameters).
-Unfortunately, as of 2019-9-03, moltemplate does 
-\textit{not} assign partial charges, 
-\textit{or} infer the atom-types which are needed to lookup this information.
-\textit{(Force-field-specific atom types are typically inferred from PDB files,
-CIF files, SMILES strings, or read directly from PSF files or other files.)}
-In practice, the lack of automatic atom-type
-determination can be a huge limitation.
-Currently, users must carefully choose the name
-of the atom type associated with every atom in their molecules.
-For small molecules, this can sometimes be done by reading the force-field
-file carefully and choosing from among the \@atom types in the list
-whose description in the comments seems to match the context where
-the atom appears in their molecule.  However this is risky because the accuracy
-of the simulation depends on selecting the correct atom type from this list.
-For large, complex molecules, manually selecting atom types this way
-is not feasible.  In that case, users can try using an external tool
-(like AmberTools or PSFGEN) to generate atom type names and partial charges,
-and (manually) copy that information into the moltemplate file (LT file).
-(Unfortunately, the atom type names in different versions of the
- same force field do not always match, so this also must be done carefully.
- For example, as of 2019-9-03, the OPLSAA atom types created by PSFGEN
- \textit{do not match} the OPLSAA atom types used by moltemplate.
- Efforts are underway to make these various tools work better together.)
-
-Fortunately, external web-servers such as ATB or LibParGen can be
-used to generate files moltemplate or LAMMPS or format which internally
-contain all of the force-field information (so that using an external
-force field is unnecessary).
+%\subsubsection*{Warning: All-atom force fields}
+%
+%Although moltemplate was designed for building coarse-grained molecules,
+%popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
+%converted into LT format, and more are planned.  Moltemplate
+%users can build molecules, using these force-field rules to generate
+%angles, dihedrals, and impropers interactions for their molecules automatically
+%(and lookup their corresponding force field parameters).
+%Unfortunately, as of 2019-9-03, moltemplate does 
+%\textit{not} assign partial charges, 
+%\textit{or} infer the atom-types which are needed to lookup this information.
+%\textit{(Force-field-specific atom types are typically inferred from PDB files,
+%CIF files, SMILES strings, or read directly from PSF files or other files.)}
+%In practice, the lack of automatic atom-type
+%determination can be a huge limitation.
+%Currently, users must carefully choose the name
+%of the atom type associated with every atom in their molecules.
+%For small molecules, this can sometimes be done by reading the force-field
+%file carefully and choosing from among the \@atom types in the list
+%whose description in the comments seems to match the context where
+%the atom appears in their molecule.  However this is risky because the accuracy
+%of the simulation depends on selecting the correct atom type from this list.
+%For large, complex molecules, manually selecting atom types this way
+%is not feasible.  In that case, users can try using an external tool
+%(like AmberTools or PSFGEN) to generate atom type names and partial charges,
+%and (manually) copy that information into the moltemplate file (LT file).
+%(Unfortunately, the atom type names in different versions of the
+% same force field do not always match, so this also must be done carefully.
+% For example, as of 2019-9-03, the OPLSAA atom types created by PSFGEN
+% \textit{do not match} the OPLSAA atom types used by moltemplate.
+% Efforts are underway to make these various tools work better together.)
+%
+%Fortunately, external web-servers such as ATB or LigParGen can be
+%used to generate files moltemplate or LAMMPS or format which internally
+%contain all of the force-field information (so that using an external
+%force field is unnecessary).
 
 
 
@@ -251,11 +293,22 @@ force field is unnecessary).
 %For these tasks, external utilities are very helpful.
 
 \subsection*{Additional tools}
-The VMD topotools plugin \cite{topotools} is useful for 
-converting PDB files into LAMMPS format.  These files can then
-be converted to ``LT'' format using the ``ltemplify.py'' utility.
-VMD \cite{VMD} and topotools are also useful for visualizing 
-the data files created by moltemplate.sh
+The \textbf{ATB} service \cite{ATB}
+mentioned earlier (\url{https://atb.uq.edu.au})
+is a repository of hundreds of thousands of carefully parameterized molecules.
+Users can submit requests for molecules which are not yet in the repository.
+Both the charge and force-field parameters for these molecules
+have been individually optimized using quantum chemical calculations.
+These molecules are available in moltemplate's native ``LT'' format.
+
+Moltemplate can also read LAMMPS DATA files files generated by other tools,
+including VMD/topotools \cite{topotools}
+and OpenBabel \cite{OpenBABEL}.
+These data files can be converted
+into ``LT'' format using the ``ltemplify.py'' utility.
+VMD \cite{VMD}, topotools \cite{topotools}, and OVITO \cite{OVITO}
+are also useful for visualizing the data files and trajectory files
+created by moltemplate.sh and LAMMPS.
 (See section \ref{sec:vmd_topotools}.)
   %Documentation for doing this is included 
   %in the \textit{online examples} discussed below.
@@ -407,6 +460,21 @@ Later, you can uninstall moltemplate using:
 pip uninstall moltemplate
 \end{verbatim}
 
+\textit{If you run into difficulty with pip}, then try installing
+moltemplate into a temporary virtual environment
+by running these commands:
+\begin{verbatim}
+python -m venv ~/venv     #(or "virtualenv venv" if using python2)
+source ~/venv/bin/activate
+pip install moltemplate
+#(now do something useful with moltemplate...)
+\end{verbatim}
+(You will have to enter ``source \textapprox/venv/bin/activate''
+ into a terminal beforehand every time you want to run moltemplate.)
+If all this fails, then try installing moltemplate by manually
+updating your \$PATH environment variable.
+Instructions for doing that are included below.
+
 \textit{Note: There are a large variety of detailed moltemplate
 examples which will be omitted if you install moltemplate this way.
 \textbf{Downloading the examples is strongly recommended.}}
@@ -445,22 +513,12 @@ cd  ~/moltemplate
 pip install .  # (or "pip install --user", if that fails)
 \end{verbatim}
 
-\textit{If you run into difficulty with pip}, then try installing
-moltemplate into a temporary virtual environment
-by installing ``virtualenv'',
-%downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
-and running these commands:
-\begin{verbatim}
-cd ~/moltemplate
-python -m venv venv     #(or "virtualenv venv" if using python2)
-source venv/bin/activate
-pip install .
-#(now do something useful with moltemplate...)
-\end{verbatim}
-(You will have to enter ``source \textapprox/moltemplate/venv/bin/activate''
- into a terminal beforehand every time you want to run moltemplate.)
-If all this fails, then try installing moltemplate by manually
-updating your \$PATH environment variable.  Instructions for doing that are included below.
+As mentioned earlier, if you are having difficulty, try to installing
+moltemplate in a virtual environment instead.  Using virtual environments
+is cleaner, and can avoid many of the common pitfalls that occur in computers
+with complex python installations.  To do that, follow the
+instructions above (in Method 1) to start a virtual environment,
+and \textit{then} run ``pip install .''.
 
 
 \subsubsection*{Installation Method 3 (updating your PATH)}
@@ -1165,9 +1223,11 @@ Read all of the atomic coordinates from an external XYZ file
 & 
 Read all of the atomic coordinates from an external PDB file
 (Periodic boundary conditions are also read, if present.
- Atoms are sorted by the chainID, resID, insertCode, and atomID
- fields on every line beginning with ``ATOM'' or ``HETATM''.
- This order must match the order that the atoms appear in the data file.
+ %Atoms are sorted by the chainID, resID, insertCode, and atomID
+%fields on every line beginning with ``ATOM'' or ``HETATM''.
+ The order of atoms in the PDB file
+ must match the order that the atoms appear in the data file,
+ which matches the order they appear in the LT file.
  See section \ref{sec:coords_intro}.)
 \\
 \hline
@@ -1467,7 +1527,10 @@ for the molecular system described in ``system.lt'',
 using the desired atom style (``full'' by default).
 In this example, moltemplate is relying on an external file (``coords.pdb'')
 to supply the atomic coordinates of the water molecules, as well as
-the periodic boundary conditions.
+the periodic boundary conditions.  \textit{Note:} The order of atoms in
+the PDB file must match the order that the atoms appear in the LT file.
+(So in this example, the oxygen atom in each water molecule in the PDB file
+ must precede the two hydrogen atoms in that molecule.)
 Coordinates in XYZ format are also supported using ``-xyz coords.xyz''. 
 
 \subsubsection*{\textit{Details}}

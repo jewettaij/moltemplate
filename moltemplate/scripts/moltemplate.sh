@@ -1878,11 +1878,11 @@ if [ -z "$BOXSIZE_MINX" ] || [ -z "$BOXSIZE_MAXX" ] || [ -z "$BOXSIZE_MINY" ] ||
         echo "----           (A default cube of volume=(200.0)^3 was used.      ----" >&2
         echo "----               This is probably not what you want!)           ----" >&2
         echo "---- It is recommended that you specify your periodic boundary    ----" >&2
-        echo "---- by adding a write_once(\"Boundary\") command to your .lt file. ----" >&2
+        echo "---- by adding a write_once(\"Data Boundary\") command to your .lt file. ----" >&2
         echo "---- For example:                                                 ----" >&2
         #echo "----------------------------------------------------------------------" >&2
         echo "----                                                              ----" >&2
-        echo "----   write_once(\"Boundary\") {                                   ----" >&2
+        echo "----   write_once(\"Data Boundary\") {                                   ----" >&2
         echo "----     2.51  46.79 xlo xhi                                      ----" >&2
         echo "----     -4.38 35.824 ylo yhi                                     ----" >&2
         echo "----     0.3601 42.95 zlo zhi                                     ----" >&2
