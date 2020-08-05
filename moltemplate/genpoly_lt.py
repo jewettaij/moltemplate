@@ -948,7 +948,7 @@ def main():
     try:
         g_program_name = __file__.split('/')[-1]
         g_version_str = '0.1.1'
-        g_date_str = '2020-4-11'
+        g_date_str = '2020-5-28'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
