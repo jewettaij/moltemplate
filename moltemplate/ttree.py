@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2020-7-09'
-g_version_str = '0.86.4'
+g_date_str = '2020-8-05'
+g_version_str = '0.86.5'
 
 
 class ClassReference(object):
@@ -4317,7 +4317,12 @@ def AssignStaticVarPtrs(context_node, search_instance_commands=False):
             AssignTemplateVarPtrs(command.tmpl_list, context_node)
 
     # Recursively invoke AssignVarPtrs() on all (non-leaf) child nodes:
-    for child in context_node.children.values():
+    #old code:
+    # for child in context_node.children.values():
+    #new code (make copy before iterating since children are added during loop):
+    # for child in context_node.children.copy().values():
+    #this also works:
+    for child in list(context_node.children.values()):
         AssignStaticVarPtrs(child, search_instance_commands)
 
 
