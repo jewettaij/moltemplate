@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2020-8-05'
-g_version_str = '0.86.5'
+g_date_str = '2020-8-06'
+g_version_str = '0.86.6'
 
 
 class ClassReference(object):
@@ -872,6 +872,7 @@ def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
 
     is_static_node = isinstance(starting_node, StaticObj)
     
+    assert(len(leaf_ptkns) > 0)
     if is_static_node:
         is_simple_node = ((len(last_node.children) == 0) and
                           (len(last_node.instance_commands) == 0) and
@@ -1434,6 +1435,12 @@ def DescrToCatLeafNodes(descr_str,
     """
 
     cat_name, cat_ptkns, leaf_ptkns = DescrToCatLeafPtkns(descr_str, dbg_loc)
+
+    if len(leaf_ptkns) == 0:
+        raise InputError('Error(' + g_module_name + '.DescrToCatLeafNodes()):\n'
+                         '       Error near ' +
+                         ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n'
+                         '       Illegal counter variable \"' + descr_str + '\"\n')
 
     # ---- ellipsis hack ----
     #
