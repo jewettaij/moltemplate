@@ -200,4 +200,4 @@ It is similar to the BSD and MIT licenses and
 ## Funding
 
 Moltemplate is currently funded by NIH grant T32-AI007354-29
-(and previously by HSFP grant RGP0014/2014 and NSF grant 1056587).
+(and previously by HSFP grant RGP0014/2014 and NSF grant NSF-MCB-1158577).
