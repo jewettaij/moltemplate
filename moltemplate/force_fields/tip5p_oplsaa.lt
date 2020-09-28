@@ -16,7 +16,7 @@ import "oplsaa.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
 
 TIP5P inherits OPLSAA {
 
-  # Atom types from "oplsa.lt"
+  # Atom types from "oplsaa.lt"
   # @atom:73  <-->  OW  "TIP5P Water O"
   # @atom:74  <-->  HW  "TIP5P Water H"
   # @atom:75  <-->  LP  "TIP5P Water LP"

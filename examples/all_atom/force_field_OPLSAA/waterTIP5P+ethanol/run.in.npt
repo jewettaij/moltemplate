@@ -36,7 +36,7 @@ dump            1 all custom 500 traj_npt.lammpstrj id mol type x y z ix iy iz
 velocity all create 298.0 12345   # choose the starting velocities randomly
 
 
-timestep  0.5   # (In my own tests, I've been getting away with using 1fs)
+timestep  1.0
 
 
 group gRigid    union    gH2O gH2O
