@@ -45,7 +45,7 @@ cd new_lt_file_TMP
 
   # now run ltemplify.py
 
-  ltemplify.py ../system.in.* ../system.data > system.lt
+  ltemplify.py -ignore-comments ../system.in.* ../system.data > system.lt
 
   # This creates a new .LT file named "system.lt" in the local directory.
 
