@@ -64,10 +64,13 @@ echo "# charges yourself.  (Moltemplate is only a simple text manipulation tool.
 echo "# You can do this afterwards using commands like \"set atom 70 charge -0.212\""
 echo "# For details, see http://lammps.sandia.gov/doc/set.html)"
 echo "####################################################################"
-echo ""
-echo ""
 
 
+if ! which ./amberparm_atomdescr_to_lt.py > /dev/null; then
+    echo "\nError: \"amberparm_atomdescr_to_lt.py\" not found.\n" >&2
+    echo "       (Try running this script from the directory containing amberparm2lt.sh)" >&2
+    exit 2
+fi
 if ! which ./amberparm_mass_to_lt.py > /dev/null; then
     echo "\nError: \"amberparm_mass_to_lt.py\" not found.\n" >&2
     echo "       (Try running this script from the directory containing amberparm2lt.sh)" >&2
@@ -145,7 +148,7 @@ awk -v n=8 '{if (NF==0) nblanks++; else {if (nblanks+1==n) print $0}}' \
     | tail -n +2 \
     > "${PARM_FILE}.pair"
 
-
+./amberparm_atomdescr_to_lt.py < "${PARM_FILE}.mass" > "${PARM_FILE}.atomdescr.lt"
 ./amberparm_mass_to_lt.py < "${PARM_FILE}.mass" > "${PARM_FILE}.mass.lt"
 ./amberparm_pair_to_lt.py < "${PARM_FILE}.pair" > "${PARM_FILE}.pair.lt"
 ./amberparm_bond_to_lt.py < "${PARM_FILE}.bond" > "${PARM_FILE}.bond.lt"
@@ -154,6 +157,16 @@ awk -v n=8 '{if (NF==0) nblanks++; else {if (nblanks+1==n) print $0}}' \
      < "${PARM_FILE}.dihedral" > "${PARM_FILE}.dihedral.lt"
 ./amberparm_improper_to_lt.py \
      < "${PARM_FILE}.improper" > "${PARM_FILE}.improper.lt"
+
+
+echo "#"
+echo "# --- Description of atom types ---"
+echo "#"
+cat "${PARM_FILE}.atomdescr.lt"
+echo ""
+echo ""
+echo ""
+
 
 echo "$2 {"
 echo ""

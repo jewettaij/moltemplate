@@ -78,7 +78,7 @@ while i < len(in_dihedral_coeffs):
 for i in range(0, len(in_dihedral_coeffs)):
     type_str = in_dihedral_coeffs[i][0]
     params = in_dihedral_coeffs[i][1:]
-    params = map(str, params)
+    params = list(map(str, params))
     num_fourier_terms = (len(params)-1)/3
     dihedral_coeff_str = 'dihedral_coeff '+type_str+' '+\
         dihedral_style_name+' '+ \
