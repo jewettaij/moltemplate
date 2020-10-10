@@ -30,63 +30,109 @@
 # (see below), and looking for a reasonable match. If your simulation is
 # non-neutral, or moltemplate complains that you have missing bond, angle, or
 # dihedral types, this means at least one of your atom types is incorrect.
+#
+# --- Description of atom types ---
+#
+#  AtomType  Element  "Description"  (nbonds, ver, ref)
+#
+#  @atom:ar  Ar  "argon"  (ver=1.0, ref=5)
+#  @atom:c3a  C  "aromatic carbon"  (ver=1.0, ref=1)
+#  @atom:c1o  C  "carbon in CO"  (ver=1.0, ref=5)
+#  @atom:c2=  C  "carbon in CO2 and CS2"  (ver=1.0, ref=5)
+#  @atom:c3prime  C  "carbonyl carbon [one polar substituent]"  (ver=1.0, ref=7)
+#  @atom:c4  C  "generic sp3 carbon"  (ver=1.0, ref=1)
+#  @atom:c41o  C  "carbon, sp3, in methanol"  (ver=1.0, ref=8)
+#  @atom:c43o  C  "carbon, sp3 in secondary alcohols"  (ver=1.0, ref=8)
+#  @atom:c43  C  "sp3 carbon with three heavy atoms attached"  (ver=1.0, ref=1)
+#  @atom:c44  C  "sp3 carbon with four heavy atoms attached"  (ver=1.0, ref=1)
+#  @atom:c4o  C  "alpha carbon"  (ver=1.0, ref=3)
+#  @atom:c4z  C  "carbon, sp3, bonded to -N3"  (ver=1.0, ref=9)
+#  @atom:h1  H  "nonpolar hydrogen"  (ver=1.0, ref=1)
+#  @atom:h1h  H  "hydrogen in H2"  (ver=1.0, ref=5)
+#  @atom:h1o  H  "strongly polar hydrogen, bonded to O,F"  (ver=1.0, ref=3)
+#  @atom:he  He  "helium"  (ver=1.0, ref=5)
+#  @atom:kr  Kr  "krypton"  (ver=1.0, ref=5)
+#  @atom:n1n  N  "nitrogen in N2"  (ver=1.0, ref=5)
+#  @atom:n1o  N  "nitrogen in NO"  (ver=1.0, ref=5)
+#  @atom:n1z  N  "nitrogen, terminal atom in -N3"  (ver=1.0, ref=5)
+#  @atom:n2=  N  "nitrogen"  (ver=1.0, ref=4)
+#  @atom:n2o  N  "nitrogen in NO2"  (ver=1.0, ref=5)
+#  @atom:n2t  N  "nitrogen, central atom in -N3"  (ver=1.0, ref=9)
+#  @atom:n2z  N  "nitrogen, first atom in -N3"  (ver=1.0, ref=9)
+#  @atom:n3m  N  "sp3 nitrogen in amides without hydrogen"  (ver=1.0, ref=7)
+#  @atom:n3o  N  "nitrogen in nitro group"  (ver=1.0, ref=6)
+#  @atom:ne  Ne  "neon"  (ver=1.0, ref=5)
+#  @atom:o1=  O  "oxygen in NO2 and SO2 [and carbonyl]"  (ver=1.0, ref=5)
+#  @atom:o1=star  O  "oxygen in CO2"  (ver=1.0, ref=5)
+#  @atom:o12  O  "oxygen in nitro group (-NO2)"  (ver=1.0, ref=6)
+#  @atom:o1c  O  "oxygen in CO"  (ver=1.0, ref=5)
+#  @atom:o1n  O  "oxygen in NO"  (ver=1.0, ref=5)
+#  @atom:o1o  O  "oxygen in O2"  (ver=1.0, ref=5)
+#  @atom:o2  O  "generic oxygen with two bonds attached"  (ver=1.0, ref=2)
+#  @atom:o2e  O  "ether oxygen"  (ver=1.0, ref=3)
+#  @atom:o2h  O  "hydroxyl oxygen"  (ver=1.0, ref=3)
+#  @atom:o2n  O  "oxygen in nitrates"  (ver=1.0, ref=6)
+#  @atom:o2s  O  "ester oxygen"  (ver=1.0, ref=7)
+#  @atom:o2z  O  "oxygen, in siloxanes and zeolites"  (ver=1.0, ref=2)
+#  @atom:p4=  P  "phosphorous"  (ver=1.0, ref=4)
+#  @atom:s1=  S  "sulfur in CS2"  (ver=1.0, ref=5)
+#  @atom:s2=  S  "sulfur in SO2"  (ver=1.0, ref=5)
+#  @atom:si4  Si  "generic silicon with four bonds attached"  (ver=1.0, ref=2)
+#  @atom:si4c  Si  "a subset of si4, non-hydrogen atom attached [siloxanes]"  (ver=1.0, ref=2)
+#  @atom:xe  Xe  "xenon"  (ver=1.0, ref=5)
 
-
-# This file was generated automatically using:
-# msifrc2lt.py -no-hybrid -name COMPASS
 
 
 COMPASS {
 
-
-  #        AtomType    Mass     # "Description" (version, reference)
+  #        AtomType    Mass
 
   write_once("Data Masses") {
-    @atom:ar 39.944  # Ar, "argon" (ver=1.0, ref=5)
-    @atom:c3a 12.01115  # C, "aromatic carbon" (ver=1.0, ref=1)
-    @atom:c1o 12.01115  # C, "carbon in CO" (ver=1.0, ref=5)
-    @atom:c2= 12.01115  # C, "carbon in CO2 and CS2" (ver=1.0, ref=5)
-    @atom:c3prime 12.01115  # C, "carbonyl carbon [one polar substituent]" (ver=1.0, ref=7)
-    @atom:c4 12.01115  # C, "generic sp3 carbon" (ver=1.0, ref=1)
-    @atom:c41o 12.01115  # C, "carbon, sp3, in methanol" (ver=1.0, ref=8)
-    @atom:c43o 12.01115  # C, "carbon, sp3 in secondary alcohols" (ver=1.0, ref=8)
-    @atom:c43 12.01115  # C, "sp3 carbon with three heavy atoms attached" (ver=1.0, ref=1)
-    @atom:c44 12.01115  # C, "sp3 carbon with four heavy atoms attached" (ver=1.0, ref=1)
-    @atom:c4o 12.01115  # C, "alpha carbon" (ver=1.0, ref=3)
-    @atom:c4z 12.01115  # C, "carbon, sp3, bonded to -N3" (ver=1.0, ref=9)
-    @atom:h1 1.00797  # H, "nonpolar hydrogen" (ver=1.0, ref=1)
-    @atom:h1h 1.00797  # H, "hydrogen in H2" (ver=1.0, ref=5)
-    @atom:h1o 1.00797  # H, "strongly polar hydrogen, bonded to O,F" (ver=1.0, ref=3)
-    @atom:he 4.003  # He, "helium" (ver=1.0, ref=5)
-    @atom:kr 83.8  # Kr, "krypton" (ver=1.0, ref=5)
-    @atom:n1n 14.0067  # N, "nitrogen in N2" (ver=1.0, ref=5)
-    @atom:n1o 14.0067  # N, "nitrogen in NO" (ver=1.0, ref=5)
-    @atom:n1z 14.0067  # N, "nitrogen, terminal atom in -N3" (ver=1.0, ref=5)
-    @atom:n2= 14.0067  # N, "nitrogen" (ver=1.0, ref=4)
-    @atom:n2o 14.0067  # N, "nitrogen in NO2" (ver=1.0, ref=5)
-    @atom:n2t 14.0067  # N, "nitrogen, central atom in -N3" (ver=1.0, ref=9)
-    @atom:n2z 14.0067  # N, "nitrogen, first atom in -N3" (ver=1.0, ref=9)
-    @atom:n3m 14.0067  # N, "sp3 nitrogen in amides without hydrogen" (ver=1.0, ref=7)
-    @atom:n3o 14.0067  # N, "nitrogen in nitro group" (ver=1.0, ref=6)
-    @atom:ne 20.183  # Ne, "neon" (ver=1.0, ref=5)
-    @atom:o1= 15.9994  # O, "oxygen in NO2 and SO2 [and carbonyl]" (ver=1.0, ref=5)
-    @atom:o1=star 15.9994  # O, "oxygen in CO2" (ver=1.0, ref=5)
-    @atom:o12 15.9994  # O, "oxygen in nitro group (-NO2)" (ver=1.0, ref=6)
-    @atom:o1c 15.9994  # O, "oxygen in CO" (ver=1.0, ref=5)
-    @atom:o1n 15.9994  # O, "oxygen in NO" (ver=1.0, ref=5)
-    @atom:o1o 15.9994  # O, "oxygen in O2" (ver=1.0, ref=5)
-    @atom:o2 15.9994  # O, "generic oxygen with two bonds attached" (ver=1.0, ref=2)
-    @atom:o2e 15.9994  # O, "ether oxygen" (ver=1.0, ref=3)
-    @atom:o2h 15.9994  # O, "hydroxyl oxygen" (ver=1.0, ref=3)
-    @atom:o2n 15.9994  # O, "oxygen in nitrates" (ver=1.0, ref=6)
-    @atom:o2s 15.9994  # O, "ester oxygen" (ver=1.0, ref=7)
-    @atom:o2z 15.9994  # O, "oxygen, in siloxanes and zeolites" (ver=1.0, ref=2)
-    @atom:p4= 30.9738  # P, "phosphorous" (ver=1.0, ref=4)
-    @atom:s1= 32.064  # S, "sulfur in CS2" (ver=1.0, ref=5)
-    @atom:s2= 32.064  # S, "sulfur in SO2" (ver=1.0, ref=5)
-    @atom:si4 28.086  # Si, "generic silicon with four bonds attached" (ver=1.0, ref=2)
-    @atom:si4c 28.086  # Si, "a subset of si4, non-hydrogen atom attached [siloxanes]" (ver=1.0, ref=2)
-    @atom:xe 131.3  # Xe, "xenon" (ver=1.0, ref=5)
+    @atom:ar 39.944  # ar
+    @atom:c3a 12.01115  # c3a
+    @atom:c1o 12.01115  # c1o
+    @atom:c2= 12.01115  # c2=
+    @atom:c3prime 12.01115  # c3prime
+    @atom:c4 12.01115  # c4
+    @atom:c41o 12.01115  # c41o
+    @atom:c43o 12.01115  # c43o
+    @atom:c43 12.01115  # c43
+    @atom:c44 12.01115  # c44
+    @atom:c4o 12.01115  # c4o
+    @atom:c4z 12.01115  # c4z
+    @atom:h1 1.00797  # h1
+    @atom:h1h 1.00797  # h1h
+    @atom:h1o 1.00797  # h1o
+    @atom:he 4.003  # he
+    @atom:kr 83.8  # kr
+    @atom:n1n 14.0067  # n1n
+    @atom:n1o 14.0067  # n1o
+    @atom:n1z 14.0067  # n1z
+    @atom:n2= 14.0067  # n2=
+    @atom:n2o 14.0067  # n2o
+    @atom:n2t 14.0067  # n2t
+    @atom:n2z 14.0067  # n2z
+    @atom:n3m 14.0067  # n3m
+    @atom:n3o 14.0067  # n3o
+    @atom:ne 20.183  # ne
+    @atom:o1= 15.9994  # o1=
+    @atom:o1=star 15.9994  # o1=star
+    @atom:o12 15.9994  # o12
+    @atom:o1c 15.9994  # o1c
+    @atom:o1n 15.9994  # o1n
+    @atom:o1o 15.9994  # o1o
+    @atom:o2 15.9994  # o2
+    @atom:o2e 15.9994  # o2e
+    @atom:o2h 15.9994  # o2h
+    @atom:o2n 15.9994  # o2n
+    @atom:o2s 15.9994  # o2s
+    @atom:o2z 15.9994  # o2z
+    @atom:p4= 30.9738  # p4=
+    @atom:s1= 32.064  # s1=
+    @atom:s2= 32.064  # s2=
+    @atom:si4 28.086  # si4
+    @atom:si4c 28.086  # si4c
+    @atom:xe 131.3  # xe
   } #(end of atom masses)
 
 

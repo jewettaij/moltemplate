@@ -34,8 +34,8 @@ it is manually, for all of the carbon atoms in that kind of molecule.
 
 
 __author__ = 'Andrew Jewett'
-__version__ = '0.3.1'
-__date__ = '2020-7-13'
+__version__ = '0.3.2'
+__date__ = '2020-10-09'
 
 
 import sys
@@ -3497,25 +3497,36 @@ def main():
 
         sys.stdout.write("# This file was generated automatically using:\n")
         sys.stdout.write("# " + g_program_name + " " + " ".join(sys.argv[1:]) + "\n")
-        sys.stdout.write("\n\n")
-        sys.stdout.write(ffname + " {\n\n")
-        
-        sys.stdout.write("\n"
-                         "  #        AtomType    Mass     # \"Description\" (version, reference)\n\n")
-        sys.stdout.write("  write_once(\"Data Masses\") {\n")
+        sys.stdout.write("#\n")
+        sys.stdout.write("#  AtomType  Element  \"Description\"  (nbonds, ver, ref)\n")
+        sys.stdout.write("#\n")
         for atype in atom2mass:
-            sys.stdout.write("    @atom:" + atype + " " + str(atom2mass[atype]))
-            sys.stdout.write("  # ")
+            sys.stdout.write("#  @atom:" + atype + "  ")
             if atype in atom2element:
-                sys.stdout.write(atom2element[atype] + ", ")
-            #sys.stdout.write(atom2descr[atype])
-            sys.stdout.write("\"" + atom2descr[atype] + "\"")
-            sys.stdout.write(" (")
+                sys.stdout.write(atom2element[atype])
+            sys.stdout.write("  \"" + atom2descr[atype] + "\"")
+            sys.stdout.write("  (")
             if atype in atom2numbonds:
                 sys.stdout.write("nbonds="+str(atom2numbonds[atype])+", ")
             sys.stdout.write("ver=" + atom2ver[atype] +
                              ", ref=" + atom2ref[atype])
             sys.stdout.write(")\n")
+
+
+
+
+        sys.stdout.write("\n\n\n")
+        sys.stdout.write(ffname + " {\n")
+
+
+
+        sys.stdout.write("\n"
+                         "  #        AtomType    Mass\n\n")
+        sys.stdout.write("  write_once(\"Data Masses\") {\n")
+        for atype in atom2mass:
+            sys.stdout.write("    @atom:" + atype + " " +
+                             str(atom2mass[atype]) +
+                             "  # " + atype + "\n")
         sys.stdout.write("  } #(end of atom masses)\n\n\n")
 
 
