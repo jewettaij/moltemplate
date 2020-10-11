@@ -44,8 +44,14 @@ mkdir new_lt_file_TMP
 cd new_lt_file_TMP
 
   # now run ltemplify.py
+  #
+  # If any arguments were passed to this script ("$@") insert them here.
+  # (An example of a useful argument would be "-ignore-comments".
+  #  It will prevent ltemplify.py from trying to infer atom type names
+  #  from comments in the "Masses" section of the DATA file.  Such comments
+  #  might contain spaces or special characters which we want to avoid.)
 
-  ltemplify.py -ignore-comments ../system.in.* ../system.data > system.lt
+  ltemplify.py "$@" ../system.in.* ../system.data > system.lt
 
   # This creates a new .LT file named "system.lt" in the local directory.
 
