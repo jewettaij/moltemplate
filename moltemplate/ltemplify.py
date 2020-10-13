@@ -45,8 +45,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.66.0'
-g_date_str = '2020-10-07'
+g_version_str = '0.67.0'
+g_date_str = '2020-10-12'
 
 def Intify(s):
     if s.isdigit():
@@ -271,6 +271,7 @@ class Ltemplify(object):
         self.atomtype_selection = []
         self.molid_selection = []
         self.mol_name = ''
+        self.preamble_text = ''
 
         self.min_sel_atomid = None
         self.min_sel_atomtype = None
@@ -466,13 +467,22 @@ class Ltemplify(object):
                 self.atom_column_names = argv[i+1].strip('\"\'').strip().split()
                 del argv[i:i + 2]
 
+            elif (argv[i] == '-preamble')
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a string.\n')
+                self.cindent = 2
+                self.indent += self.cindent
+                self.preamble_text += argv[i + 1]
+                del argv[i:i + 2]
+
             elif ((argv[i] == '-name') or
                   (argv[i] == '-molname') or
                   (argv[i] == '-molecule-name') or
                   (argv[i] == '-molecule_name')):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a a molecule type name.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by a molecule type name.\n')
                 self.cindent = 2
                 self.indent += self.cindent
                 self.mol_name = argv[i + 1]
@@ -4731,6 +4741,9 @@ class Ltemplify(object):
         #                 '       You can redirect this to a file using:\n'+
         #                 '   '+' '.join(sys.argv)+' > filename.ttree\n'
         #                 '        ----------------------\n')
+
+        if self.preamble_text != '':
+            out_file.write(self.preamble_text + '\n')
 
         if self.mol_name != '':
             out_file.write(self.mol_name + ' {\n')
