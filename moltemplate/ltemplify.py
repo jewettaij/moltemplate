@@ -467,7 +467,7 @@ class Ltemplify(object):
                 self.atom_column_names = argv[i+1].strip('\"\'').strip().split()
                 del argv[i:i + 2]
 
-            elif (argv[i] == '-preamble')
+            elif argv[i] == '-preamble':
                 if i + 1 >= len(argv):
                     raise InputError(
                         'Error: ' + argv[i] + ' flag should be followed by a string.\n')
