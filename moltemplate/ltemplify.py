@@ -4743,7 +4743,7 @@ class Ltemplify(object):
         #                 '        ----------------------\n')
 
         if self.preamble_text != '':
-            out_file.write(self.preamble_text + '\n')
+            out_file.write(self.preamble_text + '\n\n')
 
         if self.mol_name != '':
             out_file.write(self.mol_name + ' {\n')
