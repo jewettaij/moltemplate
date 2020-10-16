@@ -27,8 +27,8 @@ except (ImportError, SystemError, ValueError):
     from ttree_lex import ExtractCatName
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_postprocess.py'
-g_version_str = '0.5.1'
-g_date_str = '2017-8-23'
+g_version_str = '0.6.1'
+g_date_str = '2020-10-15'
 
 def main():
     atom_style = 'full'
@@ -36,6 +36,7 @@ def main():
 
     defined_mols = set([])
     defined_atoms = set([])
+    defined_masses = set([])
     defined_bonds = set([])
     defined_angles = set([])
     defined_dihedrals = set([])
@@ -115,7 +116,7 @@ def main():
                 raise InputError('Error(' + g_program_name + '): The following line from\n'
                                  '     "\"' + data_atoms + '.template\" has bad format:\n\n'
                                  + line_orig + '\n'
-                                 '     This my probably an internal error. (Feel free to contact the developer.)\n'
+                                 '     This might be an internal error. (Feel free to contact the developer.)\n'
                                  + g_no_check_msg + '\n')
             else:
                 defined_atoms.add(tokens[i_atomid])
@@ -142,7 +143,7 @@ def main():
                     raise InputError('Error(' + g_program_name + '): The following line from\n'
                                      '     "\"' + data_bonds + '.template\" has bad format:\n\n'
                                      + line_orig + '\n'
-                                     '     This my probably an internal error. (Feel free to contact the developer.)\n'
+                                     '     This might be an internal error. (Feel free to contact the developer.)\n'
                                      + g_no_check_msg + '\n')
                 else:
                     defined_bonds.add(tokens[0])
@@ -167,7 +168,7 @@ def main():
                     raise InputError('Error(' + g_program_name + '): The following line from\n'
                                      '     "\"' + data_angles + '.template\" has bad format:\n\n'
                                      + line_orig + '\n'
-                                     '     This my probably an internal error. (Feel free to contact the developer.)\n'
+                                     '     This might be an internal error. (Feel free to contact the developer.)\n'
                                      + g_no_check_msg + '\n')
                 else:
                     defined_angles.add(tokens[0])
@@ -192,7 +193,7 @@ def main():
                     raise InputError('Error(' + g_program_name + '): The following line from\n'
                                      '     "\"' + data_dihedrals + '.template\" has bad format:\n\n'
                                      + line_orig + '\n'
-                                     '     This my probably an internal error. (Feel free to contact the developer.)\n'
+                                     '     This might be an internal error. (Feel free to contact the developer.)\n'
                                      + g_no_check_msg + '\n')
                 else:
                     defined_dihedrals.add(tokens[0])
@@ -219,7 +220,7 @@ def main():
                     raise InputError('Error(' + g_program_name + '): The following line from\n'
                                      '     "\"' + data_impropers + '.template\" has bad format:\n\n'
                                      + line_orig + '\n'
-                                     '     This my probably an internal error. (Feel free to contact the developer.)\n'
+                                     '     This might be an internal error. (Feel free to contact the developer.)\n'
                                      + g_no_check_msg + '\n')
                 else:
                     defined_impropers.add(tokens[0])
@@ -227,6 +228,32 @@ def main():
         except:
             # Defining impropers (stored in the data_impropers file) is optional
             pass
+
+        # ------------ defined_bonds ------------
+        try:
+            f = open(data_masses + '.template', 'r')
+
+            for line_orig in f:
+                ic = line_orig.find('#')
+                if ic != -1:
+                    line = line_orig[:ic]
+                else:
+                    line = line_orig.rstrip('\n')
+
+                tokens = line.strip().split()
+                if len(tokens) == 0:
+                    pass
+                elif len(tokens) != 2:
+                    raise InputError('Error(' + g_program_name + '): The following line from\n'
+                                     '     "\"' + data_masses + '.template\" has bad format:\n\n'
+                                     + line_orig + '\n'
+                                     '     This might be an internal error. (Feel free to contact the developer.)\n'
+                                     + g_no_check_msg + '\n')
+                else:
+                    defined_masses.add(tokens[0])
+            f.close()
+        except:
+            pass  # Defining mass (stored in the data_masses file) is optional
 
         # ---- Check ttree_assignments to make sure variables are defined ----
 
@@ -267,6 +294,8 @@ def main():
                 # We only care about instance variables (which use the '$' prefix)
                 # Lines corresponding to static variables (which use the '@' prefix)
                 # are ignored during this pass.
+
+
                 i_prefix = tokens[0].find('$')
                 if i_prefix != -1:
                     descr_str = tokens[0][i_prefix + 1:]
@@ -332,6 +361,29 @@ def main():
                     #                     '    (If that molecule is part of a larger molecule, then make sure that\n'+
                     #                     '     you specified the correct path which leads to it (using / and ..))\n\n'+
                     #                     g_no_check_msg)
+
+
+
+
+                # Now check for @ (type) counter variables (such as @atom):
+                i_prefix = tokens[0].find('@')
+                if i_prefix != -1:
+                    descr_str = tokens[0][i_prefix + 1:]
+                    cat_name = ExtractCatName(descr_str)
+
+                    if ((cat_name == 'atom') and (len(defined_masses) > 0) and
+                        (tokens[0] not in defined_masses)):
+                        raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
+                                         '      A reference to an @atom: of type:\n'
+                                         '            ' + tokens[0] + '     (<--full type name)\n\n' +
+                                         '      ...was found, however its mass was never defined.\n'
+                                         '      (Make sure that there is a "write_once("Data Masses"){" section in one\n'
+                                         '       of your LT files which defines the mass of this atom type.  If the\n'
+                                         '       atom type name contains "/", then make sure the path is correct.)\n\n' +
+                                         g_no_check_msg)
+
+
+
 
         f.close()
 
