@@ -22,6 +22,7 @@ It currently supports the
 [**OPLSAA**](./examples/all_atom/force_field_OPLSAA),
 [**OPLSUA**](./examples/all_atom/force_field_OPLSUA_united_atom),
 [**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
+[**DREIDING**](./examples/all_atom/force_field_DREIDING),
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**TraPPE**(1998)](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
@@ -49,7 +50,6 @@ and any other program that reads or generates LAMMPS data (.lmpdat) files.
 This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
 
-
 ### Documentation
 
 The best way to learn how to use moltemplate is to find an example
@@ -63,6 +63,13 @@ All moltemplate users should probably read chapter 4 of the
 In addition, there are also several
 [talks/tutorials](http://moltemplate.org/doc/talks.html)
 online.
+
+
+### Limitations for preparing all-atom simulations
+
+Moltemplate [does *not* do "atom typing"](http://moltemplate.org/force_field_recommendations.html), and 3rd-party tools may be needed
+to calculate atomic partial charges accurately.
+*(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use the [DREIDING](./moltemplate/force_fields/DREIDING_Label_Manual.pdf) force field, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py).)*
 
 
 ## Typical usage
