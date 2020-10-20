@@ -1,0 +1,18 @@
+import "furan.lt"
+
+# Create an array of 5x5x10 Furan molecules
+
+molecule = new Furan [5].move(6.6,0,0)
+                     [5].move(0,6.6,0)
+                    [10].move(0,0,3.3)
+
+# (We do not have to start with realistic spacing between molecules
+#  because later we will run a simulation at constant pressure
+#  to equilibrate the density of the liquid.)
+
+write_once("Data Boundary") {
+   0.0    33.0     xlo xhi
+   0.0    33.0     ylo yhi
+   0.0    33.0     zlo zhi
+}
+

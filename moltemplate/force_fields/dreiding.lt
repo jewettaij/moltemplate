@@ -38224,7 +38224,7 @@ DREIDING {
 
   # Impropers Data by Type:
 
-  write_once("Data Impropers By Type") {
+  write_once("Data Impropers By Type (cenIsortJKL.py)") {
 	@improper:X_2  @atom:*_2* @atom:* @atom:* @atom:*
 	@improper:X_R  @atom:*_R* @atom:* @atom:* @atom:*
 	@improper:C_31 @atom:C_31* @atom:* @atom:* @atom:*
