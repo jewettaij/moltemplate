@@ -3,7 +3,7 @@
 This directory contains some examples of all-atom simulations using the GAFF
 force field, prepared using moltemplate.
 
-This software is experimental, and the force-fields and equilbration protocols
+This software is experimental and the force-fields and equilbration protocols
 have not been tested carefully by me.  There is no gaurantee that simulations
 prepared using moltemplate will reproduce the behavior of AmberTools/AMBER.
 
