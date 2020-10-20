@@ -22,13 +22,13 @@ It currently supports the
 [**OPLSAA**](./examples/all_atom/force_field_OPLSAA),
 [**OPLSUA**](./examples/all_atom/force_field_OPLSUA_united_atom),
 [**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
+[**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**DREIDING**](./examples/all_atom/force_field_DREIDING),
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
-[**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**TraPPE**(1998)](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
 force fields,
 the
-[**ATB**](https://atb.uq.edu.au) database,
+[**ATB**](https://atb.uq.edu.au) molecule database,
 and the
 [**MOLC**](./examples/coarse_grained/MOLC),
 [**mW**](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
@@ -67,9 +67,8 @@ online.
 
 ### Limitations for preparing all-atom simulations
 
-Moltemplate [does *not* do "atom typing"](http://moltemplate.org/force_field_recommendations.html), and 3rd-party tools may be needed
-to calculate atomic partial charges accurately.
-*(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use the [DREIDING](./doc/DREIDING_Label_Manual.pdf) force field, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py).)*
+Moltemplate [does *not* choose atom types automatically ("atom typing")](http://moltemplate.org/force_field_recommendations.html), and 3rd-party tools may be needed to calculate atomic partial charges accurately.
+*(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py.  Alternatively, the DREIDING force field has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf).)
 
 
 ## Typical usage
