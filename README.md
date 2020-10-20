@@ -68,7 +68,7 @@ online.
 ### Limitations for preparing all-atom simulations
 
 Moltemplate [does *not* choose atom types automatically ("atom typing")](http://moltemplate.org/force_field_recommendations.html), and 3rd-party tools may be needed to calculate atomic partial charges accurately.
-*(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py.  Alternatively, the DREIDING force field has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf).)
+*(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py).  Alternatively, the DREIDING force field has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf).)
 
 
 ## Typical usage
