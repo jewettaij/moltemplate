@@ -27,7 +27,7 @@ But their effect should be neglegible.
 ### Bloated lammps input scripts
 
 By default, LAMMPS input scripts prepared using moltemplate contain the
-entire contents of the GAFF or GAFF2 force-field, even when simulating small
+entire contents of the OPLS force-field, even when simulating small
 systems with just a few atom types.
 
 This is harmless, but if you want to get rid of this extra information,
