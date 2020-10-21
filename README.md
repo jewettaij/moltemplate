@@ -30,8 +30,8 @@ force fields,
 the
 [**ATB**](https://atb.uq.edu.au) molecule database,
 and the
-[**MOLC**](https://pubs.rsc.org/en/content/articlelanding/2019/cp/c9cp04120f)
-[**mW**](https://doi.org/10.1021/jp805227c)
+[**MOLC**](https://pubs.rsc.org/en/content/articlelanding/2019/cp/c9cp04120f),
+[**mW**](https://doi.org/10.1021/jp805227c),
 [**ELBA**(water)](./examples/coarse_grained/solvent_models/ELBAwater%2Bmethanol),
 [**oxDNA2**](https://dna.physics.ox.ac.uk/index.php/DNA_model_introduction),
 and
