@@ -1,7 +1,7 @@
 This directory contains some examples of all-atom simulations using the COMPASS
 force field.
 
-## WARNING
+### WARNING
 
 This software is experimental and the force-fields and equilbration protocols
 have not been tested carefully by me.  There is no gaurantee that simulations
@@ -11,7 +11,7 @@ If you notice a problem with these examples, please report it.
 Peer-review is the only way to improve this software (or any software).
 (jewett.aij @ gmail.com)
 
-## Limitations
+### Limitations
 
 The moltemplate implementation of COMPASS currently relies on the same
 incomplete force-field file that "msi2lmp" uses ("compass_published.frc").
@@ -19,7 +19,7 @@ Unfortunately this means that many force field parameters and some atom types
 (such as sp2-carbons) have not (yet) been publicly released and are not
 available.
 
-## Suggestions
+### Suggestions
 Currently I recommend that users should run the "cleanup_moltemplate.sh"
 script after running "moltemplate.sh system.lt".  Then manually check that 
 the "system.in.settings" and "system.in.charges" files which remain 

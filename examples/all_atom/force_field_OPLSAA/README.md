@@ -22,7 +22,7 @@ unavoidable discrepancies in energies and forces computed by LAMMPS and NAMD.
 But their effect should be neglegible.
 *(Please let us know if this is not the case.)*
 
-## Bloated lammps input scripts
+### Bloated lammps input scripts
 
 By default, LAMMPS input scripts prepared using moltemplate contain the
 entire contents of the GAFF or GAFF2 force-field, even when simulating small
