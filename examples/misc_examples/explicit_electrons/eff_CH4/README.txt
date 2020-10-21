@@ -5,6 +5,8 @@ The files from that example were converted into moltemplate format using
 "ltemplify.py" and then edited by hand (to rename the atom types,
 and replace all of the "pair_coeff ..." commands with "pair_coeff * *")
 
+A paper describing the EFF method can be found here:
+https://doi.org/10.1002/jcc.21637
 
 --- Original README: ---
 Methane, valence electron ionization and full molecule tests (spe, dynamics).

@@ -25,17 +25,17 @@ It currently supports the
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**DREIDING**](./examples/all_atom/force_field_DREIDING),
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
-[**TraPPE**(1998)](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
+[**TraPPE**(1998)](./examples/coarse_grained/solvent_models/manybodywaterMW+hydrocarbonsTraPPE)
 force fields,
 the
 [**ATB**](https://atb.uq.edu.au) molecule database,
 and the
-[**MOLC**](./examples/coarse_grained/MOLC),
-[**mW**](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
-[**ELBA**(water)](./examples/coarse_grained/ELBAwater%2Bmethanol),
-[**oxDNA2**](./examples/coarse_grained/DNA_models),
+[**MOLC**](https://pubs.rsc.org/en/content/articlelanding/2019/cp/c9cp04120f)
+[**mW**](https://doi.org/10.1021/jp805227c)
+[**ELBA**(water)](./examples/coarse_grained/solvent_models/ELBAwater%2Bmethanol),
+[**oxDNA2**](https://dna.physics.ox.ac.uk/index.php/DNA_model_introduction),
 and
-[**EFF**](./examples/misc_examples/explicit_electrons)
+[**EFF**](./examples/misc_examples/explicit_electrons/eff_CH4)
 molecular models (and others).
 Moltemplate is interoperable with
 [**ATB**](https://atb.uq.edu.au),
@@ -68,7 +68,7 @@ online.
 ### Limitations for preparing all-atom simulations
 
 Moltemplate [does *not* choose atom types automatically ("atom typing")](http://moltemplate.org/force_field_recommendations.html), and 3rd-party tools may be needed to calculate atomic partial charges accurately.
-*(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py).  Alternatively, the DREIDING force field has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf).)
+(For non-trivial molecules, users are encouraged to use the [ATB](https://atb.uq.edu.au) database, or use a 3rd-party molecule-builder and convert the resulting files to LAMMPS format using OpenBabel followed by [ltemplify.py](./doc/doc_ltemplify.py).  Alternatively, the DREIDING force field has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf).)
 
 
 ## Typical usage
