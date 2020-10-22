@@ -2,8 +2,8 @@ This example is a simple simulation of a long alkane chain,
 in a vacuum at room temperature using the OPLSAA force field.
 
 *Note: This particular example uses the a variant of the OPLSAA force-field
-suitable for long alkane chains (sometimes called the "LOPLS" force field).
-However, moltemplate is not limited to OPLSAA or LOPLS.*
+suitable for long alkane chains (sometimes called the "LOPLSAA" force field).
+However, moltemplate is not limited to OPLSAA or LOPLSAA.*
 
 ### Instructions
 
@@ -47,8 +47,7 @@ a new force field named LOPLSAA.  Instead it was implemented in a way
 that will modify the existing OPLSAA force field, augmenting it,
 adding a few extra atom types and dihedral interactions needed to
 improve the accuracy of long alkane chains.
-*(I apologize if this is confusing.  Perhaps it would be more clear if
-I also changed the name of the force field to LOPLSAA.)*
+*(I apologize if this is confusing.)*
 
 ### Manual control of angle interactions
 

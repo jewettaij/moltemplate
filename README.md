@@ -21,7 +21,7 @@ but it can be used to prepare realistic all-atom simulations as well.
 It currently supports the
 [**OPLSAA**](./examples/all_atom/force_field_OPLSAA),
 [**OPLSUA**](./examples/all_atom/force_field_OPLSUA_united_atom),
-[**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
+[**LOPLSAA**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**DREIDING**](./examples/all_atom/force_field_DREIDING),
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
