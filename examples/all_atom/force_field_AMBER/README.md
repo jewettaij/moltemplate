@@ -12,9 +12,9 @@ If you notice a problem with these examples, please report it.
 
 ### Limitations: *atomic charges*
 
-Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include rules for assigning partial charges to atoms.  Most force fields, including AMBER GAFF and GAFF2 do not.  So GAFF and GAFF2 users will have to obtain atomic charges by some other means, probably by using 3rd-party tools.  (Alternatively, LAMMPS' [fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature can be used to assign partial charges, especially for simple molecules containing only C, H, O, N atoms.  If this fix is run infrequently, or run only once at the beginning of the simulation, then it should not slow the simulation down significantly.)
+Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include rules for assigning partial charges to atoms.  Most force fields, including AMBER GAFF and GAFF2 do not.  So GAFF and GAFF2 users will have to obtain atomic charges by some other means, probably by using 3rd-party tools.  (Alternatively, LAMMPS' [fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature can be used to assign partial charges.  If this fix is run infrequently, or run only once at the beginning of the simulation, then it should not slow the simulation down significantly.)
 
-*(In these examples, I obtained partial charges from the OPLSAA
+*(In some of these examples, I obtained partial charges from the OPLSAA
 parameter file located [here](http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm).)*
 
 ### Improper angles
