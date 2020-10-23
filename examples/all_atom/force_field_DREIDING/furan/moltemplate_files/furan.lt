@@ -7,20 +7,14 @@ import "dreiding.lt"
 # naming conventions explained in "DREIDING_Label_Manual.pdf" file.  (This file
 # is either included in the the moltemplate distribution, or avialable at
 # https://github.com/m-bone/moltemplate-DREIDING )
-#
-# WARNING: Moltemplate is only a simple text manipulation tool.
-# It cannot calculate atomic charge using quantom chemistry methods.
-# For this example, I looked up the charge of each atom using the 
+
+# WARNING: THE ATOMIC CHARGES ARE INCORRECT
+# For this example, I manually looked up the charge of each atom using the 
 # OPLSAA parameters from the "oplsaa.prm" file distributed with TINKER:
 # http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
-#    charge -0.19   # "Furan O"
-#    charge -0.019  # "Furan C2"
-#    charge -0.154  # "Furan C3"
-#    charge 0.142   # "Furan HC2"
-#    charge 0.126   # "Furan HC3"
-# However, atom charges are typically assigned using quantum mechanical methods
-# (eg. "QEQ", "HF/6-31G* RESP2", "AM1-BCC3").  Using the OPLSAA charges instead
-# (as I did here) will NOT reproduce the behavior of DREIDING.
+#   PLEASE DO NOT DO THIS!
+# For details how to calculate charges correctly, see:
+# https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_DREIDING/README.md
 
 Furan inherits DREIDING {
   # AtomID  MolID  AtomType    Charge       X       Y      Z
