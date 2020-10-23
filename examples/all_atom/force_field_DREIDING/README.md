@@ -11,7 +11,7 @@ prepared using moltemplate will reproduce the behavior of Materials Studio
 
 Please report any bugs you find.
 
-### Limitations: *atomic charges*
+### *The atomic charges in these examples are not correct*
 
 Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include
 rules for assigning partial charges to atoms.  Most force fields, including

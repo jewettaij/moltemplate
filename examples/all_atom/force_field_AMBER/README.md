@@ -10,7 +10,7 @@ behavior of AmberTools/AMBER.
 If you notice a problem with these examples, please report it.
 (jewett.aij @ gmail.com)
 
-### Limitations: *atomic charges*
+### *The atomic charges in these examples are not correct*
 
 Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include rules for assigning partial charges to atoms.  Most force fields, including AMBER GAFF and GAFF2 do not.  So GAFF and GAFF2 users will have to obtain atomic charges by some other means, probably by using 3rd-party tools.
 
