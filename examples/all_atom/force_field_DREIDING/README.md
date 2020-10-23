@@ -35,6 +35,13 @@ in molecules that are modeled using the DREIDING force field.
 If this fix is run infrequently (or if it is run only once at the beginning
 of the simulation), then it should not slow the simulation down significantly.
 
+In addition to the QEq method, the
+[Gasteiger method](https://doi.org/10.1016/0040-4020(80)80168-2)
+(suggested in the
+[original DREIDING](https://doi.org/10.1021/j100389a010) paper)
+[is also popular](https://bioviacommunity.force.com/Communities_Topics?id=90638000000Gw1YAAS&name=Materials+Studio&tid=09a500000004QfAAAU#/feedtype=SINGLE_QUESTION_DETAIL)
+
+
 ### Improper angles
 
 The style of improper interaction used by DREIDING force fields depends on an
