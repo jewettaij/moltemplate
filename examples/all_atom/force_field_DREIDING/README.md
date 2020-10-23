@@ -18,6 +18,14 @@ rules for assigning partial charges to atoms.  Most force fields, including
 DREIDING does not.  So DREIDING users will have to obtain atomic charges by
 some other means, perhaps by using 3rd-party tools.
 
+WARNING:
+*In these examples, I obtained partial charge estimates
+from the OPLSAA parameter file located
+[here](http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm).)*
+***PLEASE DO NOT DO THIS!***
+This is not how the DREIDING force field should be used.
+It will probably not result in accurate behavior.
+
 Alternatively LAMMPS'
 [fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html)
 feature can be used to assign partial charges.
@@ -26,13 +34,6 @@ feature can be used to assign partial charges.
 in molecules that are modeled using the DREIDING force field.
 If this fix is run infrequently (or if it is run only once at the beginning
 of the simulation), then it should not slow the simulation down significantly.
-
-*(Sometimes I obtain partial charge estimates from the OPLSAA parameter file
-located
-[here](http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm).)*
-***Do not do this.***
-This was not how the DREIDING force field was intended to be used.
-It will probably not result in accurate behavior.
 
 ### Improper angles
 
