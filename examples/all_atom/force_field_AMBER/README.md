@@ -28,7 +28,7 @@ to assign atomic charges, using a
 [variety of methods](http://ambermd.org/tutorials/basic/tutorial4b/index.htm).
 
 Alternatively, you can use the
-[OpenForceField tools](https://github.com/openmm/openmmforcefields),
+[OpenForceField tools](https://github.com/openmm/openmmforcefields#partial-charges-for-small-molecules)
 to
 [calculate these charges](https://open-forcefield-toolkit.readthedocs.io/en/latest/api/generated/openforcefield.topology.Molecule.html#openforcefield.topology.Molecule.compute_partial_charges_am1bcc).
 
