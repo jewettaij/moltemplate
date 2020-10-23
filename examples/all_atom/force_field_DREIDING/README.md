@@ -15,7 +15,7 @@ Please report any bugs you find.
 
 Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include
 rules for assigning partial charges to atoms.  Most force fields, including
-DREIDING does not.  So DREIDING users will have to obtain atomic charges by
+DREIDING do not.  So DREIDING users will have to obtain atomic charges by
 some other means, perhaps by using 3rd-party tools.
 
 WARNING:
