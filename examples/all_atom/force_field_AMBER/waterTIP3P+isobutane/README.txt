@@ -5,8 +5,12 @@ The GAFF parameters are applied only to the isobutane molecule.
 (The water molecule paramters are defined explicitly in the
  "force_fields/tip3p_2004.lt" file distributed with moltemplate.)
 
-WARNING: THIS EXAMPLE HAS NOT BEEN CAREFULLY TESTED.
-         PLEASE REPORT BUGS AND/OR SEND CORRECTIONS.  -A 2016-12-16
+WARNING:
+The atomic partial charges in this example are not correct!
+For details how to calculate charges correctly, see:
+https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
+...and edit the "isobutane.lt" file in the "moltemplate_files"
+directory accordingly.
 
 ----------------- CHARGE ----------------------
 

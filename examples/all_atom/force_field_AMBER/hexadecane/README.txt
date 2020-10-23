@@ -1,6 +1,13 @@
 This example is a simple simulation of 288 hexadecane molecules in a box at
 room temperature and atmospheric pressure.  Please read the WARNING.TXT file.
 
+WARNING:
+The atomic partial charges in this example are not correct!
+For details how to calculate charges correctly, see:
+https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
+...and edit the "ch2group.lt" and "ch3group.lt" files in the "moltemplate_files"
+directory accordingly.
+
 -------- REQUIREMENTS: ---------
 This example requires building LAMMPS with the "USER-MISC" package.
 (because it uses dihedral_style fourier)

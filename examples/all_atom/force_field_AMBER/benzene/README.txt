@@ -1,6 +1,12 @@
 This example shows how to build a box of benzene molecules using the
 AMBER/GAFF force-field.
 
+WARNING:
+The atomic partial charges in this example are not correct!
+For details how to calculate charges correctly, see:
+https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
+...and edit the .lt files in the moltemplate_files directory accordingly.
+
 step 1)
 To build the files which LAMMPS needs, follow the instructions in:
 README_setup.sh

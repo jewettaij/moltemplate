@@ -49,12 +49,11 @@ MOLTEMPLATE file created by ltemplify.py.)
 
 ***Note: Tiresome details to follow.***
 
-***First time readers should probably skip to the
-[examples section](#examples).***
+### *First time readers should skip to the [examples section](#examples)*
 
+--------------------------------------------------------
 
-
-#### Required arguments
+### Required arguments
 
 "ltemplify.py" requires one argument: the name of a LAMMPS data file.
 However (as shown in the example above), it also reads LAMMPS input scripts.

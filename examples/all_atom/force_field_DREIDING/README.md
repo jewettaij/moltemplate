@@ -13,11 +13,26 @@ Please report any bugs you find.
 
 ### Limitations: *atomic charges*
 
-Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include rules for assigning partial charges to atoms.  Most force fields, including DREIDING does not.  So DREIDING users will have to obtain atomic charges by some other means, probably by using 3rd-party tools.  (Alternatively, LAMMPS' [fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature can be used to assign partial charges.  If this fix is run infrequently, or run only once at the beginning of the simulation, then it should not slow the simulation down significantly.)
+Some force-fields (like COMPASS, and moltemplate's version of OPLSAA) include
+rules for assigning partial charges to atoms.  Most force fields, including
+DREIDING does not.  So DREIDING users will have to obtain atomic charges by
+some other means, perhaps by using 3rd-party tools.
+
+Alternatively LAMMPS'
+[fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html)
+feature can be used to assign partial charges.
+**QEq** is one of the built-in methods
+[used by Gaussian to assign partial charges to atoms](https://gaussian.com/mm/)
+in molecules that are modeled using the DREIDING force field.
+If this fix is run infrequently (or if it is run only once at the beginning
+of the simulation), then it should not slow the simulation down significantly.
 
 *(Sometimes I obtain partial charge estimates from the OPLSAA parameter file
 located
 [here](http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm).)*
+***Do not do this.***
+This was not how the DREIDING force field was intended to be used.
+It will probably not result in accurate behavior.
 
 ### Improper angles
 

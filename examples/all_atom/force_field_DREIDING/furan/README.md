@@ -9,9 +9,9 @@ moltemplate distribution).
 
 To create files that LAMMPS needs, enter the "moltemplate_files" subdirectory
 and enter:
-
+```
 moltemplate.sh system.lt
-
+```
 This will generate the following files:
    "system.data", "system.in.init", "system.in.settings"
 which are needed to run LAMMPS.  You must copy these files to the parent
@@ -34,15 +34,19 @@ partial charges, unless they are defined in the force field file itself.
 Automating the assignment of atom charges is an area where moltemplate
 could be improved.)
 
-In this example, I stole the atom partial charges from the "oplsaa.lt" file
-distributed with moltemplate.  This isn't advisable.  For accurate results,
-you will have to find a way to assign realistic partial charges for each atom
-according to their bond partners and local environment.  There are many 3rd
-party tools that can calculate atomic charge.  (In addition, LAMMPS'
-"fix qeq/point" feature can be used to assign partial charges, especially
-for simple molecules containing only C, H, O, N atoms.  If it is run
-infrequently, or only once at the beginning of the simulation,
-then it should not slow the simulation down significantly.)
+## Atomic charge
+
+WARNING: The atomic partial charges in this example are not correct.
+
+In this example, I obtained partial charge estimates from the
+OPLSAA parameter file located
+[here](http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm).)
+***DO NOT DO THIS.***
+This is not how the DREIDING force field should be used.
+It will probably not result in accurate behavior.
+
+Suggestions how to choose partial charges correctly can be found
+[here](https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_DREIDING/README.md).
 
 ## Optional cleanup
 
