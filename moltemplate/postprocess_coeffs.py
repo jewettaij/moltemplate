@@ -67,7 +67,7 @@ g_program_name = g_filename
 
 def ExtractVarName(text):
     """ Read a string like 'atom:A  '  or  '{/atom:A B/C/../D }ABC '
-        and return ('','@atom:A','  ')  or  ('{','atom:A B/C/../D ','}ABC')
+        and return ('','atom:A','  ')  or  ('{','atom:A B/C/../D ','}ABC')
         These are 3-tuples containing the portion of the text containing 
         only the variable's name (assumed to be within the text),
         ...in addition to the text on either side of the variable name.

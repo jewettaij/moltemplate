@@ -69,6 +69,7 @@ nbody_fix_ttree_assignments.py
 nbody_reorder_atoms.py
 pdbsort.py
 postprocess_input_script.py
+postprocess_coeffs.py
 remove_duplicate_atoms.py
 remove_duplicates_nbody.py
 renumber_DATA_first_column.py
