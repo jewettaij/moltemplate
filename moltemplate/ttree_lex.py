@@ -1574,7 +1574,7 @@ class TemplateLexer(TtreeShlex):
                      simplify_output=False,
                      terminators='}',
                      other_esc_chars='{',
-                     var_terminators='{}(),', #(var_delim, spaces also included)  CONTINUEHERE COMMA BREAKS compass_published.lt
+                     var_terminators='{}(),', #(var_delim, spaces also included)
                      keep_terminal_char=True):
         """
            ReadTemplate() reads a block of text (between terminators)
