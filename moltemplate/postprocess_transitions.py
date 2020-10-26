@@ -267,6 +267,10 @@ def main():
         #-------- CONTINUEHERE (ISSUE1) --------------
         #AT THIS POINT if_clause=['atom', '[', '1', ']', '=', '=', '@', 'atom', ':', 'A', 'and', 'atom', '[', '2', ']', '=', '=', '@', 'atom', ':', 'B', '*', 'and', 'atom', '[', '3', ']', '=', '=', '@', 'atom', ':', 'C']
         #AND then_clause=['atom', '[', '2', ']', '=', '@', 'atom', ':', 'B', 'and', 'atom', '[', '3', ']', '=', '@', 'atom', ':', 'D']
+        # I need to consolidate the tokens that are part of atom type patterns,
+        # such as 'B','*' -> 'B*'   (or 'B','/','B' -> 'B/B'),
+        # --OR--
+        # make "lex" of type TemplateLexer and use lex.ReadTemplate()
         #-------- CONTINUEHERE (ISSUE2) --------------
         # The while(lex) loop is failing to halt when we reach the end of the
         # file, and get_token() keeps returning '', causing an infinite loop.
