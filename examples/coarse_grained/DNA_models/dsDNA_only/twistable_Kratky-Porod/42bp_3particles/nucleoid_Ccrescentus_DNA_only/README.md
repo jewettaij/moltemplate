@@ -100,7 +100,7 @@ allowed to relax further.  The topology of the system is now circular:
 
 During the simulation, many twist motors (distributed throughout the polymer)
 apply a constant torque in order to maintain a
-final superhelical density of approximately 0.05 (+/- 5%).
+final superhelical density of approximately 0.033 (+/- 0.005%).
 To implement these "twist motors" this simulation uses an experimental
 new feature of LAMMPS called "fix twist".  (See "prerequisites" section.)
 (Note: It's not strictly necessary to have this twist motors in the simulation.
