@@ -6,7 +6,9 @@ Nucleoid model
 This is an example demonstrating how to build a model of the conformation of
 an entire bacterial chromosome (a long circular polymer of DNA), 4Mbp in length
 using the coarse-grained "42bp3p" DNA model.  (See details below.)
+
 ![DNA model](../../images/DNA_models_similar_to_Benedetti++Stasiak_NAR2014.jpg)
+
 This simulation was intended to mimic the process of DNA relaxation and
 supercoiling during the process of DNA replication in Caulobacter crescentus.
 
@@ -15,10 +17,14 @@ supercoiling during the process of DNA replication in Caulobacter crescentus.
 Initially the circular polymer is stretched in a straight-line conformation
 connecting opposite ends of the (circular) polymer to opposite ends of a
 long periodic box (to which they are attached).
-![Initial conformation (not to scale)](../images/initial_conformation_not_to_scale.jpg)
+
+![Initial conformation (not to scale)](images/initial_conformation_not_to_scale.jpg)
+
 Twist is applied to polymer to achieve a supercoiled
 conformation which mimics the degree of supercoiling measured in bacteria.
+
 ![Twist motor](../../images/twist_motor_LLR.jpg)
+
 The tension is gradually relaxed by shortening the length of the simulation box.
 As the box shrinks and the tension in the polymer reduces, plectonemic
 supercoils form, gradually getting longer and more numerous as the tension
@@ -30,7 +36,9 @@ This was intended to mimic the process of DNA relaxation after the ParABS
 system has pulled the two origins of replication to opposite poles of the cell.
 The continued replication of DNA increases the slack and gradually reduces
 the tension in the (initially streched) polymer.
-![motivation for DNA contraction](motivation_DNA_replication_and_contraction.jpg)
+
+![motivation for DNA contraction](images/motivation_DNA_replication_and_contraction.jpg)
+
 During this time, the DNA is supercoiled.
 The goal of these simulations is to produce a circular
 polymer which is supercoiled in a similar way to the supercoils seen in
