@@ -32,7 +32,7 @@ replication, transcription, gyrase, and other DNA binding proteins.
 
 The tension is gradually relaxed by shortening the length of the
 simulation box until it equals the length of the bacterial cell.
-As the box shrinks and the tension in the polymer is reduceds,
+As the box shrinks and the tension in the polymer is reduced,
 plectonemic supercoils form, gradually getting longer and more numerous.
 
 
