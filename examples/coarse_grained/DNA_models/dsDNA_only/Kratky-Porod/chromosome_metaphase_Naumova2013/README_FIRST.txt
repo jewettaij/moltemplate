@@ -3,6 +3,34 @@ in the Naumova et Al 2013 Science paper on metaphase chromatin.
 (Download the supplemental materials section and scroll down to the section:
  "Two-stage process: linear compaction - axial compression")
 
+----------------------- WARNING --------------------------
+--------- THIS IS NO LONGER THE MOST UP-TO-DATE ----------
+---------      METAPHASE CHROMATIN MODEL        ----------
+----------------------------------------------------------
+
+This was a very early attempt to imagine a mechanical process
+that might explain limited structural data available at the time.
+Newer models (which are very different) have since been proposed.
+The purpose of this example is only to demonstrate one way
+to model a non-trival active process (the process described
+in that paper) ...using moltemplate.  It is probably not an
+accurate model of chromatin.
+
+Furthermore, this is a low resolution model of chromatin.  Each
+bead is larger than the persistence length of DNA.  Nucleosomes and
+other DNA-binding proteins are not explicitly included in the model.
+
+Furthermore,  the two-stage model at the end of Naumova et al Science
+2013 uses the "30nm-fiber" model, whose details are (somewhat vaguely)
+described in the supplemental materials section.
+The 30-nm fiber model of DNA is a hypothetical model of DNA which
+has not been observed in most Eukaryotic cells (with a few examples).
+This is another reason to avoid this model.
+
+So please do not use this example as starting point for creating a
+new DNA model.  (I think it would be better to start from scratch.)
+
+
 ---- SMALL MODIFICATION ----
 
 Unlike that study, I did not use "softened" Lennard-Jones potentials
@@ -21,8 +49,6 @@ However building the sytem using moltemplate may pay off if you
 replace each point-like monomer with a multi-atom molecule later on.
 (Right now, using moltemplate to build this system is sort of overkill.
  I'll post an example of building more complex models of chromatin eventually.)
-
-Anyway, the two-stage model at the end of Naumova et al Science 2013 uses the "30nm-fiber" model, whose details are (somewhat vaguely) described in the supplemental materials section.
 
 ---- 10-nm fiber model: ----
 
