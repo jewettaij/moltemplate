@@ -1,6 +1,8 @@
 Nucleoid model
 =========
 
+![Full size bacterial chromosome](images/nucleoid_Ccrescentus_4Mbp_400motors_final_conformation_LLR.jpg)
+
 ## Description
 
 This is an example demonstrating how to build a model of the conformation of
