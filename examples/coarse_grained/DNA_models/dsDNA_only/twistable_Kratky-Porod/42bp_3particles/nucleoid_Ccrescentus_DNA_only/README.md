@@ -5,7 +5,7 @@ Nucleoid model
 
 This is an example demonstrating how to build a model of the conformation of
 an entire bacterial chromosome (a long circular polymer of DNA), 4Mbp in length
-using the coarse-grained "42bp3p" DNA model.  (See details below.)a
+using the coarse-grained "42bp3p" DNA model.  (See details below.)
 This simulation was intended to mimic the process of DNA relaxation and
 supercoiling during the process of DNA replication in Caulobacter crescentus.
 
