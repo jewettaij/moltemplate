@@ -18,19 +18,23 @@ supercoiling during the process of DNA replication in Caulobacter crescentus.
 
 Initially the circular polymer is stretched in a straight-line conformation
 connecting opposite ends of the (circular) polymer to opposite ends of a
-long periodic box (to which they are attached).
+very long periodic box (to which they are attached).
 
 ![Initial conformation (not to scale)](images/initial_conformation_not_to_scale.jpg)
 
-Twist is applied to polymer to achieve a supercoiled
-conformation which mimics the degree of supercoiling measured in bacteria.
+Twist is applied to polymer to achieve a supercoiled conformation which
+mimics the degree of supercoiling measured in bacteria.  In this simulation
+this is implemented using hundreds of small motors which exert a torque on
+the polymer similar to the torque presumably exerted by the combined effect
+replication, transcription, gyrase, and other DNA binding proteins.
 
 ![Twist motor](../../images/twist_motor_LLR.jpg)
 
-The tension is gradually relaxed by shortening the length of the simulation box.
-As the box shrinks and the tension in the polymer reduces, plectonemic
-supercoils form, gradually getting longer and more numerous as the tension
-is reduced.
+The tension is gradually relaxed by shortening the length of the
+simulation box until it equals the length of the bacterial cell.
+As the box shrinks and the tension in the polymer is reduceds,
+plectonemic supercoils form, gradually getting longer and more numerous.
+
 
 ## Motivation
 
