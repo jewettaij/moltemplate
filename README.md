@@ -46,7 +46,7 @@ Moltemplate is interoperable with
 [**CellPACK**](http://www.cellpack.org),
 [**LigParGen**](http://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**Vipster**](https://sgsaenger.github.io/vipster),
-[**NanoHub struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
+[**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that reads or generates LAMMPS data (.lmpdat) files.
 This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
