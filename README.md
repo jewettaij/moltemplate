@@ -41,11 +41,12 @@ Moltemplate is interoperable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
 [**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
+[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html)
+[**EMC**](http://montecarlo.sourceforge.net/),
 [**CellPACK**](http://www.cellpack.org),
 [**LigParGen**](http://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**NanoHub struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
-[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html)
 and any other program that reads or generates LAMMPS data (.lmpdat) files.
 This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
