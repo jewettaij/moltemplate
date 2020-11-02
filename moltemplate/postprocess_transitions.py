@@ -141,43 +141,12 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2020-10-24'
-g_version_str = '0.0.1'
+g_date_str = '2020-11-01'
+g_version_str = '0.0.2'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
 
-def ExtractVarName(text):
-    """ Read a string like 'atom:A  '  or  '{/atom:A B/C/../D }ABC '
-        and return ('','atom:A','  ')  or  ('{','atom:A B/C/../D ','}ABC')
-        These are 3-tuples containing the portion of the text containing 
-        only the variable's name (assumed to be within the text),
-        ...in addition to the text on either side of the variable name.
-    """
-    i_begin = 0
-    escape = '\''
-    lparen = '{'
-    rparen = '}'
-    escaped = False
-    commenters = '#'
-    whitespace = ' \t\r\f\n'
-    terminators = whitespace + commenters
-    # Ideally, perhaps I should lookup these values from ttree_lex.TtreeLex to 
-    # make sure I am being consistent, instead of re-defining them in this file.
-    #while ((i_begin < len(text)) and
-    #       (text[i_begin] in whitespace)):
-    #    i_begin += 1
-    in_paren = text[i_begin:i_begin+1] == lparen
-    if in_paren:
-        terminators = rparen
-        i_begin += 1
-    i_end = i_begin
-    while ((i_end < len(text)) and
-           (text[i_end] not in terminators)):
-        i_end += 1
-    return (text[0: i_begin],
-            text[i_begin:i_end],
-            text[i_end:])
 
 
 
@@ -254,6 +223,9 @@ def main():
                 then_clause = []
                 in_if_clause = False
                 continue
+            if token in ('@', '$'):
+                var_name = lex.GetVarName()
+                token = token + var_name  # for example: "@/atom:GAFF2/c3"
             if in_if_clause:
                 if_clause.append(token)
             else:

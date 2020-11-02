@@ -52,7 +52,6 @@ __all__ = ["TtreeShlex",
            "HasWildcard",
            "HasRE",
            "MatchesPattern",
-           #"IsRegex",
            "InputError",
            "ErrorLeader",
            "SrcLoc",
@@ -576,6 +575,109 @@ def SplitQuotedString(string,
     if len(string) > 0:
         tokens.append(token)
     return tokens
+
+
+
+
+def GetVarName(lex):
+    """ Read a string like 'atom:A  '  or  '{/atom:A B/C/../D }ABC '
+        and return ('','atom:A','  ')  or  ('{','/atom:A B/C/../D ','}ABC')
+        These are 3-tuples containing the portion of the text containing 
+        only the variable's name (assumed to be within the text),
+        ...in addition to the text on either side of the variable name.
+    """
+
+    i_begin = 0
+    escape = '\''
+    lparen = '{'
+    rparen = '}'
+
+    nextchar = lex.read_char()
+    # Skip past the left-hand side paren '{'
+    in_paren = False
+    escaped = False
+    if nextchar == lparen:
+        in_paren = True
+    elif nextchar in lex.escape:
+        lex.push_char(nextchar)
+        escaped = True
+    elif nextchar in lex.word_terminators:
+        lex.push_char(nextchar)
+        return ''
+    # Now read the variable name:
+    var_name_l = []
+    while lex:
+        nextchar=lex.read_char()
+        if nextchar == '':
+            break
+        elif nextchar == '\n':
+            lex.lineno += 1
+            if in_paren:
+                var_name_l.append(nextchar)
+            else:
+                break
+        elif escaped:
+            var_name_l.append(nextchar)
+            escaped = False
+        elif nextchar in lex.escape:
+            escaped = True
+        elif nextchar == rparen:
+            if (in_paren or (nextchar in lex.word_terminators)):
+                break
+            else:
+                var_name_l.append(nextchar)
+        elif in_paren:
+            var_name_l.append(next_char)
+            escaped = False
+        elif nextchar in lex.whitespace:
+            break
+        elif (hasattr(lex, 'word_terminators') and
+              (nextchar in lex.word_terminators)):
+            break
+        elif nextchar in lex.commenters:
+            lex.instream.readline()
+            lex.lineno += 1
+            break
+        else:
+            var_name_l.append(nextchar)
+            escaped = False
+    var_name = ''.join(var_name_l)
+    return var_name
+
+
+
+def ExtractVarName(text,
+                   commenters = '#'
+                   whitespace = ' \t\r\f\n'):
+    """ Read a string like 'atom:A  '  or  '{/atom:A B/C/../D }ABC '
+        and return ('','atom:A','  ')  or  ('{','/atom:A B/C/../D ','}ABC')
+        These are 3-tuples containing the portion of the text containing 
+        only the variable's name (assumed to be within the text),
+        ...in addition to the text on either side of the variable name.
+    """
+    i_begin = 0
+    escape = '\''
+    lparen = '{'
+    rparen = '}'
+    escaped = False
+    terminators = whitespace + commenters
+    # Ideally, perhaps I should lookup these values from ttree_lex.TtreeLex to 
+    # make sure I am being consistent, instead of re-defining them in this file.
+    #while ((i_begin < len(text)) and
+    #       (text[i_begin] in whitespace)):
+    #    i_begin += 1
+    in_paren = text[i_begin:i_begin+1] == lparen
+    if in_paren:
+        terminators = rparen
+        i_begin += 1
+    i_end = i_begin
+    while ((i_end < len(text)) and
+           (text[i_end] not in terminators)):
+        i_end += 1
+    return (text[0: i_begin],
+            text[i_begin:i_end],
+            text[i_end:])
+
 
 
 def EscCharStrToChar(s_in, escape='\\'):
