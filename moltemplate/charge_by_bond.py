@@ -6,8 +6,8 @@
 # All rights reserved.
 
 g_program_name = __file__.split('/')[-1]   # = 'charge_by_bond.py'
-g_date_str = '2017-10-03'
-g_version_str = '0.14.0'
+g_date_str = '2020-11-04'
+g_version_str = '0.15.0'
 
 
 import sys

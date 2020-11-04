@@ -21,8 +21,8 @@
 
 
 g_program_name = __file__.split('/')[-1]  # = 'bonds_by_type.py'
-g_date_str = '2016-12-21'
-g_version_str = '0.12.0'
+g_date_str = '2020-11-04'
+g_version_str = '0.13.0'
 
 
 import sys

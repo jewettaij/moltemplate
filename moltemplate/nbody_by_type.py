@@ -138,8 +138,8 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 """
 
 g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-g_date_str = '2017-2-06'
-g_version_str = '0.20.0'
+g_date_str = '2020-11-04'
+g_version_str = '0.21.0'
 
 bond_pattern_module_name = ""
 

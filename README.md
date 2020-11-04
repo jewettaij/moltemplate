@@ -41,11 +41,12 @@ Moltemplate is interoperable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
 [**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
+[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
+[**EMC**](http://montecarlo.sourceforge.net/),
 [**CellPACK**](http://www.cellpack.org),
 [**LigParGen**](http://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**Vipster**](https://sgsaenger.github.io/vipster),
-[**NanoHub struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
-[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html)
+[**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that reads or generates LAMMPS data (.lmpdat) files.
 This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
@@ -71,11 +72,13 @@ Moltemplate [does *not* choose atom types automatically ("atom typing")](http://
 and currently cannot be used to build all-atom proteins from scratch.
 3rd-party tools may be needed to calculate atomic partial charges accurately.
 (For non-trivial molecules, users are encouraged to use the
-[ATB](https://atb.uq.edu.au) database, or use a 3rd-party molecule-builder
+[ATB](https://atb.uq.edu.au) database,
+or use the DREIDING force field which has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf),
+or use a 3rd-party molecule-builder
 and convert the resulting files to LAMMPS format using
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format")
-followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format").
-Alternatively, the DREIDING force field has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf).)
+followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format").)
+
 
 
 ## Typical usage

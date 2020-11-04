@@ -1,44 +1,33 @@
-# ---------------- CHANGES 2016-3-22 -----------------
-# IN THIS EXAMPLE, I WILL MAKE THE CYLINDER "INFINITE"
-# IN THE X DIRECTION (SO THE LENGTH OF A CELL IS IRRELEVANT)
-# (Actually, there's currently no way to make it inifinite 
-#  in LAMMPS, so I just make it very long.
-#  I will also choose the radius to be large enough to hopefully
-#  have not much effect on the final conformation.)
-# ----------------------------------------------------
-
-##########################################################
-# Now define "rSphereL", and "rSphereR" two spherical regions
+# This file defines a cylindrical wall whose diameter is approximately
+# consistent with the width of a Caulobacter crescentus cell.
 #
-#                        sphere_center radius
-#                           x0   y0   z0  rc0
-#                           |    |    |    |
-#                          \|/  \|/  \|/  \|/
-#                           V    V    V    V
-# OPTIONAL: We don't really need to put spherical caps in the end of the
-#           cylinder, so I commented out the next two lines
-#region rSphereL sphere -350000.0  0  0  330.0   side in
-#region rSphereR sphere  350000.0  0  0  330.0   side in
+# NOTE: The length of the cylinder we are using here is extremely long.
+#       (In LAMMPS, there is no way to make it infinite.)  However this
+#       does not matter because we are using periodic boundary conditions
+#       in this simulation. Only the length of the simulation box matters.
+#       During the simulation, the box length will be adjusted until it
+#       equals the length of a typical Caulobacter crescentus cell.
 
-# The value of the rc0 parameter does not matter very much as long as it is big.
-# (see below)
 
+################################################
+# Define "rCyl", a cylindrical region in space.
+#
+#                        cylinder_center radius
+#                       x,y,z?   x0    y0    rc0     xlo      xhi       inside
+#                         |      |     |      |       |        |        surface
+#                        \|/    \|/   \|/    \|/     \|/      \|/          |
+#                         V      V     V      V       V        V           V
+region  rCyl     cylinder x     0.0   0.0   330.0 -350000.0 350000.0  side in
 
 # This sets the parameter "rc0" equal to 330.0.
-# The "330.0" means we assume no particle will ever be further than 330.0
-# from the central axis of the cylinder (if it is in the cylindrical region)
-# or the center of the spheres (if it is in one of the spherical end-caps).
-# However it is not the location of the wall.
-# Particles will experience an inward pushing force earlier than this(see below)
-
-
-#                        cylinder_center radius
-#                       x,y,z?   x0    y0    rc0    xlo   xhi
-#                         |      |     |      |      |     |
-#                        \|/    \|/   \|/    \|/    \|/   \|/
-#                         V      V     V      V      V     V
-region  rCyl     cylinder x     0.0   0.0   330.0 -350000.0 350000.0  side in
-#region  rCapsule union 3 rSphereL rCyl rSphereR  
+# The rc0 parameter is not the radius of the cylinder.  It is slightly larger to
+# make room for a thin region of space where the force field will push inward.
+# Setting rc0=330.0 means we assume no particle will ever travel further than
+# 330.0 from the central axis of the cylinder.
+# Particles will experience an inward pushing force earlier than this.
+# The exact value of the rc0 parameter does not matter very much as long as
+# it is big enough to enclose the cylinder and some additional wiggle room.
+# For details, see: http://lammps.sandia.gov/doc/region.html
 
 
 
@@ -58,19 +47,12 @@ region  rCyl     cylinder x     0.0   0.0   330.0 -350000.0 350000.0  side in
 #                                             \|/   \|/   \|/
 #                                              V     V     V
 
-#fix fxWall all wall/region rCapsule harmonic  1.0   0.0   10.0
 fix fxWall all wall/region rCyl harmonic      1.0   0.0   10.0
 
-
-
-# Uexternal(r) = k*((rc0-rc) - r)^2    (if (rc0-rc) < r < rc0,  0 otherwise)
-# 
 #     Note that rc0-rc = 320.0
-#               rc0-rc = the "inner" sphere radius
+#               rc0-rc = the "inner" sphere radius (where the force begins)
 
-
-# For (a very confusing) explanation of these commands go here:
+# For (a confusing) explanation of these commands go here:
 # http://lammps.sandia.gov/doc/fix_wall_region.html
 # http://lammps.sandia.gov/doc/region.html
-# (I had to figure things out by reading the source code, fix_wall_region.cpp)
-
+# (I figured things out by reading the LAMMPS source code, fix_wall_region.cpp)

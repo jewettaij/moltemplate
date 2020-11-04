@@ -4,6 +4,9 @@ Twist Motors acting on DNA
 This example demonstrates how to prepare a simulation of circular
 double-stranded (ds) DNA containing a "twist motor"
 (a machine that applies a torsional torque on the polymer).
+
+![Twist motor](../../images/twist_motor_LLR.jpg)
+
 In biology, machines like gyrase cause double stranded breaks
 allowing the polymer to pass through itself at times that would
 preferentially generate a negative supercoiling density throughout the DNA.

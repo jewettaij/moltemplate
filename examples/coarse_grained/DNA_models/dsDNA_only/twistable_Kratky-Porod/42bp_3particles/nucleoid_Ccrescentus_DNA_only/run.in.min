@@ -53,7 +53,7 @@ dump 1 all custom 20000 traj_min.lammpstrj id mol type x y z ix iy iz
 
 # To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
 # (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
-# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+# kB*T = 0.001987207*300 kcal/mole = 0.5961621
 
 # Note: tdamp must be >> than the innertial t_m ~= sqrt( m / d^U/dr )
 #       which for our force field is about 15 (It should be ~= Nperiod
@@ -73,9 +73,9 @@ fix fxcen all recenter 0.0 0.0 0.0
 # (See http://lammps.sandia.gov/doc/fix_langevin.html)
 
 thermo_style    custom step temp pe etotal epair ebond eangle edihed lx
-thermo          100  # time interval for printing out "thermo" data
-#thermo_modify   norm yes  flush yes
-thermo_modify   norm yes
+#thermo         100  # time interval for printing out "thermo" data
+thermo          1    # time interval for printing out "thermo" data
+thermo_modify   norm yes flush yes
 
 
 fix fxbal all balance 20000 1.03 shift x 20 1.03
