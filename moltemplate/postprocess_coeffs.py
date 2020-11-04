@@ -138,14 +138,10 @@ def main():
             if ((len(tokens) >= 2) and
                 (tokens[0].find('bond_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
+                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 if token1_is_re:
-                    icolon = tokens[1].find(':')
-                    assert(icolon != -1)
-                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
-                    left_paren = text_after = ''
+                    regex_str = VarNameToRegex(tokens[1])
                     typepattern = re.compile(regex_str)
-                else:
-                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for btype in bond_types:
                     if MatchesPattern(btype, typepattern):
                         #assert(left_paren == '')
@@ -155,14 +151,10 @@ def main():
             elif ((len(tokens) >= 2) and
                 (tokens[0].find('angle_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
+                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 if token1_is_re:
-                    icolon = tokens[1].find(':')
-                    assert(icolon != -1)
-                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
-                    left_paren = text_after = ''
+                    regex_str = VarNameToRegex(tokens[1])
                     typepattern = re.compile(regex_str)
-                else:
-                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for antype in angle_types:
                     if MatchesPattern(antype, typepattern):
                         #assert(left_paren == '')
@@ -172,14 +164,10 @@ def main():
             elif ((len(tokens) >= 2) and
                 (tokens[0].find('dihedral_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
+                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 if token1_is_re:
-                    icolon = tokens[1].find(':')
-                    assert(icolon != -1)
-                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
-                    left_paren = text_after = ''
+                    regex_str = VarNameToRegex(tokens[1])
                     typepattern = re.compile(regex_str)
-                else:
-                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for dtype in dihedral_types:
                     if MatchesPattern(dtype, typepattern):
                         #assert(left_paren == '')
@@ -189,14 +177,10 @@ def main():
             elif ((len(tokens) >= 2) and
                 (tokens[0].find('improper_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
+                left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 if token1_is_re:
-                    icolon = tokens[1].find(':')
-                    assert(icolon != -1)
-                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
-                    left_paren = text_after = ''
+                    regex_str = VarNameToRegex(tokens[1])
                     typepattern = re.compile(regex_str)
-                else:
-                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
                 for itype in improper_types:
                     if MatchesPattern(itype, typepattern):
                         #assert(left_paren == '')
@@ -270,12 +254,9 @@ def main():
                                   and (tokens[2][0] != '{'))  #ignore * in {}
                 ################
 
-
                 if token1_is_re:
                     atom_types1 = atom_types
-                    icolon = tokens[1].find(':')
-                    assert(icolon != -1)
-                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
+                    regex_str = VarNameToRegex(tokens[1])
                     typepattern1 = re.compile(regex_str)
                 elif token1_is_wild:
                     atom_types1 = atom_types
@@ -284,9 +265,7 @@ def main():
 
                 if token2_is_re:
                     atom_types2 = atom_types
-                    icolon = tokens[2].find(':')
-                    assert(icolon != -1)
-                    regex_str = tokens[2][icolon+4:len(tokens[2])-1]
+                    regex_str = VarNameToRegex(tokens[2])
                     typepattern2 = re.compile(regex_str)
                 elif token2_is_wild:
                     atom_types2 = atom_types
