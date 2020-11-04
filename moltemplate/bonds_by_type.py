@@ -21,8 +21,8 @@
 
 
 g_program_name = __file__.split('/')[-1]  # = 'bonds_by_type.py'
-g_date_str = '2016-12-21'
-g_version_str = '0.12.0'
+g_date_str = '2020-11-04'
+g_version_str = '0.13.0'
 
 
 import sys
@@ -34,6 +34,7 @@ except (ImportError, SystemError, ValueError):
     # not installed as a package
     import ttree_lex
     from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+import re
 
 
 def LookupBondTypes(bond_types,
@@ -162,7 +163,7 @@ def LookupBondTypes(bond_types,
 
             for typestr in tokens[1:]:
                 if ttree_lex.HasRE(typestr):
-                    regex_str = typestr[3:]
+                    regex_str = VarNameToRegex(typestr)
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))

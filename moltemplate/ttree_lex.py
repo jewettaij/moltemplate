@@ -45,14 +45,16 @@ __all__ = ["TtreeShlex",
            "split",
            "LineLex",
            "SplitQuotedString",
+           "ExtractVarName",
+           "GetVarName",
            "EscCharStrToChar",
            "SafelyEncodeString",
            "RemoveOuterQuotes",
            "MaxLenStr",
-           "HasWildcard",
+           "VarNameToRegex",
            "HasRE",
+           "HasWildcard",
            "MatchesPattern",
-           #"IsRegex",
            "InputError",
            "ErrorLeader",
            "SrcLoc",
@@ -578,6 +580,129 @@ def SplitQuotedString(string,
     return tokens
 
 
+
+
+def GetVarName(lex):
+    """ Read a string like 'atom:A  '  or  '{/atom:A B/C/../D }ABC '
+        and return ('','atom:A','  ')  or  ('{','/atom:A B/C/../D ','}ABC')
+        These are 3-tuples containing the portion of the text containing 
+        only the variable's name (assumed to be within the text),
+        ...in addition to the text on either side of the variable name.
+    """
+    escape = '\''
+    lparen = '{'
+    rparen = '}'
+    if hasattr(lex, 'escape'):
+        escape = lex.escape
+    if hasattr(lex, 'var_open_paren'):
+        lparen = lex.var_open_paren
+    if hasattr(lex, 'var_close_paren'):
+        rparen = lex.var_close_paren
+
+    nextchar = lex.read_char()
+    # Skip past the left-hand side paren '{'
+    paren_depth = 0
+    escaped = False
+    if nextchar == lparen:
+        paren_depth = 1
+    elif nextchar in lex.escape:
+        escaped = True
+    elif (hasattr(lex, 'wordterminators') and
+          (nextchar in lex.wordterminators)):
+        lex.push_raw_text(nextchar)
+        return ''
+    else:
+        lex.push_raw_text(nextchar)
+    # Now read the variable name:
+    var_name_l = []
+    while lex:
+        nextchar=lex.read_char()
+        if nextchar == '':
+            break
+        elif nextchar == '\n':
+            lex.lineno += 1
+            if paren_depth > 0:
+                var_name_l.append(nextchar)
+            else:
+                lex.push_raw_text(nextchar)
+                break
+        elif escaped:
+            var_name_l.append(nextchar)
+            escaped = False
+        elif nextchar in lex.escape:
+            escaped = True
+        elif nextchar == lparen:
+            paren_depth += 1
+            if (hasattr(lex, 'wordterminators') and
+                (nextchar in lex.wordterminators)):
+                lex.push_raw_text(nextchar)
+                break
+            else:
+                var_name_l.append(nextchar)
+        elif nextchar == rparen:
+            paren_depth -= 1
+            if paren_depth == 0:
+                break
+            elif (hasattr(lex, 'wordterminators') and
+                  (nextchar in lex.wordterminators)):
+                lex.push_raw_text(nextchar)
+                break
+            else:
+                var_name_l.append(nextchar)
+        elif paren_depth > 0:
+            var_name_l.append(nextchar)
+            escaped = False
+        elif nextchar in lex.whitespace:
+            lex.push_raw_text(nextchar)
+            break
+        elif (hasattr(lex, 'wordterminators') and
+              (nextchar in lex.wordterminators) and
+              (paren_depth == 0)):
+            lex.push_raw_text(nextchar)
+            break
+        elif nextchar in lex.commenters:
+            lex.instream.readline()
+            lex.lineno += 1
+            break
+        else:
+            var_name_l.append(nextchar)
+            escaped = False
+    var_name = ''.join(var_name_l)
+    return var_name
+
+
+
+def ExtractVarName(text,
+                   commenters = '#',
+                   whitespace = ' \t\r\f\n'):
+    """ Read a string like 'atom:A  '  or  '{/atom:A B/C/../D }ABC '
+        and return ('','atom:A','  ')  or  ('{','/atom:A B/C/../D ','}ABC')
+        These are 3-tuples containing the portion of the text containing 
+        only the variable's name (assumed to be within the text),
+        ...in addition to the text on either side of the variable name.
+    """
+    ibegin = 0
+    left_paren = ''
+    if text[0] == '{':
+        ibegin = 1
+        left_paren = text[0] #(GetVarName() strips the leading '{' character)
+    # The best way to insure consistency with other code is to use
+    # lex.GetVarName() to figure out where the variable name ends.
+    lex = TtreeShlex(StringIO(text))
+    var_name = GetVarName(lex)
+    # Any text following the end of the variable name should be returned as well
+    text_after_list = []
+    if left_paren:
+        text_after_list.append('}') #(GetVarName() strips the trailing '}' char)
+    while lex:
+        c = lex.read_char()
+        if c == '':
+            break
+        text_after_list.append(c)
+    text_after = ''.join(text_after_list)
+    return (left_paren, var_name, text_after)
+
+
 def EscCharStrToChar(s_in, escape='\\'):
     """
     EscCharStrToChar() replaces any escape sequences
@@ -671,12 +796,52 @@ def MaxLenStr(s1, s2):
         return s1
 
 
+def VarNameToRegex(s):
+    """
+    Returns the portion of a TTREE-style variable name (eg "@atom:re.C[1-5]")
+    that corresponds to a regular expression (eg "C[1-5]").  A variable name
+    is assumed to encode a regular expression if it begins with "re.", OR if
+    the a ':' character is followed by "re.".
+    If so, the text in s (excluding "re.") is assumed to be a regular expresion
+    and is returned to the caller.
+    If not, the empty string ('') is returned.
+    If the first or second character is a '{', and if the final character
+    is '}', they will be deleted.  Consequently:
+      VarNameToRegex('@atom:C') returns ''
+      VarNameToRegex('@atom:re.C[1-5]') returns '@atom:C[1-5]'
+      VarNameToRegex('@{/atom:re.C[1-5]}') returns '@/atom:C[1-5]'
+      VarNameToRegex('@bond:AB') returns ''
+      VarNameToRegex('@bond:re.A*B') returns '@bond:a*b'
+      VarNameToRegex('bond:re.A*B') returns 'bond:a*b'
+      VarNameToRegex('{bond:re.A*B}') returns 'bond:a*b'
+      VarNameToRegex('@{bond:re.A*B}') returns '@bond:a*b'
+    """
+    # First, deal with parenthesis {}
+    iparen_L = s.find('{')
+    iparen_R = s.rfind('}')
+    if (((iparen_L == 0) or (iparen_L == 1)) and (iparen_R == len(s)-1)):
+        optional_char = ''
+        if iparen_L == 1:
+            optional_char = s[0]
+        s = optional_char + s[iparen_L+1:iparen_R]
+    # Now check to see if the remaining string contains 're.' or ':re.'
+    icolon = s.find(':')
+    # If 're.' is not found immediately after the first ':' character
+    # or following a '/' character
+    # (or if it is not found at the beginning when no ':' is present)
+    # then there is no regular expression.  In that case, return ''
+    ire = s.find('re.')
+    if ((ire == -1) or
+        (not ((ire > 0) and ((s[ire-1] == ':') or (s[ire-1] == '/'))))):
+        return ''
+    return s[0:ire] + s[ire+3:]
+    
+
 def HasRE(pat):
     """
     Returns true if a string (pat) begins with 're.'
-
     """
-    return pat.find('re.') == 0
+    return len(VarNameToRegex(pat)) > 0
 
 
 def HasWildcard(pat):
@@ -1573,7 +1738,7 @@ class TemplateLexer(TtreeShlex):
     def ReadTemplate(self,
                      simplify_output=False,
                      terminators='}',
-                     other_esc_chars='{',
+                     #11-04c#other_esc_chars='{',  # <-- COMMENT: WHAT IS THIS FOR? -AJ
                      var_terminators='{}(),', #(var_delim, spaces also included)
                      keep_terminal_char=True):
         """
@@ -1643,11 +1808,14 @@ class TemplateLexer(TtreeShlex):
            OR if they are part of a two-character escape sequence
         (for example, '}' in "\}" does not cause terminate parsing).
         In that case, the text is considered normal text.  (However the
-        '\' character is also stripped out.  It is also stripped out if it
-        preceeds any characters in "other_esc_chars", which is
-        the second argument.  Otherwise it is left in the text block.)
-
+        '\' character is also stripped out.
         """
+        #11-04c#"""
+        #11-04c#It is also stripped out if it
+        #11-04c#preceeds any characters in "other_esc_chars", which is
+        #11-04c#the second argument.  Otherwise it is left in the text block.)
+        #11-04c#"""
+
         #sys.stderr.write('    ReadTemplate('+terminators+') invoked at '+self.error_leader())
 
         # The main loop of the parser reads only one variable at time.
@@ -1660,6 +1828,7 @@ class TemplateLexer(TtreeShlex):
         # True iff we are in a region of text where vars should be ignored
         commented_state = False
         var_paren_depth = 0  # This is non-zero iff we are inside a
+        #11-04a#var_parens_in_use = False
         # bracketed variable's name for example: "${var}"
         var_terminators += self.whitespace + self.newline + self.var_delim
 
@@ -1729,27 +1898,30 @@ class TemplateLexer(TtreeShlex):
                         # In this case, the '\' char was only to prevent terminating
                         # string prematurely, so delete the '\' character.
                         #delete_prior_escape = True
-                        if not (nextchar in self.var_close_paren):
-                            del var_descr_plist[-1]
-                            var_descr_plist.append(nextchar)
-
+                        #11-04b# if not (nextchar in self.var_close_paren):
+                        del var_descr_plist[-1]
+                        var_descr_plist.append(nextchar)
+                        #escaped_state = False
                     elif not ((var_paren_depth > 0) and (nextchar in self.var_close_paren)):
+                    #11-04a#else:
                         terminate_var = True
                         done_reading = True
 
                 if nextchar in self.var_open_paren:  # eg: nextchar == '{'
                     #sys.stdout.write('   ReadTemplate() readmode found {.\n')
                     if escaped_state:
-                        # In this case, the '\' char was only to prevent
-                        # interpreting '{' as a variable prefix
-                        # delete_prior_escape=True # so delete the '\'
-                        # character
-                        del var_descr_plist[-1]
+                        #11-04d## In this case, the '\' char was only to prevent
+                        #11-04d## interpreting '{' as a variable prefix
+                        #11-04d## delete_prior_escape=True # so delete the '\'
+                        #11-04d## character
+                        #11-04d#del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
+                        #escaped_state = False
                     else:
                         # "${var}" is a valid way to refer to a variable
                         if prev_char_delim:
                             var_prefix += nextchar
+                            #11-04a#var_parens_in_use = True
                             var_paren_depth = 1
                         # "${{var}}" is also a valid way to refer to a variable,
                         # (although strange), but "$va{r}" is not.
@@ -1758,6 +1930,8 @@ class TemplateLexer(TtreeShlex):
                         elif var_paren_depth > 0:
                             var_paren_depth += 1
                             var_descr_plist.append(nextchar)
+                        #11-04a#else:
+                        #11-04a#    var_descr_plist.append(nextchar)
 
                 elif nextchar in self.var_close_paren:
                     #sys.stdout.write('   ReadTemplate() readmode found }.\n')
@@ -1765,9 +1939,10 @@ class TemplateLexer(TtreeShlex):
                         # In this case, the '\' char was only to prevent
                         # interpreting '}' as a variable suffix,
                         # delete_prior_escape=True  #so skip the '\' character
-                        if (nextchar not in terminators):
-                            del var_descr_plist[-1]
-                            var_descr_plist.append(nextchar)
+                        #11-04b#if (nextchar not in terminators):
+                        del var_descr_plist[-1]
+                        var_descr_plist.append(nextchar)
+                        #escaped_state = False
                     else:
                         if var_paren_depth > 0:
                             var_paren_depth -= 1
@@ -1776,16 +1951,27 @@ class TemplateLexer(TtreeShlex):
                                 terminate_var = True
                             else:
                                 var_descr_plist.append(nextchar)
+                        #11-04a#if var_parens_in_use:
+                        #11-04a#    var_suffix = nextchar
+                        #11-04a#    terminate_var = True
+                        #11-04a#    var_parens_in_use = False
+                        #11-04a#else:
+                        #11-04a#    var_descr_plist.append(nextchar)
 
 
                 elif nextchar in var_terminators:
                     #sys.stdout.write('   ReadTemplate() readmode found var_terminator \"'+nextchar+'\"\n')
                     if (escaped_state or (var_paren_depth > 0)):
-                        # In this case, the '\' char was only to prevent
-                        # interpreting nextchar as a variable terminator
-                        # delete_prior_escape = True # so skip the '\'
-                        # character
-                        del var_descr_plist[-1]
+                    #11-04a#if (escaped_state or var_parens_in_use):
+                        # In that case ignore the terminator
+                        # and append it to the variable name
+                        if escaped_state:
+                            # In this case, the '\' char was only to prevent
+                            # interpreting nextchar as a variable terminator
+                            # delete_prior_escape = True # so skip the '\'
+                            # character
+                            del var_descr_plist[-1]
+                            #escaped_state = False
                         var_descr_plist.append(nextchar)
                     else:
                         terminate_var = True
@@ -1799,6 +1985,7 @@ class TemplateLexer(TtreeShlex):
                         # character
                         del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
+                        #escaped_state = False
                     else:
                         prev_var_delim = True
                         # Then we are processing a new variable name
@@ -1837,25 +2024,27 @@ class TemplateLexer(TtreeShlex):
                     else:
                         prev_char_delim = True
                         reading_var = True
+                        # NOTE TO SELF: IN THE FUTURE, USE GetVarName(self)
+                        # TO PARSE TEXT ASSOCIATED WITH A VARIABLE
+                        # THIS WILL SIMPLIFY THE CODE AND ENSURE CONSISTENCY.
                         var_paren_depth = 0
+                        #11-04a#var_parens_in_use = False
                         terminate_text = True
                 else:
                     text_block_plist.append(nextchar)
                     # TO DO: use "list_of_chars.join()" instead of '+='
                     prev_char_delim = False  # the previous character was not '$'
 
-            # Now deal with "other_esc_chars"
-            # if escaped_state and (nextchar in other_esc_chars):
-
-            if escaped_state and (nextchar in other_esc_chars):
-                if reading_var:
-                    #sys.stdout.write('   ReadTemplate: var_descr_str=\''+''.join(var_descr_plist)+'\'\n')
-                    assert(var_descr_plist[-2] in self.escape)
-                    del var_descr_plist[-2]
-                else:
-                    #sys.stdout.write('   ReadTemplate: text_block=\''+''.join(text_block_plist)+'\'\n')
-                    assert(text_block_plist[-2] in self.escape)
-                    del text_block_plist[-2]
+            # Now deal with "other_esc_chars"  <--COMMENT: WHAT IS THIS FOR? -AJ
+            #11-04c#if escaped_state and (nextchar in other_esc_chars):
+            #11-04c#    if reading_var:
+            #11-04c#        #sys.stdout.write('   ReadTemplate: var_descr_str=\''+''.join(var_descr_plist)+'\'\n')
+            #11-04c#        assert(var_descr_plist[-2] in self.escape)
+            #11-04c#        del var_descr_plist[-2]
+            #11-04c#    else:
+            #11-04c#        #sys.stdout.write('   ReadTemplate: text_block=\''+''.join(text_block_plist)+'\'\n')
+            #11-04c#        assert(text_block_plist[-2] in self.escape)
+            #11-04c#        del text_block_plist[-2]
 
             if terminate_text:
                 #sys.stdout.write('ReadTemplate() appending: ')
@@ -1893,6 +2082,7 @@ class TemplateLexer(TtreeShlex):
                     raise InputError('Error: near ' + self.error_leader() + '\n\n'
                                      'Null variable name.')
                 if var_paren_depth > 0:
+                #11-04a#if var_parens_in_use:
                     raise InputError('Error: near ' + self.error_leader() + '\n\n'
                                      'Incomplete bracketed variable name.')
 
@@ -1949,7 +2139,11 @@ class TemplateLexer(TtreeShlex):
                     # Then we are processing a new variable name
                     prev_var_delim = True
                     reading_var = True
+                    # NOTE TO SELF: IN THE FUTURE, USE GetVarName(self)
+                    # TO PARSE TEXT ASSOCIATED WITH A VARIABLE
+                    # THIS WILL SIMPLIFY THE CODE AND ENSURE CONSISTENCY.
                     var_paren_depth = 0
+                    #11-04a#var_parens_in_use = False
                     var_prefix = nextchar
 
                 elif nextchar in self.var_close_paren:

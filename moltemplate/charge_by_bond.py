@@ -6,13 +6,14 @@
 # All rights reserved.
 
 g_program_name = __file__.split('/')[-1]   # = 'charge_by_bond.py'
-g_date_str = '2017-10-03'
-g_version_str = '0.14.0'
+g_date_str = '2020-11-04'
+g_version_str = '0.15.0'
 
 
 import sys
 import re
 from collections import defaultdict
+import re
 
 try:
     from . import ttree_lex
@@ -166,7 +167,7 @@ def LookupChargePairs(chargebyatomid,
 
             for typestr in tokens[:2]:
                 if ttree_lex.HasRE(typestr):
-                    regex_str = typestr[3:]
+                    regex_str = VarNameToRegex(typestr)
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))
