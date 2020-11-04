@@ -147,6 +147,7 @@ import os
 import sys
 sys.path.append(os.getcwd())
 import importlib
+import re
 
 if sys.version < '2.6':
     raise InputError('Error: Using python ' + sys.version + '\n'
@@ -253,8 +254,7 @@ def GenInteractions_lines(lines_atoms,
             typepattern = []
 
             for typestr in tokens[1:]:
-                if ((len(typestr) >= 2) and
-                    HasRE(typestr)):
+                if HasRE(typestr):
                     regex_str = VarNameToRegex(typestr)
                     typepattern.append(re.compile(regex_str))
                 else:

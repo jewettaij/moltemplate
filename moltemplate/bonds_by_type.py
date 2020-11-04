@@ -34,6 +34,7 @@ except (ImportError, SystemError, ValueError):
     # not installed as a package
     import ttree_lex
     from lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid
+import re
 
 
 def LookupBondTypes(bond_types,

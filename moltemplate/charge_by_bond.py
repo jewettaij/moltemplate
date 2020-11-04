@@ -13,6 +13,7 @@ g_version_str = '0.14.0'
 import sys
 import re
 from collections import defaultdict
+import re
 
 try:
     from . import ttree_lex

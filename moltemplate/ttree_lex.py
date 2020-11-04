@@ -624,6 +624,7 @@ def GetVarName(lex):
             if paren_depth > 0:
                 var_name_l.append(nextchar)
             else:
+                lex.push_raw_text(nextchar)
                 break
         elif escaped:
             var_name_l.append(nextchar)
@@ -634,14 +635,17 @@ def GetVarName(lex):
             paren_depth += 1
             if (hasattr(lex, 'wordterminators') and
                 (nextchar in lex.wordterminators)):
+                lex.push_raw_text(nextchar)
                 break
             else:
                 var_name_l.append(nextchar)
         elif nextchar == rparen:
             paren_depth -= 1
-            if ((paren_depth == 0) or
-                (hasattr(lex, 'wordterminators') and
-                 (nextchar in lex.wordterminators))):
+            if paren_depth == 0:
+                break
+            elif (hasattr(lex, 'wordterminators') and
+                  (nextchar in lex.wordterminators)):
+                lex.push_raw_text(nextchar)
                 break
             else:
                 var_name_l.append(nextchar)
@@ -649,10 +653,12 @@ def GetVarName(lex):
             var_name_l.append(nextchar)
             escaped = False
         elif nextchar in lex.whitespace:
+            lex.push_raw_text(nextchar)
             break
         elif (hasattr(lex, 'wordterminators') and
               (nextchar in lex.wordterminators) and
               (paren_depth == 0)):
+            lex.push_raw_text(nextchar)
             break
         elif nextchar in lex.commenters:
             lex.instream.readline()
