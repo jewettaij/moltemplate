@@ -255,7 +255,7 @@ def GenInteractions_lines(lines_atoms,
             for typestr in tokens[1:]:
                 if ((len(typestr) >= 2) and
                     HasRE(typestr)):
-                    regex_str = typestr[3:]
+                    regex_str = VarNameToRegex(typestr)
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(EscCharStrToChar(typestr))

@@ -166,7 +166,7 @@ def LookupChargePairs(chargebyatomid,
 
             for typestr in tokens[:2]:
                 if ttree_lex.HasRE(typestr):
-                    regex_str = typestr[3:]
+                    regex_str = VarNameToRegex(typestr)
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(ttree_lex.EscCharStrToChar(typestr))
