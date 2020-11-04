@@ -139,7 +139,9 @@ def main():
                 (tokens[0].find('bond_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = tokens[1][3:] #*#
+                    icolon = tokens[1].find(':')
+                    assert(icolon != -1)
+                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -154,7 +156,9 @@ def main():
                 (tokens[0].find('angle_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = tokens[1][3:] #*#
+                    icolon = tokens[1].find(':')
+                    assert(icolon != -1)
+                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -169,7 +173,9 @@ def main():
                 (tokens[0].find('dihedral_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = tokens[1][3:] #*#
+                    icolon = tokens[1].find(':')
+                    assert(icolon != -1)
+                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -184,7 +190,9 @@ def main():
                 (tokens[0].find('improper_coeff') == 0) and
                 (token1_is_re or token1_is_wild)):
                 if token1_is_re:
-                    regex_str = tokens[1][3:] #*#
+                    icolon = tokens[1].find(':')
+                    assert(icolon != -1)
+                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
                     left_paren = text_after = ''
                     typepattern = re.compile(regex_str)
                 else:
@@ -265,7 +273,9 @@ def main():
 
                 if token1_is_re:
                     atom_types1 = atom_types
-                    regex_str = tokens[1][3:]
+                    icolon = tokens[1].find(':')
+                    assert(icolon != -1)
+                    regex_str = tokens[1][icolon+4:len(tokens[1])-1]
                     typepattern1 = re.compile(regex_str)
                 elif token1_is_wild:
                     atom_types1 = atom_types
@@ -274,7 +284,9 @@ def main():
 
                 if token2_is_re:
                     atom_types2 = atom_types
-                    regex_str = tokens[2][3:]
+                    icolon = tokens[2].find(':')
+                    assert(icolon != -1)
+                    regex_str = tokens[2][icolon+4:len(tokens[2])-1]
                     typepattern2 = re.compile(regex_str)
                 elif token2_is_wild:
                     atom_types2 = atom_types

@@ -212,19 +212,22 @@ def main():
         in_if_clause = True
         while lex:
             token = lex.get_token()
-            if token == 'if':
-                in_if_clause = True
+            if ((token == '') or (token == 'if')):
                 if ((len(if_clause)>0) and (len(then_clause)>0)):
                     transition_rules_orig.append([if_clause, then_clause])
                     if_clause = []
                     then_clause = []
-                continue
+                if token == 'if':
+                    in_if_clause = True
+                    continue
+                elif token == '':
+                    break
             elif token == 'then':
                 then_clause = []
                 in_if_clause = False
                 continue
-            if token in ('@', '$'):
-                var_name = lex.GetVarName()
+            elif token in ('@', '$'):
+                var_name = GetVarName(lex)
                 token = token + var_name  # for example: "@/atom:GAFF2/c3"
             if in_if_clause:
                 if_clause.append(token)
@@ -235,7 +238,6 @@ def main():
         if not ('template' in args):
             templ_file.close()
 
-        exit(0)
         #-------- CONTINUEHERE (ISSUE1) --------------
         #AT THIS POINT if_clause=['atom', '[', '1', ']', '=', '=', '@', 'atom', ':', 'A', 'and', 'atom', '[', '2', ']', '=', '=', '@', 'atom', ':', 'B', '*', 'and', 'atom', '[', '3', ']', '=', '=', '@', 'atom', ':', 'C']
         #AND then_clause=['atom', '[', '2', ']', '=', '@', 'atom', ':', 'B', 'and', 'atom', '[', '3', ']', '=', '@', 'atom', ':', 'D']
@@ -250,8 +252,8 @@ def main():
 
 
         # Now split the if and then clauses into tokens separated by "and"
-        if_conditions = []
-        if_condition = []
+        if_requirements = []
+        if_requirement = []
         then_results = []
         then_result = []
         for rule in transition_rules_orig:
@@ -259,19 +261,21 @@ def main():
             then_clause = rule[1]
             #split the if_clause into lists of tokens separated by 'and':
             for token in if_clause:
-                if ((token == 'and') and (len(if_condition) > 0)):
-                    if_conditions.append(if_condition)
+                if ((token == 'and') and (len(if_requirement) > 0)):
+                    if_requirements.append(if_requirement)
+                    if_requirement = []
                 else:
-                    if_condition.append(token)
-            if len(if_condition) > 0:
-                if_conditions.append(if_condition)
-            # Replace rule[0] with the if_conditions list
-            rule[0] = if_conditions
+                    if_requirement.append(token)
+            if len(if_requirement) > 0:
+                if_requirements.append(if_requirement)
+            # Replace rule[0] with the if_requirements list
+            rule[0] = if_requirements
 
             #split the then_clause into lists of tokens separated by 'and'
             for token in then_clause:
                 if ((token == 'and') and (len(then_result) > 0)):
                     then_results.append(then_result)
+                    then_result = []
                 else:
                     then_result.append(token)
             if len(then_result) > 0:
@@ -304,30 +308,43 @@ def main():
         dihedral_req = []  # dihedral type requirements
         improper_req = []  # improper type requirements
         for rule in transition_rules_orig:
-            if_conditions = rule[0]
-            for if_condition in if_conditions:
-                tokens = if_condition
+            if_requirements = rule[0]
+            for if_requirement in if_requirements:
+                tokens = if_requirement
                 assert(len(tokens) > 0)
                 iatm = -1
                 if tokens[0] == 'atom':
-                    if not ((len(tokens) == 5) and
+                    # allow users to use either '=' or '==' to test for equality
+                    # For example, these should both work:
+                    #    'if atom[1] == @atom:A'
+                    #    'if atom[1] = @atom:A'.
+                    # But if '==' was used, the lexer will mistake this for
+                    # two separate tokens ('=' followed by '=').  We take care
+                    # of that here by deleting the extra '='
+                    if (tokens[4] == tokens[5] == '='):
+                        tokens[4] = '=='
+                        del tokens[5]
+                    if not ((len(tokens) == 6) and
                             (tokens[1] == '[') and
                             (tokens[2].isnumeric() and
                              (int(tokens[2]) > 0)) and
                             (tokens[3] == ']') and
-                            ((tokens[4].find('@') != -1) and
-                             (tokens[4].find('atom:') != -1))):
+                            (tokens[4] == '==') and
+                            ((tokens[5].find('@') != -1) and
+                             (tokens[5].find('atom:') != -1))):
                         raise InputError('Error in transitions file near:\n'+
                                          '      '+' '.join(tokens)+'\n')
 
                 iatm = int(tokens[2])
-                if iatm >= Natm:
-                    atom_req += [] * (1 + iatm - Natm)
-                    Natm = iatm + 1
-                    assert(Natm == len(atom_req))
+                if iatm >= Natoms:
+                    atom_req += [[] for i in range(0, 1 + iatm - Natoms)]
+                    Natoms = iatm + 1
+                    assert(Natoms == len(atom_req))
 
-                typestr = tokens[4]  # a string identifying atom type(s)
-                                     # eg: '@atom:/SPCE/O' or '@atom:C*'
+                typestr = tokens[5][1:]  # a string identifying atom type(s)
+                                         # eg: '@atom:/SPCE/O' or '@atom:C*'
+                #icolon = typestr.find('atom:') + 5
+                #typestr = typestr[icolon:]
 
                 # If the second token is surrounded by '/' characters, interpret
                 # it as a regular expression.
@@ -340,15 +357,17 @@ def main():
                                 (typestr[0] != '{')) #(ignore * or ? in {})
 
                 if type_is_re:
-                    regex_str = typestr[3:]
-                    left_paren = text_after = ''
+                    regex_str = VarNameToRegex(typestr)
                     typepattern = re.compile(regex_str)
                 else:
-                    left_paren, typepattern, text_after = ExtractVarName(tokens[1])
-                if (type_is_re or type_is_wild):
-                    for atype in atom_types:
-                        if MatchesPattern(atype, typepattern):
-                            atom_req[iatm].append('@'+left_paren+atype+text_after)
+                    #left_paren, typepattern, text_after=ExtractVarName(typestr)
+                    typepattern = typestr
+                    left_paren = ''
+                    text_after = ''
+                for atype in atom_types:
+                    if MatchesPattern(atype, typepattern):
+                        #atom_req[iatm].append('@'+left_paren+atype+text_after)
+                        atom_req[iatm].append('@{'+atype+'}')
 
         # ------------------ CONTINUEHERE --------------------
                     
