@@ -59,44 +59,13 @@ then
 
 """
 
-#OLD SYNTAX:
-#
-#if atoms((1,@atom:A), (2,@atom:B*), (3,@atom:C)) and &
-#   bonds(((1,2),@bond:AB), ((2,3),@bond:BC)) and &
-#   angles(((1,2,3),@angle:ABC)) and &
-#   distance(1,3) < 3.0 and &
-#   prob(0.5)
-#then &
-#   atoms( ,@atom:B,@atom:D) and &
-#   bonds(((1,2),@bond:*), ((1,3),@bond:AD))
-#
-#if atoms(@atom:A, ,@atom:C) and &
-#   bonds((1,2), (2,3)) and &
-#   angles(((1,2,3),@angle:ABC)) and &
-#   distance(1,3) < 3.0 and &
-#   prob(0.5) and &
-#then &
-#   atoms(@atom:A, @atom:*,@atom:D) and &
-#   bonds(((1,2),@bond:*), ((1,3),@bond:AD))
 
-
-
-
-
-
-#Strategy
-#1) Instantiate the lexer
-#2) Use lex.ReadTemplate()   (and also StaticObj.CleanupReadTemplate() ?? no.)
-#3) Augment the functionality of ttree_lex.SplitTemplateMulti() to optionally
-#   enable it to not discard the delimiter used for splitting.  This way you
-#   can see which delimiter appears where.  (This is optional and not default)
-#4) Use SplitTemplateMulti(['if','then'])
-#5) Use SplitTemplate('and')
-#5) Use SplitTemplateMulti(['[', ']', '(', ')', ',', '==', '=', 'atom_type', 'bond_type', 'angle_type', 'dihedral_type', 'improper_type', 'distance', 'prob', 'rmsd', 'coords', 'delete_atom', 'delete_bond', 'delete_angle', 'delete_dihedral', 'dihedral_improper'])
+# Keywords recognized by this script:
+# '[', ']', '(', ')', ',', '==', '=', 'atom_type', 'bond_type', 'angle_type', 'dihedral_type', 'improper_type', 'distance', 'prob', 'rmsd', 'coords', 'delete_atom', 'delete_bond', 'delete_angle', 'delete_dihedral', 'dihedral_improper'
 #
 # ------ the following features not needed for version 1.0: ------
 #
-#6) This next step is only needed for rmsd((),())  and coords():
+#1) This next step is only needed for rmsd((),())  and coords():
 #   Create a variant of SplitQuotedString() that splits according to both
 #   parenthesis and commas and works with nested expressions.
 #   Call it "SplitNestedQuotes()".  It accepts these arguments with these
@@ -109,6 +78,7 @@ then
 #        ... which is what ReadTemplate() will return when invoked on
 #            'bond(((1,2),@/bond:AB), ((2,3),@/bond:BC))'
 #   into something like this:
+#        KRUFT ALERT.  THE NEXT FEW LINES OF COMMENTS ARE OUT OF DATE -AJ2020-11
 #    ['bond',
 #     '(',
 #     ['(1,2),', VarRef('@/bond:AB')],
@@ -118,7 +88,7 @@ then
 #         The '(1,2),' was not processed further.  Had it been, it would have
 #         returned [['(', ['1','2'] ,')'], '']
 #   
-#7) Use SplitNestedQuotes() to find the arguments following the
+#2) Use SplitNestedQuotes() to find the arguments following the
 #   rmsd() and coords() keywords.
 
 import sys
@@ -166,8 +136,6 @@ def main():
         angle_types = set([])
         dihedral_types = set([])
         improper_types = set([])
-
-        #BasicUIReadBindingsStream(assignments, f, bindings_filename)
 
         # The line above is robust but it uses far too much memory.
         # This for loop below works for most cases.
@@ -237,19 +205,6 @@ def main():
         # now close the file (if we opened it)
         if args.template is not None:
             templ_file.close()
-
-        #-------- CONTINUEHERE (ISSUE1) --------------
-        #AT THIS POINT if_clause=['atom', '[', '1', ']', '=', '=', '@', 'atom', ':', 'A', 'and', 'atom', '[', '2', ']', '=', '=', '@', 'atom', ':', 'B', '*', 'and', 'atom', '[', '3', ']', '=', '=', '@', 'atom', ':', 'C']
-        #AND then_clause=['atom', '[', '2', ']', '=', '@', 'atom', ':', 'B', 'and', 'atom', '[', '3', ']', '=', '@', 'atom', ':', 'D']
-        # I need to consolidate the tokens that are part of atom type patterns,
-        # such as 'B','*' -> 'B*'   (or 'B','/','B' -> 'B/B'),
-        # --OR--
-        # make "lex" of type TemplateLexer and use lex.ReadTemplate()
-        #-------- CONTINUEHERE (ISSUE2) --------------
-        # The while(lex) loop is failing to halt when we reach the end of the
-        # file, and get_token() keeps returning '', causing an infinite loop.
-        # Don't worry about fixing this until deciding how to address ISSUE1.
-
 
         # Now split the if and then clauses into tokens separated by "and"
         if_requirements = []

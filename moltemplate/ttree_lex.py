@@ -1828,7 +1828,6 @@ class TemplateLexer(TtreeShlex):
         # True iff we are in a region of text where vars should be ignored
         commented_state = False
         var_paren_depth = 0  # This is non-zero iff we are inside a
-        #11-04a#var_parens_in_use = False
         # bracketed variable's name for example: "${var}"
         var_terminators += self.whitespace + self.newline + self.var_delim
 
@@ -1898,30 +1897,23 @@ class TemplateLexer(TtreeShlex):
                         # In this case, the '\' char was only to prevent terminating
                         # string prematurely, so delete the '\' character.
                         #delete_prior_escape = True
-                        #11-04b# if not (nextchar in self.var_close_paren):
                         del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
                         #escaped_state = False
-                    elif not ((var_paren_depth > 0) and (nextchar in self.var_close_paren)):
-                    #11-04a#else:
+                    elif not ((var_paren_depth > 0) and
+                              (nextchar in self.var_close_paren)):
                         terminate_var = True
                         done_reading = True
 
                 if nextchar in self.var_open_paren:  # eg: nextchar == '{'
                     #sys.stdout.write('   ReadTemplate() readmode found {.\n')
                     if escaped_state:
-                        #11-04d## In this case, the '\' char was only to prevent
-                        #11-04d## interpreting '{' as a variable prefix
-                        #11-04d## delete_prior_escape=True # so delete the '\'
-                        #11-04d## character
-                        #11-04d#del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
                         #escaped_state = False
                     else:
                         # "${var}" is a valid way to refer to a variable
                         if prev_char_delim:
                             var_prefix += nextchar
-                            #11-04a#var_parens_in_use = True
                             var_paren_depth = 1
                         # "${{var}}" is also a valid way to refer to a variable,
                         # (although strange), but "$va{r}" is not.
@@ -1930,8 +1922,6 @@ class TemplateLexer(TtreeShlex):
                         elif var_paren_depth > 0:
                             var_paren_depth += 1
                             var_descr_plist.append(nextchar)
-                        #11-04a#else:
-                        #11-04a#    var_descr_plist.append(nextchar)
 
                 elif nextchar in self.var_close_paren:
                     #sys.stdout.write('   ReadTemplate() readmode found }.\n')
@@ -1939,7 +1929,6 @@ class TemplateLexer(TtreeShlex):
                         # In this case, the '\' char was only to prevent
                         # interpreting '}' as a variable suffix,
                         # delete_prior_escape=True  #so skip the '\' character
-                        #11-04b#if (nextchar not in terminators):
                         del var_descr_plist[-1]
                         var_descr_plist.append(nextchar)
                         #escaped_state = False
@@ -1951,18 +1940,10 @@ class TemplateLexer(TtreeShlex):
                                 terminate_var = True
                             else:
                                 var_descr_plist.append(nextchar)
-                        #11-04a#if var_parens_in_use:
-                        #11-04a#    var_suffix = nextchar
-                        #11-04a#    terminate_var = True
-                        #11-04a#    var_parens_in_use = False
-                        #11-04a#else:
-                        #11-04a#    var_descr_plist.append(nextchar)
-
 
                 elif nextchar in var_terminators:
                     #sys.stdout.write('   ReadTemplate() readmode found var_terminator \"'+nextchar+'\"\n')
                     if (escaped_state or (var_paren_depth > 0)):
-                    #11-04a#if (escaped_state or var_parens_in_use):
                         # In that case ignore the terminator
                         # and append it to the variable name
                         if escaped_state:
@@ -2028,7 +2009,6 @@ class TemplateLexer(TtreeShlex):
                         # TO PARSE TEXT ASSOCIATED WITH A VARIABLE
                         # THIS WILL SIMPLIFY THE CODE AND ENSURE CONSISTENCY.
                         var_paren_depth = 0
-                        #11-04a#var_parens_in_use = False
                         terminate_text = True
                 else:
                     text_block_plist.append(nextchar)
@@ -2082,7 +2062,6 @@ class TemplateLexer(TtreeShlex):
                     raise InputError('Error: near ' + self.error_leader() + '\n\n'
                                      'Null variable name.')
                 if var_paren_depth > 0:
-                #11-04a#if var_parens_in_use:
                     raise InputError('Error: near ' + self.error_leader() + '\n\n'
                                      'Incomplete bracketed variable name.')
 
@@ -2143,7 +2122,6 @@ class TemplateLexer(TtreeShlex):
                     # TO PARSE TEXT ASSOCIATED WITH A VARIABLE
                     # THIS WILL SIMPLIFY THE CODE AND ENSURE CONSISTENCY.
                     var_paren_depth = 0
-                    #11-04a#var_parens_in_use = False
                     var_prefix = nextchar
 
                 elif nextchar in self.var_close_paren:
