@@ -490,6 +490,12 @@ class GenPoly(object):
                 self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
+                if j-i < 1:
+                    err_msg = 'Error in "-cuts" argument: One or more of the cuts has length zero.  The\n' + \
+                              '      numbers in the "-cuts" file must all lie between 1 and N-1 (where "N" is\n' + \
+                              '      the number of monomers in the polymer, which is '+str(self.N)+' in this case).\n' + \
+                              '      Furthermore, no integer can be listed more than once.\n'
+                    raise InputError(err_msg+'.\n')
                 coords_multi.append(coords[i:j])
                 i = j
         else:
@@ -953,8 +959,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.2'
-        g_date_str = '2020-8-06'
+        g_version_str = '0.1.3'
+        g_date_str = '2020-11-05'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
