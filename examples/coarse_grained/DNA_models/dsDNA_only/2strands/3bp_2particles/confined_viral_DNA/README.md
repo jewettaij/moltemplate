@@ -1,9 +1,7 @@
 simple confined DNA example
 ==========
 
-![Initial DNA conformation](images/DNA+capsid_cutaway_t=0_LR.jpg)
-  →  
-![Final DNA conformation](images/DNA+capsid_cutaway_not_equilibrated_LR.jpg)
+![Initial DNA conformation](images/DNA+capsid_cutaway_t=0_LR.jpg) → ![Final DNA conformation](images/DNA+capsid_cutaway_not_equilibrated_LR.jpg)
 
 ## Description
 
