@@ -2,23 +2,30 @@ import "oxdna2.lt"  # <-- defines "OXDNA2", "AT", "CG", "GC", "TA"
 
 using namespace OXDNA2_MONOMERS   #<-- exposes "AT", "CG", "GC", "TA"
 
+# NOTE: You can generate files like this automatically for almost any polymer.
+# using the "genpoly_lt.py" python script (which is included with moltemplate).
+# https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
+# These links may also may be useful:
+# https://github.com/jewettaij/moltemplate/tree/master/examples/coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA
+# https://github.com/jewettaij/moltemplate/blob/master/doc/doc_interpolate_curve.md
+# https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_modify_lt.md
 
-
-# Now define the "Polymer21" molecule object.
+# Instead, in this example, we define the polymer ("Polymer21") manually.
 # (This object is a double-stranded DNA and which is 21 base pairs long.)
 # Once defined, we can make copies of it later.
+
+
+
 
 Polymer21 inherits OXDNA2 {
 
   # Optional: Use "create_var{ $mol }" to insure that all of the atoms in this
-  #  polymer share the same molecule-IDs.  (See chapter 9.6 of the manual.)
-  #  My apologies. I realize this detail is confusing.  Most uers don't care
-  #  about the molecule-ID numbers and can safely comment out this next line.)
+  # polymer share the same molecule-IDs.
+  # My apologies. I realize this detail is confusing.  Most uers don't care
+  # about the molecule-ID numbers and can safely comment out this next line.)
 
   create_var{ $mol }
 
-
-  # ----- IMPORTANT: -----
   # Now create an array of 21 base-pair "monomers", and specify their
   # location and orientation
   # Each successive "monomer" will be shifted (in the +Z

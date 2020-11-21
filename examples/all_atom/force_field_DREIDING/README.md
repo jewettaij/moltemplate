@@ -50,5 +50,5 @@ When multiple atoms have the same type, this creates ambiguity in atom order.
 Since there is no guarantee that moltemplate will choose the same atom order
 as other molecule builders this can lead to small unavoidable discrepancies
 in energies and forces computed by LAMMPS and other simulation programs
-(like Materials Studio).  But their effect should be neglegible.
+(like Materials Studio).  But their effect should be negligible.
 (Please let us know if this is not the case.)

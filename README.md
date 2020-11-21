@@ -48,13 +48,13 @@ Moltemplate is interoperable with
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that reads or generates LAMMPS data (.lmpdat) files.
-This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
 
 ### Documentation
 
 The best way to learn how to use moltemplate is to find an example
 which is similar to the system that you wish to simulate and modify it.
+This repository includes approximately 50 [examples](./examples).
 Some of the moltemplate examples are also demonstrated (with pictures)
 [here](http://moltemplate.org/visual_examples.html).
 

@@ -1,5 +1,11 @@
 You can visualize the trajectory (dump file) with the program OVITO
 (www.ovito.org). You will have to define few parameters, though.
+UNFORTUNATELY, OVITO DOES A POOR JOB OF VISUALIZING OxDNA2 POLYMERS BY DEFAULT.
+(I haven't yet figured out any other way to visualize them.
+ Unfortunately the aspherical parameters that are used in the OxDNA2
+ force field do not work well for visualization.
+ Feel free to suggest better methods or scripts and I will post them.)
+
 Invoke ovito using:
 
 ovito traj.lammpstrj
@@ -10,7 +16,7 @@ click on "File contains a time series" to display the entire trajectory.
 Then click the button "Edit column mapping" and enter the fields as specified
 in the png file located here:
 
-https://github.com/jewettaij/moltemplate/blob/master/examples/coarse_grained/ellipsoids_CG_benzene/README_visualization_OVITO_ellipsoids.png
+https://github.com/jewettaij/moltemplate/blob/master/examples/coarse_grained/MOLC/README_visualization_OVITO_settings.png
 
 (However, in this particular example, the "Orientation" columns are named
  "c_quat" instead of "c_q".  As before, they are ordered: W, X, Y, Z.)

@@ -39,8 +39,9 @@ fix fxnve gOXDNA2 nve/dot
 #fix fxnve gOXDNA2 nve/asphere
 fix fxlan gOXDNA2 langevin ${Toxdna} ${Toxdna} 0.03 457145 angmom 10
 
-# (you may need to adjust this timestep)
-timestep 1e-5
+# (The timestep has not been optimized for accuracy or speed.
+#  You might need to adjust it.)
+timestep 0.005
 
 # optional: print out various contributions to the energy 
 compute erot gOXDNA2 erotate/asphere
