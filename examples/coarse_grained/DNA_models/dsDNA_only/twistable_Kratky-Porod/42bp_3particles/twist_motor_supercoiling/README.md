@@ -5,7 +5,9 @@ This example demonstrates how to prepare a simulation of circular
 double-stranded (ds) DNA containing a "twist motor"
 (a machine that applies a torsional torque on the polymer).
 
-![Twist motor](../../images/twist_motor_LLR.jpg)
+![Twist motor](../../images/twist_motor_LLR.jpg) →
+
+![Twisted DNA polymer](https://i1.ytimg.com/vi/TzCJ4BTUQ20/hqdefault.jpg)
 
 In biology, machines like gyrase cause double stranded breaks
 allowing the polymer to pass through itself at times that would
@@ -16,12 +18,13 @@ as rotary motors.
 There are two types of rotary motors implemented:
 
 1) Motors that apply a constant torque to the polymer
+https://www.youtube.com/watch?v=TzCJ4BTUQ20
 https://www.youtube.com/watch?v=tnhUKxsAaqw
 
 2) Motors that twist at a constant rate
 https://www.youtube.com/watch?v=xU2QzDDmuyA
 
-Note: The polymer shown in those videos ("3bp2p") is different than the
+Note: The polymer shown in some of these videos ("3bp2p") is different than the
       polymer used in this example ("42bp3p"), however the behavior
       of the twist motors is the same.
 
