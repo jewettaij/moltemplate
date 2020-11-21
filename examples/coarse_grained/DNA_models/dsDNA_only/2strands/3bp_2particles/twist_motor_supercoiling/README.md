@@ -6,6 +6,7 @@ double-stranded (ds) DNA containing a "twist motor"
 (a machine that applies a torsional torque on the polymer).
 
 ![Twist motor](../images/twist_motor_3bp2p_LLR.jpg)
+![Twisted DNA polymer](https://i1.ytimg.com/vi/xU2QzDDmuyA/hqdefault.jpg)
 
 In biology, machines like gyrase cause double stranded breaks
 allowing the polymer to pass through itself at times that would

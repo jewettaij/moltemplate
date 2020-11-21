@@ -1,7 +1,18 @@
 simple confined DNA example
 ==========
+
+![Initial DNA conformation](images/DNA+capsid_cutaway_t=0_LR.jpg)
+  →  
+![Final DNA conformation](images/DNA+capsid_cutaway_not_equilibrated_LR.jpg)
+
+## Description
+
 This is an example demonstrating how to confine a polymer (eg. DNA)
 within an arbitrary shaped box (eg. the HIV viral capsid).
+Here are two images showing the initial and final conformation of
+the DNA polymer (before and after the simulation).
+
+## Overview
 
 Initially, the conformation of the polymer is created with a combination
 of "ndmansfield" (a random self-avoiding-curve generator), smoothed with
@@ -16,6 +27,11 @@ https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 Then moltemplate is invoked to create a LAMMPS data file and input script
 containing the polymer (as well as the box that it is contained within).
 (See "STEP_2_generate_LAMMPS_files.sh" for details.)
+
+Some of the particles in the simulation form the walls of the container
+(the viral capsid shell).  The are immobilized by excluding them from
+the group of atoms that is supplied to the integrator.  (For details, see
+"run.in.min", and pay attention to the "group" and "fix nve/limit" commands.)
 
 ##    Prerequisites
 
