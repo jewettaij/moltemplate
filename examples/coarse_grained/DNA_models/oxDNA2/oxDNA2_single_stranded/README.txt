@@ -1,14 +1,19 @@
 
-This is a simple example demonstrating how to build a short straight
-coarse-grained helical double-stranded DNA polymer using the oxDNA2
-force field with moltemplate.
+This is a simple example demonstrating how to build a short
+single-stranded DNA polymer using the oxDNA2 force field with moltemplate.
 
 This is based on the corresponding LAMMPS example located in this subdirectory:
 examples/USER/cgdna/examples/oxDNA2/duplex1/
 ...which is distributed with LAMMPS.  (The conversion into MOLTEMPLATE format
 was done automatically using the "ltemplify.py" file converter.)
 
-WARNING: As of 2019-11-02, this example has not been tested or optimized.
+Even though this is a single-stranded DNA molecule, in this example,
+for its initial configuration, I decided to move and rotate each monomer (base)
+into the same helical position it would be in if it were part of
+ordinary (B-form) double-stranded DNA.  This is optional.
+(See "polymer.lt" for details.)
+
+WARNING: As of 2020-11-20, this example has not been tested or optimized.
          You should probably alter with the timestep, and langevin-settings
          to improve the simulation efficiency.
 

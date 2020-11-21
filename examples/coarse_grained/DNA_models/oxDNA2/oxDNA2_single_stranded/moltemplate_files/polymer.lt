@@ -1,6 +1,6 @@
-import "oxdna2.lt"  # <-- defines "OXDNA2", "A", "C", "G", "T"
+import "oxdna2.lt"  # <-- defines "OXDNA2", "A", "C", "G", "T" bases (monomers)
 
-using namespace OXDNA2_MONOMERS   #<-- exposes "A", "C", "G", "T"
+using namespace OXDNA2_MONOMERS  #<-makes it easier to access "A", "C", "G", "T"
 
 
 # NOTE: You can generate files like this automatically for almost any polymer.

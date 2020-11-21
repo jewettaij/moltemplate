@@ -1,6 +1,7 @@
 import "oxdna2.lt"  # <-- defines "OXDNA2", "AT", "CG", "GC", "TA"
 
-using namespace OXDNA2_MONOMERS   #<-- exposes "AT", "CG", "GC", "TA"
+using namespace OXDNA2_MONOMERS  #<-makes it easier to access "A", "C", "G", "T"
+
 
 # NOTE: You can generate files like this automatically for almost any polymer.
 # using the "genpoly_lt.py" python script (which is included with moltemplate).
