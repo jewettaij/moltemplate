@@ -7,6 +7,8 @@ This simple example demonstrates how to build a simulation containing a box full
 
 <img src="images/benzene.jpg" width=110>
 
+The number of molecules in the simulation and and the simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The simulation contitions can be controlled by editing the [run.in.npt file](run.in.npt).
+
 
 ### Details 
 
@@ -38,7 +40,7 @@ run a short simulation are provided in other README files.
 2) To run LAMMPS with these files, follow these instructions:
 [README_run.sh](README_run.sh)
 
-*(If you notice a problem with this example, please [report it](../README.md).)*
+(The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)
 
 
 ### Requirements

@@ -52,10 +52,9 @@ ClIon {
 
 
 
-
-
-# Note: Monovalent ion parameters for Ewald and SPC/E water
-#       are from Joung & Cheatham JPCB (2008)   (Table 5)
+# Note: Monovalent ion parameters for Ewald and SPC/E water are from
+#       Joung S, Cheatham TE, JPCB, 2008, 112(30):9020-41  (Table 5)
+#       https://doi.org/10.1021/jp8001614
 #       (The widths of the ions, expressed in terms of Rmin/2, are:
 #        1.212 and 2.711, for Na+ and Cl-, respectively)
 # Note: They use  U(r) =  ε*((σ/r)^12 - 2*(σ/r)^6)

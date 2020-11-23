@@ -1,13 +1,13 @@
 Long alkane chain example
 ==============
-This example is a simple simulation of a long alkane chain, in a vacuum at room temperature using the OPLSAA force field.  The molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").  In this example, the polymer was initially straight.  However you can use the ["genpoly_lt.py" script](../../../../doc/doc_genpoly_lt.md) to generate .lt files describing long polymers that can wrap around any curve.  (An example of "genpoly_lt.py" usage can be found [here](../../../coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)
+This example is a simple simulation of a long alkane chain, in a vacuum at room temperature using the OPLSAA force field.  The molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").  In this example, the polymer was initially straight.  However you can use the ["genpoly_lt.py" script](../../../../doc/doc_genpoly_lt.md) to generate .lt files describing long polymers that can wrap around any curve.  (An example of "genpoly_lt.py" usage can be found [here](../../../coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)  *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
 
 #### Images
 
 <img src="images/ch2_ry90.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60.jpg" width=110>
 <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=0_straight.jpg" width=250> <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=1ns_equilibrated.jpg" width=150>
 
-*Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
+The length of the polymer can be controlled by editing the [alkane50.lt file](moltemplate_files/alkane50.lt).  The simulation contitions can be controlled by editing the [run.in.nvt file](run.in.nvt).
 
 
 ### Instructions
@@ -18,7 +18,7 @@ This example is a simple simulation of a long alkane chain, in a vacuum at room 
 2) To run LAMMPS with these files, follow these instructions:
 [README_run.sh](README_run.sh)
 
-*(If you notice a problem with this example, please [report it](../README.md).)*
+(The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)
 
 
 ### Details

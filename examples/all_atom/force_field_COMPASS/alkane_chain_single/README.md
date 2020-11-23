@@ -8,6 +8,8 @@ This example is a simple simulation of a long alkane chain, in a vacuum at room 
 <img src="images/ch2_ry60.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60.jpg" width=110>
 <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=0_straight.jpg" width=250> <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=1ns_equilibrated.jpg" width=150>
 
+The length of the polymer can be controlled by editing the [alkane50.lt file](moltemplate_files/alkane50.lt).  The simulation contitions can be controlled by editing the [run.in.nvt file](run.in.nvt).
+
 
 ### Instructions
 
@@ -17,7 +19,7 @@ This example is a simple simulation of a long alkane chain, in a vacuum at room 
 2) To run LAMMPS with these files, follow these instructions:
 [README_run.sh](README_run.sh)
 
-*(If you notice a problem with this example, please [report it](../README.md).)*
+(The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)
 
 
 ### Details

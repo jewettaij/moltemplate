@@ -1,13 +1,12 @@
 Ethylene, Benzene mixture
 ==============
-A mixture of two small organic molecules using the *OPLSAA* force field.  In this example, the ethylene molecules were initially arranged in a rectangular lattice.  The benzene molecules were also arranged in a lattice, and were shifted to avoid overlap with the ethylene molecules. *(See the [system.lt file](./moltemplate_files/system.lt) for details.)*
-
+A mixture of two small organic molecules using the *OPLSAA* force field.  In this example, the ethylene molecules were initially arranged in a rectangular lattice.  The benzene molecules were also arranged in a lattice, and were shifted to avoid overlap with the ethylene molecules.  *(Alternatively, you can create a single lattice and specify the number of ethelene and benzene molecules you want in it using moltemplate's "new random([],[])" command, which is explained in the manual.  This gives you more control over the concentration of each ingredient.  You can also use PACKMOL to create random mixtures of molecules.)*
 
 #### Images
+
 <img src="images/ethylene.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/benzene.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_50bar_t=100000_LR.jpg" width=150>
 
-
-*(Alternatively, you can create a single lattice and specify the number of ethelene and benzene molecules you want in it using moltemplate's "new random([],[])" command, which is explained in the manual.  You can also use PACKMOL to create random mixtures of molecules.)*
+The number of molecules, positions, and simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The simulation contitions can be controlled by editing the [run.in.npt file](run.in.npt).
 
 
 ## Instructions
@@ -18,4 +17,4 @@ A mixture of two small organic molecules using the *OPLSAA* force field.  In thi
 2) To run LAMMPS with these files, follow these instructions:
 [README_run.sh](README_run.sh)
 
-*(If you notice a problem with this example, please [report it](../README.md).)*
+(The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)

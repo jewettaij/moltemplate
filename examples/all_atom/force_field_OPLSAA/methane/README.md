@@ -1,6 +1,7 @@
 Methane Example
 ===================
-This example demonstrates how to build a simulation containing a box of methane gas.  (Not a very interesting example.)  The number of methane molecules, and box size can be controlled by editing the [system.lt](./moltemplate_files/system.lt) file.
+This example demonstrates how to build a simulation containing a box of methane gas.  (Not a very interesting example.)
+
 
 ### Details 
 
@@ -10,6 +11,8 @@ The methane molecules in this example use the OPLSAA force-field.  This means th
 import "oplsaa.lt"
 Methane inherits OPLSAA { ... }    # (see "methane.lt")
 ```
+
+The number of molecules and simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The simulation contitions can be controlled by editing the [run.in.npt file](run.in.npt).
 
 
 ### Instructions
@@ -22,4 +25,4 @@ More detailed instructions on how to build LAMMPS input files and run a short si
 2) To run LAMMPS with these files, follow these instructions:
 [README_run.sh](README_run.sh)
 
-*(If you notice a problem with this example, please [report it](../README.md).)*
+(The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)

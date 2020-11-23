@@ -1,6 +1,6 @@
 Star Polymer Example
-======================================
-This example is a simple simulation of several star-polymers.  Each star polymer consists of 12 alkane chains (named "Polyethylene16") attached to a large particle located in the center.
+====================
+This example is a simple simulation of several star-polymers.  Each star polymer consists of 12 alkane chains (named "Polyethylene16") attached to a large particle located in the center.  *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
 
 
 #### Images
@@ -9,8 +9,7 @@ This example is a simple simulation of several star-polymers.  Each star polymer
 
 <img src="images/rightarrow.svg" height=80> <img src="images/star_polymers_t=0_LR.jpg" width=250> <img src="images/rightarrow.svg" height=80> <img src="images/star_polymers_t=50000_LR.jpg" width=250>
 
-
-*Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
+The number of star molecules and simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The number of polymers in each "star" can be controlled by editing the [polyethylene16_star12.lt](moltemplate_files/polyethylene16_star12.lt) file.  The length of the polymers can be controlled by editing the [polyethylene16.lt](moltemplate_files/polyethylene16.lt) file.  The simulation contitions can be controlled by editing the [run.in.npt file](run.in.npt).
 
 
 ### Instructions
@@ -21,7 +20,7 @@ This example is a simple simulation of several star-polymers.  Each star polymer
 2) To run LAMMPS with these files, follow these instructions:
 [README_run.sh](README_run.sh)
 
-*(If you notice a problem with this example, please [report it](../README.md).)*
+(The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)
 
 
 ### Details

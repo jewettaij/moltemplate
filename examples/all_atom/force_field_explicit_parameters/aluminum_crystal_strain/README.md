@@ -1,9 +1,21 @@
+Aluminum crystal under strain
+=============================
+A simulation of a small alluminum crystal under high pressure.
+
+### Images
+
+<img src="images/AlCell_LR.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/AlCrystal10x10x10_t=0steps_LR.jpg" height=140> <img src="images/rightarrow.svg" height=80> <img src="images/AlCrystal10x10x10_t=20000steps_LR.jpg" height=140>
+
+
+
+## Details
+
 NOTE: This example requires the "Al99.eam.alloy" file.
-      (It was not included in this directory because if its large size.)
-      As of 2012-11, I was able to obtain it here:
-      http://www.ctcms.nist.gov/~cbecker/Download/Al-YM/Al99.eam.alloy
-      Copy it to the directory containing this README file.
-------------------------------------------------------------------------
+(It was not included in this directory because if its large size.)
+As of 2012-11, I was able to obtain it here:
+http://www.ctcms.nist.gov/~cbecker/Download/Al-YM/Al99.eam.alloy
+Copy it to the directory containing this README file.
+
 This example shows an alternative way to setup the
 aluminum crystal loading simulation described here:
 http://icme.hpc.msstate.edu/mediawiki/index.php/Uniaxial_Compression
@@ -17,7 +29,7 @@ unusual structures out of aluminum crystals, or mix them with other molecules.
 I created this example in response to a user request.)
 
 
-  --- To build the system ---
+## Instructions
 
 Carry out the instructions in README_setup.sh,
 to generate the LAMMPS DATA file and input scripts you need:
@@ -26,13 +38,13 @@ system.data, system.in.init, system.in.settings.
 
 
   --- To run LAMMPS, try a command like: ---
-
+```
 lmp_mpi -i run.in
-
-    or (if you have mpi installed)
-
+```
+or (if you have mpi installed)
+```
 mpirun -np 4 lmp_mpi -i run.in
-
+```
 This will create an ordinary LAMMPS dump file you can visualize with VMD
 traj.lammpstrj    (See README_visualize.txt)
 
