@@ -53,7 +53,7 @@ c) Menu  Extensions->Tk Console
 d) Try entering these commands:
 
     pbc wrap -compound res -all
-    pbc box
+    pbc box -width 0.5
 
     ----- Optional ----
     Sometimes the solvent or membrane obscures the view of the solute.
@@ -61,14 +61,9 @@ d) Try entering these commands:
     To shift the box in the y direction (for example) do this:
 
     pbc wrap -compound res -all -shiftcenterrel {-0.1 -0.1 -0.1}
-    pbc box -shiftcenterrel {-0.1 -0.1 -0.1}
+    pbc box -shiftcenterrel {-0.1 -0.1 -0.1} -width 0.5
 
     Distances are measured in units of box-length fractions, not Angstroms.
-
-    Alternately if you have a solute whose atoms are all of type 1,
-    then you can also try this to center the box around it:
-
-    pbc wrap -sel type=1 -all -centersel type=2 -center com
 
 4)
     You should check if your periodic boundary conditions are too small.

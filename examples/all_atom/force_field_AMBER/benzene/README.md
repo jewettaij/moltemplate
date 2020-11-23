@@ -1,14 +1,21 @@
-Ethylene, Benzene mixture
-==============
-A mixture of two small organic molecules using the *AMBER/GAFF* force field.  In this example, the ethylene molecules were initially arranged in a rectangular lattice.  The benzene molecules were also arranged in a lattice, and were shifted to avoid overlap with the ethylene molecules. *(See the [system.lt file](./moltemplate_files/system.lt) for details.)*
+Benzene Example
+===================
+This simple example demonstrates how to build a simulation containing a box full of benzene molecules and run a simulation at conditions of 298K, 1 barr.  The number of benzene molecules, and box size can be controlled by editing the [system.lt](./moltemplate_files/system.lt) file.  The simulation conditions can be controlled by editing the [run.in.npt](./run.in.npt) file.
 
 
 #### Images
 
-<img src="images/ethylene.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/benzene.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_50bar_t=100000_LR.jpg" width=150>
+<img src="images/benzene.jpg" width=110>
 
 
-*(Alternatively, you can create a single lattice and specify the number of ethylene and benzene molecules you want in it using moltemplate's "new random([],[])" command, which is explained in the manual.  You can also use PACKMOL to create random mixtures of molecules.)*
+### Details 
+
+The benzene molecules in this example use the AMBER (GAFF) force-field.  *(The GAFF2 force-field is also available.)*  This means that the database of force-field parameters in "gaff.lt" will be used to generate angles, dihedrals, and impropers.  The "moltemplate_files/benzene.lt" file contains these lines which refer to GAFF:
+
+```
+import "gaff.lt"
+Benzene inherits GAFF { ... }    # (see "benzene.lt")
+```
 
 
 ### *WARNING: The atomic charges in this examples are not correct*
@@ -20,7 +27,10 @@ The generation of atomic partial charges requires 3rd party software.
 For suggestions how to calculate charges correctly, see [README.md](../README.md).  Then choose a 3rd party program to calculate partial charges for the atoms in each type of molecule.  Then edit the corresponding ".lt" files in the "moltemplate_files" directory accordingly.
 
 
-## Instructions
+### Instructions
+
+More detailed instructions on how to build LAMMPS input files and
+run a short simulation are provided in other README files.
 
 1) To build the files which LAMMPS needs, follow the instructions in:
 [README_setup.sh](README_setup.sh)
