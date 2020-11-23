@@ -2,13 +2,11 @@ Hexadecane example
 ==============
 This example is a simple simulation of a long alkane chain, in a vacuum at room temperature using the OPLSAA force field.  The molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").
 
-<img src="images/ch2_ry90.jpg" width=110>
-<img src="images/plus.svg" height=80>
-<img src="images/ch3_ry60.jpg" width=110>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/alkane50_t=0_straight.jpg" width=150>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/alkane50_t=1ns_equilibrated.jpg" width=150>
+
+#### Images
+<img src="images/ch2_ry90.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60.jpg" width=110>
+<img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=0_straight.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=1ns_equilibrated.jpg" width=150>
+
 
 *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
 

@@ -2,15 +2,8 @@ Hexadecane example
 ==============
 This example is a simple simulation of many long alkane chains (hexadecane) in a box near the boiling point at atmospheric pressure.  The hexadecane molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").
 
-<img src="images/ch2_ry60_LR.jpg" width=110>
-<img src="images/plus.svg" height=80>
-<img src="images/ch3_ry60_LR.jpg" width=110>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/hexadecane_LR.jpg" width=150>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/hexadecane_12x12x2_t=0_LR.jpg" width=150>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/hexadecane_12x12x2_t=10ps_npt_LR.jpg" width=150>
+<img src="images/ch2_ry60_LR.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60_LR.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_LR.jpg" width=150>
+<img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=10ps_npt_LR.jpg" width=150>
 
 
 *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*

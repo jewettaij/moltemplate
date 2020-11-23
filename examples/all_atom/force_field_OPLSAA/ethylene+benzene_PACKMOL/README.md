@@ -2,13 +2,11 @@ Ethylene, Benzene mixture using PACKMOL
 ==============
 This example also shows how to use moltemplate in together with PACKMOL to create mixture of two small organic molecules using the *OPLSAA* force field.  [PACKMOL](http://m3g.iqm.unicamp.br/packmol/home.shtml) was used to generate the initial coordinates of the system:
 
-<img src="images/ethylene.jpg" width=110>
-<img src="images/plus.svg" height=80>
-<img src="images/benzene.jpg" width=110>
-<img src="images/plus.svg" height=80>
-PACKMOL
-<img src="images/rightarrow.svg" height=80>
-<img src="images/ethylene+benzene_box80x80x80_LR.jpg" width=200>
+
+#### Images
+<img src="images/ethylene.jpg" width=110> <img src="images/plus.svg" height=80>
+<img src="images/benzene.jpg" width=110> <img src="images/plus.svg" height=80> PACKMOL <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_box80x80x80_LR.jpg" width=200>
+
 
 The size and number of ethylene and benzene is specified in the [mix_ethylene+benzene.inp](./packmol_files/mix_ethylene+benzene.inp) and [system.lt](./moltemplate_files/system.lt) files.  (The numbers in these files must agree.)
   

@@ -5,6 +5,7 @@ This directory contains some examples of all-atom simulations using the COMPASS 
 This software is experimental and the force-fields and equilbration protocols have not been tested carefully by me.  There is no gaurantee that simulations prepared using moltemplate will reproduce the behavior of other MD codes.
 
 If you notice a problem with these examples, please report it. Peer-review is the only way to improve this software (or any software).
+
 (jewett.aij @ gmail.com)
 
 ### Limitations

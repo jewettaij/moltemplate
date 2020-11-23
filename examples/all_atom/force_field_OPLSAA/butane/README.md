@@ -2,15 +2,9 @@ Butane example
 ==============
 This example is a simple simulation of many short alkane chains (butane) in a box near the boiling point at atmospheric pressure.  The butane molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").
 
-<img src="images/ch2_ry90.jpg" width=110>
-<img src="images/plus.svg" height=80>
-<img src="images/ch3_ry60.jpg" width=110>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/butane.jpg" width=150>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/initial_configuration_LR.jpg" width=150>
-<img src="images/rightarrow.svg" height=80>
-<img src="images/after_pressure_equilibration_LR.jpg" width=150>
+
+#### Images
+<img src="images/ch2_ry90.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/butane.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/initial_configuration_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/after_pressure_equilibration_LR.jpg" width=150>
 
 
 ### Instructions
