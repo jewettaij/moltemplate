@@ -4,8 +4,10 @@ This example is a simple simulation of several star-polymers.  Each star polymer
 
 
 #### Images
-<img src="images/ch2_ry60_LR.jpg" width=70> <img src="images/rightarrow.svg" height=60> <img src="images/polymer16_no_endcaps.jpg" width=200> <img src="images/plus.svg" height=60> <img src="images/ch3_ry60_LR.jpg" width=70> <img src="images/plus.svg" height=60> <img src="images/central_particle_LR.jpg" width=80> <img src="images/rightarrow.svg" height=80>
-<img src="images/star_polymers_t=0_LR.jpg" width=250> <img src="images/rightarrow.svg" height=80> <img src="images/star_polymers_t=50000_LR.jpg" width=250>
+
+<img src="images/ch2_ry60_LR.jpg" width=70> <img src="images/rightarrow.svg" height=60> <img src="images/polymer16_no_endcaps.jpg" width=200> <img src="images/plus.svg" height=60> <img src="images/ch3_ry60_LR.jpg" width=70> <img src="images/plus.svg" height=60> <img src="images/central_particle_LR.jpg" width=80>
+
+<img src="images/rightarrow.svg" height=80> <img src="images/star_polymers_t=0_LR.jpg" width=250> <img src="images/rightarrow.svg" height=80> <img src="images/star_polymers_t=50000_LR.jpg" width=250>
 
 
 *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*

@@ -1,12 +1,11 @@
-Hexadecane example
+Long alkane chain example
 ==============
-This example is a simple simulation of a long alkane chain, in a vacuum at room temperature using the OPLSAA force field.  The molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").
-
+This example is a simple simulation of a long alkane chain, in a vacuum at room temperature using the OPLSAA force field.  The molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").  In this example, the polymer was initially straight.  However you can use the ["genpoly_lt.py" script](../../../../doc/doc_genpoly_lt.md) to generate .lt files describing long polymers that can wrap around any curve.  (An example of "genpoly_lt.py" usage can be found [here](../../../coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)
 
 #### Images
-<img src="images/ch2_ry90.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60.jpg" width=110>
-<img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=0_straight.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=1ns_equilibrated.jpg" width=150>
 
+<img src="images/ch2_ry90.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60.jpg" width=110>
+<img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=0_straight.jpg" width=250> <img src="images/rightarrow.svg" height=80> <img src="images/alkane50_t=1ns_equilibrated.jpg" width=150>
 
 *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
 
@@ -42,5 +41,5 @@ There are only a few differences between LOPLSAA and OPLSAA.  The LOPLSAA force 
 
 ### Manual control of bond and angle interactions
 
-It is unlikely that you will need to do this, but if necessary you can customize existing bonds, angles, dihedrals etc. in your molecule (eg. *Alkane50*), or add new ones (if the force field does not define them).  To do this, edit the corresponding LT file (eg. ["alkane50.lt"](./moltemplate_files/alkane50.lt)), and add extra sections to that file (eg. *write("Data Bonds")* or *write("Data Angles")*).  Then add a list of bonded interactions to these sections (containing lines similar to *"\$bond:c7h5 @bond:CustomType \$atom:c7 \$atom:h5"*).  By default, this will override the bond and bonded angular interactions created by the force field.  For more details, read the chapter in the moltemplate manual named "Customizing molecule position and topology".)
+If necessary, you can customize existing bonds, angles, dihedrals etc. in your molecule (eg. *Alkane50*), or add new ones (if the force field does not define them).  To do this, edit the corresponding LT file (eg. ["alkane50.lt"](./moltemplate_files/alkane50.lt)), and add extra sections to that file (eg. *write("Data Bonds")* or *write("Data Angles")*).  Then add a list of bonded interactions to these sections (containing lines similar to *"\$bond:c7h5 @bond:CustomType \$atom:c7 \$atom:h5"*).  By default, this will override the bond and bonded angular interactions created by the force field.  For more details, read the chapter in the moltemplate manual named "Customizing molecule position and topology".)
 

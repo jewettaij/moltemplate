@@ -1,51 +1,33 @@
-This example is a simple simulation of 288 hexadecane molecules in a box at
-room temperature and atmospheric pressure.  Please read the WARNING.TXT file.
+Hexadecane example
+==============
+This example is a simple simulation of many long alkane chains (hexadecane) in a box near the boiling point at atmospheric pressure.  The hexadecane molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").
 
-WARNING:
-The atomic partial charges in this example are not correct!
-For details how to calculate charges correctly, see:
-https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
-...and edit the "ch2group.lt" and "ch3group.lt" files in the "moltemplate_files"
-directory accordingly.
+#### Images
 
--------- REQUIREMENTS: ---------
-This example requires building LAMMPS with the "USER-MISC" package.
-(because it uses dihedral_style fourier)
-To do this, type "make yes-user-misc" before compiling LAMMPS.
-http://lammps.sandia.gov/doc/Section_start.html#start_3
+<img src="images/ch2_ry60_LR.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60_LR.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_LR.jpg" width=150>  <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=10ps_npt_LR.jpg" width=150>
 
-More detailed instructions on how to build LAMMPS input files and
-run a short simulation are provided in other README files:
 
-step 1) to setup the LAMMPS input files, run this file:
-README_setup.sh
+### *WARNING: The atomic charges in this examples are not correct*
 
-      (Currently there is a bug which makes this step slow.
-       I'll fix it later -Andrew 2013-10-15.)
+The AMBER for field does not include charge information.  (In this example, they were borrowed from the corresponding atoms in the ["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt).  Do not do this!)
 
-step 2) to run LAMMPS, follow the instructions in this file:
-README_run.sh
+The generation of atomic partial charges requires 3rd party software.
 
------------- NOTE: There are two versions of this example. ----------------
+For suggestions how to calculate charges correctly, see [README.md](../README.md).  Then choose a 3rd party program to calculate partial charges for the atoms in each type of molecule.  Then edit the corresponding ".lt" files in the "moltemplate_files" directory accordingly.
 
-Both examples use the same force-field parameters.
 
-1)
-In this version, the force-field parameters are loaded from the "gaff.lt" file
-(located in the "force_fields" subdirectory of the moltemplate distribution).
-This frees the user from the drudgery of manually specifying all of these
-force-field details for every molecule.  (However, the user must be careful
-to choose @atom-type names which match AMBER GAFF conventions,
-such as the "c3" and "h1" atoms, in this example.)
+## Instructions
 
-2)
-Alternately, there is another "hexadecane" example in the "all_atom_examples"
-directory.  In that example, force-field parameters are loaded from a file
-named "alkanes.lt" (instead of "gaff.lt").  The "alkanes.lt" file contains
-only the excerpts from "gaff.lt" which are relevant to the hydrocarbon
-molcules used in that example.  ("gaff.lt" contains parameters for most
-small organic molecules, not just hydrocarbons.)
-In this way, by editing "alkanes.lt", the user can manually control all of the
-force-field details in the simulation.  (Without feeling as though they are
-relying on some kind of mysterious "black box" to do it for them.)
+1) To build the files which LAMMPS needs, follow the instructions in:
+[README_setup.sh](README_setup.sh)
+
+2) To run LAMMPS with these files, follow these instructions:
+[README_run.sh](README_run.sh)
+
+*(If you notice a problem with this example, please [report it](../README.md).)*
+
+
+### Requirements
+
+This example requires a version of LAMMPS compiled with support for the optional "USER-MISC" package (because the AMBER force field currently uses *dihedral_style fourier*).  If you encounter the error *"dihedral_style fourier not found"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with the "USER-MISC" package.
 

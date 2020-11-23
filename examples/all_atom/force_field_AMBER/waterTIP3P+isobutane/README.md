@@ -1,41 +1,35 @@
-The simulation consists of a mixture of isobutane and water.
-Over time (less than 1 ns), the two molecules phase-separate.
+Isobutane and water phase separation example
+==============
+A mixture of two small organic molecules using the *AMBER/GAFF* force field.  In this example, the water molecules were initially arranged in a rectangular lattice.  The isobutane molecules were also arranged in a lattice, and were shifted to avoid overlap with the water molecules. *(See the [system.lt file](./moltemplate_files/system.lt) for details.)*  The two types of molecules phase separate over the course of a few hundred ps.  The GAFF parameters are applied only to the isobutane molecule.  (The water molecule paramters are defined explicitly in the "force_fields/tip3p_2004.lt" file distributed with moltemplate.)
 
-The GAFF parameters are applied only to the isobutane molecule.
-(The water molecule paramters are defined explicitly in the
- "force_fields/tip3p_2004.lt" file distributed with moltemplate.)
-
-WARNING:
-The atomic partial charges in this example are not correct!
-For details how to calculate charges correctly, see:
-https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
-...and edit the "isobutane.lt" file in the "moltemplate_files"
-directory accordingly.
-
------------------ CHARGE ----------------------
-
-NOTE: The GAFF force-field DOES NOT ASSIGN ATOM CHARGE.
-      In this example, atom charges were taken from the OPLSAA force field file:
-      http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
-      This is not the charge in AMBER simunlations is typically assigned.
-      (As of 2014, it is assigned using the "HF/6-31G* RESP2" or "AM1-BCC3"
-       methods using AmberTools (which are not available in moltemplate).
-       http://ambermd.org/doc6/html/AMBER-sh-19.4.html
-       http://ambermd.org/tutorials/basic/tutorial4b/)
+#### Images
+<img src="images/isobutane.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/water.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/water+isobutane_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/water+isobutane_t=840ps_LR.jpg" width=150>
 
 
--------- REQUIREMENTS: ---------
+*(Alternatively, you can create a single lattice and specify the number of isobutane and water molecules you want in it using moltemplate's "new random([],[])" command, which is explained in the manual.  You can also use PACKMOL to create random mixtures of molecules.)*
 
-  This example requires building LAMMPS with the "USER-MISC" package.
-  (because it makes use of "gaff.lt" which uses dihedral_style fourier)
-   To do this, type "make yes-user-misc" before compiling LAMMPS.
-  http://lammps.sandia.gov/doc/Section_start.html#start_3
 
-More detailed instructions on how to build LAMMPS input files and
-run a short simulation are provided in other README files.
 
-step 1)
-README_setup.sh
+### *WARNING: The atomic charges in this examples are not correct*
 
-step 2)
-README_run.sh
+The AMBER for field does not include charge information.  (In this example, they were borrowed from the corresponding atoms in the ["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt).  Do not do this!)
+
+The generation of atomic partial charges requires 3rd party software.
+
+For suggestions how to calculate charges correctly, see [README.md](../README.md).  Then choose a 3rd party program to calculate partial charges for the atoms in each type of molecule.  Then edit the corresponding ".lt" files in the "moltemplate_files" directory accordingly.
+
+
+## Instructions
+
+1) To build the files which LAMMPS needs, follow the instructions in:
+[README_setup.sh](README_setup.sh)
+
+2) To run LAMMPS with these files, follow these instructions:
+[README_run.sh](README_run.sh)
+
+*(If you notice a problem with this example, please [report it](../README.md).)*
+
+
+### Requirements
+
+This example requires a version of LAMMPS compiled with support for the optional "USER-MISC" package (because the AMBER force field currently uses *dihedral_style fourier*).  If you encounter the error *"dihedral_style fourier not found"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with the "USER-MISC" package.

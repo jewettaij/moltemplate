@@ -1,7 +1,6 @@
-Methane Gas Example
+Methane Example
 ===================
-This example demonstrates how to build a simulation containing a box of methane.
-(Not a very interesting example.)
+This example demonstrates how to build a simulation containing a box of methane gas.  (Not a very interesting example.)
 
 ### Details 
 

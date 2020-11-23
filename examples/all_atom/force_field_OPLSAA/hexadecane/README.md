@@ -2,8 +2,9 @@ Hexadecane example
 ==============
 This example is a simple simulation of many long alkane chains (hexadecane) in a box near the boiling point at atmospheric pressure.  The hexadecane molecule in this example was constructed from monomeric subunits (named "CH2", and "CH3").
 
-<img src="images/ch2_ry60_LR.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60_LR.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_LR.jpg" width=150>
-<img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=10ps_npt_LR.jpg" width=150>
+#### Images
+
+<img src="images/ch2_ry60_LR.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/ch3_ry60_LR.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_LR.jpg" width=150>  <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=0_LR.jpg" width=150> <img src="images/rightarrow.svg" height=80> <img src="images/hexadecane_12x12x2_t=10ps_npt_LR.jpg" width=150>
 
 
 *Note: This particular example uses the a variant of the OPLSAA force-field suitable for long alkane chains (sometimes called the "LOPLSAA" force field).*
@@ -36,4 +37,4 @@ There are only a few differences between LOPLSAA and OPLSAA.  The LOPLSAA force 
 
 ### Manual control of bond and angle interactions
 
-It is unlikely that you will need to do this, but if necessary you can customize existing bonds, angles, dihedrals etc. in your molecule (eg. *Hexadecane*), or add new ones (if the force field does not define them).  To do this, edit the corresponding LT file (eg. ["hexadecane.lt"](./moltemplate_files/hexadecane.lt)), and add extra sections to that file (eg. *write("Data Bonds")* or *write("Data Angles")*).  Then add a list of bonded interactions to these sections (containing lines similar to *"\$bond:c7h5 @bond:CustomType \$atom:c7 \$atom:h5"*).  By default, this will override the bond and bonded angular interactions created by the force field.  For more details, read the chapter in the moltemplate manual named "Customizing molecule position and topology".)
+If necessary, you can customize existing bonds, angles, dihedrals etc. in your molecule (eg. *Hexadecane*), or add new ones (if the force field does not define them).  To do this, edit the corresponding LT file (eg. ["hexadecane.lt"](./moltemplate_files/hexadecane.lt)), and add extra sections to that file (eg. *write("Data Bonds")* or *write("Data Angles")*).  Then add a list of bonded interactions to these sections (containing lines similar to *"\$bond:c7h5 @bond:CustomType \$atom:c7 \$atom:h5"*).  By default, this will override the bond and bonded angular interactions created by the force field.  For more details, read the chapter in the moltemplate manual named "Customizing molecule position and topology".)
