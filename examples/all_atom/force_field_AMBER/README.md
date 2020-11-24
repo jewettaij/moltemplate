@@ -28,7 +28,7 @@ Unfortunatley, these tools are not bundled with moltemplate.  If someone submits
 
 ### Requirements
 
-The AMBER examples require a version of LAMMPS compiled with support for the optional "USER-MISC" package (because the AMBER force fields currently uses *dihedral_style fourier*).  If you encounter the error *"dihedral_style fourier not found"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with the "USER-MISC" package.
+The AMBER examples require a version of LAMMPS compiled with support for the optional "USER-MISC" package (because the AMBER force fields currently uses *dihedral_style fourier*).  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with the "USER-MISC" package enabled.
 
 
 ### Improper angles
