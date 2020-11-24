@@ -4,7 +4,7 @@ This example also shows how to use moltemplate in together with PACKMOL to creat
 
 
 #### Images
-<img src="images/ethylene.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/benzene.jpg" width=110> <img src="images/plus.svg" height=80> PACKMOL <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_box80x80x80_LR.jpg" width=200>
+<img src="images/ethylene.jpg" width=110> <img src="images/plus.svg" height=80> <img src="images/benzene.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/ethylene+benzene_box80x80x80_LR.jpg" width=200>
 
 The simulation size and number of ethylene and benzene is specified in the [mix_ethylene+benzene.inp](./packmol_files/mix_ethylene+benzene.inp) and [system.lt](./moltemplate_files/system.lt) files.  (The numbers in these files must agree.)  The simulation contitions can be controlled by editing the [run.in.npt](run.in.npt) file.
 

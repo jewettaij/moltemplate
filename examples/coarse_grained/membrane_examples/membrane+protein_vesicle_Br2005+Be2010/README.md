@@ -4,7 +4,7 @@ This example shows how to build a spherical vesicle made from DPPC lipids and 12
 
 ### Images
 
-<img src="images/DPPC.jpg" height=100> <img src="images/plus.svg" height=80> <img src="images/4HelixBundle_LR.jpg" height=130> <img src="images/plus.svg" height=80> **PACKMOL** <img src="images/rightarrow.svg" height=80>
+<img src="images/DPPC.jpg" height=100> <img src="images/plus.svg" height=80> <img src="images/4HelixBundle_LR.jpg" height=130> <img src="images/rightarrow.svg" height=80>
 <img src="images/vesicle_membrane+protein_LR.jpg" width=400>
 
 
