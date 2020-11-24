@@ -7,7 +7,6 @@ A simulation of a small alluminum crystal under high pressure.
 <img src="images/AlCell_LR.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/AlCrystal10x10x10_t=0steps_LR.jpg" height=140> <img src="images/rightarrow.svg" height=80> <img src="images/AlCrystal10x10x10_t=20000steps_LR.jpg" height=140>
 
 
-
 ## Details
 
 NOTE: This example requires the "Al99.eam.alloy" file.
@@ -28,25 +27,18 @@ this. But this approach might be useful if you want to artificially create
 unusual structures out of aluminum crystals, or mix them with other molecules.
 I created this example in response to a user request.)
 
+### Instructions
 
-## Instructions
+More detailed instructions on how to build LAMMPS input files and
+run a short simulation are provided in other README files.
 
-Carry out the instructions in README_setup.sh,
-to generate the LAMMPS DATA file and input scripts you need:
-system.data, system.in.init, system.in.settings.
-(The run.in script contains references to these files.)
+1) To build the files which LAMMPS needs, follow the instructions in:
+[README_setup.sh](README_setup.sh)
 
+2) To run LAMMPS with these files, follow these instructions:
+[README_run.sh](README_run.sh)
 
-  --- To run LAMMPS, try a command like: ---
-```
-lmp_mpi -i run.in
-```
-or (if you have mpi installed)
-```
-mpirun -np 4 lmp_mpi -i run.in
-```
-This will create an ordinary LAMMPS dump file you can visualize with VMD
-traj.lammpstrj    (See README_visualize.txt)
+This will create an ordinary LAMMPS dump file (traj.lammpstrj) that you can visualize with Ovito, VMD, or AtomEye.  (See README_visualize.txt)
 
 It will also create a number of other files, such as:
 dump.comp_0.cfg

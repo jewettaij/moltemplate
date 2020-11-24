@@ -11,9 +11,11 @@ The size of the final crystal is a multiple of its unit cell size.
 #### Images
 
 Unit Cell (8 water molecules):
+
 <img src="images/ice_rect8_unitcell.png" width=60>
 
 Assembled crystal:
+
 <img src="images/ice_rect8_crystal_3x2x2_LR.jpg" width=150>
 
 The number of water molecules in the simulation and and the simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The simulation contitions can be controlled by editing the [run.in.npt file](run.in.npt).
