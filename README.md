@@ -77,7 +77,7 @@ or use the DREIDING force field which has simple [atom type rules](./doc/DREIDIN
 or use a 3rd-party molecule-builder
 and convert the resulting files to LAMMPS format using
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format")
-followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format").)
+followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format"), and then use moltemplate.)
 
 
 
@@ -114,6 +114,7 @@ There are two ways to install moltemplate:
 
 
 ## Installation using pip
+
 If you are familiar with pip, then run the following command from within the directory where this README file is located:
 
     pip install . --user

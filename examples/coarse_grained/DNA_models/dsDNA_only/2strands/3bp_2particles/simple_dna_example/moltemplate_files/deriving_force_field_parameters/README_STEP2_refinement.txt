@@ -41,7 +41,15 @@ k_new = k_old * (σsim/σtarget)^2
 # (and angle stiffness parameters) which reproduced the measured
 # persistence length and torsional persistence length of double-stranded DNA.
 # (50nm and 111nm, respectively).  This was usually done by hand, iteratively.
-# The resulting measured mechanical properties were:
+#
+# If interested, you can follow the process of how this was done by reading
+# the "dna_forcefield_more_comments.lt" file (located in this directory).
+# Again, at each iteration a separate simulation was run (using force field
+# parameters derived from the previous iteration).  This file contains those
+# force field parameters as well as the distances, angles, and persistence
+# lengths measured after each simulation.
+#
+# After 4 iterations, the resulting measured mechanical properties were:
 #                                                |  this model  | experimenal |
 # ----------------------------------------------------------------------------
 # persistence length:                            |  48.7101 nm  |     50 nm   |
