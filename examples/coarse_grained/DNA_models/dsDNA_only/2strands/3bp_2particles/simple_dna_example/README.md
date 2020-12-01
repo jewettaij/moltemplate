@@ -10,7 +10,7 @@ DNA using the coarse-grained "3bp2p" (3 base pairs = 2 particles) model.
 
 *(additional images are shown below)*
 
-During the simulation, the forces acting on the particles in the coarse-grained model are calculated from equations containing these degrees of freedom: r1, r2, θ1, θ2, φb, φt.  See the [dna_forcefield.lt](moltemplate/dna_forcefield.lt) file for details.  (The method used to generate these force field parameters is explained [here](moltemplate_files/deriving_force_field_parameters).)
+During the simulation, the forces acting on the particles in the coarse-grained model are calculated from equations containing these degrees of freedom: r1, r2, θ1, θ2, φb, φt.  See the [dna_forcefield.lt](moltemplate_files/dna_forcefield.lt) file for details.  (The method used to generate these force field parameters is explained [here](moltemplate_files/deriving_force_field_parameters).)
 
 
 ### Features
