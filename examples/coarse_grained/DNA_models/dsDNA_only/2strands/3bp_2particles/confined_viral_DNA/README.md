@@ -3,12 +3,14 @@ simple confined DNA example
 
 ![Initial DNA conformation](images/DNA+capsid_cutaway_t=0_LR.jpg) → ![Final DNA conformation](images/DNA+capsid_cutaway_not_equilibrated_LR.jpg)
 
+
 ## Description
 
 This is an example demonstrating how to confine a polymer (eg. DNA)
 within an arbitrary shaped box (eg. the HIV viral capsid).
 Here are two images showing the initial and final conformation of
 the DNA polymer (before and after the simulation).
+
 
 ## Overview
 
@@ -31,6 +33,7 @@ Some of the particles in the simulation form the walls of the container
 the group of atoms that is supplied to the integrator.  (For details, see
 "run.in.min", and pay attention to the "group" and "fix nve/limit" commands.)
 
+
 ##    Prerequisites
 
 LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
@@ -39,6 +42,7 @@ If you receive this error message (or something similar):
 [these instructions](https://lammps.sandia.gov/doc/Build_package.html),
 and recompile LAMMPS.
 
+
 ## Polymer Melts (Optional)
 
 Note: In this example, there was only 1 polymer, but you can create a
@@ -46,12 +50,14 @@ system with multiple polymers (of various lengths) confined in the same box
 by running the "genpoly_lt.py" script with the "-cuts" argument in step 2.
 This is a useful way to generate polymer melts.
 
-## Biological Details (Optional)
 
-This example uses the "dsDNA_2beads=3bp_2019-10-19" DNA model, which has
-been tuned to have realistic geometry and mechanical properties of DNA,
-including a major/minor groove, helicity, length, persistence length,
-and torsional persistence length.
+## Details (Optional)
+
+This example uses the "3bp2p" DNA model described [here](../simple_dna_example).
+The force field parameters were tuned to reproduce realistic geometry and
+mechanical properties of DNA, including a major/minor groove, helicity, length,
+persistence length, and torsional persistence length.
+
 
 ## WARNING: THIS IS NOT A REALISTIC MODEL OF DNA IN THE HIV VIRUS
 
@@ -91,4 +97,4 @@ on the capsid shell.)
 I realize this is a complicated example.
 Hopefully in spite of that, this example is useful.
 
-Andrew, 2020-1-24
+Andrew, 2020-11-30

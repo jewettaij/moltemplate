@@ -15,7 +15,7 @@ During the simulation, the forces acting on the particles in the coarse-grained 
 
 ### Features
 
-1) This model has a double-helical conformation with major and minor grooves.  It can be used to model interaction of DNA with simple protein models that bind specifically to the major or minor grooves.
+1) This model has a double-helical conformation with major and minor grooves.
 2) The polymer can be bent arbitrarily far without kinking or numerical instability.  This allows the use of comparatively large timesteps.
 3) The masses were adjusted to make it possible to set the timestep to "1.0".  (*Note:* Use of a common timestep makes it easier to combine different coarse grained models together in the same simulation.  Using heavier masses can compensate for stiff bonds or bond-angles.  Using unrealistic masses is justified if the processes-of-interest occur on time-scales far larger than the vibrational spectra of individual bonds or angles in the coarse grained model.  At these time scales, the rates of diffusive motion can be controlled by adjusting the Langevin parameters and solvent properties, and are not effected by the mass of the particles of the model.)
 

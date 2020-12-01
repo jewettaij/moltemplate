@@ -9,6 +9,8 @@ double-stranded (ds) DNA containing a "twist motor"
 
 ![Twisted DNA polymer](https://i1.ytimg.com/vi/xU2QzDDmuyA/hqdefault.jpg)
 
+This example uses the "3bp2p" DNA model described [here](../simple_dna_example).
+
 In biology, machines like gyrase cause double stranded breaks
 allowing the polymer to pass through itself at times that would
 preferentially generate a negative supercoiling density throughout the DNA.
