@@ -6,9 +6,9 @@ Functionalized Nanotubes
 <img src="images/graphene_unit_cell.jpg" width=100> <img src="images/plus.svg" height=80> <img src="images/nh2_bbk_occ.jpg" width=60> <img src="images/rightarrow.svg" height=80> <img src="images/graphene_NH2_unit_cell.jpg" width=100> <img src="images/graphene_NH2_unit_cell_view2.jpg" width=100> <img src="images/rightarrow.svg" height=80> <img src="images/nanotubes_t=0_bbk.jpg" width=140> <img src="images/rightarrow.svg" height=80> <img src="images/nanotubes_t=100000_bbk.jpg" width=140>
 
 
-### Details and caveats
+### Details
 
-This example demonstrates a way to build carbon nanotubes with chemical groups attached to the surface at random locations using moltemplate.  In this example, the carbon nanotubes are 2-D arrays of graphene unit cells which have been wrapped around the surface of a cylinder.  A small fraction of unit cells (selected randomly) have a amine group (NH2) attached to one of the carbon atoms (shown above).  This example uses the "new random" feature to select randomly from the two different versions of the graphene unit cell (with and without the attached amine group).  The carbon atoms in the nanotubes are rigid, but the nanotubes are allowed to move.
+This example demonstrates a way to build carbon nanotubes with chemical groups attached to the surface at random locations using moltemplate.  In this example, the carbon nanotubes are 2-D arrays of graphene unit cells which have been wrapped around the surface of a cylinder.  A small fraction of unit cells (selected randomly) have a amine group (NH2) attached to one of the carbon atoms (shown above).  This example uses the "new random" feature to select randomly from the two different versions of the graphene unit cell (with and without the attached amine group), as shown in the pictures above.  The carbon atoms in the nanotubes are rigid (as well as the nitrogen atoms which are directly bonded to them).  However the nanotubes are allowed to move.
 
 
 #### There are no carbon-carbon bonds
@@ -20,7 +20,7 @@ In the graphene and nanotube structures, I did not try to connect the carbon ato
 
 The Lennard-Jones parameters for the carbon atoms were taken from this [paper](https://doi.org/10.1016/S0009-2614(01)01127-7).
 
-The hydrogen atoms in the amine groups which are attached to the nanotube surface are allowed to move.  The atoms in the amine groups use the OPLSAA force field and modify the charge of the carbon they are bonded to so that the local structure (4 atoms) is neutral.  But in the file I created, the amine groups have no other effect either on the shape or charge of the nearby carbon atoms in the nanotube.  I don't know if this is realistic.
+Although the carbon and nitrogen atoms are rigid, the remaining atoms in the attached amine groups (the two hydrogen atoms) are allowed to move.  The atoms in the amine groups use the OPLSAA force field and modify the charge of the carbon they are bonded to so that the local structure (4 atoms) is neutral.  But in the file I created, the amine groups have no other effect either on the shape or charge of the nearby carbon atoms in the nanotube.  I don't know if this is realistic.
 
 
 ### Requirements
