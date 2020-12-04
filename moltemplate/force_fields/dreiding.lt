@@ -4,7 +4,7 @@
 # found in the original DREIDING paper.
 ##############################################################################
 # Developed by: Matthew Bone
-# Last Updated: 20/10/2020
+# Last Updated: 4/12/2020
 # Updated by: Matthew Bone
 #
 # Contact Details:
@@ -4496,47 +4496,67 @@ DREIDING {
 	@dihedral:O_2w-C_3w @atom:* @atom:O_2* @atom:C_3* @atom:*
 	@dihedral:O_2w-N_3w @atom:* @atom:O_2* @atom:N_3* @atom:*
 	@dihedral:C_2-C_2 @atom:* @atom:C_2 @atom:C_2 @atom:*
+	@dihedral:C_2-O_2 @atom:* @atom:C_2 @atom:O_2 @atom:*
+	@dihedral:C_2-O_2_ha @atom:* @atom:C_2 @atom:O_2_ha @atom:*
 	@dihedral:C_2-B_2_d1 @atom:* @atom:C_2 @atom:B_2_d1 @atom:*
 	@dihedral:C_2-B_2_d2 @atom:* @atom:C_2 @atom:B_2_d2 @atom:*
 	@dihedral:C_2-N_2_d1w @atom:* @atom:C_2 @atom:N_2_d1* @atom:*
 	@dihedral:C_2-N_2_d2w @atom:* @atom:C_2 @atom:N_2_d2* @atom:*
-	@dihedral:C_2-O_2w @atom:* @atom:C_2 @atom:O_2* @atom:*
 	@dihedral:C_2_b1-C_2 @atom:* @atom:C_2_b1 @atom:C_2 @atom:*
+	@dihedral:C_2_b1-O_2 @atom:* @atom:C_2_b1 @atom:O_2 @atom:*
+	@dihedral:C_2_b1-O_2_ha @atom:* @atom:C_2_b1 @atom:O_2_ha @atom:*
 	@dihedral:C_2_b1-B_2_d1 @atom:* @atom:C_2_b1 @atom:B_2_d1 @atom:*
 	@dihedral:C_2_b1-B_2_d2 @atom:* @atom:C_2_b1 @atom:B_2_d2 @atom:*
 	@dihedral:C_2_b1-N_2_d1w @atom:* @atom:C_2_b1 @atom:N_2_d1* @atom:*
 	@dihedral:C_2_b1-N_2_d2w @atom:* @atom:C_2_b1 @atom:N_2_d2* @atom:*
-	@dihedral:C_2_b1-O_2w @atom:* @atom:C_2_b1 @atom:O_2* @atom:*
 	@dihedral:C_2_b2-C_2_b2 @atom:* @atom:C_2_b2 @atom:C_2_b2 @atom:*
 	@dihedral:C_2_b2-B_2_b2_d1 @atom:* @atom:C_2_b2 @atom:B_2_b2_d1 @atom:*
 	@dihedral:C_2_b2-B_2_b2_d2 @atom:* @atom:C_2_b2 @atom:B_2_b2_d2 @atom:*
 	@dihedral:C_2_b2-N_2_b2_d1w @atom:* @atom:C_2_b2 @atom:N_2_b2_d1* @atom:*
 	@dihedral:C_2_b2-N_2_b2_d2w @atom:* @atom:C_2_b2 @atom:N_2_b2_d2* @atom:*
 	@dihedral:C_2_b2-O_2_b2w @atom:* @atom:C_2_b2 @atom:O_2_b2* @atom:*
+	@dihedral:O_2-C_2 @atom:* @atom:O_2 @atom:C_2 @atom:*
+	@dihedral:O_2-O_2 @atom:* @atom:O_2 @atom:O_2 @atom:*
+	@dihedral:O_2-O_2_ha @atom:* @atom:O_2 @atom:O_2_ha @atom:*
+	@dihedral:O_2-B_2_d1 @atom:* @atom:O_2 @atom:B_2_d1 @atom:*
+	@dihedral:O_2-B_2_d2 @atom:* @atom:O_2 @atom:B_2_d2 @atom:*
+	@dihedral:O_2-N_2_d1w @atom:* @atom:O_2 @atom:N_2_d1* @atom:*
+	@dihedral:O_2-N_2_d2w @atom:* @atom:O_2 @atom:N_2_d2* @atom:*
+	@dihedral:O_2_ha-C_2 @atom:* @atom:O_2_ha @atom:C_2 @atom:*
+	@dihedral:O_2_ha-O_2 @atom:* @atom:O_2_ha @atom:O_2 @atom:*
+	@dihedral:O_2_ha-O_2_ha @atom:* @atom:O_2_ha @atom:O_2_ha @atom:*
+	@dihedral:O_2_ha-B_2_d1 @atom:* @atom:O_2_ha @atom:B_2_d1 @atom:*
+	@dihedral:O_2_ha-B_2_d2 @atom:* @atom:O_2_ha @atom:B_2_d2 @atom:*
+	@dihedral:O_2_ha-N_2_d1w @atom:* @atom:O_2_ha @atom:N_2_d1* @atom:*
+	@dihedral:O_2_ha-N_2_d2w @atom:* @atom:O_2_ha @atom:N_2_d2* @atom:*
 	@dihedral:B_2_d1-C_2 @atom:* @atom:B_2_d1 @atom:C_2 @atom:*
+	@dihedral:B_2_d1-O_2 @atom:* @atom:B_2_d1 @atom:O_2 @atom:*
+	@dihedral:B_2_d1-O_2_ha @atom:* @atom:B_2_d1 @atom:O_2_ha @atom:*
 	@dihedral:B_2_d1-B_2_d1 @atom:* @atom:B_2_d1 @atom:B_2_d1 @atom:*
 	@dihedral:B_2_d1-B_2_d2 @atom:* @atom:B_2_d1 @atom:B_2_d2 @atom:*
 	@dihedral:B_2_d1-N_2_d1w @atom:* @atom:B_2_d1 @atom:N_2_d1* @atom:*
 	@dihedral:B_2_d1-N_2_d2w @atom:* @atom:B_2_d1 @atom:N_2_d2* @atom:*
-	@dihedral:B_2_d1-O_2w @atom:* @atom:B_2_d1 @atom:O_2* @atom:*
 	@dihedral:B_2_d2-C_2 @atom:* @atom:B_2_d2 @atom:C_2 @atom:*
+	@dihedral:B_2_d2-O_2 @atom:* @atom:B_2_d2 @atom:O_2 @atom:*
+	@dihedral:B_2_d2-O_2_ha @atom:* @atom:B_2_d2 @atom:O_2_ha @atom:*
 	@dihedral:B_2_d2-B_2_d1 @atom:* @atom:B_2_d2 @atom:B_2_d1 @atom:*
 	@dihedral:B_2_d2-B_2_d2 @atom:* @atom:B_2_d2 @atom:B_2_d2 @atom:*
 	@dihedral:B_2_d2-N_2_d1w @atom:* @atom:B_2_d2 @atom:N_2_d1* @atom:*
 	@dihedral:B_2_d2-N_2_d2w @atom:* @atom:B_2_d2 @atom:N_2_d2* @atom:*
-	@dihedral:B_2_d2-O_2w @atom:* @atom:B_2_d2 @atom:O_2* @atom:*
 	@dihedral:B_2_b1_d1-C_2 @atom:* @atom:B_2_b1_d1 @atom:C_2 @atom:*
+	@dihedral:B_2_b1_d1-O_2 @atom:* @atom:B_2_b1_d1 @atom:O_2 @atom:*
+	@dihedral:B_2_b1_d1-O_2_ha @atom:* @atom:B_2_b1_d1 @atom:O_2_ha @atom:*
 	@dihedral:B_2_b1_d1-B_2_d1 @atom:* @atom:B_2_b1_d1 @atom:B_2_d1 @atom:*
 	@dihedral:B_2_b1_d1-B_2_d2 @atom:* @atom:B_2_b1_d1 @atom:B_2_d2 @atom:*
 	@dihedral:B_2_b1_d1-N_2_d1w @atom:* @atom:B_2_b1_d1 @atom:N_2_d1* @atom:*
 	@dihedral:B_2_b1_d1-N_2_d2w @atom:* @atom:B_2_b1_d1 @atom:N_2_d2* @atom:*
-	@dihedral:B_2_b1_d1-O_2w @atom:* @atom:B_2_b1_d1 @atom:O_2* @atom:*
 	@dihedral:B_2_b1_d2-C_2 @atom:* @atom:B_2_b1_d2 @atom:C_2 @atom:*
+	@dihedral:B_2_b1_d2-O_2 @atom:* @atom:B_2_b1_d2 @atom:O_2 @atom:*
+	@dihedral:B_2_b1_d2-O_2_ha @atom:* @atom:B_2_b1_d2 @atom:O_2_ha @atom:*
 	@dihedral:B_2_b1_d2-B_2_d1 @atom:* @atom:B_2_b1_d2 @atom:B_2_d1 @atom:*
 	@dihedral:B_2_b1_d2-B_2_d2 @atom:* @atom:B_2_b1_d2 @atom:B_2_d2 @atom:*
 	@dihedral:B_2_b1_d2-N_2_d1w @atom:* @atom:B_2_b1_d2 @atom:N_2_d1* @atom:*
 	@dihedral:B_2_b1_d2-N_2_d2w @atom:* @atom:B_2_b1_d2 @atom:N_2_d2* @atom:*
-	@dihedral:B_2_b1_d2-O_2w @atom:* @atom:B_2_b1_d2 @atom:O_2* @atom:*
 	@dihedral:B_2_b2_d1-C_2_b2 @atom:* @atom:B_2_b2_d1 @atom:C_2_b2 @atom:*
 	@dihedral:B_2_b2_d1-B_2_b2_d1 @atom:* @atom:B_2_b2_d1 @atom:B_2_b2_d1 @atom:*
 	@dihedral:B_2_b2_d1-B_2_b2_d2 @atom:* @atom:B_2_b2_d1 @atom:B_2_b2_d2 @atom:*
@@ -4550,17 +4570,19 @@ DREIDING {
 	@dihedral:B_2_b2_d2-N_2_b2_d2w @atom:* @atom:B_2_b2_d2 @atom:N_2_b2_d2* @atom:*
 	@dihedral:B_2_b2_d2-O_2_b2w @atom:* @atom:B_2_b2_d2 @atom:O_2_b2* @atom:*
 	@dihedral:N_2_d1w-C_2 @atom:* @atom:N_2_d1* @atom:C_2 @atom:*
+	@dihedral:N_2_d1w-O_2 @atom:* @atom:N_2_d1* @atom:O_2 @atom:*
+	@dihedral:N_2_d1w-O_2_ha @atom:* @atom:N_2_d1* @atom:O_2_ha @atom:*
 	@dihedral:N_2_d1w-B_2_d1 @atom:* @atom:N_2_d1* @atom:B_2_d1 @atom:*
 	@dihedral:N_2_d1w-B_2_d2 @atom:* @atom:N_2_d1* @atom:B_2_d2 @atom:*
 	@dihedral:N_2_d1w-N_2_d1w @atom:* @atom:N_2_d1* @atom:N_2_d1* @atom:*
 	@dihedral:N_2_d1w-N_2_d2w @atom:* @atom:N_2_d1* @atom:N_2_d2* @atom:*
-	@dihedral:N_2_d1w-O_2w @atom:* @atom:N_2_d1* @atom:O_2* @atom:*
 	@dihedral:N_2_b1_d1w-C_2 @atom:* @atom:N_2_b1_d1* @atom:C_2 @atom:*
+	@dihedral:N_2_b1_d1w-O_2 @atom:* @atom:N_2_b1_d1* @atom:O_2 @atom:*
+	@dihedral:N_2_b1_d1w-O_2_ha @atom:* @atom:N_2_b1_d1* @atom:O_2_ha @atom:*
 	@dihedral:N_2_b1_d1w-B_2_d1 @atom:* @atom:N_2_b1_d1* @atom:B_2_d1 @atom:*
 	@dihedral:N_2_b1_d1w-B_2_d2 @atom:* @atom:N_2_b1_d1* @atom:B_2_d2 @atom:*
 	@dihedral:N_2_b1_d1w-N_2_d1w @atom:* @atom:N_2_b1_d1* @atom:N_2_d1* @atom:*
 	@dihedral:N_2_b1_d1w-N_2_d2w @atom:* @atom:N_2_b1_d1* @atom:N_2_d2* @atom:*
-	@dihedral:N_2_b1_d1w-O_2w @atom:* @atom:N_2_b1_d1* @atom:O_2* @atom:*
 	@dihedral:N_2_b2_d1w-C_2_b2 @atom:* @atom:N_2_b2_d1* @atom:C_2_b2 @atom:*
 	@dihedral:N_2_b2_d1w-B_2_b2_d1 @atom:* @atom:N_2_b2_d1* @atom:B_2_b2_d1 @atom:*
 	@dihedral:N_2_b2_d1w-B_2_b2_d2 @atom:* @atom:N_2_b2_d1* @atom:B_2_b2_d2 @atom:*
@@ -4568,35 +4590,32 @@ DREIDING {
 	@dihedral:N_2_b2_d1w-N_2_b2_d2w @atom:* @atom:N_2_b2_d1* @atom:N_2_b2_d2* @atom:*
 	@dihedral:N_2_b2_d1w-O_2_b2w @atom:* @atom:N_2_b2_d1* @atom:O_2_b2* @atom:*
 	@dihedral:N_2_d2w-C_2 @atom:* @atom:N_2_d2* @atom:C_2 @atom:*
+	@dihedral:N_2_d2w-O_2 @atom:* @atom:N_2_d2* @atom:O_2 @atom:*
+	@dihedral:N_2_d2w-O_2_ha @atom:* @atom:N_2_d2* @atom:O_2_ha @atom:*
 	@dihedral:N_2_d2w-B_2_d1 @atom:* @atom:N_2_d2* @atom:B_2_d1 @atom:*
 	@dihedral:N_2_d2w-B_2_d2 @atom:* @atom:N_2_d2* @atom:B_2_d2 @atom:*
 	@dihedral:N_2_d2w-N_2_d1w @atom:* @atom:N_2_d2* @atom:N_2_d1* @atom:*
 	@dihedral:N_2_d2w-N_2_d2w @atom:* @atom:N_2_d2* @atom:N_2_d2* @atom:*
-	@dihedral:N_2_d2w-O_2w @atom:* @atom:N_2_d2* @atom:O_2* @atom:*
 	@dihedral:N_2_b1_d2w-C_2 @atom:* @atom:N_2_b1_d2* @atom:C_2 @atom:*
+	@dihedral:N_2_b1_d2w-O_2 @atom:* @atom:N_2_b1_d2* @atom:O_2 @atom:*
+	@dihedral:N_2_b1_d2w-O_2_ha @atom:* @atom:N_2_b1_d2* @atom:O_2_ha @atom:*
 	@dihedral:N_2_b1_d2w-B_2_d1 @atom:* @atom:N_2_b1_d2* @atom:B_2_d1 @atom:*
 	@dihedral:N_2_b1_d2w-B_2_d2 @atom:* @atom:N_2_b1_d2* @atom:B_2_d2 @atom:*
 	@dihedral:N_2_b1_d2w-N_2_d1w @atom:* @atom:N_2_b1_d2* @atom:N_2_d1* @atom:*
 	@dihedral:N_2_b1_d2w-N_2_d2w @atom:* @atom:N_2_b1_d2* @atom:N_2_d2* @atom:*
-	@dihedral:N_2_b1_d2w-O_2w @atom:* @atom:N_2_b1_d2* @atom:O_2* @atom:*
 	@dihedral:N_2_b2_d2w-C_2_b2 @atom:* @atom:N_2_b2_d2* @atom:C_2_b2 @atom:*
 	@dihedral:N_2_b2_d2w-B_2_b2_d1 @atom:* @atom:N_2_b2_d2* @atom:B_2_b2_d1 @atom:*
 	@dihedral:N_2_b2_d2w-B_2_b2_d2 @atom:* @atom:N_2_b2_d2* @atom:B_2_b2_d2 @atom:*
 	@dihedral:N_2_b2_d2w-N_2_b2_d1w @atom:* @atom:N_2_b2_d2* @atom:N_2_b2_d1* @atom:*
 	@dihedral:N_2_b2_d2w-N_2_b2_d2w @atom:* @atom:N_2_b2_d2* @atom:N_2_b2_d2* @atom:*
 	@dihedral:N_2_b2_d2w-O_2_b2w @atom:* @atom:N_2_b2_d2* @atom:O_2_b2* @atom:*
-	@dihedral:O_2w-C_2 @atom:* @atom:O_2* @atom:C_2 @atom:*
-	@dihedral:O_2w-B_2_d1 @atom:* @atom:O_2* @atom:B_2_d1 @atom:*
-	@dihedral:O_2w-B_2_d2 @atom:* @atom:O_2* @atom:B_2_d2 @atom:*
-	@dihedral:O_2w-N_2_d1w @atom:* @atom:O_2* @atom:N_2_d1* @atom:*
-	@dihedral:O_2w-N_2_d2w @atom:* @atom:O_2* @atom:N_2_d2* @atom:*
-	@dihedral:O_2w-O_2w @atom:* @atom:O_2* @atom:O_2* @atom:*
 	@dihedral:O_2_b1w-C_2 @atom:* @atom:O_2_b1* @atom:C_2 @atom:*
+	@dihedral:O_2_b1w-O_2 @atom:* @atom:O_2_b1* @atom:O_2 @atom:*
+	@dihedral:O_2_b1w-O_2_ha @atom:* @atom:O_2_b1* @atom:O_2_ha @atom:*
 	@dihedral:O_2_b1w-B_2_d1 @atom:* @atom:O_2_b1* @atom:B_2_d1 @atom:*
 	@dihedral:O_2_b1w-B_2_d2 @atom:* @atom:O_2_b1* @atom:B_2_d2 @atom:*
 	@dihedral:O_2_b1w-N_2_d1w @atom:* @atom:O_2_b1* @atom:N_2_d1* @atom:*
 	@dihedral:O_2_b1w-N_2_d2w @atom:* @atom:O_2_b1* @atom:N_2_d2* @atom:*
-	@dihedral:O_2_b1w-O_2w @atom:* @atom:O_2_b1* @atom:O_2* @atom:*
 	@dihedral:O_2_b2w-C_2_b2 @atom:* @atom:O_2_b2* @atom:C_2_b2 @atom:*
 	@dihedral:O_2_b2w-B_2_b2_d1 @atom:* @atom:O_2_b2* @atom:B_2_b2_d1 @atom:*
 	@dihedral:O_2_b2w-B_2_b2_d2 @atom:* @atom:O_2_b2* @atom:B_2_b2_d2 @atom:*
@@ -4677,6 +4696,8 @@ DREIDING {
 	@dihedral:O_2_b1w-O_2_b1w @atom:* @atom:O_2_b1* @atom:O_2_b1* @atom:*
 	@dihedral:C_2_b2-C_2 @atom:* @atom:C_2_b2 @atom:C_2 @atom:*
 	@dihedral:C_2_b2-C_2_b1 @atom:* @atom:C_2_b2 @atom:C_2_b1 @atom:*
+	@dihedral:C_2_b2-O_2 @atom:* @atom:C_2_b2 @atom:O_2 @atom:*
+	@dihedral:C_2_b2-O_2_ha @atom:* @atom:C_2_b2 @atom:O_2_ha @atom:*
 	@dihedral:C_2_b2-B_2_d1 @atom:* @atom:C_2_b2 @atom:B_2_d1 @atom:*
 	@dihedral:C_2_b2-B_2_d2 @atom:* @atom:C_2_b2 @atom:B_2_d2 @atom:*
 	@dihedral:C_2_b2-B_2_b1_d1 @atom:* @atom:C_2_b2 @atom:B_2_b1_d1 @atom:*
@@ -4685,10 +4706,11 @@ DREIDING {
 	@dihedral:C_2_b2-N_2_b1_d1w @atom:* @atom:C_2_b2 @atom:N_2_b1_d1* @atom:*
 	@dihedral:C_2_b2-N_2_d2w @atom:* @atom:C_2_b2 @atom:N_2_d2* @atom:*
 	@dihedral:C_2_b2-N_2_b1_d2w @atom:* @atom:C_2_b2 @atom:N_2_b1_d2* @atom:*
-	@dihedral:C_2_b2-O_2w @atom:* @atom:C_2_b2 @atom:O_2* @atom:*
 	@dihedral:C_2_b2-O_2_b1w @atom:* @atom:C_2_b2 @atom:O_2_b1* @atom:*
 	@dihedral:B_2_b2_d1-C_2 @atom:* @atom:B_2_b2_d1 @atom:C_2 @atom:*
 	@dihedral:B_2_b2_d1-C_2_b1 @atom:* @atom:B_2_b2_d1 @atom:C_2_b1 @atom:*
+	@dihedral:B_2_b2_d1-O_2 @atom:* @atom:B_2_b2_d1 @atom:O_2 @atom:*
+	@dihedral:B_2_b2_d1-O_2_ha @atom:* @atom:B_2_b2_d1 @atom:O_2_ha @atom:*
 	@dihedral:B_2_b2_d1-B_2_d1 @atom:* @atom:B_2_b2_d1 @atom:B_2_d1 @atom:*
 	@dihedral:B_2_b2_d1-B_2_d2 @atom:* @atom:B_2_b2_d1 @atom:B_2_d2 @atom:*
 	@dihedral:B_2_b2_d1-B_2_b1_d1 @atom:* @atom:B_2_b2_d1 @atom:B_2_b1_d1 @atom:*
@@ -4697,10 +4719,11 @@ DREIDING {
 	@dihedral:B_2_b2_d1-N_2_b1_d1w @atom:* @atom:B_2_b2_d1 @atom:N_2_b1_d1* @atom:*
 	@dihedral:B_2_b2_d1-N_2_d2w @atom:* @atom:B_2_b2_d1 @atom:N_2_d2* @atom:*
 	@dihedral:B_2_b2_d1-N_2_b1_d2w @atom:* @atom:B_2_b2_d1 @atom:N_2_b1_d2* @atom:*
-	@dihedral:B_2_b2_d1-O_2w @atom:* @atom:B_2_b2_d1 @atom:O_2* @atom:*
 	@dihedral:B_2_b2_d1-O_2_b1w @atom:* @atom:B_2_b2_d1 @atom:O_2_b1* @atom:*
 	@dihedral:B_2_b2_d2-C_2 @atom:* @atom:B_2_b2_d2 @atom:C_2 @atom:*
 	@dihedral:B_2_b2_d2-C_2_b1 @atom:* @atom:B_2_b2_d2 @atom:C_2_b1 @atom:*
+	@dihedral:B_2_b2_d2-O_2 @atom:* @atom:B_2_b2_d2 @atom:O_2 @atom:*
+	@dihedral:B_2_b2_d2-O_2_ha @atom:* @atom:B_2_b2_d2 @atom:O_2_ha @atom:*
 	@dihedral:B_2_b2_d2-B_2_d1 @atom:* @atom:B_2_b2_d2 @atom:B_2_d1 @atom:*
 	@dihedral:B_2_b2_d2-B_2_d2 @atom:* @atom:B_2_b2_d2 @atom:B_2_d2 @atom:*
 	@dihedral:B_2_b2_d2-B_2_b1_d1 @atom:* @atom:B_2_b2_d2 @atom:B_2_b1_d1 @atom:*
@@ -4709,10 +4732,11 @@ DREIDING {
 	@dihedral:B_2_b2_d2-N_2_b1_d1w @atom:* @atom:B_2_b2_d2 @atom:N_2_b1_d1* @atom:*
 	@dihedral:B_2_b2_d2-N_2_d2w @atom:* @atom:B_2_b2_d2 @atom:N_2_d2* @atom:*
 	@dihedral:B_2_b2_d2-N_2_b1_d2w @atom:* @atom:B_2_b2_d2 @atom:N_2_b1_d2* @atom:*
-	@dihedral:B_2_b2_d2-O_2w @atom:* @atom:B_2_b2_d2 @atom:O_2* @atom:*
 	@dihedral:B_2_b2_d2-O_2_b1w @atom:* @atom:B_2_b2_d2 @atom:O_2_b1* @atom:*
 	@dihedral:N_2_b2_d1w-C_2 @atom:* @atom:N_2_b2_d1* @atom:C_2 @atom:*
 	@dihedral:N_2_b2_d1w-C_2_b1 @atom:* @atom:N_2_b2_d1* @atom:C_2_b1 @atom:*
+	@dihedral:N_2_b2_d1w-O_2 @atom:* @atom:N_2_b2_d1* @atom:O_2 @atom:*
+	@dihedral:N_2_b2_d1w-O_2_ha @atom:* @atom:N_2_b2_d1* @atom:O_2_ha @atom:*
 	@dihedral:N_2_b2_d1w-B_2_d1 @atom:* @atom:N_2_b2_d1* @atom:B_2_d1 @atom:*
 	@dihedral:N_2_b2_d1w-B_2_d2 @atom:* @atom:N_2_b2_d1* @atom:B_2_d2 @atom:*
 	@dihedral:N_2_b2_d1w-B_2_b1_d1 @atom:* @atom:N_2_b2_d1* @atom:B_2_b1_d1 @atom:*
@@ -4721,10 +4745,11 @@ DREIDING {
 	@dihedral:N_2_b2_d1w-N_2_b1_d1w @atom:* @atom:N_2_b2_d1* @atom:N_2_b1_d1* @atom:*
 	@dihedral:N_2_b2_d1w-N_2_d2w @atom:* @atom:N_2_b2_d1* @atom:N_2_d2* @atom:*
 	@dihedral:N_2_b2_d1w-N_2_b1_d2w @atom:* @atom:N_2_b2_d1* @atom:N_2_b1_d2* @atom:*
-	@dihedral:N_2_b2_d1w-O_2w @atom:* @atom:N_2_b2_d1* @atom:O_2* @atom:*
 	@dihedral:N_2_b2_d1w-O_2_b1w @atom:* @atom:N_2_b2_d1* @atom:O_2_b1* @atom:*
 	@dihedral:N_2_b2_d2w-C_2 @atom:* @atom:N_2_b2_d2* @atom:C_2 @atom:*
 	@dihedral:N_2_b2_d2w-C_2_b1 @atom:* @atom:N_2_b2_d2* @atom:C_2_b1 @atom:*
+	@dihedral:N_2_b2_d2w-O_2 @atom:* @atom:N_2_b2_d2* @atom:O_2 @atom:*
+	@dihedral:N_2_b2_d2w-O_2_ha @atom:* @atom:N_2_b2_d2* @atom:O_2_ha @atom:*
 	@dihedral:N_2_b2_d2w-B_2_d1 @atom:* @atom:N_2_b2_d2* @atom:B_2_d1 @atom:*
 	@dihedral:N_2_b2_d2w-B_2_d2 @atom:* @atom:N_2_b2_d2* @atom:B_2_d2 @atom:*
 	@dihedral:N_2_b2_d2w-B_2_b1_d1 @atom:* @atom:N_2_b2_d2* @atom:B_2_b1_d1 @atom:*
@@ -4733,10 +4758,11 @@ DREIDING {
 	@dihedral:N_2_b2_d2w-N_2_b1_d1w @atom:* @atom:N_2_b2_d2* @atom:N_2_b1_d1* @atom:*
 	@dihedral:N_2_b2_d2w-N_2_d2w @atom:* @atom:N_2_b2_d2* @atom:N_2_d2* @atom:*
 	@dihedral:N_2_b2_d2w-N_2_b1_d2w @atom:* @atom:N_2_b2_d2* @atom:N_2_b1_d2* @atom:*
-	@dihedral:N_2_b2_d2w-O_2w @atom:* @atom:N_2_b2_d2* @atom:O_2* @atom:*
 	@dihedral:N_2_b2_d2w-O_2_b1w @atom:* @atom:N_2_b2_d2* @atom:O_2_b1* @atom:*
 	@dihedral:O_2_b2w-C_2 @atom:* @atom:O_2_b2* @atom:C_2 @atom:*
 	@dihedral:O_2_b2w-C_2_b1 @atom:* @atom:O_2_b2* @atom:C_2_b1 @atom:*
+	@dihedral:O_2_b2w-O_2 @atom:* @atom:O_2_b2* @atom:O_2 @atom:*
+	@dihedral:O_2_b2w-O_2_ha @atom:* @atom:O_2_b2* @atom:O_2_ha @atom:*
 	@dihedral:O_2_b2w-B_2_d1 @atom:* @atom:O_2_b2* @atom:B_2_d1 @atom:*
 	@dihedral:O_2_b2w-B_2_d2 @atom:* @atom:O_2_b2* @atom:B_2_d2 @atom:*
 	@dihedral:O_2_b2w-B_2_b1_d1 @atom:* @atom:O_2_b2* @atom:B_2_b1_d1 @atom:*
@@ -4745,11 +4771,12 @@ DREIDING {
 	@dihedral:O_2_b2w-N_2_b1_d1w @atom:* @atom:O_2_b2* @atom:N_2_b1_d1* @atom:*
 	@dihedral:O_2_b2w-N_2_d2w @atom:* @atom:O_2_b2* @atom:N_2_d2* @atom:*
 	@dihedral:O_2_b2w-N_2_b1_d2w @atom:* @atom:O_2_b2* @atom:N_2_b1_d2* @atom:*
-	@dihedral:O_2_b2w-O_2w @atom:* @atom:O_2_b2* @atom:O_2* @atom:*
 	@dihedral:O_2_b2w-O_2_b1w @atom:* @atom:O_2_b2* @atom:O_2_b1* @atom:*
 	@dihedral:C_Rw-C_2 @atom:* @atom:C_R* @atom:C_2 @atom:*
 	@dihedral:C_Rw-C_2_b1 @atom:* @atom:C_R* @atom:C_2_b1 @atom:*
 	@dihedral:C_Rw-C_2_b2 @atom:* @atom:C_R* @atom:C_2_b2 @atom:*
+	@dihedral:C_Rw-O_2 @atom:* @atom:C_R* @atom:O_2 @atom:*
+	@dihedral:C_Rw-O_2_ha @atom:* @atom:C_R* @atom:O_2_ha @atom:*
 	@dihedral:C_Rw-B_2_d1 @atom:* @atom:C_R* @atom:B_2_d1 @atom:*
 	@dihedral:C_Rw-B_2_d2 @atom:* @atom:C_R* @atom:B_2_d2 @atom:*
 	@dihedral:C_Rw-B_2_b1_d1 @atom:* @atom:C_R* @atom:B_2_b1_d1 @atom:*
@@ -4762,12 +4789,13 @@ DREIDING {
 	@dihedral:C_Rw-N_2_d2w @atom:* @atom:C_R* @atom:N_2_d2* @atom:*
 	@dihedral:C_Rw-N_2_b1_d2w @atom:* @atom:C_R* @atom:N_2_b1_d2* @atom:*
 	@dihedral:C_Rw-N_2_b2_d2w @atom:* @atom:C_R* @atom:N_2_b2_d2* @atom:*
-	@dihedral:C_Rw-O_2w @atom:* @atom:C_R* @atom:O_2* @atom:*
 	@dihedral:C_Rw-O_2_b1w @atom:* @atom:C_R* @atom:O_2_b1* @atom:*
 	@dihedral:C_Rw-O_2_b2w @atom:* @atom:C_R* @atom:O_2_b2* @atom:*
 	@dihedral:N_R_d1w-C_2 @atom:* @atom:N_R_d1* @atom:C_2 @atom:*
 	@dihedral:N_R_d1w-C_2_b1 @atom:* @atom:N_R_d1* @atom:C_2_b1 @atom:*
 	@dihedral:N_R_d1w-C_2_b2 @atom:* @atom:N_R_d1* @atom:C_2_b2 @atom:*
+	@dihedral:N_R_d1w-O_2 @atom:* @atom:N_R_d1* @atom:O_2 @atom:*
+	@dihedral:N_R_d1w-O_2_ha @atom:* @atom:N_R_d1* @atom:O_2_ha @atom:*
 	@dihedral:N_R_d1w-B_2_d1 @atom:* @atom:N_R_d1* @atom:B_2_d1 @atom:*
 	@dihedral:N_R_d1w-B_2_d2 @atom:* @atom:N_R_d1* @atom:B_2_d2 @atom:*
 	@dihedral:N_R_d1w-B_2_b1_d1 @atom:* @atom:N_R_d1* @atom:B_2_b1_d1 @atom:*
@@ -4780,12 +4808,13 @@ DREIDING {
 	@dihedral:N_R_d1w-N_2_d2w @atom:* @atom:N_R_d1* @atom:N_2_d2* @atom:*
 	@dihedral:N_R_d1w-N_2_b1_d2w @atom:* @atom:N_R_d1* @atom:N_2_b1_d2* @atom:*
 	@dihedral:N_R_d1w-N_2_b2_d2w @atom:* @atom:N_R_d1* @atom:N_2_b2_d2* @atom:*
-	@dihedral:N_R_d1w-O_2w @atom:* @atom:N_R_d1* @atom:O_2* @atom:*
 	@dihedral:N_R_d1w-O_2_b1w @atom:* @atom:N_R_d1* @atom:O_2_b1* @atom:*
 	@dihedral:N_R_d1w-O_2_b2w @atom:* @atom:N_R_d1* @atom:O_2_b2* @atom:*
 	@dihedral:N_R_d2w-C_2 @atom:* @atom:N_R_d2* @atom:C_2 @atom:*
 	@dihedral:N_R_d2w-C_2_b1 @atom:* @atom:N_R_d2* @atom:C_2_b1 @atom:*
 	@dihedral:N_R_d2w-C_2_b2 @atom:* @atom:N_R_d2* @atom:C_2_b2 @atom:*
+	@dihedral:N_R_d2w-O_2 @atom:* @atom:N_R_d2* @atom:O_2 @atom:*
+	@dihedral:N_R_d2w-O_2_ha @atom:* @atom:N_R_d2* @atom:O_2_ha @atom:*
 	@dihedral:N_R_d2w-B_2_d1 @atom:* @atom:N_R_d2* @atom:B_2_d1 @atom:*
 	@dihedral:N_R_d2w-B_2_d2 @atom:* @atom:N_R_d2* @atom:B_2_d2 @atom:*
 	@dihedral:N_R_d2w-B_2_b1_d1 @atom:* @atom:N_R_d2* @atom:B_2_b1_d1 @atom:*
@@ -4798,12 +4827,13 @@ DREIDING {
 	@dihedral:N_R_d2w-N_2_d2w @atom:* @atom:N_R_d2* @atom:N_2_d2* @atom:*
 	@dihedral:N_R_d2w-N_2_b1_d2w @atom:* @atom:N_R_d2* @atom:N_2_b1_d2* @atom:*
 	@dihedral:N_R_d2w-N_2_b2_d2w @atom:* @atom:N_R_d2* @atom:N_2_b2_d2* @atom:*
-	@dihedral:N_R_d2w-O_2w @atom:* @atom:N_R_d2* @atom:O_2* @atom:*
 	@dihedral:N_R_d2w-O_2_b1w @atom:* @atom:N_R_d2* @atom:O_2_b1* @atom:*
 	@dihedral:N_R_d2w-O_2_b2w @atom:* @atom:N_R_d2* @atom:O_2_b2* @atom:*
 	@dihedral:O_Rw-C_2 @atom:* @atom:O_R* @atom:C_2 @atom:*
 	@dihedral:O_Rw-C_2_b1 @atom:* @atom:O_R* @atom:C_2_b1 @atom:*
 	@dihedral:O_Rw-C_2_b2 @atom:* @atom:O_R* @atom:C_2_b2 @atom:*
+	@dihedral:O_Rw-O_2 @atom:* @atom:O_R* @atom:O_2 @atom:*
+	@dihedral:O_Rw-O_2_ha @atom:* @atom:O_R* @atom:O_2_ha @atom:*
 	@dihedral:O_Rw-B_2_d1 @atom:* @atom:O_R* @atom:B_2_d1 @atom:*
 	@dihedral:O_Rw-B_2_d2 @atom:* @atom:O_R* @atom:B_2_d2 @atom:*
 	@dihedral:O_Rw-B_2_b1_d1 @atom:* @atom:O_R* @atom:B_2_b1_d1 @atom:*
@@ -4816,7 +4846,6 @@ DREIDING {
 	@dihedral:O_Rw-N_2_d2w @atom:* @atom:O_R* @atom:N_2_d2* @atom:*
 	@dihedral:O_Rw-N_2_b1_d2w @atom:* @atom:O_R* @atom:N_2_b1_d2* @atom:*
 	@dihedral:O_Rw-N_2_b2_d2w @atom:* @atom:O_R* @atom:N_2_b2_d2* @atom:*
-	@dihedral:O_Rw-O_2w @atom:* @atom:O_R* @atom:O_2* @atom:*
 	@dihedral:O_Rw-O_2_b1w @atom:* @atom:O_R* @atom:O_2_b1* @atom:*
 	@dihedral:O_Rw-O_2_b2w @atom:* @atom:O_R* @atom:O_2_b2* @atom:*
 	@dihedral:C_Rw_b1-C_Rw_b1 @atom:* @atom:C_R*_b1 @atom:C_R*_b1 @atom:*
@@ -22048,47 +22077,67 @@ DREIDING {
 	dihedral_coeff @dihedral:O_2w-C_3w 0.1667 6 180 0.000
 	dihedral_coeff @dihedral:O_2w-N_3w 0.25 6 180 0.000
 	dihedral_coeff @dihedral:C_2-C_2 5.625 2 540 0.000
+	dihedral_coeff @dihedral:C_2-O_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:C_2-O_2_ha 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2-B_2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2-B_2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2-N_2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2-N_2_d2w 5.625 2 540 0.000
-	dihedral_coeff @dihedral:C_2-O_2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b1-C_2 5.625 2 540 0.000
+	dihedral_coeff @dihedral:C_2_b1-O_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:C_2_b1-O_2_ha 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b1-B_2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b1-B_2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b1-N_2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b1-N_2_d2w 5.625 2 540 0.000
-	dihedral_coeff @dihedral:C_2_b1-O_2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-C_2_b2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-B_2_b2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-B_2_b2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-N_2_b2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-N_2_b2_d2w 5.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-O_2_b2w 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2-O_2_ha 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2-B_2_d1 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2-B_2_d2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2-N_2_d1w 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2-N_2_d2w 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-O_2_ha 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-B_2_d1 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-B_2_d2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-N_2_d1w 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2_ha-N_2_d2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d1-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:B_2_d1-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:B_2_d1-O_2_ha 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d1-B_2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d1-B_2_d2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d1-N_2_d1w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d1-N_2_d2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:B_2_d1-O_2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d2-C_2 5.625 2 540 0.000
+	dihedral_coeff @dihedral:B_2_d2-O_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:B_2_d2-O_2_ha 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d2-B_2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d2-B_2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d2-N_2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_d2-N_2_d2w 5.625 2 540 0.000
-	dihedral_coeff @dihedral:B_2_d2-O_2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d1-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b1_d1-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b1_d1-O_2_ha 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d1-B_2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d1-B_2_d2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d1-N_2_d1w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d1-N_2_d2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:B_2_b1_d1-O_2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d2-C_2 5.625 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b1_d2-O_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b1_d2-O_2_ha 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d2-B_2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d2-B_2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d2-N_2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b1_d2-N_2_d2w 5.625 2 540 0.000
-	dihedral_coeff @dihedral:B_2_b1_d2-O_2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-C_2_b2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-B_2_b2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-B_2_b2_d2 11.25 2 540 0.000
@@ -22102,17 +22151,19 @@ DREIDING {
 	dihedral_coeff @dihedral:B_2_b2_d2-N_2_b2_d2w 5.625 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-O_2_b2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d1w-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:N_2_d1w-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:N_2_d1w-O_2_ha 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d1w-B_2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d1w-B_2_d2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d1w-N_2_d1w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d1w-N_2_d2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:N_2_d1w-O_2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d1w-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b1_d1w-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b1_d1w-O_2_ha 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d1w-B_2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d1w-B_2_d2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d1w-N_2_d1w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d1w-N_2_d2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:N_2_b1_d1w-O_2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-C_2_b2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-B_2_b2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-B_2_b2_d2 11.25 2 540 0.000
@@ -22120,35 +22171,32 @@ DREIDING {
 	dihedral_coeff @dihedral:N_2_b2_d1w-N_2_b2_d2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-O_2_b2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d2w-C_2 5.625 2 540 0.000
+	dihedral_coeff @dihedral:N_2_d2w-O_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:N_2_d2w-O_2_ha 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d2w-B_2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d2w-B_2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d2w-N_2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_d2w-N_2_d2w 5.625 2 540 0.000
-	dihedral_coeff @dihedral:N_2_d2w-O_2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d2w-C_2 5.625 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b1_d2w-O_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b1_d2w-O_2_ha 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d2w-B_2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d2w-B_2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d2w-N_2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b1_d2w-N_2_d2w 5.625 2 540 0.000
-	dihedral_coeff @dihedral:N_2_b1_d2w-O_2w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-C_2_b2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-B_2_b2_d1 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-B_2_b2_d2 5.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-N_2_b2_d1w 11.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-N_2_b2_d2w 5.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-O_2_b2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:O_2w-C_2 11.25 2 540 0.000
-	dihedral_coeff @dihedral:O_2w-B_2_d1 22.5 2 540 0.000
-	dihedral_coeff @dihedral:O_2w-B_2_d2 11.25 2 540 0.000
-	dihedral_coeff @dihedral:O_2w-N_2_d1w 22.5 2 540 0.000
-	dihedral_coeff @dihedral:O_2w-N_2_d2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:O_2w-O_2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b1w-C_2 11.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2_b1w-O_2 22.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2_b1w-O_2_ha 22.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b1w-B_2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b1w-B_2_d2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b1w-N_2_d1w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b1w-N_2_d2w 11.25 2 540 0.000
-	dihedral_coeff @dihedral:O_2_b1w-O_2w 22.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-C_2_b2 11.25 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-B_2_b2_d1 22.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-B_2_b2_d2 11.25 2 540 0.000
@@ -22229,6 +22277,8 @@ DREIDING {
 	dihedral_coeff @dihedral:O_2_b1w-O_2_b1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-C_2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-C_2_b1 0.625 2 540 0.000
+	dihedral_coeff @dihedral:C_2_b2-O_2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:C_2_b2-O_2_ha 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-B_2_d1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-B_2_d2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-B_2_b1_d1 1.25 2 540 0.000
@@ -22237,10 +22287,11 @@ DREIDING {
 	dihedral_coeff @dihedral:C_2_b2-N_2_b1_d1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-N_2_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-N_2_b1_d2w 0.625 2 540 0.000
-	dihedral_coeff @dihedral:C_2_b2-O_2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_2_b2-O_2_b1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-C_2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-C_2_b1 1.25 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b2_d1-O_2 2.5 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b2_d1-O_2_ha 2.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-B_2_d1 2.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-B_2_d2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-B_2_b1_d1 2.5 2 540 0.000
@@ -22249,10 +22300,11 @@ DREIDING {
 	dihedral_coeff @dihedral:B_2_b2_d1-N_2_b1_d1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-N_2_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-N_2_b1_d2w 1.25 2 540 0.000
-	dihedral_coeff @dihedral:B_2_b2_d1-O_2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d1-O_2_b1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-C_2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-C_2_b1 0.625 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b2_d2-O_2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:B_2_b2_d2-O_2_ha 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-B_2_d1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-B_2_d2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-B_2_b1_d1 1.25 2 540 0.000
@@ -22261,10 +22313,11 @@ DREIDING {
 	dihedral_coeff @dihedral:B_2_b2_d2-N_2_b1_d1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-N_2_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-N_2_b1_d2w 0.625 2 540 0.000
-	dihedral_coeff @dihedral:B_2_b2_d2-O_2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:B_2_b2_d2-O_2_b1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-C_2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-C_2_b1 1.25 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b2_d1w-O_2 2.5 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b2_d1w-O_2_ha 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-B_2_d1 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-B_2_d2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-B_2_b1_d1 2.5 2 540 0.000
@@ -22273,10 +22326,11 @@ DREIDING {
 	dihedral_coeff @dihedral:N_2_b2_d1w-N_2_b1_d1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-N_2_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-N_2_b1_d2w 1.25 2 540 0.000
-	dihedral_coeff @dihedral:N_2_b2_d1w-O_2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d1w-O_2_b1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-C_2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-C_2_b1 0.625 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b2_d2w-O_2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:N_2_b2_d2w-O_2_ha 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-B_2_d1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-B_2_d2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-B_2_b1_d1 1.25 2 540 0.000
@@ -22285,10 +22339,11 @@ DREIDING {
 	dihedral_coeff @dihedral:N_2_b2_d2w-N_2_b1_d1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-N_2_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-N_2_b1_d2w 0.625 2 540 0.000
-	dihedral_coeff @dihedral:N_2_b2_d2w-O_2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_2_b2_d2w-O_2_b1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-C_2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-C_2_b1 1.25 2 540 0.000
+	dihedral_coeff @dihedral:O_2_b2w-O_2 2.5 2 540 0.000
+	dihedral_coeff @dihedral:O_2_b2w-O_2_ha 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-B_2_d1 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-B_2_d2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-B_2_b1_d1 2.5 2 540 0.000
@@ -22297,11 +22352,12 @@ DREIDING {
 	dihedral_coeff @dihedral:O_2_b2w-N_2_b1_d1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-N_2_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-N_2_b1_d2w 1.25 2 540 0.000
-	dihedral_coeff @dihedral:O_2_b2w-O_2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_2_b2w-O_2_b1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-C_2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-C_2_b1 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-C_2_b2 0.625 2 540 0.000
+	dihedral_coeff @dihedral:C_Rw-O_2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:C_Rw-O_2_ha 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-B_2_d1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-B_2_d2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-B_2_b1_d1 1.25 2 540 0.000
@@ -22314,12 +22370,13 @@ DREIDING {
 	dihedral_coeff @dihedral:C_Rw-N_2_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-N_2_b1_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-N_2_b2_d2w 0.625 2 540 0.000
-	dihedral_coeff @dihedral:C_Rw-O_2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-O_2_b1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw-O_2_b2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-C_2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-C_2_b1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-C_2_b2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:N_R_d1w-O_2 2.5 2 540 0.000
+	dihedral_coeff @dihedral:N_R_d1w-O_2_ha 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-B_2_d1 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-B_2_d2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-B_2_b1_d1 2.5 2 540 0.000
@@ -22332,12 +22389,13 @@ DREIDING {
 	dihedral_coeff @dihedral:N_R_d1w-N_2_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-N_2_b1_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-N_2_b2_d2w 1.25 2 540 0.000
-	dihedral_coeff @dihedral:N_R_d1w-O_2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-O_2_b1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d1w-O_2_b2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-C_2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-C_2_b1 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-C_2_b2 0.625 2 540 0.000
+	dihedral_coeff @dihedral:N_R_d2w-O_2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:N_R_d2w-O_2_ha 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-B_2_d1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-B_2_d2 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-B_2_b1_d1 1.25 2 540 0.000
@@ -22350,12 +22408,13 @@ DREIDING {
 	dihedral_coeff @dihedral:N_R_d2w-N_2_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-N_2_b1_d2w 0.625 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-N_2_b2_d2w 0.625 2 540 0.000
-	dihedral_coeff @dihedral:N_R_d2w-O_2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-O_2_b1w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:N_R_d2w-O_2_b2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-C_2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-C_2_b1 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-C_2_b2 1.25 2 540 0.000
+	dihedral_coeff @dihedral:O_Rw-O_2 2.5 2 540 0.000
+	dihedral_coeff @dihedral:O_Rw-O_2_ha 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-B_2_d1 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-B_2_d2 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-B_2_b1_d1 2.5 2 540 0.000
@@ -22368,7 +22427,6 @@ DREIDING {
 	dihedral_coeff @dihedral:O_Rw-N_2_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-N_2_b1_d2w 1.25 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-N_2_b2_d2w 1.25 2 540 0.000
-	dihedral_coeff @dihedral:O_Rw-O_2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-O_2_b1w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:O_Rw-O_2_b2w 2.5 2 540 0.000
 	dihedral_coeff @dihedral:C_Rw_b1-C_Rw_b1 1.25 2 540 0.000
