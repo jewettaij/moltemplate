@@ -24,8 +24,8 @@ A reference DATA file is needed (argument).
 
 #g_program_name = 'dump2data.py'
 g_program_name = __file__.split('/')[-1]
-g_date_str = '2020-7-26'
-g_version_str = '0.58.0'
+g_date_str = '2020-12-03'
+g_version_str = '0.59.0'
 
 import sys
 from collections import defaultdict
@@ -1089,12 +1089,18 @@ def main():
                             # Now that we have read all 3 of them, recompute
                             # the avec, bvec, cvec vectors according to:
                             # https://lammps.sandia.gov/doc/Howto_triclinic.html
-                            xlo_bound = str(frame_xlo_str)
-                            xhi_bound = str(frame_xhi_str)
-                            ylo_bound = str(frame_ylo_str)
-                            yhi_bound = str(frame_yhi_str)
-                            zlo_bound = str(frame_zlo_str)
-                            zhi_bound = str(frame_zhi_str)
+                            #
+                            # When triclinic boundary conditions are used,
+                            # the "BOX BOUNDS" section of the dump file stores
+                            # xlo_bound, xhi_bound, ylo_bound, and yhi_bound
+                            # instead of xlo, xhi, ylo, yhi.  So we need to use
+                            # the following formula to calculate xlo,xhi,ylo,yhi
+                            xlo_bound = float(frame_xlo_str)
+                            xhi_bound = float(frame_xhi_str)
+                            ylo_bound = float(frame_ylo_str)
+                            yhi_bound = float(frame_yhi_str)
+                            zlo_bound = float(frame_zlo_str)
+                            zhi_bound = float(frame_zhi_str)
                             xy = float(frame_xy_str)
                             xz = float(frame_xz_str)
                             yz = float(frame_yz_str)
@@ -1104,6 +1110,14 @@ def main():
                             yhi = yhi_bound - max(0.0, yz)
                             zlo = zlo_bound
                             zhi = zhi_bound
+                            # now update "frame_xlo_str" and the other strings:
+                            frame_xlo_str = str(xlo)
+                            frame_xhi_str = str(xhi)
+                            frame_ylo_str = str(ylo)
+                            frame_yhi_str = str(yhi)
+                            frame_zlo_str = str(zlo)
+                            frame_zhi_str = str(zhi)
+                            # and compute the avec,bvec,cvec unit cell vectors
                             avec = [xhi-xlo, 0.0, 0.0]
                             bvec = [xy, yhi-ylo, 0.0]
                             cvec = [xz, yz, zhi-zlo]
