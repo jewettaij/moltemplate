@@ -12,9 +12,9 @@
 
 # file "tip3p_2004.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 #
 # I think this is the TIP3P water described in the paper by
 # Daniel J. Price and Charles L. Brooks III
@@ -25,9 +25,9 @@
 TIP3P_2004 {
 
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:O  -0.830   0.0000000   0.00000 0.000000
-    $atom:H1 $mol:. @atom:H   0.415   0.756950327 0.00000 0.5858822766
-    $atom:H2 $mol:. @atom:H   0.415  -0.756950327 0.00000 0.5858822766
+    $atom:o  $mol:w @atom:O  -0.830   0.0000000   0.00000 0.000000
+    $atom:h1 $mol:w @atom:H   0.415   0.756950327 0.00000 0.5858822766
+    $atom:h2 $mol:w @atom:H   0.415  -0.756950327 0.00000 0.5858822766
   }
 
   write_once("Data Masses") {
@@ -36,17 +36,22 @@ TIP3P_2004 {
   }
 
   write("Data Bonds") {
-    $bond:OH1 @bond:OH $atom:O $atom:H1
-    $bond:OH2 @bond:OH $atom:O $atom:H2
+    $bond:oh1 @bond:OH $atom:o $atom:h1
+    $bond:oh2 @bond:OH $atom:o $atom:h2
   }
 
   write("Data Angles") {
-    $angle:HOH @angle:HOH $atom:H1 $atom:O $atom:H2
+    $angle:hoh @angle:HOH $atom:h1 $atom:o $atom:h2
   }
 
   write_once("In Settings") {
     bond_coeff   @bond:OH         450.0  0.9572
     angle_coeff  @angle:HOH       55.0   104.52
+
+    # Note: Since we are using SHAKE constraints, the bond and angle strength
+    # parameters ("450.0", "55.0") do not matter.  But the equilibrium bond
+    # length ("0.9572") and equilibrium angle ("104.52") does matter.  LAMMPS
+    # obtains these numbers from the bond_coeff and angle_coeff commands.
 
     #########################################################################
     ####  There are two choices for for the O-O interactions

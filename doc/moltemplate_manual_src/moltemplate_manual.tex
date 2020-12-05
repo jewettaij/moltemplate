@@ -957,15 +957,22 @@ this variable appears only contains a single improper interaction.)
 A number which indicates an improper's \textit{type}
 \\
 \hline
-\$\textit{mol} \hspace{0.2cm} or \hspace{0.2cm} \$\textit{mol:.} & 
-This variable refers to the ID number of \textit{this} molecule object.
-(See section \ref{sec:spce_example}.
-Note: \mbox{\textit{``\$mol''}} is shorthand for \mbox{\textit{``\$mol:.''}})
+\$\textit{mol}:\textit{name}   &
+A unique molecule ID number.  Typically all the atoms in molecule have
+the same molecule ID.  (The ``:\textit{name}'' suffix is optional.
+If omitted, the default \textit{name} is ``.''.)
 \\
+\hline
+%\$\textit{mol} \hspace{0.2cm} or \hspace{0.2cm} \$\textit{mol:.} &
+%This variable refers to the ID number of \textit{this} molecule object.
+%(See section \ref{sec:spce_example}.
+%Note: \mbox{\textit{``\$mol''}} is shorthand for \mbox{\textit{``\$mol:.''}})
+%\\
 \hline
 \$\textit{mol:}... & 
 The ID number assigned to the molecule to which this object belongs
 (if applicable).
+%(This object must begin with \textit{create\_var\{\$mol\}})
 See sections \ref{sec:2beadPolymer}, 
 \ref{sec:ellipsis_mol},
 %\ref{sec:paths},
@@ -1430,22 +1437,22 @@ including SHAKE constraints, k-space settings, and even group definitions.
 #
 # file "spce_simple.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 #
 
 SPCE {
 
-  ## Atom properties and molecular topology go in the various "Data ..." sections
+  ## Atom properties and bond topology go in various "Data ..." sections
 
-  # We selected "atom_style full".  That means we use this column format:
-  # atomID      molID         atomType  charge  coordX    coordY    coordZ
+  # We selected "atom_style full". That means we use this column format:
+  # atomID    molID   atomType  charge  coordX    coordY    coordZ
 
   write("Data Atoms") {
-    $atom:o      $mol:.       @atom:O  -0.8476  0.0000000 0.000000  0.00000
-    $atom:h1     $mol:.       @atom:H   0.4238  0.8164904 0.5773590 0.00000
-    $atom:h2     $mol:.       @atom:H   0.4238  -0.8164904 0.5773590 0.00000
+    $atom:o   $mol:w  @atom:O  -0.8476  0.0000000 0.000000  0.00000
+    $atom:h1  $mol:w  @atom:H   0.4238  0.8164904 0.5773590 0.00000
+    $atom:h2  $mol:w  @atom:H   0.4238  -0.8164904 0.5773590 0.00000
   }
 
   # Variables beginning with $ or @ will be replaced by numbers LAMMPS will
@@ -1453,7 +1460,7 @@ SPCE {
   # atomIDs (denoted here by "$atom:o", "$atom:h1", "$atom:h2"), even if
   # they belong to different molecules.  However, the atom types
   # (denoted "@atom:O", "@atom:H") are shared for atoms in all molecules.
-  # All 3 atoms share same molID number (represeted here by "$mol:.")
+  # All 3 atoms share same molID number (represeted here by "$mol:w")
   # however that number is different for different water molecules.
 
   write_once("Data Masses") {
@@ -1589,7 +1596,7 @@ elsewhere in your LT files using this notation:
 ``\$atom:wat[2][3][4]/h1'', 
 ``\$bond:wat[0][5][1]/oh1'', 
 ``\$angle:wat[2][8][3]/hoh'', 
-``\$mol:wat[0][1][2]''.
+``\$mol:wat[0][1][2]/w''.
 This allows you to define interactions which link
 different molecules together (see section \ref{sec:coordinates}).
 
@@ -2418,7 +2425,7 @@ import "monomer.lt"  #(defines "Monomer" and "ForceField")
 Polymer inherits ForceField {
 
   # The next line is optional:
-  create_var {$mol}  #(force all monomers to share the same molecule-ID)
+  create_var {$mol}  #(force all Monomers to share the same molecule-ID)
 
   # Now create some monomers
 
@@ -2754,10 +2761,10 @@ when creating molecules.  For example:
 \begin{verbatim}
 # atom-id  mol-id atom-type charge   x       y        z
 write("Data Atoms") {
-  $atom:c  $mol:. @atom:C4  -0.18  0.0000  0.0000   0.0000
-  $atom:h1 $mol:. @atom:H1   0.06  0.0000  0.6310   0.8924
-  $atom:h2 $mol:. @atom:H1   0.06  0.0000  0.6310  -0.8924
-  $atom:h3 $mol:. @atom:H1   0.06 -0.8924 -0.6310   0.0000
+  $atom:c  $mol:me @atom:C4  -0.18  0.0000  0.0000   0.0000
+  $atom:h1 $mol:me @atom:H1   0.06  0.0000  0.6310   0.8924
+  $atom:h2 $mol:me @atom:H1   0.06  0.0000  0.6310  -0.8924
+  $atom:h3 $mol:me @atom:H1   0.06 -0.8924 -0.6310   0.0000
        :       :       :
 }
 \end{verbatim}
@@ -3434,7 +3441,7 @@ MolecularComplex inherits ForceField {
 }
 \end{verbatim}
 \textit{For this to work, you must also delete the 
- \mbox{\textit{``create\_var \{\$mol:.\}''}} line from
+ \mbox{\textit{``create\_var \{\$mol\}''}} line from
  the definition of the Polymer molecule. See section \ref{sec:2bead}.}
 
 
@@ -3667,11 +3674,12 @@ MolecularComplex0 = MolecularComplex
 
 MolecularComplex0 inherits ForceField {
   write("Data Atoms") {
-    $atom:t1 $mol:. @atom:CA   0.0   23.0   0.0     0.0
-    $atom:t2 $mol:. @atom:CA   0.0   24.7   4.0     0.0
-    $atom:t3 $mol:. @atom:CA   0.0   24.7   8.4     0.0
-    $atom:t4 $mol:. @atom:CA   0.0   23.0   12.4    0.0
+    $atom:t1 $mol:... @atom:CA   0.0   23.0   0.0     0.0
+    $atom:t2 $mol:... @atom:CA   0.0   24.7   4.0     0.0
+    $atom:t3 $mol:... @atom:CA   0.0   24.7   8.4     0.0
+    $atom:t4 $mol:... @atom:CA   0.0   23.0   12.4    0.0
   }
+
   write("Data Bonds") {
     $bond:b1 @bond:Backbone $atom:polymers[0]/res7/CA $atom:t1
     $bond:b2 @bond:Backbone $atom:t1 $atom:t2
@@ -3684,6 +3692,7 @@ MolecularComplex0 inherits ForceField {
 # Center and rescale the atoms in all "MolecularComplex0"
 MolecularComplex0.move(-9.6,-6.2, 0).scale(0.3125)
 \end{verbatim}
+
 The result of these modifications is shown in figure \ref{fig:mol_complex}b).
 \begin{figure}[htbp]
 \centering
@@ -3786,9 +3795,9 @@ A more robust example is included below.
 \begin{verbatim}
 # file "spce.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 
 SPCE {
 
@@ -3803,11 +3812,11 @@ SPCE {
     pair_modify  mix arithmetic
   }
 
-  # AtomID  MolID("."=this)  AtomType  charge  coordX   coordY   coordZ
+  # AtomID   MolID  AtomType  charge  coordX   coordY   coordZ
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:O -0.8476  0.0000000 0.00000 0.000000
-    $atom:H1 $mol:. @atom:H  0.4238  0.8164904 0.00000  0.5773590
-    $atom:H2 $mol:. @atom:H  0.4238  -0.8164904 0.00000 0.5773590
+    $atom:o  $mol:w @atom:O -0.8476  0.0000000 0.00000 0.000000
+    $atom:h1 $mol:w @atom:H  0.4238  0.8164904 0.00000  0.5773590
+    $atom:h2 $mol:w @atom:H  0.4238  -0.8164904 0.00000 0.5773590
   }
 
   # atom-type  Mass
@@ -3828,8 +3837,8 @@ SPCE {
 
   #  bond-id   bond-type  atom-id1 atom-id2
   write("Data Bonds") {
-    $bond:oh1  @bond:OH   $atom:O  $atom:H1
-    $bond:oh2  @bond:OH   $atom:O  $atom:H2
+    $bond:oh1  @bond:OH   $atom:o  $atom:h1
+    $bond:oh2  @bond:OH   $atom:o  $atom:h2
   }
 
   #             bond-type   bond-style-name  parameter-list
@@ -3839,7 +3848,7 @@ SPCE {
 
   # angle-id   angle-type  atom-id1 atom-id2 atom-id3
   write("Data Angles") {
-    $angle:hoh @angle:HOH  $atom:H1 $atom:O $atom:H2
+    $angle:hoh @angle:HOH  $atom:h1 $atom:o $atom:h2
   }
 
   #              angle-type  angle-style-name  parameter-list
@@ -4037,11 +4046,11 @@ cyclopentane {
 
   # AtomID  MolID('.'=this) AtomType  charge coordX  coordY   coordZ
   write("Data Atoms") {
-    $atom:c1 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.000000000 1.0000000
-    $atom:c2 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.951056516 0.3090170
-    $atom:c3 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.587785252 -0.809017
-    $atom:c4 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.587785252 -0.809017
-    $atom:c5 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.951056516 0.3090170
+    $atom:c1 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 0.000000000 1.0000000
+    $atom:c2 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 0.951056516 0.3090170
+    $atom:c3 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 0.587785252 -0.809017
+    $atom:c4 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 -0.587785252 -0.809017
+    $atom:c5 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 -0.951056516 0.3090170
   }
 
   write("Data Bonds") {
@@ -4164,10 +4173,10 @@ import "trappe1998.lt"
 
 Butane {
   write("Data Atoms"){
-    $atom:c1 $mol:. @atom:TraPPE/CH3 0.0  0.419372  0.000 -1.937329
-    $atom:c2 $mol:. @atom:TraPPE/CH2 0.0  -0.419372  0.000 -0.645776
-    $atom:c3 $mol:. @atom:TraPPE/CH2 0.0  0.419372  0.000  0.645776
-    $atom:c4 $mol:. @atom:TraPPE/CH3 0.0  -0.419372  0.0000 1.937329
+    $atom:c1 $mol:bt @atom:TraPPE/CH3 0.0  0.419372  0.000 -1.937329
+    $atom:c2 $mol:bt @atom:TraPPE/CH2 0.0  -0.419372  0.000 -0.645776
+    $atom:c3 $mol:bt @atom:TraPPE/CH2 0.0  0.419372  0.000  0.645776
+    $atom:c4 $mol:bt @atom:TraPPE/CH3 0.0  -0.419372  0.0000 1.937329
   }
   write("Data Bonds"){
     $bond:b1 @bond:TraPPE/CC $atom:c1 $atom:c2
@@ -4198,10 +4207,10 @@ import "trappe1998.lt"
 TraPPE {
   Butane {
     write("Data Atoms"){
-      $atom:c1 $mol:. @atom:../CH3 0.0  0.419372  0.000 -1.937329
-      $atom:c2 $mol:. @atom:../CH2 0.0  -0.419372  0.000 -0.645776
-      $atom:c3 $mol:. @atom:../CH2 0.0  0.419372  0.000  0.645776
-      $atom:c4 $mol:. @atom:../CH3 0.0  -0.419372  0.0000 1.937329
+      $atom:c1 $mol:bt @atom:../CH3 0.0  0.419372  0.000 -1.937329
+      $atom:c2 $mol:bt @atom:../CH2 0.0  -0.419372  0.000 -0.645776
+      $atom:c3 $mol:bt @atom:../CH2 0.0  0.419372  0.000  0.645776
+      $atom:c4 $mol:bt @atom:../CH3 0.0  -0.419372  0.0000 1.937329
     }
     write("Data Bonds"){
       $bond:b1 @bond:../CC $atom:c1 $atom:c2
@@ -4284,8 +4293,8 @@ molecules to find the target (the text following the ``/'' slash).
 Recall that LAMMPS allows users the option to assign
 \textit{molecule-IDs} to each atom.
 (In the water example (section \ref{sec:spce_example}), atoms in
-each water molecule is assigned to a molecule-ID, denoted ``\$mol:.''.
-In that example, the ``.'' was the name of that molecule's ID.)
+each water molecule is assigned to a molecule-ID, denoted ``\$mol:w''.
+In that example, the ``w'' was the name given to that molecule's ID.)
 
 If you want to build large molecules using smaller pieces as building-blocks
 moltemplate has a way to allow all the the atoms to share the same molecule-ID.
@@ -4297,8 +4306,9 @@ This means that the second column of each line of the ``Data Atoms'' section
 should contain ``\$mol:...'' 
 (assuming ``atom\_style full'' or ``molecular'' is used).
 
-The ``...'' syntax is explained more formally 
-in appendix \ref{sec:adv_variable_syntax}.)
+The ``...'' syntax is explained in section \ref{sec:2bead},
+and more formally in section \ref{sec:paths}, 
+and appendix \ref{sec:adv_variable_syntax}
 
 
 
@@ -4341,8 +4351,8 @@ import "trappe_butane.lt"
 using namespace TraPPE
 butane = new Butane
 write("Data Atoms") {
-  $atom:c1 $mol @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
-  $atom:c2 $mol @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
+  $atom:c1 $mol:bt @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
+  $atom:c2 $mol:bt @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
 }
 \end{verbatim}
 If, for example, you want to leave out the ``TraPPE/'' prefix 
@@ -4358,10 +4368,10 @@ import "trappe1998.lt"
 
 Butane inherits TraPPE {
   write("Data Atoms"){
-    $atom:c1 $mol:. @atom:CH3 0.0  0.419372  0.000 -1.937329
-    $atom:c2 $mol:. @atom:CH2 0.0  -0.419372  0.000 -0.645776
-    $atom:c3 $mol:. @atom:CH2 0.0  0.419372  0.000  0.645776
-    $atom:c4 $mol:. @atom:CH3 0.0  -0.419372  0.0000 1.937329
+    $atom:c1 $mol:bt @atom:CH3 0.0  0.419372  0.000 -1.937329
+    $atom:c2 $mol:bt @atom:CH2 0.0  -0.419372  0.000 -0.645776
+    $atom:c3 $mol:bt @atom:CH2 0.0  0.419372  0.000  0.645776
+    $atom:c4 $mol:bt @atom:CH3 0.0  -0.419372  0.0000 1.937329
   }
   write("Data Bonds"){
     $bond:b1 @bond:CC $atom:c1 $atom:c2
@@ -4452,11 +4462,11 @@ A {
   %  # In the CGLipid model, the tail is represented by 
   %  # a single linear chain.
   %  write("Data Atoms"){
-  %    $atom:c1 $mol:. @atom:C 0.0  0.419372  0.00000 -1.481799
-  %    $atom:c2 $mol:. @atom:C 0.0  -0.419372 0.00000 -2.773352
-  %    $atom:c3 $mol:. @atom:C 0.0  0.419372  0.00000 -4.064904
-  %    $atom:c4 $mol:. @atom:C 0.0  -0.419372 0.00000 -5.356457
-  %    $atom:c5 $mol:. @atom:C 0.0  0.419372  0.00000 -6.648010
+  %    $atom:c1 $mol:li @atom:C 0.0  0.419372  0.00000 -1.481799
+  %    $atom:c2 $mol:li @atom:C 0.0  -0.419372 0.00000 -2.773352
+  %    $atom:c3 $mol:li @atom:C 0.0  0.419372  0.00000 -4.064904
+  %    $atom:c4 $mol:li @atom:C 0.0  -0.419372 0.00000 -5.356457
+  %    $atom:c5 $mol:li @atom:C 0.0  0.419372  0.00000 -6.648010
   %  }
   %  write("Data Bonds"){
   %    $bond:c12 @bond:Tail $atom:c1 $atom:c2
@@ -4473,7 +4483,7 @@ A {
   %\begin{verbatim}
   %DOPC inherits CGLipid {
   %  write("Data Atoms"){
-  %    $atom:head $mol:. @atom:head 0.0  0.000 0.000 0.000
+  %    $atom:head $mol:li @atom:head 0.0  0.000 0.000 0.000
   %  }
   %  write_once("Data Masses"){
   %    @atom:. 245.0
@@ -4487,7 +4497,7 @@ A {
 
   %DOTAP inherits CGLipid {
   %  write("Data Atoms"){
-  %    $atom:head $mol:. @atom:head 0.0  0.000 0.000 0.000
+  %    $atom:head $mol:li @atom:head 0.0  0.000 0.000 0.000
   %  }
   %  write_once("Data Masses") {
   %    @atom:. 122.0

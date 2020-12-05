@@ -12,9 +12,9 @@
 
 # file "tip3p_1983_oplsaa.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 #
 # This is the version of "tip3p_1983.lt" suitable for use in a simulation
 # using the OPLSAA force field (as implemented in the "oplsaa.lt" file).
@@ -30,14 +30,14 @@ TIP3P_1983_oplsaa inherits OPLSAA {
   # @atom:64 <--> "TIP3P Water H"
 
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:63 -0.834   0.0000000   0.00000 0.000000
-    $atom:H1 $mol:. @atom:64  0.417   0.756950327 0.00000 0.5858822766
-    $atom:H2 $mol:. @atom:64  0.417  -0.756950327 0.00000 0.5858822766
+    $atom:o  $mol:w @atom:63 -0.834   0.0000000   0.00000 0.000000
+    $atom:h1 $mol:w @atom:64  0.417   0.756950327 0.00000 0.5858822766
+    $atom:h2 $mol:w @atom:64  0.417  -0.756950327 0.00000 0.5858822766
   }
 
   write("Data Bond List") {
-    $bond:OH1  $atom:O $atom:H1
-    $bond:OH2  $atom:O $atom:H2
+    $bond:oh1  $atom:o $atom:h1
+    $bond:oh2  $atom:o $atom:h2
   }
 
   write_once("In Settings") {
