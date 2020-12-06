@@ -24,8 +24,8 @@ A reference DATA file is needed (argument).
 
 #g_program_name = 'dump2data.py'
 g_program_name = __file__.split('/')[-1]
-g_date_str = '2020-12-03'
-g_version_str = '0.59.0'
+g_date_str = '2020-12-05'
+g_version_str = '0.60.0'
 
 import sys
 from collections import defaultdict
@@ -679,10 +679,12 @@ def WriteFrameToData(out_file,
 
     section = ''
     firstline = True
-    for line in data_settings.contents:
-        ic = line.find('#')
+    for line_orig in data_settings.contents:
+        ic = line_orig.find('#')
         if ic != -1:
-            line = line[:ic]
+            line = line_orig[:ic]
+        else:
+            line = line_orig
         line = line.strip()
 
         if firstline:  # Construct a new descriptive header line:
@@ -842,6 +844,14 @@ def WriteFrameToData(out_file,
 
                         # Now finally paste all the tokens together:
                         line = ' '.join(tokens)
+
+                else: # If we are not in one of the sections containing
+                    #   data that comes from the dump file (eg 'Atoms',
+                    #   'Velocities'), then copy the text directly from
+                    #   the original data file without modification.
+                    #   Since "line" has any comments and whitespace removed,
+                    #   replace it with "line_orig" which has everything.
+                    line = line_orig.rstrip('\n')
 
         out_file.write(line + '\n')
 
