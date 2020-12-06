@@ -41,7 +41,19 @@ Polyethylene16Star12 inherits OPLSAA { ... }  # (see "polyethylene16_star12.lt")
 There are only a few differences between LOPLSAA and OPLSAA.  The LOPLSAA force field contains a few extra atom types and dihedral interactions which improve the accuracy of long alkane chains.  The ["loplsaa.lt"](../../../../moltemplate/force_fields/loplsaa.lt) file (referenced above) incorporates these extra atom and dihedral types in the existing OPLSAA force field *instead* of creating a new force field named "LOPLSAA".  *(There is no separate "LOPLSAA" force field object.  I apologize if this is confusing.)*  You can mix LOPLSAA and OPLSAA atoms in the same molecule.
 
 
+### Customizing atomic charges
+
+In most moltemplate examples, atomic charges (if present) are listed in
+the 4th column of the "Data Atoms" section of each molecule's definition.
+However *in moltemplate's implementation of OPLSAA,*
+the atomic charges are determined by their @atom types
+*(according to a lookup table located at the beginning of the
+["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+**This can be overridden.**
+See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
+for instructions how to customize atomic charges.
+
+
 ### Manual control of bond and angle interactions
 
 It is unlikely that you will need to do this, but if necessary you can customize existing bonds, angles, dihedrals etc. in your molecule (eg. *Alkane50*), or add new ones (if the force field does not define them).  To do this, edit the corresponding LT file (eg. ["polyethylene16_star12"](./moltemplate_files/polyethylene16_star12.lt)), and add extra sections to that file (eg. *write("Data Bonds")* or *write("Data Angles")*).  Then add a list of bonded interactions to these sections (containing lines similar to *"\$bond:c7h5 @bond:CustomType \$atom:c7 \$atom:h5"*).  By default, this will override the bond and bonded angular interactions created by the force field.  For more details, read the chapter in the moltemplate manual named "Customizing molecule position and topology".)
-

@@ -18,3 +18,16 @@ The number of molecules, positions, and simulation box size can be controlled by
 [README_run.sh](README_run.sh)
 
 (The instructions in "README_remove_irrelevant_info.sh" are optional.  *(If you notice a problem with this example, please [report it](../README.md).*)
+
+
+### Customizing atomic charges
+
+In most moltemplate examples, atomic charges (if present) are listed in
+the 4th column of the "Data Atoms" section of each molecule's definition.
+However *in moltemplate's implementation of OPLSAA,*
+the atomic charges are determined by their @atom types
+*(according to a lookup table located at the beginning of the
+["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+**This can be overridden.**
+See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
+for instructions how to customize atomic charges.

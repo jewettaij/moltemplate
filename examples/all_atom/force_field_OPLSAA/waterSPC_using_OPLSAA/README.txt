@@ -16,3 +16,16 @@ README_setup.sh
 
 step 2)
 README_run.sh
+
+
+### Customizing atomic charges
+
+In most moltemplate examples, atomic charges (if present) are listed in
+the 4th column of the "Data Atoms" section of each molecule's definition.
+However the charges of atoms belonging to molecules which begin with
+"inherits OPLSAA" is determined by their @atom types
+*(according to a lookup table located at the beginning of the
+["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+**This can be overridden.**
+See [here](../README.md#Customizing-atomic-charges)
+for instructions how to customize atomic charges.
