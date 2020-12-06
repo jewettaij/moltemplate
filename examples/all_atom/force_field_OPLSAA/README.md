@@ -13,7 +13,7 @@ However *in moltemplate's implementation of OPLSAA,*
 the atomic charges are determined by their @atom types
 *(according to a lookup table located at the beginning of the
 ["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
-*This can be overridden.*
+**This can be overridden.**
 
 ### Customizing atomic charges for OPLSAA molecules
 
@@ -31,9 +31,8 @@ and provide a list of custom charges for the \$atoms you want to modify.
 This is demonstrated in the ["graphene_nh2.lt"](functionalized_nanotubes_NH2/moltemplate_files/graphene_nh2.lt)
 file located in [this example](functionalized_nanotubes_NH2).
 *(In that example, the charge of one of the carbon atoms in the "Graphene_NH2"
- object was modified.
-Note that if you do this, then do not comment out "include system.in.charges"
-from all the "run.in\*" script files.)*
+object was modified.  If you use this strategy, do not comment out
+"include system.in.charges" from your "run.in\*" script files.)*
 
 This discussion only applies to molecules that use the OPLSAA force field
 *(i.e. molecules whose definition begins with "inherits OPLSAA")*.

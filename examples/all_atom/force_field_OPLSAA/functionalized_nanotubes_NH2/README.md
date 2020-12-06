@@ -25,6 +25,41 @@ The Lennard-Jones parameters for the carbon atoms were taken from this [paper](h
 The 3 atoms in the amine groups use the OPLSAA force field.  The charge of the carbon they are bonded (colored in orange in the pictures above) is modified so that the local structure (4 atoms) is neutral.  In this simulation, these amine groups were assumed to have no other effect on either the shape or the charge of the nearby carbon atoms in the nanotube.
 
 
+#### Customizing atomic charges
+
+This is a somewhat complex example because charges of the atoms are specified
+in 3 different ways.  This example is complicated because some of the atoms
+use the OPLSAA force field, and others do not.
+
+1) In most moltemplate examples, atomic charges are specified directly in
+the "Data Atoms" section of the molecule's definition.
+As mentioned above, the unmodified carbon atoms in the nanotube do not use
+the OPLSAA force field.  Hence their charges are specified in the ordinary way
+(ie. in the "Data Atoms" section of the
+["graphene.lt"](moltemplate_files/graphene.lt) and
+["graphene_nh2.lt"](moltemplate_files/graphene_nh2.lt) files).
+2) However NH2 amine group atoms, as well as the \$atom:c1 carbon atoms
+in the "Graphene_NH2" object do use the OPLSAA force field.
+Moltemplate's version of the OPLSAA force field assigns atomic charge
+according to @atom type, using a lookup table at the beginning of the
+["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt).
+So for these OPLSAA atom types, we never bother to specify
+their charges in the "Data Atoms" section.
+3) To make matters even more confusing, the the charge of the \$atom:c1 carbon
+atom in the "Graphene_NH2" object was customized.  Recall that, because this
+atom uses the OPLSAA force field, the "Data Atoms" section for this atom
+is ignored.  So to modify its charge, we have to modify the same file
+that will contain the final list of charges for all the OPLSAA atoms:
+the "system.in.charges" file.  (This file is created by moltemplate.sh
+by copying text from the "oplsaa.lt" file.)  To do that, we append a
+["set" command](https://lammps.sandia.gov/doc/set.html)
+to the "In Charges" section at the end of the
+["graphene_nh2.lt"](moltemplate_files/graphene_nh2.lt) file.
+That "set" command modifies the charge of the \$atom:c1 atom.
+(Note that any text written to a file named "In XXX" will end up appended
+to the end of the "system.in.XXX" file.  In this case XXX = "charges".)
+
+
 ### Requirements
 
 To run this you must have a version of LAMMPS which has been compiled with support for the optional RIGID package. (See the [run.in.nvt](run.in.nvt) file for more details.)  Running at NVT defintely does not require this.

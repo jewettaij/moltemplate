@@ -11,6 +11,12 @@ This example is a simple simulation of a long alkane chain, in a vacuum at room 
 The length of the polymer can be controlled by editing the [alkane50.lt file](moltemplate_files/alkane50.lt).  The simulation contitions can be controlled by editing the [run.in.nvt file](run.in.nvt).
 
 
+### *Suggestion: Start with the "butane" example*
+
+If this is your first time learning how to build a polymer in moltemplate,
+I suggest starting with the [butane](../butane) example.
+
+
 ### Instructions
 
 1) To build the files which LAMMPS needs, follow the instructions in:

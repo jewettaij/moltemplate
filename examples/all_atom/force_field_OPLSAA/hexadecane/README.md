@@ -9,6 +9,12 @@ This example is a simple simulation of many long alkane chains (hexadecane) in a
 The number of molecules and simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The length of each polymer can be controlled by editing the [hexadecane.lt](moltemplate_files/hexadecane.lt) file.  The simulation contitions can be controlled by editing the [run.in.npt file](run.in.npt).
 
 
+### *Suggestion: Start with the "butane" example*
+
+If this is your first time learning how to build a polymer in moltemplate,
+I suggest starting with the [butane](../butane) example instead.
+
+
 ### Instructions
 
 1) To build the files which LAMMPS needs, follow the instructions in:
