@@ -28,18 +28,33 @@ run a short simulation are provided in other README files.
 
 ### Customizing atomic charges
 
-In most moltemplate examples, atomic charges (if present) are listed in
-the 4th column of the "Data Atoms" section of each molecule's definition.
-However the charges of atoms belonging to molecules which begin with
-"inherits OPLSAA" is determined by their @atom types
+
+LAMMPS provides two different methods to specify atomic charges:
+-specify charges in a DATA file (eg "system.data"), or
+-specify them using "set" commands.
+
+This is a somewhat complex example because *both* methods were used.
+This is because some of the atoms use the OPLSAA force field, and others do not.
+
+Since the SPC/E water molecules do *not* use the OPLSAA
+force field, their charges are specified in the ordinary way
+(ie. in the "Data Atoms" section of the
+["spce.lt"](moltemplate_files/spce.lt) file).
+(After running moltemplate.sh, this information will be written to the
+"Atoms" section of the "system.data" file created by moltemplate.)
+
+However the charges of atoms belonging to molecules that use the OPLSAA force
+field (such as methane, in this example) are determined by their @atom types
 *(according to a lookup table located at the beginning of the
 ["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+After running moltemplate.sh, this information will be written to the
+the "system.in.charges" file created by moltemplate.
+For these OPLSAA atom types, we never bother to specify their charges in
+the "Data Atoms" section.  The information in the "system.in.charges"
+file overrides it, since LAMMPS reads it after reading the "system.data" file.
+(See the ["run.in.nvt"](run.in.nvt) file for details.)
+
 **This can be overridden.**
 See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
 for instructions how to customize atomic charges.
 
-Note that in this example, the SPC/E water model we are using does *not*
-begin with "inherits OPLSAA".  Consequently, the charges of atoms in
-water molecule is determined by the "Data Atoms" section
-of the water molecule's definition.
-(See ["spce.lt"](moltemplate_files/spce.lt).)

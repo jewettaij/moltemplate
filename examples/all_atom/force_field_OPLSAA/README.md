@@ -17,17 +17,36 @@ the atomic charges are determined by their @atom types
 
 ### Customizing atomic charges for OPLSAA molecules
 
-If you use use a 3rd-party program to calculate each atom's charge, you can
-copy those charges into the "Data Atoms" section of your molecule's LT files.
-To prevent LAMMPS from ignoring the "Data Atoms" section, edit the
-LAMMPS input script files (eg. "run.in.min", "run.in.nvt", "run.in.npt")
-and delete or comment-out the line containing: **"include system.in.charges"**.
-*(The "system.in.charges" file contains the data from the "oplsaa.lt" file.)*
 
-Alternatively, if you only want to override the charges of *some* of the atoms
-in your molecule (and use default "oplsaa.lt" charges for the remaining atoms),
-then you can do this by adding an "In Charges" section to your molecule
-and provide a list of custom charges for the \$atoms you want to modify.
+#### Background information
+
+LAMMPS provides two different methods to specify atomic charges:
+1) **Specify charges in a DATA file** (eg "system.data").
+*(This is the most popular way to specify atomic charges.
+After running moltemplate.sh, the information in the "Data Atoms" section
+is copied into the "Atoms" section of the "system.data" file created by
+moltemplate.sh, and later read by LAMMPS.)*
+2) **Specify charges using "set" commands.**
+*(This is how the OPLSAA atom charges are specified.
+After running moltemplate, atom charge information in the
+["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt)
+is copied into the "system.in.charges" file created by moltemplate.sh.
+A LAMMPS input script file (eg. "run.in.nvt" or "run.in.npt")
+is included with all of the OPLSAA examples.  It tells LAMMPS to read
+this "system.in.charges" file after reading the "system.data" file.
+This overwrites the atom charges from "system.data" for the OPLSAA atoms.)*
+
+#### How to customize atomic charge (without modifying oplsaa.lt)
+
+1) If you use use a 3rd-party program to calculate each atom's charge, you can
+copy those charges into the "Data Atoms" section of your molecule's LT files.
+To prevent LAMMPS from ignoring these charges, delete or comment-out the line
+containing: **"include system.in.charges"** from your LAMMPS input script
+(such as "run.in.min", "run.in.nvt", and "run.in.npt").
+2)Alternatively, if you only want to override the charges of *some* of the atoms
+in your molecules (and use default "oplsaa.lt" charges for the remaining atoms),
+then you can do this by adding an "In Charges" section to your LT file,
+and providing a list of custom charges for the \$atoms you want to modify.
 This is demonstrated in the ["graphene_nh2.lt"](functionalized_nanotubes_NH2/moltemplate_files/graphene_nh2.lt)
 file located in [this example](functionalized_nanotubes_NH2).
 *(In that example, the charge of one of the carbon atoms in the "Graphene_NH2"
@@ -36,14 +55,13 @@ object was modified.  If you use this strategy, do not comment out
 
 This discussion only applies to molecules that use the OPLSAA force field
 *(i.e. molecules whose definition begins with "inherits OPLSAA")*.
-So, alternatively, you can mix molecules that use OPLSAA with other molecules
+You can also mix molecules that use OPLSAA with other molecules
 that don't.  In the [waterSPCE+methane](waterSPCE+methane) example,
-the atoms in the SPC/E water molecules do not use OPLSAA.
+the SPC/E water molecules do not use OPLSAA.
 Hence, their atomic charges are located in the "Data Atoms" section
-of the [spce.lt](waterSPCE+methane/moltemplate_files/spce.lt) file
-and are not overridden.
-(The same is true of most of the carbon atoms in the
-[carbon nanotube](functionalized_nanotubes_NH2) example.)
+of the [spce.lt](waterSPCE+methane/moltemplate_files/spce.lt) file.
+*(The same is true of most of the carbon atoms in the
+[carbon nanotube](functionalized_nanotubes_NH2) example.)*
 
 
 
