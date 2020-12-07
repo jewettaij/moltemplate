@@ -39,3 +39,13 @@ CH3 inherits COMPASS { ... }         # (see "ch3group.lt")
 Alkane50 inherits COMPASS { ... }    # (see "alkane50.lt")
 ```
 
+### Customizing atomic charges
+
+In this example, atomic charge for COMPASS atoms is determined by @atom type
+*(...according to a lookup table located at the beginning of the
+["compass_published.lt"](../../../moltemplate/force_fields/compass_published.lt) file)*.
+*(Any atomic charges listed in the "Data Atoms" section of your LT files
+will be ignored.)*
+**These charges can be overridden.**
+See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
+for instructions explaining how to customize atomic charge.

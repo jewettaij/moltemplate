@@ -30,10 +30,10 @@ run a short simulation are provided in other README files.
 
 
 LAMMPS provides two different methods to specify atomic charges:
--specify charges in a DATA file (eg "system.data"), or
--specify them using "set" commands.
+1) Specify charges in a DATA file (eg "system.data")
+2) Specify them using "set" commands
 
-This is a somewhat complex example because *both* methods were used.
+This is a complicated example because *both* methods were used.
 This is because some of the atoms use the OPLSAA force field, and others do not.
 
 Since the SPC/E water molecules do *not* use the OPLSAA
@@ -46,7 +46,7 @@ force field, their charges are specified in the ordinary way
 However the charges of atoms belonging to molecules that use the OPLSAA force
 field (such as methane, in this example) are determined by their @atom types
 *(according to a lookup table located at the beginning of the
-["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
 After running moltemplate.sh, this information will be written to the
 the "system.in.charges" file created by moltemplate.
 For these OPLSAA atom types, we never bother to specify their charges in

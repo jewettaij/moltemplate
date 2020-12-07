@@ -7,16 +7,16 @@ There is no gaurantee that simulations prepared using moltemplate will reproduce
 
 ### Atomic charges
 
-In most moltemplate examples, atomic charge (if present) is listed in
-the 4th column of the "Data Atoms" section of each molecule's definition.
-However *in moltemplate's implementation of OPLSAA,*
-the atomic charges are determined by their @atom types
-*(according to a lookup table located at the beginning of the
-["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
-**This can be overridden.**
+In most of the OPLSAA examples,
+the atomic charges are determined by their @atom types.
+*(...according to a lookup table located at the beginning of the
+["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file.
+The atomic charges listed in the 4th column of the "Data Atoms" section
+are ignored.)*
+**These charges can be overridden.**
+
 
 ### Customizing atomic charges for OPLSAA molecules
-
 
 #### Background information
 
@@ -29,7 +29,7 @@ moltemplate.sh, and later read by LAMMPS.)*
 2) **Specify charges using "set" commands.**
 *(This is how the OPLSAA atom charges are specified.
 After running moltemplate, atom charge information in the
-["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt)
+["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt)
 is copied into the "system.in.charges" file created by moltemplate.sh.
 A LAMMPS input script file (eg. "run.in.nvt" or "run.in.npt")
 is included with all of the OPLSAA examples.  It tells LAMMPS to read

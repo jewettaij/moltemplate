@@ -30,12 +30,11 @@ More detailed instructions on how to build LAMMPS input files and run a short si
 
 ### Customizing atomic charges
 
-In most moltemplate examples, atomic charges (if present) are listed in
-the 4th column of the "Data Atoms" section of each molecule's definition.
-However *in moltemplate's implementation of OPLSAA,*
-the atomic charges are determined by their @atom types
-*(according to a lookup table located at the beginning of the
-["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
-**This can be overridden.**
+In this example, atomic charge for OPLSAA atoms is determined by @atom type
+*(...according to a lookup table located at the beginning of the
+["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+*(Any atomic charges listed in the "Data Atoms" section of your LT files
+will be ignored.)*
+**These charges can be overridden.**
 See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
-for instructions how to customize atomic charges.
+for instructions explaining how to customize atomic charge.

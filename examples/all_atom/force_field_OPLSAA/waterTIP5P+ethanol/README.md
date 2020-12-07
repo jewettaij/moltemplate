@@ -22,12 +22,11 @@ run a short simulation are provided in other README files.
 
 ### Customizing atomic charges
 
-In most moltemplate examples, atomic charges (if present) are listed in
-the 4th column of the "Data Atoms" section of each molecule's definition.
-However the charges of atoms belonging to molecules which begin with
-"inherits OPLSAA" is determined by their @atom types
-*(according to a lookup table located at the beginning of the
-["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt) file)*.
-**This can be overridden.**
+In this example, atomic charge for OPLSAA atoms is determined by @atom type
+*(...according to a lookup table located at the beginning of the
+["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+*(Any atomic charges listed in the "Data Atoms" section of your LT files
+will be ignored.)*
+**These charges can be overridden.**
 See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
-for instructions how to customize atomic charges.
+for instructions explaining how to customize atomic charge.

@@ -28,10 +28,10 @@ The 3 atoms in the amine groups use the OPLSAA force field.  The charge of the c
 #### Customizing atomic charges
 
 LAMMPS provides two different methods to specify atomic charges:
-1) Specify charges in a DATA file (eg "system.data"), or
-2) Specify them using "set" commands.
+1) Specify charges in a DATA file (eg "system.data")
+2) Specify them using "set" commands
 
-This is a somewhat complex example because *both* methods were used.
+This is a complicated example because *both* methods were used.
 This is because some of the atoms use the OPLSAA force field, and others do not.
 
 1)  Since most of the carbon atoms in the nanotube do *not* use the OPLSAA
@@ -46,7 +46,7 @@ moltemplate.sh and read by LAMMPS.*)
 in the "Graphene_NH2" object *use the OPLSAA force field*.
 Moltemplate's version of the OPLSAA force field assigns atomic charge
 according to @atom type, using a lookup table at the beginning of the
-["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt).
+["oplsaa.lt"](../../../../moltemplate/force_fields/oplsaa.lt) file.
 *(After running moltemplate, this information gets copied into the
 "system.in.charges" file created by moltemplate.sh, and read by LAMMPS.)*
 So, for these OPLSAA atom types, we never bother to specify their charges in
@@ -66,7 +66,7 @@ to the "In Charges" section at the end of the
 ["graphene_nh2.lt"](moltemplate_files/graphene_nh2.lt) file.
 That "set" command modifies the charge of this individual \$atom:c1 atom.
 (Note that any text written to a file named "In XXX" will end up appended
-to the end of the "system.in.XXX" file.  In this case XXX="charges".)
+to the end of a file named "system.in.XXX".  In this case, XXX="charges".)
 
 
 ### Requirements
