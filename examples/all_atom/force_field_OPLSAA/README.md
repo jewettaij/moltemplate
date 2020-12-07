@@ -33,8 +33,9 @@ After running moltemplate, atom charge information in the
 is copied into the "system.in.charges" file created by moltemplate.sh.
 A LAMMPS input script file (eg. "run.in.nvt" or "run.in.npt")
 is included with all of the OPLSAA examples.  It tells LAMMPS to read
-this "system.in.charges" file after reading the "system.data" file.
-This overwrites the atom charges from "system.data" for the OPLSAA atoms.)*
+this "system.in.charges" file after reading the "system.data" file,
+This overrides the atom charges from the "system.data" file.)*
+
 
 #### How to customize atomic charge (without modifying oplsaa.lt)
 
@@ -43,17 +44,16 @@ copy those charges into the "Data Atoms" section of your molecule's LT files.
 To prevent LAMMPS from ignoring these charges, delete or comment-out the line
 containing: **"include system.in.charges"** from your LAMMPS input script
 (such as "run.in.min", "run.in.nvt", and "run.in.npt").
-2)Alternatively, if you only want to override the charges of *some* of the atoms
-in your molecules (and use default "oplsaa.lt" charges for the remaining atoms),
-then you can do this by adding an "In Charges" section to your LT file,
+2) Alternatively, if you only want to override the charges of *some* of the
+atoms in your molecules (and use default "oplsaa.lt" charges for the remaining
+atoms), then you can do this by adding an "In Charges" section to your LT file
 and providing a list of custom charges for the \$atoms you want to modify.
 This is demonstrated in the ["graphene_nh2.lt"](functionalized_nanotubes_NH2/moltemplate_files/graphene_nh2.lt)
 file located in [this example](functionalized_nanotubes_NH2).
 *(In that example, the charge of one of the carbon atoms in the "Graphene_NH2"
 object was modified.  If you use this strategy, do not comment out
 "include system.in.charges" from your "run.in\*" script files.)*
-
-This discussion only applies to molecules that use the OPLSAA force field
+3) This discussion only applies to molecules that use the OPLSAA force field
 *(i.e. molecules whose definition begins with "inherits OPLSAA")*.
 You can also mix molecules that use OPLSAA with other molecules
 that don't.  In the [waterSPCE+methane](waterSPCE+methane) example,
