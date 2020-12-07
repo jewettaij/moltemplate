@@ -32,6 +32,18 @@ Hexadecane inherits COMPASS { ... }     # (see "hexadecane.lt")
 ```
 
 
+### Customizing atomic charges
+
+In this example, atomic charge for COMPASS atoms is determined by @atom type
+and bond parter *(...according to the rules in the 
+["compass_published.lt"](../../../../moltemplate/force_fields/compass_published.lt) file)*.
+*(Any atomic charges listed in the "Data Atoms" section of your molecules'
+LT files will be ignored.)*
+**These charges can be overridden.**
+See [here](../README.md#Customizing-atomic-charges-in-COMPASS-molecules)
+for instructions explaining how to customize atomic charge.
+
+
 ### Manual control of bond and angle interactions
 
 If necessary, you can customize existing bonds, angles, dihedrals etc. in your molecule (eg. *Hexadecane*), or add new ones (if the force field does not define them).  To do this, edit the corresponding LT file (eg. ["hexadecane.lt"](./moltemplate_files/hexadecane.lt)), and add extra sections to that file (eg. *write("Data Bonds")* or *write("Data Angles")*).  Then add a list of bonded interactions to these sections (containing lines similar to *"\$bond:c7h5 @bond:CustomType \$atom:c7 \$atom:h5"*).  By default, this will override the bond and bonded angular interactions created by the force field.  For more details, read the chapter in the moltemplate manual named "Customizing molecule position and topology".)

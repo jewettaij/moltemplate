@@ -8,15 +8,15 @@ There is no gaurantee that simulations prepared using moltemplate will reproduce
 ### Atomic charges
 
 In most of the OPLSAA examples,
-the atomic charges are determined by their @atom types.
+the atomic charges are determined by their @atom types
 *(...according to a lookup table located at the beginning of the
-["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file.
-The atomic charges listed in the 4th column of the "Data Atoms" section
-are ignored.)*
+["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+*(Any atomic charges listed in the "Data Atoms" section of your molecule's
+LT files will be ignored.)*
 **These charges can be overridden.**
 
 
-### Customizing atomic charges for OPLSAA molecules
+### Customizing atomic charges in OPLSAA molecules
 
 #### Background information
 
@@ -37,7 +37,8 @@ this "system.in.charges" file after reading the "system.data" file,
 This overrides the atom charges from the "system.data" file.)*
 
 
-#### How to customize atomic charge (without modifying oplsaa.lt)
+#### How to customize atomic charge
+*(without modifying "oplsaa.lt")*
 
 1) If you use use a 3rd-party program to calculate each atom's charge, you can
 copy those charges into the "Data Atoms" section of your molecule's LT files.

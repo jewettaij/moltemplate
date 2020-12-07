@@ -32,6 +32,17 @@ CH3 inherits COMPASS { ... }        # (see "ch2group.lt")
 Butane inherits COMPASS { ... }     # (see "butane.lt")
 ```
 
+### Customizing atomic charges
+
+In this example, atomic charge for COMPASS atoms is determined by @atom type
+and bond parter *(...according to the rules in the 
+["compass_published.lt"](../../../../moltemplate/force_fields/compass_published.lt) file)*.
+*(Any atomic charges listed in the "Data Atoms" section of your molecules'
+LT files will be ignored.)*
+**These charges can be overridden.**
+See [here](../README.md#Customizing-atomic-charges-in-COMPASS-molecules)
+for instructions explaining how to customize atomic charge.
+
 
 ### Manual control of bond and angle interactions
 

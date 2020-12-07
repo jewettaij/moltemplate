@@ -55,6 +55,6 @@ file overrides it, since LAMMPS reads it after reading the "system.data" file.
 (See the ["run.in.nvt"](run.in.nvt) file for details.)
 
 **This can be overridden.**
-See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
+See [here](../README.md#Customizing-atomic-charges-in-OPLSAA-molecules)
 for instructions how to customize atomic charges.
 

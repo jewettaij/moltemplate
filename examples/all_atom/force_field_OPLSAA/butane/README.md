@@ -38,10 +38,10 @@ Butane inherits OPLSAA { ... }   # (see "butane.lt")
 In this example, atomic charge for OPLSAA atoms is determined by @atom type
 *(...according to a lookup table located at the beginning of the
 ["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
-*(Any atomic charges listed in the "Data Atoms" section of your LT files
-will be ignored.)*
+*(Any atomic charges listed in the "Data Atoms" section of your molecules'
+LT files will be ignored.)*
 **These charges can be overridden.**
-See [here](../README.md#Customizing-atomic-charges-for-OPLSAA-molecules)
+See [here](../README.md#Customizing-atomic-charges-in-OPLSAA-molecules)
 for instructions explaining how to customize atomic charge.
 
 
