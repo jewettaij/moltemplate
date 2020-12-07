@@ -28,8 +28,8 @@ The 3 atoms in the amine groups use the OPLSAA force field.  The charge of the c
 #### Customizing atomic charges
 
 LAMMPS provides two different methods to specify atomic charges:
--specify charges in a DATA file (eg "system.data"), or
--specify them using "set" commands.
+1) Specify charges in a DATA file (eg "system.data"), or
+2) Specify them using "set" commands.
 
 This is a somewhat complex example because *both* methods were used.
 This is because some of the atoms use the OPLSAA force field, and others do not.

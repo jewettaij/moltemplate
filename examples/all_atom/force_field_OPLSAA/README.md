@@ -53,8 +53,8 @@ file located in [this example](functionalized_nanotubes_NH2).
 *(In that example, the charge of one of the carbon atoms in the "Graphene_NH2"
 object was modified.  If you use this strategy, do not comment out
 "include system.in.charges" from your "run.in\*" script files.)*
-3) This discussion only applies to molecules that use the OPLSAA force field
-*(i.e. molecules whose definition begins with "inherits OPLSAA")*.
+3) The discussion so far only applies to molecules that use the OPLSAA force
+field *(i.e. molecules whose definition begins with "inherits OPLSAA")*.
 You can also mix molecules that use OPLSAA with other molecules
 that don't.  In the [waterSPCE+methane](waterSPCE+methane) example,
 the SPC/E water molecules do not use OPLSAA.
