@@ -71,7 +71,7 @@ to the end of a file named "system.in.XXX".  In this case, XXX="charges".)
 
 ### Requirements
 
-To run this you must have a version of LAMMPS which has been compiled with support for the optional RIGID package. (See the [run.in.nvt](run.in.nvt) file for more details.)  Running at NVT defintely does not require this.
+To run this you must have a version of LAMMPS which has been compiled with support for the optional MOLECULE and RIGID packages.  If you encounter errors when running LAMMPS then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with these packages enabled.
 
 
 ### Notes:
