@@ -17,7 +17,7 @@ for every structure in the PDB database.  Instead, a (hopefully) unbiased
 subset of PDB files containing DNA structures were selected using the
 procedure explained here:
 
-https://github.com/jewettaij/dlpdb/blob/master/examples/dna_example/README_STEP_1_prepare_pdb_files.sh
+https://github.com/jewettaij/dlpdb/blob/master/examples/dna_example
 
   --- UGLY DETAILS: ---
 Then these files were processed to discarding overhangs, end-caps, and 

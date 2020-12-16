@@ -79,11 +79,11 @@ velocity all create 0.5961621 4928459
 
 timestep 1.0   # By definition.  (Masses should be adjusted accordingly.)
 
-reset_timestep 182000000
+reset_timestep 150000000
 
 # To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
 # (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
-# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+# kB*T = 0.001987207*300 kcal/mole = 0.5961621
 # To maximize diffusion rate (sampling efficiency), make tdamp as large as you
 # can.  Just make sure it does not exceed the timescales you really care about.
 # (Keep it an order of magnitude or so shorter than that.)
@@ -94,7 +94,7 @@ fix fxnve all nve
 # Keep the chain centered in the X direction (so that it does not drift)
 fix fxcen all recenter 0.0 NULL NULL
 
-run 18000000
+run 20000000
 
 unfix fxcen
 unfix fxnve

@@ -21,39 +21,40 @@ but it can be used to prepare realistic all-atom simulations as well.
 It currently supports the
 [**OPLSAA**](./examples/all_atom/force_field_OPLSAA),
 [**OPLSUA**](./examples/all_atom/force_field_OPLSUA_united_atom),
-[**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
-[**COMPASS**](./examples/all_atom/force_field_COMPASS),
+[**LOPLSAA**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
-[**TraPPE**(1998)](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
+[**DREIDING**](./examples/all_atom/force_field_DREIDING),
+[**COMPASS**](./examples/all_atom/force_field_COMPASS),
+[**TraPPE**(1998)](./examples/coarse_grained/solvent_models/manybodywaterMW+hydrocarbonsTraPPE)
 force fields,
 the
-[**ATB**](https://atb.uq.edu.au) database,
+[**ATB**](https://atb.uq.edu.au) molecule database,
 and the
-[**MOLC**](./examples/coarse_grained/MOLC),
-[**mW**](./examples/coarse_grained/3bodyWater%2Bhydrocarbons_MW%2BTraPPE),
-[**ELBA**(water)](./examples/coarse_grained/ELBAwater%2Bmethanol),
-[**oxDNA2**](./examples/coarse_grained/DNA_models),
+[**MOLC**](https://pubs.rsc.org/en/content/articlelanding/2019/cp/c9cp04120f),
+[**mW**](https://doi.org/10.1021/jp805227c),
+[**ELBA**(water)](./examples/coarse_grained/solvent_models/ELBAwater%2Bmethanol),
+[**oxDNA2**](https://dna.physics.ox.ac.uk/index.php/DNA_model_introduction),
 and
-[**EFF**](./examples/misc_examples/explicit_electrons)
+[**EFF**](./examples/misc_examples/explicit_electrons/eff_CH4)
 molecular models (and others).
 Moltemplate is interoperable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
 [**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
+[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
+[**EMC**](http://montecarlo.sourceforge.net/),
 [**CellPACK**](http://www.cellpack.org),
 [**LigParGen**](http://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**Vipster**](https://sgsaenger.github.io/vipster),
-[**NanoHub struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
-[**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html)
+[**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that reads or generates LAMMPS data (.lmpdat) files.
-This repository includes approximately 50 [examples](./examples).
 (New force fields and examples are added continually by users.)
-
 
 ### Documentation
 
 The best way to learn how to use moltemplate is to find an example
 which is similar to the system that you wish to simulate and modify it.
+This repository includes approximately 50 [examples](./examples).
 Some of the moltemplate examples are also demonstrated (with pictures)
 [here](http://moltemplate.org/visual_examples.html).
 
@@ -63,6 +64,21 @@ All moltemplate users should probably read chapter 4 of the
 In addition, there are also several
 [talks/tutorials](http://moltemplate.org/doc/talks.html)
 online.
+
+
+### Limitations for preparing all-atom simulations
+
+Moltemplate [does *not* choose atom types automatically ("atom typing")](http://moltemplate.org/force_field_recommendations.html),
+and currently cannot be used to build all-atom proteins from scratch.
+3rd-party tools may be needed to calculate atomic partial charges accurately.
+(For non-trivial molecules, users are encouraged to use the
+[ATB](https://atb.uq.edu.au) database,
+or use the DREIDING force field which has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf),
+or use a 3rd-party molecule-builder
+and convert the resulting files to LAMMPS format using
+[OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format")
+followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format"), and then use moltemplate.)
+
 
 
 ## Typical usage
@@ -98,6 +114,7 @@ There are two ways to install moltemplate:
 
 
 ## Installation using pip
+
 If you are familiar with pip, then run the following command from within the directory where this README file is located:
 
     pip install . --user
@@ -201,4 +218,4 @@ It is similar to the BSD and MIT licenses and
 ## Funding
 
 Moltemplate is currently funded by NIH grant T32-AI007354-29
-(and previously by HSFP grant RGP0014/2014 and NSF grant 1056587).
+(and previously by HSFP grant RGP0014/2014 and NSF grant NSF-MCB-1158577).

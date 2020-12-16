@@ -45,8 +45,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.65.0'
-g_date_str = '2019-12-12'
+g_version_str = '0.67.0'
+g_date_str = '2020-10-12'
 
 def Intify(s):
     if s.isdigit():
@@ -271,6 +271,7 @@ class Ltemplify(object):
         self.atomtype_selection = []
         self.molid_selection = []
         self.mol_name = ''
+        self.preamble_text = ''
 
         self.min_sel_atomid = None
         self.min_sel_atomtype = None
@@ -466,13 +467,22 @@ class Ltemplify(object):
                 self.atom_column_names = argv[i+1].strip('\"\'').strip().split()
                 del argv[i:i + 2]
 
+            elif argv[i] == '-preamble':
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: ' + argv[i] + ' flag should be followed by a string.\n')
+                self.cindent = 2
+                self.indent += self.cindent
+                self.preamble_text += argv[i + 1]
+                del argv[i:i + 2]
+
             elif ((argv[i] == '-name') or
                   (argv[i] == '-molname') or
                   (argv[i] == '-molecule-name') or
                   (argv[i] == '-molecule_name')):
                 if i + 1 >= len(argv):
                     raise InputError(
-                        'Error: ' + argv[i] + ' flag should be followed by a a molecule type name.\n')
+                        'Error: ' + argv[i] + ' flag should be followed by a molecule type name.\n')
                 self.cindent = 2
                 self.indent += self.cindent
                 self.mol_name = argv[i + 1]
@@ -3105,7 +3115,7 @@ class Ltemplify(object):
                 atomtype_i_tokens = atomtype_i_str.split('*')
 
                 if atomtype_i_tokens[0] == '':
-                    if (self.min_sel_atomtype and
+                    if (self.min_sel_atomtype and self.min_needed_atomtype and
                         (self.min_sel_atomtype < self.min_needed_atomtype)):
                         i_a = self.min_sel_atomtype
                     else:
@@ -3114,7 +3124,7 @@ class Ltemplify(object):
                     i_a = Intify(atomtype_i_tokens[0])
 
                 if atomtype_i_tokens[1] == '':
-                    if (self.max_sel_atomtype and
+                    if (self.max_sel_atomtype and self.max_needed_atomtype and
                         (self.max_sel_atomtype > self.max_needed_atomtype)):
                         i_b = self.max_sel_atomtype
                     else:
@@ -3153,7 +3163,7 @@ class Ltemplify(object):
                 atomtype_j_tokens = atomtype_j_str.split('*')
 
                 if atomtype_j_tokens[0] == '':
-                    if (self.min_sel_atomtype and
+                    if (self.min_sel_atomtype and self.min_needed_atomtype and
                         (self.min_sel_atomtype < self.min_needed_atomtype)):
                         j_a = self.min_sel_atomtype
                     else:
@@ -3162,7 +3172,7 @@ class Ltemplify(object):
                     j_a = Intify(atomtype_j_tokens[0])
 
                 if atomtype_j_tokens[1] == '':
-                    if (self.max_sel_atomtype and
+                    if (self.max_sel_atomtype and self.max_needed_atomtype and
                         (self.max_sel_atomtype > self.max_needed_atomtype)):
                         j_b = self.max_sel_atomtype
                     else:
@@ -3246,7 +3256,7 @@ class Ltemplify(object):
                 atomtype_i_tokens = atomtype_i_str.split('*')
 
                 if atomtype_i_tokens[0] == '':
-                    if (self.min_sel_atomtype and
+                    if (self.min_sel_atomtype and self.min_needed_atomtype and
                         (self.min_sel_atomtype < self.min_needed_atomtype)):
                         i_a = self.min_sel_atomtype
                     else:
@@ -3255,7 +3265,9 @@ class Ltemplify(object):
                     i_a = Intify(atomtype_i_tokens[0])
 
                 if atomtype_i_tokens[1] == '':
-                    if (self.max_sel_atomtype and
+                    assert(self.max_sel_atomtype != None)
+                    assert(self.max_needed_atomtype != None)
+                    if (self.max_sel_atomtype and self.max_needed_atomtype and
                         (self.max_sel_atomtype > self.max_needed_atomtype)):
                         i_b = self.max_sel_atomtype
                     else:
@@ -3269,11 +3281,15 @@ class Ltemplify(object):
             i_a_final = None
             i_b_final = None
             for i in range(i_a, i_b + 1):
-                if ((i in self.needed_atomtypes) or (self.min_sel_atomtype <= i)):
+                if ((i in self.needed_atomtypes) or
+                    ((self.min_sel_atomtype != None) and
+                     (self.min_sel_atomtype <= i))):
                     i_a_final = i
                     break
             for i in reversed(range(i_a, i_b + 1)):
-                if ((i in self.needed_atomtypes) or (self.max_sel_atomtype >= i)):
+                if ((i in self.needed_atomtypes) or
+                    ((self.max_sel_atomtype != None) and
+                     (self.max_sel_atomtype >= i))):
                     i_b_final = i
                     break
 
@@ -3372,6 +3388,8 @@ class Ltemplify(object):
             self.min_needed_bondtype = 1
             self.max_needed_bondtype = 0
 
+        assert(self.min_needed_bondtype != None)
+        assert(self.max_needed_bondtype != None)
 
         i_line = 0
         while i_line < len(self.l_in_bond_coeffs):
@@ -3522,18 +3540,18 @@ class Ltemplify(object):
             for angletype in self.needed_angletypes:
                 assert(type(angletype) is int)
                 if ((self.min_needed_angletype == None) or
-                        (self.min_needed_angletype > angletype)):
+                    (self.min_needed_angletype > angletype)):
                     self.min_needed_angletype = angletype
                 if ((self.max_needed_angletype == None) or
-                        (self.max_needed_angletype < angletype)):
+                    (self.max_needed_angletype < angletype)):
                     self.max_needed_angletype = angletype
             for angleid in self.needed_angleids:
                 assert(type(angleid) is int)
                 if ((self.min_needed_angleid == None) or
-                        (self.min_needed_angleid > angleid)):
+                    (self.min_needed_angleid > angleid)):
                     self.min_needed_angleid = angleid
                 if ((self.max_needed_angleid == None) or
-                        (self.max_needed_angleid < angleid)):
+                    (self.max_needed_angleid < angleid)):
                     self.max_needed_angleid = angleid
         else:
             # If no angles were needed, then define some defaults
@@ -3541,6 +3559,8 @@ class Ltemplify(object):
             self.min_needed_angletype = 1
             self.max_needed_angletype = 0
 
+        assert(self.min_needed_angletype != None)
+        assert(self.max_needed_angletype != None)
 
         i_line = 0
         while i_line < len(self.l_in_angle_coeffs):
@@ -3749,18 +3769,18 @@ class Ltemplify(object):
             for dihedraltype in self.needed_dihedraltypes:
                 assert(type(dihedraltype) is int)
                 if ((self.min_needed_dihedraltype == None) or
-                        (self.min_needed_dihedraltype > dihedraltype)):
+                    (self.min_needed_dihedraltype > dihedraltype)):
                     self.min_needed_dihedraltype = dihedraltype
                 if ((self.max_needed_dihedraltype == None) or
-                        (self.max_needed_dihedraltype < dihedraltype)):
+                    (self.max_needed_dihedraltype < dihedraltype)):
                     self.max_needed_dihedraltype = dihedraltype
             for dihedralid in self.needed_dihedralids:
                 assert(type(dihedralid) is int)
                 if ((self.min_needed_dihedralid == None) or
-                        (self.min_needed_dihedralid > dihedralid)):
+                    (self.min_needed_dihedralid > dihedralid)):
                     self.min_needed_dihedralid = dihedralid
                 if ((self.max_needed_dihedralid == None) or
-                        (self.max_needed_dihedralid < dihedralid)):
+                    (self.max_needed_dihedralid < dihedralid)):
                     self.max_needed_dihedralid = dihedralid
         else:
             # If no dihedrals were needed, then define some defaults
@@ -3768,6 +3788,8 @@ class Ltemplify(object):
             self.min_needed_dihedraltype = 1
             self.max_needed_dihedraltype = 0
 
+        assert(self.min_needed_dihedraltype != None)
+        assert(self.max_needed_dihedraltype != None)
 
         i_line = 0
         while i_line < len(self.l_in_dihedral_coeffs):
@@ -3927,6 +3949,8 @@ class Ltemplify(object):
             self.min_needed_impropertype = 1
             self.max_needed_impropertype = 0
 
+        assert(self.min_needed_impropertype != None)
+        assert(self.max_needed_impropertype != None)
 
         i_line = 0
         while i_line < len(self.l_in_improper_coeffs):
@@ -4055,6 +4079,8 @@ class Ltemplify(object):
         #    self.min_needed_cmaptype = 1
         #    self.max_needed_cmaptype = 0
         #
+        #assert(self.min_needed_cmaptype != None)
+        #assert(self.max_needed_cmaptype != None)
         #
         #i_line = 0
         #while i_line < len(self.l_in_cmap_coeffs):
@@ -4395,6 +4421,7 @@ class Ltemplify(object):
             if len(tokens) < 4:
                 break
             if tokens[1] == 'type':
+                assert(self.min_needed_atomtype != None)
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
                     types_lo = self.min_needed_atomtype
@@ -4403,6 +4430,7 @@ class Ltemplify(object):
                     if types_lo < self.min_needed_atomtype:
                         types_lo = self.min_needed_atomtype
                 if len(pattern)  == 2:
+                    assert(self.max_needed_atomtype != None)
                     if pattern[1] == '':
                         types_hi = self.max_needed_atomtype
                     else:
@@ -4417,6 +4445,7 @@ class Ltemplify(object):
                                                               var_descr + ' ' +
                                                               ' '.join(tokens[3:]))
             elif tokens[1] == 'atom':
+                assert(self.min_needed_atomid != None)
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
                     atomids_lo = self.min_needed_atomid
@@ -4425,6 +4454,7 @@ class Ltemplify(object):
                     if atomids_lo < self.min_needed_atomid:
                         atomids_lo = self.min_needed_atomid
                 if len(pattern)  == 2:
+                    assert(self.max_needed_atomid != None)
                     if pattern[1] == '':
                         atomids_hi = self.max_needed_atomid
                     else:
@@ -4439,6 +4469,7 @@ class Ltemplify(object):
                                                        var_descr + ' ' +
                                                        ' '.join(tokens[3:]))
             elif tokens[1] == 'mol':
+                assert(self.min_needed_molid != None)
                 pattern = tokens[2].split('*')
                 if pattern[0] == '':
                     molids_lo = self.min_needed_molid
@@ -4447,6 +4478,7 @@ class Ltemplify(object):
                     if molids_lo < self.min_needed_molid:
                         molids_lo = self.min_needed_molid
                 if len(pattern)  == 2:
+                    assert(self.max_needed_molid != None)
                     if pattern[1] == '':
                         molids_hi = self.max_needed_molid
                     else:
@@ -4709,6 +4741,9 @@ class Ltemplify(object):
         #                 '       You can redirect this to a file using:\n'+
         #                 '   '+' '.join(sys.argv)+' > filename.ttree\n'
         #                 '        ----------------------\n')
+
+        if self.preamble_text != '':
+            out_file.write(self.preamble_text + '\n\n')
 
         if self.mol_name != '':
             out_file.write(self.mol_name + ' {\n')

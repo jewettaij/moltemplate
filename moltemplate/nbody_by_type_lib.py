@@ -227,7 +227,7 @@ def GenInteractions_int(G_system,
                 # If in the future, different interactions (type_patterns) have
                 # different symmetries, and canonical_order() varies from 
                 # interaction to interaction, then DONT loop over type_pattern:
-                # for type_pattern, coefftype in typepattern_to_coefftypes)
+                # for type_pattern, coefftype in typepattern_to_coefftypes:
                 #     abids = canonical_order(abids, type_pattern)
                 # Why:  When checking for undefined interactions,
                 # we just want to make sure that SOME kind of interaction

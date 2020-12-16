@@ -70,10 +70,13 @@ echo "# charges yourself.  (Moltemplate is only a simple text manipulation tool.
 echo "# You can do this afterwards using commands like \"set atom 70 charge -0.212\""
 echo "# For details, see http://lammps.sandia.gov/doc/set.html)"
 echo "####################################################################"
-echo ""
-echo ""
 
 
+if ! which ./amberparm_atomdescr_to_lt.py > /dev/null; then
+    echo "\nError: \"amberparm_atomdescr_to_lt.py\" not found.\n" >&2
+    echo "       (Try running this script from the directory containing amberparm2lt.sh)" >&2
+    exit 2
+fi
 if ! which ./amberparm_mass_to_lt.py > /dev/null; then
     echo "\nError: \"amberparm_mass_to_lt.py\" not found.\n" >&2
     echo "       (Try running this script from the directory containing amberparm2lt.sh)" >&2
@@ -125,6 +128,7 @@ tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="IMPROPER"
 tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="NONBON")) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.pair
 
 
+./amberparm_atomdescr_to_lt.py < "${PARM_FILE}.mass" > "${PARM_FILE}.atomdescr.lt"
 ./amberparm_mass_to_lt.py < "${FRCMOD_FILE}.mass" > "${FRCMOD_FILE}.mass.lt"
 ./amberparm_pair_to_lt.py < "${FRCMOD_FILE}.pair" > "${FRCMOD_FILE}.pair.lt"
 ./amberparm_bond_to_lt.py < "${FRCMOD_FILE}.bond" > "${FRCMOD_FILE}.bond.lt"
@@ -134,6 +138,14 @@ tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="NONBON"))
 ./amberparm_improper_to_lt.py \
      < "${FRCMOD_FILE}.improper" > "${FRCMOD_FILE}.improper.lt"
 
+
+echo "#"
+echo "# --- Description of atom types ---"
+echo "#"
+cat "${PARM_FILE}.atomdescr.lt"
+echo ""
+echo ""
+echo ""
 
 
 echo "$2 {"

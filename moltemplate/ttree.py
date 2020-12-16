@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2020-7-09'
-g_version_str = '0.86.4'
+g_date_str = '2020-8-06'
+g_version_str = '0.86.6'
 
 
 class ClassReference(object):
@@ -872,6 +872,7 @@ def FollowPathCounterVar(leaf_ptkns, starting_node, dbg_loc):
 
     is_static_node = isinstance(starting_node, StaticObj)
     
+    assert(len(leaf_ptkns) > 0)
     if is_static_node:
         is_simple_node = ((len(last_node.children) == 0) and
                           (len(last_node.instance_commands) == 0) and
@@ -1435,6 +1436,12 @@ def DescrToCatLeafNodes(descr_str,
 
     cat_name, cat_ptkns, leaf_ptkns = DescrToCatLeafPtkns(descr_str, dbg_loc)
 
+    if len(leaf_ptkns) == 0:
+        raise InputError('Error(' + g_module_name + '.DescrToCatLeafNodes()):\n'
+                         '       Error near ' +
+                         ErrorLeader(dbg_loc.infile, dbg_loc.lineno) + '\n'
+                         '       Illegal counter variable \"' + descr_str + '\"\n')
+
     # ---- ellipsis hack ----
     #
     # Search for class:
@@ -1680,7 +1687,8 @@ def DescrToCatLeafNodes(descr_str,
 
         elif (create_missing_nodes and
               ((i_last_ptkn == len(leaf_ptkns) - 1) or
-               HasWildcard('/'.join(leaf_ptkns)))):
+               HasWildcard('/'.join(leaf_ptkns)) or
+               HasRE('/'.join(leaf_ptkns)))):
 
             # elif (create_missing_nodes and
             #      (i_last_ptkn == len(leaf_ptkns)-1)):
@@ -2191,7 +2199,7 @@ class StaticObj(object):
                     #    should never appear in a write_once() statement.
                     for entry in tmpl_contents:
                         if (isinstance(entry, VarRef) and
-                                (entry.prefix[0] == '$')):
+                            (entry.prefix[0] == '$')):
                             err_msg = ('Error(' + g_module_name + '.StaticObj.Parse()):\n' +
                                        '       Error near ' + ErrorLeader(entry.srcloc.infile,
                                                                           entry.srcloc.lineno) + '\n' +
@@ -4317,7 +4325,12 @@ def AssignStaticVarPtrs(context_node, search_instance_commands=False):
             AssignTemplateVarPtrs(command.tmpl_list, context_node)
 
     # Recursively invoke AssignVarPtrs() on all (non-leaf) child nodes:
-    for child in context_node.children.values():
+    #old code:
+    # for child in context_node.children.values():
+    #new code (make copy before iterating since children are added during loop):
+    # for child in context_node.children.copy().values():
+    #this also works:
+    for child in list(context_node.children.values()):
         AssignStaticVarPtrs(child, search_instance_commands)
 
 
@@ -4464,7 +4477,7 @@ def AutoAssignVals(cat_node,
                 else:
 
                     if ((not var_binding.nptr.leaf_node.IsDeleted()) and
-                            (len(var_binding.refs) > 0)):
+                        (len(var_binding.refs) > 0)):
 
                         # For each (regular) variable, query this category's counter
                         # (convert it to a string), and see if it is already in use
@@ -4553,7 +4566,8 @@ def Render(tmpl_list, substitute_vars=True):
 
                 else:
                     out_str_list.append(var_ref.prefix +
-                                        SafelyEncodeString(var_bindings[var_ref.nptr.leaf_node].full_name[1:]) +
+                                        #SafelyEncodeString(var_bindings[var_ref.nptr.leaf_node].full_name[1:]) +
+                                        var_bindings[var_ref.nptr.leaf_node].full_name[1:] +
                                         var_ref.suffix)
 
         else:
@@ -4823,8 +4837,8 @@ def WriteVarBindingsFile(node):
 
             # if type(node) is type(nd):
             if ((isinstance(node, InstanceObjBasic) and isinstance(nd, InstanceObjBasic))
-                    or
-                    (isinstance(node, StaticObj) and isinstance(nd, StaticObj))):
+                or
+                (isinstance(node, StaticObj) and isinstance(nd, StaticObj))):
 
                 # Now omit variables whos names contain "*" or "?" or regex
                 # (these are not variables, but pattern matching strings)
@@ -4836,8 +4850,10 @@ def WriteVarBindingsFile(node):
                                         var_binding.refs[0].srcloc.lineno)
                     else:
                         usage_example = ''
-                    out.write(SafelyEncodeString(var_binding.full_name) + '   ' +
-                              SafelyEncodeString(var_binding.value)
+                    out.write(#SafelyEncodeString(var_binding.full_name) + '   ' +
+                              var_binding.full_name + '   ' +
+                              #SafelyEncodeString(var_binding.value)
+                              var_binding.value
                               + usage_example + '\n')
     out.close()
     for child in node.children.values():

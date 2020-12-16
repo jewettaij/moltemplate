@@ -1,0 +1,15 @@
+import "nanotube.lt"
+
+nanotube1 = new Nanotube
+nanotube1.move(-8,0,0)
+
+nanotube2 = new Nanotube
+nanotube2.rot(90,1,0,0).move(8,0,0)
+
+# ------------ boundary conditions ------------
+
+write_once("Data Boundary") {
+ -20   20  xlo xhi
+ -20   20  ylo yhi
+ -20   20  zlo zhi
+}

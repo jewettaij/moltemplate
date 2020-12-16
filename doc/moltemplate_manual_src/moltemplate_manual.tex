@@ -71,11 +71,52 @@ Downloading these examples is highly recommended.
 
 
 Moltemplate is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
-LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build even larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
+LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
 
 Moltemplate is extremely flexible.
 It supports all LAMMPS force-field styles and nearly all atom-styles
 (now and in the future).
+
+\subsection*{\textit{All-atom simulations}}
+\label{sec:all_atom_limitations}
+Moltemplate was designed for coarse-grained simulations.
+To prepare realistic all-atom simulations,
+you can \textit{either} use the \textbf{ATB} service
+(\url{https://atb.uq.edu.au}) to download a realistic LT file describing
+your molecules, \textit{or} create an LT file by hand.
+In the later case, if you want to use one of the force-field parameter
+sets included with moltemplate (eg. OPLSAA, GAFF2, COMPASS),
+you must choose the \textit{type} of each atom in the molecule by hand.
+\textit{\textbf{Moltemplate does not assign atom types automatically.}}
+For example, to create an LT file for a molecule that contains
+a carbon atom, you must choose which \textit{type} of carbon
+atom is most appropriate for that atom.
+(For most force fields, there are many types of carbon atoms to choose from.)
+To do that, you must choose a force field (eg. OPLSAA), and read the
+force field's LT file (eg. ``oplsaa.lt''), and choose from the list of atom
+type descriptions in that file, the one which most closely matches that atom.
+(Its partial charge may also need to be adjusted.)
+ %Moltemplate comes with examples of simple molecules built this way.
+This is not difficult for simple organic molecules like polyethylene or benzene,
+but it is not trivial for complex molecules like proteins and many ligands.
+
+Unlike other molecule builders, moltemplate does not infer atom types
+from their local bond environment or from information from PDB files.
+Moltemplate also does not repair incomplete PDB files or calculate
+atomic partial charges using physics.  While moltemplate can read PDB files, 
+\textit{\textbf{moltemplate currently only reads atomic coordinates from PDB
+files and discards all other information.}}
+
+\subsubsection*{Strategy for preparing all atom simulations}
+Consequently, for complex molecules, users are currently
+encouraged to either use \textbf{ATB} \cite{ATB},
+\textit{\textbf{or}} prepare simulation files using a different
+molecule building program that supports automatic atom type (and charge)
+assignment, and save (or convert) the resulting files to LAMMPS DATA format.
+Once in LAMMPS DATA format, they can be converted into moltemplate format
+(if desired) using the ``ltemplify.py'' utility.
+(See appendix \ref{sec:ltemplify}.)
+
 
 
   % OLD VERSION
@@ -87,6 +128,7 @@ It supports all LAMMPS force-field styles and nearly all atom-styles
   %%Unlimited levels of object composition, nesting, and inheritance are supported.)
   %Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be moved, deleted and replaced).
 
+\subsection*{Requirements}
 
 Moltemplate requires the Bourne-shell, and a recent version of python (2.7 or 3.0 or higher), and can run on OS X, linux, or windows (if a suitable shell environment has been installed).  
 \textbf{A substantial amount of memory is needed} to run moltemplate.
@@ -152,11 +194,11 @@ moltemplate.sh -atomstyle "full" system.lt
 moltemplate.sh -xyz coords.xyz -atomstyle "full" -vmd system.lt
 \end{verbatim}
 In the first example, the coordinates of the atoms in the 
-system are built from commands inside the "system.lt" file.
+system are built from commands inside the ``system.lt'' file.
 In the second example coordinates for the atoms are read from an XYZ-file,
-and then invokes VMD to visualize the system just created. 
+and then VMD is invoked to visualize the system just created. 
 (PDB-files and other coordinate formats are also supported.
-Note: The "full" atom style was used in this example, but other
+Note: The ``full'' atom style was used in this example, but other
 LAMMPS atom styles are supported, including hybrid styles.)
 
 Either of these commands will construct a LAMMPS data file and a 
@@ -176,42 +218,42 @@ Existing LAMMPS input/data files can be converted into
 
 
 
-\subsubsection*{Warning: All-atom force fields}
-
-Although moltemplate was designed for building coarse-grained molecules,
-popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
-converted into LT format, and more are planned.  Moltemplate
-users can build molecules, using these force-field rules to generate
-angles, dihedrals, and impropers interactions for their molecules automatically
-(and lookup their corresponding force field parameters).
-Unfortunately, as of 2019-9-03, moltemplate does 
-\textit{not} assign partial charges, 
-\textit{or} infer the atom-types which are needed to lookup this information.
-\textit{(Force-field-specific atom types are typically inferred from PDB files,
-CIF files, SMILES strings, or read directly from PSF files or other files.)}
-In practice, the lack of automatic atom-type
-determination can be a huge limitation.
-Currently, users must carefully choose the name
-of the atom type associated with every atom in their molecules.
-For small molecules, this can sometimes be done by reading the force-field
-file carefully and choosing from among the \@atom types in the list
-whose description in the comments seems to match the context where
-the atom appears in their molecule.  However this is risky because the accuracy
-of the simulation depends on selecting the correct atom type from this list.
-For large, complex molecules, manually selecting atom types this way
-is not feasible.  In that case, users can try using an external tool
-(like AmberTools or PSFGEN) to generate atom type names and partial charges,
-and (manually) copy that information into the moltemplate file (LT file).
-(Unfortunately, the atom type names in different versions of the
- same force field do not always match, so this also must be done carefully.
- For example, as of 2019-9-03, the OPLSAA atom types created by PSFGEN
- \textit{do not match} the OPLSAA atom types used by moltemplate.
- Efforts are underway to make these various tools work better together.)
-
-Fortunately, external web-servers such as ATB or LibParGen can be
-used to generate files moltemplate or LAMMPS or format which internally
-contain all of the force-field information (so that using an external
-force field is unnecessary).
+%\subsubsection*{Warning: All-atom force fields}
+%
+%Although moltemplate was designed for building coarse-grained molecules,
+%popular all-atom force-fields such as AMBER GAFF and OPLS-AA have been
+%converted into LT format, and more are planned.  Moltemplate
+%users can build molecules, using these force-field rules to generate
+%angles, dihedrals, and impropers interactions for their molecules automatically
+%(and lookup their corresponding force field parameters).
+%Unfortunately, as of 2019-9-03, moltemplate does 
+%\textit{not} assign partial charges, 
+%\textit{or} infer the atom-types which are needed to lookup this information.
+%\textit{(Force-field-specific atom types are typically inferred from PDB files,
+%CIF files, SMILES strings, or read directly from PSF files or other files.)}
+%In practice, the lack of automatic atom-type
+%determination can be a huge limitation.
+%Currently, users must carefully choose the name
+%of the atom type associated with every atom in their molecules.
+%For small molecules, this can sometimes be done by reading the force-field
+%file carefully and choosing from among the \@atom types in the list
+%whose description in the comments seems to match the context where
+%the atom appears in their molecule.  However this is risky because the accuracy
+%of the simulation depends on selecting the correct atom type from this list.
+%For large, complex molecules, manually selecting atom types this way
+%is not feasible.  In that case, users can try using an external tool
+%(like AmberTools or PSFGEN) to generate atom type names and partial charges,
+%and (manually) copy that information into the moltemplate file (LT file).
+%(Unfortunately, the atom type names in different versions of the
+% same force field do not always match, so this also must be done carefully.
+% For example, as of 2019-9-03, the OPLSAA atom types created by PSFGEN
+% \textit{do not match} the OPLSAA atom types used by moltemplate.
+% Efforts are underway to make these various tools work better together.)
+%
+%Fortunately, external web-servers such as ATB or LigParGen can be
+%used to generate files moltemplate or LAMMPS or format which internally
+%contain all of the force-field information (so that using an external
+%force field is unnecessary).
 
 
 
@@ -251,11 +293,22 @@ force field is unnecessary).
 %For these tasks, external utilities are very helpful.
 
 \subsection*{Additional tools}
-The VMD topotools plugin \cite{topotools} is useful for 
-converting PDB files into LAMMPS format.  These files can then
-be converted to ``LT'' format using the ``ltemplify.py'' utility.
-VMD \cite{VMD} and topotools are also useful for visualizing 
-the data files created by moltemplate.sh
+The \textbf{ATB} service \cite{ATB}
+mentioned earlier (\url{https://atb.uq.edu.au})
+is a repository of hundreds of thousands of carefully parameterized molecules.
+Users can submit requests for molecules which are not yet in the repository.
+Both the charge and force-field parameters for these molecules
+have been individually optimized using quantum chemical calculations.
+These molecules are available in moltemplate's native ``LT'' format.
+
+Moltemplate can also read LAMMPS DATA files files generated by other tools,
+including VMD/topotools \cite{topotools}
+and OpenBabel \cite{OpenBABEL}.
+These data files can be converted
+into ``LT'' format using the ``ltemplify.py'' utility.
+VMD \cite{VMD}, topotools \cite{topotools}, and OVITO \cite{OVITO}
+are also useful for visualizing the data files and trajectory files
+created by moltemplate.sh and LAMMPS.
 (See section \ref{sec:vmd_topotools}.)
   %Documentation for doing this is included 
   %in the \textit{online examples} discussed below.
@@ -407,6 +460,21 @@ Later, you can uninstall moltemplate using:
 pip uninstall moltemplate
 \end{verbatim}
 
+\textit{If you run into difficulty with pip}, then try installing
+moltemplate into a temporary virtual environment
+by running these commands:
+\begin{verbatim}
+python -m venv ~/venv     #(or "virtualenv venv" if using python2)
+source ~/venv/bin/activate
+pip install moltemplate
+#(now do something useful with moltemplate...)
+\end{verbatim}
+(You will have to enter ``source \textapprox/venv/bin/activate''
+ into a terminal beforehand every time you want to run moltemplate.)
+If all this fails, then try installing moltemplate by manually
+updating your \$PATH environment variable.
+Instructions for doing that are included below.
+
 \textit{Note: There are a large variety of detailed moltemplate
 examples which will be omitted if you install moltemplate this way.
 \textbf{Downloading the examples is strongly recommended.}}
@@ -445,22 +513,12 @@ cd  ~/moltemplate
 pip install .  # (or "pip install --user", if that fails)
 \end{verbatim}
 
-\textit{If you run into difficulty with pip}, then try installing
-moltemplate into a temporary virtual environment
-by installing ``virtualenv'',
-%downloading moltemplate (to ``\textapprox/moltemplate'' in the example below),
-and running these commands:
-\begin{verbatim}
-cd ~/moltemplate
-python -m venv venv     #(or "virtualenv venv" if using python2)
-source venv/bin/activate
-pip install .
-#(now do something useful with moltemplate...)
-\end{verbatim}
-(You will have to enter ``source \textapprox/moltemplate/venv/bin/activate''
- into a terminal beforehand every time you want to run moltemplate.)
-If all this fails, then try installing moltemplate by manually
-updating your \$PATH environment variable.  Instructions for doing that are included below.
+As mentioned earlier, if you are having difficulty, try to installing
+moltemplate in a virtual environment instead.  Using virtual environments
+is cleaner, and can avoid many of the common pitfalls that occur in computers
+with complex python installations.  To do that, follow the
+instructions above (in Method 1) to start a virtual environment,
+and \textit{then} run ``pip install .''.
 
 
 \subsubsection*{Installation Method 3 (updating your PATH)}
@@ -823,7 +881,7 @@ See section \ref{sec:2beadPolymer}.
 \\
 \hline
 \textbf{replace} \{ \textit{oldvariable} \textit{newvariable} \} &
-Allow alternate names for the same variable.  This replaces all instances of \textit{oldvariable} with \textit{newvariable}.  Both variable names must have a ``@'' prefix.  This is typically used to reduce the length of long variables, for example to allow the shorthand ``@atom:C2'' to refer to ``@atom:C2\_bC2\_aC\_dC\_iC''
+Allow alternate names for the same variable.  This replaces all instances of \textit{oldvariable} with \textit{newvariable}.  Both variable names must have a ``@'' prefix.  This is typically used to reduce the length of long variables, for example to allow the shorthand ``@atom:C2'' to refer to ``@atom:C2\_bC2\_aC\_dC\_iC'' (See section \ref{sec:replace_command}.)
 \\
 \hline
  \textbf{\#}\textit{commented text} & 
@@ -899,15 +957,22 @@ this variable appears only contains a single improper interaction.)
 A number which indicates an improper's \textit{type}
 \\
 \hline
-\$\textit{mol} \hspace{0.2cm} or \hspace{0.2cm} \$\textit{mol:.} & 
-This variable refers to the ID number of \textit{this} molecule object.
-(See section \ref{sec:spce_example}.
-Note: \mbox{\textit{``\$mol''}} is shorthand for \mbox{\textit{``\$mol:.''}})
+\$\textit{mol}:\textit{name}   &
+A unique molecule ID number.  Typically all the atoms in molecule have
+the same molecule ID.  (The ``:\textit{name}'' suffix is optional.
+If omitted, the default \textit{name} is ``.''.)
 \\
+\hline
+%\$\textit{mol} \hspace{0.2cm} or \hspace{0.2cm} \$\textit{mol:.} &
+%This variable refers to the ID number of \textit{this} molecule object.
+%(See section \ref{sec:spce_example}.
+%Note: \mbox{\textit{``\$mol''}} is shorthand for \mbox{\textit{``\$mol:.''}})
+%\\
 \hline
 \$\textit{mol:}... & 
 The ID number assigned to the molecule to which this object belongs
 (if applicable).
+%(This object must begin with \textit{create\_var\{\$mol\}})
 See sections \ref{sec:2beadPolymer}, 
 \ref{sec:ellipsis_mol},
 %\ref{sec:paths},
@@ -1165,9 +1230,11 @@ Read all of the atomic coordinates from an external XYZ file
 & 
 Read all of the atomic coordinates from an external PDB file
 (Periodic boundary conditions are also read, if present.
- Atoms are sorted by the chainID, resID, insertCode, and atomID
- fields on every line beginning with ``ATOM'' or ``HETATM''.
- This order must match the order that the atoms appear in the data file.
+ %Atoms are sorted by the chainID, resID, insertCode, and atomID
+%fields on every line beginning with ``ATOM'' or ``HETATM''.
+ The order of atoms in the PDB file
+ must match the order that the atoms appear in the data file,
+ which matches the order they appear in the LT file.
  See section \ref{sec:coords_intro}.)
 \\
 \hline
@@ -1279,7 +1346,7 @@ Normally moltemplate.sh reorders the atoms in each bond, angle, dihedral, and im
 \hline
 -molc &
 Helpful additional post-processing for users of the \textbf{MOLC}
-coarse-grained model.
+coarse-grained model
 \\
 \hline
 \begin{tabular}[t]{l}
@@ -1370,22 +1437,22 @@ including SHAKE constraints, k-space settings, and even group definitions.
 #
 # file "spce_simple.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 #
 
 SPCE {
 
-  ## Atom properties and molecular topology go in the various "Data ..." sections
+  ## Atom properties and bond topology go in various "Data ..." sections
 
-  # We selected "atom_style full".  That means we use this column format:
-  # atomID      molID         atomType  charge  coordX    coordY    coordZ
+  # We selected "atom_style full". That means we use this column format:
+  # atomID    molID   atomType  charge  coordX    coordY    coordZ
 
   write("Data Atoms") {
-    $atom:o      $mol:.       @atom:O  -0.8476  0.0000000 0.000000  0.00000
-    $atom:h1     $mol:.       @atom:H   0.4238  0.8164904 0.5773590 0.00000
-    $atom:h2     $mol:.       @atom:H   0.4238  -0.8164904 0.5773590 0.00000
+    $atom:o   $mol:w  @atom:O  -0.8476  0.0000000 0.000000  0.00000
+    $atom:h1  $mol:w  @atom:H   0.4238  0.8164904 0.5773590 0.00000
+    $atom:h2  $mol:w  @atom:H   0.4238  -0.8164904 0.5773590 0.00000
   }
 
   # Variables beginning with $ or @ will be replaced by numbers LAMMPS will
@@ -1393,7 +1460,7 @@ SPCE {
   # atomIDs (denoted here by "$atom:o", "$atom:h1", "$atom:h2"), even if
   # they belong to different molecules.  However, the atom types
   # (denoted "@atom:O", "@atom:H") are shared for atoms in all molecules.
-  # All 3 atoms share same molID number (represeted here by "$mol:.")
+  # All 3 atoms share same molID number (represeted here by "$mol:w")
   # however that number is different for different water molecules.
 
   write_once("Data Masses") {
@@ -1467,7 +1534,10 @@ for the molecular system described in ``system.lt'',
 using the desired atom style (``full'' by default).
 In this example, moltemplate is relying on an external file (``coords.pdb'')
 to supply the atomic coordinates of the water molecules, as well as
-the periodic boundary conditions.
+the periodic boundary conditions.  \textit{Note:} The order of atoms in
+the PDB file must match the order that the atoms appear in the LT file.
+(So in this example, the oxygen atom in each water molecule in the PDB file
+ must precede the two hydrogen atoms in that molecule.)
 Coordinates in XYZ format are also supported using ``-xyz coords.xyz''. 
 
 \subsubsection*{\textit{Details}}
@@ -1526,7 +1596,7 @@ elsewhere in your LT files using this notation:
 ``\$atom:wat[2][3][4]/h1'', 
 ``\$bond:wat[0][5][1]/oh1'', 
 ``\$angle:wat[2][8][3]/hoh'', 
-``\$mol:wat[0][1][2]''.
+``\$mol:wat[0][1][2]/w''.
 This allows you to define interactions which link
 different molecules together (see section \ref{sec:coordinates}).
 
@@ -2355,7 +2425,7 @@ import "monomer.lt"  #(defines "Monomer" and "ForceField")
 Polymer inherits ForceField {
 
   # The next line is optional:
-  create_var {$mol}  #(force all monomers to share the same molecule-ID)
+  create_var {$mol}  #(force all Monomers to share the same molecule-ID)
 
   # Now create some monomers
 
@@ -2415,20 +2485,38 @@ the write(``Data Bonds'') command to append additional bonds to the system.
 %specific to the atom types in different monomers.}
 
 
+\section{Force Fields}
+\label{sec:force_fields}
+
+This is a short chapter describing the features of the
+moltemplate language that enable users to create and store their own
+custom force-fields in LT format.
+
+This is not a tutorial explaining how to use popular all-atom force-fields
+(like OPLSAA or GAFF2) in your simulation.
+\textit{(Perhaps later, I will add more information on this worthy topic.
+For now, the best way to learn to build realistic all-atom
+simulations is to download moltemplate and its examples.
+Then modify an example which is similar to what you want to simulate.)}
+  %(More examples are welcome.  Users are encouraged to submit of molecules
+  % they created for inclusion with moltemplate.)
+
+
 \subsection{Bonded interactions \textit{by type}}
 \label{sec:nbody_by_type_intro}
 
-In this example we did \textit{not} provide a list of all 3-body
-and 4-body angle forces between bonded atoms in the polymer.
-Moltemplate allows you to manually list all of these interactions
-(using the ``write\_once("Data Angles")'' command
-from section \ref{sec:spce_example},
-\textit{or} 
-the ``write\_once("Data Dihedrals")'', 
-or ``write\_once("Data Impropers")'' commands).
-However there are usually many of them.
-For this reason, it is often more convenient to provide
-moltemplate with instructions to help it automatically figure out 
+In the polymer example in the previous chapter,
+we did \textit{not} provide a list of all the
+angle, dihedral, and improper forces acting on the atoms in the polymer.
+  %Moltemplate allows you to manually list all of these interactions
+  %(using the ``write("Data Angles")'' command
+  %from section \ref{sec:spce_example},
+  %\textit{or} 
+  %the ``write("Data Dihedrals")'', 
+  %or ``write("Data Impropers")'' commands).
+We \textit{could} have listed them, however there are usually many of them.
+It is often more convenient to provide
+moltemplate with instructions to help it automatically determine
 which atoms participate in 3-body and 4-body angle interactions,
 and what force field parameters to assign to them.
 We will do that below using the following commands:
@@ -2439,15 +2527,18 @@ We will do that below using the following commands:
   %Moltemplate can detect consecutively bonded atoms and 
   %determine the forces between them based on atom type (and bond type).
 
-Furthermoree, since many different kinds molecules often share
+Furthermore, since many different kinds molecules often share
 the same rules for creating 3-body and 4-body angle interactions,
 it is convenient to organize all of this information
-together into one place (eg an object named ``ForceField'').
-A ``ForceField'' object will typically include many
-``write\_once("Data Angles By Type")''
-commands, as well as force field parameters and related atom type properties.
-We also typically store that information in a separate file
-(eg ``forcefield.lt'', ``oplsaa.lt'', ``gaff2.lt'', ``compass.lt'', etc...).
+together into one place (for example, an object named ``ForceField'').
+A ``ForceField'' object will typically include a long list of
+``write\_once("Data Angles/Dihedrals/Impropers By Type")''
+commands,
+as well as force field parameters and related atom type properties.
+It's also a good idea to store force-field objects in a separate file
+(eg ``forcefield.lt'', ``oplsaa.lt'', ``gaff2.lt'', ``compass.lt'', etc...)
+so that these rules and parameters can be be applied to different molecules
+more easily (by using the \textit{import} command to load the file when needed).
 
 \begin{verbatim}
 # -- file "forcefield.lt" --
@@ -2485,7 +2576,7 @@ ForceField {
   # By convention, in this file we keep track of all of the possible
   # interactions which could exist between these atoms:
 
-  # Rules for determining 3-body (angle) interactions by atom & bond type:
+  # Rules for determining 3-body (angle) interactions by atom and bond type:
   # angle-type     atomType1 atomType2 atomType3  bondType1 bondType2
 
   write_once("Data Angles By Type") {
@@ -2503,15 +2594,16 @@ ForceField {
     angle_coeff @angle:Sidechain  30.00  132
   }
 
-  # 4-body interactions in this example are listed by atomType
-  # Rules for determining 4-body (dihedral) interactions by atom & bond type:
+  # 4-body interactions in this example are listed by atom type and (optionally)
+  # by bond type. (You can use wildcards * to accept all bond types.)
+  #
+  #   dihedralType atmType1 atmType2 atmType3 atmType4 bondType1 bType2 bType3
   write_once("Data Dihedrals By Type") {
-    # dihedralType atmType1 atmType2 atmType3 atmType4 bondType1 bType2 bType3
     @dihedral:CCCC @atom:CA @atom:CA @atom:CA @atom:CA  @bond:* @bond:* @bond:*
     @dihedral:RCCR @atom:R  @atom:CA @atom:CA @atom:R   @bond:* @bond:* @bond:*
   }
 
-  # The forumula used is:
+  # The forumula used in this example is:
   #
   # Udihedral(phi) = K * (1 + cos(n*phi - d))
   #
@@ -2540,7 +2632,7 @@ ForceField {
 Any molecule that wants to access this information can use the
 ``inherits ForceField'' keyword.
 \textit{(...as we did in the ``monomer.lt'' and ``polymer.lt'' files in theexample above.
- Note: the ``import forcefield'' statement was also necessary because the
+ Note: the ``import forcefield.lt'' statement was also necessary because the
  information is located in a separate file: ``forcefield.lt''.}
 %\textit{(Note: You can also generate \textbf{improper} interactions 
 %  %between any 4-atoms bonded together in a T-shaped topology
@@ -2549,6 +2641,248 @@ Any molecule that wants to access this information can use the
 \textit{You can customize these ``By Type'' rules further
   by altering the bond topology search rules and atom type symmetry.
   See appendix \ref{sec:nbody_by_type_custom} for details.)}
+
+
+\subsection{Wildcards}
+Star (*) and question mark (?) characters are multi and single-character
+wildcards.
+They can appear in any of the
+``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'',
+``dihedral\_coeff'', or ``improper\_coeff'' commands.
+For example, the following excerpt tells moltemplate to assign nonbonded
+pair parameters ``0.10 2.0'' to \textit{all} pairs of atoms whose
+atom type strings begin with the letter ``C''
+\begin{verbatim}
+write_once("In Settings") {
+  pair_coeff @atom:C* @atom:C* 0.10 2.0
+}
+\end{verbatim}
+Wildcards can also appear in any of the @atom or @bond type names
+in the ``By Type'' sections.
+The following rule will generate a dihedral angle interaction
+(of type ``@angle:CCR'') between any triplet of atoms if the last
+atom's type name ends with ``R''.
+\begin{verbatim}
+write_once("Data Angles By Type") {
+  @angle:CCR @atom:* @atom:* @atom:*R
+}
+\end{verbatim}
+In this way, a small number of these rules can describe
+a large number of atom type combinations.
+Force fields like OPLSAA and COMPASS use this strategy to reduce the size
+of the entries in the ``Angles By Type'' section (and elsewhere).
+Note that rules with wildcards typically appear near the beginning of the
+``Data Angles By Type'' section (and other ``By Type'' sections).
+Rules describing angles between specific atom type combinations
+should appear later in the list so that they can override the
+more general rules containing wildcards that appeared earlier.
+
+\textit{(Note: Regex based atom-type-name matching 
+has been implemented, but this feature has not yet been tested.
+See section \ref{sec:regex}.  -Andrew 2020-8-09)}
+
+
+\subsection{``Data Bonds By Type'' and ``Data Bond List''}
+It is also possible to determine \textit{bond type} from \textit{atom type},
+by specifying a ``Data Bonds By Type'' section:
+\begin{verbatim}
+write_once("Data Bonds By Type") {
+  @bond:Backbone  @atom:CA @atom:CA
+  @bond:Sidechain @atom:CA  @atom:R
+}
+\end{verbatim}
+We can also put this information in the ``ForceField'' object.  Later, in the
+``Monomer'' and ``Polymer'' objects, we can omit the @bond types.
+For example, we could replace the ``Data Bonds'' section in the ``Polymer''
+with a ``Data Bond List'' section:
+\begin{verbatim}
+write_once("Data Bond List") {
+  $bond:backbone1  $atom:mon1/ca  $atom:mon2/ca
+  $bond:backbone2  $atom:mon2/ca  $atom:mon3/ca
+       :                :              :
+}
+\end{verbatim}
+Notice that we did not specify the ``@bond:SideChain'' and ``@bond:Backbone''
+bond type information which would normally appear in the 2nd column
+of the ``Data Bonds'' section.  While not very useful in this example,
+many all-atom force fields (eg. OPLSAA, GAFF, COMPASS) assign bond types
+by atom type.  For this reason, molecules that use these force fields
+typically contain a ``Data Bond List'' section, instead of a
+``Data Bonds'' section.
+
+
+
+\subsection{The \textit{replace} command}
+\label{sec:replace_command}
+
+The ``replace'' command is useful for people who want to publish their own
+custom force fields in moltemplate (LT) format.
+This command is typically used to simplify the names of atom types
+in modern force fields.  In some force fields (eg, COMPASS, OPLSAA), 
+atom type names are complicated by the the way they are used to
+lookup force field parameters.  @atom type names can be quite long
+and difficult to type (such as ``@atom:h1h\_ph1h\_bh1h\_ah1\_dh1\_ih1'').
+  %Note that some force fields (like COMPASS) are currently implemented using
+  %very long atom names which could be difficult for users to type correctly
+  %(such as ``@atom:h1h\_ph1h\_bh1h\_ah1\_dh1\_ih1'').
+The ``replace'' command allows \textit{the people who use your force field} to
+refer to these atoms in their molecules with short names instead of long ones.
+Consider the following example:
+\begin{verbatim}
+replace{ @atom:C4  @atom:C4_aC4  }
+replace{ @atom:H1  @atom:H1_aH1  }
+replace{ @atom:C4o @atom:C4o_aC4 }
+replace{ @atom:H1o @atom:H1o_aH1 }
+\end{verbatim}
+In this example, ``@atom:C4'' and ``@atom:H1'' are shorthand
+referring to ``@atom:C4\_aC4'' and ``@atom:H1\_aH1'', respectively.
+\textit{(The ``replace'' command works with all @-style variables, not
+  just @atom type names.  It does not work with \$-style variables.)}
+
+These longer atom names are often used in combination with ``By Type'' rules
+for generating angle and dihedral interactions.  For example, consider a force
+field which uses the following rules for generating angle interactions:
+\begin{verbatim}
+write_once("Data Angles By Type") {
+  @angle:HCH @atom:*_ah1 @atom:*_ac4 @atom:*_ah1
+  @angle:CCH @atom:*_ac4 @atom:*_ac4 @atom:*_ah1
+}
+\end{verbatim}
+Through the use of wildcard characters (*), these two rules only depend
+on the portion of the atom type name following the ``\_a'' character
+(``h1'', or ``c4'').  Since multiple atom types share the same ``h1'' and ``c4''
+name suffixes, this significantly reduces the number of ``Angles By Type''
+rules needed for the carbon and hydrogen atoms in this example.  (And this
+reduction becomes even more dramatic as the number of atom types increases.)
+
+The ``replace'' command is useful because it allows users to refer to these
+long atoms by their short names (``@atom:C4'' and ``@atom:H1'')
+when creating molecules.  For example:
+\begin{verbatim}
+# atom-id  mol-id atom-type charge   x       y        z
+write("Data Atoms") {
+  $atom:c  $mol:me @atom:C4  -0.18  0.0000  0.0000   0.0000
+  $atom:h1 $mol:me @atom:H1   0.06  0.0000  0.6310   0.8924
+  $atom:h2 $mol:me @atom:H1   0.06  0.0000  0.6310  -0.8924
+  $atom:h3 $mol:me @atom:H1   0.06 -0.8924 -0.6310   0.0000
+       :       :       :
+}
+\end{verbatim}
+
+
+
+
+
+\subsection{``In Charges''}
+\label{sec:in_charges}
+Recall that moltemplate was designed for simulating coarse grained molecular
+models.  It's not uncommon for coarse grained models to use big particles
+containing many atoms, whole proteins, or even larger complexes.  It often
+does not make sense to assign charge to particles in this size range, and
+moltemplate does not force you to use a charge-bearing particle representation.
+But if you want to assign charges to particles, there are several ways to do
+that.
+
+Modern molecule-builder tools typically assign partial charges to atoms
+using sophisticated ab initio physics-based calculations.
+Moltemplate does not do this.
+However moltemplate does supports several optional methods
+allowing you to assign particle charge according to atom type (@atom).
+  %Some force fields (such as the current implementation of OPLSAA and LOPLSAA)
+  %assign atom charge according to atom type.
+For example, here is an excerpt
+from the ``loplsaa.lt'' file (on 2020-8-09):
+\begin{verbatim}
+write_once("In Charges") {
+  set type @atom:80L charge -0.222 # "Alkane CH3- (LOPLS)"
+  set type @atom:81L charge -0.148 # "Alkane -CH2- (LOPLS)"
+  :
+}
+\end{verbatim}
+This will set the charge of \textit{all} atoms of type ``@atom:80L'' to -0.222,
+(regardless of who they are bonded to).
+
+Confusingly, the charge information is \textbf{not} written to the DATA
+file created by moltemplate.sh.  Instead the charges are written to a
+file whose name ends in ``.in.charges'' (eg. ``system.in.charges'').
+Later when you run LAMMPS, you must remember to use the LAMMPS ``include''
+command to load this file after you read the data file.  For example:
+\begin{verbatim}
+read_data "system.data"
+include "system.in.charges"
+\end{verbatim}
+
+Note that any charge information specified in the ``Data Atoms'' section
+of your molecule (which ends up in ``system.data'') will be ignored.
+If you want to customize the charge of individual atoms in your molecule,
+add an ``In Charges'' section to the \textit{end} of your molecule definition.
+For the carbon atoms in an alkane polymer (for example),
+you might use something like this:
+\begin{verbatim}
+write("In Charges") {
+  set atom $atom:monomer[0]/c charge -0.222
+  set atom $atom:monomer[1]/c charge -0.148
+                :
+}
+\end{verbatim}
+\textit{(For reference, the LAMMPS' ``set'' command is explained here:
+        \url{https://lammps.sandia.gov/doc/set.html}.)}
+
+
+
+
+
+
+
+\subsection{``Data Charge By Bond''}
+\label{sec:charge_by_bond}
+
+The ``Data Charge by Bond'' section allows partial charges can be assigned
+to atoms according to the other atoms they are bonded to and their types.
+Here is a (slightly modified) excerpt from the ``compass\_published.lt'' file:
+\begin{verbatim}
+write_once("Data Bonds By Type") {
+  @atom:h1 @atom:si4        -0.1260 0.1260
+  @atom:*bc4* @atom:*bsi4*  -0.1350 0.1350
+}
+\end{verbatim}
+Each bond between atoms contributes to the partial charge of those atoms.
+The first line tells moltemplate that any bond between atoms of type
+``@atom:h1'' and ``@atom:si4'' modifies their charge by
+-0.1260 and 0.1260, respectively.
+The wildcard characters (``*'') in the second line cause moltemplate to modify
+the partial charges of any bonded pair of atoms by -/+0.1350 if the first atom
+type contains the string ``bc4'' and the second atom type contains the string
+``bsi4''.
+The final charge of each atom is determined by adding the contribution to its
+charge from each of the atoms it is bonded to.
+
+Again, these charges will not be written to your DATA file.  As explained above,
+after you load the DATA file, you must remember to use the LAMMPS ``include''
+command to load the file containing the charge information.
+(For example: ``include system.in.charges''.)
+Again, if you need to, you can customize the
+charge of individual atoms in your molecule by placing an
+``write("In Charges")'' section at the \textit{end} of your molecule definition
+(as shown above).
+
+
+\subsection{The \textit{force\_fields} directory}
+\label{sec:moltemplate_path}
+Files containing popular force fields (like ``oplsaa.lt'' and ``gaff2.lt'')
+and molecule models (like ``spce.lt'') are stored in the ``force\_fields/''
+subdirectory distributed with moltemplate.  (This directory is included when
+you download moltemplate using either git or pip.)
+You can load the contents of any of these files using the \textit{import}
+statement.  They do not need to be located in your local directory.
+You can add your own LT files there as well.  This is a convenient
+way for many different examples to share the same force fields.
+If a shell environment variable named ``TTREE\_PATH'' is defined,
+the directories listed there (delimited by ``:'') are also searched.
+\textit{(Note: If a file you want to import can be found in multipl locations,
+the file in your local directory has priority.)}
+
+
 
   %\subsubsection*{\textit{(Advanced)} Order matters when sets overlap}
   %Bonded-interactions are generated in the order they appear in the LT file.
@@ -2582,6 +2916,8 @@ Any molecule that wants to access this information can use the
   %  $angle:2 @angle:CCCgeneral $atom:c1 $atom:c3 $atom:c4
   %}
   %\end{verbatim}
+
+
 
 
 \section{Arrays, slices, and coordinate transformations}
@@ -3105,7 +3441,7 @@ MolecularComplex inherits ForceField {
 }
 \end{verbatim}
 \textit{For this to work, you must also delete the 
- \mbox{\textit{``create\_var \{\$mol:.\}''}} line from
+ \mbox{\textit{``create\_var \{\$mol\}''}} line from
  the definition of the Polymer molecule. See section \ref{sec:2bead}.}
 
 
@@ -3338,11 +3674,12 @@ MolecularComplex0 = MolecularComplex
 
 MolecularComplex0 inherits ForceField {
   write("Data Atoms") {
-    $atom:t1 $mol:. @atom:CA   0.0   23.0   0.0     0.0
-    $atom:t2 $mol:. @atom:CA   0.0   24.7   4.0     0.0
-    $atom:t3 $mol:. @atom:CA   0.0   24.7   8.4     0.0
-    $atom:t4 $mol:. @atom:CA   0.0   23.0   12.4    0.0
+    $atom:t1 $mol:... @atom:CA   0.0   23.0   0.0     0.0
+    $atom:t2 $mol:... @atom:CA   0.0   24.7   4.0     0.0
+    $atom:t3 $mol:... @atom:CA   0.0   24.7   8.4     0.0
+    $atom:t4 $mol:... @atom:CA   0.0   23.0   12.4    0.0
   }
+
   write("Data Bonds") {
     $bond:b1 @bond:Backbone $atom:polymers[0]/res7/CA $atom:t1
     $bond:b2 @bond:Backbone $atom:t1 $atom:t2
@@ -3355,6 +3692,7 @@ MolecularComplex0 inherits ForceField {
 # Center and rescale the atoms in all "MolecularComplex0"
 MolecularComplex0.move(-9.6,-6.2, 0).scale(0.3125)
 \end{verbatim}
+
 The result of these modifications is shown in figure \ref{fig:mol_complex}b).
 \begin{figure}[htbp]
 \centering
@@ -3457,9 +3795,9 @@ A more robust example is included below.
 \begin{verbatim}
 # file "spce.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 
 SPCE {
 
@@ -3474,11 +3812,11 @@ SPCE {
     pair_modify  mix arithmetic
   }
 
-  # AtomID  MolID("."=this)  AtomType  charge  coordX   coordY   coordZ
+  # AtomID   MolID  AtomType  charge  coordX   coordY   coordZ
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:O -0.8476  0.0000000 0.00000 0.000000
-    $atom:H1 $mol:. @atom:H  0.4238  0.8164904 0.00000  0.5773590
-    $atom:H2 $mol:. @atom:H  0.4238  -0.8164904 0.00000 0.5773590
+    $atom:o  $mol:w @atom:O -0.8476  0.0000000 0.00000 0.000000
+    $atom:h1 $mol:w @atom:H  0.4238  0.8164904 0.00000  0.5773590
+    $atom:h2 $mol:w @atom:H  0.4238  -0.8164904 0.00000 0.5773590
   }
 
   # atom-type  Mass
@@ -3499,8 +3837,8 @@ SPCE {
 
   #  bond-id   bond-type  atom-id1 atom-id2
   write("Data Bonds") {
-    $bond:oh1  @bond:OH   $atom:O  $atom:H1
-    $bond:oh2  @bond:OH   $atom:O  $atom:H2
+    $bond:oh1  @bond:OH   $atom:o  $atom:h1
+    $bond:oh2  @bond:OH   $atom:o  $atom:h2
   }
 
   #             bond-type   bond-style-name  parameter-list
@@ -3510,7 +3848,7 @@ SPCE {
 
   # angle-id   angle-type  atom-id1 atom-id2 atom-id3
   write("Data Angles") {
-    $angle:hoh @angle:HOH  $atom:H1 $atom:O $atom:H2
+    $angle:hoh @angle:HOH  $atom:h1 $atom:o $atom:h2
   }
 
   #              angle-type  angle-style-name  parameter-list
@@ -3708,11 +4046,11 @@ cyclopentane {
 
   # AtomID  MolID('.'=this) AtomType  charge coordX  coordY   coordZ
   write("Data Atoms") {
-    $atom:c1 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.000000000 1.0000000
-    $atom:c2 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.951056516 0.3090170
-    $atom:c3 $mol:. @atom:TraPPE/CH2 0.0 0.0000 0.587785252 -0.809017
-    $atom:c4 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.587785252 -0.809017
-    $atom:c5 $mol:. @atom:TraPPE/CH2 0.0 0.0000 -0.951056516 0.3090170
+    $atom:c1 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 0.000000000 1.0000000
+    $atom:c2 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 0.951056516 0.3090170
+    $atom:c3 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 0.587785252 -0.809017
+    $atom:c4 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 -0.587785252 -0.809017
+    $atom:c5 $mol:cp @atom:TraPPE/CH2 0.0 0.0000 -0.951056516 0.3090170
   }
 
   write("Data Bonds") {
@@ -3835,10 +4173,10 @@ import "trappe1998.lt"
 
 Butane {
   write("Data Atoms"){
-    $atom:c1 $mol:. @atom:TraPPE/CH3 0.0  0.419372  0.000 -1.937329
-    $atom:c2 $mol:. @atom:TraPPE/CH2 0.0  -0.419372  0.000 -0.645776
-    $atom:c3 $mol:. @atom:TraPPE/CH2 0.0  0.419372  0.000  0.645776
-    $atom:c4 $mol:. @atom:TraPPE/CH3 0.0  -0.419372  0.0000 1.937329
+    $atom:c1 $mol:bt @atom:TraPPE/CH3 0.0  0.419372  0.000 -1.937329
+    $atom:c2 $mol:bt @atom:TraPPE/CH2 0.0  -0.419372  0.000 -0.645776
+    $atom:c3 $mol:bt @atom:TraPPE/CH2 0.0  0.419372  0.000  0.645776
+    $atom:c4 $mol:bt @atom:TraPPE/CH3 0.0  -0.419372  0.0000 1.937329
   }
   write("Data Bonds"){
     $bond:b1 @bond:TraPPE/CC $atom:c1 $atom:c2
@@ -3869,10 +4207,10 @@ import "trappe1998.lt"
 TraPPE {
   Butane {
     write("Data Atoms"){
-      $atom:c1 $mol:. @atom:../CH3 0.0  0.419372  0.000 -1.937329
-      $atom:c2 $mol:. @atom:../CH2 0.0  -0.419372  0.000 -0.645776
-      $atom:c3 $mol:. @atom:../CH2 0.0  0.419372  0.000  0.645776
-      $atom:c4 $mol:. @atom:../CH3 0.0  -0.419372  0.0000 1.937329
+      $atom:c1 $mol:bt @atom:../CH3 0.0  0.419372  0.000 -1.937329
+      $atom:c2 $mol:bt @atom:../CH2 0.0  -0.419372  0.000 -0.645776
+      $atom:c3 $mol:bt @atom:../CH2 0.0  0.419372  0.000  0.645776
+      $atom:c4 $mol:bt @atom:../CH3 0.0  -0.419372  0.0000 1.937329
     }
     write("Data Bonds"){
       $bond:b1 @bond:../CC $atom:c1 $atom:c2
@@ -3955,8 +4293,8 @@ molecules to find the target (the text following the ``/'' slash).
 Recall that LAMMPS allows users the option to assign
 \textit{molecule-IDs} to each atom.
 (In the water example (section \ref{sec:spce_example}), atoms in
-each water molecule is assigned to a molecule-ID, denoted ``\$mol:.''.
-In that example, the ``.'' was the name of that molecule's ID.)
+each water molecule is assigned to a molecule-ID, denoted ``\$mol:w''.
+In that example, the ``w'' was the name given to that molecule's ID.)
 
 If you want to build large molecules using smaller pieces as building-blocks
 moltemplate has a way to allow all the the atoms to share the same molecule-ID.
@@ -3968,8 +4306,9 @@ This means that the second column of each line of the ``Data Atoms'' section
 should contain ``\$mol:...'' 
 (assuming ``atom\_style full'' or ``molecular'' is used).
 
-The ``...'' syntax is explained more formally 
-in appendix \ref{sec:adv_variable_syntax}.)
+The ``...'' syntax is explained in section \ref{sec:2bead},
+and more formally in section \ref{sec:paths}, 
+and appendix \ref{sec:adv_variable_syntax}
 
 
 
@@ -4012,8 +4351,8 @@ import "trappe_butane.lt"
 using namespace TraPPE
 butane = new Butane
 write("Data Atoms") {
-  $atom:c1 $mol @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
-  $atom:c2 $mol @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
+  $atom:c1 $mol:bt @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
+  $atom:c2 $mol:bt @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
 }
 \end{verbatim}
 If, for example, you want to leave out the ``TraPPE/'' prefix 
@@ -4029,10 +4368,10 @@ import "trappe1998.lt"
 
 Butane inherits TraPPE {
   write("Data Atoms"){
-    $atom:c1 $mol:. @atom:CH3 0.0  0.419372  0.000 -1.937329
-    $atom:c2 $mol:. @atom:CH2 0.0  -0.419372  0.000 -0.645776
-    $atom:c3 $mol:. @atom:CH2 0.0  0.419372  0.000  0.645776
-    $atom:c4 $mol:. @atom:CH3 0.0  -0.419372  0.0000 1.937329
+    $atom:c1 $mol:bt @atom:CH3 0.0  0.419372  0.000 -1.937329
+    $atom:c2 $mol:bt @atom:CH2 0.0  -0.419372  0.000 -0.645776
+    $atom:c3 $mol:bt @atom:CH2 0.0  0.419372  0.000  0.645776
+    $atom:c4 $mol:bt @atom:CH3 0.0  -0.419372  0.0000 1.937329
   }
   write("Data Bonds"){
     $bond:b1 @bond:CC $atom:c1 $atom:c2
@@ -4123,11 +4462,11 @@ A {
   %  # In the CGLipid model, the tail is represented by 
   %  # a single linear chain.
   %  write("Data Atoms"){
-  %    $atom:c1 $mol:. @atom:C 0.0  0.419372  0.00000 -1.481799
-  %    $atom:c2 $mol:. @atom:C 0.0  -0.419372 0.00000 -2.773352
-  %    $atom:c3 $mol:. @atom:C 0.0  0.419372  0.00000 -4.064904
-  %    $atom:c4 $mol:. @atom:C 0.0  -0.419372 0.00000 -5.356457
-  %    $atom:c5 $mol:. @atom:C 0.0  0.419372  0.00000 -6.648010
+  %    $atom:c1 $mol:li @atom:C 0.0  0.419372  0.00000 -1.481799
+  %    $atom:c2 $mol:li @atom:C 0.0  -0.419372 0.00000 -2.773352
+  %    $atom:c3 $mol:li @atom:C 0.0  0.419372  0.00000 -4.064904
+  %    $atom:c4 $mol:li @atom:C 0.0  -0.419372 0.00000 -5.356457
+  %    $atom:c5 $mol:li @atom:C 0.0  0.419372  0.00000 -6.648010
   %  }
   %  write("Data Bonds"){
   %    $bond:c12 @bond:Tail $atom:c1 $atom:c2
@@ -4144,7 +4483,7 @@ A {
   %\begin{verbatim}
   %DOPC inherits CGLipid {
   %  write("Data Atoms"){
-  %    $atom:head $mol:. @atom:head 0.0  0.000 0.000 0.000
+  %    $atom:head $mol:li @atom:head 0.0  0.000 0.000 0.000
   %  }
   %  write_once("Data Masses"){
   %    @atom:. 245.0
@@ -4158,7 +4497,7 @@ A {
 
   %DOTAP inherits CGLipid {
   %  write("Data Atoms"){
-  %    $atom:head $mol:. @atom:head 0.0  0.000 0.000 0.000
+  %    $atom:head $mol:li @atom:head 0.0  0.000 0.000 0.000
   %  }
   %  write_once("Data Masses") {
   %    @atom:. 122.0
@@ -4415,16 +4754,30 @@ if they are connected by bonds of type \mbox{``@bond:SAT''}.
 Note: The 2nd and 3rd lines in this example will generate new interactions 
 which may override any angle interactions assigned earlier.
 
-\subsection*{Regular expressions}
+\subsection{Regular expressions}
+\label{sec:regex}
 Regular-expressions can also be used to match potential atom and bond types.
 To use regular expressions, the first 3 characters following ``:'' should be
 ``re.'', and the variable name should be enclosed in curly brackets, \{\}.
 For example: \mbox{@\{atom:re.C[1-5]\}}, should match 
 \mbox{@atom:C1} through \mbox{@atom:C6}.
-\textit{Note: This feature has not been tested as of 2020-7-09.}
+\textit{
+(
+\textbf{Note:}
+Moltemplate cannot understand regular expressions unless the
+number of '\{' and '\}' characters within them is \textbf{balanced}.
+(or if you preceed them with a backslash character).
+Moltemplate also cannot understand regular expressions containing whitespace.
+If you break these rules, moltemplate will get so confused that it will
+probably provide you with a confusing or misleading error message.
+%In moltemplate, the '\{' and '\}' characters have many other uses.
+)
+}
 
-In a similar way, one can define ``Dihedrals By Type'' and 
-``Impropers By Type''.
+In a similar way, one can use regular expressions in
+``Dihedrals By Type'' and ``Impropers By Type''.
+
+\textbf{\textit{Note: This is an experimental feature.  Regular expressions have not been tested as of 2020-11-04.}}
 
 
 
@@ -6139,7 +6492,132 @@ that you want to search for.
 
 
 
-\section{Variable syntax details}
+
+\section{Moltemplate Grammar}
+\label{sec:grammar}
+
+Moltemplate.sh is a script which invokes a python program program (\textit{ttree.py}) to parse and interpret the moltemplate language.  An overview of the grammar of that language is provided below.  The grammer shown here is not comprehensive.  The syntax of some lesser-used language features (such as varialble shortcuts, and paths containing ``../'' and ``...'') is omitted here
+(but discussed later in appendix \ref{sec:adv_variable_syntax}).
+
+Note that the current language parser (\textit{ttree.py}) was written by hand.  (It was not generated by a compiler-compiler.)  So it is unfortunately possible that some valid inputs may exist which satisfy the rules of the grammar and yet cause moltemplate to return an error message.  However most moltemplate commands are short and simple.  Several years of heavy usage have passed since I have received a report of this kind of error.
+
+\subsubsection*{Explanation of Terminals:}
+
+Terminals are the indivisible words and symbols in a language.
+Terminals in the moltemplate language fall into several categories.
+
+\begin{verbatim}
+Terminals ::= Integer | Number | String
+\end{verbatim}
+
+\begin{itemize}
+\item \textbf{Integer}: A nonnegative integer
+
+\item \textbf{Number}: A floating point number
+
+\item \textbf{String}: A string. (A sequence of characters.)
+\end{itemize}
+
+Strings fall into several categories:
+
+\begin{verbatim}
+String ::= InstanceName | ObjectTypeName | FileName | CategoryName | OtherStr
+\end{verbatim}
+
+\begin{itemize}
+\item \textbf{InstanceName}: is a string referring to one of the child nodes at the current level in the instance tree.  Typically it is the unique name of one of the molecules you have instantiated, but it can also be the name of one of the atoms or bonded interactions within these molecules.
+
+\item \textbf{ObjectTypeName}: is a string that refers to the name of one of the child nodes at the current level in the static tree.  That node typically refers to a type of molecule or a type of atom or bonded interaction, or an object containing force field information (like ``TraPPE'' or ``OPLSAA'').
+
+\item \textbf{CategoryName}: is a type of counter variable \textit{category}.  Typical categories are ``@atom'', ``\$atom'', ``@bond'', ``\$bond'', ``@angle'', etc...  However user-created categories are also possible using the "category" command. (See below.)  In principle, each category is associated with a node in the static tree (@) or instance tree (\$) which limits the scope of the counter to children of that node.  However in practice most categories (eg ``@atom'', ``\$bond'', ...) are associated with the root node (``/'') by default, and are thus global in scope.  The syntax for creating custom categories and referring to them later is explained in appendix \ref{sec:custom_categories}.
+
+\item \textbf{FileName}: Strings refering to the names of files.
+
+\item \textbf{OtherStr}: Strings which do not fall into any of these categories
+\end{itemize}
+
+See appendix \ref{sec:adv_variable_syntax} for details explaining the syntax of
+\$ and @-style variables, including \textbf{CategoryNames} and node references.
+
+
+\subsection*{Production Rules}
+
+Moltemplate LT files contain lists of commands.
+
+\begin{verbatim}
+CommandList ::= "" | Command CommandList
+\end{verbatim}
+
+...where
+
+\begin{verbatim}
+Command ::= ObjectDef | InstanceCommand | DeleteCommand | WriteC | WriteOC |
+            ImportCommand | CategoryDef | InstanceMod | ObjectTypeMod |
+            ObjectDefMod | ReplaceCommand | UsingCommand | PushXform
+
+ObjectDef ::= ObjectTypeName ClassParents "{" CommandList "}" 
+ClassParents ::= "" | "inherits" ParentList
+ParentList ::= StaticNode | StaticNode ParentList
+StaticNode ::= ObjectTypeName | ObjectTypeName "/" StaticNode
+
+InstanceCommand ::= InstanceName "=" "new" InstanceExpr
+InstanceExpr ::= InstanceName RangeNDX
+RangeNDX ::= "" | RangeX RangeNDX
+RangeX ::= "[" IntRange "]" Xforms
+IntRange ::= Integer | Integer ":" Integer | "*"
+Xforms ::= "" | Xform Xforms
+Xform ::= MoveXform | RotXform | ScaleXform
+MoveXform ::= ".move(" Number "," Number "," Number ")"
+RotXform ::= ".rot(" Number "," Number "," Number "," Number ")"
+ScaleXform ::= ".scale(" Number "," Number "," Number ")"
+\end{verbatim}
+
+
+\subsubsection*{\textit{Deleting or modifying existing instances}}
+
+\begin{verbatim}
+InstanceMod ::= InstanceSelection XformsNE
+DeleteCommand ::= "delete" InstanceSelection
+InstanceSelection ::= InstanceNode RangeND
+InstanceNode ::= InstanceName | InstanceNode "/" InstanceName
+RangeND ::= "" | Range RangeND
+Range ::= "[" IntRange "]"
+XformsNE ::= Xform Xforms
+\end{verbatim}
+
+\subsubsection*{\textit{Writing text containing counter variables}}
+\begin{verbatim}
+WriteC ::= "write(" FileName ")" "{" TemplateText "}"
+TemplText ::= "" | String TemplText | StatVar TemplText | InstVar TemplText
+InstVar ::= "$"CategoryName":"InstanceNode
+StatVar ::= "@"CategoryName":"StaticNode
+
+WriteOC ::= "write_once(" FileName ")" "{" TemplateTextStat "}"
+TemplTextStat ::= "" | String TemplTextStat | StatVar TemplTextStat
+\end{verbatim}
+
+\subsubsection*{\textit{Miscellaneous}}
+
+\begin{verbatim}
+ImportCommand ::= "import" FileName
+
+ReplaceCommand ::= "replace" { StatVar StatVar }
+
+CategoryCommand ::= CatCommandStat | CatCommandInst
+CatCommandStat ::= "category" "@"CategoryName"(" Integer "," Integer ")"
+CatCommandInst ::= "category" "$"CategoryName"(" Integer "," Integer ")"
+
+ObjectTypeMod ::= ObjectTypeName XformsNE
+ObjectDefMod ::= ObjectTypeName "=" ObjectTypeName XformsNE
+
+UsingCommand ::= "using" "namespace" ObjectTypeName
+
+PushXform := "push(" XformsNE ")" CommandList "pop()"
+\end{verbatim}
+
+
+
+\subsection{Counter variable syntax}
 \label{sec:adv_variable_syntax}
 
 Counter variables have names like:

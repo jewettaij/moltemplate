@@ -1,0 +1,43 @@
+import "dreiding.lt" 
+
+# The "dreiding.lt" file is usually located in "force_fields" subdirectory
+# of the moltemplate distribution. It contains definitions of the atoms
+# "O_R", "C_R", as well as the bonded and non-bonded interactions between
+# them (and many other atoms).  These atom types were chosen using the atom
+# naming conventions explained in "DREIDING_Label_Manual.pdf" file.  (This file
+# is either included in the the moltemplate distribution, or avialable at
+# https://github.com/m-bone/moltemplate-DREIDING )
+
+# WARNING: THE ATOMIC CHARGES ARE INCORRECT
+# For this example, I manually looked up the charge of each atom using the 
+# OPLSAA parameters from the "oplsaa.prm" file distributed with TINKER:
+# http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
+#   PLEASE DO NOT DO THIS!
+# For details how to calculate charges correctly, see:
+# https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_DREIDING/README.md
+
+Furan inherits DREIDING {
+  # AtomID  MolID  AtomType    Charge       X       Y      Z
+  write("Data Atoms") {
+    $atom:O0  $mol  @atom:O_R  -0.19    -0.790540 0.744310 -0.000000
+    $atom:C0  $mol  @atom:C_R  -0.019   -1.909550 0.055400 0.000000
+    $atom:C1  $mol  @atom:C_R  -0.019    0.227280 -0.086850 -0.000000
+    $atom:C2  $mol  @atom:C_R  -0.154   -1.615660 -1.291470 -0.000000
+    $atom:C3  $mol  @atom:C_R  -0.154   -0.242560 -1.382880 -0.000000
+    $atom:H0  $mol  @atom:H     0.142   -2.898760 0.493210 -0.000000
+    $atom:H1  $mol  @atom:H     0.126   -2.321770 -2.110980 -0.000000
+    $atom:H2  $mol  @atom:H     0.126    0.348690 -2.288750 -0.000000
+    $atom:H3  $mol  @atom:H     0.142    1.265790 0.215970 -0.000000
+  }
+  write("Data Bond List") {
+    $bond:0	$atom:O0	$atom:C0
+    $bond:1	$atom:O0	$atom:C1
+    $bond:2	$atom:C0	$atom:C2
+    $bond:3	$atom:C0	$atom:H0
+    $bond:4	$atom:C1	$atom:C3
+    $bond:5	$atom:C1	$atom:H3
+    $bond:6	$atom:C2	$atom:C3
+    $bond:7	$atom:C2	$atom:H1
+    $bond:8	$atom:C3	$atom:H2
+  }
+}

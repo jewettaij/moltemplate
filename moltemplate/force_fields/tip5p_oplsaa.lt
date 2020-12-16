@@ -1,8 +1,8 @@
 # file "tip5p.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 #       / \
 #     LP   LP 
 #
@@ -16,25 +16,25 @@ import "oplsaa.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
 
 TIP5P inherits OPLSAA {
 
-  # Atom types from "oplsa.lt"
+  # Atom types from "oplsaa.lt"
   # @atom:73  <-->  OW  "TIP5P Water O"
   # @atom:74  <-->  HW  "TIP5P Water H"
   # @atom:75  <-->  LP  "TIP5P Water LP"
 
   # Atom-ID Mol-ID Atom-Type  charge      X      Y       Z
   write("Data Atoms") {
-    $atom:O   $mol:. @atom:73  0.0000    0.00000 0.00000 0.00000
-    $atom:H1  $mol:. @atom:74  0.2410    0.00000 0.81649 0.57736
-    $atom:H2  $mol:. @atom:74  0.2410    0.00000 -0.81649 0.57736
-    $atom:LP1 $mol:. @atom:75 -0.2410    0.57154 0.00000 -0.404151
-    $atom:LP2 $mol:. @atom:75 -0.2410   -0.57154 0.00000 -0.404151
+    $atom:o   $mol:w @atom:73  0.0000    0.00000 0.00000 0.00000
+    $atom:h1  $mol:w @atom:74  0.2410    0.00000 0.81649 0.57736
+    $atom:h2  $mol:w @atom:74  0.2410    0.00000 -0.81649 0.57736
+    $atom:LP1 $mol:w @atom:75 -0.2410    0.57154 0.00000 -0.404151
+    $atom:LP2 $mol:w @atom:75 -0.2410   -0.57154 0.00000 -0.404151
   }
 
   write("Data Bond List") {
-    $bond:OH1 $atom:O $atom:H1
-    $bond:OH2 $atom:O $atom:H2
-    $bond:OLP1 $atom:O $atom:LP1
-    $bond:OLP2 $atom:O $atom:LP2 
+    $bond:oh1 $atom:o $atom:h1
+    $bond:oh2 $atom:o $atom:h2
+    $bond:oLP1 $atom:o $atom:LP1
+    $bond:oLP2 $atom:o $atom:LP2
   }
 
   write_once("In Settings") {

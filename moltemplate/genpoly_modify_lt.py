@@ -2,7 +2,7 @@
 
 g_program_name = __file__.split('/')[-1]
 g_version_str  = '0.3.6'
-g_date_str     = '2020-7-17'
+g_date_str     = '2020-7-18'
 
 g_usage_msg = """
 

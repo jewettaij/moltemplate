@@ -138,8 +138,8 @@ Note: Optional "-prefix" and "-suffix" arguments can be included to decorate
 """
 
 g_program_name = __file__.split('/')[-1]  # = 'nbody_by_type.py'
-g_date_str = '2017-2-06'
-g_version_str = '0.20.0'
+g_date_str = '2020-11-04'
+g_version_str = '0.21.0'
 
 bond_pattern_module_name = ""
 
@@ -147,6 +147,7 @@ import os
 import sys
 sys.path.append(os.getcwd())
 import importlib
+import re
 
 if sys.version < '2.6':
     raise InputError('Error: Using python ' + sys.version + '\n'
@@ -253,9 +254,8 @@ def GenInteractions_lines(lines_atoms,
             typepattern = []
 
             for typestr in tokens[1:]:
-                if ((len(typestr) >= 2) and
-                    HasRE(typestr)):
-                    regex_str = typestr[3:]
+                if HasRE(typestr):
+                    regex_str = VarNameToRegex(typestr)
                     typepattern.append(re.compile(regex_str))
                 else:
                     typepattern.append(EscCharStrToChar(typestr))

@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.18.2"
-G_DATE="2020-7-25"
+G_VERSION="2.19.2"
+G_DATE="2020-12-06"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -69,6 +69,7 @@ nbody_fix_ttree_assignments.py
 nbody_reorder_atoms.py
 pdbsort.py
 postprocess_input_script.py
+postprocess_coeffs.py
 remove_duplicate_atoms.py
 remove_duplicates_nbody.py
 renumber_DATA_first_column.py
@@ -606,10 +607,9 @@ while [ "$i" -lt "$ARGC" ]; do
             BOXSIZE_XY=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*cos(GAMMA*PI/180.0)}'`
             BOXSIZE_XZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v BETA="$BETA"   'BEGIN{print BOXSIZE_C*cos(BETA*PI/180.0)}'`
             BOXSIZE_YZ=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*(ca-(cg*cb))/sg}'`
-            BOXSIZE_Z=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*sqrt(1.+2*ca*cb*cg-ca**2-cb**2-cg**2)/sg}'`
-            #BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C**2)-((BOXSIZE_XZ**2)+(BOXSIZE_YZ**2)))}'`
-            # The two expressions for "BOXSIZE_Z" should be algebraically equivalent, but I
-            # might have made a mistake. Thanks, Otello for fixing this code. -A 2020-7-25.
+            BOXSIZE_Z=`awk -v PI="$PI" -v BOXSIZE_C="$BOXSIZE_C" -v ALPHA="$ALPHA" -v BETA="$BETA" -v GAMMA="$GAMMA" 'BEGIN{ca=cos(ALPHA*PI/180.0); cb=cos(BETA*PI/180.0); cg=cos(GAMMA*PI/180.0); sg=sin(GAMMA*PI/180.0); print BOXSIZE_C*sqrt(1.0+2*ca*cb*cg-ca*ca-cb*cb-cg*cg)/sg}'`
+            #BOXSIZE_Z=`awk -v BOXSIZE_C="$BOXSIZE_C" -v BOXSIZE_XZ="$BOXSIZE_XZ" -v BOXSIZE_YZ="$BOXSIZE_YZ" 'BEGIN{print sqrt((BOXSIZE_C*BOXSIZE_C)-((BOXSIZE_XZ*BOXSIZE_XZ)+(BOXSIZE_YZ*BOXSIZE_YZ)))}'`
+            # Note: The two expressions for "BOXSIZE_Z" are algebraically equivalent.
         else
             BOXSIZE_X=$BOXSIZE_A
             BOXSIZE_Y=$BOXSIZE_B
@@ -1356,6 +1356,7 @@ IFS=$OIFS
 # "pair_coeff", "bond_coeff", "angle_coeff", "dihedral_coeff", "improper_coeff".
 # These files need to be processed further.
 
+
 OUT_FILES_WITH_COEFF_COMMANDS=""
 for f in *.template; do
     HAS_COEFF_COMMANDS=`awk 'BEGIN{has_coeffs=0} {if ((NF>0)&&(($1=="pair_coeff")||($1=="bond_coeff")||($1=="angle_coeff")||($1=="dihedral_coeff")||($1=="improper_coeff"))) has_coeffs=1} END{print has_coeffs}' < "$f"`
@@ -1367,7 +1368,6 @@ for f in *.template; do
         fi
     fi
 done
-
 
 
 # Deal with wildcard characters ('*', '?') in "_coeff" commands
@@ -1879,11 +1879,11 @@ if [ -z "$BOXSIZE_MINX" ] || [ -z "$BOXSIZE_MAXX" ] || [ -z "$BOXSIZE_MINY" ] ||
         echo "----           (A default cube of volume=(200.0)^3 was used.      ----" >&2
         echo "----               This is probably not what you want!)           ----" >&2
         echo "---- It is recommended that you specify your periodic boundary    ----" >&2
-        echo "---- by adding a write_once(\"Boundary\") command to your .lt file. ----" >&2
+        echo "---- by adding a write_once(\"Data Boundary\") command to your .lt file. ----" >&2
         echo "---- For example:                                                 ----" >&2
         #echo "----------------------------------------------------------------------" >&2
         echo "----                                                              ----" >&2
-        echo "----   write_once(\"Boundary\") {                                   ----" >&2
+        echo "----   write_once(\"Data Boundary\") {                                   ----" >&2
         echo "----     2.51  46.79 xlo xhi                                      ----" >&2
         echo "----     -4.38 35.824 ylo yhi                                     ----" >&2
         echo "----     0.3601 42.95 zlo zhi                                     ----" >&2
@@ -2249,6 +2249,37 @@ else
 fi
 
 
+# Later on, it will be useful to keep track of the files that the user created.
+# This must be inferred from the files ending in ".template".
+# (Do this now before we discard all of the ".template" files.)
+
+RENDERED_FILES=""
+for f in *.template; do
+
+    # Moltemplate (ttree.py) generates two copies of each file that the
+    # user creates using the "write" and "write_once" commands:
+    # 1) The original file requested by the user.  This file is a "rendered"
+    #    file.  All of the $-style and @-style variables have been replaced
+    #    with other text (usually integers).
+    # 2) A version of that file that contains the original variable names
+    #    instead of integers.  (These file names end in ".template".)
+    # We no longer care about the files ending in ".template", but we can loop
+    # over files ending in ".template" created by moltemplate.  We can infer
+    # the name of the other file name by removing the ".template" suffix.
+
+    bn=`basename "$f" .template`  #file name without the ".template" suffix
+    if [ ! -f "$bn" ]; then
+        continue
+    fi
+    if [ -n "$RENDERED_FILES" ]; then
+        printf -v RENDERED_FILES "${RENDERED_FILES}\n$bn"
+    else
+        RENDERED_FILES="$bn"
+    fi
+done
+
+
+
 # ############## CLEAN UP ################
 
 # A lot of files have been created along the way.
@@ -2360,7 +2391,7 @@ if [ -e "$in_prefix_no_space" ]; then
     mv -f "$in_prefix_no_space" output_ttree/
 fi
 
-
+# ------ Postprocess coeff commands after rendering. ----------
 # Swap the order of atom types I, J in all "pair_coeff I J ..." commands
 # whenever I > J.  Do this for every input script file generated by moltemplate.
 # (Perhaps later I'll check to make sure the user did not specify contradictory
@@ -2368,9 +2399,64 @@ fi
 #  here, because at this point we've thrown away the original atom type names,
 #  so there's no easy way to explain the problem to the user if there is one.)
 
-echo "" > input_scripts_so_far.tmp
+# -- First we must figure out which files we need to consider. --
+# Ugly details.  We already created a variable ($RENDERED_FILES) storing a
+# list of files which are created by the user.  However some of those files no
+# longer exist. We also need do add several files to this list and remove
+# duplicates.  Lacking data structures, SH and BASH are really bad at this kind
+# thing, so the code is ugly.  Must create temporary files and sort them.
 
-for file_name in "$OUT_FILE_INIT" "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_SETTINGS"; do
+echo "$RENDERED_FILES" > RENDERED_FILENAMES.tmp
+echo "$OUT_FILE_INIT" >> RENDERED_FILENAMES.tmp
+echo "$OUT_FILE_INPUT_SCRIPT " >> RENDERED_FILENAMES.tmp
+echo "$OUT_FILE_SETTINGS " >> RENDERED_FILENAMES.tmp
+echo "$RENDERED_FILES_WITH_COEFF_COMMANDS" >> RENDERED_FILENAMES.tmp
+
+# Now remove duplicate file names
+sort RENDERED_FILENAMES.tmp > RENDERED_FILENAMES.tmp2
+awk '{if ((NF>0)&&(NR>1)&&($0!=prev)) {print $0} prev=$0}' \
+    < RENDERED_FILENAMES.tmp2 > RENDERED_FILENAMES.tmp3
+
+# Now update the list of files stored in $RENDERED_FILES
+RENDERED_FILES=""
+while read file_name; do
+    if [ ! -f "$file_name" ]; then
+        continue  # make sure the file exists
+    fi
+    if [ -n "$RENDERED_FILES" ]; then
+        printf -v RENDERED_FILES "${RENDERED_FILES}\n$file_name"
+    else
+        RENDERED_FILES="$file_name"
+    fi
+done < RENDERED_FILENAMES.tmp3
+
+rm -f RENDERED_FILENAMES.tmp*
+
+
+# Now filter out files which do not contain "_coeff" commands
+RENDERED_FILES_WITH_COEFF_COMMANDS=""
+IFS=$CR
+for file_name in $RENDERED_FILES; do
+    if [ ! -f "$file_name" ]; then
+        continue  # make sure the file exists
+    fi
+    HAS_COEFF_COMMANDS=`awk 'BEGIN{has_coeffs=0} {if ((NF>0)&&(($1=="pair_coeff")||($1=="bond_coeff")||($1=="angle_coeff")||($1=="dihedral_coeff")||($1=="improper_coeff"))) has_coeffs=1} END{print has_coeffs}' < "$file_name"`
+    if [ "$HAS_COEFF_COMMANDS" -eq "1" ]; then
+        if [ -n "$RENDERED_FILES_WITH_COEFF_COMMANDS" ]; then
+            printf -v RENDERED_FILES_WITH_COEFF_COMMANDS "${RENDERED_FILES_WITH_COEFF_COMMANDS}\n$file_name"
+        else
+            RENDERED_FILES_WITH_COEFF_COMMANDS="$file_name"
+        fi
+    fi
+done
+IFS=$OIFS
+
+
+
+# ---- Now loop over all user-created files containing "coeff" commands. ----
+echo "" > input_scripts_so_far.tmp
+IFS=$CR
+for file_name in $RENDERED_FILES_WITH_COEFF_COMMANDS; do
     if [ -s "$file_name" ]; then
         echo "postprocessing file \"$file_name\"" >&2
         if ! $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_input_script.py" input_scripts_so_far.tmp < "$file_name" > "$file_name.tmp"; then
@@ -2405,6 +2491,7 @@ for file_name in "$OUT_FILE_INIT" "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_SETTINGS";
         fi
     fi
 done
+IFS=$OIFS
 
 
 # Process any custom input script files created by the user afterwards

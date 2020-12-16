@@ -1,21 +1,31 @@
+#!/usr/bin/env bash
+#
+# WHAT THIS SCRIPT DOES:
+#
+# This script creates the moltemplate (LT) files describing our polymer.
+# Then it uses moltemplate.sh to create the LAMMPS input files we need.
+#
 # PREREQUISITES
 #
 # The users should have followed the instructions in STEP_1 and created a
 # file named "init_crds_polymer_backbone.raw" containing the positions
 # of every monomer in the polymer.
+#
+# PARAMETERS
+#
+# Make sure that the following numbers are consistent with STEP_1
 
-# Use these commands to generate the LAMMPS input script and data file
-
-# --- MAKE SURE THESE PARAMETERS AGREE WITH STEP_1 and "dna_forcefield.lt" ---
 
 L_BOND=6.972           # length of the bonds connecting monomers
 L_MONOMER=13.944       # length of each monomer (Note: In this model, each
                        # monomer has 3 particles, and two different bonds
                        # along the backbone.  Hence its length equals 2 bonds.
 N_TWIST_MOTORS=400     # number of twist motors to insert into the polymer
+TORQUE=1.1      # in (kcal/mole)/radian
+       # SEE "verbose_version" for an explanation how I estimated this number.
 
 
-# Create LAMMPS input files this way:
+
 cd moltemplate_files
 
 
@@ -39,8 +49,9 @@ cd moltemplate_files
   #    Δφ = 360*σ*(n_b/10.5)     (in degrees)
   # where n_b is the number of base pairs per monomer, and 10.5 is the
   # natural period of DNA twist in the relaxed state in base-pairs.
-  # Example:
-  # genpoly_lt.py -helix -72.0 \
+  # (However, if you are using twist motors, it should not matter what -helix
+  #  parameter you choose, because eventually the supercoiling will be
+  #  determined by the amount of torque you apply to these motors.)
   # For details, see:
   # https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md
 
@@ -55,8 +66,6 @@ cd moltemplate_files
       -header 'import "dna_monomer.lt"' \
       -padding ${L_BOND},500,500 \
       < init_crds_polymer_backbone.raw > dna_polymer.lt
-
-
 
 
   # We are using angle and dihedral interactions who's energy (near the minima)
@@ -74,7 +83,7 @@ cd moltemplate_files
   #
   #   b = n_b * 0.332nm
   #   n_b=the number of base pairs per monomer (typically less than 50)
-  #   kB*T=0.001987207*300 (kCal/mole, assuming we are using these energy units)
+  #   kB*T=0.001987207*300 (kcal/mole, assuming we are using these energy units)
   #
   # However for numerical stability we must forbid certain angles from being
   # visited, and this requires changing the potential to something slightly more
@@ -103,24 +112,9 @@ cd moltemplate_files
   #./calc_table_angle.py 0 4.211969 180.0 180 RCCR -179 179 -160 12.0 160 -12.0\
   #                      "DEGREES" > table_dihedral.dat
   #
-  #  -------- ITERATION 1: ------
-  #
-  # L_b_target = 35.0,     L_b_sim1 =  73.77234648
-  # L_t_target = 111.0,    L_t_sim1 =  108.046530763
-  #
-  # k_b_sim1 = k_b_sim0 * (L_b_target / L_b_sim0) = 0.9991475
-  # k_t_sim1 = k_t_sim0 * (L_t_target / L_t_sim0) = 4.327104
-  #
-  #./calc_table_angle.py 180.0 0.9991475 120.0 181 CCC 0.0 180.0 65.0 12.0\
-  #                      "EQ 0.0"  > table_angle.dat
-  #./calc_table_angle.py 0 4.327104 180.0 180 RCCR -179 179 -160 12.0 160 -12.0\
-  #                      "DEGREES" > table_dihedral.dat
-  #
-  #                        :
-  #                        :
-  #  -------- SKIPPING ITERATIONS 2 THROUGH 4 ---------
-  #                        :
-  #                        :
+  #  As mentioned, the resulting polymer using these angular potentials
+  #  does not have the right mechanical properties (persistence lengths).
+  #  After several rounds of iteration, we now use:
   #
   #  -------- ITERATION 5: ------
   #
@@ -132,8 +126,7 @@ cd moltemplate_files
   #
   # (In iteration 5, I also added a hard-sphere steric (Lennard-Jones)
   #  repulsion to the backbone DNA particles at short distances
-  #  to prevent the polymer from passing through itself.  Earlier
-  #  iterations did not use this approach.)
+  #  to prevent the polymer from passing through itself.)
 
   ./calc_table_angle.py 180.0 1.14983 120.0 181 CCC 0.0 180.0 65.0 12.0\
                         "EQ 0.0"  > table_angle.dat
@@ -162,13 +155,12 @@ cd moltemplate_files
   echo '' >> dna_polymer.lt
 
   # How many monomers are there in the polymer?
-  # We can infer that from the number of non-empty lines in the
-  # "init_crds_polymer_backbone.raw" file.
+  # This was specified in STEP_1 in the $N_MONOMERS variable.  We could ask
+  # the user to specify this again here (but they might make a mistake).
+  # Instead, we can infer that from the number of non-empty lines in the
+  # "init_crds_polymer_backbone.raw" file from STEP_1.  The next line does that:
 
   N_MONOMERS=`awk '{if ((NF>0) && (substr($1,1,1)!="#")) {n++}} END{print n}' < init_crds_polymer_backbone.raw`
-
-  TORQUE=1.10657  # in (kcal/mole)/radian
-                  # SEE BELOW for an explanation how I estimated this number.
 
   # The "genpoly_modify_lt.py" script will add modifications to an existing
   # polymer created by "genpoly_lt.py", typically at many locations on the
@@ -185,52 +177,10 @@ cd moltemplate_files
     -length $N_MONOMERS \
     -locations-periodic $N_TWIST_MOTORS 0 \
     -dihedral Disable r c2 c2 r 0 0 1 1 \
-    -fix-nbody 4 "fix_twist.in" fxTw all twist torque r c2 c2 r 0 0 1 1 "$TORQUE" \
-    -set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 Rmotor C1motor C1motor Rmotor \
+-fix-nbody 4 "fix_twist.in" fxTw all twist torque r c2 c2 r 0 0 1 1 "$TORQUE" \
+-set-atoms 4 "In Types" "type" r c2 c2 r 0 0 1 1 Rmotor C1motor C1motor Rmotor \
     >> dna_polymer.lt
-
-  # How did we choose the TORQUE (twist motor strength) parameter?
-  # This would be the torque necessary to introduce a supercoil
-  # density of σ (which is usually measured by experiment to be ~ 0.03-0.05).
-  # This is difficult to know because it depends on the shape of the polymer.
-  # The torque necessary to introduce a supercoil density σ into a straight
-  # polymer made from monomers (length b) connected with torsional springs
-  # of strength k_t is
-  #  torque = k_t * σ*(2*pi/10.5)*(b/0.332)
-  # where σ*(2*pi/10.5) is the Δtwist-per-base-pair corresponding to σ, and
-  # (b/0.332) is the number of base pairs per monomer (b in monomer length in nm
-  # 0.332nm base pair spacing), and 10.5 is the periodicity of DNA (base pairs)
-  # ... AND the spring constant is approximated by:
-  #     k_t = (L_t/b)*kB*T
-  #     L_t = torsional persistence length of DNA
-  #    kB*T = 0.001987207*300kCal/mole,
-  # Setting b = 10.5*0.332,  and L_t = 111.0:
-  #
-  # --> torque = k_t*σ*(2*pi/10.5)*(b/0.332) = 5.875137 (kcal/mole)/ radian
-  #     torque * 2*pi / (kB*T) = 61.92 kB*T / turn
-  #
-  # However, this estimate is for a straight polymer.
-  # For a curved polymer that contains both twist and writhe, you can
-  # estimate the amount of twist in that polymer by measuring the average 
-  # torsional angle between successive monomers in that polymer.
-  # First we must generate a curved polymer with a known superhelical density σ
-  # and with a conformation that you consider to be realistic.  One way to do
-  # this is to create a simple, flat circular polymer (with zero writhe)
-  # which is already twisted along its axis by an amount consistent with σ.
-  # Then allow the polymer to relax slowly. Hopefully the resulting conformation
-  # is similar to the desired conformation.  Then measure the twist stored in
-  # the polymer by measuring average torsional angle between monomers.
-  # (Alternatively you can measure the polymer's writhe from its shape, and
-  #  then subtract writhe from the total supercoil density, if it is known.)
-  # From the average torsional angle, you can estimate the torque necessary
-  # to create that angle between successive monomers.
-  # Then we can insert twist motors into the polymer that exert
-  # this amount of torque to achieve the same effect.
-  # (This is how I obtained the value of TORQUE used above.
-  #  See the file "extract_dihedrals_and_infer_torque.sh" for more details.)
   # -------------------- END OF TWIST MOTOR SECTION -----------------------
-
-
 
 
 
@@ -240,21 +190,15 @@ cd moltemplate_files
   echo '' > constraints.lt
 
 
-
-
-
-  # Finally run moltemplate
+  # -------------- Finally run moltemplate ------------------
 
   moltemplate.sh system.lt
-
-
 
 
   # Now move the files that LAMMPS needs into the directory where we plan
   # to run LAMMPS (the parent directory)
 
-  mv -f system.in* system.data fix_twist*.in delete_link_bonds.in pair_*.in table_*.dat vmd_commands.tcl ../
-  
+  mv -f system.in* system.data fix_twist*.in delete_link_bonds.in pair_*.in table_*.dat vmd_commands.tcl ../  2> /dev/null
   
 
   # ---------------- LINKED VERSION -----------------
@@ -264,23 +208,6 @@ cd moltemplate_files
   # with the periodic image of the ring polymer on the other side.
   # (In other words, link the origin of replication at one end, with the
   #  terminus of replication at the other end, though the periodic boundary.)
-  # This is one of several strategies one could use to keep the polymer under
-  # tension as we let the system collapse (contract) using "fix deform".
-  # We don't want to just completely let go of the polymer ends, because
-  # the polymer needs to be under some kind of tension for the plectonemic
-  # supercoils to slowly form along it's length correctly as the tension is
-  # relaxed.  Furthermore the polymer needs to be linked in 2 places (not 1)
-  # to the polymers on the other side of the periodic boundary.  This is to 
-  # prevent the ends of the circle from spinning freely.  Otherwise, the
-  # entire circular polymer would simply twist around its own long axis (the
-  # x-axis) and form one incredibly long plectonemic supercoil.  (This is not
-  # what bacterial nucleoids look like.)  Linking the polymer in 2 nearby
-  # places along the chain avoids this.  And this also does a more accurate job
-  # of simulating the replication of DNA in Caulobacter crescentus, because
-  # in that bacteria either end of the cicular DNA (ie the Ori and Ter regions)
-  # are anchored to opposite sides of the cell wall (in a way that would prevent
-  # them from freely rotating).  Since there is no cell wall in this model,
-  # the only thing left to bind the polymer to its periodic image.
 
   N_MONOMERS_HALF=`awk -v N=$N_MONOMERS 'BEGIN{print int(N/2)}'`
   N1=0
@@ -303,14 +230,9 @@ cd moltemplate_files
 
 
 
-
-
   # Now run moltemplate again with these new constraints added
 
   moltemplate.sh system.lt
-
-
-
 
   # Now move the files that LAMMPS needs into the directory where we plan
   # to run LAMMPS (the parent directory), but change its name so that
@@ -320,17 +242,9 @@ cd moltemplate_files
   mv -f system.data ../system_linked.data
 
   # Move the other files to the parent directory as well (but don't rename them)
-  mv -f system.in* system.psf fix_twist*.in delete_link_bonds.in pair_*.in table_*.dat vmd_commands.tcl ../
+  mv -f system.in* system.psf fix_twist*.in delete_link_bonds.in pair_*.in table_*.dat vmd_commands.tcl ../  2> /dev/null
   
-
-
-
   # (We are done building all the files we need for LAMMPS.)
-
-
-
-
-
 
   # -------- OPTIONAL:  Delete temporary files we created earlier ---------
 
@@ -340,131 +254,10 @@ cd moltemplate_files
   rm -rf output_ttree/
 
   # Delete the local temporary .lt files we created
-  rm -f dna_polymer.lt dna_forcefield_nb.lt optional_nonbonded.lt init_crds_polymer_backbone.raw
+  #rm -f init_crds_polymer_backbone.raw
+  rm -f dna_polymer.lt dna_forcefield_nb.lt optional_nonbonded.lt constraints.lt
 
   # Delete any local .pyc files created by running python
-  rm -rf __pycache__ *.pyc
-
-  # If we created a temporary python environment, remove that now:
-  #deactivate
-  #rm -rf venv
+  rm -rf __pycache__ *.pyc    2> /dev/null
 
 cd ../
-
-
-
-
-
-
-
-
-
-
-  # ---------------------------- PLEASE IGNORE --------------------------------
-  # ---------------------------- COMMENTED OUT --------------------------------
-  # ---- OLD METHOD (does not work well for beads larger than Debye length) ---
-  ## Create the tabular pair tables that the polymer needs:
-  ##Define interactions between the central particles that make up the DNA chain
-  #
-  ##echo "" > dna_forcefield_nb.lt
-  #./gen_nonbonded_tables.py \
-  #    -types "DNAForceField/C* DNAForceField/C*" \
-  #    -label "DNA_U0=inf" \
-  #    -table-file "table_dna_U0=inf.dat" \
-  #    -Ntable 64 \
-  #    -script-file "In Settings" \
-  #    -pair-style "table" \
-  #    -barrier-height inf \
-  #    -lj 1.0 6.972 \
-  #    -lambda 1 \
-  #    -ljrmax 6.972 \
-  #    -charge -42.0 \
-  #    -Ldebye 0.000000001 \
-  #    -Ldebye-cut 0.0 \
-  #    -escale 0.5961621 \
-  #    >> dna_forcefield_nb.lt
-  #
-  # Incidentally, "0.5961621" = kB*T in kCal/mole (assuming T=300K)
-  #
-  ## Define the interaction between the DNAForceField/R particles with all
-  ## other particles ("*"). Set the barrier-height to 0 to turn off these forces
-  #
-  #echo "" >> dna_forcefield_nb.lt
-  #./gen_nonbonded_tables.py \
-  #    -types "DNAForceField/R *" \
-  #    -label "DNA_U0=0" \
-  #    -table-file "table_dna_U0=0.dat" \
-  #    -Ntable 64 \
-  #    -script-file "In Settings" \
-  #    -pair-style "table" \
-  #    -barrier-height 0 \
-  #    -lj 1.0 6.972 \
-  #    -lambda 1 \
-  #    -ljrmax 6.972 \
-  #    -charge -42.0 \
-  #    -Ldebye 0.000000001 \
-  #    -Ldebye-cut 0.0 \
-  #    -escale 0.5961621 \
-  #    >> dna_forcefield_nb.lt
-  #
-  ##echo "} # Polymer (pair tables)" >> dna_polymer.lt
-  #
-  ## Now generate the files defining the OPTIONAL forces between particles
-  ## used in this DNA model.  We do this for a range of parameters
-  ## that we might use (a range of U0 barrier height values).
-  ## Later we can select from these different models by selecting a different
-  ## script file (beginning with "pair_...")
-  #rm -f optional_nonbonded.lt
-  #for BARRIER_HEIGHT in inf 64 32 16 8 4 2 1 0.5 0; do
-  #  ./gen_nonbonded_tables.py \
-  #     -types "DNAForceField/C* DNAForceField/C*" \
-  #     -label "DNA_U0=${BARRIER_HEIGHT}kT" \
-  #     -table-file "table_dna_U0=${BARRIER_HEIGHT}kT.dat" \
-  #     -Ntable 64 \
-  #     -script-file "pair_dna_U0=${BARRIER_HEIGHT}kT.in" \
-  #     -pair-style "table" \
-  #     -barrier-height $BARRIER_HEIGHT \
-  #     -lj 1.0 6.972 \
-  #     -lambda 1 \
-  #     -ljrmax 6.972 \
-  #     -charge -42.0 \
-  #     -Ldebye 0.000000001 \
-  #     -Ldebye-cut 0.0 \
-  #     -escale 0.5961621 \
-  #     >> optional_nonbonded.lt
-  #  # ("inf"<-->infinity, which is implemented here as a large positive number)
-  #done
-  #
-  ## Notes:
-  ##
-  ##  By default, the energy between particles is defined as:
-  ##      U(r) = U_LR(r) + U_yuk(r)
-  ## -lj supplies the Lennard-Jones parameters (ε, σ)
-  ##
-  ## -lambda (λ) supplies the (optional) 3rd Lennard-Jones parameter.
-  ##   --> U_LR(r) = ε * ((σ/(r-rshiftLJ))^12 - 2*λ*(σ/(r-rshiftLJ))^6)
-  ## -charge = the charge of the particle
-  ##
-  ## -Ldebye = the Debye length (electrostatic decay length due to counter ions)
-  ##   --> U_yuk(r) = (Ke/r) * exp(-(r-rshiftQ)/Ldebye)     ("yukawa potential")
-  ##             Ke = ke*qi*qj / eps_r
-  ##             ke = 8.9875517873681764e09 J*m*C^-2 = 1/4*pi*eps_0
-  ##                  (https://en.wikipedia.org/wiki/Coulomb's_law)
-  ##
-  ## -barrier-height U0   If this parameter is specified, then U(r) changes to
-  ##            U(r) = (U0/(pi/2)) * arctan(Uorig(r)/U0)
-  ##  where Uorig(r) = the original U(r) potential.  
-  ##                  This function approaches U0 as r->0 (a non-infinite value)
-  ##
-  ## -escale multiplies the energy parameters (ε,U0) by a constant before use.
-  ##         (Typically I choose that constant to be kB*Temperature)
-  ##
-  ## - Why did I choose Ldebey ≈ 0 and Ldebye-cut = 0? -
-  ## Because the range of the Lennard-Jones spheres we are using to prevent the
-  ## polymer from passing through itself is wider than the Debye length there
-  ## is no longer a reason to consider electrostatic repulsion in this model.
-  ## Doing so would just make the width of the polymer even larger.  So in this
-  ## case, I turned off the electrostatics by setting Ldebye to a tiny number,
-  ## and Ldebye-cut to 0.  (Note: For typical salt concentrations Ldebye ≈ 1nm.)
-  #
-  # ---------------------------- PLEASE IGNORE --------------------------------

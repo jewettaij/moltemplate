@@ -1,23 +1,20 @@
 #    This is the 1.7 version of GAFF (from AmberTools15), downloaded 2015-8-17.
-# NOTE: Corrections were made to the amberparm2lt.sh converter on 2014-5-19, so
-#    this version of gaff.lt differs from earlier versions using the same source
 ####################################################################
 # To use this, LAMMPS currently must be compiled with the USER-MISC package.
 # (Type "make yes-user-misc" into the shell before compiling LAMMPS.)
 ####################################################################
 #    This moltemplate (LT) file was generated automatically using
-# amber/amberparm2lt.sh gaff.dat GAFF > gaff.lt
+# amberparm2lt.sh gaff.dat GAFF > gaff.lt
 ####################################################################
 #    Background information and usage explanation:
 # This file contanis a list of atom types and rules for generating bonded
 # interactions between these atoms (hopefully) according to AMBER conventions.
-# By using the atom types shown below in your own molecules, bonds and angular 
+# By using the atom types shown below in your own molecules, bonds and angular
 # interactions will be automatically generated.
 # AMBER (GAFF) force-field parameters will also be assigned to each angle
 # interaction (according to these atom types).
 # One way to apply the GAFF force field to a particular type of molecule, is
 # to use the "inherits" keyword when you define that molecule.  For example:
-#
 # import("gaff.lt")
 # MoleculeType inherits GAFF {
 #   write_once("Data Atoms") {
@@ -26,14 +23,87 @@
 #        :       :         :
 #   }
 # }
-#
 #(See "Inheritance" and "short names vs. full names" in the moltemplate manual.)
 ####################################################################
 #    Moltemplate can not assign atom charge.  You must assign atomic
-# charges yourself.  (Moltemplate is only a simple text manipulation tool.
+# charges yourself.  (Moltemplate is only a simple text manipulation tool.)
 # You can do this afterwards using commands like "set atom 70 charge -0.212"
 # For details, see http://lammps.sandia.gov/doc/set.html)
 ####################################################################
+#
+# --- Description of atom types ---
+#
+#  @atom:c  Sp2 C carbonyl group
+#  @atom:c1  Sp C
+#  @atom:c2  Sp2 C
+#  @atom:c3  Sp3 C
+#  @atom:ca  Sp2 C in pure aromatic systems
+#  @atom:cp  Head Sp2 C that connect two rings in biphenyl sys.
+#  @atom:cq  Head Sp2 C that connect two rings in biphenyl sys. identical to cp
+#  @atom:cc  Sp2 carbons in non-pure aromatic systems
+#  @atom:cd  Sp2 carbons in non-pure aromatic systems, identical to cc
+#  @atom:ce  Inner Sp2 carbons in conjugated systems
+#  @atom:cf  Inner Sp2 carbons in conjugated systems, identical to ce
+#  @atom:cg  Inner Sp carbons in conjugated systems
+#  @atom:ch  Inner Sp carbons in conjugated systems, identical to cg
+#  @atom:cx  Sp3 carbons in triangle systems
+#  @atom:cy  Sp3 carbons in square systems
+#  @atom:cu  Sp2 carbons in triangle systems
+#  @atom:cv  Sp2 carbons in square systems
+#  @atom:cz  Sp2 carbon in guanidine group
+#  @atom:h1  H bonded to aliphatic carbon with 1 electrwd. group
+#  @atom:h2  H bonded to aliphatic carbon with 2 electrwd. group
+#  @atom:h3  H bonded to aliphatic carbon with 3 electrwd. group
+#  @atom:h4  H bonded to non-sp3 carbon with 1 electrwd. group
+#  @atom:h5  H bonded to non-sp3 carbon with 2 electrwd. group
+#  @atom:ha  H bonded to aromatic carbon
+#  @atom:hc  H bonded to aliphatic carbon without electrwd. group
+#  @atom:hn  H bonded to nitrogen atoms
+#  @atom:ho  Hydroxyl group
+#  @atom:hp  H bonded to phosphate
+#  @atom:hs  Hydrogen bonded to sulphur
+#  @atom:hw  Hydrogen in water
+#  @atom:hx  H bonded to C next to positively charged group
+#  @atom:f  Fluorine
+#  @atom:cl  Chlorine
+#  @atom:br  Bromine
+#  @atom:i  Iodine
+#  @atom:n  Sp2 nitrogen in amide groups
+#  @atom:n1  Sp N
+#  @atom:n2  aliphatic Sp2 N with two connected atoms
+#  @atom:n3  Sp3 N with three connected atoms
+#  @atom:n4  Sp3 N with four connected atoms
+#  @atom:na  Sp2 N with three connected atoms
+#  @atom:nb  Sp2 N in pure aromatic systems
+#  @atom:nc  Sp2 N in non-pure aromatic systems
+#  @atom:nd  Sp2 N in non-pure aromatic systems, identical to nc
+#  @atom:ne  Inner Sp2 N in conjugated systems
+#  @atom:nf  Inner Sp2 N in conjugated systems, identical to ne
+#  @atom:nh  Amine N connected one or more aromatic rings
+#  @atom:no  Nitro N
+#  @atom:o  Oxygen with one connected atom
+#  @atom:oh  Oxygen in hydroxyl group
+#  @atom:os  Ether and ester oxygen
+#  @atom:ow  Oxygen in water
+#  @atom:p2  Phosphate with two connected atoms
+#  @atom:p3  Phosphate with three connected atoms, such as PH3
+#  @atom:p4  Phosphate with three connected atoms, such as O=P(CH3)2
+#  @atom:p5  Phosphate with four connected atoms, such as O=P(OH)3
+#  @atom:pb  Sp2 P in pure aromatic systems
+#  @atom:pc  Sp2 P in non-pure aromatic systems
+#  @atom:pd  Sp2 P in non-pure aromatic systems, identical to pc
+#  @atom:pe  Inner Sp2 P in conjugated systems
+#  @atom:pf  Inner Sp2 P in conjugated systems, identical to pe
+#  @atom:px  Special p4 in conjugated systems
+#  @atom:py  Special p5 in conjugated systems
+#  @atom:s  S with one connected atom
+#  @atom:s2  S with two connected atom, involved at least one double bond
+#  @atom:s4  S with three connected atoms
+#  @atom:s6  S with four connected atoms
+#  @atom:sh  Sp3 S connected with hydrogen
+#  @atom:ss  Sp3 S in thio-ester and thio-ether
+#  @atom:sx  Special s4 in conjugated systems
+#  @atom:sy  Special s6 in conjugated systems
 
 
 
@@ -49,77 +119,77 @@ GAFF {
   # ----------------------------------------------------------------------
 
   write_once("Data Masses") {
-    @atom:c 12.01   # Sp2 C carbonyl group
-    @atom:c1 12.01   # Sp C
-    @atom:c2 12.01   # Sp2 C
-    @atom:c3 12.01   # Sp3 C
-    @atom:ca 12.01   # Sp2 C in pure aromatic systems
-    @atom:cp 12.01   # Head Sp2 C that connect two rings in biphenyl sys.
-    @atom:cq 12.01   # Head Sp2 C that connect two rings in biphenyl sys. identical to cp
-    @atom:cc 12.01   # Sp2 carbons in non-pure aromatic systems
-    @atom:cd 12.01   # Sp2 carbons in non-pure aromatic systems, identical to cc
-    @atom:ce 12.01   # Inner Sp2 carbons in conjugated systems
-    @atom:cf 12.01   # Inner Sp2 carbons in conjugated systems, identical to ce
-    @atom:cg 12.01   # Inner Sp carbons in conjugated systems
-    @atom:ch 12.01   # Inner Sp carbons in conjugated systems, identical to cg
-    @atom:cx 12.01   # Sp3 carbons in triangle systems
-    @atom:cy 12.01   # Sp3 carbons in square systems
-    @atom:cu 12.01   # Sp2 carbons in triangle systems
-    @atom:cv 12.01   # Sp2 carbons in square systems
-    @atom:cz 12.01   # Sp2 carbon in guanidine group
-    @atom:h1 1.008   # H bonded to aliphatic carbon with 1 electrwd. group
-    @atom:h2 1.008   # H bonded to aliphatic carbon with 2 electrwd. group
-    @atom:h3 1.008   # H bonded to aliphatic carbon with 3 electrwd. group
-    @atom:h4 1.008   # H bonded to non-sp3 carbon with 1 electrwd. group
-    @atom:h5 1.008   # H bonded to non-sp3 carbon with 2 electrwd. group
-    @atom:ha 1.008   # H bonded to aromatic carbon
-    @atom:hc 1.008   # H bonded to aliphatic carbon without electrwd. group
-    @atom:hn 1.008   # H bonded to nitrogen atoms
-    @atom:ho 1.008   # Hydroxyl group
-    @atom:hp 1.008   # H bonded to phosphate
-    @atom:hs 1.008   # Hydrogen bonded to sulphur
-    @atom:hw 1.008   # Hydrogen in water
-    @atom:hx 1.008   # H bonded to C next to positively charged group
-    @atom:f 19.00   # Fluorine
-    @atom:cl 35.45   # Chlorine
-    @atom:br 79.90   # Bromine
-    @atom:i 126.9   # Iodine
-    @atom:n 14.01   # Sp2 nitrogen in amide groups
-    @atom:n1 14.01   # Sp N
-    @atom:n2 14.01   # aliphatic Sp2 N with two connected atoms
-    @atom:n3 14.01   # Sp3 N with three connected atoms
-    @atom:n4 14.01   # Sp3 N with four connected atoms
-    @atom:na 14.01   # Sp2 N with three connected atoms
-    @atom:nb 14.01   # Sp2 N in pure aromatic systems
-    @atom:nc 14.01   # Sp2 N in non-pure aromatic systems
-    @atom:nd 14.01   # Sp2 N in non-pure aromatic systems, identical to nc
-    @atom:ne 14.01   # Inner Sp2 N in conjugated systems
-    @atom:nf 14.01   # Inner Sp2 N in conjugated systems, identical to ne
-    @atom:nh 14.01   # Amine N connected one or more aromatic rings
-    @atom:no 14.01   # Nitro N
-    @atom:o 16.00   # Oxygen with one connected atom
-    @atom:oh 16.00   # Oxygen in hydroxyl group
-    @atom:os 16.00   # Ether and ester oxygen
-    @atom:ow 16.00   # Oxygen in water
-    @atom:p2 30.97   # Phosphate with two connected atoms
-    @atom:p3 30.97   # Phosphate with three connected atoms, such as PH3
-    @atom:p4 30.97   # Phosphate with three connected atoms, such as O=P(CH3)2
-    @atom:p5 30.97   # Phosphate with four connected atoms, such as O=P(OH)3
-    @atom:pb 30.97   # Sp2 P in pure aromatic systems
-    @atom:pc 30.97   # Sp2 P in non-pure aromatic systems
-    @atom:pd 30.97   # Sp2 P in non-pure aromatic systems, identical to pc
-    @atom:pe 30.97   # Inner Sp2 P in conjugated systems
-    @atom:pf 30.97   # Inner Sp2 P in conjugated systems, identical to pe
-    @atom:px 30.97   # Special p4 in conjugated systems
-    @atom:py 30.97   # Special p5 in conjugated systems
-    @atom:s 32.06   # S with one connected atom
-    @atom:s2 32.06   # S with two connected atom, involved at least one double bond
-    @atom:s4 32.06   # S with three connected atoms
-    @atom:s6 32.06   # S with four connected atoms
-    @atom:sh 32.06   # Sp3 S connected with hydrogen
-    @atom:ss 32.06   # Sp3 S in thio-ester and thio-ether
-    @atom:sx 32.06   # Special s4 in conjugated systems
-    @atom:sy 32.06   # Special s6 in conjugated systems
+    @atom:c 12.01
+    @atom:c1 12.01
+    @atom:c2 12.01
+    @atom:c3 12.01
+    @atom:ca 12.01
+    @atom:cp 12.01
+    @atom:cq 12.01
+    @atom:cc 12.01
+    @atom:cd 12.01
+    @atom:ce 12.01
+    @atom:cf 12.01
+    @atom:cg 12.01
+    @atom:ch 12.01
+    @atom:cx 12.01
+    @atom:cy 12.01
+    @atom:cu 12.01
+    @atom:cv 12.01
+    @atom:cz 12.01
+    @atom:h1 1.008
+    @atom:h2 1.008
+    @atom:h3 1.008
+    @atom:h4 1.008
+    @atom:h5 1.008
+    @atom:ha 1.008
+    @atom:hc 1.008
+    @atom:hn 1.008
+    @atom:ho 1.008
+    @atom:hp 1.008
+    @atom:hs 1.008
+    @atom:hw 1.008
+    @atom:hx 1.008
+    @atom:f 19.00
+    @atom:cl 35.45
+    @atom:br 79.90
+    @atom:i 126.9
+    @atom:n 14.01
+    @atom:n1 14.01
+    @atom:n2 14.01
+    @atom:n3 14.01
+    @atom:n4 14.01
+    @atom:na 14.01
+    @atom:nb 14.01
+    @atom:nc 14.01
+    @atom:nd 14.01
+    @atom:ne 14.01
+    @atom:nf 14.01
+    @atom:nh 14.01
+    @atom:no 14.01
+    @atom:o 16.00
+    @atom:oh 16.00
+    @atom:os 16.00
+    @atom:ow 16.00
+    @atom:p2 30.97
+    @atom:p3 30.97
+    @atom:p4 30.97
+    @atom:p5 30.97
+    @atom:pb 30.97
+    @atom:pc 30.97
+    @atom:pd 30.97
+    @atom:pe 30.97
+    @atom:pf 30.97
+    @atom:px 30.97
+    @atom:py 30.97
+    @atom:s 32.06
+    @atom:s2 32.06
+    @atom:s4 32.06
+    @atom:s6 32.06
+    @atom:sh 32.06
+    @atom:ss 32.06
+    @atom:sx 32.06
+    @atom:sy 32.06
   } # (end of masses)
 
   write_once("In Settings") {

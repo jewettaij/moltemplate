@@ -20,9 +20,9 @@
 
 # file "tip3f_1983_oplsaa.lt" 
 #
-#    H1     H2
+#    h1     h2
 #      \   /
-#        O
+#        o
 #
 # This is the flexible version of TIP3P suitable for use in a simulation
 # using the OPLSAA force field (as implemented in the "oplsaa.lt" file).
@@ -40,21 +40,21 @@ TIP3F_1983_oplsaa inherits OPLSAA {
   #  AtomID  MolID  AtomType charge(can be overridden)   x    y    z
 
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:68 -0.822   0.0000000   0.00000 0.000000
-    $atom:H1 $mol:. @atom:69  0.411   0.756950327 0.00000 0.5858822766
-    $atom:H2 $mol:. @atom:69  0.411  -0.756950327 0.00000 0.5858822766
+    $atom:o  $mol:w @atom:68 -0.822   0.0000000   0.00000 0.000000
+    $atom:h1 $mol:w @atom:69  0.411   0.756950327 0.00000 0.5858822766
+    $atom:h2 $mol:w @atom:69  0.411  -0.756950327 0.00000 0.5858822766
   }
 
   # BondID    BondType  AtomID1  AtomID2
   write("Data Bonds") {
-    $bond:OH1 @bond:OH $atom:O $atom:H1
-    $bond:OH2 @bond:OH $atom:O $atom:H2
-    $bond:HH  @bond:HH $atom:H1 $atom:H2
+    $bond:oh1 @bond:OH  $atom:o  $atom:h1
+    $bond:oh2 @bond:OH  $atom:o  $atom:h2
+    $bond:hh  @bond:HH  $atom:h1 $atom:h2
   }
 
-  #  AngleID   AngleType   AtomID1 AtomID2 AtomID3
+  #  AngleID   AngleType    AtomID1 AtomID2 AtomID3
   write("Data Angles") {
-    $angle:HOH @angle:HOH $atom:H1 $atom:O $atom:H2
+    $angle:hoh @angle:HOH  $atom:h1 $atom:o $atom:h2
   }
 
   write_once("In Settings") {

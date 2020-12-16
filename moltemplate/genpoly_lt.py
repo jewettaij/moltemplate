@@ -490,6 +490,12 @@ class GenPoly(object):
                 self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
+                if j-i < 1:
+                    err_msg = 'Error in "-cuts" argument: One or more of the cuts has length zero.  The\n' + \
+                              '      numbers in the "-cuts" file must all lie between 1 and N-1 (where "N" is\n' + \
+                              '      the number of monomers in the polymer, which is '+str(self.N)+' in this case).\n' + \
+                              '      Furthermore, no integer can be listed more than once.\n'
+                    raise InputError(err_msg+'.\n')
                 coords_multi.append(coords[i:j])
                 i = j
         else:
@@ -568,6 +574,11 @@ class GenPoly(object):
         """
 
         N = len(coords)
+
+        if N == 1:
+            self.direction_vects = [[1.0, 0.0, 0.0]]
+            return
+
         self.direction_vects = [[0.0, 0.0, 0.0] for i in range(0, N + 1)]
 
         if self.settings.is_circular:
@@ -656,8 +667,8 @@ class GenPoly(object):
                                   self.name_sequence_multi[i],
                                   self.orientations_multi[i],
                                   self.helix_angles_multi[i])
-            outfile.write('\n\n'
-                          '# Now instantiate all the polymers (once each)\n\n')
+            outfile.write('\n\n')
+            outfile.write('# Now instantiate all the polymers (once each)\n\n')
 
             for i in range(0, len(self.coords_multi)):
                 outfile.write('polymers[' + str(i) + '] = new ' +
@@ -688,29 +699,30 @@ class GenPoly(object):
 
         """
         N = len(coords)
+
         self.ChooseDirections(coords)
 
         if name_polymer != '':
             outfile.write(name_polymer + ' {\n'
                           '\n\n\n'
-                          'create_var {$mol}\n'
-                          '# The line above forces all monomer subunits to share the same molecule-ID\n'
-                          '# (Note: Setting the molecule-ID number is optional and is usually ignored.)\n\n\n\n')
+                          '  create_var {$mol}\n'
+                          '  # The line above forces all monomer subunits to share the same molecule-ID\n'
+                          '  # (Note: The molecule-ID number is optional and is usually ignored by LAMMPS.)\n\n\n\n')
 
         outfile.write("""
-# ------------ List of Monomers: ------------
-#
-# (Note: move(), rot(), and rotvv() commands control the position
-#  of each monomer.  (See the moltemplate manual for an explanation
-#  of what they do.)  Commands enclosed in push() are cumulative
-#  and remain in effect until removed by pop().)
+  # ----- list of monomers: -----
+  #
+  # (Note: move(), rot(), and rotvv() commands control the position
+  #  of each monomer.  (See the moltemplate manual for an explanation
+  #  of what they do.)  Commands enclosed in push() are cumulative
+  #  and remain in effect until removed by pop().)
 
 
 
 """
                       )
 
-        outfile.write("push(move(0,0,0))\n")
+        outfile.write("  push(move(0,0,0))\n")
 
         phi = 0.0
 
@@ -719,19 +731,19 @@ class GenPoly(object):
             # if im1 < 0 or self.settings.connect_ends:
             #    if im1 < 0:
             #        im1 += N
-            outfile.write("pop()\n")
+            outfile.write("  pop()\n")
             if len(orientations) > 0:
                 assert(len(orientations) == N)
                 if self.settings.orientations_use_quats:
                     assert(len(orientations[i]) == 4)
-                    outfile.write("push(quat(" +
+                    outfile.write("  push(quat(" +
                                   str(orientations[i][0]) + "," +
                                   str(orientations[i][1]) + "," +
                                   str(orientations[i][2]) + "," +
                                   str(orientations[i][3]) + "))\n")
                 else:
                     assert(len(orientations[i]) == 9)
-                    outfile.write("push(matrix(" +
+                    outfile.write("  push(matrix(" +
                                   str(orientations[i][0]) + "," +
                                   str(orientations[i][1]) + "," +
                                   str(orientations[i][2]) + "," +
@@ -744,19 +756,19 @@ class GenPoly(object):
             else:
                 # Otherwise, if no orientations were explicitly specified, then
                 # infer the orientation from the direction of the displacement.
-                outfile.write("push(rotvv(" +
+                outfile.write("  push(rotvv(" +
                               str(self.direction_vects[i - 1][0]) + "," +
                               str(self.direction_vects[i - 1][1]) + "," +
                               str(self.direction_vects[i - 1][2]) + "," +
                               str(self.direction_vects[i][0]) + "," +
                               str(self.direction_vects[i][1]) + "," +
                               str(self.direction_vects[i][2]) + "))\n")
-            outfile.write("push(move(" +
+            outfile.write("  push(move(" +
                           str(coords[i][0]) + "," +
                           str(coords[i][1]) + "," +
                           str(coords[i][2]) + "))\n")
 
-            outfile.write("mon[" + str(i) + "] = new " +
+            outfile.write("  mon[" + str(i) + "] = new " +
                           names_monomers[i])
 
             # If requested, apply additional rotations about the polymer axis
@@ -773,12 +785,12 @@ class GenPoly(object):
                           "," + str(self.settings.direction_orig[2]) +
                           ")\n")
             if len(orientations) > 0:
-                outfile.write("pop()\n")
+                outfile.write("  pop()\n")
 
 
-        outfile.write("pop()\n")
+        outfile.write("  pop()\n")
         if len(orientations) == 0:
-            outfile.write("pop()\n"*N)
+            outfile.write("  pop()\n"*N)
 
         assert(len(self.settings.bonds_name) ==
                len(self.settings.bonds_type) ==
@@ -788,7 +800,7 @@ class GenPoly(object):
         if len(self.settings.bonds_type) > 0:
             outfile.write("\n"
                           "\n"
-                          "write(\"Data Bonds\") {\n")
+                          "  write(\"Data Bonds\") {\n")
 
         WrapPeriodic.bounds_err = False
         for i in range(0, N):
@@ -803,11 +815,11 @@ class GenPoly(object):
                     if not self.settings.connect_ends:
                         continue
                 outfile.write(
-                    "  $bond:" + self.settings.bonds_name[b] + str(i + 1))
+                    "    $bond:" + self.settings.bonds_name[b] + str(i + 1))
                 outfile.write(" @bond:" + self.settings.bonds_type[b] + " $atom:mon[" + str(I) + "]/" + self.settings.bonds_atoms[
                               b][0] + " $atom:mon[" + str(J) + "]/" + self.settings.bonds_atoms[b][1] + "\n")
         if len(self.settings.bonds_type) > 0:
-            outfile.write("}  # write(\"Data Bonds\") {...\n\n\n")
+            outfile.write("  }  # write(\"Data Bonds\") {...\n\n\n")
 
 
         assert(len(self.settings.angles_name) ==
@@ -817,7 +829,7 @@ class GenPoly(object):
         if len(self.settings.angles_type) > 0:
             outfile.write("\n"
                           "\n"
-                          "write(\"Data Angles\") {\n")
+                          "  write(\"Data Angles\") {\n")
         for i in range(0, N):
             for b in range(0, len(self.settings.angles_type)):
                 I = i + self.settings.angles_index_offsets[b][0]
@@ -831,14 +843,14 @@ class GenPoly(object):
                     if not self.settings.connect_ends:
                         continue
                 outfile.write(
-                    "  $angle:" + self.settings.angles_name[b] + str(i + 1))
+                    "    $angle:" + self.settings.angles_name[b] + str(i + 1))
                 outfile.write(" @angle:" + self.settings.angles_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.angles_atoms[b][0] +
                               " $atom:mon[" + str(J) + "]/" + self.settings.angles_atoms[b][1] +
                               " $atom:mon[" + str(K) + "]/" + self.settings.angles_atoms[b][2] +
                               "\n")
         if len(self.settings.angles_type) > 0:
-            outfile.write("}  # write(\"Data Angles\") {...\n\n\n")
+            outfile.write("  }  # write(\"Data Angles\") {...\n\n\n")
 
 
         assert(len(self.settings.dihedrals_name) ==
@@ -848,7 +860,7 @@ class GenPoly(object):
         if len(self.settings.dihedrals_type) > 0:
             outfile.write("\n"
                           "\n"
-                          "write(\"Data Dihedrals\") {\n")
+                          "  write(\"Data Dihedrals\") {\n")
         for i in range(0, N):
             for b in range(0, len(self.settings.dihedrals_type)):
                 I = i + self.settings.dihedrals_index_offsets[b][0]
@@ -863,7 +875,7 @@ class GenPoly(object):
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                outfile.write("  $dihedral:" +
+                outfile.write("    $dihedral:" +
                               self.settings.dihedrals_name[b] + str(i + 1))
                 outfile.write(" @dihedral:" + self.settings.dihedrals_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.dihedrals_atoms[b][0] +
@@ -872,7 +884,7 @@ class GenPoly(object):
                               " $atom:mon[" + str(L) + "]/" + self.settings.dihedrals_atoms[b][3] +
                               "\n")
         if len(self.settings.dihedrals_type) > 0:
-            outfile.write("}  # write(\"Data Dihedrals\") {...\n\n\n")
+            outfile.write("  }  # write(\"Data Dihedrals\") {...\n\n\n")
 
 
         assert(len(self.settings.impropers_name) ==
@@ -882,7 +894,7 @@ class GenPoly(object):
         if len(self.settings.impropers_type) > 0:
             outfile.write("\n"
                           "\n"
-                          "write(\"Data Impropers\") {\n")
+                          "  write(\"Data Impropers\") {\n")
         for i in range(0, N):
             for b in range(0, len(self.settings.impropers_type)):
                 I = i + self.settings.impropers_index_offsets[b][0]
@@ -897,7 +909,7 @@ class GenPoly(object):
                     WrapPeriodic.bounds_err = False
                     if not self.settings.connect_ends:
                         continue
-                outfile.write("  $improper:" +
+                outfile.write("    $improper:" +
                               self.settings.impropers_name[b] + str(i + 1))
                 outfile.write(" @improper:" + self.settings.impropers_type[b] +
                               " $atom:mon[" + str(I) + "]/" + self.settings.impropers_atoms[b][0] +
@@ -906,7 +918,7 @@ class GenPoly(object):
                               " $atom:mon[" + str(L) + "]/" + self.settings.impropers_atoms[b][3] +
                               "\n")
         if len(self.settings.impropers_type) > 0:
-            outfile.write("}  # write(\"Data Impropers\") {...\n\n\n")
+            outfile.write("  }  # write(\"Data Impropers\") {...\n\n\n")
 
         if name_polymer != '':
             outfile.write("}  # " + name_polymer + "\n\n\n\n")
@@ -947,8 +959,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.1'
-        g_date_str = '2020-4-11'
+        g_version_str = '0.1.3'
+        g_date_str = '2020-11-05'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
