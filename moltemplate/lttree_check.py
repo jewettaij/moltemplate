@@ -63,7 +63,7 @@ try:
         data_dihedrals_by_type, data_impropers_by_type, \
         data_bonds, data_bond_list, data_angles, data_dihedrals, data_impropers, \
         data_boundary, data_pbc, data_prefix_no_space, in_init, in_settings, \
-        in_prefix
+        in_prefix, in_middle
     from .lttree import LttreeSettings, LttreeParseArgs
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
