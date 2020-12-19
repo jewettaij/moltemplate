@@ -966,7 +966,8 @@ def CheckSyntaxStatic(context_node,
 
             if filename == None:  # (The "create_var" command causes this)
                 pass
-            elif (filename.find(in_prefix) == 0):  # if filename begins with "In "
+            elif ((filename.find(in_prefix)==0)or #if filename begins with "In "
+                  (filename.find(in_middle)!= -1)): #if filename contains '.in.'
                 CheckInFileSyntax(command.tmpl_list,
                                   root_node,
                                   allow_wildcards,
