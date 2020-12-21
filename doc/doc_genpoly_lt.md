@@ -1,13 +1,22 @@
 genpoly_lt.py
 ===========
 
+![DNA model](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/moltemplate_usage/CG_dsDNA_gold_turquoise.gif)
+![](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/plus.png)
+![space-filling curve](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/hamiltonian_paths_16x16x16.gif)
+![](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/rightarrow.png)
+![DNA wrapped along curve](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/moltemplate_usage/wrap_CG_dsDNA_around_a_curve_from_ndmansfield_LLR.png)
 
 ## Description
 
-Generate a moltemplate file containing a definition of a Polymer
-molecule containing monomers located at the positions specified in
-"coords.raw" (a 3-column text file).  Monomers will be rotated so
-that they point along the polymer axis direction (see "-dir-indices")
+*genpoly_lt.py* is a program for preparing simulations containing polymers.
+It is useful for wrapping polymers around an arbitrary curve.
+(An example of its use is provided
+[here](examples/coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)
+*genpoly_lt.py* generates a moltemplate file (.LT file) containing a definition
+of a polymer molecule containing monomers located at the positions specified
+in a 3-column text file ("coords.raw" in the example below).  Monomers will be
+rotated so that they point along the polymer axis direction (see "-dir-indices")
 with an optional helical twist added (see "-helix").  Users can
 specify one or more bonds connecting each monomer to the next monomer
 (see "-bond").  Similarly, 3-body and 4-body angular interactions between
