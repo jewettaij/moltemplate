@@ -12,7 +12,7 @@ genpoly_lt.py
 *genpoly_lt.py* is a program for preparing simulations containing polymers.
 It is useful for wrapping polymers around an arbitrary curve.
 (An example of its use is provided
-[here](examples/coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)
+[here](../examples/coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)
 *genpoly_lt.py* generates a moltemplate file (.LT file) containing a definition
 of a polymer molecule containing monomers located at the positions specified
 in a 3-column text file ("coords.raw" in the example below).  Monomers will be
