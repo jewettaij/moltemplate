@@ -103,7 +103,6 @@ dump          1 all custom 20000 traj_make_uniform.lammpstrj id mol type x y z i
 
 
 thermo_style  custom step temp pe etotal vol epair ebond eangle
-#*#thermo        1  # time interval for printing out "thermo" data
 thermo        100  # time interval for printing out "thermo" data
 thermo_modify norm yes flush yes
 
