@@ -334,9 +334,9 @@ force-field styles and parameters, groups and fixes)
 are read from "FILE.in" (which is presumabely a LAMMPS input script file).
 
 *(NOTE: Again, it is not necessary to include a LAMMPS input script in
-        the argument list.  However important information is typically
-        contained in LAMMPS input script files, so if you have one, including
-        it is recommended.  However a data file is enough.)*
+the argument list.  However important information is typically
+contained in LAMMPS input script files, so if you have one, including
+it is recommended.  However a data file is enough.)*
 
 Note: Selecting atoms by molecule-ID only works if you are using
 one of the "molecular" atom\_styles (such as "atom\_style full").
@@ -352,7 +352,7 @@ you can select the atoms you want either by type or by id number.
 Sometimes, the information describing your molecule will divided
 into multiple lammps input scripts.
 (For example, one input script may contain various *style* commands.
- The next input script may contain *coeff* commands.)
+The next input script may contain *coeff* commands.)
 In that case, these input scripts should appear
 in the argument list *before the data file*,
 and in the order in which they are read by LAMMPS.
@@ -378,7 +378,7 @@ ltemplify.py -name Ethane -id "13 14 15 61*69" FILE.in FILE.data > ethane.lt
 ltemplify.py -name Ethane -type "1 2 3" FILE.in FILE.data > ethane.lt
 ```
 
-    In this example, only atoms whose type is 1, 2, or 3 are included.
+In this example, only atoms whose type is 1, 2, or 3 are included.
 
 
 
@@ -467,7 +467,7 @@ and put the wildcard characters back (eg "pair\_coeff * * ...") manually.
  to the correct numbers. This is usually needed in order to keep them
  consistent with the order of parameters in the corresponding pair style's
  input files.  In moltemplate you can manually assign atom types to numbers
- using the *-a* argument.)
+ using the *-a* argument, as explained in the moltemplate manual.)
 In addition, auxiliary atom types (such as the "hydrogen" atom type
 required by hbond/dreiding) will not even be parsed.
 If you are using the "hbond/dreiding" pair style, you will
