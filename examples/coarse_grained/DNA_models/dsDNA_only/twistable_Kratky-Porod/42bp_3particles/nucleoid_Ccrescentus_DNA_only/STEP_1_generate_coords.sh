@@ -1,7 +1,8 @@
 # Create a file containing the coordinates for the locations of each monomer
 # of a circular polymer stretched out into a straight conformation
 # with N_MONOMERS_HALF monomers going in each direction.
-# Later we will place monomers (in our polymer model) at each of these locations
+# Later we will use "genpoly_lt.py" to generate a polymer by placing
+# a monomer at every one of these points.
 #
 #          *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 #          |                                                     |

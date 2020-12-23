@@ -1,7 +1,13 @@
 # This is a simulation of a polymer inside a container (a virus).
-# I will approximate the shape of the container as a sphere of radius R.
-# We need to generate a random curve of the correct length with a given
-# number of monomers which can fit within the container.
+# We need to generate file containing points distributed uniformly along
+# the length of a random curve.  This curve should have the correct length
+# and contain a number of monomers which depends on the resolution of the
+# DNA polymer model we are using.
+# (Later we will use "genpoly_lt.py" to generate a polymer by placing
+#  a monomer at every one of these points along the curve.)
+#
+# For simplicity, initially we confine the curve to a rectangular region
+# circumscribed within a sphere whose size approximately matches the virus size.
 
 # Step 1a)
 
