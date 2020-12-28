@@ -196,7 +196,7 @@ DNAForceField {
     units           lj     # <-- temperature has units of energy, kB=1
     atom_style      full
     bond_style      hybrid harmonic
-    angle_style     hybrid harmonic
+    angle_style     none
     dihedral_style  hybrid spherical
     pair_style      hybrid yukawa \$\{debye_length\} 7.001
     pair_modify     shift yes

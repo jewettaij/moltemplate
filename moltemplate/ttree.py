@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2020-8-06'
-g_version_str = '0.86.6'
+g_date_str = '2020-12-27'
+g_version_str = '0.86.7'
 
 
 class ClassReference(object):
@@ -4603,7 +4603,7 @@ def FindReplacementVarPairs(context_node,
     for command in commands:
 
         if (isinstance(command, WriteFileCommand) and
-                command.filename == 'ttree_replacements.txt'):
+            command.filename == 'ttree_replacements.txt'):
             tmpl_list = command.tmpl_list
             var_alias = None
             for entry in tmpl_list:
@@ -4619,7 +4619,12 @@ def FindReplacementVarPairs(context_node,
                         var_replace = (entry.nptr.cat_name,
                                        entry.nptr.cat_node,
                                        entry.nptr.leaf_node)
-
+                        if var_alias == var_replace:  # <- edge case
+                            raise InputError('Syntax error in "replace{}" command near\n'+
+                                             '  ' + ErrorLeader(entry.srcloc.infile,
+                                                                entry.srcloc.lineno)+'\n'+
+                                             '(Some characters, like \',\' are no longer allowed in variable names. If you run\n'
+                                             ' into this error, it might be caused by using an outdated force field file.)\n')
                         replace_var_pairs[var_alias] = var_replace
                         var_alias = None
 
@@ -4675,8 +4680,8 @@ def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
             var_ref = entry
             #full_name = var_bindings[var_ref.nptr.leaf_node].full_name
             if (var_ref.nptr.cat_name,
-                    var_ref.nptr.cat_node,
-                    var_ref.nptr.leaf_node) in replace_var_pairs:
+                var_ref.nptr.cat_node,
+                var_ref.nptr.leaf_node) in replace_var_pairs:
                 # optional: (since we will eventually delete the variable)
                 # delete the reference to this variable from "bindings"
 
@@ -4701,8 +4706,8 @@ def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
                 #    ref.nptr.cat_node = nptr_new_cat_node
                 #    ref.nptr.leaf_node = nptr_new_leaf_node
                 if nptr_old.leaf_node in var_bindings:
-                    var_bindings[
-                        nptr_new_leaf_node].refs += var_bindings[nptr_old.leaf_node].refs
+                    var_bindings[nptr_new_leaf_node].refs += \
+                        var_bindings[nptr_old.leaf_node].refs
                     del var_bindings[nptr_old.leaf_node]
 
                 var_ref.nptr.cat_name = nptr_new_cat_name
@@ -4723,8 +4728,8 @@ def ReplaceVarsInTmpl(tmpl_list, replace_var_pairs):
                                       var_ref.nptr.leaf_node,
                                       var_ref.srcloc)
 
-                var_bindings[nptr_new_leaf_node].full_name = var_ref.prefix[
-                    0] + var_ref.descr_str
+                var_bindings[nptr_new_leaf_node].full_name = \
+                    var_ref.prefix[0] + var_ref.descr_str
 
         i += 1
 
