@@ -1,9 +1,9 @@
 confined DNA example
 ==========
 
-#### Images
+### Images
 
-<img src="http://moltemplate.org/images/DNA/3bp2p/3bp2p_dna_monomer_LR.jpg" width=160> <img src="images/plus.svg" height=80> <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/curve_ndmansfield_11x11x11_white_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80> <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna_t=0_green+cyan_scale0.5_width0.2_bbk_occ_light2_LR.jpg" width=200> <img src="images/plus.svg" height=80>
+<img src="http://moltemplate.org/images/DNA/3bp2p/3bp2p_dna_monomer_LR.jpg" width=220> <img src="images/plus.svg" height=80> <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/curve_ndmansfield_11x11x11_white_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80> <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna_t=0_green+cyan_scale0.5_width0.2_bbk_occ_light2_LR.jpg" width=200> <img src="images/plus.svg" height=80>
 <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/capsid_bbk_occ_light3_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80>
 <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna+capsid_t=0_scale0.5_green+cyan_bbk_occ_light2_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80> **LAMMPS**  <img src="images/rightarrow.svg" height=80>  <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna+capsid_t=8680000_green+cyan_bbk_occ_light2_LR.jpg" width=200>
 
@@ -45,6 +45,7 @@ Then the "genpoly_lt.py" tool is used to create a moltemplate file
 ("dna_polymer.lt") which defines a polymer which lies along the curve
 created in step 1 (see above).  The "genpoly_lt.py" program is explained
 [here](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md).
+
 ```shell
   # Create a moltemplate file ("dna_polymer.lt") for a polymer with this shape
   genpoly_lt.py -helix 102.7797 \
@@ -72,8 +73,9 @@ containing the polymer (as well as the box that it is contained within).
 For a detailed explanation of these programs see the links above.
 For a detailed step-by-step explanation of this process
 (with an excess of confusing and crufty comments),
-see these files:
+see these two files:
 ["STEP_1_generate_coords.sh"](STEP_1_generate_coords.sh)
+and
 ["STEP_2_generate_LAMMPS_files.sh"](STEP_2_generate_LAMMPS_files.sh).
 
 
