@@ -5,7 +5,7 @@ confined DNA example
 
 <img src="http://moltemplate.org/images/DNA/3bp2p/3bp2p_dna_monomer_LR.jpg" width=160> <img src="images/plus.svg" height=80> <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/curve_ndmansfield_11x11x11_white_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80> <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna_t=0_green+cyan_scale0.5_width0.2_bbk_occ_light2_LR.jpg" width=200> <img src="images/plus.svg" height=80>
 <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/capsid_bbk_occ_light3_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80>
-<img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna+capsid_t=0_scale0.5_green+cyan_bbk_occ_light2_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80> **LAMMPS** <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna+capsid_t=8680000_green+cyan_bbk_occ_light2_LR.jpg" width=200>
+<img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna+capsid_t=0_scale0.5_green+cyan_bbk_occ_light2_LR.jpg" width=200> <img src="images/rightarrow.svg" height=80> **LAMMPS**  <img src="images/rightarrow.svg" height=80>  <img src="http://moltemplate.org/images/DNA/3bp2p/HIV_capsid+DNA/dna+capsid_t=8680000_green+cyan_bbk_occ_light2_LR.jpg" width=200>
 
 
 ## Description
