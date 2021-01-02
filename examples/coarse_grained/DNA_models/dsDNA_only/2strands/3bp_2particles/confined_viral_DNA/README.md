@@ -38,8 +38,8 @@ along the curve matches the desired spacing between monomers in the polymer.
   Nx=11; Ny=11; Nz=11       # number of lattice sites
 
   # Generate a lattice polymer shape (integer coordinates)
-  #  (Note: You can download the "ndmansfield" source code here:
-  #   https://github.com/jewettaij/ndmansfield)
+  #   Note: You can download the "ndmansfield" source code here:
+  #   https://github.com/jewettaij/ndmansfield
   ./ndmansfield -box $Nx $Ny $Nz -seed 0 -tstart 1 -tsave 1000000 -tstop 1000000 > curve_lattice.txt
 
   # Interpolate and rescale the coordinates:
@@ -118,22 +118,17 @@ one of the following methods below to relax the polymer to its
 equilibrium conformation.
 
 
-## WARNING: THIS IS NOT A REALISTIC MODEL OF DNA IN THE HIV VIRUS
+## Warning: This is not a realistic model of DNA in the HIV virus
 
 ### Soft potentials needed to escape kinetic traps
 
 It is impossible to equilibrate a long confined polymer using this method.
-During the life cycle of an HIV virus (minutes to hours), the DNA
-presumably has ample time to rearrange itself into a conformation
-which bears similarity to its equilibrium conformation.
-However the duration of any computer simulation will be much shorter than that.
 The duration of this simulation is insufficient for a polymer
-of this length to reach a realistic conformation.
+of this length to reach a realistic equilibrium conformation.
 In this example, the DNA is expected to have a liquid-crystal-like
 equilibrium conformation, with most of the DNA polymers aligned
 parallel to each other.  But in this short simulation, the DNA
 remains bent and entangled with itself,
-
 
 In order to reach a plausible equilibrium conformation,
 it is necessary to allow the polymer to pass through itself.
