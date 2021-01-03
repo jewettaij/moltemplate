@@ -11,9 +11,13 @@ confined DNA example
 ## Description
 
 This is an example demonstrating how to confine a polymer (eg. DNA)
-within an arbitrary shaped box (eg. the HIV viral capsid).
-Here are two images showing the initial and final conformation of
-the DNA polymer (before and after the simulation).
+within an arbitrary shaped box (eg. the mature HIV viral capsid).
+Initially the polymer is confined to a rectangular box
+which is small enough to fit within the desired container (grey spheres).
+The final two images show the initial and final conformation of
+the DNA polymer (before and after relaxation).
+This example uses the ["3bp2p"](../simple_dna_example)
+coarse-grained DNA model.
 
 
 ## Overview
@@ -41,10 +45,11 @@ curve matches the desired spacing between monomers in the polymer.
   interpolate_curve.py $NMONOMERS $SCALE < curve_lattice.txt > curve_smooth.txt
 ```
 
-Then the "genpoly_lt.py" tool is used to create a moltemplate file
-("dna_polymer.lt") which defines a polymer which lies along the curve
-created in step 1 (see above).  The "genpoly_lt.py" program is explained
-[here](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_genpoly_lt.md).
+Then the
+[genpoly_lt.py](../../../../../../../doc/doc_genpoly_lt.md),
+tool is used to create a moltemplate file ("dna_polymer.lt")
+which defines a polymer which lies along the curve
+created in step 1 (see above).
 
 ```shell
   # Create a moltemplate file ("dna_polymer.lt") for a polymer with this shape
@@ -70,9 +75,8 @@ containing the polymer (as well as the box that it is contained within).
 
 (Note: The "system.lt" file contains a link to "dna_polymer.lt".)
 
-For a detailed explanation of these programs see the links above.
 For a detailed step-by-step explanation of this process
-(with an excess of confusing and crufty comments),
+(with an abundance of crufty comments),
 see these two files:
 ["STEP_1_generate_coords.sh"](STEP_1_generate_coords.sh)
 and
