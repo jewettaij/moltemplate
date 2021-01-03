@@ -10,12 +10,12 @@ confined DNA example
 
 ## Description
 
-This is an example demonstrating how to confine a polymer (eg. DNA)
-within an arbitrary shaped box (eg. the mature HIV viral capsid).
+This is an example demonstrating how to confine a polymer (eg. DNA) within an
+arbitrary shaped box (eg. the mature HIV viral capsid, shown in grey).
 Initially the polymer is confined to a rectangular box
-which is small enough to fit within the desired container (grey spheres).
+which is small enough to fit within the desired container (the viral capsid).
 The final two images show the initial and final conformation of
-the DNA polymer (before and after relaxation).
+the DNA polymer (before and after the relaxation simulation).
 This example uses the ["3bp2p"](../simple_dna_example)
 coarse-grained DNA model.
 
