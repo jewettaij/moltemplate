@@ -12,19 +12,20 @@ confined DNA example
 
 This is an example demonstrating how to confine a polymer (eg. DNA) within an
 arbitrary shaped box (eg. the mature HIV viral capsid, shown in grey).
-Initially the polymer is confined to a rectangular box
+Initially the polymer is confined to a rectangular box (shown enlarged above)
 which is small enough to fit within the desired container (the viral capsid).
 The final two images show the initial and final conformation of
-the DNA polymer (before and after the relaxation simulation).
+the DNA polymer (before and after simulated relaxation using LAMMPS).
 This example uses the ["3bp2p"](../simple_dna_example)
 coarse-grained DNA model.
 
 
 ## Overview
 
-Initially, the conformation of the polymer is created with a combination
-of [ndmansfield](https://github.com/jewettaij/ndmansfield)
-(a random self-avoiding-curve generator), smoothed with
+#### Step1
+Initially, the conformation of the polymer is created with 
+[ndmansfield](https://github.com/jewettaij/ndmansfield)
+(a random self-avoiding-curve generator), and latersmoothed with
 [interpolate_curve.py](../../../../../../../doc/doc_interpolate_curve.md),
 and then re-scaled so that the spacing between points along the
 curve matches the desired spacing between monomers in the polymer.
@@ -45,6 +46,7 @@ curve matches the desired spacing between monomers in the polymer.
   interpolate_curve.py $NMONOMERS $SCALE < curve_lattice.txt > curve_smooth.txt
 ```
 
+#### Step2
 Then the
 [genpoly_lt.py](../../../../../../../doc/doc_genpoly_lt.md),
 tool is used to create a moltemplate file ("dna_polymer.lt")
