@@ -25,7 +25,7 @@ atoms in different monomers can either be generated automatically
 OR generated manually (using "-angle", "-dihedral", "-improper" arguments).
 
 Note: This program is both a stand-alone executable program (that can be run
-from the terminal) and a python library.  The former is documented below.
+from the terminal) and a python module.  The former is documented below.
 *(The [python API is explained later](#Python-API).)*
 
 ## Usage:

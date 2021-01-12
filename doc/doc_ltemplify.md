@@ -10,7 +10,7 @@ input scripts into a single MOLTEMPLATE ("**LT**") file.
 *Typically*, the LT files generated
 by "ltemplify.py" contain the definition of a single type of molecule
 (or molecular complex) present in a data file (including geometry,
-topology, force field information, and some of the the groups or fixes
+topology, force field information, and some of the groups or fixes
 that the molecule participates in.)  This way, moltemplate users later
 on can build complicated simulations using this molecule as a building
 block (perhaps along with other molecules).
@@ -33,7 +33,7 @@ Normally, this is not very useful.
 
 
 Note: This program is both a stand-alone executable program (that can be run
-from the terminal) and a python library.  The former is documented below.
+from the terminal) and a python module.  The former is documented below.
 *(The [python API is explained later](#Python-API).)*
 
 

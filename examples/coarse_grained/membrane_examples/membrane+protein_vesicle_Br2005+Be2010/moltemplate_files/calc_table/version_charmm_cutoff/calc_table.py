@@ -6,7 +6,7 @@
 # The energy of this interaction U(r) = eps*(0.4*(sigma/r)^12 - 3.0*(sigma/r)^2)
 # I realized later this is not what we want because although energy is conserved
 # all enrgies are shifted with respect to energies used in the Brannigan paper
-# (by 0.27 kCal/mole) and the later Watson JCP 2011 paper (by 0.224 kCal/mole).
+# (by 0.27 kcal/mole) and the later Watson JCP 2011 paper (by 0.224 kcal/mole).
 # (So don't use this.)
 
 # Calculate and print a
@@ -51,7 +51,7 @@ def U(r, eps, sigma):
 def F(r, eps, sigma):
     return eps*(12*0.4*pow((sigma/r),13)/sigma - 2*3.0*sigma*sigma/(r*r*r))
 
-epsilon = 2.75/4.184 # kCal/mole
+epsilon = 2.75/4.184 # kcal/mole
 sigma   = 7.5
 Rmin    = 0.02
 Rmax    = 22.6

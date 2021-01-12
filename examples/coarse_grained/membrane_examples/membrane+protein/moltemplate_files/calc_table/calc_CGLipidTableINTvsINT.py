@@ -11,7 +11,7 @@ def U(r, eps, sigma):
 def F(r, eps, sigma):
     return eps*(12*0.4*pow((sigma/r),13)/sigma - 2*3.0*sigma*sigma/(r*r*r))
 
-epsilon = 2.75/4.184 # kCal/mole
+epsilon = 2.75/4.184 # kcal/mole
 sigma   = 7.5
 Rmin    = 0.02
 Rmax    = 22.6

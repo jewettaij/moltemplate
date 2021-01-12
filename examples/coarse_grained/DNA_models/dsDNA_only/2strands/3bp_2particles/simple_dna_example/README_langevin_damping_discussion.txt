@@ -140,9 +140,9 @@ fix fxlan all langevin 1.0 1.0  100.0 48279
 ###################################
 # Recap:
 #       σ  = in nm (varies, but near unity)
-#       ε  = in kCal/mole (neary unity but varies depending on interaction)
+#       ε  = in kcal/mole (neary unity but varies depending on interaction)
 #      kB  = 1  #(exactly, equivalent to "units lj", which we are using)
-#       T  = 0.5961621 (0.001987207*300 in kCal/mole)
+#       T  = 0.5961621 (0.001987207*300 in kcal/mole)
 #      dt  = 1
 #       m  = depends on dt and particle type (see below)
 #       m  = (d^2 U(r)/dr^2) * (dt*Nperiod/2*pi)^2

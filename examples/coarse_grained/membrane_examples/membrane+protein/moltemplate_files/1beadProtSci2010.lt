@@ -151,7 +151,7 @@
   #  --- Energy & Temperature Units ---
   #   In this protein model, "epsilon" represents the free energy 
   # bonus for bringing two hydrophobic amino acids together.  
-  # Here I choose to set epsilon to 1.806551818181818 kCal/mole.
+  # Here I choose to set epsilon to 1.806551818181818 kcal/mole.
   # This value was chosen so that a temperature of 300 Kelvin lies at 
   # 0.33 epsilon, which is the unfolding temperature of the marginally stable 
   # "ASF1" protein model from the Bellesia et al 2010 paper.

@@ -70,7 +70,7 @@ cd moltemplate_files
   #
   #   b = n_b * 0.332nm
   #   n_b=the number of base pairs per monomer (typically less than 50)
-  #   kB*T=0.001987207*300 (kCal/mole, assuming we are using these energy units)
+  #   kB*T=0.001987207*300 (kcal/mole, assuming we are using these energy units)
   #
   # However for numerical stability we must forbid certain angles from being
   # visited, and this requires changing the potential to something slightly more

@@ -10,7 +10,7 @@ lie along smooth a curve specified by the user.
 but are not necessarily evenly spaced along the physical length of the curve.)
 
 Note: This program is both a stand-alone executable program (that can be run
-from the terminal) and a python library.  The former is documented below.
+from the terminal) and a python module.  The former is documented below.
 *(The [python API is explained later](#Python-API).)*
 
 ## Usage (from the terminal)

@@ -190,17 +190,17 @@ DNAForceField {
     ##
     ## where    ke = 8.9875517873681764e09 J*m*C^-2 = 1/4*pi*eps_0
     ## and  qi = qj = -e = -1.6021766208e-19 C
-    ## and 1 J = (1/4184)*1kCal ("thermochemical calorie")
+    ## and 1 J = (1/4184)*1kcal ("thermochemical calorie")
     ##  1 kcal = 6.0221409e+23 kcal/mole
     ##     1 J = 1.4393262e+20 kcal/mole
     ## and eps_r ~= is the relative dielectric permitivity = 80.0 for water
     ## and 1 m = 1.0e9 nm
-    ## In units of (kCal/mole)*nm*e^-2
+    ## In units of (kcal/mole)*nm*e^-2
     ## ke=8.9875517873681764e09*(6.0221409e+23/4184)*1e09*(1.6021766208e-19**2)
     ##    = 33.2063715 and
     ## ke/eps_r = 0.415079644208
     ## (Double check: I should get something like 0.71*kB*T, since
-    ##  kB*T=0.001987207*300kCal/mole, and 0.71 is the Bjerrum length in water)
+    ##  kB*T=0.001987207*300kcal/mole, and 0.71 is the Bjerrum length in water)
     ##https://en.wikipedia.org/wiki/Coulomb's_law
     ##
     ## ALTERNATIVE APPROACH #2:   Use LAMMPS'  pair_style lj/cut/coul/debye
