@@ -12,10 +12,6 @@
 
 
 lmp_mpi -i run.in.nvt  # minimization and simulation at constant volume
-lmp_mpi -i run.in.npt  # minimization and simulation at constant pressure
-                         # (WARNING: The "run.in.npt" example has not been
-                         #           rigorously tested and may fail.)
-
 
 
 # If you have compiled the MPI version of lammps, you can run lammps in parallel

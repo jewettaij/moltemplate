@@ -14,9 +14,13 @@
 
 include system.in.init
 
+
 # -- Atom Definition Section --
 
-read_data system.data
+#read_data system.data  #(this also works, but commenting out)
+
+read_data system_after_min.data
+
 
 # -- Settings Section --
 

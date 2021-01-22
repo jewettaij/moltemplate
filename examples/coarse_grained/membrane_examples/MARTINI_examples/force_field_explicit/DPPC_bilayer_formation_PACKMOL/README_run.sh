@@ -26,7 +26,10 @@ lmp_mpi -i run.in.anneal  # high->low temp annealing simulation to form the
 
 lmp_mpi -i run.in.nvt     # simulation at constant volume (optional)
 
+
+
 # If you have compiled the MPI version of lammps, you can run lammps in parallel
-#mpirun -np 4 lmp_mpi -i run.in.npt
+#mpirun -np 4 lmp_mpi -i run.in.min
+#mpirun -np 4 lmp_mpi -i run.in.anneal
 #mpirun -np 4 lmp_mpi -i run.in.nvt
 # (assuming you have 4 processors available)

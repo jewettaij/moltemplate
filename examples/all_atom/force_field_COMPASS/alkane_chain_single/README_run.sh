@@ -12,7 +12,7 @@
 
 
 lmp_mpi -i run.in.min  # minimization
-lmp_mpi -i run.in.nvt  # minimization and simulation at constant volume
+lmp_mpi -i run.in.nvt  # simulation at constant volume
 
 #(Note: The constant volume simulation lacks pressure equilibration. These are
 #       completely separate simulations. The results of the constant pressure
