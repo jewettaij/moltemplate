@@ -56,8 +56,6 @@ This repository contains 3 folders:
 -[doc](./doc/): documentation for moltemplate, ltemplify, genpoly_lt, etc..
 -[examples](./examples/): examples built with moltemplate
 
-## Installation Instructions [Here](INSTALL.md)
-
 ### Documentation
 
 The best way to learn how to use moltemplate is to find an example
@@ -93,6 +91,9 @@ followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltem
 ```
     moltemplate.sh [-atomstyle style] [-pdb/-xyz coord_file] [-vmd] system.lt
 ```
+
+## Installation Instructions [Here](INSTALL.md)
+
 
 ## Web page
 
