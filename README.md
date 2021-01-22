@@ -56,6 +56,7 @@ This repository contains 3 folders:
 -[doc](./doc/): documentation for moltemplate, ltemplify, genpoly_lt, etc..
 -[examples](./examples/): examples built with moltemplate
 
+## Installation Instructions [Here](INSTALL.md)
 
 ### Documentation
 
@@ -93,10 +94,6 @@ followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltem
     moltemplate.sh [-atomstyle style] [-pdb/-xyz coord_file] [-vmd] system.lt
 ```
 
-## Installation Instructions
-
-Click [here](INSTALL.md) for installation instructions.
-
 ## Web page
 
 Additional suggestions and supporting code can be found at:
@@ -131,6 +128,6 @@ It is similar to the BSD and MIT licenses and
 
 ## Citation
 
-If you find this program useful in your research, please cite:
+If you find this program useful, please cite:
 
-"Moltemplate: A Tool for Coarse-Grained Modeling of Complex Biological Matter and Soft Condensed Matter Physics", J.Mol.Biol., (2021), *in press*, Jewett AI, Stelter D, Lambert J, Saladi SM, Roscioni OM; Ricci M, Autin L, Maritan M, Bashusqeh SM, Keyes T, Dame RT; Shea J-E, Jensen GJ, Goodsell DS
+*"Moltemplate: A Tool for Coarse-Grained Modeling of Complex Biological Matter and Soft Condensed Matter Physics", J.Mol.Biol., (2021), **in press**, Jewett AI, Stelter D, Lambert J, Saladi SM, Roscioni OM; Ricci M, Autin L, Maritan M, Bashusqeh SM, Keyes T, Dame RT; Shea J-E, Jensen GJ, Goodsell DS*

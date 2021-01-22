@@ -1,4 +1,4 @@
-MOLTEMPLATE INSTALLATION INSTRUCTIONS
+Moltemplate Installation Instructions
 ===============
 
 There are two ways to install moltemplate:
