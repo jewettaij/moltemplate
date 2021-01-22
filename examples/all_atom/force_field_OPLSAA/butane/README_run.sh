@@ -11,7 +11,7 @@
 # then you would run lammps on these files this way:
 
 
-lmp_mpi -i run.in.min  # minimization
+lmp_mpi -i run.in.npt  # minimization and relaxation in NPT
 lmp_mpi -i run.in.nvt  # minimization and simulation at constant volume
 
 #(Note: The constant volume simulation lacks pressure equilibration. These are
