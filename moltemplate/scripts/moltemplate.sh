@@ -41,6 +41,12 @@ EOF
 )
 
 
+# Maintain a list of papers that we would like users to cite.
+# (This list currently has only one entry.)
+export MOLTEMPLATE_CITE_LIST="Jewett et al. J.Mol.Biol. 2021, https://doi.org/10.1016/j.jmb.2021.166841"
+
+
+
 ERR_BAD_INSTALL()
 {
   echo "$MSG_BAD_INSTALL" >&2
@@ -809,7 +815,25 @@ OUT_FILE_SETTINGS="${OUT_FILE_BASE}.in.settings"
 OUT_FILE_DATA="${OUT_FILE_BASE}.data"
 OUT_FILE_COORDS="${OUT_FILE_BASE}.in.coords"
 
-rm -f "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_DATA" "$OUT_FILE_COORDS"
+
+#  Now delete any old files lying around which were
+#  created by previous invocations of moltemplate.
+#
+# In earlier versions of moltemplate, I was careful only to delete the most
+# most common moltemplate-created files before running moltemplate again.
+#rm -f "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_DATA" "$OUT_FILE_COORDS"
+# However, now I now delete all files beginning with "${OUT_FILE_BASE}.in.*"
+# (except for those ending in .lt).
+for f in "${OUT_FILE_BASE}.data" "${OUT_FILE_BASE}".in.* "${OUT_FILE_BASE}.in"; do
+  if [[ ! "$f" =~ .*\.lt ]]; then
+    # Although it's unlikely somebody would name their moltemplate source file
+    # "system.in.lt", just in case they do, we check to see if the file
+    # name ends in ".lt" before deleting it.  Note: This also works:
+    #if [ "$f" == `echo "$f" | sed  's|lt$||g'` ]; then ...
+    # Delete the file:
+    rm -f "$f"
+  fi
+done
 
 
 
@@ -2578,3 +2602,16 @@ if [ ! -z $RUN_VMD_AT_END ]; then
     rm -rf vmd_viz_moltemplate.tcl.tmp
 
 fi
+
+
+
+# Lastly, ask users to cite our paper.
+# Hopefully this message is not too intrusive.
+echo   "-------------------------------------------------------------" >&2
+printf "If this program is useful in your research, please cite" >&2
+if [ `echo $MOLTEMPLATE_CITE_LIST | awk 'END{print NR}'` -gt 1 ]; then
+     printf " these papers" >&2
+fi
+printf ":\n" >&2
+echo $MOLTEMPLATE_CITE_LIST >&2
+echo   "-------------------------------------------------------------" >&2
