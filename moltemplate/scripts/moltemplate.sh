@@ -6,7 +6,7 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.19.4"
+G_VERSION="2.19.5"
 G_DATE="2021-2-04"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
