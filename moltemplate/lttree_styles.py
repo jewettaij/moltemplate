@@ -88,6 +88,7 @@ in_prefix_no_space = "In"
 in_init = "In Init"
 in_settings = "In Settings"
 in_coords = "In Coords"
+in_charges = "In Charges"
 # These files represent different sections of the LAMMPS input script.
 
 

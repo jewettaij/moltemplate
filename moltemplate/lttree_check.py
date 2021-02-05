@@ -62,8 +62,8 @@ try:
         data_angleangle_coeffs, data_bonds_by_type, data_angles_by_type, \
         data_dihedrals_by_type, data_impropers_by_type, \
         data_bonds, data_bond_list, data_angles, data_dihedrals, data_impropers, \
-        data_boundary, data_pbc, data_prefix_no_space, in_init, in_settings, \
-        in_prefix, in_middle
+        data_boundary, data_pbc, data_prefix_no_space, \
+        in_init, in_settings, in_prefix, in_middle, in_charges
     from .lttree import LttreeSettings, LttreeParseArgs
     from .ttree_matrix_stack import AffineTransform, MultiAffineStack, \
         LinTransform
@@ -92,8 +92,8 @@ if sys.version < '2.6':
 
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_check.py'
-g_version_str = '0.81.0'
-g_date_str = '2020-3-25'
+g_version_str = '0.81.1'
+g_date_str = '2021-2-04'
 
 
 # g_no_check_msg = \
@@ -696,7 +696,7 @@ def CheckCommonFileNames(filename,
     N_data_prefix_no_space = len(data_prefix_no_space)
 
     if ((filename[:N_data_prefix].lower() == data_prefix.lower()) and
-            (filename[:N_data_prefix] != data_prefix)):
+        (filename[:N_data_prefix] != data_prefix)):
         raise InputError('Probable typo in ' + ErrorLeader(srcloc.infile, srcloc.lineno) + '\n\n' +
                          'The beginning of output file (\"' +
                          filename + '\")\n'
@@ -765,6 +765,17 @@ def CheckCommonFileNames(filename,
                              '\") does not match,\n'
                              'yet overlaps closely with reserved lttree-file name.\n'
                              'Perhaps you meant \"' + in_settings + '\"?')
+
+    elif ((filename.lower() == 'charges') or
+          (filename.lower() == 'in charges') or
+          (filename.lower() == 'incharges')):
+
+        if (filename != in_charges):
+            raise InputError('Probable typo in ' + ErrorLeader(srcloc.infile, srcloc.lineno) + '\n\n' +
+                             'Output file name (\"' + filename +
+                             '\") does not match,\n'
+                             'yet overlaps closely with reserved lttree-file name.\n'
+                             'Perhaps you meant \"' + in_charges + '\"?')
 
     elif ((filename.lower() == 'set_coords') or
           (filename.lower() == 'set coords') or
