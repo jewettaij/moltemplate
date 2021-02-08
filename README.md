@@ -77,13 +77,16 @@ online.
 Moltemplate [does *not* choose atom types automatically ("atom typing")](http://moltemplate.org/force_field_recommendations.html),
 and currently cannot be used to build all-atom proteins from scratch.
 3rd-party tools may be needed to calculate atomic partial charges accurately.
-(For non-trivial molecules, users are encouraged to use the
-[ATB](https://atb.uq.edu.au) database,
-or use the DREIDING force field which has simple [atom type rules](./doc/DREIDING_Label_Manual.pdf),
+Some suggestions for selecting the appropriate atom types for your molecules
+are provided [here](http://moltemplate.org/force_field_recommendations.html).
+*(Users who are unsure how to choose atom types are 
+encouraged to use the [ATB](https://atb.uq.edu.au) database,
+or use the DREIDING force field which has simple
+[atom type rules](./doc/DREIDING_Label_Manual.pdf),
 or use a 3rd-party molecule-builder
 and convert the resulting files to LAMMPS format using
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format")
-followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format"), and then use moltemplate.)
+followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format"), and then use moltemplate.)*
 
 
 
