@@ -940,15 +940,15 @@ else
     if [ -n "$NATOMTYPES" ]; then
         echo "Error: There are no atoms in your system. Suggestions:" >&2
         echo "" >&2
-        echo "       Make sure that you have the correct number of curly parenthesis {}." >&2
-        echo "       (Extra \"}\" parenthesis can cause this error.)" >&2
-        echo "" >&2
         echo "       Your files must contain at least one" >&2
         echo "           write(\"${data_atoms}\")" >&2
         echo "       command.  These commands are typically located somewhere in" >&2
         echo "       one of the molecule object(s) you have defined." >&2
         echo "" >&2
-        echo "       This error often occurs if your input files lack \"new\" commands." >&2
+        echo "       Make sure that you have the correct number of curly parenthesis {}." >&2
+        echo "       (Extra \"}\" parenthesis can cause this error.)" >&2
+        echo "" >&2
+        echo "       This error also occurs if your input files lack \"new\" commands." >&2
         echo "       Once you have defined a type of molecule, you must create a copy" >&2
         echo "       of it using \"new\", if you want it to appear in your simulation." >&2
         echo "       See the moltemplate manual or online tutorials for examples." >&2

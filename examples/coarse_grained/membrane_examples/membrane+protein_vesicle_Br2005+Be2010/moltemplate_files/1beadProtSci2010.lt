@@ -90,6 +90,9 @@
   #  of this same molecule with the hydrophobic beads pointing inward.)
 
   4HelixInsideOut {
+
+    create_var { $mol } # <--optional: make all atoms share the same molecule ID
+
     helix1 = new A16.rot(-225, 0,0,1).move(-5.70,-5.70,-32.4)
     helix2 = new A16.rot(-135, 0,0,1).move( 5.70,-5.70,-28.8)
     helix3 = new A16.rot( -45, 0,0,1).move( 5.70, 5.70,-25.2)
@@ -107,7 +110,6 @@
       $bond:turn3a  @bond:../backbone   $atom:turn3/a1   $atom:helix3/a16
       $bond:turn3b  @bond:../backbone   $atom:turn3/a3   $atom:helix4/a16
     }
-    create_var { $mol } # molecule ID number shared by all atoms in this protein
 
   } # 4HelixInsideOut
 
