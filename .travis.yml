@@ -10,8 +10,7 @@ before_script:
   - git clone https://github.com/kward/shunit2 shunit2
 
 python:
-  - "2.7"
-  - "3.7"
+  - "3.3"
 
 
 install:
