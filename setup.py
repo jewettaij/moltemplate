@@ -60,7 +60,7 @@ setup(
                'Operating System :: POSIX :: Linux',
                'Operating System :: Microsoft :: Windows',
                'Programming Language :: Python',
-               'Programming Language :: Python :: 3.3',
+               'Programming Language :: Python :: 3.4',
                'Programming Language :: Unix Shell',
                'Topic :: Scientific/Engineering :: Chemistry',
                'Topic :: Scientific/Engineering :: Physics',
