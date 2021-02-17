@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/jewettaij/moltemplate.svg?style=sheild)](https://circleci.com/gh/jewettaij/moltemplate)
+[![CircleCI](https://circleci.com/gh/jewettaij/moltemplate.svg)](https://circleci.com/gh/jewettaij/moltemplate)
 [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
