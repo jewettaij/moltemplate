@@ -1,3 +1,4 @@
+[![jewettaij](https://circleci.com/gh/jewettaij/moltemplate>.svg?style=svg)](<LINK>)
 [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
