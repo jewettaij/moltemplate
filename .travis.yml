@@ -1,4 +1,4 @@
-language: bash
+language: python
 
 
 before_script:
@@ -14,7 +14,7 @@ python:
 
 
 before_install:
-  - sudo apt-get install python3 python3-pip #(necessary since language!=python)
+  #- sudo apt-get install python3 python3-pip #(necessary if language!=python)
   - python --version
   - sudo pip install --upgrade pip   # (not sure if this is necessary)
 
