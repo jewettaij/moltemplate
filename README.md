@@ -192,11 +192,11 @@ http://www.moltemplate.org
 ## Requirements
 
 Moltemplate requires the Bourne-shell, and a recent version of python
-(3.4 or higher), and can run on OS X, linux, or windows,
+(3.6 or higher), and can run on OS X, linux, or windows,
 if a suitable shell environment has been installed.
 *(See below. Note that python 2.7 may also work,
 but you must edit your PATH since
-pip no longer supports python 2.7.)*
+pip and travis no longer support python < 3.4.)*
 
 The *numpy* python module is also required.
 
