@@ -12,11 +12,16 @@ before_script:
 python:
   - "3.5"
 
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install codecov
+  - sudo pip install --upgrade pip
 
 install:
   #- pip install .   # Build fails "Permission denied".  Try using sudo:
   - sudo pip install .
-  - sudo pip install --upgrade pip
   #- sudo pip install -r requirements.txt
 
 
