@@ -99,8 +99,9 @@ followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltem
 
 ## Installation Instructions
 
-Note: There are two ways to install moltemplate
-(using pip or editing your .bashrc file).
+Note: There are **two ways** to install moltemplate:
+1) using pip or
+2) editing your .bashrc file.
 Use one method or the other *(not both)*.
 
 ### Installation method 1: *Using pip*
