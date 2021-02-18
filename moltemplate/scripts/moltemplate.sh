@@ -7,17 +7,41 @@
 
 G_PROGRAM_NAME="moltemplate.sh"
 G_VERSION="2.19.5"
-G_DATE="2021-2-04"
+G_DATE="2021-2-17"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
 
 # Check for python:
 
-if which python > /dev/null; then
+if which python3 > /dev/null; then
+    PYTHON_COMMAND='python3'
+elif which python > /dev/null; then
     PYTHON_COMMAND='python'
+    if [ `python --version | awk '{print substr($2,0,2)}'` -lt 3 ]; then
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+        echo "  WARNING: Support for python2.7 has been depreciated." >&2
+        echo "           Please install python version 3.4 or later." >&2
+        echo "           Use older versions of python at your own risk." >&2
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+    fi
+elif which python2 > /dev/null; then
+    PYTHON_COMMAND='python2'
+    echo "############################################################" >&2
+    echo "############################################################" >&2
+    echo "############################################################" >&2
+    echo "  WARNING: Support for python2.7 has been depreciated." >&2
+    echo "           Please install python version 3.4 or later." >&2
+    echo "           Use older versions of python at your own risk." >&2
+    echo "############################################################" >&2
+    echo "############################################################" >&2
+    echo "############################################################" >&2
 else
-    echo "Error:  $G_PROGRAM_NAME requires python" >&2
+    echo "Error:  $G_PROGRAM_NAME requires python, python3, or python2." >&2
     exit 1
 fi
 

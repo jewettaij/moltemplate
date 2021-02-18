@@ -25,7 +25,7 @@ coarse-grained DNA model.
 #### Step1
 Initially, the conformation of the polymer is created with 
 [ndmansfield](https://github.com/jewettaij/ndmansfield)
-(a random self-avoiding-curve generator), and latersmoothed with
+(a random self-avoiding-curve generator), and then smoothed with
 [interpolate_curve.py](../../../../../../../doc/doc_interpolate_curve.md),
 and then re-scaled so that the spacing between points along the
 curve matches the desired spacing between monomers in the polymer.

@@ -91,43 +91,92 @@ followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltem
 
 
 ## Typical usage
+
 ```
     moltemplate.sh [-atomstyle style] [-pdb/-xyz coord_file] [-vmd] system.lt
 ```
 
+
 ## Installation Instructions
 
-### Installation using pip
+Note: There are two ways to install moltemplate
+(using pip or editing your .bashrc file).
+Use one method or the other *(not both)*.
 
-If you are familiar with pip, then run the following command from within the directory where this README file is located:
+### Installation method 1: *Using pip*
 
-    pip install . --user
+If you are familiar with pip, then run the following command from
+within the directory where this README file is located:
 
-This will install moltemplate for a single user.  On a shared computer, to install moltemplate system-wide, use:
+    pip3 install . --user    # (or "pip", if that fails)
 
-    sudo pip install .
+This will install moltemplate for a single user.
+If you are on a shared computer and you want to install moltemplate
+system-wide, then use:
 
-Make sure that your default pip install bin directory is in your PATH.  (This is usually something like ~/.local/bin/ or ~/anaconda3/bin/.  If you have installed anaconda, this will be done for you automatically.)  Later, you can uninstall moltemplate using:
+    sudo pip3 install .     # (or "pip", if that fails)
 
-    pip uninstall moltemplate
+Later, you can uninstall moltemplate using:
 
-If you continue to run into difficulty, try installing moltemplate into a temporary virtual environment by installing "*virtualenv*", downloading moltemplate (to "~/moltemplate" in the example below), and running these commands:
+    pip3 uninstall moltemplate   #(prepend "sudo" if you did that earlier)
+
+
+#### Troubleshooting (method 1)
+
+Again, if you get the error "command not found",
+try using "pip" instead of "pip3".
+
+If that fails try installing the
+[anaconda version of python](https://anaconda.com).
+
+The *anaconda* version of python is recommended for several reasons.
+Anaconda python includes *numpy*, and it will also
+automatically update your [PATH](http://www.linfo.org/path_env_var.html)
+for you so that pip works correctly.
+*(If you don't use anaconda python, then it is possible
+that you will need to edit your ~/.bashrc file and
+manually append the default pip install bin directory
+to the list of directories in your PATH variable.
+This directory is usually named $HOME/.local/bin, or something similar.)*
+
+
+#### Optional: Use a python virtual environment
+
+Once you have python and pip (or python3 and pip3) installed,
+it's never a bad idea to install moltemplate into a temporary
+python "virtual environment".
+In a virtual environment, it should not be necessary to use "sudo" or "--user"
+to get around permissions issues that sometimes occur when using pip.
+(You can also uninstall moltemplate cleanly simply by deleting
+the directory that stores the virtual environment where it was installed.
+That directory is named "venv" in the example below.)
+Although using a virtual python environment should not be necessary,
+if you are curious how to do it then try downloading moltemplate
+to "~/moltemplate", and run these commands:
 
     cd ~/moltemplate
     python -m venv venv     #(or "virtualenv venv" if using python2)
+    # This will create a local directory named "venv".
+    # You must "activate" your environment before use:
     source venv/bin/activate
+    # Then install moltemplate into this environment:
     pip install .
-    #(now do something useful with moltemplate...)
+    # (Now do something useful with moltemplate...)
 
-(You will have to enter "source ~/moltemplate/venv/bin/activate"
- into a terminal beforehand every time you want to run moltemplate.
+Note that if you use a virtual environment, you will have to enter
+"source ~/moltemplate/venv/bin/activate" into a terminal
+before you use that terminal to run moltemplate.
 Virtual environments are
 [explained here](https://docs.python.org/3/tutorial/venv.html)
+
+
 If all this fails, then try installing moltemplate by manually updating your
 \$PATH environment variable.  Instructions for doing that are included below.
+(Either way, you must have a working version of python or python3 installed.)
 
 
-### Manual installation:
+
+### Installation method 2: *Editing .bashrc*
 
 Alternatively, you can edit your $PATH environment variable manually to 
 include the subdirectory where the "moltemplate.sh" script is located,
@@ -136,12 +185,13 @@ Suppose the directory with this README file is named "moltemplate"
 and is located in your home directory:
 
 If you use the *BASH* shell, typically you would edit your
-`~/.bashrc` file (or `~/.profile`, `~/.bash_profile` files)
-to contain the following lines:
+`~/.bashrc` file and add the following lines to the end of the file:
 
     export PATH="$PATH:$HOME/moltemplate/moltemplate"
     export PATH="$PATH:$HOME/moltemplate/moltemplate/scripts"
 
+(Some people prefer to put these lines in their `~/.profile`,
+ or `~/.bash_profile` files instead `~/.bashrc`.  This should work also.)
 If you use the *TCSH* shell, typically you would edit your
 `~/.cshrc`, `~/.tcshrc` or `~/.login` files to contain the following lines:
 
@@ -156,8 +206,8 @@ After making these changes, you may need to start a new terminal (shell) for the
 Do not install moltemplate this way if you are using "vipster",
 "cellpack2moltemplate", or other software that has a moltemplate python
 dependency.  In order to be able to be able to run "import moltemplate"
-within python, as these programs do, moltemplate must be installed using
-pip or setuptools.)*
+within python, as those programs do, moltemplate must be installed using
+pip or pip3.)*
 
 
 ### WINDOWS installation suggestions
@@ -194,7 +244,7 @@ http://www.moltemplate.org
 Moltemplate requires the Bourne-shell, and a recent version of python
 (3.5 or higher recommended), and can run on MacOS, linux, or windows,
 if a suitable shell environment has been installed.
-*(Note that python 2.7 may also work, but you must edit your PATH to
+(Note that python 2.7 may also work, but you must edit your PATH to
 install moltemplate instead of using pip.  Pip no longer works with
 old versions of python.)
 
