@@ -14,10 +14,6 @@ read_data       "system.data"
 
 # ------------------------------- Settings Section --------------------------
 
-include         "system.in.settings"
-
-# ------------------------------- Settings Section --------------------------
-
 include         system.in.settings
 
 # ------------------------------- Run Section -------------------------------
@@ -25,9 +21,10 @@ include         system.in.settings
 # -- simulation protocol --
 
 thermo          5
-dump  1 all custom 100 traj_min.lammpstrj id mol type x y z ix iy iz
-min_style fire
-min_modify dmax 0.01
+thermo_style    custom step temp pe etotal epair ebond eangle
+dump  1 all custom 1000 traj_min.lammpstrj id mol type x y z ix iy iz
+min_style  sd
+min_modify dmax 0.1
 minimize 1.0e-4 1.0e-6 100000 400000
 
 write_data   system_after_min.data

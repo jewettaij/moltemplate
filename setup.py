@@ -60,7 +60,7 @@ setup(
                'Operating System :: POSIX :: Linux',
                'Operating System :: Microsoft :: Windows',
                'Programming Language :: Python',
-               'Programming Language :: Python :: 3.5',
+               'Programming Language :: Python :: 3.4',
                'Programming Language :: Unix Shell',
                'Topic :: Scientific/Engineering :: Chemistry',
                'Topic :: Scientific/Engineering :: Physics',
@@ -105,7 +105,7 @@ setup(
   install_requires=[
       'numpy',
   ],
-  #python_requires='>=3.5.*',
+  #python_requires='>=3.4.*',
   setup_requires=['pytest-runner'],
   tests_require=['pytest'],
   zip_safe=True,
