@@ -1,5 +1,6 @@
+import "martini.lt"    #(This file is located in moltemplate/force_fields/)
 import "water.lt"
-import "lipid.lt"
+import "DPPC.lt"
 
 # The following command generates a lipid bilayer consisting of
 # 13 x 13 lipids in the XY plane, with a 7.6923 angstrom spacing:
@@ -43,6 +44,8 @@ lipids = new random([DPPC,
                    [2].rot(180, 1, 0, 0)
 
 
+# Now add some water molecules
+
 waters = new MW [25].move(4.0, 0, 0)
                 [25].move(0, 4.0, 0)
                 [13].move(0, 0, 4.23)
@@ -50,14 +53,6 @@ waters = new MW [25].move(4.0, 0, 0)
 # Move the waters upwards so that they don't overlap with the lipids.
 
 waters[*][*][*].move(0, 0, 22.4)
-
-write_once("In Settings") {
-pair_coeff @atom:MW/P4 @atom:DPPC/Q0 lj/gromacs/coul/gromacs 1.3384321223709 4.7
-pair_coeff @atom:MW/P4 @atom:DPPC/Qa lj/gromacs/coul/gromacs 1.3384321223709 4.7
-pair_coeff @atom:MW/P4 @atom:DPPC/Na lj/gromacs/coul/gromacs 0.9560229445507 4.7
-pair_coeff @atom:MW/P4 @atom:DPPC/C1 lj/gromacs/coul/gromacs 0.4780114722753 4.7
-}
-
 
 write_once("Data Boundary") {
   0.0   100.0  xlo xhi

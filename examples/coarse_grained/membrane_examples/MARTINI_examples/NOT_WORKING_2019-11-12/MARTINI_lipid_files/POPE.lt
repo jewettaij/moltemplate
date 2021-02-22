@@ -2,21 +2,33 @@ import "martini.lt"
 
 POPE inherits MARTINI {
 
-  # atomID   molID  atomTyle  charge     X        Y          Z
+  # atomID    molID  atomTyle   charge       X       Y       Z
   write('Data Atoms') {
-    $atom:NH3 $mol:. @atom:Qd   1.0   0.641   0.577   2.464
-    $atom:PO4 $mol:. @atom:Qa  -1.0   0.418   0.543   2.154
-    $atom:GL1 $mol:. @atom:Na   0.0   0.500   0.593   1.818
-    $atom:GL2 $mol:. @atom:Na   0.0   0.804   0.535   1.822
-    $atom:C1A $mol:. @atom:C1   0.0   0.377   0.595   1.479
-    $atom:D2A $mol:. @atom:C3   0.0   0.495   0.498   1.182
-    $atom:C3A $mol:. @atom:C1   0.0   0.418   0.660   0.899
-    $atom:C4A $mol:. @atom:C1   0.0   0.448   0.518   0.542
-    $atom:C1B $mol:. @atom:C1   0.0   0.925   0.442   1.498
-    $atom:C2B $mol:. @atom:C1   0.0   0.985   0.564   1.204
-    $atom:C3B $mol:. @atom:C1   0.0   0.907   0.473   0.900
-    $atom:C4B $mol:. @atom:C1   0.0   0.968   0.530   0.537
+    $atom:NH3 $mol:. @atom:Qd   0.2236068   0.641   0.577   2.464
+    $atom:PO4 $mol:. @atom:Qa  -0.2236068   0.418   0.543   2.154
+    $atom:GL1 $mol:. @atom:Na   0.0         0.500   0.593   1.818
+    $atom:GL2 $mol:. @atom:Na   0.0         0.804   0.535   1.822
+    $atom:C1A $mol:. @atom:C1   0.0         0.377   0.595   1.479
+    $atom:D2A $mol:. @atom:C3   0.0         0.495   0.498   1.182
+    $atom:C3A $mol:. @atom:C1   0.0         0.418   0.660   0.899
+    $atom:C4A $mol:. @atom:C1   0.0         0.448   0.518   0.542
+    $atom:C1B $mol:. @atom:C1   0.0         0.925   0.442   1.498
+    $atom:C2B $mol:. @atom:C1   0.0         0.985   0.564   1.204
+    $atom:C3B $mol:. @atom:C1   0.0         0.907   0.473   0.900
+    $atom:C4B $mol:. @atom:C1   0.0         0.968   0.530   0.537
   }
+  # Note: The coordinates here are in nm, but later on we use the .scale(10)
+  #       function to convert them into Angstroms.  (We do this because the
+  #       "units real" command in "martini.lt" tells LAMMPS to use angstroms.)
+  # Note: The charge of the Q0 and Qa is 1/sqrt(20) to compensate for the fact
+  #       that the MARTINI force field uses electrostatic interactions which
+  #       in SI units is    q1*q2 / 4π ε0 ε
+  #       ...where "ε0" is the vacuum permitivity, and "ε" is the
+  #       relative permitivity of water used in the MARTINI model,
+  #       WHICH THEY CHOSE TO BE 20.0
+  #       (This is an odd choice.  In real water, at large distances ε≈80.)
+  #       However the electrostatic interactions in most LAMMPS pair styles
+  #       assume that ε=1.  To compensate for this, we divide charges by sqrt(ε)
 
   write('Data Bond List') {
     $bond:b1 $atom:NH3 $atom:PO4
@@ -31,6 +43,12 @@ POPE inherits MARTINI {
     $bond:b10 $atom:C2B $atom:C3B
     $bond:b11 $atom:C3B $atom:C4B
   }
-
 } 
-POPE.scale(10)
+
+
+POPE.scale(10)    # Convert nm to Angstroms
+
+# Optional: Move the molecule to a convenient location for buildling a bilayer:
+#           Center the molecule in the X,Y directions and set the min Z value.
+
+POPE.move(-6.57167,-5.44,-3.02)

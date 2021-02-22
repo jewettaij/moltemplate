@@ -4,7 +4,7 @@ DPPC {
     units           real
     atom_style      full
     bond_style      hybrid harmonic
-    angle_style     hybrid cosine/squared 
+    angle_style     hybrid cosine/squared
     dihedral_style  none
     improper_style  none
     pair_style      hybrid lj/gromacs/coul/gromacs 9 12 0.000001 12
@@ -14,19 +14,29 @@ DPPC {
   }
 
   write("Data Atoms") {
-    $atom:1  $mol:. @atom:Q0  1.0  9.09   9.83   0.75 
-    $atom:2  $mol:. @atom:Qa -1.0  5.68   7.31   0.00
-    $atom:3  $mol:. @atom:Na  0.0  5.50   5.61   3.28
-    $atom:4  $mol:. @atom:Na  0.0  6.65   2.22   3.04
-    $atom:5  $mol:. @atom:C1  0.0  5.15   7.65   7.06
-    $atom:6  $mol:. @atom:C1  0.0  7.91   7.17   10.54
-    $atom:7  $mol:. @atom:C1  0.0  9.24   8.25   14.96
-    $atom:8  $mol:. @atom:C1  0.0  12.19  11.75  16.38
-    $atom:9  $mol:. @atom:C1  0.0  5.52   1.61   7.40
-    $atom:10 $mol:. @atom:C1  0.0  6.53   2.26   12.25
-    $atom:11 $mol:. @atom:C1  0.0  3.51   1.81   16.01
-    $atom:12 $mol:. @atom:C1  0.0  0.00   0.00   18.19
+    $atom:1  $mol:. @atom:Q0  0.2236068   2.67583  4.37417  19.25
+    $atom:2  $mol:. @atom:Qa -0.2236068  -0.73417  1.85417  20.00
+    $atom:3  $mol:. @atom:Na  0.0        -0.91417  0.15417  16.72
+    $atom:4  $mol:. @atom:Na  0.0         0.23583 -3.23583  16.96
+    $atom:5  $mol:. @atom:C1  0.0        -1.26417  2.19417  12.94
+    $atom:6  $mol:. @atom:C1  0.0         1.49583  1.71417  9.46
+    $atom:7  $mol:. @atom:C1  0.0         2.82583  2.79417  5.04
+    $atom:8  $mol:. @atom:C1  0.0         5.77583  6.29417  3.62
+    $atom:9  $mol:. @atom:C1  0.0        -0.89417 -3.84583  12.6
+    $atom:10 $mol:. @atom:C1  0.0         0.11583 -3.19583  7.75
+    $atom:11 $mol:. @atom:C1  0.0        -2.90417 -3.64583  3.99
+    $atom:12 $mol:. @atom:C1  0.0        -6.41417 -5.45583  1.81
   }
+  # Note: The charge of the Q0 and Qa is 1/sqrt(20) to compensate for the fact
+  #       that the MARTINI force field uses electrostatic interactions which
+  #       in SI units is    q1*q2 / 4π ε0 ε
+  #       ...where "ε0" is the vacuum permitivity, and "ε" is the
+  #       relative permitivity of water used in the MARTINI model,
+  #       WHICH THEY CHOSE TO BE 20.0.
+  #       (This is an odd choice.  In real water, at large distances ε≈80.)
+  #       However the electrostatic interactions in most LAMMPS pair styles
+  #       assume that ε=1.  To compensate for this, we divide charges by sqrt(ε)
+
   write("Data Bonds") {
     $bond:b1    @bond:Bo   $atom:1  $atom:2
     $bond:b2    @bond:Bo   $atom:2  $atom:3
@@ -70,9 +80,9 @@ DPPC {
     pair_coeff @atom:Na @atom:Na lj/gromacs/coul/gromacs  0.9560229445507 4.7
     pair_coeff @atom:Na @atom:C1 lj/gromacs/coul/gromacs  0.6453154875717 4.7
     pair_coeff @atom:C1 @atom:C1 lj/gromacs/coul/gromacs  0.8365200764818 4.7
-    bond_coeff @bond:Bo           harmonic              1.4937858508604 4.7 
+    bond_coeff @bond:Bo           harmonic              1.4937858508604 4.7
     bond_coeff @bond:Short        harmonic              1.4937858508604 3.7
-    angle_coeff  @angle:An1       cosine/squared        2.9875717017208 180 
-    angle_coeff  @angle:An2       cosine/squared        2.9875717017208 120 
+    angle_coeff  @angle:An1       cosine/squared        2.9875717017208 180
+    angle_coeff  @angle:An2       cosine/squared        2.9875717017208 120
   }
 } #DPPC

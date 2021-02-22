@@ -6,7 +6,7 @@ MW {
   }
 
   write("Data Atoms") {
-    $atom:1  $mol:. @atom:P4  0  0   0   0 
+    $atom:1  $mol:. @atom:P4  0  0   0   0
   }
   write_once("Data Masses") {
     @atom:P4  72.0
@@ -14,4 +14,4 @@ MW {
   write_once("In Settings") {
     pair_coeff @atom:P4 @atom:P4  lj/gromacs/coul/gromacs  1.1950286806883 4.7
   }
-} #MW   
+} #MW

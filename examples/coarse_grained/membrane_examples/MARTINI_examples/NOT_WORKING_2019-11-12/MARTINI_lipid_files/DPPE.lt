@@ -2,21 +2,33 @@ import "martini.lt"
 
 DPPE inherits MARTINI {
 
-  # atomID   molID  atomTyle  charge     X        Y          Z
+  # atomID    molID  atomTyle   charge      X        Y          Z
   write('Data Atoms') {
-    $atom:NH3 $mol:. @atom:Qd   1.0   0.661   0.516   2.470
-    $atom:PO4 $mol:. @atom:Qa  -1.0   0.366   0.541   2.169
-    $atom:GL1 $mol:. @atom:Na   0.0   0.474   0.578   1.822
-    $atom:GL2 $mol:. @atom:Na   0.0   0.782   0.642   1.834
-    $atom:C1A $mol:. @atom:C1   0.0   0.359   0.556   1.498
-    $atom:C2A $mol:. @atom:C1   0.0   0.419   0.532   1.179
-    $atom:C3A $mol:. @atom:C1   0.0   0.471   0.476   0.877
-    $atom:C4A $mol:. @atom:C1   0.0   0.461   0.629   0.523
-    $atom:C1B $mol:. @atom:C1   0.0   0.916   0.482   1.520
-    $atom:C2B $mol:. @atom:C1   0.0   0.911   0.555   1.202
-    $atom:C3B $mol:. @atom:C1   0.0   0.977   0.547   0.890
-    $atom:C4B $mol:. @atom:C1   0.0   0.953   0.463   0.517
+    $atom:NH3 $mol:. @atom:Qd   0.2236068   0.661   0.516   2.470
+    $atom:PO4 $mol:. @atom:Qa  -0.2236068   0.366   0.541   2.169
+    $atom:GL1 $mol:. @atom:Na   0.0         0.474   0.578   1.822
+    $atom:GL2 $mol:. @atom:Na   0.0         0.782   0.642   1.834
+    $atom:C1A $mol:. @atom:C1   0.0         0.359   0.556   1.498
+    $atom:C2A $mol:. @atom:C1   0.0         0.419   0.532   1.179
+    $atom:C3A $mol:. @atom:C1   0.0         0.471   0.476   0.877
+    $atom:C4A $mol:. @atom:C1   0.0         0.461   0.629   0.523
+    $atom:C1B $mol:. @atom:C1   0.0         0.916   0.482   1.520
+    $atom:C2B $mol:. @atom:C1   0.0         0.911   0.555   1.202
+    $atom:C3B $mol:. @atom:C1   0.0         0.977   0.547   0.890
+    $atom:C4B $mol:. @atom:C1   0.0         0.953   0.463   0.517
   }
+  # Note: The coordinates here are in nm, but later on we use the .scale(10)
+  #       function to convert them into Angstroms.  (We do this because the
+  #       "units real" command in "martini.lt" tells LAMMPS to use angstroms.)
+  # Note: The charge of the Q0 and Qa is 1/sqrt(20) to compensate for the fact
+  #       that the MARTINI force field uses electrostatic interactions which
+  #       in SI units is    q1*q2 / 4π ε0 ε
+  #       ...where "ε0" is the vacuum permitivity, and "ε" is the
+  #       relative permitivity of water used in the MARTINI model,
+  #       WHICH THEY CHOSE TO BE 20.0
+  #       (This is an odd choice.  In real water, at large distances ε≈80.)
+  #       However the electrostatic interactions in most LAMMPS pair styles
+  #       assume that ε=1.  To compensate for this, we divide charges by sqrt(ε)
 
   write('Data Bond List') {
     $bond:b1 $atom:NH3 $atom:PO4
@@ -33,8 +45,11 @@ DPPE inherits MARTINI {
   }
 
 } 
-DPPE.scale(10)
+
+
+DPPE.scale(10)    # Convert nm to Angstroms
 
 # Optional: Move the molecule to a convenient location for buildling a bilayer:
 #           Center the molecule in the X,Y directions and set the min Z value.
+
 DPPE.move(-6.45833,-5.43083,-2.82)

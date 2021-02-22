@@ -100,8 +100,8 @@ followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltem
 ## Installation Instructions
 
 Note: There are **two ways** to install moltemplate:
-1) using pip or
-2) editing your .bashrc file.
+1) using pip
+2) editing your .bashrc file
 
 Use one method or the other *(not both)*.
 
@@ -128,13 +128,13 @@ Later, you can uninstall moltemplate using:
 Again, if you get the error "command not found",
 try using "pip" instead of "pip3".
 
-If that fails try installing the
-[anaconda version of python](https://anaconda.com).
-
+If that fails, install the
+[anaconda version of python](https://anaconda.com)
+and then try installing moltemplate again (using "pip").
 The *anaconda* version of python is recommended for several reasons.
 Anaconda python includes *numpy*, and it will also
 automatically update your [PATH](http://www.linfo.org/path_env_var.html)
-for you so that pip works correctly.
+for you so that *pip* works correctly.
 *(If you don't use anaconda python, then it is possible
 that you will need to edit your ~/.bashrc file and
 manually append the default pip install bin directory
@@ -144,11 +144,11 @@ This directory is usually named $HOME/.local/bin, or something similar.)*
 
 #### Optional: Use a python virtual environment
 
-Once you have python and pip (or python3 and pip3) installed,
+Once you have *python* and *pip* (or *python3* and *pip3*) installed,
 it's never a bad idea to install moltemplate into a temporary
 python "virtual environment".
 In a virtual environment, it should not be necessary to use "sudo" or "--user"
-to get around permissions issues that sometimes occur when using pip.
+to get around permissions issues that sometimes occur when using *pip*.
 (You can also uninstall moltemplate cleanly simply by deleting
 the directory that stores the virtual environment where it was installed.
 That directory is named "venv" in the example below.)
@@ -247,10 +247,11 @@ Moltemplate requires the Bourne-shell, and a recent version of python
 (3.5 or higher recommended), and can run on MacOS, linux, or windows,
 if a suitable shell environment has been installed.
 (Note that python 2.7 may also work, but you must edit your PATH to
-install moltemplate instead of using pip.  Pip no longer works with
+install moltemplate instead of using *pip*.  Pip no longer works with
 old versions of python.)
 
 The *numpy* python module is also required.
+
 
 ## License
 

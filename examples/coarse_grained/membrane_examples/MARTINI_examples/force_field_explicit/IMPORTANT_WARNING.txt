@@ -1,0 +1,27 @@
+WARNING:
+   There are two different implementations of the MARTINI lipid model.
+One implementation was created by Saeed M Bashusqeh.
+The other implementation was created by David Stelter and Pieter J. in ’t Veld.
+I have serious doubts about both of them because:
+1) I am concerned that the electrostatic interactions in these examples
+may be too strong (by a factor of 20).  (The original Martini paper in
+J.Phys.Chem.B 2004 uses an relative electrostatic epsilon of 20. We use 1.)
+2) I am uncertain about how many angle interactions should be in each lipid.
+
+The moltemplate developers have historically relied on input from
+users to spot bugs in force fields.  There were several mistakes in our
+implementations of the OPLSAA, GAFF2, COMPASS, and DREIDING force fields.
+However these force fields were popular enough that users have spotted
+these mistakes and reported them to us.  Unfortunately, coarse grained
+force fields like MARTINI are much less popular, and we haven't received
+any feedback from people who use them.
+
+I finally decided to try these examples.
+I was not encouraged by the contradictory behavior of these two implementations.
+
+I will either update or remove all of the MARTINI examples in the next
+month or two.
+
+PLEASE DO NOT USE THE MARTINI MODEL WITH MOLTEMPLATE UNTIL THIS IS RESOLVED.
+
+Andrew 2021-2-21

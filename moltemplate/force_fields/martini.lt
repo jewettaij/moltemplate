@@ -4,7 +4,7 @@
 #
 # emcprm2lt.py martini.prm lipids.prm cholesterol.prm --bond-style=harmonic --angle-style=cosine/squared --pair-style=lj/gromacs/coul/gromacs --name=martini
 #
-# sed -i 's/special_bonds lj\/coul 0.0 0.0 0.0/special_bonds lj 0.0 1.0 1.0/g' martini.lt
+# sed -i 's/special_bonds lj\/coul 0.0 0.0 0.0/special_bonds lj\/coul 0.0 1.0 1.0/g' martini.lt
 #   (...because the MARTINI force field uses custom "special_bonds" settings.)
 #
 # mv -f martini.lt ../
@@ -2225,7 +2225,7 @@ MARTINI {
     bond_style hybrid harmonic
     angle_style hybrid cosine/squared
     pair_style hybrid lj/gromacs/coul/gromacs 9.000000 12.000000
-    special_bonds lj 0.0 1.0 1.0
+    special_bonds lj/coul 0.0 1.0 1.0
   } # end init
 
 } # MARTINI
