@@ -14,8 +14,8 @@ DPPC {
   }
 
   write("Data Atoms") {
-    $atom:1  $mol:. @atom:Q0  0.2236068   2.67583  4.37417  19.25
-    $atom:2  $mol:. @atom:Qa -0.2236068  -0.73417  1.85417  20.00
+    $atom:1  $mol:. @atom:Q0  1.0         2.67583  4.37417  19.25
+    $atom:2  $mol:. @atom:Qa -1.0        -0.73417  1.85417  20.00
     $atom:3  $mol:. @atom:Na  0.0        -0.91417  0.15417  16.72
     $atom:4  $mol:. @atom:Na  0.0         0.23583 -3.23583  16.96
     $atom:5  $mol:. @atom:C1  0.0        -1.26417  2.19417  12.94
@@ -27,15 +27,6 @@ DPPC {
     $atom:11 $mol:. @atom:C1  0.0        -2.90417 -3.64583  3.99
     $atom:12 $mol:. @atom:C1  0.0        -6.41417 -5.45583  1.81
   }
-  # Note: The charge of the Q0 and Qa is 1/sqrt(20) to compensate for the fact
-  #       that the MARTINI force field uses electrostatic interactions which
-  #       in SI units is    q1*q2 / 4π ε0 ε
-  #       ...where "ε0" is the vacuum permitivity, and "ε" is the
-  #       relative permitivity of water used in the MARTINI model,
-  #       WHICH THEY CHOSE TO BE 20.0.
-  #       (This is an odd choice.  In real water, at large distances ε≈80.)
-  #       However the electrostatic interactions in most LAMMPS pair styles
-  #       assume that ε=1.  To compensate for this, we divide charges by sqrt(ε)
 
   write("Data Bonds") {
     $bond:b1    @bond:Bo   $atom:1  $atom:2

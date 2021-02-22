@@ -4,8 +4,8 @@ DLPE inherits MARTINI {
 
   # atomID    molID  atomTyle   charge      X        Y         Z
   write('Data Atoms') {
-    $atom:NH3 $mol:. @atom:Qd   0.2236068   0.523   0.508   2.312
-    $atom:PO4 $mol:. @atom:Qa  -0.2236068   0.457   0.463   2.011
+    $atom:NH3 $mol:. @atom:Qd   1.0         0.523   0.508   2.312
+    $atom:PO4 $mol:. @atom:Qa  -1.0         0.457   0.463   2.011
     $atom:GL1 $mol:. @atom:Na   0.0         0.535   0.471   1.678
     $atom:GL2 $mol:. @atom:Na   0.0         0.755   0.669   1.650
     $atom:C1A $mol:. @atom:C1   0.0         0.393   0.605   1.310
@@ -18,15 +18,6 @@ DLPE inherits MARTINI {
   # Note: The coordinates here are in nm, but later on we use the .scale(10)
   #       function to convert them into Angstroms.  (We do this because the
   #       "units real" command in "martini.lt" tells LAMMPS to use angstroms.)
-  # Note: The charge of the Q0 and Qa is 1/sqrt(20) to compensate for the fact
-  #       that the MARTINI force field uses electrostatic interactions which
-  #       in SI units is    q1*q2 / 4π ε0 ε
-  #       ...where "ε0" is the vacuum permitivity, and "ε" is the
-  #       relative permitivity of water used in the MARTINI model,
-  #       WHICH THEY CHOSE TO BE 20.0
-  #       (This is an odd choice.  In real water, at large distances ε≈80.)
-  #       However the electrostatic interactions in most LAMMPS pair styles
-  #       assume that ε=1.  To compensate for this, we divide charges by sqrt(ε)
 
   write('Data Bond List') {
     $bond:b1 $atom:NH3 $atom:PO4

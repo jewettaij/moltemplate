@@ -2224,8 +2224,9 @@ MARTINI {
     atom_style full
     bond_style hybrid harmonic
     angle_style hybrid cosine/squared
-    pair_style hybrid lj/gromacs/coul/gromacs 9.000000 12.000000
+    pair_style hybrid lj/gromacs/coul/gromacs 9 12 0.000001 12
     special_bonds lj/coul 0.0 1.0 1.0
+    dielectric      15
   } # end init
 
 } # MARTINI

@@ -4,8 +4,8 @@ DAPC inherits MARTINI {
 
   # atomID   molID   atomTyle   charge      X        Y          Z
   write('Data Atoms') {
-    $atom:NC3 $mol:. @atom:Q0   0.2236068   0.566   0.559   2.614
-    $atom:PO4 $mol:. @atom:Qa  -0.2236068   0.464   0.444   2.297
+    $atom:NC3 $mol:. @atom:Q0   1.0         0.566   0.559   2.614
+    $atom:PO4 $mol:. @atom:Qa  -1.0         0.464   0.444   2.297
     $atom:GL1 $mol:. @atom:Na   0.0         0.486   0.539   1.967
     $atom:GL2 $mol:. @atom:Na   0.0         0.766   0.678   1.938
     $atom:D1A $mol:. @atom:C4   0.0         0.360   0.508   1.627
@@ -22,15 +22,6 @@ DAPC inherits MARTINI {
   # Note: The coordinates here are in nm, but later on we use the .scale(10)
   #       function to convert them into Angstroms.  (We do this because the
   #       "units real" command in "martini.lt" tells LAMMPS to use angstroms.)
-  # Note: The charge of the Q0 and Qa is 1/sqrt(20) to compensate for the fact
-  #       that the MARTINI force field uses electrostatic interactions which
-  #       in SI units is    q1*q2 / 4π ε0 ε
-  #       ...where "ε0" is the vacuum permitivity, and "ε" is the
-  #       relative permitivity of water used in the MARTINI model,
-  #       WHICH THEY CHOSE TO BE 20.0
-  #       (This is an odd choice.  In real water, at large distances ε≈80.)
-  #       However the electrostatic interactions in most LAMMPS pair styles
-  #       assume that ε=1.  To compensate for this, we divide charges by sqrt(ε)
 
   write('Data Bond List') {
     $bond:b1 $atom:NC3 $atom:PO4
