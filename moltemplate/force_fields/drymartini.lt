@@ -1,0 +1,907 @@
+# WARNING: THIS FILE HAS NOT BEEN TESTED
+#
+# This file contains the "DRYMARTINI" force-field
+# converted into moltemplate (.lt) format.
+# Arnarez,...,Marrink, J. Chem. Theory Comput., 2015, 11 (1), pp 260-275
+#
+# It was generated with the help of this command:
+#
+# ./itp_pairs2lt.py  dry_martini_v2.1_nicknames.itp \
+#                  < dry_martini_v2.1_pairs.itp
+
+DRYMARTINI {
+  write_once("Data Masses") {
+    @atom:Qda 72.000000 # Qda
+    @atom:Qa 72.000000 # Qa
+    @atom:Qd 72.000000 # Qd
+    @atom:Q0 72.000000 # Q0
+    @atom:P5 72.000000 # P5
+    @atom:P4 72.000000 # P4
+    @atom:P3 72.000000 # P3
+    @atom:P2 72.000000 # P2
+    @atom:P1 72.000000 # P1
+    @atom:Nda 72.000000 # Nda
+    @atom:Nd 72.000000 # Nd
+    @atom:Na 72.000000 # Na
+    @atom:N0 72.000000 # N0
+    @atom:C5 72.000000 # C5
+    @atom:C4 72.000000 # C4
+    @atom:C3 72.000000 # C3
+    @atom:C2 72.000000 # C2
+    @atom:C1 72.000000 # C1
+    @atom:SQda 45.0  # SQda
+    @atom:SQd  45.0  # SQd
+    @atom:SQa  45.0  # SQa
+    @atom:SQ0  45.0  # SQ0
+    @atom:SP5  45.0  # SP5
+    @atom:SP4  45.0  # SP4
+    @atom:SP3  45.0  # SP3
+    @atom:SP2  45.0  # SP2
+    @atom:SP1  45.0  # SP1
+    @atom:SNda 45.0  # SNda
+    @atom:SNd  45.0  # SNd
+    @atom:SNa  45.0  # SNa
+    @atom:SN0  45.0  # SN0
+    @atom:SC5  45.0  # SC5
+    @atom:SC4  45.0  # SC4
+    @atom:SC3  45.0  # SC3
+    @atom:SC2  45.0  # SC2
+    @atom:SC1  45.0  # SC1
+    @atom:SP1c 45.0  # SP1c
+  } # end of atom masses
+
+  # ----- EQUIVALENCE CATEGORIES for bonded interaction lookup -----
+  # normall beads
+  replace{ @atom:Qda @atom:Qda_bQda_aQda_dQda_iQda}
+  replace{ @atom:Qd @atom:Qd_bQd_aQd_dQd_iQd}
+  replace{ @atom:Qa @atom:Qa_bQa_aQa_dQa_iQa}
+  replace{ @atom:Q0 @atom:Q0_bQ0_aQ0_dQ0_iQ0}
+  replace{ @atom:P5 @atom:P5_bP5_aP5_dP5_iP5}
+  replace{ @atom:P4 @atom:P4_bP4_aP4_dP4_iP4}
+  replace{ @atom:P3 @atom:P3_bP3_aP3_dP3_iP3}
+  replace{ @atom:P2 @atom:P2_bP2_aP2_dP2_iP2}
+  replace{ @atom:P1 @atom:P1_bP1_aP1_dP1_iP1}
+  replace{ @atom:Nda @atom:Nda_bNda_aNda_dNda_iNda}
+  replace{ @atom:Nd @atom:Nd_bNd_aNd_dNd_iNd}
+  replace{ @atom:Na @atom:Na_bNa_aNa_dNa_iNa}
+  replace{ @atom:N0 @atom:N0_bN0_aN0_dN0_iN0}
+  replace{ @atom:C5 @atom:C5_bC5_aC5_dC5_iC5}
+  replace{ @atom:C4 @atom:C4_bC4_aC4_dC4_iC4}
+  replace{ @atom:C3 @atom:C3_bC3_aC3_dC3_iC3}
+  replace{ @atom:C2 @atom:C2_bC2_aC2_dC2_iC2}
+  replace{ @atom:C1 @atom:C1_bC1_aC1_dC1_iC1}
+  # small beads:
+  replace{ @atom:SQda @atom:SQda_bQda_aQda_dQda_iQda}
+  replace{ @atom:SQd @atom:SQd_bQd_aQd_dQd_iQd}
+  replace{ @atom:SQa @atom:SQa_bQa_aQa_dQa_iQa}
+  replace{ @atom:SQ0 @atom:SQ0_bQ0_aQ0_dQ0_iQ0}
+  replace{ @atom:SP5 @atom:SP5_bP5_aP5_dP5_iP5}
+  replace{ @atom:SP4 @atom:SP4_bP4_aP4_dP4_iP4}
+  replace{ @atom:SP3 @atom:SP3_bP3_aP3_dP3_iP3}
+  replace{ @atom:SP2 @atom:SP2_bP2_aP2_dP2_iP2}
+  replace{ @atom:SP1 @atom:SP1_bP1_aP1_dP1_iP1}
+  replace{ @atom:SNda @atom:SNda_bNda_aNda_dNda_iNda}
+  replace{ @atom:SNd @atom:SNd_bNd_aNd_dNd_iNd}
+  replace{ @atom:SNa @atom:SNa_bNa_aNa_dNa_iNa}
+  replace{ @atom:SN0 @atom:SN0_bN0_aN0_dN0_iN0}
+  replace{ @atom:SC5 @atom:SC5_bC5_aC5_dC5_iC5}
+  replace{ @atom:SC4 @atom:SC4_bC4_aC4_dC4_iC4}
+  replace{ @atom:SC3 @atom:SC3_bC3_aC3_dC3_iC3}
+  replace{ @atom:SC2 @atom:SC2_bC2_aC2_dC2_iC2}
+  replace{ @atom:SC1 @atom:SC1_bC1_aC1_dC1_iC1}
+  replace{ @atom:SC1c @atom:SC1c_bC1c_aC1c_dC1c_iC1c}
+  # END EQUIVALENCE
+
+
+  write_once("In Settings") {
+    # ----- Non-Bonded interactions for lipids -----
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Qda_bQda_aQda_dQda_iQda lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Qd_bQd_aQd_dQd_iQd lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Qa_bQa_aQa_dQa_iQa lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Q0_bQ0_aQ0_dQ0_iQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:P5_bP5_aP5_dP5_iP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:P4_bP4_aP4_dP4_iP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qda_bQda_aQda_dQda_iQda @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:Qd_bQd_aQd_dQd_iQd lj/gromacs/coul/gromacs 0.549713193117 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:Qa_bQa_aQa_dQa_iQa lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:Q0_bQ0_aQ0_dQ0_iQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:P5_bP5_aP5_dP5_iP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:P4_bP4_aP4_dP4_iP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.549713193117 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qd_bQd_aQd_dQd_iQd @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:Qa_bQa_aQa_dQa_iQa lj/gromacs/coul/gromacs 0.549713193117 0.6
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:Q0_bQ0_aQ0_dQ0_iQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:P5_bP5_aP5_dP5_iP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:P4_bP4_aP4_dP4_iP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.645315487572 0.6
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.549713193117 0.6
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Qa_bQa_aQa_dQa_iQa @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:Q0_bQ0_aQ0_dQ0_iQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:P5_bP5_aP5_dP5_iP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:P4_bP4_aP4_dP4_iP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.478011472275 0.6
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:Q0_bQ0_aQ0_dQ0_iQ0 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:P5_bP5_aP5_dP5_iP5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:P4_bP4_aP4_dP4_iP4 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P5_bP5_aP5_dP5_iP5 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:P4_bP4_aP4_dP4_iP4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P4_bP4_aP4_dP4_iP4 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:P3_bP3_aP3_dP3_iP3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P3_bP3_aP3_dP3_iP3 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:P2_bP2_aP2_dP2_iP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P2_bP2_aP2_dP2_iP2 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:P1_bP1_aP1_dP1_iP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:P1_bP1_aP1_dP1_iP1 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:Nda_bNda_aNda_dNda_iNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nda_bNda_aNda_dNda_iNda @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:Nd_bNd_aNd_dNd_iNd lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Nd_bNd_aNd_dNd_iNd @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:Na_bNa_aNa_dNa_iNa lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:Na_bNa_aNa_dNa_iNa @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:N0_bN0_aN0_dN0_iN0 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:N0_bN0_aN0_dN0_iN0 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:C5_bC5_aC5_dC5_iC5 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.740917782027 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C5_bC5_aC5_dC5_iC5 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:C4_bC4_aC4_dC4_iC4 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C4_bC4_aC4_dC4_iC4 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:C3_bC3_aC3_dC3_iC3 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C3_bC3_aC3_dC3_iC3 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:C2_bC2_aC2_dC2_iC2 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C2_bC2_aC2_dC2_iC2 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:C1_bC1_aC1_dC1_iC1 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.119502868069 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.239005736138 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.836520076482 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.956022944551 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 1.07552581262 0.47
+    pair_coeff @atom:C1_bC1_aC1_dC1_iC1 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SQda_bSQda_aSQda_dSQda_iSQda lj/gromacs/coul/gromacs 0.478011472275 0.55
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.478011472275 0.55
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.478011472275 0.55
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.358508604207 0.55
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQda_bSQda_aSQda_dSQda_iSQda @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SQd_bSQd_aSQd_dSQd_iSQd lj/gromacs/coul/gromacs 0.406309751434 0.55
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.478011472275 0.55
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.358508604207 0.55
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQd_bSQd_aSQd_dSQd_iSQd @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SQa_bSQa_aSQa_dSQa_iSQa lj/gromacs/coul/gromacs 0.406309751434 0.55
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.358508604207 0.55
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQa_bSQa_aSQa_dSQa_iSQa @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 lj/gromacs/coul/gromacs 0.358508604207 0.55
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SQ0_bSQ0_aSQ0_dSQ0_iSQ0 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SP5_bSP5_aSP5_dSP5_iSP5 lj/gromacs/coul/gromacs 0.549713193117 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.549713193117 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.549713193117 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.549713193117 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP5_bSP5_aSP5_dSP5_iSP5 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SP4_bSP4_aSP4_dSP4_iSP4 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.0896271510516 0.43
+    pair_coeff @atom:SP4_bSP4_aSP4_dSP4_iSP4 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SP3_bSP3_aSP3_dSP3_iSP3 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP3_bSP3_aSP3_dSP3_iSP3 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.358508604207 0.47
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SP2_bSP2_aSP2_dSP2_iSP2 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.358508604207 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.179254302103 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.478011472275 0.62
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.358508604207 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.268881453155 0.43
+    pair_coeff @atom:SP2_bSP2_aSP2_dSP2_iSP2 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.478011472275 0.47
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SP1_bSP1_aSP1_dSP1_iSP1 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SP1_bSP1_aSP1_dSP1_iSP1 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SNda_bSNda_aSNda_dSNda_iSNda lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNda_bSNda_aSNda_dSNda_iSNda @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SNd_bSNd_aSNd_dSNd_iSNd lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNd_bSNd_aSNd_dSNd_iSNd @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SNa_bSNa_aSNa_dSNa_iSNa lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.406309751434 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.478011472275 0.43
+    pair_coeff @atom:SNa_bSNa_aSNa_dSNa_iSNa @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SN0_bSN0_aSN0_dSN0_iSN0 lj/gromacs/coul/gromacs 0.549713193117 0.43
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.549713193117 0.43
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.621414913958 0.43
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.621414913958 0.43
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.621414913958 0.43
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.621414913958 0.43
+    pair_coeff @atom:SN0_bSN0_aSN0_dSN0_iSN0 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SC5_bSC5_aSC5_dSC5_iSC5 @atom:SC5_bSC5_aSC5_dSC5_iSC5 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC5_bSC5_aSC5_dSC5_iSC5 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC5_bSC5_aSC5_dSC5_iSC5 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC5_bSC5_aSC5_dSC5_iSC5 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC5_bSC5_aSC5_dSC5_iSC5 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC5_bSC5_aSC5_dSC5_iSC5 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:SC4_bSC4_aSC4_dSC4_iSC4 @atom:SC4_bSC4_aSC4_dSC4_iSC4 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC4_bSC4_aSC4_dSC4_iSC4 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC4_bSC4_aSC4_dSC4_iSC4 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC4_bSC4_aSC4_dSC4_iSC4 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.717017208413 0.43
+    pair_coeff @atom:SC4_bSC4_aSC4_dSC4_iSC4 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:SC3_bSC3_aSC3_dSC3_iSC3 @atom:SC3_bSC3_aSC3_dSC3_iSC3 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC3_bSC3_aSC3_dSC3_iSC3 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC3_bSC3_aSC3_dSC3_iSC3 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC3_bSC3_aSC3_dSC3_iSC3 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:SC2_bSC2_aSC2_dSC2_iSC2 @atom:SC2_bSC2_aSC2_dSC2_iSC2 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC2_bSC2_aSC2_dSC2_iSC2 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC2_bSC2_aSC2_dSC2_iSC2 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.645315487572 0.47
+    pair_coeff @atom:SC1_bSC1_aSC1_dSC1_iSC1 @atom:SC1_bSC1_aSC1_dSC1_iSC1 lj/gromacs/coul/gromacs 0.812619502868 0.43
+    pair_coeff @atom:SC1_bSC1_aSC1_dSC1_iSC1 @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+    pair_coeff @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c @atom:SP1c_bSP1c_aSP1c_dSP1c_iSP1c lj/gromacs/coul/gromacs 0.549713193117 0.47
+  } # end of nonbonded parameters
+
+
+  
+  write_once("In Settings") {
+    # ----- Bonds -----
+    bond_coeff @bond:Q0-Qa harmonic 1.49375 4.5 
+    bond_coeff @bond:Qa-Na harmonic 1.49375 4.5
+    bond_coeff @bond:Na-Na harmonic 1.49375 3.7
+    bond_coeff @bond:Na-C1 harmonic 1.49375 4.8
+    bond_coeff @bond:C1-C1 harmonic 1.49375 4.8
+    bond_coeff @bond:C1-C3 harmonic 1.49375 4.8
+    bond_coeff @bond:Na-C4 harmonic 1.49375 4.8
+    bond_coeff @bond:C4-C4 harmonic 1.49375 4.8
+    bond_coeff @bond:C4-C1 harmonic 1.49375 4.8
+    bond_coeff @bond:Na-C4 harmonic 1.49375 4.8
+    bond_coeff @bond:Qd-Qa harmonic 1.49375 4.5
+    bond_coeff @bond:C1-C3 harmonic 1.49375 4.8
+    bond_coeff @bond:Qa-P5 harmonic 1.49375 4.5
+    bond_coeff @bond:P5-P1 harmonic 1.49375 3.7
+    bond_coeff @bond:P5-C1 harmonic 1.49375 4.8
+    bond_coeff @bond:P1-C3 harmonic 1.49375 4.8
+    bond_coeff @bond:P4-Qa harmonic 1.49375 3.7
+    bond_coeff @bond:P5-Qa harmonic 1.49375 3.7 
+    bond_coeff @bond:SC1-SC3 harmonic 358.5 2.719     
+  }
+
+  write_once("Data Bonds By Type") {
+    @bond:Q0-Qa @atom:*_bQ0_a*_d*_i* @atom:*_bQa_a*_d*_i*
+    @bond:Qa-Na @atom:*_bQa_a*_d*_i* @atom:*_bNa_a*_d*_i*
+    @bond:Na-Na @atom:*_bNa_a*_d*_i* @atom:*_bNa_a*_d*_i*
+    @bond:Na-C1 @atom:*_bNa_a*_d*_i* @atom:*_bC1_a*_d*_i*
+    @bond:C1-C1 @atom:*_bC1_a*_d*_i* @atom:*_bC1_a*_d*_i*
+    @bond:C1-C3 @atom:*_bC1_a*_d*_i* @atom:*_bC3_a*_d*_i*
+    @bond:Na-C4 @atom:*_bNa_a*_d*_i* @atom:*_bC4_a*_d*_i*
+    @bond:C4-C4 @atom:*_bC4_a*_d*_i* @atom:*_bC4_a*_d*_i*
+    @bond:C4-C1 @atom:*_bC4_a*_d*_i* @atom:*_bC1_a*_d*_i*
+    @bond:Na-C4 @atom:*_bNa_a*_d*_i* @atom:*_bC4_a*_d*_i*
+    @bond:Qd-Qa @atom:*_bQd_a*_d*_i* @atom:*_bQa_a*_d*_i*
+    @bond:C1-C3 @atom:*_bC1_a*_d*_i* @atom:*_bC3_a*_d*_i*
+    @bond:Qa-P5 @atom:*_bQa_a*_d*_i* @atom:*_bP5_a*_d*_i*
+    @bond:P5-P1 @atom:*_bP5_a*_d*_i* @atom:*_bP1_a*_d*_i*
+    @bond:P5-C1 @atom:*_bP5_a*_d*_i* @atom:*_bC1_a*_d*_i*
+    @bond:P1-C3 @atom:*_bP1_a*_d*_i* @atom:*_bC3_a*_d*_i*
+    @bond:P4-Qa @atom:*_bP4_a*_d*_i* @atom:*_bQa_a*_d*_i*
+    @bond:P5-Qa @atom:*_bP5_a*_d*_i* @atom:*_bQa_a*_d*_i*
+    @bond:P1-C1 @atom:*_bP1_a*_d*_i* @atom:*_bC1_a*_d*_i*
+    @bond:SC1-SC3 @atom:*_bSC1_a*_d*_i* @atom:*_bSC3_a*_d*_i*
+    
+  } # end of bonds
+
+  write_once("In Settings") {
+    # ----- Angles -----
+    angle_coeff @angle:Qa-Na-Na cosine/squared 2.9875 120
+    angle_coeff @angle:Qa-Na-C1 cosine/squared 2.9875 180
+    angle_coeff @angle:Na-Na-C1 cosine/squared 4.1825 180
+    angle_coeff @angle:C1-C1-C1 cosine/squared 4.1825 180
+    angle_coeff @angle:Na-C1-C3 cosine/squared 4.1825 180
+    angle_coeff @angle:C1-C3-C1 cosine/squared 5.3775 120
+    angle_coeff @angle:C3-C1-C1 cosine/squared 4.1825 180
+    angle_coeff @angle:Na-C1-C1 cosine/squared 4.1825 180
+    angle_coeff @angle:Qa-Na-C4 cosine/squared 2.9875 180
+    angle_coeff @angle:Na-C4-C4 cosine/squared 2.3900  95
+    angle_coeff @angle:C4-C4-C4 cosine/squared 2.3900  95
+    angle_coeff @angle:C4-C4-C1 cosine/squared 5.3775 120
+    angle_coeff @angle:Na-C1-C4 cosine/squared 4.1825 180
+    angle_coeff @angle:C4-C4-C1 cosine/squared 4.1825 180
+    angle_coeff @angle:C1-C4-C4 cosine/squared 2.3900  95
+    angle_coeff @angle:Qa-P5-P1 cosine/squared 2.9875 120
+    angle_coeff @angle:Qa-P5-C1 cosine/squared 2.9875 180
+    angle_coeff @angle:P5-C1-C1 cosine/squared 2.9875 180
+    angle_coeff @angle:P1-C3-C1 cosine/squared 2.9875 120
+  }
+
+  write_once("Data Angles By Type") {
+    @angle:Qa-Na-Na @atom:*_b*_aQa_d*_i* @atom:*_b*_aNa_d*_i* @atom:*_b*_aNa_d*_i*
+    @angle:Qa-Na-C1 @atom:*_b*_aQa_d*_i* @atom:*_b*_aNa_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:Na-Na-C1 @atom:*_b*_aNa_d*_i* @atom:*_b*_aNa_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:C1-C1-C1 @atom:*_b*_aC1_d*_i* @atom:*_b*_aC1_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:Na-C1-C3 @atom:*_b*_aNa_d*_i* @atom:*_b*_aC1_d*_i* @atom:*_b*_aC3_d*_i*
+    @angle:C1-C3-C1 @atom:*_b*_aC1_d*_i* @atom:*_b*_aC3_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:C3-C1-C1 @atom:*_b*_aC3_d*_i* @atom:*_b*_aC1_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:Na-C1-C1 @atom:*_b*_aNa_d*_i* @atom:*_b*_aC1_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:Qa-Na-C4 @atom:*_b*_aQa_d*_i* @atom:*_b*_aNa_d*_i* @atom:*_b*_aC4_d*_i*
+    @angle:Na-C4-C4 @atom:*_b*_aNa_d*_i* @atom:*_b*_aC4_d*_i* @atom:*_b*_aC4_d*_i*
+    @angle:C4-C4-C4 @atom:*_b*_aC4_d*_i* @atom:*_b*_aC4_d*_i* @atom:*_b*_aC4_d*_i*
+    @angle:C4-C4-C1 @atom:*_b*_aC4_d*_i* @atom:*_b*_aC4_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:Na-C1-C4 @atom:*_b*_aNa_d*_i* @atom:*_b*_aC1_d*_i* @atom:*_b*_aC4_d*_i*
+    @angle:C4-C4-C1 @atom:*_b*_aC4_d*_i* @atom:*_b*_aC4_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:C1-C4-C4 @atom:*_b*_aC1_d*_i* @atom:*_b*_aC4_d*_i* @atom:*_b*_aC4_d*_i*
+    @angle:Qa-P5-P1 @atom:*_b*_aQa_d*_i* @atom:*_b*_aP5_d*_i* @atom:*_b*_aP1_d*_i*
+    @angle:Qa-P5-C1 @atom:*_b*_aQa_d*_i* @atom:*_b*_aP5_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:P5-C1-C1 @atom:*_b*_aP5_d*_i* @atom:*_b*_aC1_d*_i* @atom:*_b*_aC1_d*_i*
+    @angle:P1-C3-C1 @atom:*_b*_aP1_d*_i* @atom:*_b*_aC3_d*_i* @atom:*_b*_aC1_d*_i*
+  } # end of angles
+
+  write_once("In Init") {
+    units real
+    atom_style full
+    bond_style hybrid harmonic
+    angle_style hybrid cosine/squared
+    pair_style hybrid lj/gromacs/coul/gromacs 9 12 0.000001 12
+    special_bonds lj/coul 0.0 1.0 1.0
+    dielectric 15.0
+  }
+
+} # DRYMARTINI
