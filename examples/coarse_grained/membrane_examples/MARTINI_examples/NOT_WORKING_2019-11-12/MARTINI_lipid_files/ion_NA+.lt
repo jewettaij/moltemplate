@@ -1,0 +1,10 @@
+import "martini.lt"
+
+# The NA+ ion (MARTINI model)
+
+NApIon inherits MARTINI {
+  #  AtomID MolID AtomType Charge  x   y   z
+  write("Data Atoms") {
+    $atom   $mol  @atom:Qd   1.0   0   0   0
+  }
+}

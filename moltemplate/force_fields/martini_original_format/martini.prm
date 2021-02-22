@@ -1,7 +1,7 @@
 #
-#  Martini interaction parameters using martini.30642.tmp
-#  converted by martini.pl v1.2, February 10, 2014 by Pieter J. in 't Veld
-#  to be used in conjuction with EMC v9.3.7 or higher
+#  Martini interaction parameters using martini.21650.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
 #
 
 # Force field definition
@@ -11,7 +11,7 @@ ITEM	DEFINE
 FFNAME	MARTINI
 FFTYPE	COARSE
 VERSION	V2.0
-CREATED	Feb 2014
+CREATED	Oct 2019
 LENGTH	NANOMETER
 ENERGY	KJ/MOL
 DENSITY	G/CC
@@ -20,9 +20,8 @@ NBONDED	1
 INNER	0.9
 CUTOFF	1.2
 PAIR14	OFF
-ANGLE	IGNORE
+ANGLE	WARN
 TORSION	IGNORE
-IMPROP	IGNORE
 
 ITEM	END
 
@@ -76,45 +75,45 @@ ITEM	END
 
 ITEM	EQUIVALENCE
 
-# type	pair	bond	angle	torsion	improper
+# type	pair	incr	bond	angle	torsion	improper
 
-BP4	BP4	BP4	BP4	BP4	BP4
-C1	C1	C1	C1	C1	C1
-C2	C2	C2	C2	C2	C2
-C3	C3	C3	C3	C3	C3
-C4	C4	C4	C4	C4	C4
-C5	C5	C5	C5	C5	C5
-N0	N0	N0	N0	N0	N0
-Na	Na	Na	Na	Na	Na
-Nd	Nd	Nd	Nd	Nd	Nd
-Nda	Nda	Nda	Nda	Nda	Nda
-P1	P1	P1	P1	P1	P1
-P2	P2	P2	P2	P2	P2
-P3	P3	P3	P3	P3	P3
-P4	P4	P4	P4	P4	P4
-P5	P5	P5	P5	P5	P5
-Q0	Q0	Q0	Q0	Q0	Q0
-Qa	Qa	Qa	Qa	Qa	Qa
-Qd	Qd	Qd	Qd	Qd	Qd
-Qda	Qda	Qda	Qda	Qda	Qda
-SC1	SC1	SC1	SC1	SC1	SC1
-SC2	SC2	SC2	SC2	SC2	SC2
-SC3	SC3	SC3	SC3	SC3	SC3
-SC4	SC4	SC4	SC4	SC4	SC4
-SC5	SC5	SC5	SC5	SC5	SC5
-SN0	SN0	SN0	SN0	SN0	SN0
-SNa	SNa	SNa	SNa	SNa	SNa
-SNd	SNd	SNd	SNd	SNd	SNd
-SNda	SNda	SNda	SNda	SNda	SNda
-SP1	SP1	SP1	SP1	SP1	SP1
-SP2	SP2	SP2	SP2	SP2	SP2
-SP3	SP3	SP3	SP3	SP3	SP3
-SP4	SP4	SP4	SP4	SP4	SP4
-SP5	SP5	SP5	SP5	SP5	SP5
-SQ0	SQ0	SQ0	SQ0	SQ0	SQ0
-SQa	SQa	SQa	SQa	SQa	SQa
-SQd	SQd	SQd	SQd	SQd	SQd
-SQda	SQda	SQda	SQda	SQda	SQda
+BP4	BP4	BP4	BP4	BP4	BP4	BP4
+C1	C1	C1	C1	C1	C1	C1
+C2	C2	C2	C2	C2	C2	C2
+C3	C3	C3	C3	C3	C3	C3
+C4	C4	C4	C4	C4	C4	C4
+C5	C5	C5	C5	C5	C5	C5
+N0	N0	N0	N0	N0	N0	N0
+Na	Na	Na	Na	Na	Na	Na
+Nd	Nd	Nd	Nd	Nd	Nd	Nd
+Nda	Nda	Nda	Nda	Nda	Nda	Nda
+P1	P1	P1	P1	P1	P1	P1
+P2	P2	P2	P2	P2	P2	P2
+P3	P3	P3	P3	P3	P3	P3
+P4	P4	P4	P4	P4	P4	P4
+P5	P5	P5	P5	P5	P5	P5
+Q0	Q0	Q0	Q0	Q0	Q0	Q0
+Qa	Qa	Qa	Qa	Qa	Qa	Qa
+Qd	Qd	Qd	Qd	Qd	Qd	Qd
+Qda	Qda	Qda	Qda	Qda	Qda	Qda
+SC1	SC1	SC1	SC1	SC1	SC1	SC1
+SC2	SC2	SC2	SC2	SC2	SC2	SC2
+SC3	SC3	SC3	SC3	SC3	SC3	SC3
+SC4	SC4	SC4	SC4	SC4	SC4	SC4
+SC5	SC5	SC5	SC5	SC5	SC5	SC5
+SN0	SN0	SN0	SN0	SN0	SN0	SN0
+SNa	SNa	SNa	SNa	SNa	SNa	SNa
+SNd	SNd	SNd	SNd	SNd	SNd	SNd
+SNda	SNda	SNda	SNda	SNda	SNda	SNda
+SP1	SP1	SP1	SP1	SP1	SP1	SP1
+SP2	SP2	SP2	SP2	SP2	SP2	SP2
+SP3	SP3	SP3	SP3	SP3	SP3	SP3
+SP4	SP4	SP4	SP4	SP4	SP4	SP4
+SP5	SP5	SP5	SP5	SP5	SP5	SP5
+SQ0	SQ0	SQ0	SQ0	SQ0	SQ0	SQ0
+SQa	SQa	SQa	SQa	SQa	SQa	SQa
+SQd	SQd	SQd	SQd	SQd	SQd	SQd
+SQda	SQda	SQda	SQda	SQda	SQda	SQda
 
 ITEM	END
 

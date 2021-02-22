@@ -1,7 +1,7 @@
 #
-#  Martini interaction parameters using martini.30634.tmp
-#  converted by martini.pl v1.2, February 10, 2014 by Pieter J. in 't Veld
-#  to be used in conjuction with EMC v9.3.7 or higher
+#  Martini interaction parameters using martini.21642.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
 #
 
 # Force field definition
@@ -11,7 +11,7 @@ ITEM	DEFINE
 FFNAME	MARTINI
 FFTYPE	COARSE
 VERSION	2011
-CREATED	Feb 2014
+CREATED	Oct 2019
 LENGTH	NANOMETER
 ENERGY	KJ/MOL
 DENSITY	G/CC
@@ -47,7 +47,7 @@ ITEM	END
 
 ITEM	EQUIVALENCE
 
-# type	pair	bond	angle	torsion	improper
+# type	pair	incr	bond	angle	torsion	improper
 
 P51	P5	P51	P51	P51	P51
 P52	P5	P52	P52	P52	P52
@@ -157,7 +157,7 @@ PHE	[P57][SC4]1[SC4][SC4]1
 PRO	[P53][AC2]
 SER	[P56][P1]
 THR	[P55][P1]
-TRP	[P59][SC4]1[SP1]2[SC4]1[SC4]2
+TRP	[P59][SC4]2[SP1]1[SC4]2[SC4]1
 TYR	[P58][SC4]1[SC4][SP1]1
 VAL	[P5][AC2]
 

@@ -1,0 +1,10 @@
+import "martini.lt"
+
+# The CA2+ ion (MARTINI model)
+
+CA2pIon inherits MARTINI {
+  #  AtomID MolID AtomType Charge  x   y   z
+  write("Data Atoms") {
+    $atom   $mol  @atom:Qd   2.0   0   0   0
+  }
+}

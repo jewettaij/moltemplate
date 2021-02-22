@@ -1,7 +1,7 @@
 #
-#  Martini interaction parameters using martini.30636.tmp
-#  converted by martini.pl v1.2, February 10, 2014 by Pieter J. in 't Veld
-#  to be used in conjuction with EMC v9.3.7 or higher
+#  Martini interaction parameters using martini.21644.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
 #
 
 # Force field definition
@@ -11,7 +11,7 @@ ITEM	DEFINE
 FFNAME	MARTINI
 FFTYPE	COARSE
 VERSION	2011
-CREATED	Feb 2014
+CREATED	Oct 2019
 LENGTH	NANOMETER
 ENERGY	KJ/MOL
 DENSITY	G/CC
@@ -55,7 +55,7 @@ ITEM	END
 
 ITEM	EQUIVALENCE
 
-# type	pair	bond	angle	torsion	improper
+# type	pair	incr	bond	angle	torsion	improper
 
 SC11	SC1	SC11	SC11	SC11	SC11
 SC110	SC1	SC110	SC110	SC110	SC110
@@ -78,7 +78,6 @@ SP12	SP1	SP12	SP12	SP12	SP12
 ITEM	END
 
 # Bond parameters
-# To change the bond stiffness, edit the "k" parameter
 
 ITEM	BOND
 
@@ -191,8 +190,8 @@ ITEM	TEMPLATES
 
 # name	smiles
 
-CHOA	[SP1]1[SC110]3[SC33]2[SP11]1[SC112]6[SP12]4[SC111]5[Qa-1]
-CHOL	[SP1]1[SC1]3[SC31]2[SC11]1[SC13]6[SC14]4[SC12]5[C1]
-CO	[SC19]1([SC15]3[SC32]2[SC16]1[SC18]6[SC1]4[SC17]5[C1])[Na][C1][C3][C1][C1]
+CHOA	[SP1]57[SC110]6[SC33]47[SP11]1356[SP12]24[SC112]3[SC111]12[Qa-1]
+CHOL	[SP1]57[SC1]6[SC31]47[SC11]1356[SC14]24[SC13]3[SC12]12[C1]
+CO	[SC19]57([SC15]6[SC32]47[SC16]1356[SC1]24[SC18]3[SC17]12[C1])[Na][C1][C3][C1][C1]
 
 ITEM	END

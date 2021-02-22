@@ -1,0 +1,118 @@
+#
+#  Martini interaction parameters using martini.21660.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
+#
+
+# Force field definition
+
+ITEM	DEFINE
+
+FFNAME	MARTINI
+FFTYPE	COARSE
+VERSION	2011
+CREATED	Oct 2019
+LENGTH	NANOMETER
+ENERGY	KJ/MOL
+DENSITY	G/CC
+MIX	NONE
+NBONDED	1
+INNER	0.9
+CUTOFF	1.2
+PAIR14	OFF
+ANGLE	WARN
+TORSION	IGNORE
+
+ITEM	END
+
+# Masses
+
+ITEM	MASS
+
+# type	mass	element	ncons	charge	comment
+
+C11	56.108	C1	2	0	apolar
+C12	57.116	C1	2	0	apolar
+Qa1	96.0576	Qa	2	-1	charged
+
+ITEM	END
+
+# Typing equivalences
+
+ITEM	EQUIVALENCE
+
+# type	pair	incr	bond	angle	torsion	improper
+
+C11	C1	C11	C11	C11	C11
+C12	C1	C12	C12	C12	C12
+Qa1	Qa	Qa1	Qa1	Qa1	Qa1
+
+ITEM	END
+
+# Bond parameters
+
+ITEM	BOND
+
+# type1	type2	k	l0
+
+C1	C1	1250	0.47
+C1	Na	1250	0.47
+C1	P4	1250	0.47
+C1	Qa	1250	0.47
+C1	SNa	1250	0.37
+C11	C11	1250	0.47
+C11	C12	1250	0.47
+C11	Qa1	10000	0.404
+Na	P1	1250	0.47
+P1	Qa	1250	0.47
+Q0	Qa	1250	0.47
+SNa	SNa	17000	0.33
+SNa	SP2	17000	0.33
+
+ITEM	END
+
+# Angle parameters
+
+ITEM	ANGLE
+
+# type1	type2	type3	k	theta0
+
+C1	C1	C1	25	180
+C1	C1	Na	25	180
+C1	C1	P4	25	180
+C1	C1	SNa	25	180
+C1	Na	P1	25	180
+C1	SNa	SNa	25	120
+C11	C11	C12	25	180
+C11	C11	Qa1	15	170
+Na	P1	Qa	25	180
+SNa	SNa	SNa	50	130
+SNa	SNa	SP2	50	130
+
+ITEM	END
+
+# Torsion parameters
+
+ITEM	TORSION
+
+# type1	type2	type3	type4	k	n	delta	...
+
+SNa	SNa	SNa	SNa	1.96	1	180	0.18	2	0	0.33	3	0	0.12	4	0
+SNa	SNa	SNa	SP2	1.96	1	180	0.18	2	0	0.33	3	0	0.12	4	0
+
+ITEM	END
+
+# Templates
+
+ITEM	TEMPLATES
+
+# name	smiles
+
+DPC	[Q0+1][Qa-1][C1][C1][C1]
+EO5	[SP2][SNa][SNa][SNa][SNa][SNa][C1][C1][C1]
+HPC	[Q0+1][Qa-1][P1][Na][C1]
+PCA	[P4][C1][C1][C1][C1]
+PPC	[Q0+1][Qa-1][P1][Na][C1][C1][C1]
+SDS	[Qa1-1][C11][C11][C12]
+
+ITEM	END

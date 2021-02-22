@@ -1,0 +1,39 @@
+#
+#  Martini interaction parameters using martini.21646.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
+#
+
+# Force field definition
+
+ITEM	DEFINE
+
+FFNAME	MARTINI
+FFTYPE	COARSE
+VERSION	2011
+CREATED	Oct 2019
+LENGTH	NANOMETER
+ENERGY	KJ/MOL
+DENSITY	G/CC
+MIX	NONE
+NBONDED	1
+INNER	0.9
+CUTOFF	1.2
+PAIR14	OFF
+ANGLE	WARN
+TORSION	IGNORE
+
+ITEM	END
+
+# Templates
+
+ITEM	TEMPLATES
+
+# name	smiles
+
+CA+	[Qd+2]
+CL-	[Qa-1]
+NA+	[Qd+1]
+NC3+	[Q0+1]
+
+ITEM	END
