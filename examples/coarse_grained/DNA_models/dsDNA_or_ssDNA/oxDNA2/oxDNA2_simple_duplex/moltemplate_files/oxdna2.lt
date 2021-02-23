@@ -230,3 +230,32 @@ OXDNA2_MONOMERS {
 
 } #OXDNA2_MONOMERS
 
+
+
+
+
+
+
+write_once("log.cite.oxdna2") {
+  Please cite the following papers:
+
+  - "Coarse-grained simulation of DNA using LAMMPS",
+    O. Henrich, Y.A.F. Gutiérrez , T. Curk, T.E. Ouldridge,
+    Eur. Phys. J. E 41, 57 (2018),
+    https://doi.org/10.1140/epje/i2018-11669-8
+
+  - "Introducing improved structural properties and salt dependence
+     into a coarse-grained model of DNA",
+    B.E.K. Snodin, F. Randisi, M. Mosayebi, P. Šulc, J.S. Schreck, F. Romano,
+    T.E. Ouldridge, R. Tsukanov, E. Nir, Ard A. Louis, and J.P.K. Doye,
+    J. Chem. Phys. 142, 234901 (2015)
+    https://doi.org/10.1063/1.4921957
+
+  If you are curious, here is a link to the original OxDNA paper.
+  (It is not necessary to cite this paper because this example uses OxDNA2.)
+  - "Structural, mechanical, and thermodynamic properties of a 
+     coarse-grained DNA model",
+     T.E. Ouldridge, A.A. Louis, and J.P.K. Doye,
+     J. Chem. Phys. 134, 085101 (2011)
+    https://doi.org/10.1063/1.3552946
+}

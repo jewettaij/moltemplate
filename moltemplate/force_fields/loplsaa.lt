@@ -2,7 +2,7 @@
 ## Extra OPLSAA parameters and atom types for long hydrocarbon chains     ##
 ## SOURCES: Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4), 1459
 ##          Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287 ##
-## CREDIT: Sebastian Echeverri (file format conversion)                   ##
+## CREDIT: Thanks to Sebastian Echeverri for the file format conversion!  ##
 ############################################################################
 # This file was generated using:
 # tinkerparm2lt.py -name OPLSAA -file loplsaa_ext.prm -dihedral-style opls -zeropad 3
@@ -266,7 +266,16 @@ OPLSAA {
   # Syntax:
   # dihedral_coeff DihedralTypeName  parameters...
 
-
-
 }  # OPLSAA
 
+
+
+
+
+write_once("log.cite.loplsaa") {
+  The LOPLS parameters are from:
+  - Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287
+    https://doi.org/10.1021/acs.jpcb.5b08569
+  - Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4), 1459
+    https://doi.org/10.1021/ct200908r
+}

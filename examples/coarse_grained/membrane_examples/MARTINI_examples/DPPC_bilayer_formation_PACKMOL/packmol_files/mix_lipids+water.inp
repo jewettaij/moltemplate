@@ -5,7 +5,7 @@
 # All the atoms from diferent molecules will be separated at least 3.0
 # Anstroms at the solution.
 
-tolerance  3.0      # minimal distance between atoms in different molecules
+tolerance  2.5      # minimal distance between atoms in different molecules
                     # (you should also consider changing the "discale" 
                     #  parameter.  I think discale=1.0 by default.)
 

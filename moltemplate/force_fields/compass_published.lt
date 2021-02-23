@@ -4196,3 +4196,13 @@ COMPASS {
 # WARNING: Undefined bond length (r0) or rest angle (theta0) in dihedral: c3prime n3m c3prime o1
 # WARNING: Undefined rest angle (theta0) in improper: c3a c3prime c3prime n3m
 # WARNING: Undefined rest angle (theta0) in improper: c3a o1= c3prime n3m
+
+
+
+
+write_once("log.cite.compass") {
+  "COMPASS: An ab Initio Force-Field Optimized for Condensed-Phase
+   Application Overview with Details on Alkane and Benzene Compounds",
+  H. Sun, J. Phys. Chem. B 1998, 102, 38, 7338-7364
+  https://doi.org/10.1021/jp980939v
+}

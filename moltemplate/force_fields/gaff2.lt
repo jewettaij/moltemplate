@@ -13443,3 +13443,21 @@ GAFF2 {
 }
 
 
+
+
+write_once("log.cite.gaff2") {
+  The only official-looking paper I can find for either GAFF or GAFF2 is:
+
+  - "Development and testing of a general amber force field"
+    J. Wang, R.M. Wolf, J.W. Caldwell, P.A. Kollman, D.A. Case,
+    https://doi.org/10.1002/jcc.20035
+
+  (I might be wrong.  I did not spend much time searching.
+   If you use GAFF2, it might be a good idea to verify that there
+   isn't a more recent paper specifically for the GAFF2 force field.)
+
+  Links to individual papers referred to in the comments (eg. "SOURCE2")
+  can be found by downloading the "gaff2.dat" file distributed with AmberTools.
+  (This file was created by the automatic conversion of the "gaff2.dat" file.
+   In the conversion process, those references were lost.)
+}

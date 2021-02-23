@@ -52,7 +52,8 @@ timestep        10.0
 run 1000
 unfix fxlan
 
-fix fxlan all langevin  600.0 600.0  5000  12345  # temp: 450 K
+# Increase the damping time (reduce the friction (coupling) with the heat bath).
+fix fxlan all langevin  600.0 600.0  5000  12345
 timestep        30.0     # (40.0 should be possible for lipid systems)
 run 20000
 unfix fxnve

@@ -11856,3 +11856,15 @@ GAFF {
 }
 
 
+
+write_once("log.cite.gaff") {
+  Here is a link for the original GAFF force field used here:
+  - "Development and testing of a general amber force field"
+    J. Wang, R.M. Wolf, J.W. Caldwell, P.A. Kollman, D.A. Case,
+    https://doi.org/10.1002/jcc.20035
+
+  Links to individual papers referred to in the comments (eg. "SOURCE2")
+  can be found by downloading the "gaff.dat" file distributed with AmberTools.
+  (This file was created by the automatic conversion of the "gaff.dat" file.
+   In the conversion process, those references were lost.)
+}

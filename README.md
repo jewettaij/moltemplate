@@ -80,13 +80,19 @@ and currently cannot be used to build all-atom proteins from scratch.
 Some suggestions for selecting the appropriate atom types for your molecules
 are provided [here](http://moltemplate.org/force_field_recommendations.html).
 *(Users who are unsure how to choose atom types are 
-encouraged to use the [ATB](https://atb.uq.edu.au) database,
+encouraged to use
+the [ATB](https://atb.uq.edu.au) database,
 or use the DREIDING force field which has simple
 [atom type rules](./doc/DREIDING_Label_Manual.pdf),
-or use a 3rd-party molecule-builder
-and convert the resulting files to LAMMPS format using
-[OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format")
-followed by [ltemplify.py](./doc/doc_ltemplify.md "Convert LAMMPS DATA to Moltemplate format"), and then use moltemplate.)*
+or *use a 3rd-party molecule-builder that supports atom typing
+(such as [EMC](http://montecarlo.sourceforge.net/))*.
+If necessary, you can then convert the created
+molecular simulation files into LAMMPS format using
+[OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
+If these files need additionaly modifications, you then can use
+[ltemplify.py](./doc/doc_ltemplify.md),
+to extract individual molecules from the LAMMPS DATA file, and
+modify them or combine them with other molecules using moltemplate.)*
 
 
 

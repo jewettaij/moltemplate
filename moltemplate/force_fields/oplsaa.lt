@@ -8,6 +8,8 @@
 #
 # The "oplsaa.prm" file was downloaded on 2018-6-15 from the TINKER website
 # https://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
+# and on github:
+# https://github.com/TinkerTools/tinker/blob/release/params/oplsaa.prm
 # (Corrections to impropers were added by David Huang (adelaide.edu.au))
 # (Additional conversion details are explained at the end of this file.)
 # Urey-Bradley parameters are not included, and a quadratic energy function
@@ -9044,3 +9046,44 @@ OPLSAA {
 
 }  # OPLSAA
 
+
+
+
+write_once("log.cite.oplsaa") {
+  The OPLSAA parameters in the "oplsaa.lt" file are originally from.
+
+  - W. L. Jorgensen, July 2008,
+   "OPLS All-Atom Parameters for Organic Molecules, Ions,
+    Peptides & Nucleic Acids, July 2008", BOSS Version 4.8
+
+  Presumably, these parameters mostly come from this paper:
+  - "Development and Testing of the OPLS All-Atom Force Field on
+     Conformational Energetics and Properties of Organic Liquids."
+    W. L. Jorgensen, D. S. Maxwell, and J. Tirado-Rives
+    J. Am. Chem. Soc. 1996, 118, 11225-11236. doi:10.1021/ja9621760
+
+  Important: The OPLS force field parameters in moltemplate were taken
+  from files that are distributed with the TINKER software:
+  (https://github.com/TinkerTools/tinker/blob/release/params/oplsaa.prm)
+  So if you use the OPLSAA or OPLSUA force fields with moltemplate,
+  please cite the TINKER paper:
+
+  - J.A. Rackers, Z. Wang, C. Lu, M.L. Laury, L.Lagardère, M.J. Schnieders,
+    J-P. Piquemal, P. Ren, and J.W. Ponder
+    J.Chem.Theory.Comput.,14(10):5273-5289, 2018
+    https://doi.org/10.1021/acs.jctc.8b00529
+
+  Optional: You may wish to consider citing additional OPLS papers (before 2008)
+  (OPLSAA parameters were converted to TINKER and moltemplate format in 2008)
+  - "The OPLS All-Atom Force Field for Carbohydrates.
+    W. Damm, A. Frontera, J. Tirado-Rives, and W. L. Jorgensen
+    J. Comp. Chem. 1997, 18, 1955-1970.
+    doi:10.1002/(SICI)1096-987X(199712)18:16<1955::AID-JCC1>3.0.CO;2-L.
+  - "OPLS All-Atom Model for Amines: Resolution of the Amine Hydration Problem."
+    R. C. Rizzo and W. L. Jorgensen
+    J. Am. Chem. Soc. 1999, 121, 4827-4836. doi:10.1021/ja984106u.
+  - "Evaluation and Reparametrization of the OPLS-AA Force Field for Proteins
+     via Comparison with Accurate Quantum Chemical Calculations on Peptides."
+    G. Kaminski, R. A. Friesner, J. Tirado-Rives and W. L. Jorgensen
+    J. Phys. Chem. B 2001, 105, 6474-6487. doi:10.1021/jp003919d.
+}
