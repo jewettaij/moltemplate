@@ -86,10 +86,10 @@ or use the DREIDING force field which has simple
 [atom type rules](./doc/DREIDING_Label_Manual.pdf),
 or *use a 3rd-party molecule-builder that supports atom typing
 (such as [EMC](http://montecarlo.sourceforge.net/))*.
-If necessary, you can then convert the created
-molecular simulation files into LAMMPS format using
+If necessary, you can then convert the
+molecular simulation files created earlier into LAMMPS format using
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
-If these files need additionaly modifications, you then can use
+If these files are incomplete or need additional modifications, you can use
 [ltemplify.py](./doc/doc_ltemplify.md),
 to extract individual molecules from the LAMMPS DATA file, and
 modify them or combine them with other molecules using moltemplate.)*

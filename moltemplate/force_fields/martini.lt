@@ -2243,20 +2243,23 @@ MARTINI {
 
 
 write_once("log.cite.martini") {
-  Please cite the following papers if you use MARTINI with your research:
+  The MARTINI force field parameters in moltemplate were not taken
+  from the original MARTINI sources. Instead, they were copied from the files
+  in the EMC software (which also can be used to prepare MARTINI simulations).
+  So if you use MARTINI with moltemplate, please cite the EMC paper as well:
+  - P.J. in ‘t Veld and G.C. Rutledge, Macromolecules 2003, 36, 7358
+    https://doi.org/10.1021/ma0346658
+
+  Here are some links to MARTINI papers that are relevant to "martini.lt":
   - S. J. Marrink, H. J. Risselada, S. Yefimov, D. P. Tieleman,
     and A. H. de Vries, J.Phys.Chem.B, 111:7812-7824, 2007
     https://doi.org/10.1021/jp071097f
+
   - S.J. Marrink, A.H. de Vries, A.E. Mark. J.Phys.Chem.B, 108:750-760, 2004.
     https://doi.org/10.1021/jp036508g
+
   If you include cholesterol molecules with MARTINI, then also cite:
   - S.J. Marrink, A.H. de Vries, T.A. Harroun, J. Katsaras, S.R. Wassall.
     JACS, 130:10-11, 2008.
     https://doi.org/10.1021/ja076641c
-  The MARTINI force field parameters in moltemplate were not taken from
-  the original MARTINI sources.  Instead, they were copied from the files in
-  the EMC software (which also can be used to prepare MARTINI simulations).
-  So please cite the EMC paper as well:
-  - P.J. in ‘t Veld and G.C. Rutledge, Macromolecules 2003, 36, 7358
-    https://doi.org/10.1021/ma0346658
 }

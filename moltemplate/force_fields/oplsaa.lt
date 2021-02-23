@@ -9050,7 +9050,19 @@ OPLSAA {
 
 
 write_once("log.cite.oplsaa") {
-  The OPLSAA parameters in the "oplsaa.lt" file are originally from.
+  The OPLS force field parameters win moltemplate were not taken
+  directly from the original OPLS papers.  Instead, they were obtained
+  from files that are distributed with the TINKER software:
+  (https://github.com/TinkerTools/tinker/blob/release/params/oplsaa.prm)
+  So if you use the OPLSAA or OPLSUA force fields with moltemplate,
+  please also cite the TINKER paper:
+
+  - J.A. Rackers, Z. Wang, C. Lu, M.L. Laury, L.Lagardère, M.J. Schnieders,
+    J-P. Piquemal, P. Ren, and J.W. Ponder
+    J.Chem.Theory.Comput.,14(10):5273-5289, 2018
+    https://doi.org/10.1021/acs.jctc.8b00529
+
+  Here are some references for the OPLSAA parameters in the "oplsaa.lt" file:
 
   - W. L. Jorgensen, July 2008,
    "OPLS All-Atom Parameters for Organic Molecules, Ions,
@@ -9061,17 +9073,6 @@ write_once("log.cite.oplsaa") {
      Conformational Energetics and Properties of Organic Liquids."
     W. L. Jorgensen, D. S. Maxwell, and J. Tirado-Rives
     J. Am. Chem. Soc. 1996, 118, 11225-11236. doi:10.1021/ja9621760
-
-  Important: The OPLS force field parameters in moltemplate were taken
-  from files that are distributed with the TINKER software:
-  (https://github.com/TinkerTools/tinker/blob/release/params/oplsaa.prm)
-  So if you use the OPLSAA or OPLSUA force fields with moltemplate,
-  please cite the TINKER paper:
-
-  - J.A. Rackers, Z. Wang, C. Lu, M.L. Laury, L.Lagardère, M.J. Schnieders,
-    J-P. Piquemal, P. Ren, and J.W. Ponder
-    J.Chem.Theory.Comput.,14(10):5273-5289, 2018
-    https://doi.org/10.1021/acs.jctc.8b00529
 
   Optional: You may wish to consider citing additional OPLS papers (before 2008)
   (OPLSAA parameters were converted to TINKER and moltemplate format in 2008)
