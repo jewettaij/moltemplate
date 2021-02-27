@@ -13,6 +13,16 @@ postprocess_transitions.py ttree_assignments.txt -t file.template \
 
 Where "file.template" contains contents similar to:
 
+if atoms == [@atom:A,@atom:B,@atom:C] and
+   bonds == [[1,2], [2,3]] and
+   bonding_ids == [1,2] and
+   edge_ids == [3]
+then
+   atoms = [@atom:B,@atom:B,@atom:C] and
+   bonds = [[2,3], [3,1]]
+
+Eventually, I will also support this syntax:
+
 if atoms @atom:A @atom:B* @atom:C and 
    bond_type[1,2] == @bond:AB and
    bond_type[2,3] == @bond:BC and
@@ -54,7 +64,7 @@ if atom_type[1] == @atom:A and
    bond_type[2,3] == @bond:BC and
    rmsd((1,2,3), ((1.3,5.2,1.2),(2.4,4.5,6.6),(0.01,1.5,9.55)) <= 3.2
 then
-   coords((1.3,5.2,1.2),(2.4,4.5,6.6),(0.01,1.5,9.55),(-1.2,0.1,12))  #add atom
+   coords = ((1.3,5.2,1.2),(2.4,4.5,6.6),(0.01,1.5,9.55),(-1.2,0.1,12)) #add atom
    and atom_type[4] = @atom:D
    and bond_type[3,4] = @bond:CD
 

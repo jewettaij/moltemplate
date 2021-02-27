@@ -38300,8 +38300,8 @@ DREIDING {
 
 
 write_once("log.cite.dreiding") {
-  - "DREIDING: a generic force field for molecular simulations"
-    S.L. Mayo, B.D. Olafson, and W.A. Goddard,
-    J. Phys. Chem. 1990, 94, 26, 8897-8909
-    https://doi.org/10.1021/j100389a010
+  "DREIDING: a generic force field for molecular simulations"
+  S.L. Mayo, B.D. Olafson, and W.A. Goddard,
+  J. Phys. Chem. 1990, 94, 26, 8897-8909
+  https://doi.org/10.1021/j100389a010
 }
