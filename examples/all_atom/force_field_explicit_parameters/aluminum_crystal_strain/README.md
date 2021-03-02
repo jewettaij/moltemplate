@@ -17,7 +17,7 @@ Copy it to the directory containing this README file.
 
 This example shows an alternative way to setup the
 aluminum crystal loading simulation described here:
-http://icme.hpc.msstate.edu/mediawiki/index.php/Uniaxial_Compression
+https://icme.hpc.msstate.edu/mediawiki/index.php/Uniaxial_Compression.html
 by Mark Tschopp and Nathan R. Rhodes
 For additional backgroumd information, please consult that web page.
 
