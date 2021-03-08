@@ -28,4 +28,8 @@ cd moltemplate_files
   # moltemplate.  They can be useful for debugging, but are usually thrown away.
   rm -rf output_ttree/
 
+  # Optional:
+  # Delete the "system.xyz" file we created earlier with PACKMOL.
+  rm -rf system.xyz
+
 cd ../

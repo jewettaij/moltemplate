@@ -154,3 +154,17 @@ write_once("In Init") {
   special_bonds   lj 0.0 0.0 1.0   # turn off pairs if "less than 3 bonds"
 }
 
+
+
+
+
+# OPTIONAL:  Since we use PACKMOL in this example, create a file
+#            (named "log.cite.packmol") containing a link to the PACKMOL paper.
+
+write_once("log.cite.packmol") {
+  L. Martinez, R. Andrade, E. G. Birgin, J. M. Martinez,
+  PACKMOL: A package for building initial configurations for
+  molecular dynamics simulations.
+  Journal of Computational Chemistry, 30:2157-2164,2009.
+  https://doi.org/10.1002/jcc.21224
+}

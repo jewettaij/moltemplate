@@ -47,7 +47,7 @@ Here we use the "AUF2" model described in that paper.  (In the paper, the protei
 
 #### Memebrane Model
 
-The DPPC lipid bilayer described in:
+The DPPC lipid bilayer is described in:
 1) G. Brannigan, P.F. Philips, and F.L.H. Brown, Physical Review E, Vol 72, 011915 (2005)
 2) M.C. Watson, E.S. Penev, P.M. Welch, and F.L.H. Brown, J. Chem. Phys. 135, 244701 (2011)
 

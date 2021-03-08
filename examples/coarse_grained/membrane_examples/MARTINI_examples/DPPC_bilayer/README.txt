@@ -1,8 +1,11 @@
 
-This example of the formation of a coarse-grained DPPC lipid-bilayer uses the
-Martini force-field v2.0 (2013-10), was provided by Saeed Momeni Bashusqeh.
-It's probably a good idea to run the simulation for a few ns to allow the
-lipids to reorient themselves.
+This is an example of a coarse-grained DPPC lipid-bilayer (MARTINI model).
+Lipid orientation within the membrane was chosen randomly.
+(This was done using the "new random" command to select from versions of the
+ lipid molecule which were rotated by different amounts around the Z axis.
+ See the "system.lt" file for details.)
+It's probably a good idea to run the simulation for a few ns to allow
+the the orientation and position of the lipids to relax.
 
 step 1)
 To build the files which LAMMPS needs, follow the instructions in:

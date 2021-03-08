@@ -23,7 +23,7 @@ output system.xyz
 # defined by the minimum coordinates x, y and z = 0 0 0. and maximum
 # coordinates 100 100 100.  (Box size: 100x100x100)
 
-structure lipid.xyz
+structure DPPC.xyz
   number 300
   inside box  0.0  0.0  0.0  100.0  100.0  100.0 
 end structure
