@@ -9067,11 +9067,17 @@ write_once("log.cite.oplsaa") {
     J.Chem.Theory.Comput.,14(10):5273-5289, 2018
     https://doi.org/10.1021/acs.jctc.8b00529
 
-  Here is the original OPLS paper from 1996:
-  - "Development and Testing of the OPLS All-Atom Force Field on
-     Conformational Energetics and Properties of Organic Liquids."
-    W. L. Jorgensen, D. S. Maxwell, and J. Tirado-Rives
-    J. Am. Chem. Soc. 1996, 118, 11225-11236. doi:10.1021/ja9621760
+  As for OPLS, any of these papers can be used to cite
+  the version of OPLS provided by moltemplate:
+  - W.L. Jorgensen and J. Tirado–Rives
+    J. Comp. Chem., Volume 26, Issue 16 p. 1689-1700, 2005
+    https://doi.org/10.1002/jcc.20297
+  - W.L. Jorgensen and J. Tirado–Rives
+    Proc. Nat. Acad. Sci, 102 (19) 6665-6670, 2005
+    https://doi.org/10.1073/pnas.0408037102
+  - W.L. Jorgensen, D.S. Maxwell, and J. Tirado-Rives
+    J. Am. Chem. Soc. 1996, 118, 11225-11236.
+    https://doi.org/10.1021/ja9621760
 
   Incidentally, parameters used by both TINKER and moltemplate were taken from:
   - W. L. Jorgensen, July 2008,
@@ -9086,8 +9092,7 @@ write_once("log.cite.oplsaa") {
   from several of them:
     http://zarbi.chem.yale.edu/publications.html
   However, depending on the type of simulation you want to run,
-  only a small subset of these will be relevant to your work.
-  Also keep in mind that the force field parameters used here were taken
-  from the 2008 version of BOSS, so only papers published before 2008
-  could potentially be relevant.
+  only a small subset of these will be relevant to your work (if any).
+  Since the force field parameters used here were taken from the 2008 version of
+  BOSS, papers published after that time are not relevant to moltemplate users.
 }
