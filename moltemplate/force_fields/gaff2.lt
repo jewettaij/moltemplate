@@ -13440,10 +13440,15 @@ GAFF2 {
     special_bonds   amber
   }
 
-}
+} # GAFF2
 
 
 
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.gaff") containing a link to
+# a paper describing the GAFF/GAFF2 force field.
 
 write_once("log.cite.gaff") {
   "Development and testing of a general amber force field"

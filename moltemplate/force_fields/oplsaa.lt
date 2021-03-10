@@ -9052,6 +9052,11 @@ OPLSAA {
 
 
 
+
+# OPTIONAL:
+# Generate a file ("log.cite.oplsaa") containing a couple papers
+# describing the OPLSAA force field, and its implementation in moltemplate.
+
 write_once("log.cite.oplsaa") {
   In case it is helpful, here is a list of papers relevant to
   the implementation of the OPLSAA force field used in moltemplate.  
