@@ -9026,7 +9026,10 @@ OPLSAA {
     angle_style harmonic
     dihedral_style opls
     improper_style harmonic
-    pair_style lj/cut/coul/long 10.0 10.0
+    pair_style lj/cut/coul/long 11.0 11.0
+      # (Note to self: The pair_style used by OPLSAA/M (2015) is:
+      #                lj/charmm/coul/long 9.0 11.0
+      #                ...so this will have to be updated eventually.)
     pair_modify mix geometric
     special_bonds lj/coul 0.0 0.0 0.5
     kspace_style pppm 0.0001
@@ -9070,10 +9073,13 @@ write_once("log.cite.oplsaa") {
     W. L. Jorgensen, D. S. Maxwell, and J. Tirado-Rives
     J. Am. Chem. Soc. 1996, 118, 11225-11236. doi:10.1021/ja9621760
 
-  The parameters used by both TINKER and moltemplate were taken from:
+  Incidentally, parameters used by both TINKER and moltemplate were taken from:
   - W. L. Jorgensen, July 2008,
    "OPLS All-Atom Parameters for Organic Molecules, Ions,
     Peptides & Nucleic Acids, July 2008", BOSS Version 4.8
+  ...although I doubt you need to cite this.
+  (This document no longer appears to be publicly available, however several
+   other versions of it can be found at http://zarbi.chem.yale.edu/doc/)
 
   Many additional OPLS papers have been published by the Jorgensen lab
   over the years, and the "oplsaa.lt" file probably contains parameters

@@ -53,7 +53,7 @@ and any other program that reads or generates LAMMPS data (.lmpdat) files.
 
 This repository contains 3 folders:
 - [moltemplate](./moltemplate/): source code and force fields
-- [doc](./doc/): documentation for moltemplate, ltemplify, genpoly_lt, etc..
+- [doc](./doc/): documentation for moltemplate.sh, ltemplify.py, genpoly_lt.py, etc..
 - [examples](./examples/): examples built with moltemplate
 
 ### Documentation

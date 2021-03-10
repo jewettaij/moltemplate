@@ -1,10 +1,20 @@
-# file "spce.lt" 
+# file "spce_dreiding.lt" 
 #
 #    H1     H2
 #      \   /
 #        O
-#
-# This is a version of the SPC/E water model.
+
+
+
+# This is an implementation of the SPC/E water model which is comptabile
+# with the DREIDING force field.  This version uses a pair_style which matches
+# the pair_style used by "dreiding.lt".
+# The DREIDING force field (as implemented by moltemplate) uses a hybrid
+# pair_style which combines hbond/dreiding/lj with a Lennard Jones interaction
+# using an abrupt cutoff (instead of a smooth gradual truncation function).
+# This file has not been tested, so please use with caution
+# and report any problems you find.  -Andrew  2021-3-10
+
 
 SPCE {
 
@@ -29,10 +39,10 @@ SPCE {
   }
 
   write_once("In Settings") {
-    bond_coeff   @bond:OH         600.0   1.0 
-    angle_coeff  @angle:HOH       75.0    109.47
-    pair_coeff   @atom:O @atom:O  0.1553  3.166 
-    pair_coeff   @atom:H @atom:H  0.0     0.0
+    bond_coeff   @bond:OH                          600.0   1.0 
+    angle_coeff  @angle:HOH                        75.0    109.47
+    pair_coeff   @atom:O @atom:O lj/cut/coul/long  0.1553  3.166 
+    pair_coeff   @atom:H @atom:H lj/cut/coul/long  0.0     0.0
     group spce type  @atom:O  @atom:H
     fix fShakeSPCE spce shake 0.0001 10 100 b @bond:OH a @angle:HOH
     # (Remember to "unfix" fShakeSPCE during minimization.)
@@ -46,7 +56,7 @@ SPCE {
     # -- Default styles (for solo "SPCE" water) --
     units        real
     atom_style   full
-    pair_style   lj/charmm/coul/long 9.0 10.0 10.0
+    pair_style hybrid/overlay lj/cut/coul/long 10.0 hbond/dreiding/lj 4 6 6.5 90
     bond_style   harmonic
     angle_style  harmonic
     kspace_style pppm 0.0001

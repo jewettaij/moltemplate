@@ -1,5 +1,5 @@
-import "spce.lt"     # <- defines the "SPCE" (water) molecule type.
-import "methane.lt"  # <- defines the "Methane" molecule type (uses OPLSAA)
+import "spce_oplsaa.lt" # <- defines the "SPCE" (water) molecule type.
+import "methane.lt"     # <- defines the "Methane" molecule type (uses OPLSAA)
 
 # Periodic boundary conditions:
 write_once("Data Boundary") {

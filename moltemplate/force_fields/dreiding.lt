@@ -29,11 +29,11 @@ DREIDING {
     angle_style     harmonic
     dihedral_style  charmm
     improper_style  umbrella
-	special_bonds   dreiding	
+    special_bonds   dreiding
 
-	# Coefficients in non-bonding are just as an example
-    pair_style      hybrid/overlay hbond/dreiding/lj 4 6 6.5 90 lj/cut/coul/long 10.0
-	kspace_style	ewald 0.0001
+    # Coefficients in non-bonding are just as an example
+    pair_style hybrid/overlay lj/cut/coul/long 10.0 hbond/dreiding/lj 4 6 6.5 90
+    kspace_style    ewald 0.0001
 
     dielectric      1.0
    
