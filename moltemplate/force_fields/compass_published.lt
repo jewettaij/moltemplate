@@ -4200,6 +4200,12 @@ COMPASS {
 
 
 
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.compass") containing a link to
+# a paper describing the COMPASS force field.
+
 write_once("log.cite.compass") {
   "COMPASS: An ab Initio Force-Field Optimized for Condensed-Phase
    Application Overview with Details on Alkane and Benzene Compounds",

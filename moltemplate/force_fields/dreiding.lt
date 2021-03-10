@@ -38299,6 +38299,12 @@ DREIDING {
 
 
 
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.dreiding") containing a link to
+# a paper describing the DREIDING force field.
+
 write_once("log.cite.dreiding") {
   "DREIDING: a generic force field for molecular simulations"
   S.L. Mayo, B.D. Olafson, and W.A. Goddard,

@@ -2242,6 +2242,11 @@ MARTINI {
 
 
 
+
+# OPTIONAL:
+# Generate a file ("log.cite.martini") containing a link to several papers
+# describing the MARTINI force field (and its implemention in moltemplate).
+
 write_once("log.cite.martini") {
   In case it is helpful, here is a list of papers relevant to
   the implementation of the MARTINI force field used in moltemplate.  

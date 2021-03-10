@@ -9046,7 +9046,6 @@ OPLSAA {
   #       http://lammps.sandia.gov/doc/dihedral_hybrid.html
   #       http://lammps.sandia.gov/doc/improper_hybrid.html
 
-
 }  # OPLSAA
 
 
