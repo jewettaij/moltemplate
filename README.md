@@ -89,8 +89,7 @@ or *use a 3rd-party molecule-builder that supports atom typing
 If necessary, you can then convert the
 molecular simulation files created earlier into LAMMPS format using
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
-If these files are incomplete or need additional modifications, you can use
-[ltemplify.py](./doc/doc_ltemplify.md),
+You can then use [ltemplify.py](./doc/doc_ltemplify.md),
 to extract individual molecules from the LAMMPS DATA file, and
 modify them or combine them with other molecules using moltemplate.)*
 
