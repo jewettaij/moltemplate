@@ -451,4 +451,13 @@ write_once("log.cite.sdk") {
 
   - P.J. in ‘t Veld and G.C. Rutledge, Macromolecules 2003, 36, 7358
     https://doi.org/10.1021/ma0346658
+
+  Lipid parameters were taken from:
+
+  - Shinoda et al. J. Phys. Chem. B, Vol. 114, No. 20, 2010
+    http://dx.doi.org/10.1021/jp9107206
+
+  Cholesterol parameters were taken from:
+  - MacDermaid et al. J. Chem. Phys, 143(24), 243144, 2015
+    http://dx.doi.org/10.1063/1.4937153
 }
