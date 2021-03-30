@@ -34,8 +34,8 @@ it is manually, for all of the carbon atoms in that kind of molecule.
 
 
 __author__ = 'Andrew Jewett'
-__version__ = '0.3.2'
-__date__ = '2020-10-09'
+__version__ = '0.3.3'
+__date__ = '2021-3-30'
 
 
 import sys
@@ -866,7 +866,7 @@ def main():
         type_subset = set([])
         filename_in = ''
         file_in = sys.stdin
-        #file_in = open('pcff_repaired.frc','r')  #CONTINUEHERE
+        #file_in = open('compass_published.frc','r')  #CONTINUEHERE
         include_auto_equivalences = False
         allow_hybrid = True
         #pair_style_name = 'lj/class2/coul/long'
@@ -1650,6 +1650,20 @@ def main():
                 if (tokens[0] in allowed_section_names):
                     section_name = tokens[0]
                     section_is_auto = tokens[-1].endswith('_auto')
+                    if section_name == '#bond_increments':
+                        # SPECIAL CASE:
+                        # Either there is something quirky about the frc file
+                        # format, or I'm misinterpreting what "_auto" means.
+                        # For some reason '#bond_increments' sections are always
+                        # labelled with "_auto", even though the atom types are
+                        # always ordinary atoms(not "auto" atoms ending in "_").
+                        # I could either ignore the "_auto" label, or I
+                        # could go through each line of the "#bond_increments"
+                        # section and decide whether these are "auto" atoms
+                        # by checking for "_" at the end of each atom name.
+                        # Right now, I'm just ignoring the label
+                        # and assume they are not auto atoms.
+                        section_is_auto = False
                     tokens_after_section_name = tokens[1:]
                     sys.stderr.write(' encountered section \"'+tokens[0]+'\"\n')
                     continue
