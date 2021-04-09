@@ -58,48 +58,31 @@ DREIDING {
 	@atom:C_1	12.011
 	@atom:C_1_b1	12.011
 	@atom:N_3	14.007
-	@atom:N_3_ha	14.007
 	@atom:N_3_hd	14.007
 	@atom:N_R_d1	14.007
-	@atom:N_R_d1_ha	14.007
 	@atom:N_R_d2	14.007
-	@atom:N_R_d2_ha	14.007
 	@atom:N_R_d2_hd	14.007
 	@atom:N_R_b1_d2	14.007
-	@atom:N_R_b1_d2_ha	14.007
 	@atom:N_R_b1_d2_hd	14.007
 	@atom:N_2_d1	14.007
-	@atom:N_2_d1_ha	14.007
 	@atom:N_2_d1_hd	14.007
 	@atom:N_2_b1_d1	14.007
-	@atom:N_2_b1_d1_ha	14.007
 	@atom:N_2_b2_d1	14.007
-	@atom:N_2_b2_d1_ha	14.007
 	@atom:N_2_d2	14.007
 	@atom:N_2_d2_hd	14.007
-	@atom:N_2_d2_ha	14.007
 	@atom:N_2_b1_d2	14.007
 	@atom:N_2_b1_d2_hd	14.007
-	@atom:N_2_b1_d2_ha	14.007
 	@atom:N_2_b2_d2	14.007
 	@atom:N_2_b2_d2_hd	14.007
-	@atom:N_2_b2_d2_ha	14.007
 	@atom:N_1	14.007
-	@atom:N_1_ha	14.007
 	@atom:O_3	15.999
 	@atom:O_3_hd	15.999
-	@atom:O_3_ha	15.999
 	@atom:O_R	15.999
-	@atom:O_R_ha	15.999
 	@atom:O_2	15.999
-	@atom:O_2_ha	15.999
 	@atom:O_2_b1	15.999
-	@atom:O_2_b1_ha	15.999
 	@atom:O_2_b1_hd	15.999
 	@atom:O_2_b2	15.999
-	@atom:O_2_b2_ha	15.999
 	@atom:O_1	15.999
-	@atom:O_1_ha	15.999
 	@atom:H_B	1.008
 	@atom:B_3	10.81
 	@atom:B_2_d1	10.81
@@ -110,7 +93,6 @@ DREIDING {
 	@atom:B_2_b2_d2	10.81
 	@atom:F	18.998
 	@atom:F_hd	18.998
-	@atom:F_ha	18.998
 	@atom:Cl	34.45
 	@atom:Br	79.904
 	@atom:I	126.904
@@ -148,6 +130,24 @@ DREIDING {
 	@atom:Ca	40.078
 	@atom:Fe	55.845
 	@atom:Zn	65.38
+	@atom:N_3_ha	14.007
+	@atom:N_R_d1_ha	14.007
+	@atom:N_R_d2_ha	14.007
+	@atom:N_R_b1_d2_ha	14.007
+	@atom:N_2_d1_ha	14.007
+	@atom:N_2_b1_d1_ha	14.007
+	@atom:N_2_b2_d1_ha	14.007
+	@atom:N_2_d2_ha	14.007
+	@atom:N_2_b1_d2_ha	14.007
+	@atom:N_2_b2_d2_ha	14.007
+	@atom:N_1_ha	14.007
+	@atom:O_3_ha	15.999
+	@atom:O_R_ha	15.999
+	@atom:O_2_ha	15.999
+	@atom:O_2_b1_ha	15.999
+	@atom:O_2_b2_ha	15.999
+	@atom:O_1_ha	15.999
+	@atom:F_ha	18.998
   } # End of Masses Data by Type
 
   # 2-body (non-bonded) interactions:
