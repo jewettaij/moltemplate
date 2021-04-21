@@ -27,8 +27,8 @@ except (ImportError, SystemError, ValueError):
     from ttree_lex import ExtractCatName
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_postprocess.py'
-g_version_str = '0.6.1'
-g_date_str = '2020-10-15'
+g_version_str = '0.6.2'
+g_date_str = '2021-4-20'
 
 def main():
     atom_style = 'full'
@@ -304,18 +304,21 @@ def main():
                     if ((cat_name == 'atom') and
                             (tokens[0] not in defined_atoms)):
                         raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
-                                         '      Reference to undefined $atom:\n\n'
+                                         '      Reference to undefined $atom:\n\n' +
                                          '            ' + tokens[0] + '     (<--full name)\n\n' +
-                                         '      (If that atom belongs to a molecule (or other subunit), make sure that\n' +
+                                         '      (This $atom was not found in the "Data Atoms" sections in your LT files.\n' +
+                                         '       If this atom belongs to a molecule (or other subunit), make sure that\n' +
                                          '       you specified the correct path which leads to it (using / and ..))\n\n' +
                                          g_no_check_msg)
 
                     elif ((cat_name == 'bond') and
                           (tokens[0] not in defined_bonds)):
                         raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
-                                         '      Reference to undefined $bond:\n\n'
+                                         '      Reference to undefined $bond:\n\n' +
                                          '            ' + tokens[0] + '     (<--full name)\n\n' +
-                                         '      (If that bond belongs to a molecule (or other subunit), make sure that\n' +
+                                         '      (This $bond was not found in either the "Data Bonds" sections,\n' +
+                                         '       or the "Data Bond List" sections of any of your LT files.\n' +
+                                         '       If this bond belongs to a molecule (or other subunit), make sure that\n' +
                                          '       you specified the correct path which leads to it (using / and ..))\n\n' +
                                          g_no_check_msg)
 
@@ -324,26 +327,32 @@ def main():
                         raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
                                          '      Reference to undefined $angle:\n\n' +
                                          '            ' + tokens[0] + '     (<--full name)\n\n' +
-                                         '      (If that angle belongs to a molecule (or other subunit), make sure that\n' +
-                                         '       you specified the correct path which leads to it (using / and ..))\n\n' +
+                                         '      (This $angle not found in the "Data Angles" sections in your LT files.\n'
+                                         '       If this angle belongs to a molecule (or other subunit), make sure that\n' +
+                                         '       you specified the correct path which leads to it (using / and ..)\n' +
+                                         '       It is also possible that you have misnamed the "Data Angles" section.)\n\n' +
                                          g_no_check_msg)
 
                     elif ((cat_name == 'dihedral') and
                           (tokens[0] not in defined_dihedrals)):
                         raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n\n' +
-                                         '      Reference to undefined $dihedral:\n\n'
+                                         '      Reference to undefined $dihedral:\n\n' +
                                          '            ' + tokens[0] + '     (<--full name)\n\n' +
-                                         '    (If that dihedral belongs to a molecule (or other subunit), make sure that\n' +
-                                         '     you specified the correct path which leads to it (using / and ..))\n\n' +
+                                         '   (This dihedral was not found in the "Data Dihedrals" sections in your files\n' +
+                                         '    If this dihedral belongs to a molecule (or other subunit), make sure that\n' +
+                                         '    you specified the correct path which leads to it (using / and ..)\n' +
+                                         '    It is also possible that you have misnamed the "Data Dihedrals" section.)\n\n' +
                                          g_no_check_msg)
 
                     elif ((cat_name == 'improper') and
                           (tokens[0] not in defined_impropers)):
                         raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
-                                         '      Reference to undefined $improper:\n\n'
+                                         '      Reference to undefined $improper:\n\n' +
                                          '            ' + tokens[0] + '     (<--full name)\n\n' +
-                                         '    (If that improper belongs to a molecule (or other subunit), make sure that\n' +
-                                         '     you specified the correct path which leads to it (using / and ..))\n\n' +
+                                         '   (This improper was not found in the "Data Impropers" sections in your files\n' +
+                                         '    If this improper belongs to a molecule (or other subunit), make sure that\n' +
+                                         '    you specified the correct path which leads to it (using / and ..)\n' +
+                                         '    It is also possible that you have misnamed the "Data Impropers" section.)\n\n' +
                                          g_no_check_msg)
 
                     # I used to generate an error when a users defines a $mol
