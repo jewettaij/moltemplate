@@ -7,33 +7,24 @@
 #
 # ------------------------------- Initialization Section --------------------
 
-include         "system.in.init"
+include      "system.in.init"        # specify the style of force field used
 
 # ------------------------------- Atom Definition Section -------------------
 
-read_data       "system.data"
+read_data    "system.data"
 
 # ------------------------------- Settings Section --------------------------
 
-include         "system.in.settings"
-include         "system.in.charges"
-
+include      "system.in.settings"    # load the force field parameters
+include      "system.in.charges"     # load the charge of each atom
 
 # ------------------------------- Run Section -------------------------------
 
 
 # -- minimization protocol --
 
-# Note: The minimization step is not necessary in this example.  However
-#       in general, it's always a good idea to minimize the system beforehand.
-#       (The "fShakeSPCE" fix was defined in system.in.settings. 
-#        It is incompatible with "minimize", so we disable it first.)
-#unfix         fShakeSPCE
 thermo        500
 minimize 1.0e-4 1.0e-6 100000 400000
-
-# Now read "system.in.settings" in order to enable fShakeSPCE again:
-#include       system.in.settings
 
 # Optional: write the coordinates after minimization
 write_data   system_after_min.data

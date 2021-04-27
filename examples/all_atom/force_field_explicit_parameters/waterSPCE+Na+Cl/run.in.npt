@@ -6,43 +6,44 @@
 
 # ------------------------------- Initialization Section --------------------
 
-include         system.in.init
+include      "system.in.init"        # specify the style of force field used
 
 # ------------------------------- Atom Definition Section -------------------
 
-read_data       system.data
+read_data    "system.data"           # specify atom coordinates and topology
 
 # ------------------------------- Settings Section --------------------------
 
-include         system.in.settings
+include      "system.in.settings"    # load the force field parameters
 
 # ------------------------------- Run Section -------------------------------
 
 
 # -- minimization protocol --
 
+
 # Note: The minimization step is not necessary in this example.  However
 #       in general, it's always a good idea to minimize the system beforehand.
-# fShakeSPCE was defined in system.in.settings. It is incompatible with "minimize".
-unfix         fShakeSPCE
 minimize 1.0e-3 1.0e-5 100000 400000
-# Now read "system.in.settings" in order to redefine fShakeSPCE again:
-include       system.in.settings
 
 # -- simulation protocol --
 
 
-timestep        1.0
-dump            1 all custom 200 traj_npt.lammpstrj id mol type x y z ix iy iz
-fix             fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
-thermo          100
+timestep     1.0
+dump         1 all custom 200 traj_npt.lammpstrj id mol type x y z ix iy iz
+fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
-run             10000
+include      "system.in.constraints" # apply constraints (after minimization
+                                     # and after all integration fixes)
+
+thermo       100
+
+run          10000
 
 # Now that the system's temperature has become more equilibrated,
 # we can increase the timestep:
 
-timestep        2.0
-run		50000
+timestep     2.0
+run          50000
 
 write_data   system_after_npt.data

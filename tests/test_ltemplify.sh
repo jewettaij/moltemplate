@@ -64,8 +64,8 @@ test_ltemplify() {
       assertTrue "ltemplify.py output lacks pair_coeffs" "[ $NUM_PAIR_COEFFS -gt 0 ]"
       FOUND_GROUP_COMMAND=`awk "/group gEthylenes/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the group command" "[ $FOUND_GROUP_COMMAND -gt 0 ]"
-      FOUND_SHAKE_COMMAND=`awk "/fix fHCbonds gEthylenes shake/{sum+=1} END{print sum}" < out.lt`
-      assertTrue "ltemplify.py failed to process the shake command" "[ $FOUND_SHAKE_COMMAND -gt 0 ]"
+      FOUND_RATTLE_COMMAND=`awk "/fix fHCbonds gEthylenes rattle/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the rattle command" "[ $FOUND_RATTLE_COMMAND -gt 0 ]"
       FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
       N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
@@ -100,8 +100,8 @@ test_ltemplify() {
       assertTrue "ltemplify.py output lacks a Data Improper Coeffs section" "[ $FOUND_DATA_IMPROPER_COEFFS -gt 0 ]"
       FOUND_GROUP_COMMAND=`awk "/group gEthylenes/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the group command" "[ $FOUND_GROUP_COMMAND -gt 0 ]"
-      FOUND_SHAKE_COMMAND=`awk "/fix fHCbonds gEthylenes shake/{sum+=1} END{print sum}" < out.lt`
-      assertTrue "ltemplify.py failed to process the shake command" "[ $FOUND_SHAKE_COMMAND -gt 0 ]"
+      FOUND_RATTLE_COMMAND=`awk "/fix fHCbonds gEthylenes rattle/{sum+=1} END{print sum}" < out.lt`
+      assertTrue "ltemplify.py failed to process the rattle command" "[ $FOUND_RATTLE_COMMAND -gt 0 ]"
       FOUND_SET_COMMAND=`awk "/set type/{sum+=1} END{print sum}" < out.lt`
       assertTrue "ltemplify.py failed to process the set command" "[ $FOUND_SET_COMMAND -gt 0 ]"
       N_C_ATOM_NAMES=`awk "/atom:C/{sum+=1} END{print sum}" < out.lt`
