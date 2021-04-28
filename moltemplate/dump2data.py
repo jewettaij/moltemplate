@@ -24,8 +24,8 @@ A reference DATA file is needed (argument).
 
 #g_program_name = 'dump2data.py'
 g_program_name = __file__.split('/')[-1]
-g_date_str = '2020-12-05'
-g_version_str = '0.60.0'
+g_date_str = '2021-4-27'
+g_version_str = '0.61.0'
 
 import sys
 from collections import defaultdict
@@ -844,6 +844,13 @@ def WriteFrameToData(out_file,
 
                         # Now finally paste all the tokens together:
                         line = ' '.join(tokens)
+
+                elif section == '':
+                    # If section == '', then we are in the Header section
+                    # of the DATA file.  In that case, the modifications that
+                    # were made to that line were handled earlier, and there
+                    # is nothing left to do here.
+                    pass
 
                 else: # If we are not in one of the sections containing
                     #   data that comes from the dump file (eg 'Atoms',
