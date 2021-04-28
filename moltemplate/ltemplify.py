@@ -256,7 +256,9 @@ def ProcessShakeRattle(sf_l_in_fix_shake_rattle,  # lines containing fix shake o
                        sf_needed_bondtypes,       # bond types selected by user
                        sf_bondtypes_int2name,
                        sf_needed_angletypes,      # angle types selected by user
-                       sf_angletypes_int2name):
+                       sf_angletypes_int2name,
+                       groups_needed,
+                       sf_indent):
     """
     The sf_l_in_fix_shake_rattle list will be updated, discarding
     commands which are no longer needed.
@@ -275,7 +277,8 @@ def ProcessShakeRattle(sf_l_in_fix_shake_rattle,  # lines containing fix shake o
         fixid = tokens[1]
         group_name = tokens[2]
         delete_this_command = True
-        assert(tokens[3].find('shake') == 0)
+        assert((tokens[3].find('shake') == 0) or
+               (tokens[3].find('rattle') == 0))
 
         #  parse the list of angle types
         #i_token = tokens.index('a')
@@ -370,7 +373,7 @@ def ProcessShakeRattle(sf_l_in_fix_shake_rattle,  # lines containing fix shake o
                              sf_l_in_fix_shake_rattle[i_line].rstrip() + '\"\n')
             del sf_l_in_fix_shake_rattle[i_line]
         else:
-            sf_l_in_fix_shake_rattle[i_line] = (' ' * self.indent) + ' '.join(tokens)
+            sf_l_in_fix_shake_rattle[i_line] = (' ' * sf_indent) + ' '.join(tokens)
             i_line += 1
 
 
@@ -4655,7 +4658,9 @@ class Ltemplify(object):
                            self.needed_bondtypes,
                            self.bondtypes_int2name,
                            self.needed_angletypes,
-                           self.angletypes_int2name)
+                           self.angletypes_int2name,
+                           groups_needed,
+                           self.indent)
 
         ProcessShakeRattle(self.l_in_fix_rattle,
                            self.needed_atomtypes,
@@ -4663,7 +4668,9 @@ class Ltemplify(object):
                            self.needed_bondtypes,
                            self.bondtypes_int2name,
                            self.needed_angletypes,
-                           self.angletypes_int2name)
+                           self.angletypes_int2name,
+                           groups_needed,
+                           self.indent)
 
         # --- fix poems ---
 
