@@ -4649,21 +4649,21 @@ class Ltemplify(object):
             
 
         # --- fix shake ---
-        ProcessFixShakeRattle(self.l_in_fix_shake,
-                              self.needed_atomtypes,
-                              self.atomtypes_int2name,
-                              self.needed_bondtypes,
-                              self.bondtypes_int2name,
-                              self.needed_angletypes,
-                              self.angletypes_int2name)
+        ProcessShakeRattle(self.l_in_fix_shake,
+                           self.needed_atomtypes,
+                           self.atomtypes_int2name,
+                           self.needed_bondtypes,
+                           self.bondtypes_int2name,
+                           self.needed_angletypes,
+                           self.angletypes_int2name)
 
-        ProcessFixShakeRattle(self.l_in_fix_rattle,
-                              self.needed_atomtypes,
-                              self.atomtypes_int2name,
-                              self.needed_bondtypes,
-                              self.bondtypes_int2name,
-                              self.needed_angletypes,
-                              self.angletypes_int2name)
+        ProcessShakeRattle(self.l_in_fix_rattle,
+                           self.needed_atomtypes,
+                           self.atomtypes_int2name,
+                           self.needed_bondtypes,
+                           self.bondtypes_int2name,
+                           self.needed_angletypes,
+                           self.angletypes_int2name)
 
         # --- fix poems ---
 
