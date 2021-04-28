@@ -26,8 +26,6 @@ read_data    "system_after_npt.data"
 
 include      "system.in.settings"    # load the force field parameters
 include      "system.in.charges"     # load the charge of each atom
-include      "system.in.constraints" # apply constraints (after minimization
-                                     # and after other fixes which exert force)
 
 # ------------------------------- Run Section -------------------------------
 
@@ -35,9 +33,9 @@ include      "system.in.constraints" # apply constraints (after minimization
 
 
 timestep        1.0
-dump            1 all custom 1000 traj_nvt.lammpstrj id mol type x y z ix iy iz
+thermo          100
+dump            1 all custom 2000 traj_nvt.lammpstrj id mol type x y z ix iy iz
 fix             fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
-thermo          500
 #thermo_modify  flush yes
 
 run		50000

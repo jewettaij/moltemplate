@@ -33,16 +33,18 @@ include         system.in.constraints
 
 timestep     1.0
 
-dump         1 all custom 500 traj_npt.lammpstrj id mol type x y z ix iy iz
-thermo_style custom step temp ke pe etotal epair ebond eangle edihed press vol
 thermo       100
 #thermo_modify flush yes
+
+dump         1 all custom 2000 traj_npt.lammpstrj id mol type x y z ix iy iz
+
+thermo_style custom step temp ke pe etotal epair ebond eangle edihed press vol
 
 fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
 include      "system.in.constraints" # apply constraints (after minimization
                                      # and after all integration fixes)
 
-run          40000
+run          200000
 
 write_data   "system_after_npt.data"

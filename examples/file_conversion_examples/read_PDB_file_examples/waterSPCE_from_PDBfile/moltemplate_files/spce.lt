@@ -25,7 +25,7 @@ SPCE {
   }
 
   write("Data Angles") {
-    $angle:hoh @angle:HOH $atom:h1 $atom:o $atom:h1
+    $angle:hoh @angle:HOH $atom:h1 $atom:o $atom:h2
   }
 
   write_once("In Settings") {

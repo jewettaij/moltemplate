@@ -34,7 +34,7 @@ write_data   "system_after_min.data"
 
 
 timestep     1.0
-dump         1 all custom 10000 traj_npt.lammpstrj id mol type x y z ix iy iz
+dump         1 all custom 5000 traj_npt.lammpstrj id mol type x y z ix iy iz
 fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
 include      "system.in.constraints" # apply constraints (after minimization
@@ -42,6 +42,6 @@ include      "system.in.constraints" # apply constraints (after minimization
 
 thermo       100
 
-run          2000000
+run          500000
 
 write_data   "system_after_npt.data"

@@ -40,7 +40,7 @@ minimize 1.0e-5 1.0e-7 100000 400000
 
 timestep     1.0
 
-thermo       500
+thermo       100
 dump         1 all custom 500 traj_nvt.lammpstrj id mol type x y z ix iy iz
 
 fix          fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
