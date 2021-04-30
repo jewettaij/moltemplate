@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.19.9"
-G_DATE="2021-4-27"
+G_VERSION="2.19.10"
+G_DATE="2021-4-29"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -1785,7 +1785,7 @@ echo "LAMMPS Description" > "$OUT_FILE_DATA"
 echo "" >> "$OUT_FILE_DATA"
 echo "     $NATOMS  atoms" >> "$OUT_FILE_DATA"
 if [ -n "$NELLIPSOIDS" ]; then
-    echo "     $NATOMS  ellipsoids" >> "$OUT_FILE_DATA"
+    echo "     $NELLIPSOIDS  ellipsoids" >> "$OUT_FILE_DATA"
 fi
 if [ -n "$NBONDS" ] || [ -n "$NBONDTYPES" ]; then
     echo "     $NBONDS  bonds" >> "$OUT_FILE_DATA"
