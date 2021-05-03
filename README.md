@@ -219,24 +219,33 @@ pip or pip3.)*
 
 ### WINDOWS installation suggestions
 
-You can install both moltemplate and LAMMPS in windows, but you will first need to install the BASH shell environment on your computer.  I recommend installing [virtualbox](https://www.virtualbox.org) in windows together with a (debian-based) linux distribution with a lightweight desktop such as [xubuntu](https://xubuntu.org).  Alternatively, if you are using Windows 10 or later, you can try installing the
-[Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl)
-*(which is text only)*
-or
-[Hyper-V](https://www.nakivo.com/blog/run-linux-hyper-v/).
-Otherwise, if you are using an older version of windows, try installing
-[CYGWIN](https://www.cygwin.com/) instead.
+You can install both moltemplate and LAMMPS in windows, but
+you will first need to install the BASH shell environment on
+your computer.  I recommend installing either
+[Windows Subsystem for Linux (WSL2)](https://docs.microsoft.com/en-us/windows/wsl/install-win10),
+***or***
+[virtualbox](https://www.virtualbox.org)
+(In the later case, you will also need to install a linux distribution,
+preferably with a lightweight
+desktop such as [xubuntu](https://xubuntu.org).)
+Alternatively, you can try 
+[Hyper-V](https://www.nakivo.com/blog/run-linux-hyper-v/)
+or (if you have an older version of windows)
+[CYGWIN](https://www.cygwin.com/).
 
 To use LAMMPS and moltemplate, you will also need to install (and learn
 how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)
-If you are **NOT using WSL**, then you can use popular graphical text editors
-such as Atom, Sublime, Notepad++, VSCode,
-and the graphical versione of emacs and vim.
-([Don't use these editors to edit files within the WSL environment.](https://www.reddit.com/r/bashonubuntuonwindows/comments/6bu1d1/since_we_shouldnt_edit_files_stored_in_wsl_with/))
-If you **ARE using WSL** then you are restricted to using non-graphical text
-editors which you can safely install and run from within the WSL terminal.
-These include: **nano**, **ne**, **emacs** (the text version),
-**vim** (the text version), and **jove**.
+Popular graphical text editors
+include **Atom**, **Sublime**, **Notepad++**, **VSCode**.
+Older, non-graphical programs include **vim**, **emacs**,
+**nano**, **ne**, and **jove**.
+If you **are using WSL or WSL2**, then you should
+[use caution when using windows programs to edit your linux files](https://devblogs.microsoft.com/commandline/do-not-change-linux-files-using-windows-apps-and-tools/).
+Consequently, it might be safer to restrict yourself to using text editors
+which you have installed and can run from within the WSL or WSL2 environment.
+
+
+
 
 
 ## Web page
