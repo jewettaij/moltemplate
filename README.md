@@ -233,12 +233,24 @@ Alternatively, you can try
 or (if you have an older version of windows)
 [CYGWIN](https://www.cygwin.com/).
 
-To use LAMMPS and moltemplate, you will also need to install (and learn
-how to use) a text editor.  (Word, Wordpad, and Notepad will not work.)
+To use LAMMPS and moltemplate, you will also need to install (and learn how to
+use) a (unix-style) text editor.  (Word, Wordpad, and Notepad will not work.)
 Popular graphical text editors
-include **Atom**, **Sublime**, **Notepad++**, **VSCode**.
+include **Atom**, **Sublime**, **Notepad++**, and **VSCode**.
 Older, non-graphical programs include **vim**, **emacs**,
 **nano**, **ne**, and **jove**.
+
+WSL and virtualbox are virtual machines that allow you to run an
+alternate operating system from within windows.
+In this case that operating system is linux.  The linux operating system
+includes the BASH shell and python (which moltemplate needs), as well as
+compilers such as g++ (which can be used for compiling LAMMPS from source),
+as well as the gdb debugger (which can be useful for
+understanding why LAMMPS is behaving strangely).
+It creates an ideal environment for running LAMMPS and moltemplate.
+WSL and virtualbox also create an alternate filesystem inside windows where
+the linux operating system is stored.  Software (like moltemplate and LAMMPS)
+that you install there can access the files in that filesystem.
 If you **are using WSL or WSL2**, then you should
 [use caution when using windows programs to edit your linux files](https://devblogs.microsoft.com/commandline/do-not-change-linux-files-using-windows-apps-and-tools/).
 Consequently, it might be safer to restrict yourself to using text editors
