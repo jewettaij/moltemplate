@@ -2236,8 +2236,8 @@ def main():
                                          '  No coeffs for the \"' + angle_binding.full_name + '\" angle type have been\n' +
                                          'defined, but a reference to that angle type was discovered\n' +
                                          'near ' + ErrorLeader(angle_binding.refs[0].srcloc.infile,
-                                                               angle_binding.refs[0].srcloc.lineno) + '.   Check this file and\n'
-                                         'also check your \"angle_coeff\" commands or your \"Data Angle Coeffs" section.\n' +
+                                                               angle_binding.refs[0].srcloc.lineno) + '.   Check this file and also check\n'
+                                         'your \"angle_coeff\" commands or your \"Data Angle Coeffs" section.\n' +
                                          '---------------------------------------------------------------------\n' +
                                          g_no_check_msg)
 
@@ -2279,8 +2279,8 @@ def main():
                                          '  No coeffs for the \"' + dihedral_binding.full_name + '\" dihedral type have been\n' +
                                          'defined, but a reference to that dihedral type was discovered\n' +
                                          'near ' + ErrorLeader(dihedral_binding.refs[0].srcloc.infile,
-                                                               dihedral_binding.refs[0].srcloc.lineno) + '.   Check this file and\n'
-                                         'also check your \"dihedral_coeff\" commands or your \"Data Dihedral Coeffs" section.\n' +
+                                                               dihedral_binding.refs[0].srcloc.lineno) + '.   Check this file and also check\n'
+                                         'your \"dihedral_coeff\" commands or your \"Data Dihedral Coeffs" section.\n' +
                                          '---------------------------------------------------------------------\n' +
                                          g_no_check_msg)
 
@@ -2321,8 +2321,8 @@ def main():
                                          '  No coeffs for the \"' + improper_binding.full_name + '\" improper type have been\n' +
                                          'defined, but a reference to that improper type was discovered\n' +
                                          'near ' + ErrorLeader(improper_binding.refs[0].srcloc.infile,
-                                                               improper_binding.refs[0].srcloc.lineno) + '.   Check this file and\n'
-                                         'also check your \"improper_coeff\" commands or your \"Data Improper Coeffs" section.\n' +
+                                                               improper_binding.refs[0].srcloc.lineno) + '.   Check this file and also check\n'
+                                         'your \"improper_coeff\" commands or your \"Data Improper Coeffs" section.\n' +
                                          '---------------------------------------------------------------------\n' +
                                          g_no_check_msg)
 

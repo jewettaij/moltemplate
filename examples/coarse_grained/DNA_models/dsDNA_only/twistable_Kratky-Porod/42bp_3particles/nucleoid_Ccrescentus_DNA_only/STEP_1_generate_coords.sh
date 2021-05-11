@@ -21,6 +21,8 @@ N_MONOMERS_HALF=47619 # The number of monomers in each direction.  (The total
 
 L_MONOMER=13.944     # physical distance between monomers along the polymer axis
 
+echo "Warning: This step can take a while..." >&2
+
 rm -f crds.raw
 for (( i=0; i < N_MONOMERS_HALF; i++ )); do
     echo "$i 0.5 0.0" >> crds.raw

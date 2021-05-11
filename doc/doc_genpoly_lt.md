@@ -244,16 +244,14 @@ from the terminal) and a python module.  The former is documented below.
              that axis.
              
     -circular keyword
-       Inform the program that the polymer is circular.
-       In order to enable interactions between monomers at opposite ends of a
-       circular polymer, you must use the "-circular yes" or "-circle connected"
-       arguments.  This allows you to use monomer indices in the polymer which
-       may wrap around the polymer.  (Otherwise an error is generated.)
+       Specify whether the polymer is circular.  If so, then
+       you must use "-circular yes" or "-circle connected".
        "keyword" must be one of these choices:
              "no"          The polymer is a linear chain with the two ends
                            not connected.  (default)
              "yes"         The polymer is a circular loop with the two ends
-                           connected pointing in similar directions.
+                           connected (and the direction of the last monomer
+                           points toward the first monomer).
              "connected"   Connect the two ends together with bonds (and angles,
                            and dihedrals, if applicable) to make a closed loop.
                            But do not adjust the orientation of the first and
@@ -285,8 +283,8 @@ from the terminal) and a python module.  The former is documented below.
 
     -dir-indices ia ib
              The program attempts to orient each monomer in a direction that
-             the polymer is pointing.  By default, the program will
-             orient monomer i in the direction connecting the monomers before
+             the polymer is pointing.  By default, the program will orient
+             monomer i in the direction of a line connecting the monomers before
              and after it (monomers i-1 and i+1).  The user can override this
              using the -dir-indices command line argument.  The ia and ib
              arguments are integer offsets.  To point monomer i in the direction
