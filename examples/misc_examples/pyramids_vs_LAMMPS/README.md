@@ -2,9 +2,15 @@ Macroscopic example
 ===========================
 This is a simulation of the collapse of a stack of spherical particles arranged into a pyramid shape.  An initial (small) disturbance in the shape of the pyramids leads to their eventaul collapse in an avalanche.
 
+
 ### Images
 
 <img src="images/pyramids_vs_gravity_t=04800steps_LR.jpg" width=300> <img src="images/rightarrow.svg" height=80> <img src="images/pyramids_vs_gravity_t=12200steps_LR.jpg" width=300> <img src="images/rightarrow.svg" height=80> <img src="images/pyramids_vs_gravity_t=33000steps_LR.jpg" width=300>
+
+
+### Videos
+
+https://www.youtube.com/watch?v=Nvk6fEFkRc0
 
 
 ### Instructions
