@@ -39,10 +39,13 @@ from the terminal) and a python module.  The former is documented below.
 ```
 ltemplify.py -name MoleculeName -mol MolID INPUT_SCRIPT DATA_FILE > FILE.lt
 ```
-(...where MoleculeName is a string, MolID is an integer, INPUT_SCRIPT
-and DATA_FILE are the names of a LAMMPS input script and a data file
+(...where *MoleculeName* is a string, *MolID* is an integer, *INPUT_SCRIPT*
+and *DATA_FILE* are the names of a LAMMPS input script and a data file
 containing the molecule of interest, and FILE.lt is the resulting
 MOLTEMPLATE file created by ltemplify.py.)
+To understand the meaning of these arguments, see [this example](#-Example-1)*
+
+
 
 ***Note: Tiresome details to follow.***
 
