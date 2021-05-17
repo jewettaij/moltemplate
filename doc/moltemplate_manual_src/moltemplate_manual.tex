@@ -3764,23 +3764,24 @@ discusses alternate approaches.
 
 
 
-\section*{Advanced moltemplate usage}
 
-
-
-\section{Comparing different ways to store force-field information}
-\label{sec:spce_example_robust}
-The ``.LT'' format is a flexible file format
-for storing force field parameters in LAMMPS.
+\section{Advanced moltemplate usage}
+\label{sec:advanced_usage}
+This chapter includes a more detailed discussion of moltemplate syntax.
+The goal of this chapter is to help you write moltemplate (``.LT'') files
+in a \textit{portable} way, so that they can be shared with others.
+The ``.LT'' format is a flexible file format for storing both
+molecules and force field parameters in LAMMPS.
 There are a variety of ways to do this.
-For completeness, this chapter contains a discussion of these
+For completeness, this chapter includes a discussion of these
 different methods, and a comparison between them.
-However most users are encouraged to follow the conventions
-explained in chapters \ref{sec:force_fields} and \ref{sec:inheritance}.
+However, when using force fields, most users are encouraged to
+follow the syntax explained in chapters
+\ref{sec:inheritance} and \ref{sec:force_fields}.
 
 
 
-\subsection{Portability: Mixing molecule types}
+\subsection{Mixing molecule types}
   %Atoms of one type may interact with 
   %each other using inexpensive Lennard-Jones potentials. 
   %Other atoms in the same simulation 
@@ -4415,12 +4416,15 @@ Butane inherits TraPPE {
 \end{verbatim}
 %A molecule which \textit{inherits} from another molecule (or namespace)
 %\textit{is} a particular type of that molecule (or namespace).
-Defining \textit{Butane} this way allows it to 
-access all of molecule types, atom types, and bond types, etc...
-defined within \textit{TraPPE} as if they were defined locally.
-(I did not have to refer to the CH3 atom types as ``@atom:TraPPE/CH3'', or
-``@atom:../CH3'' for example.  Eliminating unnecessary redundant text like
-``TraPPE/'' and ``../'' reduces the chance of typos or spelling errors.)
+The ``inherits'' keyword causes \textit{Butane} to have all of the attributes
+(such as atom types, bond types, molecule definitions) of the ``parent'' object
+(\textit{TraPPE}).
+Defining \textit{Butane} this way means that you can directly access
+these molecule types, atom types, and bond types.
+You can refer to the CH3 atom type ``@atom:CH3'' instead of
+``@atom:TraPPE/CH3'', or ``@atom:../CH3'' for example.
+(Eliminating unnecessary redundant text, like ``TraPPE/'' and ``../'',
+reduces the chance of typos or spelling errors.)
 \textbf{This is the preferred way to use force fields in moltemplate.}
 
 
@@ -4452,7 +4456,8 @@ If two molecules are related to each other this way:
 then consider using inheritance instead of nesting
 (or object composition).
 In this example (with \textit{Butane} and \textit{TraPPE})
-either nesting or inheritance would work.
+either nesting or inheritance would work
+(but inheritance is a little bit cleaner and safer).
 
   Again, one very minor advantage to nesting 
 \textit{Butane} inside \textit{TraPPE}, is that it prevents the name
