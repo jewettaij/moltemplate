@@ -274,7 +274,7 @@ Syntax example:
 Usage:
 
 moltemplate.sh [-atomstyle style] \
-               [-pdb/-xyz/-dump coord_file] \
+               [-pdb/-xyz/-dump/-raw coord_file] \
                [-a assignments.txt] file.lt
 
 Optional arguments:
@@ -316,7 +316,7 @@ Optional arguments:
                 For data style ellipsoid, the dump file MUST be formatted in
                 the following order:
                 "id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] ... "
-                Where:
+                Where: "q" is defined using:
                 compute q all property/atom quatw quati quatj quatk
 
                 The box boundaries are also copied to the LAMMPS data file.
@@ -713,7 +713,7 @@ while [ "$i" -lt "$ARGC" ]; do
           BOXSIZE_XY=${box[2]}
           BOXSIZE_XZ=${box[5]}
           BOXSIZE_YZ=${box[8]}
-	        TRICLINIC="True"
+	  TRICLINIC="True"
         fi
 
         # Save the coordinates.

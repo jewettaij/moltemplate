@@ -421,7 +421,7 @@ which is available under the
 %  even if the LAMMPS syntax changes radically, and ``moltemplate.sh'' breaks. 
 %  (``ttree.py'' is nearly identical to and supports all the 
 %  command line options used by ``moltemplate.sh'', 
-%  with the exception of ``-pdb'', ``-xyz'', and ``-raw''.)
+%  with the exception of ``-pdb'', ``-xyz'', ``-dump'', and ``-raw''.)
 %    %However this tool is intentionally simple and ignorant about LAMMPS. 
 %    %This allows programmers to add features to LAMMPS without ever
 %    %breaking the ``.LT'' file format.
@@ -837,19 +837,19 @@ preventing circular (self-referential) inclusions.
 \textit{(recommended)}
 \\
 \hline
-\textbf{using namespace} \textit{X}
-&
-This enables you to refer to any of the molecule types,
-defined within a \textbf{namespace} object (\textit{X} in this example),
-\textit{without} needing to refer to these objects by their full path.
-  %(Unfortunately, atom types, or bond, angle, dihedral, or improper types
-  %must still be referred to explicitly, by their full path.)
-  %%(``Namespace objects'' are moltemplate objects containing 
-  %% only molecule definitions.)
-(This does not work for atom types.
-See section \ref{sec:using_namespaces}.)
-\\
-\hline
+%\textbf{using namespace} \textit{X}
+%&
+%This enables you to refer to any of the molecule types,
+%defined within a \textbf{namespace} object (\textit{X} in this example),
+%\textit{without} needing to refer to these objects by their full path.
+%  %(Unfortunately, atom types, or bond, angle, dihedral, or improper types
+%  %must still be referred to explicitly, by their full path.)
+%  %%(``Namespace objects'' are moltemplate objects containing
+%  %% only molecule definitions.)
+%(This does not work for atom types.
+%See section \ref{sec:using_namespaces}.)
+%\\
+%\hline
 \begin{tabular}[t]{l}
 \textbf{category} \textit{\$catname}($i_0$, $\Delta$)
 \\
@@ -1237,6 +1237,15 @@ Read all of the atomic coordinates from an external PDB file
  must match the order that the atoms appear in the data file,
  which matches the order they appear in the LT file.
  See section \ref{sec:coords_intro}.)
+\\
+\hline
+-dump coords.lammpstrj
+&
+Read all of the atomic coordinates from a LAMMPS dump (trajectory) file.
+(If ellipsoids are present, the dump file must be formatted in the
+following order:  ``id type xu yu zu c\_q[1] c\_q[2] c\_q[3] c\_q[4] ... ``
+where ``q'' is defined by
+``compute q all property/atom quatw quati quatj quatk''.)
 \\
 \hline
 -a '\textit{variable} \textit{value}'
@@ -3759,16 +3768,19 @@ discusses alternate approaches.
 
 
 
-\section{Portability: Using \textit{LT files} for force-field storage}
+\section{Comparing different ways to store force-field information}
 \label{sec:spce_example_robust}
 The ``.LT'' format is a flexible file format
 for storing force field parameters in LAMMPS.
-If you want to share your ``.LT'' file with others, it's 
-not safe to assume that all interactions use the same standard formula.
+There are a variety of ways to do this.
+For completeness, this chapter contains a discussion of these
+different methods, and a comparison between them.
+However most users are encouraged to follow the conventions
+explained in chapters \ref{sec:force_fields} and \ref{sec:inheritance}.
 
-\subsection{Mixing molecule types}
-LAMMPS has the ability to combine molecules using multiple different 
-force-field styles together using. 
+
+
+\subsection{Portability: Mixing molecule types}
   %Atoms of one type may interact with 
   %each other using inexpensive Lennard-Jones potentials. 
   %Other atoms in the same simulation 
@@ -3782,8 +3794,11 @@ force-field styles together using.
 In section \ref{sec:spce_example}, 
 we provided an example of an SPCE water molecule model.
 This example was simple to understand.
-However, as written, it would be impossible to combine this definition of water 
-with other molecules which don't share the same simple bond or angle styles.
+But LAMMPS has the ability to combine molecules using different
+kinds of force-fields together in the same simulation.
+If you want to share your ``.LT'' file with others, it's not safe to assume
+that all interactions use the same simple harmonic bond or angle styles
+that we used in that example.
 For example, we used harmonic restoring forces to preserve the water angle 
 at $109.47^\circ$, but other users may want to mix this SPCE water with a small 
 number of molecules which use a more complicated angular potential formula,
@@ -3792,7 +3807,7 @@ Using the ``hybrid'' keyword, you can avoid this limitation.
    %being limited to one particular 
    %formula to describe all of the bonds, angles, dihedrals
    %(and pair and improper) interactions.
-A more robust example is included below.
+A more robust example using ``hybrid'' styles is included below.
 
 \begin{verbatim}
 # file "spce.lt" 
@@ -3992,8 +4007,8 @@ Instead, declare your force field parameters
 as we do in this manual, 
 using the corresponding input script commands.
 (For example, ``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'',
- ``dihedral\_coeff'', and ``improper\_coeff''.
-As in the examples, all of these commands belong in the 
+ ``dihedral\_coeff'', and ``improper\_coeff'' commands.
+As in the examples, these commands usually should be located in the
 ``write\_once("In Settings")'' sections of your .LT files.)
 
 
@@ -4064,8 +4079,13 @@ cyclopentane {
   }
 }
 \end{verbatim}
-(The ``TraPPE/'' is explained below.)
-We can create copies of this molecule in the same way we did with SPCE:
+(The ``TraPPE/'' notation is explained below.)
+
+\textit{\textbf{NOTE: While conceptually simple, this is not currently
+the recommended way to use force fields in moltemplate.}
+(See section \ref{sec:inheritance} for a better way.)}
+
+...Then we can create copies of this molecule in the same way we did with SPCE:
 \begin{verbatim}
 # A cubic lattice of 125 cyclopentane molecules (12-angstrom spacing)
 mols = new Cyclopentane [5].move(0,0,12) [5].move(0,12,0) [5].move(12,0,0)
@@ -4198,9 +4218,13 @@ Butane {
   %(Note: If you omit the ``../'', moltemplate will automatically 
   %look for it there in any case, so this is optional.)
 
-Alternately, as mentioned above, it may be simpler to nest our ``Butane'' 
+\textit{\textbf{NOTE: Again, this is not the recommended way to use
+force fields.} (See section \ref{sec:inheritance} for a cleaner, simpler way.)}
+
+As mentioned above, it may be simpler to nest our ``Butane''
 within ``TraPPE'', so that so that it does not get confused with other
-(perhaps all-atom) representations of butane.  In that case, we would use:
+(perhaps all-atom) representations of the butane molecule.
+In that case, we would use:
 \begin{verbatim}
 # -- file "trappe_butane.lt" --
 
@@ -4222,7 +4246,11 @@ TraPPE {
   }
 }
 \end{verbatim}
-Note: Wrapping Butane within ``TraPPE\{ \}'' clause merely appends 
+\textit{\textbf{NOTE: Again, although the ``nesting'' method explained here
+works, a simpler, better way to use force fields is demonstrated in section
+\ref{sec:inheritance}.}}
+
+Also note that wrapping Butane within ``TraPPE\{ \}'' clause merely appends
 additional content to be added to the ``TraPPE'' object defined 
 in the ``trappe1998.lt'' file (which was included earlier). 
 It does not overwrite it. 
@@ -4315,52 +4343,55 @@ and appendix \ref{sec:adv_variable_syntax}
 
 
 
-\subsection{\textit{using namespace} syntax}
-\label{sec:using_namespaces}
-
-Because the \textit{Butane} molecule was defined within the \textit{TraPPE}
-environment, you normally have to indicate this when you refer to it later.
-For example, to create a copy of a \textit{Butane} molecule, 
-you would normally use:
-\begin{verbatim}
-import "trappe_butane.lt"
-
-butane = new TraPPE/Butane
-\end{verbatim}
-
-However for convenience, you can use the 
-\mbox{``\textbf{using namespace}''} declaration 
-so that, in the future, you can quickly refer to any 
-of the molecule types defined within \textit{TraPPE} directly, 
-without having to specify their path.
-\begin{verbatim}
-import "trappe_butane.lt"
-
-using namespace TraPPE
-
-butane = new Butane
-\end{verbatim}
-\subsubsection*{This only works for molecule types, not atom types}
-Unfortunately, you still \textit{must} always
-\textbf{refer to} atom types, bond types, and any other
-\textbf{primitive types explicitly} (by their full path).
-For example, the second line in the \textit{``Data Atoms''} in the example
-below does not refer to the \textit{CH2} atom type defined in \textit{TraPPE}.
-(Instead it creates a \textit{new} atom type, 
-which is probably not what you want.)
-\begin{verbatim}
-import "trappe_butane.lt"
-using namespace TraPPE
-butane = new Butane
-write("Data Atoms") {
-  $atom:c1 $mol:bt @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
-  $atom:c2 $mol:bt @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
-}
-\end{verbatim}
-If, for example, you want to leave out the ``TraPPE/'' prefix 
-when accessing the atom, bond, and angle types defined in TraPPE,
-then instead you can define a new molecule which 
-\textit{inherits} from TraPPE. (See section \ref{sec:inheritance}.)
+%\subsection{\textit{using namespace} syntax}
+%\label{sec:using_namespaces}
+%
+%\textit{\textbf{Note: The ``using namespace'' feature discussed below
+%may be eliminated in the future.}  Avoid using it. -Andrew 2021-5-16}
+%
+%Because the \textit{Butane} molecule was defined within the \textit{TraPPE}
+%environment, you normally have to indicate this when you refer to it later.
+%For example, to create a copy of a \textit{Butane} molecule,
+%you would normally use:
+%\begin{verbatim}
+%import "trappe_butane.lt"
+%
+%butane = new TraPPE/Butane
+%\end{verbatim}
+%
+%However for convenience, you can use the
+%\mbox{``\textbf{using namespace}''} declaration
+%so that, in the future, you can quickly refer to any
+%of the molecule types defined within \textit{TraPPE} directly,
+%without having to specify their path.
+%\begin{verbatim}
+%import "trappe_butane.lt"
+%
+%using namespace TraPPE
+%
+%butane = new Butane
+%\end{verbatim}
+%\subsubsection*{This only works for molecule types, not atom types}
+%Unfortunately, you still \textit{must} always
+%\textbf{refer to} atom types, bond types, and any other
+%\textbf{primitive types explicitly} (by their full path).
+%For example, the second line in the \textit{``Data Atoms''} in the example
+%below does not refer to the \textit{CH2} atom type defined in \textit{TraPPE}.
+%(Instead it creates a \textit{new} atom type,
+%which is probably not what you want.)
+%\begin{verbatim}
+%import "trappe_butane.lt"
+%using namespace TraPPE
+%butane = new Butane
+%write("Data Atoms") {
+%  $atom:c1 $mol:bt @atom:TraPPE/CH2 0.0   0.41937 0.00 1.9373  # <-- yes
+%  $atom:c2 $mol:bt @atom:CH2        0.0  -0.41937 0.00 -0.6457 # new atom type?
+%}
+%\end{verbatim}
+%If, for example, you want to leave out the ``TraPPE/'' prefix
+%when accessing the atom, bond, and angle types defined in TraPPE,
+%then instead you can define a new molecule which
+%\textit{inherits} from TraPPE. (See section \ref{sec:inheritance}.)
 
 \subsection{Inheritance}
 \label{sec:inheritance}
@@ -4382,13 +4413,16 @@ Butane inherits TraPPE {
   }
 }
 \end{verbatim}
-A molecule which \textit{inherits} from another molecule (or namespace)
-\textit{is} a particular type of that molecule (or namespace).
+%A molecule which \textit{inherits} from another molecule (or namespace)
+%\textit{is} a particular type of that molecule (or namespace).
 Defining \textit{Butane} this way allows it to 
 access all of molecule types, atom types, and bond types, etc...
 defined within \textit{TraPPE} as if they were defined locally.
-(I did not have to refer to the CH3 atom types as ``@atom:TraPPE/CH3'',
- for example.)
+(I did not have to refer to the CH3 atom types as ``@atom:TraPPE/CH3'', or
+``@atom:../CH3'' for example.  Eliminating unnecessary redundant text like
+``TraPPE/'' and ``../'' reduces the chance of typos or spelling errors.)
+\textbf{This is the preferred way to use force fields in moltemplate.}
+
 
 \subsubsection{Multiple inheritance:}
 \label{sec:multiple_inheritance}
