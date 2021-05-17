@@ -331,7 +331,9 @@ Other information relevant to that molecule (including the atom_style,
 force-field styles and parameters, groups and fixes)
 are read from "FILE.in" (which is presumabely a LAMMPS input script file).
 
-*(NOTE: Again, it is not necessary to include a LAMMPS input script in
+*(NOTE: The "data" file, "FILE.data", must appear after
+the input script(s), "File.in", in the argument list.
+NOTE: Again, it is not necessary to include a LAMMPS input script in
 the argument list.  However important information is typically
 contained in LAMMPS input script files, so if you have one, including
 it is recommended.  However a data file is enough.)*
