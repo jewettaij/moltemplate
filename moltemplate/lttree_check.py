@@ -932,7 +932,8 @@ def IsAtomRefRange(entry):
     """
     Is entry a template of the form:  @{atom:b1}*@{atom:b3}   ?
     """
-    is_range = ((len(entry) == 3) and
+    is_range = (hasattr(entry, "__getitem__") and  #<-- does entry support []?
+                (len(entry) == 3) and
                 IsAtomRef(entry[0]) and
                 IsAtomRef(entry[2]) and
                 ((isinstance(entry[1], TextBlock) and
