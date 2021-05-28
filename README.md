@@ -137,14 +137,10 @@ If that fails, install the
 [anaconda version of python](https://anaconda.com)
 and then try installing moltemplate again (using "pip").
 The *anaconda* version of python is recommended for several reasons.
-Anaconda python includes *numpy*, and it will also
+Anaconda python automatically includes *numpy*, and it will also
 automatically update your [PATH](http://www.linfo.org/path_env_var.html)
 for you so that *pip* works correctly.
-*(If you don't use anaconda python, then it is possible
-that you will need to edit your ~/.bashrc file and
-manually append the default pip install bin directory
-to the list of directories in your PATH variable.
-This directory is usually named $HOME/.local/bin, or something similar.)*
+*(Note: If you installed anaconda python then use "pip", not "pip3".)*
 
 
 #### Optional: Use a python virtual environment
