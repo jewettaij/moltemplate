@@ -2,7 +2,7 @@ Moltemplate Installation
 ====================
 
 Before you install moltemplate,
-[you must install BASH and python](#-OS-specific-suggestions).
+[you must install BASH and python](#OS-specific-suggestions).
 
 Once you have met those requirements,
 there are **two ways** to install moltemplate:
