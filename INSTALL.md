@@ -46,10 +46,10 @@ try using "pip" instead of "pip3".
 
 When users have difficulty installing moltemplate, it is usually
 for one of these reasons:
--They have not installed BASH (a.k.a. Xcode, WSL, linux, etc...).
--The computer has an old version of python (before python 3).
--pip and pip3 are missing. (This is very common.)
--There are multiple conflicting versions of python and pip installed.
+ - They have not installed BASH (a.k.a. Xcode, WSL, linux, etc...).
+ - The computer has an old version of python (before python 3).
+ - pip and pip3 are missing. (This is very common.)
+ - There are multiple conflicting versions of python and pip installed.
 
 Once these issues are fixed, installing moltemplate is easy.
 
