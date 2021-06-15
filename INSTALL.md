@@ -65,7 +65,7 @@ Alternatively, you can try installing the
 includes *numpy*, and it will also automatically update your
 [PATH](http://www.linfo.org/path_env_var.html)
 for you so that *pip* works correctly.
-*(Note thate if you installed anaconda then use "pip",
+*(Note that if you installed anaconda then use "pip",
 not "pip3" in the commands above.)*
 
 Some computers have both "pip" and "pip3" installed.

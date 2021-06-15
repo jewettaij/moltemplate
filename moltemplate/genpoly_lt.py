@@ -485,15 +485,15 @@ class GenPoly(object):
 
         # Did the caller ask us to split the polymer into multiple polymers?
         if len(self.settings.cuts) > 0:
-            if (self.settings.cuts[-1] < self.N+1):
-                self.settings.cuts.append(self.N + 1)
-                self.settings.cuts.sort()
+            self.settings.cuts.append(self.N)
+            self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
-                if j-i < 1:
-                    err_msg = 'Error in "-cuts" argument: One or more of the cuts has length zero.  The\n' + \
-                              '      numbers in the "-cuts" file must all lie between 1 and N-1 (where "N" is\n' + \
-                              '      the number of monomers in the polymer, which is '+str(self.N)+' in this case).\n' + \
+                if ((j-i < 1) or (i < 0) or (j>self.N)):
+                    err_msg = 'Error in "-cuts" argument: One or more of the polymers has length zero.  The\n' + \
+                              '      numbers in the "-cuts" file must be in increasing order and must be in\n' + \
+                              '      the range from 1 to N-1 (where "N" is the sum of the number of monomers\n' + \
+                              '      in all of the polymers, which is '+str(self.N)+' in this case).\n' + \
                               '      Furthermore, no integer can be listed more than once.\n'
                     raise InputError(err_msg+'.\n')
                 coords_multi.append(coords[i:j])
@@ -546,8 +546,8 @@ class GenPoly(object):
 
         # Did the caller ask us to split the polymer into multiple polymers?
         if len(self.settings.cuts) > 0:
-            if (self.settings.cuts[-1] < N+1):
-                self.settings.cuts.append(N + 1)
+            if (self.settings.cuts[-1] < N):
+                self.settings.cuts.append(N)
                 self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
@@ -959,8 +959,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.3'
-        g_date_str = '2020-11-05'
+        g_version_str = '0.1.6'
+        g_date_str = '2021-6-15'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
