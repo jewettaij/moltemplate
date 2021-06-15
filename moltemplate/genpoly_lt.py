@@ -489,12 +489,13 @@ class GenPoly(object):
             self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
-                if ((j-i < 1) or (i < 0) or (j>self.N)):
-                    err_msg = 'Error in "-cuts" argument: One or more of the polymers has length zero.  The\n' + \
-                              '      numbers in the "-cuts" file must be in increasing order and must be in\n' + \
+                if ((j-i < 1) or (j > self.N)):
+                    err_msg = 'Error in "-cuts" argument: You have bad numbers in the "-cuts" file.  This\n' + \
+                              '      could cause one or more the polymers to have zero length.  The numbers\n'
+                              '      in the "-cuts" file must be in increasing order and must be in\n' + \
                               '      the range from 1 to N-1 (where "N" is the sum of the number of monomers\n' + \
                               '      in all of the polymers, which is '+str(self.N)+' in this case).\n' + \
-                              '      Furthermore, no integer can be listed more than once.\n'
+                              '      No integer can be listed more than once.\n'
                     raise InputError(err_msg+'.\n')
                 coords_multi.append(coords[i:j])
                 i = j

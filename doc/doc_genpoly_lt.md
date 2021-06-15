@@ -212,8 +212,8 @@ from the terminal) and a python module.  The former is documented below.
                    appears in this file, a cut is made between monomers
                    i-1 and i (Indexing begins at 0, so a value of 1
                    corresponds to a cut between the first and second monomers.)
-                   A separate polymer object will be created for each polymer,
-                   and an integer suffix will be added to the name, to
+                   A separate molecule object will be created for each polymer,
+                   and an integer suffix will be added to each name, to
                    distinguish them from each other.  (Each of these
                    polymers will be part of a larger object defined by this
                    program.  Instantiating that object will create all of the
