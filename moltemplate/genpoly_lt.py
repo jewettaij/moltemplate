@@ -491,7 +491,7 @@ class GenPoly(object):
             for j in self.settings.cuts:
                 if ((j-i < 1) or (j > self.N)):
                     err_msg = 'Error in "-cuts" argument: You have bad numbers in the "-cuts" file.  This\n' + \
-                              '      could cause one or more the polymers to have zero length.  The numbers\n'
+                              '      could cause one or more the polymers to have zero length.  The numbers\n' + \
                               '      in the "-cuts" file must be in increasing order and must be in\n' + \
                               '      the range from 1 to N-1 (where "N" is the sum of the number of monomers\n' + \
                               '      in all of the polymers, which is '+str(self.N)+' in this case).\n' + \
@@ -960,8 +960,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.6'
-        g_date_str = '2021-6-15'
+        g_version_str = '0.1.7'
+        g_date_str = '2021-6-21'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
