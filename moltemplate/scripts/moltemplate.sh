@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.19.11"
-G_DATE="2021-6-21"
+G_VERSION="2.19.12"
+G_DATE="2021-6-29"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -569,7 +569,7 @@ while [ "$i" -lt "$ARGC" ]; do
         # a string is numeric.
         #http://rosettacode.org/wiki/Determine_if_a_string_is_numeric#AWK
 
-        awk 'function isnum(x){return(x==x+0)} BEGIN{targetframe=1;framecount=0} {if (isnum($0)) {framecount++} else{if (framecount==targetframe){  if (NF>0) { if ((NF==3) && isnum($1)) {print $1" "$2" "$3} else if ((NF>3) && (NR>2) && isnum($2)) {print $2" "$3" "$4} }}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
+        awk '{if (NR>2) {if (NF==4) {print $2" "$3" "$4} else {if (NF==3) {print $1" "$2" "$3}}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
 
     elif [ "$A" = "-pdb" ]; then
         if [ "$i" -eq "$ARGC" ]; then

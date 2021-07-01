@@ -2,7 +2,7 @@
 [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
-[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](http://moltemplate.org)
+[![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](https://moltemplate.org)
 [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
 
 
@@ -12,10 +12,10 @@ Moltemplate
 
 ##  Description
 
-[Moltemplate](http://moltemplate.org)
+[Moltemplate](https://moltemplate.org)
 is a *general* cross-platform text-based molecule builder for
 [**LAMMPS**](https://lammps.sandia.gov) and *(the TCL version of)*
-[**ESPResSo**](http://moltemplate.org/espresso/).
+[**ESPResSo**](https://moltemplate.org/espresso/).
 Moltemplate was intended for building custom coarse-grained molecular models,
 but it can be used to prepare realistic all-atom simulations as well.
 It currently supports the
@@ -44,7 +44,7 @@ Moltemplate is inter-operable with
 [**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
 [**EMC**](http://montecarlo.sourceforge.net/),
 [**CellPACK**](http://www.cellpack.org),
-[**LigParGen**](http://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
+[**LigParGen**](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that reads or generates LAMMPS data (.lmpdat) files.
@@ -62,23 +62,23 @@ The best way to learn how to use moltemplate is to find an example
 which is similar to the system that you wish to simulate and modify it.
 This repository includes approximately 50 [examples](./examples).
 Some of the moltemplate examples are also demonstrated (with pictures)
-[here](http://moltemplate.org/visual_examples.html).
+[here](https://moltemplate.org/visual_examples.html).
 
 All moltemplate users should probably read chapter 4 of the
 [reference manual](./doc/moltemplate_manual.pdf)
 *(It's only a few pages long.  The first 3 chapters are optional.)*
 In addition, there are also several
-[talks/tutorials](http://moltemplate.org/doc/talks.html)
+[talks/tutorials](https://moltemplate.org/doc/talks.html)
 online.
 
 
 ### Limitations for preparing all-atom simulations
 
-Moltemplate [does *not* choose atom types automatically ("atom typing")](http://moltemplate.org/force_field_recommendations.html),
+Moltemplate [does *not* choose atom types automatically ("atom typing")](https://moltemplate.org/force_field_recommendations.html),
 and currently cannot be used to build all-atom proteins from scratch.
 3rd-party tools may be needed to calculate atomic partial charges accurately.
 Some suggestions for selecting the appropriate atom types for your molecules
-are provided [here](http://moltemplate.org/force_field_recommendations.html).
+are provided [here](https://moltemplate.org/force_field_recommendations.html).
 *(Users who are unsure how to choose atom types are
 encouraged to use
 the [ATB](https://atb.uq.edu.au) database,

@@ -519,7 +519,7 @@ class GPModSettings(object):
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
                         'Error: The ' + argv[i] + ' flag should be followed by at least '+str(3+3*natoms)+
-                        'arguments .\n')
+                        ' arguments .\n')
                 natoms = int(argv[i+1])
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
@@ -557,8 +557,8 @@ class GPModSettings(object):
                 natoms = 1
                 if i+5+2*natoms >= len(argv):
                     raise InputError(
-                        'Error: The ' + argv[i] + ' flag should be followed by at least'+str(5+2*natoms)+
-                        'arguments .\n')
+                        'Error: The ' + argv[i] + ' flag should be followed by at least '+str(5+2*natoms)+
+                        ' arguments .\n')
                 natoms = int(argv[i+1])
                 if i+5+2*natoms >= len(argv):
                     raise InputError(
