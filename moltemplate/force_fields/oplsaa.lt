@@ -8214,7 +8214,7 @@ OPLSAA {
     @improper:X_X_024_X @atom:* @atom:* @atom:*_b*_a*_d*_i024* @atom:*
     @improper:X_X_047_X @atom:* @atom:* @atom:*_b*_a*_d*_i047* @atom:*
     @improper:X_X_048_X @atom:* @atom:* @atom:*_b*_a*_d*_i048* @atom:*
-    @improper:055_055_X_055 @atom:*_b*_a*_d*_i55 @atom:*_b*_a*_d*_i55 @atom:* @atom:*_b*_a*_d*_i55
+    @improper:055_055_X_055 @atom:*_b*_a*_d*_i055 @atom:*_b*_a*_d*_i055 @atom:* @atom:*_b*_a*_d*_i055
   } #(end of impropers by type)
 
 

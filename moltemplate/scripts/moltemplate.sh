@@ -67,7 +67,7 @@ EOF
 
 # Maintain a list of papers that we would like users to cite.
 # (This list currently has only one entry.)
-export MOLTEMPLATE_CITE_LIST="Jewett et al. J.Mol.Biol. 2021 (https://doi.org/10.1016/j.jmb.2021.166841)"
+export MOLTEMPLATE_CITE_LIST="Jewett et al. J.Mol.Biol. (2021) (https://doi.org/10.1016/j.jmb.2021.166841)"
 
 
 
