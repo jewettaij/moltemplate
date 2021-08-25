@@ -513,13 +513,15 @@ class GPModSettings(object):
                 Parse arguments such as:
                 -set-atoms M filename attribute a1 ... aM i1 ... iM A1 ... Am
                 Eg:
-                -atom-type 4 system.in.types type r c2 c2 r 0 0 1 1 Motor Motor Motor Motor
+                -set-atoms 3 system.in.types type r c2 r 0 1 1 Motor Motor Motor
                 """
                 natoms = 1
                 if i+3+3*natoms >= len(argv):
                     raise InputError(
-                        'Error: The ' + argv[i] + ' flag should be followed by at least '+str(3+3*natoms)+
-                        ' arguments .\n')
+                        'Error: The "' + argv[i] + '" argument should be followed by at least '+str(3+3*natoms)+
+                        ' arguments.\n'+
+                        '       For example:\n'+
+                        '  -set-atoms 3 system.in.types type r c2 r 0 1 1 Motor Motor Motor\n')
                 natoms = int(argv[i+1])
                 if i+3+3*natoms >= len(argv):
                     raise InputError(

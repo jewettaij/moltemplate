@@ -157,6 +157,14 @@ old versions of python.)
 
 The *numpy* python module is also required.
 
+To use LAMMPS and moltemplate, you will also need to install (and learn how to
+use) a (unix-style) text editor.  (Word, Wordpad, and Notepad will not work.)
+Popular graphical text editors
+include **Atom**, **Sublime**, **Notepad++**, and **VSCode**.
+Older, non-graphical programs include **vim**, **emacs**,
+**nano**, **ne**, and **jove**.
+(Apple's TextEdit can be used if you save the file as *plain text*.)
+
 
 ## License
 

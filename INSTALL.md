@@ -196,7 +196,6 @@ Alternatively, you can install the
 [anaconda version of python](https://anaconda.com)
 in linux, windows, and macOS.
 Anaconda python includes pip and numpy by default.
-(Numpy is strongly recommended, but is not required.)
 
 
 ## Mac installation suggestions
