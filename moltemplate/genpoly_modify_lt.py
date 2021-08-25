@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.6'
-g_date_str     = '2020-7-18'
+g_version_str  = '0.3.7'
+g_date_str     = '2021-8-25'
 
 g_usage_msg = """
 
@@ -24,6 +24,7 @@ Usage:
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
       [-improper itype a1 a2 a3 a4 i1 i2 i3 i4] \\
+      [-inherits ForceFieldObject] \\
       [-set-atoms M filename attribute a1 ... aM i1 ... iM A1 ... Am] \\
       [-fix-nbody N filename fixname fixID group keyword a1 ... aN i1 ... iN params] \\
       [-circular yes/no/connected] \\
@@ -438,6 +439,19 @@ class GPModSettings(object):
                 self.polymer_name = argv[i + 1]
                 del(argv[i:i + 2])
 
+            elif (argv[i].lower() == '-inherits'):
+                if i + 1 >= len(argv):
+                    raise InputError(
+                        'Error: The ' + argv[i] + ' flag should be followed by a string\n')
+                self.inherits = argv[i + 1]
+                if self.inherits.find('inherits ') == 0:
+                    self.inherits = ' ' + self.inherits
+                else:
+                    self.inherits = ' inherits ' + self.inherits
+                if self.polymer_name == '':
+                    self.polymer_name = 'Polymer'  # supply a default name
+                del(argv[i:i + 2])
+
             elif argv[i].lower() in ('-locations-periodic',
                                      '-locationsperiodic',
                                      '-loc-periodic',
@@ -816,7 +830,8 @@ class GenPolyMod(object):
             return
 
         if self.settings.polymer_name != '':
-            outfile.write(self.settings.polymer_name + ' {\n')
+            outfile.write(self.settings.polymer_name +
+                          self.settings.inherits + ' {\n')
             outfile.write('\n'
                           '  # (Note: This will augment the definition of "'+
                           self.settings.polymer_name+'".\n'
