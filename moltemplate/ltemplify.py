@@ -45,8 +45,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.68.0'
-g_date_str = '2021-4-27'
+g_version_str = '0.69.0'
+g_date_str = '2021-8-30'
 
 def Intify(s):
     if s.isdigit():
@@ -550,8 +550,8 @@ class Ltemplify(object):
         self.ignore_masses = False
         self.forbid_type_name_duplicates = False
         self.prepend_atom_type = ''
+        self.atom_type_map = {}
         self.remove_coeffs_from_data_file = True
-
 
         # self.input_data_file      Name of the data file we will read.
         # self.input_script_files   Name of the LAMMPS input scripts to be read.
@@ -570,6 +570,8 @@ class Ltemplify(object):
         # Parse the argument list.
         # Arguments are explained in the ltemplify.py documentation located at:
         # https://github.com/jewettaij/moltemplate/blob/master/doc/utils/doc_ltemplify.md
+
+        atom_type_map_fname = ''
 
         i = 0
 
@@ -752,6 +754,10 @@ class Ltemplify(object):
                     self.prepend_atom_type += '/'
                 del argv[i:i + 2]
 
+            elif (argv[i] == '-atom-type-map'):
+                atom_type_map_fname = argv[i+1]
+                del argv[i:i + 2]
+
             else:
                 i += 1
 
@@ -809,6 +815,32 @@ class Ltemplify(object):
             self.input_data_file = argv[-1]  #the last argument is the data file
             self.input_script_files = argv[:-1] # optional input script files
 
+
+
+        # If the user specified an -atom-type-map file, then read the file
+        if atom_type_map_fname != '':
+            self.infer_types_from_comments = False
+            try:
+                atom_type_map_file = open(atom_type_map_fname, 'r')
+                for line_orig in atom_type_map_file:
+                    line = line_orig
+                    comment_text = ''
+                    ic = line_orig.find('#')
+                    if ic != -1:
+                        comment_text = line[ic + 1:].strip()
+                        line = line_orig[:ic]
+                    line = line.strip()
+                    tokens = line.split()
+                    if len(tokens) == 2:
+                        orig_type = tokens[0]
+                        new_type = tokens[1]
+                        if new_type[0:6]=='@atom:':
+                            new_type = new_type[6:]
+                        self.atom_type_map[orig_type] = new_type
+            except IOError:
+                raise InputError('Error: unable to open file:\n'
+                                 '       \"' + fname + '\"\n'
+                                 '       for reading.\n')
 
 
 
@@ -3009,6 +3041,20 @@ class Ltemplify(object):
                     atomid = Intify(atomid)
                     atomtype_name = self.atomtypes_int2name[atomtype]
                     self.atomids_int2name[atomid] = atomtype_name
+
+        # Did the user ask us to map the old atom type names to new names?
+        if len(self.atom_type_map) > 0:
+            for i in self.atomtypes_int2name:
+                name = self.atomtypes_int2name[i]
+                if (name[0:4] == 'type') and name[4:].isdigit():
+                    name = name[4:]
+                if name in self.atom_type_map:
+                    # If present, remove the "type" prefix that sometimes is
+                    # inserted by ltemplify.py at the beginning of the atom
+                    # type name. The remaining text is the original atom type.
+                    if name in self.atom_type_map:
+                        new_name = self.atom_type_map[name]
+                        self.atomtypes_int2name[i] = new_name
 
 
     def PostProcess2(self):

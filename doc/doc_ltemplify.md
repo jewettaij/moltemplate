@@ -76,6 +76,7 @@ to the molecule of interest and customize the output.
 |-datacoeffs | Put force field information in the data file, not in an input script. (By default, force field parameters will be placed in the "In Settings"  section which will eventually be written to a LAMMPS input script.) |
 |-ignore-comments  | Do not infer atom, bond, angle, dihedral, and improper type names from comments in the data file.  |
 |-infer-comments  | Infer atom, bond, angle, dihedral, and improper type names from comments in the data file. |
+|-atom-type-map *MAPFILE* | Alternatively, specify a two-column text file containing a lookup table which maps atom type integers (1st column) from the DATA file to desired moltemplate-style *@atom* type names (2nd column).  *(This will cause any comments in the DATA file to be ignored.)* |
 |-ignore-coeffs  | Ignore all force field parameters (coeffs).  Omit from output file. (This is useful when using external force fields, such as OPLSAA.)|
 |-ignore-angles  | Ignore angles, dihedrals and impropers.  Omit from output file. (This is useful when using external force fields, such as OPLSAA.)|
 |-ignore-bond-types  | Ignore the 2nd column in the "Bonds" section of the LAMMPS data file, and create a "Bond List" section in the resulting MOLTEMPLATE LT file which omits the bond types.  (This is useful when using external force fields, such as OPLSAA.)| |
