@@ -138,17 +138,17 @@ def main():
     filename_in = ""
     file_in = sys.stdin
     pair_style_name = "lj/cut/coul/long"
-    pair_style_link = "http://lammps.sandia.gov/doc/pair_lj.html"
+    pair_style_link = "https://docs.lammps.org/pair_lj_cut_coul.html"
     bond_style_name = "harmonic"
-    bond_style_link = "http://lammps.sandia.gov/doc/bond_harmonic.html"
+    bond_style_link = "https://docs.lammps.org/bond_harmonic.html"
     angle_style_name = "harmonic"
-    angle_style_link = "http://lammps.sandia.gov/doc/angle_harmonic.html"
+    angle_style_link = "https://docs.lammps.org/angle_harmonic.html"
     dihedral_style_name = "fourier"
-    dihedral_style_link = "http://lammps.sandia.gov/doc/dihedral_fourier.html"
+    dihedral_style_link = "https://docs.lammps.org/dihedral_fourier.html"
     improper_style_name = "harmonic"
-    improper_style_link = "http://lammps.sandia.gov/doc/improper_harmonic.html"
+    improper_style_link = "https://docs.lammps.org/improper_harmonic.html"
     #improper_style_name = "cvff"
-    #improper_style_link = "http://lammps.sandia.gov/doc/improper_cvff.html"
+    #improper_style_link = "https://docs.lammps.org/improper_cvff.html"
     special_bonds_command = "special_bonds lj/coul 0.0 0.0 0.5"
     mixing_style = "geometric"
     use_hybrid = False
@@ -199,9 +199,9 @@ def main():
                     'Error: ' + argv[i] + ' flag should be followed by either \"opls\" or \"fourier\"\n')
             dihedral_style_name = argv[i + 1]
             if dihedral_style_name == "fourier":
-                dihedral_style_link = "http://lammps.sandia.gov/doc/dihedral_fourier.html"
+                dihedral_style_link = "https://docs.lammps.org/dihedral_fourier.html"
             if dihedral_style_name == "opls":
-                dihedral_style_link = "http://lammps.sandia.gov/doc/dihedral_opls.html"
+                dihedral_style_link = "https://docs.lammps.org/dihedral_opls.html"
             else:
                 raise Exception(
                     'Error: ' + argv[i] + ' ' + dihedral_style_name + ' not supported.\n')
@@ -314,7 +314,7 @@ def main():
                            tokens[3].rjust(zeropad_ffid,'0')] = (k, angle0)
         elif (len(tokens) > 11) and (tokens[0] == 'torsion'):
             if dihedral_style_name == 'fourier':
-                # http://lammps.sandia.gov/doc/dihedral_fourier.html
+                # https://docs.lammps.org/dihedral_fourier.html
                 m = (len(tokens) - 5) / 3
                 K = [0.0 for i in range(0, m)]
                 n = [0.0 for i in range(0, m)]
@@ -328,7 +328,7 @@ def main():
                                   tokens[3].rjust(zeropad_ffid,'0'),
                                   tokens[4].rjust(zeropad_ffid,'0')] = (K, n, d)
             elif dihedral_style_name == 'opls':
-                # http://lammps.sandia.gov/doc/dihedral_opls.html
+                # https://docs.lammps.org/dihedral_opls.html
                 K1 = float(tokens[5])
                 K2 = float(tokens[8])
                 K3 = float(tokens[11])
@@ -417,14 +417,14 @@ def main():
 
     if system_is_charged:
         pair_style_name = "lj/cut/coul/long"
-        pair_style_params = "10.0 10.0"
+        pair_style_params = "11.0 11.0"
         kspace_style = "    kspace_style pppm 0.0001\n"
-        pair_style_link = "http://lammps.sandia.gov/doc/pair_lj.html"
+        pair_style_link = "https://docs.lammps.org/pair_lj_cut_coul.html"
     else:
         pair_style_name = "lj/cut"
-        pair_style_params = "10.0"
+        pair_style_params = "11.0"
         kspace_style = ""
-        pair_style_link = "http://lammps.sandia.gov/doc/pair_lj.html"
+        pair_style_link = "https://docs.lammps.org/pair_lj_cut_coul.html"
 
     pair_style_command = "    pair_style " + ("hybrid " if use_hybrid else "") + \
                          pair_style_name + " " + pair_style_params + "\n"
@@ -440,7 +440,7 @@ def main():
                      "# WARNING: The following 1-2, 1-3, and 1-4 weighting parameters were ASSUMED:\n")
     sys.stdout.write("#          " + special_bonds_command + "\n")
     sys.stdout.write(
-        "#          (See http://lammps.sandia.gov/doc/special_bonds.html for details)\n")
+        "#          (See https://docs.lammps.org/special_bonds.html for details)\n")
     if len(lines_ureybrad) > 0:
         sys.stdout.write("#\n"
                          "# WARNING: All Urey-Bradley interactions have been IGNORED including:\n")
@@ -451,7 +451,7 @@ def main():
     sys.stdout.write(ffname + " {\n\n")
 
     sys.stdout.write("  # Below we will use lammps \"set\" command to assign atom charges\n"
-                     "  # by atom type.  http://lammps.sandia.gov/doc/set.html\n\n")
+                     "  # by atom type.  https://docs.lammps.org/set.html\n\n")
 
     sys.stdout.write("  write_once(\"In Charges\") {\n")
     for atype in atom2mass:
@@ -605,7 +605,7 @@ def main():
                          (dihedral_style_name if use_hybrid else "") +
                          " ")
         if dihedral_style_name == 'fourier':
-            # http://lammps.sandia.gov/doc/dihedral_fourier.html
+            # https://docs.lammps.org/dihedral_fourier.html
             (K, n, d) = dihedrals_by_type[dtype]
             m = len(K)
             assert((m == len(n)) and (m == len(d)))
@@ -615,7 +615,7 @@ def main():
                                  " " + str(n[i]) + " " + str(d[i]))
             sys.stdout.write("\n")
         elif dihedral_style_name == 'opls':
-            # http://lammps.sandia.gov/doc/dihedral_opls.html
+            # https://docs.lammps.org/dihedral_opls.html
             (K1, K2, K3, K4) = dihedrals_by_type[dtype]
             sys.stdout.write(str(K1) + " " + str(K2) + " " +
                              str(K3) + " " + str(K4) + "\n")
@@ -726,16 +726,16 @@ def main():
     sys.stdout.write(kspace_style)
     sys.stdout.write("  } #end of init parameters\n\n")
 
-    sys.stdout.write("  # Note: We use \"hybrid\" styles in case the user later wishes to\n"
-                     "  #       combine the molecules built using this force-field with other\n"
-                     "  #       molecules that use other styles.  (This is not necessarily\n"
-                     "  #       a good idea, but LAMMPS and moltemplate both allow it.)\n"
-                     "  #       For more information:\n"
-                     "  #       http://lammps.sandia.gov/doc/pair_hybrid.html\n"
-                     "  #       http://lammps.sandia.gov/doc/bond_hybrid.html\n"
-                     "  #       http://lammps.sandia.gov/doc/angle_hybrid.html\n"
-                     "  #       http://lammps.sandia.gov/doc/dihedral_hybrid.html\n"
-                     "  #       http://lammps.sandia.gov/doc/improper_hybrid.html\n\n\n")
+    #sys.stdout.write("  # Note: We use \"hybrid\" styles in case the user later wishes to\n"
+    #                 "  #       combine the molecules built using this force-field with other\n"
+    #                 "  #       molecules that use other styles.  (This is not necessarily\n"
+    #                 "  #       a good idea, but LAMMPS and moltemplate both allow it.)\n"
+    #                 "  #       For more information:\n"
+    #                 "  #       https://docs.lammps.org/pair_hybrid.html\n"
+    #                 "  #       https://docs.lammps.org/bond_hybrid.html\n"
+    #                 "  #       https://docs.lammps.org/angle_hybrid.html\n"
+    #                 "  #       https://docs.lammps.org/dihedral_hybrid.html\n"
+    #                 "  #       https://docs.lammps.org/improper_hybrid.html\n\n\n")
 
     sys.stdout.write("}  # " + ffname + "\n\n")
 
