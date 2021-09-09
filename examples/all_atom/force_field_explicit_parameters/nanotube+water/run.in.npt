@@ -45,6 +45,9 @@ print "---- beginning minimization (using fix langevin, not minimize) ----"
 
 timestep        0.1
 
+# Give each atom a random initial velocity consistent with a system at 1.0K.
+velocity mobile create 1.0 12345
+
 fix fxlan mobile langevin 1.0 1.0 100.0 48279
 fix fxnve mobile nve   # <-- needed by fix langevin (see lammps documentation)
 

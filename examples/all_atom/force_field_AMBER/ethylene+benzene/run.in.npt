@@ -35,6 +35,9 @@ print "First, use Langevin dynamics to randomize the initial shape of the molecu
 print "(This is not really necessary, but it seems to speed up equilibration.)"
 print "---------------------------------------------------------------------------"
 
+# Give each atom a random initial velocity consistent with a system at 300K.
+velocity all create 300.0 12345
+
 fix fxlan all langevin  300.0 300.0  120  123456  # temp: 300 K
 fix fxnph all nph  iso 50.0 50.0 1000.0   # pressure: 50 barr
 thermo    100

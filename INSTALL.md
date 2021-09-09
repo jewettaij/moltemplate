@@ -198,14 +198,13 @@ in linux, windows, and macOS.
 Anaconda python includes pip and numpy by default.
 
 
-## Mac installation suggestions
+## MacOS installation suggestions
 
 Although I have never tried this, the BASH shell, python, and pip
 prerequisites can be installed using Homebrew (or XCODE).
 However the anaconda version of python and pip is also available for mac OS,
 and it may be more reliable than the python version
 included with XCODE or Homebrew.
-
 
 ## WINDOWS installation suggestions
 

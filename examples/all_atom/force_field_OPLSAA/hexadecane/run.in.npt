@@ -49,6 +49,10 @@ dump dumpeq2 all custom 200 traj_eq2_reorient.lammpstrj id mol type x y z ix iy 
 # using fix langevin (and fix nve).  Then I switch to fix nvt (Nose-Hoover).
 # (If I start with fix nvt (Nose-Hoover), it seems to get "stuck" for a while.)
 
+# Give each atom a random initial velocity consistent with a system at 300K.
+velocity all create 900.0 12345
+
+# Run a short simulation using a Langevin thermostat.
 
 fix fxlan all langevin  900.0 900.0  120 48279
 fix fxnve all nve

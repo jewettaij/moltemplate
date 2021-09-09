@@ -35,11 +35,12 @@ print "-------------------------------------------------------------------------
 print "First, use Langevin dynamics to randomize the initial shape of the molecules"
 print "---------------------------------------------------------------------------"
 
+# Give each atom a random initial velocity consistent with a system at 1000K.
+velocity all create 1000.0 12345
 
 fix 1 all momentum 100 linear 0 0 0
-fix fxlan all langevin  1000.0 1000.0  5000.0  123456  # temp: 1000 K
+fix fxlan all langevin  1000.0 1000.0  5000.0  123456  # temp: 1000K
 fix fxnve all nve  
-
 run 20000
 unfix fxlan
 unfix fxnve
