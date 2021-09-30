@@ -151,8 +151,9 @@ http://www.moltemplate.org
 Moltemplate requires the Bourne-shell, and a recent version of python
 (3.5 or higher recommended), and can run on MacOS, linux, or windows,
 if a suitable shell environment has been installed.
-(Note that python 2.7 may also work, but you must edit your PATH to
-install moltemplate instead of using *pip*.  Pip no longer works with
+(Note that python 2.7 may also work, but you must edit your
+[PATH](http://www.linfo.org/path_env_var.html)
+to install moltemplate instead of using *pip*.  Pip no longer works with
 old versions of python.)
 
 The *numpy* python module is also required.

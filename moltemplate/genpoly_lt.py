@@ -960,8 +960,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.7'
-        g_date_str = '2021-6-21'
+        g_version_str = '0.1.8'
+        g_date_str = '2021-9-29'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
@@ -1018,7 +1018,8 @@ def main():
         if isinstance(genpoly.settings.helix_angles_file, str):
             if genpoly.settings.helix_angles_file != '':
                 helix_angles_file = open(genpoly.settings.helix_angles_file, 'r')
-        helix_angles_file = genpoly.settings.helix_angles_file
+        else:
+            helix_angles_file = genpoly.settings.helix_angles_file
         if helix_angles_file:
             genpoly.helix_angles_multi = genpoly.ReadCoords(genpoly.settings.helix_angles_file, 1)
             # Because I borrowed the ReadCoords() function to read the file,
