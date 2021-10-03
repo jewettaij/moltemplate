@@ -467,8 +467,6 @@ class GenPoly(object):
         if name_sequence_file:
             # Note: This will fill the contents of self.name_sequence_multi
             self.ReadSequence(name_sequence_file)
-        else:
-            self.name_sequence_multi = []
 
         # Did the user specify a file with a list of orientations?
         orientations_file = None
