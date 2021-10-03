@@ -427,8 +427,6 @@ class GenPoly(object):
             infile = open(self.settings.infile_name, 'r')
             self.coords_multi = self.ReadCoords(infile)
             infile.close()
-        else:
-            self.coords_multi = []
 
         if ((len(self.settings.reverse_polymer_directions) != 0) and 
             (len(self.settings.reverse_polymer_directions) !=
