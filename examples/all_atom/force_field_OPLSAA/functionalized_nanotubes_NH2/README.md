@@ -10,7 +10,12 @@ Functionalized Nanotubes
 
 This example demonstrates a way to build carbon nanotubes with chemical groups attached to the surface at random locations using moltemplate.  In I used the "new" command with [][] brackets to create a 2-D array of graphene unit cells (blue diamonds) which were wrapped around the surface of a cylinder.
 
-A small fraction of unit cells (selected randomly) have a amine group (NH2) attached to one of the carbon atoms (shown above).  This example uses the "new random" command to select randomly from the two different versions of the graphene unit cell (with and without the attached amine group) when filling the 2-D array, as shown in the pictures above.  *(The "new" and "new random" commands are explained in the moltemplate manual.)*
+A small fraction of unit cells (selected randomly) have a amine group (NH2) attached to one of the carbon atoms (shown above).  This example uses the "new random" command to select randomly from the two different versions of the graphene unit cell (with and without the attached amine group) when filling the 2-D array, as shown in the pictures above.
+*(The "new" and "new random" commands are explained in the moltemplate manual
+[link1](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.4.2),
+[link2](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.8.4), and
+[link3](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.8.8).)*
+
 
 
 #### There are no carbon-carbon bonds

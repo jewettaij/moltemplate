@@ -91,6 +91,7 @@ class GPSettings(object):
         self.header = ''
         self.name_monomer = 'Monomer'
         self.name_sequence_file = ''
+        self.name_sequence_multi = []
         self.name_polymer = ''
         self.inherits = ''
         self.dir_index_offsets = (-1,1)
@@ -359,33 +360,8 @@ class GPSettings(object):
             else:
                 i += 1
 
-        if ((len(self.reverse_polymer_directions) != 0) and 
-            (len(self.reverse_polymer_directions) != len(self.cuts) + 1)):
-            raise InputError('Error: The number of entries in the file you supplied to "-polymer-directions"\n'
-                             '       does not equal the number of polymers (which is either 1, or 1 + the\n'
-                             '       number of entries in the file you supplied to "-cuts", if applicable)\n')
 
 
-        for b in range(0, len(self.bonds_type)):
-            if len(self.bonds_type) > 1:
-                self.bonds_name.append('genp_bond' + str(b + 1) + '_')
-            else:
-                self.bonds_name.append('genp_bond_')
-        for b in range(0, len(self.angles_type)):
-            if len(self.angles_type) > 1:
-                self.angles_name.append('genp_angle' + str(b + 1) + '_')
-            else:
-                self.angles_name.append('genp_angle_')
-        for b in range(0, len(self.dihedrals_type)):
-            if len(self.dihedrals_type) > 1:
-                self.dihedrals_name.append('genp_dihedral' + str(b + 1) + '_')
-            else:
-                self.dihedrals_name.append('genp_dihedral_')
-        for b in range(0, len(self.impropers_type)):
-            if len(self.impropers_type) > 1:
-                self.impropers_name.append('genp_improper' + str(b + 1) + '_')
-            else:
-                self.impropers_name.append('genp_improper_')
 
 
 
@@ -445,6 +421,85 @@ class GenPoly(object):
         self.settings.ParseArgs(argv)
 
 
+        # ---- Parsing is finished.  Now load files and cleanup. ----
+
+        if self.settings.infile_name != '':
+            infile = open(self.settings.infile_name, 'r')
+            self.coords_multi = self.ReadCoords(infile)
+            infile.close()
+
+        if ((len(self.settings.reverse_polymer_directions) != 0) and 
+            (len(self.settings.reverse_polymer_directions) !=
+             len(self.cuts) + 1)):
+            raise InputError('Error: The number of entries in the file you supplied to "-polymer-directions"\n'
+                             '       does not equal the number of polymers (which is either 1, or 1 + the\n'
+                             '       number of entries in the file you supplied to "-cuts", if applicable)\n')
+
+
+        for b in range(0, len(self.settings.bonds_type)):
+            if len(self.settings.bonds_type) > 1:
+                self.settings.bonds_name.append('genp_bond' + str(b + 1) + '_')
+            else:
+                self.settings.bonds_name.append('genp_bond_')
+        for b in range(0, len(self.settings.angles_type)):
+            if len(self.settings.angles_type) > 1:
+                self.settings.angles_name.append('genp_angle' + str(b + 1) + '_')
+            else:
+                self.settings.angles_name.append('genp_angle_')
+        for b in range(0, len(self.settings.dihedrals_type)):
+            if len(self.settings.dihedrals_type) > 1:
+                self.settings.dihedrals_name.append('genp_dihedral' + str(b + 1) + '_')
+            else:
+                self.settings.dihedrals_name.append('genp_dihedral_')
+        for b in range(0, len(self.settings.impropers_type)):
+            if len(self.settings.impropers_type) > 1:
+                self.settings.impropers_name.append('genp_improper' + str(b + 1) + '_')
+            else:
+                self.settings.impropers_name.append('genp_improper_')
+
+
+
+        # Did the user ask us to read a custom sequence of monomer type names?
+        name_sequence_file = None
+        if isinstance(self.settings.name_sequence_file, str):
+            if self.settings.name_sequence_file != '':
+                name_sequence_file = open(self.settings.name_sequence_file,'r')
+        if name_sequence_file:
+            # Note: This will fill the contents of self.name_sequence_multi
+            self.ReadSequence(name_sequence_file)
+
+        # Did the user specify a file with a list of orientations?
+        orientations_file = None
+        if isinstance(self.settings.orientations_file, str):
+            if self.settings.orientations_file != '':
+                orientations_file = open(self.settings.orientations_file, 'r')
+        else:
+            orientations_file = self.settings.orientations_file
+        if orientations_file:
+            if self.settings.orientations_use_quats:
+                self.orientations_multi = self.ReadCoords(orientations_file, 4)
+            else:
+                self.orientations_multi = self.ReadCoords(orientations_file, 9)
+
+        # Did the user specify a file with a list of helix angles?
+        helix_angles_file = None
+        if isinstance(self.settings.helix_angles_file, str):
+            if self.settings.helix_angles_file != '':
+                helix_angles_file = open(self.settings.helix_angles_file, 'r')
+        else:
+            helix_angles_file = self.settings.helix_angles_file
+        if helix_angles_file:
+            self.helix_angles_multi = self.ReadCoords(self.settings.helix_angles_file, 1)
+            # Because I borrowed the ReadCoords() function to read the file,
+            # each "angle" is ended up being a list containing only one element
+            # (the angle).  Convert this list into the number stored there.
+            for i in range(0, len(self.helix_angles_multi)):
+                for j in range(0, len(self.helix_angles_multi[i])):
+                    assert(len(self.helix_angles_multi[i][j]) == 1)
+                    self.helix_angles_multi[i][j] = self.helix_angles_multi[i][j][0]
+
+
+
 
     def ReadCoords(self, infile, ncolumns=3):
         """
@@ -485,16 +540,17 @@ class GenPoly(object):
 
         # Did the caller ask us to split the polymer into multiple polymers?
         if len(self.settings.cuts) > 0:
-            if (self.settings.cuts[-1] < self.N+1):
-                self.settings.cuts.append(self.N + 1)
-                self.settings.cuts.sort()
+            self.settings.cuts.append(self.N)
+            self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
-                if j-i < 1:
-                    err_msg = 'Error in "-cuts" argument: One or more of the cuts has length zero.  The\n' + \
-                              '      numbers in the "-cuts" file must all lie between 1 and N-1 (where "N" is\n' + \
-                              '      the number of monomers in the polymer, which is '+str(self.N)+' in this case).\n' + \
-                              '      Furthermore, no integer can be listed more than once.\n'
+                if ((j-i < 1) or (j > self.N)):
+                    err_msg = 'Error in "-cuts" argument: You have bad numbers in the "-cuts" file.  This\n' + \
+                              '      could cause one or more the polymers to have zero length.  The numbers\n' + \
+                              '      in the "-cuts" file must be in increasing order and must be in\n' + \
+                              '      the range from 1 to N-1 (where "N" is the sum of the number of monomers\n' + \
+                              '      in all of the polymers, which is '+str(self.N)+' in this case).\n' + \
+                              '      No integer can be listed more than once.\n'
                     raise InputError(err_msg+'.\n')
                 coords_multi.append(coords[i:j])
                 i = j
@@ -546,8 +602,8 @@ class GenPoly(object):
 
         # Did the caller ask us to split the polymer into multiple polymers?
         if len(self.settings.cuts) > 0:
-            if (self.settings.cuts[-1] < N+1):
-                self.settings.cuts.append(N + 1)
+            if (self.settings.cuts[-1] < N):
+                self.settings.cuts.append(N)
                 self.settings.cuts.sort()
             i = 0
             for j in self.settings.cuts:
@@ -632,7 +688,7 @@ class GenPoly(object):
 
         """
 
-        # make sure len(genpoly.orientations_multi) == len(genpoly.coords_multi)
+        # make sure len(self.orientations_multi) == len(self.coords_multi)
         if len(self.orientations_multi) == 0:
             self.orientations_multi = [[] for entry in self.coords_multi]
         # make sure len(self.helix_angles_multi) == len(self.coords_multi)
@@ -959,8 +1015,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.3'
-        g_date_str = '2020-11-05'
+        g_version_str = '0.1.9'
+        g_date_str = '2021-9-30'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]
@@ -973,60 +1029,33 @@ def main():
                              '\"\n\n' +
                              g_usage_msg)
 
-        if genpoly.settings.infile_name != '':
-            infile = open(genpoly.settings.infile_name, 'r')
-        else:
-            infile = sys.stdin
+        if genpoly.settings.infile_name == '':
+            # If the user did not specify the name of the file where the
+            # coordinates are stored, then the user wants us to read
+            # them from the standard (terminal) input (sys.stdin)
+            genpoly.coords_multi = genpoly.ReadCoords(sys.stdin)
+
         outfile = sys.stdout
 
         # Read the coordinates
-        genpoly.coords_multi = genpoly.ReadCoords(infile)
+        
 
-        # Did the user ask us to read a custom sequence of monomer type names?
-        name_sequence_file = None
-        if isinstance(genpoly.settings.name_sequence_file, str):
-            if genpoly.settings.name_sequence_file != '':
-                name_sequence_file = open(genpoly.settings.name_sequence_file,'r')
-        if name_sequence_file:
-            # Note: This will fill the contents of genpoly.name_sequence_multi
-            genpoly.ReadSequence(name_sequence_file)
-        else:
-            # Otherwise just fill genpoly.name_sequence_multi with
-            #  repeated copies of genpoly.settings.name_monomer
-            #   (...using this ugly two-dimensional list-of-lists comprehension)
+        if genpoly.name_sequence_multi == []:
+            # In that case it means we should assume that each monomer in
+            # the polymer(s) is of the same type.  So we fill the
+            # genpoly.name_sequence_multi array with the same entry. Recall that
+            # variables ending in "_multi" are two-dimensional lists take two
+            # indices [i][j]
+            # The first index [i] specifies the polymer
+            # The second index [j] specifies the monomer within that polymer.
+            # I will use the following ugly list comprehension to create a
+            # two-dimensional list-of-lists whose shape and size is consistent
+            # with the size of the genpoly.coords_multi array.
+            # And I will fill it with "genpoly.settings.name_monomer"
             genpoly.name_sequence_multi = [[genpoly.settings.name_monomer
                                             for j in
                                             range(0, len(genpoly.coords_multi[i]))]
                                            for i in range(0, len(genpoly.coords_multi))]
-
-        # Did the user specify a file with a list of orientations?
-        orientations_file = None
-        if isinstance(genpoly.settings.orientations_file, str):
-            if genpoly.settings.orientations_file != '':
-                orientations_file = open(genpoly.settings.orientations_file, 'r')
-        else:
-            orientations_file = genpoly.settings.orientations_file
-        if orientations_file:
-            if genpoly.settings.orientations_use_quats:
-                genpoly.orientations_multi = genpoly.ReadCoords(orientations_file, 4)
-            else:
-                genpoly.orientations_multi = genpoly.ReadCoords(orientations_file, 9)
-
-        # Did the user specify a file with a list of helix angles?
-        helix_angles_file = None
-        if isinstance(genpoly.settings.helix_angles_file, str):
-            if genpoly.settings.helix_angles_file != '':
-                helix_angles_file = open(genpoly.settings.helix_angles_file, 'r')
-        helix_angles_file = genpoly.settings.helix_angles_file
-        if helix_angles_file:
-            genpoly.helix_angles_multi = genpoly.ReadCoords(genpoly.settings.helix_angles_file, 1)
-            # Because I borrowed the ReadCoords() function to read the file,
-            # each "angle" is ended up being a list containing only one element
-            # (the angle).  Convert this list into the number stored there.
-            for i in range(0, len(genpoly.helix_angles_multi)):
-                for j in range(0, len(genpoly.helix_angles_multi[i])):
-                    assert(len(genpoly.helix_angles_multi[i][j]) == 1)
-                    genpoly.helix_angles_multi[i][j] = genpoly.helix_angles_multi[i][j][0]
 
         # Now, check for polymer and sequence length inconsistencies:
         if (len(genpoly.coords_multi) != len(genpoly.name_sequence_multi)):
@@ -1070,9 +1099,6 @@ def main():
         # Convert all of this information to moltemplate (LT) format:
         genpoly.WriteLTFile(outfile)
 
-        # Now close the input file
-        if genpoly.settings.infile_name != '':  # <--if not reading from stdin
-            infile.close()
 
     except (ValueError, InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')

@@ -1,0 +1,99 @@
+# PREREQUISITES:
+#
+# 1)   You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#      (See README_setup.sh for details.)
+# 2)   You must minimize the coordinates using by running lammps witn
+#      run.in.min
+#      
+
+# ------------------------------- Initialization Section --------------------
+
+include         "system.in.init"
+
+# ------------------------------- Atom Definition Section -------------------
+
+#read_data       "system.data"
+read_data       "system_after_min.data"
+
+# ------------------------------- Settings Section --------------------------
+
+include         "system.in.settings"
+
+# ------------------------------- Run Section -------------------------------
+
+# -- simulation protocol --
+
+print "---------------------------------------------------------------------------"
+print "I often begin simulations at constant volume at high temperature use"
+print "Langevin dynamics and small timesteps to relax the system initially."
+print "(It seems more stable than Nose-Hoover. This is probably not necessary.)"
+print "Then I begin using a barostat to run simulations at high pressure."
+print "Over time, I gradually reduce both the temperature and pressure and"
+print "increase the timestep.  Finally, I use an ordinary Nose-Hoover"
+print "barostat and thermostat to run simulations at the target conditions."
+print "---------------------------------------------------------------------------"
+
+dump  dmNPTall all custom 10000 traj_npt_step1.lammpstrj id mol type x y z ix iy iz
+
+#(first, a short run at NVT conditions, to randomize the waters)
+
+# Run a short constant volume simulation at temperature 600K
+fix fxlan all langevin  600.0 600.0  1000  12345
+fix fxnve all nve
+thermo          100
+thermo_style    custom step temp pe press vol etotal epair ebond eangle
+
+timestep        1.0  # (safer to use a small timestep initially)
+run 1000
+timestep        3.0
+run 1000
+timestep        10.0
+run 1000
+unfix fxlan
+
+fix fxlan all langevin  600.0 600.0  5000  12345  # temp: 450 K
+timestep        30.0     # (40.0 should be possible for lipid systems)
+run 20000
+unfix fxnve
+unfix fxlan
+
+
+# Now run a simulation with a small timestep whose
+# temperature decreases from 600K to 450K and whose
+# pressure decreases from 200.0 to 100.0 barr.
+
+timestep        10.0
+fix fxlan all langevin  600.0 450.0  10000  12345  # temp: 450 K
+fix fxnph all nph  aniso 200.0 100.0 1000.0 couple xy drag 1.0
+run 50000
+unfix fxnph
+unfix fxlan
+
+# Now increase the timestep and run a simulation whose
+# temperature decreases from 450K to 300K and whose
+# pressure decreases from 100.0 to 1.0 barr.
+timestep        30.0     # (40.0 should be possible for lipid systems)
+fix fxlan all langevin  450.0 300.0  20000  12345  # temp: 450 K
+fix fxnph all nph  aniso 100.0 1.0 1000.0 couple xy drag 1.0
+run 100000
+unfix fxnph
+unfix fxlan
+undump dmNPTall
+
+print "---------------------------------------------------------------------------"
+print "--- Now continue the simulation using a Nose-Hoover Thermostat/Barostat ---"
+print "---------------------------------------------------------------------------"
+
+velocity all zero linear   # <- eliminate drift due to non-zero total momentum
+                           #fix 1 all momentum 1000 linear 1 1 1 # also works
+
+# temperature: 300 K, pressure: 1 barr
+fix           fxnpt all npt temp 300.0 300.0 100.0 aniso 1.0 1.0 1000.0 drag 1.0 couple xy
+thermo          100
+#thermo_modify  flush yes
+dump  dmNPTall all custom 10000 traj_npt_step2.lammpstrj id mol type x y z ix iy iz
+
+run             100000
+
+write_data   system_after_npt.data

@@ -1,7 +1,7 @@
 #
-#  Martini interaction parameters using martini.30640.tmp
-#  converted by martini.pl v1.2, February 10, 2014 by Pieter J. in 't Veld
-#  to be used in conjuction with EMC v9.3.7 or higher
+#  Martini interaction parameters using martini.21648.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
 #
 
 # Force field definition
@@ -11,7 +11,7 @@ ITEM	DEFINE
 FFNAME	MARTINI
 FFTYPE	COARSE
 VERSION	2011
-CREATED	Feb 2014
+CREATED	Oct 2019
 LENGTH	NANOMETER
 ENERGY	KJ/MOL
 DENSITY	G/CC
@@ -44,7 +44,7 @@ ITEM	END
 
 ITEM	EQUIVALENCE
 
-# type	pair	bond	angle	torsion	improper
+# type	pair	incr	bond	angle	torsion	improper
 
 C41	C4	C4	C41	C41	C41
 C42	C4	C4	C42	C42	C42
@@ -135,7 +135,7 @@ ITEM	TEMPLATES
 
 # name	smiles
 
-BOLA	[Q0+1][Qa-1][Na][Na][C1][C1][C1][C1][C1][C1][C1][C1][Na][Na]([Qa-1][Q0+1])[C1][C1][C1][C1][C1][C1][C1][C1]
+BOLA	[Q0+1][Qa-1][Na]1[Na][C1][C1][C1][C1][C1][C1][C1][C1][Na][Na]([Qa-1][Q0+1])[C1][C1][C1][C1][C1][C1][C1][C1]1
 BOLB	[Q0+1][Qa-1][Na]([Na][C1][C1][C1][C1])[C1][C1][C1][C1][C1][C1][C1][C1][Na]([Qa-1][Q0+1])[Na][C1][C1][C1][C1]
 DAPC	[Q0+1][Qa-1][Na]([Na][C4][C4][C4][C4][C2])[C4][C4][C4][C4][C2]
 DHPC	[Q0+1][Qa-1][Na]([Na][C1][C1])[C1][C1]

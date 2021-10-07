@@ -45,9 +45,9 @@ setup(
 
   url='https://github.com/jewettaij/moltemplate',
 
-  download_url='https://github.com/jewettaij/moltemplate/archive/v2.19.2.zip',
+  download_url='https://github.com/jewettaij/moltemplate/archive/v2.19.12.zip',
 
-  version='2.19.2',
+  version='2.19.12',
 
   keywords=['simulation', 'LAMMPS', 'molecule editor', 'molecule builder',
             'ESPResSo'],
@@ -60,8 +60,7 @@ setup(
                'Operating System :: POSIX :: Linux',
                'Operating System :: Microsoft :: Windows',
                'Programming Language :: Python',
-               'Programming Language :: Python :: 2.7',
-               'Programming Language :: Python :: 3.7',
+               'Programming Language :: Python :: 3.4',
                'Programming Language :: Unix Shell',
                'Topic :: Scientific/Engineering :: Chemistry',
                'Topic :: Scientific/Engineering :: Physics',
@@ -106,7 +105,7 @@ setup(
   install_requires=[
       'numpy',
   ],
-
+  #python_requires='>=3.4.*',
   setup_requires=['pytest-runner'],
   tests_require=['pytest'],
   zip_safe=True,

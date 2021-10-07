@@ -103,7 +103,6 @@ dump          1 all custom 20000 traj_make_uniform.lammpstrj id mol type x y z i
 
 
 thermo_style  custom step temp pe etotal vol epair ebond eangle
-#*#thermo        1  # time interval for printing out "thermo" data
 thermo        100  # time interval for printing out "thermo" data
 thermo_modify norm yes flush yes
 
@@ -115,7 +114,7 @@ fix fxbal all balance 100000 1.05 shift xyz 20 1.05
 # To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
 # (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
 # (Note: We are using "units lj", which means temperature is specified
-#  in units of energy.  kB*Temp = 0.001987207*300 kCal/mole = 0.5961621)
+#  in units of energy.  kB*Temp = 0.001987207*300 kcal/mole = 0.5961621)
 fix fxlan all langevin 0.5961621 0.5961621 40 482790
 fix fxnve all nve
 

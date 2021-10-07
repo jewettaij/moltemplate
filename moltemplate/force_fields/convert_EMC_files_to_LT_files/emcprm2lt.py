@@ -1,6 +1,6 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-# Author: David Stelter
+# Author: David Stelter, Andrew Jewett
 # License: MIT License  (See LICENSE.md)
 # Copyright (c) 2017
 # All rights reserved.
@@ -8,7 +8,7 @@
 import os, sys, getopt
 import datetime
 
-__version__ = 0.2
+__version__ = '0.3.0'
 
 #################### UNITS ####################
 # Only used with --units flag
@@ -17,30 +17,30 @@ lconv = 1.0 # Additional Factor for unit conversion if neededa (lengths)
 dconv = 1.0 # Additional Factor for unit conversion if neededa (densities)
 ###############################################
 
-print('\nEMC 2 LT conversion tool: v%s\n' % __version__)
+sys.stderr.write('\nEMC 2 LT conversion tool: v'+str(__version__)+'\n\n')
 
 def helpme():
-    print 'Help for the EMC 2 LT conversion tool\n'
-    print 'Input takes a list of files in EMC .prm format to be read.'
-    print 'Additional styles (bond, angle, etc) can be modified via the',\
-            'command line. Any valid LAMMPS style can be used.\n'
-    print 'Styles include:'
-    print '--pair-style='
-    print '--bond-style='
-    print '--angle-style='
-    print '--dihedral-style='
-    print '--improper-style=\n'
-    print 'Default styles are lj/cut/coul/long, harmonic, harmonic, harmonic,',\
-            'harmonic \n'
-    print 'Other commands:'
-    print '--name= provides basename for output file if desired\n'
-    print '--units flag for manual units (no parameter needed)\n'
-    print 'Usage example:'
-    print 'emcprm2lt.py file1 file2 --bond-style=harmonic --angle-style=harmonic'
-    print ''
+    sys.stderr.write('Help for the EMC 2 LT conversion tool\n\n')
+    sys.stderr.write('Input takes a list of files in EMC .prm format to be read.\n')
+    sys.stderr.write('Additional styles (bond, angle, etc) can be modified via the\n'+
+          'command line. Any valid LAMMPS style can be used.\n\n')
+    sys.stderr.write('Styles include:\n')
+    sys.stderr.write('--pair-style=\n')
+    sys.stderr.write('--bond-style=\n')
+    sys.stderr.write('--angle-style=\n')
+    sys.stderr.write('--dihedral-style=\n')
+    sys.stderr.write('--improper-style=\n\n')
+    sys.stderr.write('Default styles are lj/cut/coul/long, harmonic, harmonic, harmonic,\n'+
+                     'harmonic \n\n')
+    sys.stderr.write('Other commands:\n')
+    sys.stderr.write('--name= provides basename for output file if desired\n\n')
+    sys.stderr.write('--units flag for manual units (no parameter needed)\n\n')
+    sys.stderr.write('Usage example:\n')
+    sys.stderr.write('emcprm2lt.py file1 file2 --bond-style=harmonic --angle-style=harmonic\n')
+    sys.stderr.write('\n')
 
 def Abort():
-    print 'Aborting...'
+    sys.stderr.write('Aborting...\n')
     sys.exit()
 
 def WriteInit():
@@ -62,47 +62,50 @@ def WriteInit():
     if pair14[0] == 'OFF':
         foutput.write('    special_bonds lj/coul 0.0 0.0 0.0\n')
     else:
-        print 'Warning: special_bonds needed, add to "In Init" section\n'
+        sys.stderr.write('Warning: special_bonds needed, add to "In Init" section\n\n')
     foutput.write('  } # end init\n')
 
 def Units(length_flag, energy_flag, density_flag):
 # Check flags for all units, determine what conversions are needed, hard-coded for LAMMPS 'real'
-    print 'Attempting to auto-convert units... This should always be double-checked',\
-            ' especially for unique potential styles'
+    sys.stderr.write('Attempting to auto-convert units... This should always be double-checked\n'+
+                     ' especially for unique potential styles\n')
     global lconv; global econv; global dconv
     if length_flag:
-        print 'Warning: length scale does not match LAMMPS real units, attempting conversion to angstroms'
+        sys.stderr.write('Warning: Length scale does not match LAMMPS real units.\n'
+                         '         Attempting conversion to angstroms.\n')
         if length[0] == 'NANOMETER':
             lconv = 10.0
-            print '  nanometer -> angstrom'
+            sys.stderr.write('  nanometer -> angstrom\n')
         elif length[0] == 'MICROMETER':
             lconv = 10000.0
-            print '  micrometer -> angstrom'
+            sys.stderr.write('  micrometer -> angstrom\n')
         elif length[0] == 'METER':
             lconv = 10000000000.0
-            print '  meter -> angstrom'
+            sys.stderr.write('  meter -> angstrom\n')
         else:
-            print 'Length units NOT converted'
+            sys.stderr.write('Length units NOT converted\n')
     if energy_flag:
-        print 'Warning: energy units do not match LAMMPS real units, attempting conversion to kcal/mol'
+        sys.stderr.write('Warning: Energy units do not match LAMMPS real units.\n'+
+                         '         Attempting conversion to kcal/mol.\n')
         if energy[0] == 'KJ/MOL':
             econv = 0.239006
-            print '  kj/mol -> kcal/mol'
+            sys.stderr.write('  kj/mol -> kcal/mol\n')
         elif energy[0] == 'J/MOL':
             econv = 0.000239006
-            print '  j/mol -> kcal/mol'
+            sys.stderr.write('  j/mol -> kcal/mol\n')
         elif energy[0] == 'CAL/MOL':
             econv = 0.001
-            print '  cal/mol -> kcal/mol'
+            sys.stderr.write('  cal/mol -> kcal/mol\n')
         else:
-            print 'Energy units NOT converted'
+            sys.stderr.write('Energy units NOT converted\n')
     if density_flag:
-        print 'Warning: density units do not match LAMMPS real units, attempting conversion to gram/cm^3'
+        sys.stderr.write('Warning: density units do not match LAMMPS real units.\n'+
+                         '         Attempting conversion to gram/cm^3\n')
         if density[0] == 'KG/M^3':
             dconv = 0.001
-            print '  kg/m^3 -> g/cm^3'
+            sys.stderr.write('  kg/m^3 -> g/cm^3\n')
         else:
-            print 'Density units NOT converted'
+            sys.stderr.write('Density units NOT converted\n')
     return lconv, econv, dconv
 
 def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
@@ -119,7 +122,7 @@ def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
         if bstyle == '' or bstyle == 'harmonic':
             beconv = econv / (2*pow(lconv,2))
         else:
-            print 'Cannot find bond potential type, use manual units'
+            sys.stderr.write('Cannot find bond potential type, use manual units\n')
             Abort()
         if angle_flag:
             if astyle == '' or astyle == 'harmonic':
@@ -129,24 +132,24 @@ def ChkPotential(manual_flag, angle_flag, torsion_flag, improp_flag):
             elif astyle == 'sdk':
                 aeconv = econv
             else:
-                print 'Cannot find angle potential type, use manual units'
+                sys.stderr.write('Cannot find angle potential type, use manual units\n')
                 Abort()
         # torsion and improper not implemented fully
         elif torsion_flag:
             if dstyle == '' or dstyle == 'harmonic':
                 deconv = econv
             else:
-                print 'Cannot find torsion potential type, use manual units'
+                sys.stderr.write('Cannot find torsion potential type, use manual units\n')
                 Abort()
         elif improp_flag:
             if istyle == '' or istyle == 'harmonic':
                 ieconv = econv
             else:
-                print 'Cannot find improper potential type, use manual units'
+                sys.stderr.write('Cannot find improper potential type, use manual units\n')
                 Abort()
     else:
     # Modify as needed
-        print 'Warning: Manual units used, set potential conversion units in script'
+        sys.stderr.write('Warning: Manual units used, set potential conversion units in script\n')
         beconv = 1
         if angle_flag:
             aeconv = 1
@@ -184,20 +187,20 @@ for opt, arg in myopts:
         name = arg
     elif opt in ('--units'):
         manual_units = True
-        print 'Manual units enabled, modify python script accordingly'
+        sys.stderr.write('Manual units enabled, modify python script accordingly')
     elif opt in ('-h', '--help'):
         helpme()
         sys.exit()
 
 ### Check input filenames, make sure they exist ###
-print 'Converting: '
+sys.stderr.write('Converting: \n')
 for i in range(len(filenames)):
     if os.path.isfile(filenames[i]):
-        print '', filenames[i]
+        sys.stderr.write('\n'+filenames[i]+'\n')
     else:
-        print 'invalid filename:', filenames[i]
+        sys.stderr.write('invalid filename:'+filenames[i]+'\n')
         Abort()
-print 'from EMC .prm to moltemplate .lt format\n'
+sys.stderr.write('from EMC .prm to moltemplate .lt format\n\n')
 
 ### Open all files ###
 f = [open(fname, 'r') for fname in filenames]
@@ -265,25 +268,25 @@ for i in range(len(f)):
 for i in range(len(f)):
     for j in range(len(f)):
         if ffname[j] != ffname[i]:
-            print 'force field files do not match'
+            sys.stderr.write('force field files do not match\n')
             Abort()
         if length[j] != length[i]:
-            print 'units not identical between files'
+            sys.stderr.write('units not identical between files\n')
             Abort()
         if energy[j] != energy[i]:
-            print 'units not identical between files'
+            sys.stderr.write('units not identical between files\n')
             Abort()
         if density[j] != density[i]:
-            print 'units not identical between files'
+            sys.stderr.write('units not identical between files\n')
             Abort()
         if inner[j] != inner[i]:
-            print 'inner cutoff not identical between files'
+            sys.stderr.write('inner cutoff not identical between files\n')
             Abort()
         if cutoff[j] != cutoff[i]:
-            print 'cutoff not identical between files'
+            sys.stderr.write('cutoff not identical between files\n')
             Abort()
         if pair14[j] != pair14[i]:
-            print '1-4 pair interaction not consistent between files'
+            sys.stderr.write('1-4 pair interaction not consistent between files\n')
             Abort()
 
 ### Check if sections exist in PRM file ###
@@ -391,20 +394,20 @@ for fname in f:
 for i in range(len(equiv)):
     for j in range(len(equiv)):
         if (equiv[i][0] == equiv[j][0]) and (equiv[i] != equiv[j]):
-            print 'Error: Identical atom types with different equivalences'
+            sys.stderr.write('Error: Identical atom types with different equivalences\n')
             Abort()
 # Check Masses
 for i in range(len(masses)):
     for j in range(len(masses)):
         if (masses[i][0] == masses[j][0]) and (masses[i][1] != masses[j][1]):
-            print 'Error: Identical types with different mass'
+            sys.stderr.write('Error: Identical types with different mass\n')
             Abort()
 # Check Nonbond
 for i in range(len(nonbond)):
     for j in range(len(nonbond)):
         if (nonbond[i][0] == nonbond[j][0]) and (nonbond[i][1] == nonbond[j][1]) and ((nonbond[i][2] != nonbond[j][2]) or (nonbond[i][3] != nonbond[j][3])):
-            print nonbond[i], nonbond[j]
-            print 'Error: Identical types with different pair-interactions'
+            sys.stderr.write(str(nonbond[i])+'\n'+str(nonbond[j])+'\n')
+            sys.stderr.write('Error: Identical types with different pair-interactions\n')
             Abort()
 
 ### Remove double equivalences ###
@@ -416,9 +419,11 @@ for i in range(len(equiv)):
         elif (equiv[i][0] == equiv[j][0]):
             equiv[j][1] = None
             equiv[j][2] = 'duplicate'
-    if len(equiv[i]) != 6:
-        print 'Warning: Incorrect equivalence formatting for type %s' % equiv[i][0],\
-                'skipping type, topology may not be complete'
+    if len(equiv[i]) < 6:
+        sys.stderr.write(str(equiv[i])+'\n')
+        sys.stderr.write('Warning: Incorrect equivalence formatting for type '+
+                         str(equiv[i][0])+'\n'+
+                         '         Skipping type. Topology may not be complete.\n\n')
         equiv[i][1] = None
         equiv[i][2] = 'invalid_format'
 
@@ -434,7 +439,9 @@ else:
 foutput = open(fname, 'w')
 
 ### Output to LT format ###
-foutput.write('# Autogenerated by EMC 2 LT tool v%s on %s\n' % (__version__, str(datetime.date.today())))
+foutput.write('# Autogenerated by EMC 2 LT tool v'+
+              __version__+' on '+
+              str(datetime.date.today())+'\n')
 foutput.write('#\n# ')
 for i in range(len(sys.argv)):
     foutput.write('%s ' % sys.argv[i])
@@ -472,8 +479,8 @@ for i in range(len(equiv)):
         if equiv[i][0] == masses[j][0]:
             check = 'success'
     if check == None:
-        print equiv[i], masses[j]
-        print 'Atom defined in Equivlances, but not found in Masses'
+        sys.stderr.write(str(equiv[i])+'\n'+str(masses[j])+'\n')
+        sys.stderr.write('Atom defined in Equivlances, but not found in Masses\n')
         Abort()
 # Sanity check masses vs equivalences
 for i in range(len(masses)):
@@ -482,13 +489,13 @@ for i in range(len(masses)):
         if masses[i][0] == equiv[j][0]:
             check = 'success'
     if check == None:
-        print masses[i], equiv[j]
-        print 'Atom defined in Masses, but not found in Equivlances'
+        sys.stderr.write(str(masses[i])+'\n'+str(equiv[j])+'\n')
+        sys.stderr.write('Atom defined in Masses, but not found in Equivlances\n')
         Abort()
 
 ### Nonbonded Info ###
 if pstyle == '':
-    print 'Warning: no non-bonded potential provided, assuming lj/cut/coul/long'
+    sys.stderr.write('Warning: no non-bonded potential provided, assuming lj/cut/coul/long\n')
     pstyle = 'lj/cut/coul/long'
 foutput.write('  write_once("In Settings") {\n')
 foutput.write('    # ----- Non-Bonded interactions -----\n')
@@ -522,8 +529,10 @@ for i in range(len(nonbond)):
         if nonbond[i][1] == equiv[j][0]:
             atom2name = '%s_b%s_a%s_d%s_i%s' % (nonbond[i][1], equiv[j][2], equiv[j][3], equiv[j][4], equiv[j][5])
     if atom1name == None or atom2name == None:
-        print atom1name, atom2name, nonbond[i]
-        print 'Error: Atom in Nonbonded Pairs not found in Equivalences'
+        sys.stderr.write(str(atom1name)+'\n'+
+                         str(atom2name)+'\n'+
+                         str(nonbond[i])+'\n')
+        sys.stderr.write('Error: Atom in Nonbonded Pairs not found in Equivalences\n')
         Abort()
     foutput.write('    pair_coeff @atom:%s @atom:%s %s %f %f' %
             (atom1name, atom2name, stylename, float(nonbond[i][3])*econv, float(nonbond[i][2])*lconv))
@@ -532,7 +541,7 @@ foutput.write('  } # end of nonbonded parameters\n\n')
 
 ### Bond Info ###
 if bstyle == '':
-    print 'Warning: no bond potential provided, assuming harmonic'
+    sys.stderr.write('Warning: no bond potential provided, assuming harmonic\n')
     bstyle == 'harmonic'
 foutput.write('  write_once("In Settings") {\n')
 foutput.write('    # ----- Bonds -----\n')
@@ -550,7 +559,7 @@ foutput.write('  } # end of bonds\n\n')
 ### Angle Info ###
 if angle_flag:
     if astyle == '':
-        print 'Warning: no angle potential provided, assuming harmonic'
+        sys.stderr.write('Warning: no angle potential provided, assuming harmonic\n')
         astyle == 'harmonic'
     foutput.write('  write_once("In Settings") {\n')
     foutput.write('    # ----- Angles -----\n')
@@ -574,7 +583,7 @@ if angle_flag:
 # Incomplete
 if torsion_flag:
     if dstyle == '':
-        print 'Warning: no dihedral/torsion potential provided, assuming harmonic'
+        sys.stderr.write('Warning: no dihedral/torsion potential provided, assuming harmonic\n')
         dstyle == 'harmonic'
     foutput.write('  write_once("In Settings") {\n')
     foutput.write('    # ----- Dihedrals -----\n')
@@ -593,7 +602,7 @@ if torsion_flag:
 ieconv = econv # improper coeff conversion
 if improp_flag:
     if istyle == '':
-        print 'Warning: no improper potential provided, assuming harmonic'
+        sys.stderr.write('Warning: no improper potential provided, assuming harmonic\n')
         istyle == 'harmonic'
     foutput.write('  write_once("In Settings") {\n')
     foutput.write('    # ----- Impropers -----\n')
@@ -610,9 +619,13 @@ if improp_flag:
     foutput.write('  } # end of impropers\n\n')
 
 ### Initialization Info ###
-print 'Warning: Attempting to write generic "In Init" section,',\
-        'further modification after this script is extremely likely'
+sys.stderr.write('Warning: Attempting to write generic "In Init" section,\n'+
+                 '         Further modification after this script is extremely likely.\n')
 WriteInit()
 
+sys.stderr.write('Warning: The EQUIVALENCES section of the PRM files may have been converted\n'
+      '         incorrectly.  Please check the "replace {}" statements for validity.\n'
+      '         (This conversion script has only been tested on a couple force fields\n'
+      '         which use a specific format.  You must verify the conversion.)\n')
 foutput.write('} # %s\n' % ffname[0])
 sys.exit()

@@ -5,7 +5,12 @@
 
 cd moltemplate_files
 
-  # Use the "genpoly_lt.py" to generate a moltemplate file (.LT file)
+  # NOTE: It would be much simpler to create the polymer in this example by
+  # adding some .move() and .rot() commands directly into the "system.lt" file.
+  # But instead, I wanted to demonstrate how to use the "genpoly_lt.py" tool
+  # to create a polymer that follows the shape of an arbitrary curve.
+  #
+  # I use the "genpoly_lt.py" to generate a moltemplate file (.LT file)
   # describing the polymer you want to simulate.  You must specify the
   # name of the moltemplate object which will be used as the monomer subunit
   # in the final polymer (eg. "DNAMonomer"), as well as any bonds (or angles

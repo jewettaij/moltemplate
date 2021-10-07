@@ -48,7 +48,7 @@ dump            1 all custom 200 traj.lammpstrj id mol type x y z ix iy iz
 
 # To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
 # (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
-# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+# kB*T = 0.001987207*300 kcal/mole = 0.5961621
 
 #                        kB*Tstart   kB*Tstop   tdamp     randomseed
 

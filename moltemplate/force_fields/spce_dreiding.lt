@@ -1,0 +1,92 @@
+############################################################################
+############################################################################
+# This is an implementation of the SPC/E water model which is comptabile
+# with the pair_style used in the DREIDING force field.  This version uses
+# a pair_style which matches the pair_style used by "dreiding.lt".
+# The DREIDING force field (as implemented by moltemplate) uses a hybrid
+# pair_style which combines hbond/dreiding/lj with a Lennard Jones interaction
+# using an abrupt cutoff (instead of a smooth gradual truncation function).
+#
+# !!!! THE SPC/E MODEL DOES NOT USE DREIDING STYLE ATOM TYPES OR H-BONDS !!!!
+#
+# When using the DREIDING force field, atoms that can participate
+# in hydrogen bonding should be explicitly labelled as hydrogen
+# donors or acceptors (by choosing an @atom type name from the
+# "dreiding.lt" file that ends in "_d" or "_a".  For details, see:
+# https://github.com/jewettaij/moltemplate/blob/master/doc/DREIDING_Label_Manual.pdf
+# When these atom types are selected, special DREIDING-specific
+# attractive interactions between donor and acceptor atoms are applied.
+# However, traditional water models, like SPC, SPC/E, TIP3P, do not 
+# use these kinds of attractive interactions.
+# So, if the molecule(s) you are mixing with water contain hydrogen
+# donors or accepters, you might want to avoid using this water model.  (I am
+# not a DREIDING expert.  This is just my opinion. Feel free to enlighten me.)
+# This file has not been tested, so please use with caution
+# and report any problems you find.  -Andrew  2021-4-26
+############################################################################
+############################################################################
+############################################################################
+
+
+# file "spce_dreiding.lt" 
+#
+#    H1     H2
+#      \   /
+#        O
+
+
+SPCE {
+
+  write("Data Atoms") {
+    $atom:O  $mol:. @atom:O -0.8476  0.0000000 0.00000 0.000000
+    $atom:H1 $mol:. @atom:H  0.4238  0.8164904 0.00000  0.5773590
+    $atom:H2 $mol:. @atom:H  0.4238  -0.8164904 0.00000 0.5773590
+  }
+
+  write_once("Data Masses") {
+    @atom:O 15.9994
+    @atom:H 1.008
+  }
+
+  write("Data Bonds") {
+    $bond:OH1 @bond:OH $atom:O $atom:H1
+    $bond:OH2 @bond:OH $atom:O $atom:H2
+  }
+
+  write("Data Angles") {
+    $angle:HOH @angle:HOH $atom:H1 $atom:O $atom:H2
+  }
+
+  write_once("In Settings") {
+    bond_coeff   @bond:OH                          600.0   1.0 
+    angle_coeff  @angle:HOH                        75.0    109.47
+    pair_coeff   @atom:O @atom:O lj/cut/coul/long  0.1553  3.166 
+    pair_coeff   @atom:H @atom:H lj/cut/coul/long  0.0     0.0
+    group spce type  @atom:O  @atom:H
+    # Note: Since we are using RATTLE constraints, the bond and angle strength
+    # parameters ("600.0", "75.0") do not matter. But the equilibrium bond
+    # length ("1.0") and equilibrium angle ("109.47") does matter. LAMMPS
+    # obtains these numbers from the bond_coeff and angle_coeff commands above.
+  }
+
+  write_once("In Constraints") {
+    group spce type  @atom:O  @atom:H
+    fix fRattleSPCE spce rattle 0.0001 10 100 b @bond:OH a @angle:HOH
+    # Remember to put this command in your LAMMPS input script:
+    #  include system.in.constraints
+    # ...after minimization and after all integration fixes
+  }
+
+  write_once("In Init") {
+    # -- Default styles (for solo "SPCE" water) --
+    units        real
+    atom_style   full
+    pair_style hybrid/overlay lj/cut/coul/long 10.0 hbond/dreiding/lj 4 6 6.5 90
+    bond_style   harmonic
+    angle_style  harmonic
+    kspace_style pppm 0.0001
+    #pair_modify  mix arithmetic  # LEAVE THIS UNSPECIFIED!
+  }
+
+} # end of definition of "SPCE" water molecule type
+

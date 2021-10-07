@@ -1,0 +1,26 @@
+
+version: 2.1
+
+orbs:
+  python: circleci/python@0.2.1
+
+jobs:
+  build-and-test:
+    executor: python/default
+    steps:
+      - checkout
+      #- python/load-cache
+      #- python/install-deps
+      #- python/save-cache
+      - run: git clone https://github.com/kward/shunit2 shunit2
+      - run: pip install . --user
+      - run: bash tests/test_read_coords_pdb.sh
+      - run: bash tests/test_ltemplify.sh
+      - run: bash tests/test_oplsaa.sh
+      - run: bash tests/test_compass.sh
+      - run: python tests/test_genpoly_lt.py
+
+workflows:
+  main:
+    jobs:
+      - build-and-test

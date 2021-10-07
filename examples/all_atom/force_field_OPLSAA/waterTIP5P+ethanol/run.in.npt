@@ -42,6 +42,9 @@ timestep  1.0
 group gRigid    union    gH2O gH2O
 group gFlexible subtract all gRigid
 
+# Give each atom a random initial velocity consistent with a system at 298K.
+velocity all create 298.0 12345
+
 fix fxRigid gH2O rigid/nph/small molecule iso 1 1 1000
 fix fxFlexible gFlexible nve
 fix fxLanvegin all langevin 298 298 10000.0 48279

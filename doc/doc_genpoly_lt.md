@@ -1,13 +1,22 @@
 genpoly_lt.py
 ===========
 
+![DNA model](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/moltemplate_usage/CG_dsDNA_gold_turquoise.gif)
+![](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/plus.png)
+![space-filling curve](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/hamiltonian_paths_16x16x16.gif)
+![](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/rightarrow.png)
+![DNA wrapped along curve](https://raw.githubusercontent.com/jewettaij/ndmansfield/master/doc/images/moltemplate_usage/wrap_CG_dsDNA_around_a_curve_from_ndmansfield_LLR.png)
 
 ## Description
 
-Generate a moltemplate file containing a definition of a Polymer
-molecule containing monomers located at the positions specified in
-"coords.raw" (a 3-column text file).  Monomers will be rotated so
-that they point along the polymer axis direction (see "-dir-indices")
+*genpoly_lt.py* is a program for preparing simulations containing polymers.
+It is useful for wrapping polymers around an arbitrary curve.
+(An example of its use is provided
+[here](../examples/coarse_grained/DNA_models/dsDNA_only/2strands/3bp_2particles/confined_viral_DNA).)
+*genpoly_lt.py* generates a moltemplate file (.LT file) containing a definition
+of a polymer molecule containing monomers located at the positions specified
+in a 3-column text file ("coords.raw" in the example below).  Monomers will be
+rotated so that they point along the polymer axis direction (see "-dir-indices")
 with an optional helical twist added (see "-helix").  Users can
 specify one or more bonds connecting each monomer to the next monomer
 (see "-bond").  Similarly, 3-body and 4-body angular interactions between
@@ -16,7 +25,7 @@ atoms in different monomers can either be generated automatically
 OR generated manually (using "-angle", "-dihedral", "-improper" arguments).
 
 Note: This program is both a stand-alone executable program (that can be run
-from the terminal) and a python library.  The former is documented below.
+from the terminal) and a python module.  The former is documented below.
 *(The [python API is explained later](#Python-API).)*
 
 ## Usage:
@@ -203,8 +212,8 @@ from the terminal) and a python library.  The former is documented below.
                    appears in this file, a cut is made between monomers
                    i-1 and i (Indexing begins at 0, so a value of 1
                    corresponds to a cut between the first and second monomers.)
-                   A separate polymer object will be created for each polymer,
-                   and an integer suffix will be added to the name, to
+                   A separate molecule object will be created for each polymer,
+                   and an integer suffix will be added to each name, to
                    distinguish them from each other.  (Each of these
                    polymers will be part of a larger object defined by this
                    program.  Instantiating that object will create all of the
@@ -235,16 +244,14 @@ from the terminal) and a python library.  The former is documented below.
              that axis.
              
     -circular keyword
-       Inform the program that the polymer is circular.
-       In order to enable interactions between monomers at opposite ends of a
-       circular polymer, you must use the "-circular yes" or "-circle connected"
-       arguments.  This allows you to use monomer indices in the polymer which
-       may wrap around the polymer.  (Otherwise an error is generated.)
+       Specify whether the polymer is circular.  If so, then
+       you must use "-circular yes" or "-circle connected".
        "keyword" must be one of these choices:
              "no"          The polymer is a linear chain with the two ends
                            not connected.  (default)
              "yes"         The polymer is a circular loop with the two ends
-                           connected pointing in similar directions.
+                           connected (and the direction of the last monomer
+                           points toward the first monomer).
              "connected"   Connect the two ends together with bonds (and angles,
                            and dihedrals, if applicable) to make a closed loop.
                            But do not adjust the orientation of the first and
@@ -276,8 +283,8 @@ from the terminal) and a python library.  The former is documented below.
 
     -dir-indices ia ib
              The program attempts to orient each monomer in a direction that
-             the polymer is pointing.  By default, the program will
-             orient monomer i in the direction connecting the monomers before
+             the polymer is pointing.  By default, the program will orient
+             monomer i in the direction of a line connecting the monomers before
              and after it (monomers i-1 and i+1).  The user can override this
              using the -dir-indices command line argument.  The ia and ib
              arguments are integer offsets.  To point monomer i in the direction

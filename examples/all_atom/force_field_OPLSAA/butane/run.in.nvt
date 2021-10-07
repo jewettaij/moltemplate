@@ -32,6 +32,9 @@ include         system.in.charges
 
 # -- simulation protocol --
 
+# Give each atom a random initial velocity consistent with a system at 260.0K.
+velocity all create 260.0 12345
+
 
 timestep        1.0
 dump            1 all custom 500 traj_nvt.lammpstrj id mol type x y z ix iy iz

@@ -46,7 +46,8 @@ thermo_modify   norm yes
 timestep        1.0
 
 group gEthylenes type 1 2
-fix fHCbonds gEthylenes shake 0.0001 20 10 b 1
+#fix fHCbonds gEthylenes rattle 0.0001 20 10 b 1   <-- Commenting out
+fix fHCbonds gEthylenes shake 0.0001 20 10 b 1  #<-- (Try "fix shake" instead)
 fix fxlan all langevin  900.0 900.0  120 48279
 fix fxnve all nve
 

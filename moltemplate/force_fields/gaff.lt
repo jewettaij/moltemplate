@@ -11853,6 +11853,26 @@ GAFF {
     special_bonds   amber
   }
 
+} # GAFF
+
+
+
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.gaff") containing a link to
+# a paper describing the GAFF force field.
+
+write_once("log.cite.gaff") {
+  "Development and testing of a general amber force field"
+  J. Wang, R.M. Wolf, J.W. Caldwell, P.A. Kollman, D.A. Case,
+  J.Comp.Chem. 2004, Vol 25, Issue 9, 1157-1174
+  https://doi.org/10.1002/jcc.20035
+
+  Note: Individual force field parameters in the "gaff.lt" file are
+        sometimes linked to individual papers referred to in the comments
+        (eg. "SOURCE2").  Those references can be found by downloading the
+        "gaff.dat" file distributed with AmberTools.  (The "gaff.lt" file used
+        by moltemplate was created converting the "gaff.dat" into moltemplate
+        format.  In the conversion process, those references were lost.)
 }
-
-

@@ -11,8 +11,7 @@
 # then you would run lammps on these files this way:
 
 
-lmp_mpi -i run.in.npt  # minimization and simulation at constant pressure
-lmp_mpi -i run.in.nvt  # simulation at constant volume
+lmp_mpi -i run.in.nvt  # minimization and simulation at constant volume
 
 
 # If you have compiled the MPI version of lammps, you can run lammps in parallel

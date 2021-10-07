@@ -332,8 +332,8 @@ class TtreeShlex(object):
                 if not nextchar:      # end of file
                     if self.debug >= 2:
                         sys.stderr.write("TtreeShlex: I see EOF in escape state")
-                    # XXX what error should be raised here?
-                    raise ValueError("No escaped character")
+                    # What error should be raised here?
+                    raise InputError('File terminated immediately following an escape character.')
                 # In posix shells, only the quote itself or the escape
                 # character may be escaped within quotes.
                 if escapedstate in self.quotes and \
@@ -1738,7 +1738,7 @@ class TemplateLexer(TtreeShlex):
     def ReadTemplate(self,
                      simplify_output=False,
                      terminators='}',
-                     #11-04c#other_esc_chars='{',  # <-- COMMENT: WHAT IS THIS FOR? -AJ
+                     remove_esc_preceeding='{\\',  #explained below
                      var_terminators='{}(),', #(var_delim, spaces also included)
                      keep_terminal_char=True):
         """
@@ -1803,18 +1803,26 @@ class TemplateLexer(TtreeShlex):
 
             Exceptional Cases:
         Terminator characters are ignored if they are part of a variable
-        reference. (For example, the '}' in "${var}", is used to denote a
+        reference. (For example, the '}' in "${cat:var}", is used to denote a
         bracketed variable, and does not cause ReadTemplate() to stop reading)
            OR if they are part of a two-character escape sequence
         (for example, '}' in "\}" does not cause terminate parsing).
         In that case, the text is considered normal text.  (However the
-        '\' character is also stripped out.
+        \ character is also stripped out.  It is also stripped out if it
+        preceeds any characters in "remove_esc_preceeding", which is
+        the second argument.  Otherwise it is left in the text block.)
+         What is the purpose of "remove_esc_preceeding"? To force ReadTemplate()
+        to remove the preceeding \ when it otherwise would not.  For example,
+        we want to remove \ whenever it preceeds another \ character, so we
+        include it in the remove_esc_preceeding string variable. We alse include
+        '{' because we want to remove \ when it preceeds the '{' character.
+        That way the \ gets deleted when it preceeds either '{' or '}'.
+        (The \ character is already removed before the '}' character.)
+        We want consistent behavior that people expect, so that
+        "\{abc\}" -> ReadTemplate() -> "{abc}"    (instead of "\{abc}").
+        In retrospect, perhaps this is a confusing way to implement this.
+        
         """
-        #11-04c#"""
-        #11-04c#It is also stripped out if it
-        #11-04c#preceeds any characters in "other_esc_chars", which is
-        #11-04c#the second argument.  Otherwise it is left in the text block.)
-        #11-04c#"""
 
         #sys.stderr.write('    ReadTemplate('+terminators+') invoked at '+self.error_leader())
 
@@ -1870,8 +1878,7 @@ class TemplateLexer(TtreeShlex):
 
                 if escaped_state:
                     raise InputError('Error: in ' + self.error_leader() + '\n\n'
-                                     'No escaped character.')
-                if reading_var:
+                                     'File terminated immediately following an escape character.')
                     terminate_var = True
                 else:
                     terminate_text = True
@@ -1906,7 +1913,7 @@ class TemplateLexer(TtreeShlex):
                         done_reading = True
 
                 if nextchar in self.var_open_paren:  # eg: nextchar == '{'
-                    #sys.stdout.write('   ReadTemplate() readmode found {.\n')
+                    #sys.stdout.write('   ReadTemplate() readmode found {\n')
                     if escaped_state:
                         var_descr_plist.append(nextchar)
                         #escaped_state = False
@@ -1950,7 +1957,7 @@ class TemplateLexer(TtreeShlex):
                             # In this case, the '\' char was only to prevent
                             # interpreting nextchar as a variable terminator
                             # delete_prior_escape = True # so skip the '\'
-                            # character
+                            #                            # character
                             del var_descr_plist[-1]
                             #escaped_state = False
                         var_descr_plist.append(nextchar)
@@ -2015,16 +2022,16 @@ class TemplateLexer(TtreeShlex):
                     # TO DO: use "list_of_chars.join()" instead of '+='
                     prev_char_delim = False  # the previous character was not '$'
 
-            # Now deal with "other_esc_chars"  <--COMMENT: WHAT IS THIS FOR? -AJ
-            #11-04c#if escaped_state and (nextchar in other_esc_chars):
-            #11-04c#    if reading_var:
-            #11-04c#        #sys.stdout.write('   ReadTemplate: var_descr_str=\''+''.join(var_descr_plist)+'\'\n')
-            #11-04c#        assert(var_descr_plist[-2] in self.escape)
-            #11-04c#        del var_descr_plist[-2]
-            #11-04c#    else:
-            #11-04c#        #sys.stdout.write('   ReadTemplate: text_block=\''+''.join(text_block_plist)+'\'\n')
-            #11-04c#        assert(text_block_plist[-2] in self.escape)
-            #11-04c#        del text_block_plist[-2]
+            # Now deal with "remove_esc_preceeding".  (See explanation above.)
+            if escaped_state and (nextchar in remove_esc_preceeding):
+                if reading_var:
+                    #sys.stdout.write('   ReadTemplate: var_descr_str=\''+''.join(var_descr_plist)+'\'\n')
+                    assert(var_descr_plist[-2] in self.escape)
+                    del var_descr_plist[-2]
+                else:
+                    #sys.stdout.write('   ReadTemplate: text_block=\''+''.join(text_block_plist)+'\'\n')
+                    assert(text_block_plist[-2] in self.escape)
+                    del text_block_plist[-2]
 
             if terminate_text:
                 #sys.stdout.write('ReadTemplate() appending: ')

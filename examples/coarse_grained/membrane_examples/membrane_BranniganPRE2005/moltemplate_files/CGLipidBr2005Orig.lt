@@ -27,7 +27,7 @@
 #   Units:
 #
 # The "epsilon" parameter in their model is approximately 2.75 kJ/mole
-#     ( = 0.657265774378585 kCal/mole, using 1kCal=4.184kJ)
+#     ( = 0.657265774378585 kcal/mole, using 1kcal=4.184kJ)
 # The "sigma" parameter corresponds to 7.5 angstroms.
 #
 #

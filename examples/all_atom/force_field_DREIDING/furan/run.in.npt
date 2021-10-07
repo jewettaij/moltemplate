@@ -31,6 +31,10 @@ thermo_modify   norm yes
 
 timestep        1.0
 
+# Give each atom a random initial velocity consistent with a system at 900K.
+velocity all create 900.0 12345
+
+
 # Run the system at high temperature (at constant volume) to reorient the
 # the molecules (which would otherwise be pointing in the same direction).
 

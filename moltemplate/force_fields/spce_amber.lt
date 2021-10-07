@@ -1,0 +1,64 @@
+# file "spce_amber.lt" 
+#
+#    H1     H2
+#      \   /
+#        O
+
+# This is a version of the "spce.lt" file (describing the SPC/E water molecule)
+# which is compatible with the AMBER force field (eg "gaff.lt" and "gaff2.lt").
+
+
+SPCE {
+
+  write("Data Atoms") {
+    $atom:O  $mol:. @atom:O -0.8476  0.0000000 0.00000 0.000000
+    $atom:H1 $mol:. @atom:H  0.4238  0.8164904 0.00000  0.5773590
+    $atom:H2 $mol:. @atom:H  0.4238  -0.8164904 0.00000 0.5773590
+  }
+
+  write_once("Data Masses") {
+    @atom:O 15.9994
+    @atom:H 1.008
+  }
+
+  write("Data Bonds") {
+    $bond:OH1 @bond:OH $atom:O $atom:H1
+    $bond:OH2 @bond:OH $atom:O $atom:H2
+  }
+
+  write("Data Angles") {
+    $angle:HOH @angle:HOH $atom:H1 $atom:O $atom:H2
+  }
+
+  write_once("In Settings") {
+    bond_coeff   @bond:OH         600.0   1.0 
+    angle_coeff  @angle:HOH       75.0    109.47
+    pair_coeff   @atom:O @atom:O  0.1553  3.166 
+    pair_coeff   @atom:H @atom:H  0.0     0.0
+    # Note: Since we are using RATTLE constraints, the bond and angle strength
+    # parameters ("600.0", "75.0") do not matter. But the equilibrium bond
+    # length ("1.0") and equilibrium angle ("109.47") does matter. LAMMPS
+    # obtains these numbers from the bond_coeff and angle_coeff commands above.
+  }
+
+  write_once("In Constraints") {
+    group spce type  @atom:O  @atom:H
+    fix fRattleSPCE spce rattle 0.0001 10 100 b @bond:OH a @angle:HOH
+    # Remember to put this command in your LAMMPS input script:
+    #  include system.in.constraints
+    # ...AFTER minimization and after all integration fixes
+  }
+
+  write_once("In Init") {
+    # -- Default styles (for solo "SPCE" water) --
+    units        real
+    atom_style   full
+    pair_style   lj/charmm/coul/long 9.0 10.0 10.0
+    bond_style   harmonic
+    angle_style  harmonic
+    kspace_style pppm 0.0001
+    #pair_modify  mix arithmetic  # LEAVE THIS UNSPECIFIED!
+  }
+
+} # end of definition of "SPCE" water molecule type
+

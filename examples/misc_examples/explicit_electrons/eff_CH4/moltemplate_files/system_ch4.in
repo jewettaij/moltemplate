@@ -24,8 +24,7 @@ include "system_ch4.in.settings"
 #
 #  -- minimize --
 # minimize 1.0e-5 1.0e-7 1000 10000
-# (Note: Some fixes, for example "shake", interfere with the minimize command,
-#        You can use the "unfix" command to disable them before minimization.)
+#
 #  -- declare time step for normal MD --
 # timestep 1.0
 #  -- run at constant pressure (Nose-Hoover)--

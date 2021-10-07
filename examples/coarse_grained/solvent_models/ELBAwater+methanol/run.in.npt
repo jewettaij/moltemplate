@@ -43,7 +43,7 @@ fix 3 gSolute langevin 298.0 298.0 1000 9876 # thermostat gSolute
 fix 4 gSolvent langevin 298.0 298.0 1000 9876 omega yes zero yes # thermostat gSolvent
 fix 5 all press/berendsen iso 1.0 1.0 1000 modulus 21740 # barostat
 fix 6 all momentum 500 linear 1 1 1 
-fix 7 gSolute shake 1.0e-6 100 0 m 1.0
+fix 7 gSolute rattle 1.0e-6 100 0 m 1.0
 
 dump  1 all custom 1000 traj_nvt.lammpstrj id mol type x y z mux muy muz ix iy iz
 

@@ -6,20 +6,26 @@ The original MARTINI files are distributed at http://cgmartini.nl
 Conversion from EMC (.PRM) format to moltemplate (.LT) format was 
 done using the "emcprm2lt.py" script written by David Stelter.
 Here is an example how to use the emcprm2lt.py script:
-
+--------------------------------
 Step 1:
-emcprm2lt.py martini.prm lipids.prm cholesterol.prm --bond-style=harmonic --angle-style=cosine/squared --pair-style=lj/gromacs/coul/gromacs --name=martini
-
+../convert_EMC_files_to_LT_files/emcprm2lt.py martini.prm lipids.prm ions.prm cholesterol.prm --bond-style=harmonic --angle-style=cosine/squared --pair-style=lj/gromacs/coul/gromacs --name=martini
+--------------------------------
 Step 2:
-The MARTINI force field uses custom "special_bonds" settings.  So we must erase
-the line containing the default "special bonds" line and replace it.  You can
-do this using a text editor, or use sed:
+The MARTINI force field uses custom "special_bonds" settings and 
+electrostatics settings.  We must override the "pair_style" and "special_bonds" commands,
+as well as customize the relative dielectric constant.
 
-sed -i 's/special_bonds lj\/coul 0.0 0.0 0.0/special_bonds lj 0.0 1.0 1.0/g' martini.lt
-
+echo 'MARTINI { # append overriding settings to the force field' >> martini.lt
+echo '  write_once("In Init"){' >> martini.lt
+echo '    pair_style hybrid lj/gromacs/coul/gromacs 9 12 0.000001 12' >> martini.lt
+echo '    special_bonds lj/coul 0.0 1.0 1.0' >> martini.lt
+echo '    dielectric 15.0' >> martini.lt
+echo '  }' >> martini.lt
+echo '}' >> martini.lt
+--------------------------------
 
 This will generate a file named "martini.lt" which (in this example)
-only includes the force field parameters for lipids and cholestrol.
+only includes the force field parameters for lipids, ions, and cholestrol.
 Later you can define new molecules in moltemplate using:
 
 import "martini.lt"

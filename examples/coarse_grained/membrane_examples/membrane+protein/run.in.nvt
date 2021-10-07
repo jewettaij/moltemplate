@@ -32,9 +32,6 @@ include         system.in.init
 
 read_data       system_after_npt.data
 
-# (The "write_restart" and "read_restart" commands were buggy in 2012, 
-#  but they should work also.  I prefer "write_data" and "read_data".)
-
 
 # ------------------------------- Settings Section --------------------------
 

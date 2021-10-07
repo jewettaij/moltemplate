@@ -10,7 +10,9 @@ read_data system.data
 
 include system.in.settings
 
+
 # Optional: Make sure the pairwise energies look reasonable:
+# COMMENTING OUT:
 #pair_write 2 2 1001 r 2.6 16.0 test_tail-tail.dat t-t 0 0
 #pair_write 2 3 1001 r 2.6 16.0 test_tail-head.dat t-h 0 0
 #pair_write 1 2 1001 r 2.6 16.0  test_int-tail.dat i-t 0 0

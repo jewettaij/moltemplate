@@ -8,11 +8,9 @@ include         system.in.init
 # Normally, I would minimize the system and equilibrate the system at constant
 # pressure and temperature beforehand.  If you run lammps with "run.in.npt",
 # it will generate a data file "system_after_npt.data" with reasonable
-# coordinates at that temperature and pressure.  Then we could load it now:
-#
-#read_data    system_after_npt.data
+# coordinates at that temperature and pressure.  We load it now:
 
-read_data       system.data
+read_data    system_after_npt.data
 
 # ------------------------------- Settings Section --------------------------
 

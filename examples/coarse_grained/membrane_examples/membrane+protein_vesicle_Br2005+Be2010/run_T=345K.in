@@ -74,7 +74,7 @@ fix fxbal all balance 100000 1.05 shift xyz 20 1.05
 # To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
 # (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
 # (Note: We are using "units lj", which means temperature is specified
-#  in units of energy.  kB*Temp = 0.001987207*345 kCal/mole = 0.685586415)
+#  in units of energy.  kB*Temp = 0.001987207*345 kcal/mole = 0.685586415)
 fix fxlan all langevin 0.685586415 0.685586415 40000 48279
 fix fxnve all nve
 

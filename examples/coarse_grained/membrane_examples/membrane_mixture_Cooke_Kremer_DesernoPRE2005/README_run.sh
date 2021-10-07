@@ -11,11 +11,11 @@
 # then you would run lammps on these files this way:
 
 
-lmp_mpi -i run.in.npt  # Run a simulation at constant pressure (tension)
+lmp_mpi -i run.in.min  # minimize the system before running a simulation
+lmp_mpi -i run.in.npt  # run a simulation at constant pressure (tension)
 
 
 # If you have compiled the MPI version of lammps, you can run lammps in parallel
+#mpiexec -np 4 lmp_mpi -i run.in.min
 #mpiexec -np 4 lmp_mpi -i run.in.npt
-#or
-#mpiexec -np 4 lmp_mpi -i run.in.nvt
 # (assuming you have 4 processors available)

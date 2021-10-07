@@ -45,8 +45,8 @@ except (ImportError, SystemError, ValueError):
     from lttree_styles import *
 
 g_program_name = __file__.split('/')[-1]  # = 'ltemplify.py'
-g_version_str = '0.67.0'
-g_date_str = '2020-10-12'
+g_version_str = '0.69.0'
+g_date_str = '2021-8-30'
 
 def Intify(s):
     if s.isdigit():
@@ -249,6 +249,137 @@ def Stringify(i, int2name, prefix1, prefix2, default_name = ''):
 
 
 
+
+def ProcessShakeRattle(sf_l_in_fix_shake_rattle,  # lines containing fix shake or rattle commands
+                       sf_needed_atomtypes,       # atom types selected by user
+                       sf_atomtypes_int2name,
+                       sf_needed_bondtypes,       # bond types selected by user
+                       sf_bondtypes_int2name,
+                       sf_needed_angletypes,      # angle types selected by user
+                       sf_angletypes_int2name,
+                       groups_needed,
+                       sf_indent):
+    """
+    The sf_l_in_fix_shake_rattle list will be updated, discarding
+    commands which are no longer needed.
+    This function deletes fix shake or fix rattle commands which involve
+    atom, bond, and angle types which were not selected ("needed") by the user.
+    The "fix shake" and "fix rattle" commands use exactly the same
+    syntax.  So I wrote a function which works on both kinds of commands.
+    """
+
+    i_line = 0
+    while i_line < len(sf_l_in_fix_shake_rattle):
+        line = sf_l_in_fix_shake_rattle[i_line]
+        tokens = line.strip().split()
+        if len(tokens) < 4:
+            break
+        fixid = tokens[1]
+        group_name = tokens[2]
+        delete_this_command = True
+        assert((tokens[3].find('shake') == 0) or
+               (tokens[3].find('rattle') == 0))
+
+        #  parse the list of angle types
+        #i_token = tokens.index('a')
+        for i_token in range(0, len(tokens)):
+            if tokens[i_token] == 'a':
+                break
+        if i_token != len(tokens):
+            i_token += 1
+            while (i_token < len(tokens)) and tokens[i_token].isdigit():
+                # delete angle types from the list which
+                # do not belong to the selection
+                btype = int(tokens[i_token])
+                if int(tokens[i_token]) in sf_needed_angletypes:
+                    var_descr = Stringify(btype,
+                                          sf_angletypes_int2name,
+                                          '@','angle','type')
+                    tokens[i_token] = var_descr
+                    i_token += 1
+                    delete_this_command = False
+                else:
+                    del tokens[i_token]
+
+        #  parse the list of bond types
+        #i_token = tokens.index('b')
+        for i_token in range(0, len(tokens)):
+            if tokens[i_token] == 'b':
+                break
+        if i_token != len(tokens):
+            i_token += 1
+            while (i_token < len(tokens)) and tokens[i_token].isdigit():
+                # delete bond types from the list which
+                # do not belong to the selection
+                btype = int(tokens[i_token])
+                if int(tokens[i_token]) in sf_needed_bondtypes:
+                    var_descr = Stringify(btype,
+                                          sf_bondtypes_int2name,
+                                          '@','bond','type')
+                    tokens[i_token] = var_descr
+                    i_token += 1
+                    delete_this_command = False
+                else:
+                    del tokens[i_token]
+
+        #  parse the list of atom types
+        # i_token = tokens.index('t')
+        for i_token in range(0, len(tokens)):
+            if tokens[i_token] == 't':
+                break
+        if i_token != len(tokens):
+            i_token += 1
+            while (i_token < len(tokens)) and tokens[i_token].isdigit():
+                # delete atom types from the list which
+                # do not belong to the selection
+                btype = int(tokens[i_token])
+                if int(tokens[i_token]) in sf_needed_atomtypes:
+                    var_descr = Stringify(btype,
+                                          sf_atomtypes_int2name,
+                                          '@','atom','type')
+                    tokens[i_token] = var_descr
+                    i_token += 1
+                    delete_this_command = False
+                else:
+                    del tokens[i_token]
+
+        #  Selecting atoms by mass feature should still work, so we
+        #  don't need to delete or ignore these kinds of commands.
+        # for i_token in range(0, len(tokens)):
+        #    if tokens[i_token] == 'm':
+        #        break
+        # if i_token != len(tokens):
+        #    delete_this_command = True
+
+        if 'mol' in tokens:
+            # What does the 'mol' keyword do?
+            #               https://lammps.sandia.gov/doc/fix_shake.html
+            #               (Excerpt below:)
+            #
+            # mol value = template-ID
+            # template-ID = ID of molecule template specified
+            #               in a separate molecule command.  See:
+            #
+            # ltemplify.py does not yet know how to parse files read by the
+            # molecule command (https://lammps.sandia.gov/doc/molecule.html)
+            # so I ignore these commands for now.  -Andrew 2019-11-11
+            delete_this_command = True
+
+        if not (group_name in groups_needed):
+            delete_this_command = True
+
+        if delete_this_command:
+            sys.stderr.write('WARNING: Ignoring line \n\"' +
+                             sf_l_in_fix_shake_rattle[i_line].rstrip() + '\"\n')
+            del sf_l_in_fix_shake_rattle[i_line]
+        else:
+            sf_l_in_fix_shake_rattle[i_line] = (' ' * sf_indent) + ' '.join(tokens)
+            i_line += 1
+
+
+
+
+
 class Ltemplify(object):
 
     def __init__(self, argv):
@@ -359,6 +490,7 @@ class Ltemplify(object):
         self.l_in_set = []
         self.l_in_set_static = []
         self.l_in_fix_shake = []
+        self.l_in_fix_rattle = []
         self.l_in_fix_rigid = []
         self.l_in_fix_poems = []
         self.l_in_fix_qeq = []
@@ -418,8 +550,8 @@ class Ltemplify(object):
         self.ignore_masses = False
         self.forbid_type_name_duplicates = False
         self.prepend_atom_type = ''
+        self.atom_type_map = {}
         self.remove_coeffs_from_data_file = True
-
 
         # self.input_data_file      Name of the data file we will read.
         # self.input_script_files   Name of the LAMMPS input scripts to be read.
@@ -438,6 +570,8 @@ class Ltemplify(object):
         # Parse the argument list.
         # Arguments are explained in the ltemplify.py documentation located at:
         # https://github.com/jewettaij/moltemplate/blob/master/doc/utils/doc_ltemplify.md
+
+        atom_type_map_fname = ''
 
         i = 0
 
@@ -620,6 +754,10 @@ class Ltemplify(object):
                     self.prepend_atom_type += '/'
                 del argv[i:i + 2]
 
+            elif (argv[i] == '-atom-type-map'):
+                atom_type_map_fname = argv[i+1]
+                del argv[i:i + 2]
+
             else:
                 i += 1
 
@@ -677,6 +815,32 @@ class Ltemplify(object):
             self.input_data_file = argv[-1]  #the last argument is the data file
             self.input_script_files = argv[:-1] # optional input script files
 
+
+
+        # If the user specified an -atom-type-map file, then read the file
+        if atom_type_map_fname != '':
+            self.infer_types_from_comments = False
+            try:
+                atom_type_map_file = open(atom_type_map_fname, 'r')
+                for line_orig in atom_type_map_file:
+                    line = line_orig
+                    comment_text = ''
+                    ic = line_orig.find('#')
+                    if ic != -1:
+                        comment_text = line[ic + 1:].strip()
+                        line = line_orig[:ic]
+                    line = line.strip()
+                    tokens = line.split()
+                    if len(tokens) == 2:
+                        orig_type = tokens[0]
+                        new_type = tokens[1]
+                        if new_type[0:6]=='@atom:':
+                            new_type = new_type[6:]
+                        self.atom_type_map[orig_type] = new_type
+            except IOError:
+                raise InputError('Error: unable to open file:\n'
+                                 '       \"' + fname + '\"\n'
+                                 '       for reading.\n')
 
 
 
@@ -2587,6 +2751,17 @@ class Ltemplify(object):
                                                  '       \"' + line.strip() + '\"\n')
                             self.l_in_fix_shake.append(
                                 (' ' * self.indent) + (' '.join(tokens)))
+                        elif (tokens[3].find('rattle') == 0):
+                            if (len(tokens) < 7):
+                                raise InputError('Error: near or before ' +
+                                                 ErrorLeader(lex.infile,
+                                                             lex.lineno) + '\n'
+                                                 '       Nonsensical ' +
+                                                 tokens[0] + ' ' +
+                                                 tokens[3] + ' command:\n'
+                                                 '       \"' + line.strip() + '\"\n')
+                            self.l_in_fix_rattle.append(
+                                (' ' * self.indent) + (' '.join(tokens)))
                         elif (tokens[3].find('poems') == 0):
                             if (len(tokens) < 4):
                                 raise InputError('Error: near or before ' +
@@ -2866,6 +3041,20 @@ class Ltemplify(object):
                     atomid = Intify(atomid)
                     atomtype_name = self.atomtypes_int2name[atomtype]
                     self.atomids_int2name[atomid] = atomtype_name
+
+        # Did the user ask us to map the old atom type names to new names?
+        if len(self.atom_type_map) > 0:
+            for i in self.atomtypes_int2name:
+                name = self.atomtypes_int2name[i]
+                if (name[0:4] == 'type') and name[4:].isdigit():
+                    name = name[4:]
+                if name in self.atom_type_map:
+                    # If present, remove the "type" prefix that sometimes is
+                    # inserted by ltemplify.py at the beginning of the atom
+                    # type name. The remaining text is the original atom type.
+                    if name in self.atom_type_map:
+                        new_name = self.atom_type_map[name]
+                        self.atomtypes_int2name[i] = new_name
 
 
     def PostProcess2(self):
@@ -4509,113 +4698,25 @@ class Ltemplify(object):
             
 
         # --- fix shake ---
+        ProcessShakeRattle(self.l_in_fix_shake,
+                           self.needed_atomtypes,
+                           self.atomtypes_int2name,
+                           self.needed_bondtypes,
+                           self.bondtypes_int2name,
+                           self.needed_angletypes,
+                           self.angletypes_int2name,
+                           groups_needed,
+                           self.indent)
 
-        i_line = 0
-        while i_line < len(self.l_in_fix_shake):
-            line = self.l_in_fix_shake[i_line]
-            tokens = line.strip().split()
-            if len(tokens) < 4:
-                break
-            fixid = tokens[1]
-            group_name = tokens[2]
-            delete_this_command = True
-            assert(tokens[3].find('shake') == 0)
-
-            #  parse the list of angle types
-            #i_token = tokens.index('a')
-            for i_token in range(0, len(tokens)):
-                if tokens[i_token] == 'a':
-                    break
-            if i_token != len(tokens):
-                i_token += 1
-                while (i_token < len(tokens)) and tokens[i_token].isdigit():
-                    # delete angle types from the list which
-                    # do not belong to the selection
-                    btype = int(tokens[i_token])
-                    if int(tokens[i_token]) in self.needed_angletypes:
-                        var_descr = Stringify(btype,
-                                              self.angletypes_int2name,
-                                              '@','angle','type')
-                        tokens[i_token] = var_descr
-                        i_token += 1
-                        delete_this_command = False
-                    else:
-                        del tokens[i_token]
-
-            #  parse the list of bond types
-            #i_token = tokens.index('b')
-            for i_token in range(0, len(tokens)):
-                if tokens[i_token] == 'b':
-                    break
-            if i_token != len(tokens):
-                i_token += 1
-                while (i_token < len(tokens)) and tokens[i_token].isdigit():
-                    # delete bond types from the list which
-                    # do not belong to the selection
-                    btype = int(tokens[i_token])
-                    if int(tokens[i_token]) in self.needed_bondtypes:
-                        var_descr = Stringify(btype,
-                                              self.bondtypes_int2name,
-                                              '@','bond','type')
-                        tokens[i_token] = var_descr
-                        i_token += 1
-                        delete_this_command = False
-                    else:
-                        del tokens[i_token]
-
-            #  parse the list of atom types
-            # i_token = tokens.index('t')
-            for i_token in range(0, len(tokens)):
-                if tokens[i_token] == 't':
-                    break
-            if i_token != len(tokens):
-                i_token += 1
-                while (i_token < len(tokens)) and tokens[i_token].isdigit():
-                    # delete atom types from the list which
-                    # do not belong to the selection
-                    btype = int(tokens[i_token])
-                    if int(tokens[i_token]) in self.needed_atomtypes:
-                        var_descr = Stringify(btype,
-                                              self.atomtypes_int2name,
-                                              '@','atom','type')
-                        tokens[i_token] = var_descr
-                        i_token += 1
-                        delete_this_command = False
-                    else:
-                        del tokens[i_token]
-
-            #  Selecting atoms by mass feature should still work, so we
-            #  don't need to delete or ignore these kinds of commands.
-            # for i_token in range(0, len(tokens)):
-            #    if tokens[i_token] == 'm':
-            #        break
-            # if i_token != len(tokens):
-            #    delete_this_command = True
-
-            if 'mol' in tokens:
-                # What does the 'mol' keyword do?
-                #               https://lammps.sandia.gov/doc/fix_shake.html
-                #               (Excerpt below:)
-                #
-                # mol value = template-ID
-                # template-ID = ID of molecule template specified
-                #               in a separate molecule command.  See:
-                #
-                # ltemplify.py does not yet know how to parse files read by the
-                # molecule command (https://lammps.sandia.gov/doc/molecule.html)
-                # so I ignore these commands for now.  -Andrew 2019-11-11
-                delete_this_command = True
-
-            if not (group_name in groups_needed):
-                delete_this_command = True
-
-            if delete_this_command:
-                sys.stderr.write('WARNING: Ignoring line \n\"' +
-                                 self.l_in_fix_shake[i_line].rstrip() + '\"\n')
-                del self.l_in_fix_shake[i_line]
-            else:
-                self.l_in_fix_shake[i_line] = (' ' * self.indent) + ' '.join(tokens)
-                i_line += 1
+        ProcessShakeRattle(self.l_in_fix_rattle,
+                           self.needed_atomtypes,
+                           self.atomtypes_int2name,
+                           self.needed_bondtypes,
+                           self.bondtypes_int2name,
+                           self.needed_angletypes,
+                           self.angletypes_int2name,
+                           groups_needed,
+                           self.indent)
 
         # --- fix poems ---
 
@@ -5200,6 +5301,20 @@ class Ltemplify(object):
             out_file.write('\n')
             out_file.write('\n'.join(self.l_in_fix_shake) + '\n')
             sys.stderr.write('WARNING: \"fix shake\" style command(s) applied to selected atoms.\n'
+                             '         Please check to make sure that the fix group(s) are defined correctly,\n'
+
+                             '         and also check that the atom, bond, and angle types are correct.\n'
+                             '######################################################\n')
+            assert(self.non_empty_output)
+
+        if len(self.l_in_fix_rattle) > 0:
+            self.no_warnings = False
+            self.l_in_fix_rattle.insert(0, (' ' * self.cindent) +
+                                  'write(\"' + in_settings + '\") {')
+            self.l_in_fix_rattle.append((' ' * self.cindent) + '}')
+            out_file.write('\n')
+            out_file.write('\n'.join(self.l_in_fix_rattle) + '\n')
+            sys.stderr.write('WARNING: \"fix rattle\" style command(s) applied to selected atoms.\n'
                              '         Please check to make sure that the fix group(s) are defined correctly,\n'
 
                              '         and also check that the atom, bond, and angle types are correct.\n'

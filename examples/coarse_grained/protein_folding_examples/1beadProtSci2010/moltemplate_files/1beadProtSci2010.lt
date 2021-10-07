@@ -139,6 +139,8 @@
 
   4SheetBarrel {
 
+    create_var { $mol } # <--optional: make all atoms share the same molecule ID
+
     sheet1 = new B16.rot(  45, 0,0,1).move(-0.793700526,-0.793700526, -6)
     sheet2 = new B16.rot( 135, 0,0,1).move( 0.793700526,-0.793700526, -6)
     sheet3 = new B16.rot( 225, 0,0,1).move( 0.793700526, 0.793700526, -6)
@@ -156,11 +158,12 @@
       $bond:turn3a  @bond:../backbone  $atom:turn3/a1    $atom:sheet3/a16
       $bond:turn3b  @bond:../backbone  $atom:turn3/a3    $atom:sheet4/a16
     }
-    create_var { $mol } # molecule ID number shared by all atoms in this protein
   }
 
 
   4HelixBundle {
+
+    create_var { $mol } # <--optional: make all atoms share the same molecule ID
 
     helix1 = new A16.rot( -45, 0,0,1).move(-1.12691645,-1.12691645, -4.5)
     helix2 = new A16.rot(  45, 0,0,1).move( 1.12691645,-1.12691645, -4.5)
@@ -179,7 +182,6 @@
       $bond:turn3a  @bond:../backbone  $atom:turn3/a1    $atom:helix3/a16
       $bond:turn3b  @bond:../backbone  $atom:turn3/a3    $atom:helix4/a16
     }
-    create_var { $mol } # molecule ID number shared by all atoms in this protein
   }
 
 

@@ -13,10 +13,11 @@
 
 lmp_mpi -i run.in.min  # minimization
 lmp_mpi -i run.in.npt  # simulation at constant pressure
+lmp_mpi -i run.in.nvt  # simulation at constant volume
 
 
 # If you have compiled the MPI version of lammps, you can run lammps in parallel
+#mpirun -np 4 lmp_mpi -i run.in.min
 #mpirun -np 4 lmp_mpi -i run.in.npt
-# or
-#mpirun -np 4 lmp_mpi -i run.in.npt
+#mpirun -np 4 lmp_mpi -i run.in.nvt
 # (assuming you have 4 processors available)

@@ -90,6 +90,9 @@
   #  of this same molecule with the hydrophobic beads pointing inward.)
 
   4HelixInsideOut {
+
+    create_var { $mol } # <--optional: make all atoms share the same molecule ID
+
     helix1 = new A16.rot(-225, 0,0,1).move(-5.70,-5.70,-32.4)
     helix2 = new A16.rot(-135, 0,0,1).move( 5.70,-5.70,-28.8)
     helix3 = new A16.rot( -45, 0,0,1).move( 5.70, 5.70,-25.2)
@@ -107,7 +110,6 @@
       $bond:turn3a  @bond:../backbone   $atom:turn3/a1   $atom:helix3/a16
       $bond:turn3b  @bond:../backbone   $atom:turn3/a3   $atom:helix4/a16
     }
-    create_var { $mol } # molecule ID number shared by all atoms in this protein
 
   } # 4HelixInsideOut
 
@@ -151,7 +153,7 @@
   #  --- Energy & Temperature Units ---
   #   In this protein model, "epsilon" represents the free energy 
   # bonus for bringing two hydrophobic amino acids together.  
-  # Here I choose to set epsilon to 1.806551818181818 kCal/mole.
+  # Here I choose to set epsilon to 1.806551818181818 kcal/mole.
   # This value was chosen so that a temperature of 345 Kelvin lies at 
   # 0.33 epsilon, which is the unfolding temperature of the marginally stable 
   # "ASF1" protein model from the Bellesia et al 2010 paper.

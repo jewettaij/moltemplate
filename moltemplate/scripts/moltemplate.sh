@@ -6,18 +6,42 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.19.2"
-G_DATE="2020-12-06"
+G_VERSION="2.19.12"
+G_DATE="2021-6-29"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
 
 # Check for python:
 
-if which python > /dev/null; then
+if which python3 > /dev/null; then
+    PYTHON_COMMAND='python3'
+elif which python > /dev/null; then
     PYTHON_COMMAND='python'
+    if [ `python --version | awk '{print substr($2,0,2)}'` -lt 3 ]; then
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+        echo "  WARNING: Support for python2.7 has been depreciated." >&2
+        echo "           Please install python version 3.4 or later." >&2
+        echo "           Use older versions of python at your own risk." >&2
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+        echo "############################################################" >&2
+    fi
+elif which python2 > /dev/null; then
+    PYTHON_COMMAND='python2'
+    echo "############################################################" >&2
+    echo "############################################################" >&2
+    echo "############################################################" >&2
+    echo "  WARNING: Support for python2.7 has been depreciated." >&2
+    echo "           Please install python version 3.4 or later." >&2
+    echo "           Use older versions of python at your own risk." >&2
+    echo "############################################################" >&2
+    echo "############################################################" >&2
+    echo "############################################################" >&2
 else
-    echo "Error:  $G_PROGRAM_NAME requires python" >&2
+    echo "Error:  $G_PROGRAM_NAME requires python, python3, or python2." >&2
     exit 1
 fi
 
@@ -39,6 +63,12 @@ Follow the instructions in the "Installation" chapter of the moltemplate manual.
 
 EOF
 )
+
+
+# Maintain a list of papers that we would like users to cite.
+# (This list currently has only one entry.)
+export MOLTEMPLATE_CITE_LIST="Jewett et al. J.Mol.Biol. (2021) (https://doi.org/10.1016/j.jmb.2021.166841)"
+
 
 
 ERR_BAD_INSTALL()
@@ -244,7 +274,7 @@ Syntax example:
 Usage:
 
 moltemplate.sh [-atomstyle style] \
-               [-pdb/-xyz/-dump coord_file] \
+               [-pdb/-xyz/-dump/-raw coord_file] \
                [-a assignments.txt] file.lt
 
 Optional arguments:
@@ -286,7 +316,7 @@ Optional arguments:
                 For data style ellipsoid, the dump file MUST be formatted in
                 the following order:
                 "id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] ... "
-                Where:
+                Where: "q" is defined using:
                 compute q all property/atom quatw quati quatj quatk
 
                 The box boundaries are also copied to the LAMMPS data file.
@@ -539,7 +569,7 @@ while [ "$i" -lt "$ARGC" ]; do
         # a string is numeric.
         #http://rosettacode.org/wiki/Determine_if_a_string_is_numeric#AWK
 
-        awk 'function isnum(x){return(x==x+0)} BEGIN{targetframe=1;framecount=0} {if (isnum($0)) {framecount++} else{if (framecount==targetframe){  if (NF>0) { if ((NF==3) && isnum($1)) {print $1" "$2" "$3} else if ((NF>3) && (NR>2) && isnum($2)) {print $2" "$3" "$4} }}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
+        awk '{if (NR>2) {if (NF==4) {print $2" "$3" "$4} else {if (NF==3) {print $1" "$2" "$3}}}}' < "$XYZ_FILE" > "$tmp_atom_coords"
 
     elif [ "$A" = "-pdb" ]; then
         if [ "$i" -eq "$ARGC" ]; then
@@ -683,7 +713,7 @@ while [ "$i" -lt "$ARGC" ]; do
           BOXSIZE_XY=${box[2]}
           BOXSIZE_XZ=${box[5]}
           BOXSIZE_YZ=${box[8]}
-	        TRICLINIC="True"
+	  TRICLINIC="True"
         fi
 
         # Save the coordinates.
@@ -803,13 +833,32 @@ fi
 
 
 
+
 OUT_FILE_INPUT_SCRIPT="${OUT_FILE_BASE}.in"
 OUT_FILE_INIT="${OUT_FILE_BASE}.in.init"
 OUT_FILE_SETTINGS="${OUT_FILE_BASE}.in.settings"
 OUT_FILE_DATA="${OUT_FILE_BASE}.data"
 OUT_FILE_COORDS="${OUT_FILE_BASE}.in.coords"
 
-rm -f "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_DATA" "$OUT_FILE_COORDS"
+
+#  Now delete any old files lying around which were
+#  created by previous invocations of moltemplate.
+#
+# In earlier versions of moltemplate, I was careful only to delete the most
+# most common moltemplate-created files before running moltemplate again.
+#rm -f "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_DATA" "$OUT_FILE_COORDS"
+# However, now I now delete all files beginning with "${OUT_FILE_BASE}.in.*"
+# (except for those ending in .lt).
+for f in "${OUT_FILE_BASE}.data" "${OUT_FILE_BASE}".in.* "${OUT_FILE_BASE}.in"; do
+  if [[ ! "$f" =~ .*\.lt ]]; then
+    # Although it's unlikely somebody would name their moltemplate source file
+    # "system.in.lt", just in case they do, we check to see if the file
+    # name ends in ".lt" before deleting it.  Note: This also works:
+    #if [ "$f" == `echo "$f" | sed  's|lt$||g'` ]; then ...
+    # Delete the file:
+    rm -f "$f"
+  fi
+done
 
 
 
@@ -873,8 +922,6 @@ fi
 
 
 
-
-
 # Attempt to remove any the DOS (windows) return-cairrage characters
 # from inside the standard LAMMPS files generated by the user:
 # (Users are free to put whatever weird characters they want in other
@@ -890,6 +937,7 @@ for file in $MOLTEMPLATE_TEMP_FILES; do
     fi
 done
 IFS=$OIFS
+
 
 
 if [ -s "${data_atoms}" ]; then
@@ -916,15 +964,15 @@ else
     if [ -n "$NATOMTYPES" ]; then
         echo "Error: There are no atoms in your system. Suggestions:" >&2
         echo "" >&2
-        echo "       Make sure that you have the correct number of curly parenthesis {}." >&2
-        echo "       (Extra \"}\" parenthesis can cause this error.)" >&2
-        echo "" >&2
         echo "       Your files must contain at least one" >&2
         echo "           write(\"${data_atoms}\")" >&2
         echo "       command.  These commands are typically located somewhere in" >&2
         echo "       one of the molecule object(s) you have defined." >&2
         echo "" >&2
-        echo "       This error often occurs if your input files lack \"new\" commands." >&2
+        echo "       Make sure that you have the correct number of curly parenthesis {}." >&2
+        echo "       (Extra \"}\" parenthesis can cause this error.)" >&2
+        echo "" >&2
+        echo "       This error also occurs if your input files lack \"new\" commands." >&2
         echo "       Once you have defined a type of molecule, you must create a copy" >&2
         echo "       of it using \"new\", if you want it to appear in your simulation." >&2
         echo "       See the moltemplate manual or online tutorials for examples." >&2
@@ -937,6 +985,7 @@ else
         exit 200
     fi
 fi
+
 
 
 
@@ -1034,10 +1083,6 @@ if [ -s "${data_bond_list}.template" ]; then
     echo "" >&2
 
 fi
-
-
-
-
 
 
 
@@ -1368,7 +1413,6 @@ for f in *.template; do
         fi
     fi
 done
-
 
 # Deal with wildcard characters ('*', '?') in "_coeff" commands
 # appearing in any LAMMPS input scripts generated by moltemplate.
@@ -1741,7 +1785,7 @@ echo "LAMMPS Description" > "$OUT_FILE_DATA"
 echo "" >> "$OUT_FILE_DATA"
 echo "     $NATOMS  atoms" >> "$OUT_FILE_DATA"
 if [ -n "$NELLIPSOIDS" ]; then
-    echo "     $NATOMS  ellipsoids" >> "$OUT_FILE_DATA"
+    echo "     $NELLIPSOIDS  ellipsoids" >> "$OUT_FILE_DATA"
 fi
 if [ -n "$NBONDS" ] || [ -n "$NBONDTYPES" ]; then
     echo "     $NBONDS  bonds" >> "$OUT_FILE_DATA"
@@ -2168,7 +2212,6 @@ fi
 
 
 
-
 rm -f $OUT_FILE_INPUT_SCRIPT
 
 if [ -s "$in_init" ]; then
@@ -2195,16 +2238,30 @@ echo "" >> $OUT_FILE_INPUT_SCRIPT
 
 
 if [ -s "$in_settings" ]; then
-    #echo "# \"$in_settings\" typically contains coeffs, fixes, groups & modify commands:" >> $OUT_FILE_INPUT_SCRIPT
-    #echo "include \"$in_settings\"" >> $OUT_FILE_INPUT_SCRIPT
-    #cat "$in_settings" >> $OUT_FILE_INPUT_SCRIPT
-    if [ -z $SETTINGS_MOLC ]; then
-      cp -f "$in_settings" $OUT_FILE_SETTINGS
-    else
-      molc.sh "$in_settings" "$in_init" > $OUT_FILE_SETTINGS
+  #echo "# \"$in_settings\" typically contains coeffs, fixes, groups & modify commands:" >> $OUT_FILE_INPUT_SCRIPT
+  #echo "include \"$in_settings\"" >> $OUT_FILE_INPUT_SCRIPT
+  #cat "$in_settings" >> $OUT_FILE_INPUT_SCRIPT
+  if [ -z $SETTINGS_MOLC ]; then
+    # Commenting out the next line.  We don't want to copy over the old file
+    #cp -f "$in_settings" $OUT_FILE_SETTINGS
+    # Instead we print out a warning message:
+    if [ -s ${OUT_FILE_SETTINGS} ]; then
+      echo "WARNING: Your files contain \"write()\" or \"write_once()\" commands which" >&2
+      echo "         explicitly write text to two different but equivalent files:" >&2
+      echo "           \"$in_settings\" and \"${OUT_FILE_SETTINGS}\"" >&2
+      echo "         After post-processing, all of the text in either file will be copied" >&2
+      echo "         into the \"${OUT_FILE_SETTINGS}\" file." >&2
+      echo "         However, the order of lines in the file may be incorrect." >&2
+      echo "         You should choose one file name or the other, but not both." >&2
     fi
-    echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_INPUT_SCRIPT
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
+    #...and append the contents to the end of the target file.
+    cat "$in_settings" >> "${OUT_FILE_SETTINGS}"
+  else
+    molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
+    export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2021 (https://doi.org/10.1039/c9cp04120f)\n"`
+  fi
+  echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_INPUT_SCRIPT
+  echo "" >> $OUT_FILE_INPUT_SCRIPT
 fi
 
 
@@ -2241,11 +2298,11 @@ if [ -s "$tmp_atom_coords" ]; then
 
 else
     rm -f "$OUT_FILE_COORDS"
-#    echo "Warning: (moltemplate.sh)" >&2
-#    echo "         Atomic coordinates were not supplied externally" >&2
-#    echo "         (for example using the \"-pdb\" or \"-xyz\" arguments)." >&2
-#    echo "         Hopefully you used rot(), trans() lttree commands to move" >&2
-#    echo "         molecules to non-overlapping positions." >&2
+    #echo "Warning: (moltemplate.sh)" >&2
+    #echo "         Atomic coordinates were not supplied externally" >&2
+    #echo "         (for example using the \"-pdb\" or \"-xyz\" arguments)." >&2
+    #echo "         Hopefully you used rot(), trans() lttree commands to move" >&2
+    #echo "         molecules to non-overlapping positions." >&2
 fi
 
 
@@ -2338,7 +2395,6 @@ ls "${data_prefix}"* 2> /dev/null | while read file_name; do
 done
 
 
-
 if [ -e "$data_prefix_no_space" ]; then
     echo "" >> "$OUT_FILE_DATA"
     cat "$data_prefix_no_space" >> "$OUT_FILE_DATA"
@@ -2357,8 +2413,8 @@ fi
 
 
 
-# Convert files with names like "In Settings" to "system.in.settings"
-# (or, more generally, "${OUT_FILE_INPUT_SCRIPT}in.settings")
+# Convert custom files with names like "In Charges" to "system.in.charges"
+
 
 #N_in_prefix=`expr length "$in_prefix"` <-- not posix compliant. AVOID.
 N_in_prefix=${#in_prefix}  #<-- works even if $in_prefix contains spaces
@@ -2376,11 +2432,26 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     # the file after the in_prefix.
     echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     echo "# ----------------- $SECTION_NAME Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-    cp -f "$file_name" "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
 
-    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
-    echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_INPUT_SCRIPT
-    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
+    # Commenting out the next line.
+    #
+    #cp -f "$file_name" "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    #
+    # We don't want overwrite "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    # with the contents of "$file_name" because it's possible that the user
+    # might have created both files (eg "In Charges" and "system.in.charges"),
+    # and we don't want to erase anything.  Instead, print a warning message
+    if [ -s "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}" ]; then
+      echo "WARNING: Your files contain \"write()\" or \"write_once()\" commands which" >&2
+      echo "         explicitly write text to two different but equivalent files:" >&2
+      echo "           \"$file_name\" and \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >&2
+      echo "         After post-processing, all of the text in either file will be copied" >&2
+      echo "         into the \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\" file." >&2
+      echo "         However, the order of lines in the file may be incorrect." >&2
+      echo "         You should choose one file name or the other, but not both." >&2
+    fi
+    #...and append the contents to the end of the target file.
+    cat "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
     mv -f "$file_name" output_ttree/
 done
 
@@ -2579,3 +2650,19 @@ if [ ! -z $RUN_VMD_AT_END ]; then
     rm -rf vmd_viz_moltemplate.tcl.tmp
 
 fi
+
+
+# Lastly, ask users to cite our paper.
+# Hopefully this message is not too intrusive.
+echo   "-------------------------------------------------------------" >&2
+printf "If this software is useful in your research, please cite\n" >&2
+if [ `printf "$MOLTEMPLATE_CITE_LIST\n" | awk 'END{print NR}'` -gt 1 ]; then
+  i_CITE=1
+  printf "$MOLTEMPLATE_CITE_LIST\n" | while read CITATION; do
+    echo "${i_CITE}) $CITATION" >&2
+    i_CITE=$(( i_CITE+1 ))
+  done
+else
+  printf "$MOLTEMPLATE_CITE_LIST\n" >&2
+fi
+echo   "-------------------------------------------------------------" >&2

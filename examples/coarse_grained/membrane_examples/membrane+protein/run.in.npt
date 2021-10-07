@@ -23,18 +23,20 @@
 
 include system.in.init
 
+
 # -- Atom Definition Section --
 
-#read_data system.data
+#read_data system.data   #(this works also but commenting out)
+
 read_data system_after_min.data
+
 
 # -- Settings Section --
 
 include system.in.settings
 
-# -- Run Section --
 
-#minimize 1.0e-5 1.0e-7 500 2000
+# -- Run Section --
 
 timestep      10.0  # The time-step in Watson et. al 2011 was 0.002*3ps = 6fs
 dump          1 all custom 10000 traj_npt.lammpstrj id mol type x y z ix iy iz

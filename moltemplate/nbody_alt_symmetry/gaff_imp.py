@@ -83,7 +83,6 @@ def canonical_order(match):
                 return ((atom0,atom3,atom2,atom1), (bond0,bond2,bond1))
         else:
             return ((atom1,atom0,atom2,atom3), (bond1,bond0,bond2))
-   
     elif atom3 <= atom1:
         if atom0 <= atom1:
             return ((atom3,atom0,atom2,atom1), (bond2,bond0,bond1))

@@ -1,7 +1,8 @@
 # Create a file containing the coordinates for the locations of each monomer
 # of a circular polymer stretched out into a straight conformation
 # with N_MONOMERS_HALF monomers going in each direction.
-# Later we will place monomers (in our polymer model) at each of these locations
+# Later we will use "genpoly_lt.py" to generate a polymer by placing
+# a monomer at every one of these points.
 #
 #          *--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*
 #          |                                                     |
@@ -19,6 +20,8 @@ N_MONOMERS_HALF=47619 # The number of monomers in each direction.  (The total
                       # number monomers in the circle is twice this number.)
 
 L_MONOMER=13.944     # physical distance between monomers along the polymer axis
+
+echo "Warning: This step can take a while..." >&2
 
 rm -f crds.raw
 for (( i=0; i < N_MONOMERS_HALF; i++ )); do

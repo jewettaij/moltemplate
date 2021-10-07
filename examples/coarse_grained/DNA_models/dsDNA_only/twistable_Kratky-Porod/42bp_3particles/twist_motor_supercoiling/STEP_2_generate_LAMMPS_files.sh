@@ -5,7 +5,12 @@
 
 cd moltemplate_files
 
-  # Use "genpoly_lt.py" to create a polymer which follows the curve 
+  # NOTE: It would be much simpler to create the polymer in this example by
+  # adding some .move() and .rot() commands directly into the "system.lt" file.
+  # But instead, I wanted to demonstrate how to use the "genpoly_lt.py" tool
+  # to create a polymer that follows the shape of an arbitrary curve.
+  #
+  # I use "genpoly_lt.py" to create a polymer which follows the curve 
   # traced by the coordinates that we copied into this directory earlier.
   # (Note: "genpoly_lt.py" is distributed and installed along with moltemplate.)
   # The "genpoly_lt.py" program generates a moltemplate file (.LT file)
@@ -65,7 +70,7 @@ cd moltemplate_files
   #
   #   b = n_b * 0.332nm
   #   n_b=the number of base pairs per monomer (typically less than 50)
-  #   kB*T=0.001987207*300 (kCal/mole, assuming we are using these energy units)
+  #   kB*T=0.001987207*300 (kcal/mole, assuming we are using these energy units)
   #
   # However for numerical stability we must forbid certain angles from being
   # visited, and this requires changing the potential to something slightly more

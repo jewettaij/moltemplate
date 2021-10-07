@@ -83,10 +83,12 @@ data_file_header_names = set(['LAMMPS Description',
 # The files are fragments of a LAMMPS data file (see "read_data").
 # In addition, moltemplate may also generate the following files:
 in_prefix = "In "
+in_middle = ".in."
 in_prefix_no_space = "In"
 in_init = "In Init"
 in_settings = "In Settings"
 in_coords = "In Coords"
+in_charges = "In Charges"
 # These files represent different sections of the LAMMPS input script.
 
 

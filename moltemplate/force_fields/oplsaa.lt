@@ -6,8 +6,10 @@
 #
 # tinkerparm2lt.py -name OPLSAA -file oplsaa.prm -dihedral-style opls -zeropad 3
 #
-# The "oplsaa.prm" file was downloaded on 2018-6-15 from the TINKER website
-# https://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
+# The "oplsaa.prm" file was downloaded on 2021-8-31 from the TINKER github page:
+#
+# https://github.com/TinkerTools/tinker/blob/release/params/oplsaa.prm
+#
 # (Corrections to impropers were added by David Huang (adelaide.edu.au))
 # (Additional conversion details are explained at the end of this file.)
 # Urey-Bradley parameters are not included, and a quadratic energy function
@@ -36,7 +38,6 @@
 
 
 
-
 OPLSAA {
 
   # Below we will use lammps "set" command to assign atom charges
@@ -44,8 +45,8 @@ OPLSAA {
 
   write_once("In Charges") {
     #--------------------- IMPORTANT -----------------------
-    # The first 56 atom types are not intended for use in an ordinary
-    # (all-atom) simulation.  Instead, these atoms were intended for
+    # The first 56 atom types (excluding 48,49) are not intended for use in an
+    # ordinary (all-atom) simulation.  Instead, these atoms were intended for
     # use with "United Atom" molecules which lack hydrogen atoms.
     # (They belong to the OPLSUA force field, not the OPLSAA force field.)
     #--------------------------------------------------------
@@ -96,8 +97,8 @@ OPLSAA {
     set type @atom:45 charge -0.25  # "Methylene Chloride (UA)"DON'T USE(OPLSUA)
     set type @atom:46 charge 0.42  # "Chloroform CHCl3 (UA)"   DON'T USE(OPLSUA)
     set type @atom:47 charge -0.14  # "Chloroform CHCl3 (UA)"  DON'T USE(OPLSUA)
-    set type @atom:48 charge 0.248  # "Carbon Tetrachloride"   DON'T USE(OPLSUA)
-    set type @atom:49 charge -0.062  # "Carbon Tetrachloride"  DON'T USE(OPLSUA)
+    set type @atom:48 charge 0.248  # "Carbon Tetrachloride"
+    set type @atom:49 charge -0.062  # "Carbon Tetrachloride"
     set type @atom:50 charge 0.139  # "DMSO >S=O (UA)"         DON'T USE(OPLSUA)
     set type @atom:51 charge -0.459  # "DMSO >S=O (UA)"        DON'T USE(OPLSUA)
     set type @atom:52 charge 0.16  # "DMSO CH3- (UA)"          DON'T USE(OPLSUA)
@@ -107,7 +108,7 @@ OPLSAA {
     set type @atom:56 charge 0.285  # "DMF CH3- (UA)"          DON'T USE(OPLSUA)
     #--------------------------------------------------------
     # ORDINARY (OPLSAA) ATOM TYPES BEGIN HERE:
-    # Do not use the atom types above this line in an all-atom simulation.
+    # Do not use the "UA" atom types above this line in an all-atom simulation.
     #--------------------------------------------------------
     set type @atom:57 charge 0.0  # "Dummy Atom"
     set type @atom:58 charge 0.0  # "Helium Atom"
@@ -8212,7 +8213,7 @@ OPLSAA {
     @improper:X_X_024_X @atom:* @atom:* @atom:*_b*_a*_d*_i024* @atom:*
     @improper:X_X_047_X @atom:* @atom:* @atom:*_b*_a*_d*_i047* @atom:*
     @improper:X_X_048_X @atom:* @atom:* @atom:*_b*_a*_d*_i048* @atom:*
-    @improper:055_055_X_055 @atom:*_b*_a*_d*_i55 @atom:*_b*_a*_d*_i55 @atom:* @atom:*_b*_a*_d*_i55
+    @improper:055_055_X_055 @atom:*_b*_a*_d*_i055 @atom:*_b*_a*_d*_i055 @atom:* @atom:*_b*_a*_d*_i055
   } #(end of impropers by type)
 
 
@@ -8268,9 +8269,9 @@ OPLSAA {
   # biotype      46    HA      "Isoleucine"                       85
   # biotype      47    CB      "Isoleucine"                       82
   # biotype      48    HB      "Isoleucine"                       85
-  # biotype      49    CG1     "Isoleucine"                       80
+  # biotype      49    CG1     "Isoleucine"                       81
   # biotype      50    HG1     "Isoleucine"                       85
-  # biotype      51    CG2     "Isoleucine"                       81
+  # biotype      51    CG2     "Isoleucine"                       80
   # biotype      52    HG2     "Isoleucine"                       85
   # biotype      53    CD      "Isoleucine"                       80
   # biotype      54    HD      "Isoleucine"                       85
@@ -9002,11 +9003,20 @@ OPLSAA {
   # biotype     780    H       "N-MeAmide C-Terminus"             85
   # biotype    2001    O       "Water"                            63
   # biotype    2002    H       "Water"                            64
-  # biotype    2003    NA      "Sodium Ion"                       -1
-  # biotype    2004    K       "Potassium Ion"                    -1
-  # biotype    2005    MG      "Magnesium Ion"                    -1
-  # biotype    2006    CA      "Calcium Ion"                      -1
-  # biotype    2007    CL      "Chloride Ion"                     -1
+  # biotype    2003    LI      "Lithium Ion"                     348
+  # biotype    2004    NA      "Sodium Ion"                      349
+  # biotype    2005    K       "Potassium Ion"                   350
+  # biotype    2006    RB      "Rubidium Ion"                    351
+  # biotype    2007    CS      "Cesium Ion"                      352
+  # biotype    2008    MG      "Magnesium Ion"                   353
+  # biotype    2009    CA      "Calcium Ion"                     354
+  # biotype    2010    SR      "Strontium Ion"                   355
+  # biotype    2011    BA      "Barium Ion"                      356
+  # biotype    2012    F       "Fluoride Ion"                    343
+  # biotype    2013    CL      "Chloride Ion"                    344
+  # biotype    2014    BR      "Bromide Ion"                     345
+  # biotype    2015    I       "Iodide Ion"                      346
+  # biotype    2016    ZN      "Zinc Ion"                        834
   # ----------   (end of comment)   ----------
 
 
@@ -9024,23 +9034,79 @@ OPLSAA {
     angle_style harmonic
     dihedral_style opls
     improper_style harmonic
-    pair_style lj/cut/coul/long 10.0 10.0
+    pair_style lj/cut/coul/long 11.0 11.0
+      # (Note to self: The pair_style used by OPLSAA/M (2015) is:
+      #                lj/charmm/coul/long 9.0 11.0
+      #                ...so this will have to be updated eventually.)
     pair_modify mix geometric
     special_bonds lj/coul 0.0 0.0 0.5
     kspace_style pppm 0.0001
   } #end of init parameters
 
-  # Note: We use "hybrid" styles in case the user later wishes to
-  #       combine the molecules built using this force-field with other
-  #       molecules that use other styles.  (This is not necessarily
-  #       a good idea, but LAMMPS and moltemplate both allow it.)
   #       For more information:
-  #       http://lammps.sandia.gov/doc/pair_hybrid.html
-  #       http://lammps.sandia.gov/doc/bond_hybrid.html
-  #       http://lammps.sandia.gov/doc/angle_hybrid.html
-  #       http://lammps.sandia.gov/doc/dihedral_hybrid.html
-  #       http://lammps.sandia.gov/doc/improper_hybrid.html
+  #       https://docs.lammps.org/units.html
+  #       https://docs.lammps.org/atom_style.html
+  #       https://docs.lammps.org/pair_lj_cut_coul.html
+  #       https://docs.lammps.org/bond_harmonic.html
+  #       https://docs.lammps.org/angle_harmonic.html
+  #       https://docs.lammps.org/dihedral_opls.html
+  #       https://docs.lammps.org/improper_harmonic.html
+  #       https://docs.lammps.org/special_bonds.html
+  #       https://docs.lammps.org/kspace_style.html
 
 
 }  # OPLSAA
 
+
+
+
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.oplsaa") containing a couple papers
+# describing the OPLSAA force field, and its implementation in moltemplate.
+
+write_once("log.cite.oplsaa") {
+  In case it is helpful, here is a list of papers relevant to
+  the implementation of the OPLSAA force field used in moltemplate.  
+  The OPLS force field parameters in moltemplate were not taken
+  directly from the original OPLS papers.  Instead, they were obtained
+  from files that are distributed with the TINKER software:
+  (https://github.com/TinkerTools/tinker/blob/release/params/oplsaa.prm)
+  So if you use the OPLSAA or OPLSUA force fields with moltemplate,
+  please also cite the TINKER paper:
+
+  - J.A. Rackers, Z. Wang, C. Lu, M.L. Laury, L.Lagardère, M.J. Schnieders,
+    J-P. Piquemal, P. Ren, and J.W. Ponder
+    J.Chem.Theory.Comput.,14(10):5273-5289, 2018
+    https://doi.org/10.1021/acs.jctc.8b00529
+
+  As for OPLS, any of these papers can be used to cite
+  the version of OPLS provided by moltemplate:
+  - W.L. Jorgensen and J. Tirado–Rives
+    J. Comp. Chem., Volume 26, Issue 16 p. 1689-1700, 2005
+    https://doi.org/10.1002/jcc.20297
+  - W.L. Jorgensen and J. Tirado–Rives
+    Proc. Nat. Acad. Sci, 102 (19) 6665-6670, 2005
+    https://doi.org/10.1073/pnas.0408037102
+  - W.L. Jorgensen, D.S. Maxwell, and J. Tirado-Rives
+    J. Am. Chem. Soc. 1996, 118, 11225-11236.
+    https://doi.org/10.1021/ja9621760
+
+  Incidentally, parameters used by both TINKER and moltemplate were taken from:
+  - W. L. Jorgensen, July 2008,
+   "OPLS All-Atom Parameters for Organic Molecules, Ions,
+    Peptides & Nucleic Acids, July 2008", BOSS Version 4.8
+  ...although I doubt you need to cite this.
+  (This document no longer appears to be publicly available, however several
+   other versions of it can be found at http://zarbi.chem.yale.edu/doc/)
+
+  Many additional OPLS papers have been published by the Jorgensen lab
+  over the years, and the "oplsaa.lt" file probably contains parameters
+  from several of them:
+    http://zarbi.chem.yale.edu/publications.html
+  However, depending on the type of simulation you want to run,
+  only a small subset of these will be relevant to your work (if any).
+  Since the force field parameters used here were taken from the 2008 version of
+  BOSS, papers published after that time are not relevant to moltemplate users.
+}

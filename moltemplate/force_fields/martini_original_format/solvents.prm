@@ -1,0 +1,122 @@
+#
+#  Martini interaction parameters using martini.21656.tmp
+#  converted by emc_martini.pl v1.4, October 16, 2019 by Pieter J. in 't Veld
+#  to be used in conjuction with EMC v9.4.4 or higher
+#
+
+# Force field definition
+
+ITEM	DEFINE
+
+FFNAME	MARTINI
+FFTYPE	COARSE
+VERSION	2011
+CREATED	Oct 2019
+LENGTH	NANOMETER
+ENERGY	KJ/MOL
+DENSITY	G/CC
+MIX	NONE
+NBONDED	1
+INNER	0.9
+CUTOFF	1.2
+PAIR14	OFF
+ANGLE	WARN
+TORSION	IGNORE
+
+ITEM	END
+
+# Masses
+
+ITEM	MASS
+
+# type	mass	element	ncons	charge	comment
+
+C11	72	C1	2	0	apolar
+C31	72	C3	2	0	apolar
+Na1	72	Na	2	0	intermediate
+Na2	72	Na	2	0	intermediate
+
+ITEM	END
+
+# Typing equivalences
+
+ITEM	EQUIVALENCE
+
+# type	pair	incr	bond	angle	torsion	improper
+
+C11	C1	C1	C11	C11	C11
+C31	C3	C3	C31	C31	C31
+Na1	Na	Na	Na1	Na1	Na1
+Na2	Na	Na	Na2	Na2	Na2
+
+ITEM	END
+
+# Bond parameters
+
+ITEM	BOND
+
+# type1	type2	k	l0
+
+C1	C1	1250	0.47
+C1	C3	1250	0.47
+C1	Na	1250	0.47
+C1	P1	1250	0.47
+SC1	SC1	5000	0.3
+SC4	SC4	20000	0.27
+
+ITEM	END
+
+# Angle parameters
+
+ITEM	ANGLE
+
+# type1	type2	type3	k	theta0
+
+C1	C1	C1	25	180
+C1	C1	C3	25	180
+C1	C1	C31	25	180
+C1	C3	C1	45	120
+C1	C31	C1	45	180
+C1	Na	C11	25	180
+C1	Na1	C11	25	180
+C1	Na2	C11	25	180
+C3	C1	Na	25	180
+C3	C1	Na1	25	180
+C3	C1	Na2	25	180
+Na	C11	Na1	25	60
+Na	C11	Na2	25	130
+Na1	C11	Na2	25	130
+
+ITEM	END
+
+# Templates
+
+ITEM	TEMPLATES
+
+# name	smiles
+
+ACE	[P5]
+ACH	[P3]
+BENZ	[SC4]1[SC4][SC4]1
+BOL	[Nda]
+BUT	[C1]
+CHEX	[SC1]1[SC1][SC1]1
+CLF	[C4]
+DEC	[C1][C1][C1]
+EOL	[P2]
+ETH	[N0]
+HD	[C1][C1][C1][C1]
+MES	[C5]
+OCO	[P1][C1]
+OCT	[C1][C1]
+OD	[C1][C1][C1][C1][C1]
+ODE	[C1][C1][C3][C1][C1]
+ODT	[C1][C31][C1][C1][C1]
+PAM	[Nd]
+POL	[P1]
+PON	[Na]
+POP	[C2]
+PRX	[C3]
+TO	[C11]([Na1][C1][C3][C1][C1])([Na2][C1][C3][C1][C1])[Na][C1][C3][C1][C1]
+
+ITEM	END

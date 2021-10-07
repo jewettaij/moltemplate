@@ -4,11 +4,13 @@ interpolate_curve.py
 ##  Description
 
 "interpolate_curve.py" is a crude program which uses (Catmull-Rom)
-cubic spline interpolation to generate a set of evenly spaced
-coordinates which lie along smooth a curve specified by the user.
+cubic spline interpolation to generate a set of coordinates which
+lie along smooth a curve specified by the user.
+(The points will be evenly spaced along the curve's parameter,
+but are not necessarily evenly spaced along the physical length of the curve.)
 
 Note: This program is both a stand-alone executable program (that can be run
-from the terminal) and a python library.  The former is documented below.
+from the terminal) and a python module.  The former is documented below.
 *(The [python API is explained later](#Python-API).)*
 
 ## Usage (from the terminal)

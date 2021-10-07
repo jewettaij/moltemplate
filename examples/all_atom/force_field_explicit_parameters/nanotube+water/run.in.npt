@@ -13,18 +13,19 @@
 # (However the "run.in.nvt" example in this directory should work.)
 # ------------------------------- Initialization Section --------------------
 
-include system.in.init
+include      "system.in.init"        # specify the style of force field used
 
 # ------------------------------- Atom Definition Section -------------------
 
-read_data system.data
+read_data    "system.data"           # load atom coordinates and topology
 
 # ------------------------------- Settings Section --------------------------
 
-include system.in.settings
+include      "system.in.settings"    # load the force field parameters
 
 # Use "neigh_modify" to turn off calculation of interactions between immobilized
-# atoms. (Note: group "cGraphene" was defined in the file "system.insettings")
+# atoms. (Note: group "cGraphene" was defined in the file "system.in.settings")
+
 neigh_modify exclude group Cgraphene Cgraphene
 
 # ------------------------------- Run Section -------------------------------
@@ -33,19 +34,23 @@ neigh_modify exclude group Cgraphene Cgraphene
 # Only the Cgraphene atoms are immobile.
 group mobile subtract all Cgraphene
 
-# (Note: The "Cgraphene" group was defined in system.in.settings.)
-
+# (Note: The "Cgraphene" group was defined in "system.in.settings".)
 
 # Unfortunately you can not use the LAMMPS "minimize" command on this system
 # because there is no way to immobilize the carbon graphene & nanotube atoms
 # during minimization.  Instead, we can use langevin dynamics with a fast
 # damping parameter and a small timestep.
 
-print "--------- beginning minimization (using fix langevin) ---------"
+print "---- beginning minimization (using fix langevin, not minimize) ----"
 
 timestep        0.1
+
+# Give each atom a random initial velocity consistent with a system at 1.0K.
+velocity mobile create 1.0 12345
+
 fix fxlan mobile langevin 1.0 1.0 100.0 48279
 fix fxnve mobile nve   # <-- needed by fix langevin (see lammps documentation)
+
 thermo          100
 run 2500
 
@@ -87,6 +92,10 @@ fix Ffreezestuff Cgraphene rigid single force * off off off torque * off off off
 
 fix fxMoveStuff mobile npt temp 300 300 100 z 200 200 1000.0 dilate mobile drag 2.0
 
+include      "system.in.constraints" # apply constraints (after minimization
+                                     # and after all integration fixes)
+
+
 #  ----------------------------------------
 
 # The next two lines recalculate the temperature using
@@ -109,15 +118,21 @@ timestep 0.5
 
 run    200000
 
+
 # Hopefully the barostat is no longer oscillating. Increase the timestep and
 # also get get rid of "drag 2.0". (A non-zero drag parameter will result in
 # unrealistic fluctuations of volume under NPT conditions.)
 # drag 2.0  <-- commenting out
 #
 # Set temp=300K, pressure=0bar, and equilibrate volume only in the z direction
+
 unfix fxMoveStuff
+unfix fRattleSPCE  # (must undo all the fixes from "system.in.constraints")
 fix fxMoveStuff mobile npt temp 300 300 100 z 0 0 1000.0 dilate mobile
 fix_modify fxMoveStuff temp tempMobile
+include      "system.in.constraints" # apply constraints AFTER integration fixes
+                                     # (such as "fix npt" used above)
+                                     # https://lammps.sandia.gov/doc/fix_shake.html
 
 timestep 0.5
 

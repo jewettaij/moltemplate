@@ -1,0 +1,62 @@
+import "martini.lt"    #(This file is located in moltemplate/force_fields/)
+import "water.lt"
+import "DPPC.lt"
+
+# The following command generates a lipid bilayer consisting of
+# 13 x 13 lipids in the XY plane, with a 7.6923 angstrom spacing:
+#
+#lipids = new DPPC [13].move(7.6923,  0,  0)
+#                  [13].move(0, 7.6923,  0)
+#                   [2].rot(180, 1, 0, 0)
+#
+# Unfortunately, all of the lipids will be pointing in the same direction.
+
+
+# Instead we use the "new random()" command to select from a list of
+# DPPC lipids that have been rotated by different amounts around the Z axis.
+# The "new random" command is discussed in chapter 6 of the moltemplate manual.
+
+lipids = new random([DPPC,
+                     DPPC.rot(18,0,0,1),
+                     DPPC.rot(36,0,0,1),
+                     DPPC.rot(54,0,0,1),
+                     DPPC.rot(72,0,0,1),
+                     DPPC.rot(90,0,0,1),
+                     DPPC.rot(108,0,0,1),
+                     DPPC.rot(126,0,0,1),
+                     DPPC.rot(144,0,0,1),
+                     DPPC.rot(162,0,0,1),
+                     DPPC.rot(180,0,0,1),
+                     DPPC.rot(198,0,0,1),
+                     DPPC.rot(216,0,0,1),
+                     DPPC.rot(234,0,0,1),
+                     DPPC.rot(252,0,0,1),
+                     DPPC.rot(270,0,0,1),
+                     DPPC.rot(288,0,0,1),
+                     DPPC.rot(306,0,0,1),
+                     DPPC.rot(324,0,0,1),
+                     DPPC.rot(342,0,0,1)],
+                     [0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,
+                      0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05],
+                     123456)
+                  [13].move(7.6923,  0,  0)
+                  [13].move(0, 7.6923,  0)
+                   [2].rot(180, 1, 0, 0)
+
+
+# Now add some water molecules
+
+waters = new MW [25].move(4.0, 0, 0)
+                [25].move(0, 4.0, 0)
+                [13].move(0, 0, 4.23)
+
+# Move the waters upwards so that they don't overlap with the lipids.
+
+waters[*][*][*].move(0, 0, 22.4)
+
+write_once("Data Boundary") {
+  0.0   100.0  xlo xhi
+  0.0   100.0  ylo yhi
+ -50.0   50.0  zlo zhi
+}
+

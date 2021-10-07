@@ -32,7 +32,6 @@ neigh_modify exclude molecule/intra gGraphene
 
 # ------------------------------- Run Section -------------------------------
 
-
 # The gGraphene atoms belong to carbon nanotubes that are rigid.
 # (Note: The "gGraphene" group was defined in system.in.settings.)
 # The remaining atoms (gFlexible) can move freely.
@@ -45,6 +44,9 @@ group gFlexible subtract all gRigid
 # a fast damping parameter and a small timestep.
 
 print "--------- beginning minimization ---------"
+
+# Give each atom a random initial velocity consistent with a system at 1.0K.
+velocity all create 1.0 12345
 
 timestep        0.1
 fix fxlan gFlexible langevin 1.0 1.0 20.0 48279

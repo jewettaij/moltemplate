@@ -1,0 +1,10 @@
+import "martini.lt"
+
+# The NC3+ ion (MARTINI model)
+
+NC3pIon inherits MARTINI {
+  #  AtomID MolID AtomType Charge  x   y   z
+  write("Data Atoms") {
+    $atom   $mol  @atom:Q0  1.0   0   0   0
+  }
+}
