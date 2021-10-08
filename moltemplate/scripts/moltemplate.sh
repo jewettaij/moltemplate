@@ -682,7 +682,9 @@ while [ "$i" -lt "$ARGC" ]; do
         IFS=$CR
         box=( $(head -8 "$tmp_dump" | awk 'NR>5{for (i=1;i<=NF;i++){printf "%g\n",$i}}') )
 
-        # Find the columns of velocities.
+        # Find the columns of: position, quaternion, velocity, and bangular momentum.
+        pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
+        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/q[wxyz]/){printf "%i\n",i-2} }}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
         angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
@@ -717,27 +719,19 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
 
         # Save the coordinates.
-        awk 'NR>9{print $3" "$4" "$5}' "$tmp_dump" > "$tmp_atom_coords"
+	awk -v x=${pos[0]} -v y=${pos[1]} -v z=${pos[2]} 'NR>9{print $x" "$y" "$z}' "$tmp_dump" > "$tmp_atom_coords"
 
         # Save the orientations. Make sure that the columns reserved for quaternions are not used to store velocities.
-        es=0
-        if [[ ${#vel[@]} == 3 && ${vel[2]} -le 9 ]]; then
-           ((es++))
-        fi
-        if [[ ${#angmom[@]} == 3 && ${angmom[2]} -le 9 ]]; then
-           ((es++))
-        fi
-        if [[ "$(sed  -n '10p;10q' "$tmp_dump" | awk '{print $6" "$7" "$8" "$9}' | wc -w)" == 4 && $es == 0 ]]; then
-           awk 'NR>9{print $6" "$7" "$8" "$9}' "$tmp_dump" > "$tmp_ellips_quat"
+	if [[ ${#quat[@]} == 4 ]]; then 
+           awk -v qw=${quat[0]} -v qx=${quat[1]} -v qy=${quat[2]} -v qz=${quat[3]} 'NR>9{print $qw" "$qx" "$qy" "$qz}' "$tmp_dump" > "$tmp_ellips_quat"
         fi
 
-        # Save the velocities. It should work with other atom styles, as long as the velocities are present.
+        # Save the velocities and, if present, angular momenta too.
         if [[ ${#vel[@]} == 3 && ${#angmom[@]} == 0 ]]; then 
            awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz}' "$tmp_dump" > "$data_velocities"
 
         elif [[ ${#vel[@]} == 3 && ${#angmom[@]} == 3 ]]; then 
            awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} -v ax=${angmom[0]} -v ay=${angmom[1]} -v az=${angmom[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz" "$ax" "$ay" "$az}' "$tmp_dump" > "$data_velocities"
-
         fi
 
 
@@ -2432,7 +2426,7 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     # the file after the in_prefix.
     echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     echo "# ----------------- $SECTION_NAME Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-
+    
     # Commenting out the next line.
     #
     #cp -f "$file_name" "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
@@ -2452,6 +2446,8 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     fi
     #...and append the contents to the end of the target file.
     cat "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
+    echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_INPUT_SCRIPT
     mv -f "$file_name" output_ttree/
 done
 
