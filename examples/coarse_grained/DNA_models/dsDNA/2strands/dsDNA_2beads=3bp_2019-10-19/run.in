@@ -1,0 +1,63 @@
+# -- Init Section --
+
+# The forces between DNA strands depend on the salt concentration,
+# so we must specify the salt concentration beforehand.
+# We do this indirectly by specifying the Debye length.  Do this now.
+
+variable debye_length equal 1.0
+
+# Now specify the force field styles and atom styles:
+include         "system.in.init"
+
+# -- Atom Definition Section --
+
+# atom geometry and topology:
+read_data       "system.data"
+
+# -- Settings Section --
+
+# force field parameters:
+include         "system.in.settings"
+
+
+# -- Run Section --
+
+
+timestep        1.0   # By definition.  Masses should be adjusted accordingly.
+
+dump            1 all custom 10000 traj.lammpstrj id mol type x y z ix iy iz
+
+# To use Langevin dynamics in LAMMPS you need both "fix langevin" and "fix nve".
+# (See http://lammps.sandia.gov/doc/fix_langevin.html for details.)
+# kB*T = 0.001987207*300 kCal/mole = 0.5961621
+
+#                        kB*Tstart   kB*Tstop   tdamp     randomseed
+
+fix fxlan all langevin   0.5961621   0.596162   10000.0    123456
+
+ 
+
+fix fxnve all nve 
+
+# To make visualization easier, keep the average position centered at 0,0,0.
+# (This will prevent the polymer from drifting away.)
+
+fix fxcen all recenter 0.0 0.0 0.0
+
+# Make sure the particles remain allocated evenly over the processors.
+# (roughly the same number of particles assigned to ever processor)
+
+fix fxbal all balance 50000 1.03 shift xyz 20 1.03
+
+
+# (See http://lammps.sandia.gov/doc/fix_langevin.html)
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo          5000     # time interval for printing out "thermo" data
+thermo_modify   norm yes #(optional, makes energy numbers easier to understand)
+
+
+run              100000000
+
+write_data  system_after_nvt.data
+

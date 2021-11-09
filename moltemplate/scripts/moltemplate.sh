@@ -684,7 +684,7 @@ while [ "$i" -lt "$ARGC" ]; do
 
         # Find the columns of: position, quaternion, velocity, and bangular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
-        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/q[wxyz]/){printf "%i\n",i-2} }}') )
+        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/q[wxyz]/||$i~/c_q/||$i~/c_orient/){printf "%i\n",i-2} }}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
         angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS

@@ -1,0 +1,48 @@
+import "oplsaa.lt"   # OPLSAA atom types and force field params used by Ethanol
+
+
+# Atom type numbers are from the "oplsaa.lt" file
+# (located in moltemplate/force_fields/)  Excerpt:
+#
+#    @atom:80 charge -0.18   mass 12.011 # "Alkane CH3-"
+#    @atom:85 charge 0.06    mass 1.008  # "Alkane H-C"
+#    @atom:96 charge -0.683  mass 15.999 # "Alcohol -OH"
+#    @atom:97 charge 0.418   mass 1.008  # "Alcohol -OH"
+#    @atom:98 charge 0.04    mass 1.008  # "Methanol CH3-"
+#    @atom:99 charge 0.145   mass 12.011 # "Alcohol CH3OH & RCH2OH"
+
+
+Ethanol inherits OPLSAA {
+
+  # atomID    molID  atomTyle  charge     X        Y          Z
+  write('Data Atoms') {
+    $atom:O   $mol:m @atom:96   0.0  1.2322305822 -0.2731895077 -0.1276123902
+    $atom:H   $mol:m @atom:97   0.0  1.2473876659 -0.8998737590  0.6150681570
+    $atom:C1  $mol:m @atom:99   0.0  0.0849758188 0.5590385475 0.0510545434
+    $atom:H11 $mol:m @atom:98   0.0  0.1506137362 1.1200249874 0.9943015309
+    $atom:H12 $mol:m @atom:98   0.0  0.1316093068 1.2841805400 -0.7645223601
+    $atom:C2  $mol:m @atom:80   0.0 -1.2129704155 -0.2295285634 -0.0097156258
+    $atom:H21 $mol:m @atom:85   0.0 -1.2655910941 -0.9539857247  0.8097953440  
+    $atom:H22 $mol:m @atom:85   0.0  -1.2737541560 -0.7748626513 -0.9540587845
+    $atom:H23 $mol:m @atom:85   0.0  -2.0801425360 0.4329727646 0.0722817289
+  }
+
+  #  Charges will be assigned by OPLSAA, so we can leave them 0.0 here.
+  #
+  #  (The "m" in "$mol:m" refers to this molecule-object's molecule-ID number.
+  #   If there are multiple different molecules contained in this object, 
+  #   then you can give them different names, eg "$mol:m1", "$mol:m2"
+  #   If this molecule is part of a larger molecule, then use "$mol:...")
+
+  write('Data Bond List') {
+    $bond:OH $atom:O $atom:H
+    $bond:C1HO $atom:C1 $atom:O
+    $bond:C1H11 $atom:C1 $atom:H11
+    $bond:C1H12 $atom:C1 $atom:H12
+    $bond:C1C2 $atom:C1 $atom:C2
+    $bond:C2H21 $atom:C2 $atom:H21
+    $bond:C2H22 $atom:C2 $atom:H22
+    $bond:C2H23 $atom:C2 $atom:H23
+  }
+
+} # Ethanol

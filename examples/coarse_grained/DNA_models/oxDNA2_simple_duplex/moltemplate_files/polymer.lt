@@ -1,0 +1,115 @@
+import "oxdna2.lt"  # <-- defines "OXDNA2", "AT", "CG", "GC", "TA"
+
+using namespace OXDNA2_MONOMERS   #<-- exposes "AT", "CG", "GC", "TA"
+
+
+
+# Now define the "Polymer21" molecule object.
+# (This object is a double-stranded DNA and which is 21 base pairs long.)
+# Once defined, we can make copies of it later.
+
+Polymer21 inherits OXDNA2 {
+
+  # Optional: Use "create_var{ $mol }" to insure that all of the atoms in this
+  #  polymer share the same molecule-IDs.  (See chapter 9.6 of the manual.)
+  #  My apologies. I realize this detail is confusing.  Most uers don't care
+  #  about the molecule-ID numbers and can safely comment out this next line.)
+
+  create_var{ $mol }
+
+
+  # ----- IMPORTANT: -----
+  # Now create an array of 21 base-pair "monomers", and specify their
+  # location and orientation
+  # Each successive "monomer" will be shifted (in the +Z
+  # direction) by 0.332, and rotated by 34.3 degrees around Z.
+
+  monomers[0] = new AT
+  monomers[1] = new CG.rot(34.3,0,0,1).move(0,0,0.332)
+  monomers[2] = new GC.rot(68.6,0,0,1).move(0,0,0.664)
+  monomers[3] = new TA.rot(102.9,0,0,1).move(0,0,0.996)
+  monomers[4] = new AT.rot(137.2,0,0,1).move(0,0,1.328)
+  monomers[5] = new CG.rot(171.5,0,0,1).move(0,0,1.66)
+  monomers[6] = new GC.rot(205.8,0,0,1).move(0,0,1.992)
+  monomers[7] = new TA.rot(240.1,0,0,1).move(0,0,2.324)
+  monomers[8] = new AT.rot(274.4,0,0,1).move(0,0,2.656)
+  monomers[9] = new CG.rot(308.7,0,0,1).move(0,0,2.988)
+  monomers[10] = new GC.rot(343.0,0,0,1).move(0,0,3.320)
+  monomers[11] = new TA.rot(377.3,0,0,1).move(0,0,3.652)
+  monomers[12] = new AT.rot(411.6,0,0,1).move(0,0,3.984)
+  monomers[13] = new CG.rot(445.9,0,0,1).move(0,0,4.316)
+  monomers[14] = new GC.rot(480.2,0,0,1).move(0,0,4.648)
+  monomers[15] = new TA.rot(514.5,0,0,1).move(0,0,4.98)
+  monomers[16] = new AT.rot(548.8,0,0,1).move(0,0,5.312)
+  monomers[17] = new CG.rot(583.1,0,0,1).move(0,0,5.644)
+  monomers[18] = new GC.rot(617.4,0,0,1).move(0,0,5.976)
+  monomers[19] = new TA.rot(651.7,0,0,1).move(0,0,6.308)
+  monomers[20] = new AT.rot(686.0,0,0,1).move(0,0,6.640)
+
+  # Note: In this case, each "Polymer" object actually contains two strands
+  #       of DNA (denoted "f"<-->forward and "r"<-->reverse).
+  # The forward strand has sequence: ACGTACGTACGTACGTACGTA
+  # The reverse strand has sequence: TACGTACGTACGTACGTACGT
+  # (Keep in mind that the reverse strand is runs in the opposite direction.)
+  # There is also a version of this example where two different "Polymer"
+  # objects are generated (wrapped around each other).  Both behave
+  # the same way.  You can generate polymers like this automatically using
+  # the "genpoly_lt.py" python script (which is included with moltemplate).
+
+  # optional: shift all of the monomers in the -Z direction
+  # (so that the resulting polymer is centered at 0,0,0)
+
+  monomers[*].move(0,0,-3.332)
+
+  # ----- IMPORTANT: -----
+  # Now add bonds between successive basepair "monomers".
+  # Each "monomer" contains 2 particles, each representing a nucleotide.
+  # The two nucleotides correspond to the base pair
+  # There are two bonds per monomer, one connects particles in the
+  # forward strand, the other connects particles in the reverse strand.
+  #  BondID, BondType, AtomID1, AtomID2
+
+  write("Data Bonds") {
+    $bond:b1 @bond:Backbone $atom:monomers[0]/f $atom:monomers[1]/f
+    $bond:b2 @bond:Backbone $atom:monomers[0]/r $atom:monomers[1]/r
+    $bond:b3 @bond:Backbone $atom:monomers[1]/f $atom:monomers[2]/f
+    $bond:b4 @bond:Backbone $atom:monomers[1]/r $atom:monomers[2]/r
+    $bond:b5 @bond:Backbone $atom:monomers[2]/f $atom:monomers[3]/f
+    $bond:b6 @bond:Backbone $atom:monomers[2]/r $atom:monomers[3]/r
+    $bond:b7 @bond:Backbone $atom:monomers[3]/f $atom:monomers[4]/f
+    $bond:b8 @bond:Backbone $atom:monomers[3]/r $atom:monomers[4]/r
+    $bond:b9 @bond:Backbone $atom:monomers[4]/f $atom:monomers[5]/f
+    $bond:b10 @bond:Backbone $atom:monomers[4]/r $atom:monomers[5]/r
+    $bond:b11 @bond:Backbone $atom:monomers[5]/f $atom:monomers[6]/f
+    $bond:b12 @bond:Backbone $atom:monomers[5]/r $atom:monomers[6]/r
+    $bond:b13 @bond:Backbone $atom:monomers[6]/f $atom:monomers[7]/f
+    $bond:b14 @bond:Backbone $atom:monomers[6]/r $atom:monomers[7]/r
+    $bond:b15 @bond:Backbone $atom:monomers[7]/f $atom:monomers[8]/f
+    $bond:b16 @bond:Backbone $atom:monomers[7]/r $atom:monomers[8]/r
+    $bond:b17 @bond:Backbone $atom:monomers[8]/f $atom:monomers[9]/f
+    $bond:b18 @bond:Backbone $atom:monomers[8]/r $atom:monomers[9]/r
+    $bond:b19 @bond:Backbone $atom:monomers[9]/f $atom:monomers[10]/f
+    $bond:b20 @bond:Backbone $atom:monomers[9]/r $atom:monomers[10]/r
+    $bond:b21 @bond:Backbone $atom:monomers[10]/f $atom:monomers[11]/f
+    $bond:b22 @bond:Backbone $atom:monomers[10]/r $atom:monomers[11]/r
+    $bond:b23 @bond:Backbone $atom:monomers[11]/f $atom:monomers[12]/f
+    $bond:b24 @bond:Backbone $atom:monomers[11]/r $atom:monomers[12]/r
+    $bond:b25 @bond:Backbone $atom:monomers[12]/f $atom:monomers[13]/f
+    $bond:b26 @bond:Backbone $atom:monomers[12]/r $atom:monomers[13]/r
+    $bond:b27 @bond:Backbone $atom:monomers[13]/f $atom:monomers[14]/f
+    $bond:b28 @bond:Backbone $atom:monomers[13]/r $atom:monomers[14]/r
+    $bond:b29 @bond:Backbone $atom:monomers[14]/f $atom:monomers[15]/f
+    $bond:b30 @bond:Backbone $atom:monomers[14]/r $atom:monomers[15]/r
+    $bond:b31 @bond:Backbone $atom:monomers[15]/f $atom:monomers[16]/f
+    $bond:b32 @bond:Backbone $atom:monomers[15]/r $atom:monomers[16]/r
+    $bond:b33 @bond:Backbone $atom:monomers[16]/f $atom:monomers[17]/f
+    $bond:b34 @bond:Backbone $atom:monomers[16]/r $atom:monomers[17]/r
+    $bond:b35 @bond:Backbone $atom:monomers[17]/f $atom:monomers[18]/f
+    $bond:b36 @bond:Backbone $atom:monomers[17]/r $atom:monomers[18]/r
+    $bond:b37 @bond:Backbone $atom:monomers[18]/f $atom:monomers[19]/f
+    $bond:b38 @bond:Backbone $atom:monomers[18]/r $atom:monomers[19]/r
+    $bond:b39 @bond:Backbone $atom:monomers[19]/f $atom:monomers[20]/f
+    $bond:b40 @bond:Backbone $atom:monomers[19]/r $atom:monomers[20]/r
+  }
+} # Polymer21
+

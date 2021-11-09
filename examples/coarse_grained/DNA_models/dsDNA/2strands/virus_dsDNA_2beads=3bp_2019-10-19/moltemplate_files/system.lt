@@ -1,0 +1,29 @@
+import "dna_polymer.lt"    # <-- Defines the polymer model used for DNA
+dnapolymer = new DNAPolymer
+
+import "wall.lt"          # <-- Defines the walls of the container
+
+# The wall particles and DNA requires use different pair styles, so we must
+# use a "hybrid" pair style: https://lammps.sandia.gov/doc/pair_hybrid.html
+
+write_once("In Init") {
+  pair_style  hybrid lj/cut 7.001 yukawa \$\{debye_length\} 7.001
+}
+
+
+# What kind of boundary conditions are we using?
+
+write_once("Data Boundary") {
+ -40.0 40.0  xlo xhi
+ -60.0 60.0  ylo yhi
+ -40.0 40.0  zlo zhi
+}
+
+write_once("In Init") {
+  boundary s s s      # <-- periodicity in x y z directions
+}
+# "f" stands for "fixed"
+# "p" stands for "periodic"
+# "s" stands for "shrink-wrapped" (non-periodic)
+
+

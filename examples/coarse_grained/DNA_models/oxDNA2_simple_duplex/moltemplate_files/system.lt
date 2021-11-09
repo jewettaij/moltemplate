@@ -1,0 +1,11 @@
+import "polymer.lt"  # <-- defines "Polymer21"
+
+polymer = new Polymer21
+
+# At some point we must indicate the
+write_once("Data Boundary") {
+  -10.0 10.0   xlo xhi
+  -10.0 10.0   ylo yhi
+  -10.0 10.0   zlo zhi
+}
+

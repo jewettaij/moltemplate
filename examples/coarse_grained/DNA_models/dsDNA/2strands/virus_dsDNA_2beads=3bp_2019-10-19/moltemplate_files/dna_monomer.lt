@@ -1,0 +1,39 @@
+#  Monomers are simply "dumbell" shaped molecules consiting of two particles.
+# 
+#
+#               -@A-
+#                 |
+#               -@B-
+#
+#
+#  Eventually we will link multiple monomers together to form a 
+#  ladder-shaped polymer:
+#
+#
+#               -@A--@A--@A--@A--@A--@A--
+#        ...      |   |   |   |   |   |   . . .
+#               -@B--@B--@B--@B--@B--@B--
+#
+
+
+
+import "dna_forcefield.lt"   # defines "DNAForceField"
+
+
+
+
+
+DNAMonomer inherits DNAForceField {
+
+  # atom-id(name)  mol-id   atom-type  charge  x     y        z
+  write("Data Atoms") {
+    $atom:a        $mol    @atom:A    0.0   0.000  -0.74000   0.0000000
+    $atom:b        $mol    @atom:B    0.0   0.000   0.74000   0.0000000
+  }
+
+  write("Data Bonds") {
+    $bond:bp @bond:BasePair  $atom:a $atom:b
+  }
+
+}
+

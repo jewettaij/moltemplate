@@ -1,0 +1,65 @@
+##########################################################
+# Now define "rSphereL", and "rSphereR" two spherical regions
+#
+#                      sphere_center radius
+#                       x0   y0   z0  rc0
+#                       |    |    |    |
+#                      \|/  \|/  \|/  \|/
+#                       V    V    V    V
+
+region rSphereL sphere  0    0 -550.0 11.65   side in
+region rSphereR sphere  0    0  550.0 11.65   side in
+
+# The value of the rc0 parameter does not matter very much as long as it is big.
+# (see below)
+
+
+# This sets the parameter "rc0" equal to 11.65
+# The "11.65" means we assume no particle will ever be further than 11.65
+# from the central axis of the cylinder (if it is in the cylindrical region)
+# or the center of the spheres (if it is in one of the spherical end-caps).
+# However it is not the location of the wall.
+# Particles will experience an inward pushing force earlier than this(see below)
+
+
+#                        cylinder_center radius
+#                       x,y,z?   x0    y0    rc0    zlo   zhi
+#                         |      |     |      |      |     |
+#                        \|/    \|/   \|/    \|/    \|/   \|/
+#                         V      V     V      V      V     V
+region  rCyl     cylinder z     0.0   0.0   11.65 -550.0 550.0  side in
+region  rRod     union 3 rSphereL rCyl rSphereR  
+
+
+
+
+
+
+# Now apply an inward force applied to every particle which lies outside
+# a spherical region (of radius rc0-rc)
+# The energy of each particle (due to that force) is:
+#
+# Uexternal(r) = k*(rsurf-rc)^2 
+#       where "rsurf" = the distance from the particle to the surface = rc0 - r
+#              = k*((rc0-rc) - r)^2
+#                 
+#                                              k   ignore  rc
+#                                              |     |     |
+#                                             \|/   \|/   \|/
+#                                              V     V     V
+
+fix fxWall all wall/region rRod harmonic      10.0  0.0   11.0
+
+
+
+# Uexternal(r) = k*((rc0-rc) - r)^2    (if (rc0-rc) < r < rc0,  0 otherwise)
+# 
+#     Note that rc0-rc = 0.65
+#               rc0-rc = the "inner" sphere radius
+
+
+# For (a very confusing) explanation of these commands go here:
+# http://lammps.sandia.gov/doc/fix_wall_region.html
+# http://lammps.sandia.gov/doc/region.html
+# (I had to figure things out by reading the source code, fix_wall_region.cpp)
+

@@ -1,0 +1,95 @@
+# This version of the methanol molecule was generated using 3rd party software
+# using parameters from the GAFF force field, and saved as a LAMMPS DATA file.
+# Then the resulting LAMMPS DATA file was converted to moltemplate format using
+# the "ltemplify.py" utility.  (As a result of the conversions, the atom type
+# names listed no longer follow GAFF force field conventions.)
+# (BCC) Charges were assigned using AmberTools
+
+Methanol {
+
+  # NOTE: This molecule uses "atom_style hybrid sphere dipole molecular"
+  #       (This is the same atom_style used by ELBA.)  Hence the extra
+  #       columns for "diam", "mux", "muy", "muz" are not relevant
+  #       for this molecule and can be ignored.)
+
+  write("Data Atoms") {
+    # Atom-ID AtomType   x     y     z     diam dens  charge mux muy muz mol-ID
+    $atom:o   @atom:O   0.708  0.0    0.0   0.0 16.0 -0.5988 0.0 0.0 0.0 $mol:m
+    $atom:c   @atom:C  -0.708  0.0    0.0   0.0 12.01 0.1167 0.0 0.0 0.0 $mol:m
+    $atom:hc1 @atom:HC -1.073 -0.769  0.685 0.0 1.008 0.0287 0.0 0.0 0.0 $mol:m
+    $atom:hc2 @atom:HC -1.073 -0.195 -1.011 0.0 1.008 0.0287 0.0 0.0 0.0 $mol:m
+    $atom:hc3 @atom:HC -1.063  0.979  0.331 0.0 1.008 0.0287 0.0 0.0 0.0 $mol:m
+    $atom:ho  @atom:HO  0.994 -0.88  -0.298 0.0 1.008 0.3960 0.0 0.0 0.0 $mol:m
+  }
+
+  write_once("Data Masses") {
+    @atom:O 16.0
+    @atom:C 12.01
+    @atom:HO 1.008
+    @atom:HC 1.008
+  }
+
+  # Note: The "m" in "$mol:m" just refers to this object's molecule-ID.
+  #       If there are multiple molecules contained in this object, 
+  #       then you can give them different names, eg "$mol:m1", "$mol:m2"
+  #       and they will be assigned to different numbers by moltemplate.
+  #       If this molecule is part of a larger molecule, then use "$mol:..."
+
+  # --- bonded interactions ---
+
+  write("Data Bonds") {
+    $bond:b1 @bond:O_H  $atom:o  $atom:ho
+    $bond:b2 @bond:C_H  $atom:c  $atom:hc1
+    $bond:b3 @bond:C_H  $atom:c  $atom:hc2
+    $bond:b4 @bond:C_H  $atom:c  $atom:hc3
+    $bond:b5 @bond:C_O  $atom:c  $atom:o
+  }
+
+  write("Data Angles") {
+    $angle:an1 @angle:O_C_H  $atom:o $atom:c $atom:hc1
+    $angle:an2 @angle:O_C_H  $atom:o $atom:c $atom:hc2
+    $angle:an3 @angle:O_C_H  $atom:o $atom:c $atom:hc3
+    $angle:an4 @angle:C_O_H  $atom:c $atom:o $atom:ho
+    $angle:an5 @angle:H_C_H  $atom:hc1 $atom:c $atom:hc2
+    $angle:an6 @angle:H_C_H  $atom:hc1 $atom:c $atom:hc3
+    $angle:an7 @angle:H_C_H  $atom:hc2 $atom:c $atom:hc3
+  }
+
+  write("Data Dihedrals") {
+    $dihedral:d1 @dihedral:H_O_C_H $atom:ho $atom:o $atom:c $atom:hc1
+    $dihedral:d2 @dihedral:H_O_C_H $atom:ho $atom:o $atom:c $atom:hc2
+    $dihedral:d3 @dihedral:H_O_C_H $atom:ho $atom:o $atom:c $atom:hc3
+  }
+
+  # --- force field parameters ---
+
+  write_once("In Settings") {
+    pair_coeff @atom:O  @atom:O  lj/charmm/coul/long 0.2104 3.066473
+    pair_coeff @atom:C  @atom:C  lj/charmm/coul/long 0.1094 3.399670
+    pair_coeff @atom:HC @atom:HC lj/charmm/coul/long 0.0157 2.47135
+    pair_coeff @atom:HO @atom:HO lj/charmm/coul/long 0.0 0.0
+  }
+
+  write_once("In Settings") {
+    bond_coeff @bond:C_O harmonic 316.7 1.4233
+    bond_coeff @bond:O_H harmonic 371.4 0.973
+    bond_coeff @bond:C_H harmonic 330.6 1.0969
+  }
+
+  write_once("In Settings") {
+    angle_coeff @angle:O_C_H harmonic 50.93 110.26
+    angle_coeff @angle:C_O_H harmonic 47.38 107.26
+    angle_coeff @angle:H_C_H harmonic 39.24 108.46
+  }
+
+  write_once("In Settings") {
+    dihedral_coeff @dihedral:H_O_C_H harmonic 0.166666667 1 3
+  }
+
+  # --- groups ---
+
+  write_once("In Settings") {
+    group gMethanol type @atom:O @atom:C @atom:HO @atom:HC
+  }
+
+} # end of "Methanol" type definition

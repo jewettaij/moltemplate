@@ -1,0 +1,42 @@
+
+WallParticle {
+
+  # Define the particles which will make up the "wall".
+  # atomID molID atomType charge  x  y  z
+  write("Data Atoms") {
+    $atom:w $mol:. @atom:W  0.0  0.0 0.0 0.0
+  }
+
+  # Specify the forces exerted by the wall on other particles:
+  write_once("In Settings") {
+    #            i     j              epsilon sigma cutoff (=sigma*2^1/6)
+    pair_coeff @atom:W @atom:../* lj/cut 0.5961621 3.0 3.37  #note: eps=kB*T
+  }
+  # (note that: 0.5961621 = kB*T = 0.001987207*300 in kCal/mole)
+
+  # Immobilize the particles in the wall
+  write_once("In Settings") {
+    group gWall type @atom:W
+    neigh_modify exclude group gWall gWall
+  }
+
+  # the mass of this particle does not matter (since it is immobile)
+  write_once("Data Masses") {
+    @atom:W 1.0
+  }
+
+  write_once("In Init") {
+    # wall particlues use the "lj/cut" pair style.
+    # if other particles in the simulation use different pair styles,
+    # we specify this in the "system.lt" file.
+    pair_style   lj/cut 7.001
+  }
+
+  # optional: create a file with information to display it in VMD
+  write_once("vmd_commands.tcl") {
+    set sel [atomselect top "type @{atom:W}"]
+    \$sel set radius 4.0
+    \$sel set name W
+  }
+}
+

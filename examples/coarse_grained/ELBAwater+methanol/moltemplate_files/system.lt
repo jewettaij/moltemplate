@@ -1,0 +1,26 @@
+import "methanol.lt"
+
+import "elba.lt"
+
+write_once("Data Boundary") {
+    -15.5 15.5 xlo xhi
+    -15.5 15.5 ylo yhi
+    -15.5 15.5 zlo zhi 
+}
+
+solute = new Methanol [1]
+
+solvent = new ElbaWater [1000]
+
+
+# Define interactions between ELBA water particles and the atoms in methanol.
+# (Because the two different molecules use different pair styles, LAMMPS
+#  does not know how to generate interactions between them automatically.)
+
+write_once("In Settings") {
+  pair_coeff @atom:Methanol/O @atom:ElbaFF/W   lj/sf/dipole/sf  0.3401  3.058
+  pair_coeff @atom:Methanol/C @atom:ElbaFF/W   lj/sf/dipole/sf  0.2453  3.2248
+  pair_coeff @atom:Methanol/HC @atom:ElbaFF/W  lj/sf/dipole/sf  0.09293 2.761
+  pair_coeff @atom:Methanol/HO @atom:ElbaFF/W  lj/sf/dipole/sf  0.000   1.525
+}
+

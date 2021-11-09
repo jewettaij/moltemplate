@@ -1,0 +1,38 @@
+import "polymer_forcefield.lt" # Defines "PForceField". This contains atom types
+                               # and force-field parameters for the polymer.
+
+
+
+# Define the "Monomer" molecule type.  Each "Monomer" contains 3 atoms.
+# (Later, we will link multiple "Monomer"s together to create a "Polymer".)
+
+
+
+
+Monomer inherits PForceField {
+
+  # List the atoms, and their properties:
+  # atom-id  mol-id   atom-type  charge  x      y        z
+
+  write("Data Atoms") {
+    $atom:CA $mol:... @atom:CA    0.0   0.000  0.4000  0.00000
+    $atom:R1 $mol:... @atom:R     0.0   0.000  1.000   1.000
+    $atom:R2 $mol:... @atom:R     0.0   0.000  1.000  -1.000
+  }
+
+  # (Note: The "..." in "$mol:..." tells moltemplate that this molecule may
+  #        be a part of a larger molecule, and (if so) to use the larger
+  #        parent object's molecule-id number as it's own.)
+
+  # Now add a list of bonds connecting these 3 atoms together:
+  #  bond-id   bond-type        atom-id1  atom-id2
+
+  write("Data Bonds") {
+    $bond:CR1  @bond:sidechain  $atom:CA  $atom:R1
+    $bond:CR2  @bond:sidechain  $atom:CA  $atom:R2
+  }
+  # atom-type  mass
+
+} # Monomer
+
+

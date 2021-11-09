@@ -1,0 +1,83 @@
+##########################################################
+# Now define "rSphere", a spherical region (used by LAMMPS fix wall/region)
+#
+#                     sphere_center radius
+#                      x0  y0   z0   rc0
+#                      |    |    |    |
+#                     \|/  \|/  \|/  \|/
+#                      V    V    V    V
+
+region rSphere sphere  0    0    0  200.0   side in
+
+# This sets the parameter "rc0" equal to 200.0.
+# The "200.0" means we assume no particle will ever be further than 200.0
+# from the center of the sphere.  If you want Uexternal(r) = k*r^2,
+# (proportional to r^2), then make sure that "rc0" equals the "rc" parameter.
+# ("rc" is the 3rd argument in the "fix wall/region" command below.)
+
+
+
+# Now apply an inward force applied to every particle.
+# The energy of each particle (due to that force) is:
+#
+# Uexternal(r) = k*(rsurf-rc)^2
+#       where "rsurf" = the distance from the particle to the surface = (rc0-r)
+#              = k*((rc0-rc) - r)^2    (if (rc0-rc) < r < rc0,  0 otherwise)
+#
+
+#                                               k      ignore   rc
+#                                               |        |      |
+#                                              \|/      \|/    \|/
+#                                               V        V      V
+
+fix fxWall all wall/region rSphere harmonic   1.0e-3  0.0  200.0
+
+# Try playing with the "k" value.
+
+
+# In the specific case when rc0 = rc, this simplifies to:
+#
+# Uexternal(r) = k * r^2     (0 < r < rc0)
+#
+# This is like a simple spring (rest-length 0) that pulls every particle inward.
+# The force is non-zero everywhere except at r=0
+#    (and also r>rc0.  However rc0 is very big, so I ignore this possibility.)
+
+
+# For (a very confusing) explanation of these commands go here:
+# http://lammps.sandia.gov/doc/fix_wall_region.html
+# http://lammps.sandia.gov/doc/region.html
+# (I had to figure things out by reading the source code, fix_wall_region.cpp)
+
+
+# NOTES:
+
+# This applies an inward force applied to every particle
+# The energy of this interaction is Uexternal(r) = k*r^2    (r<rc, 0 otherwise)
+#
+# Because it is quadratic, the total energy can also be expressed this way:
+#     \sum_i k*r_i^2  =  (k/(2N)) \sum_{i,j} (r_i - r_j)^2
+#     (For details, see http://en.wikipedia.org/wiki/Radius_of_gyration)
+# ...where r_i and r_j are 3-D vectors representing positions of particles i & j
+# ... and (r_i - r_j)^2 is the square of the distance between particles i and j
+# ... assuming that "fix recenter" is used to keep the center of mass at 0
+#     (in other words, assuming that \sum_i r_i = 0)
+#      http://lammps.sandia.gov/doc/fix_recenter.html
+#      Hmm.. Let's take care of that minor detail now:
+
+fix fxCen all recenter 0 0 0
+
+# Note: This can be interpreted as an attractive force between all PAIRS of 
+#       particles.  The energy of interaction between each pair is
+#        (k/2N) * (r_i - r_j)^2
+#       where "k" is the parameter specified above in the "fix wall/region"
+#       command
+
+
+
+
+
+# ----
+#  (scratchwork:  0.5*(1/(33.42335436886394**2)) = 4.475792428e-4)
+#   This causes the root-mean-squared particle distance from the origin to be
+#   33.42335436886394, which is the size of the inner sphere in "sphere.in")

@@ -1,0 +1,231 @@
+# This file contains force field parameters and style settings for the oxDNA2
+# DNA model.  It also contains definitions of monomers (A,C,G,T) as well as
+# (AT, TA, CG, GC) to make it easier to build long DNA polymers using
+# moltemplate.sh (along with tools like genpoly_lt.py).
+# 
+# WARNING: You must define the "Toxdna" variable in your LAMMPS input script
+#          before you run LAMMPS on an input script created by moltemplate.sh
+#
+#  Toxdna denotes the temperature (in oxDNA units, where 0.1 = 300 K)
+#
+#          See the "run.in" file for an example of how this is done.
+
+OXDNA2 {
+
+  # Somewhere we must indicate the LAMMPS force field styles
+  # needed for this kind of coarse-grained model.  Do that here.
+  # (If additional types of molecules need to be added, these
+  # settings can be overridden later, eg. in the "system.lt" file.)
+
+  write_once("In Init") {
+    atom_style hybrid bond ellipsoid
+    units lj
+    bond_style oxdna2/fene
+    pair_style hybrid/overlay oxdna2/excv    &
+                              oxdna2/stk     &
+                              oxdna2/hbond   &
+                              oxdna2/xstk    &
+                              oxdna2/coaxstk &
+                              oxdna2/dh
+    newton off
+  }
+
+  write_once("Data Masses") {
+    @atom:A 3.1575
+    @atom:C 3.1575
+    @atom:G 3.1575
+    @atom:T 3.1575
+  }
+
+  write_once("In Settings") {
+    bond_coeff @bond:Backbone 2.0 0.25 0.7564
+  }
+
+  write_once("In Settings") {
+    pair_coeff @atom:* @atom:* oxdna2/excv    2.0 0.7 0.675 2.0 0.515 0.5 2.0 0.33 0.32
+    pair_coeff @atom:* @atom:* oxdna2/stk     seqav \$\{Toxdna\} 1.3523 2.6717 6.0 0.4 0.9 0.32 0.6 1.3 0 0.8 0.9 0 0.95 0.9 0 0.95 2.0 0.65 2.0 0.65
+    pair_coeff @atom:* @atom:* oxdna2/hbond   seqav 0.0 8.0 0.4 0.75 0.34 0.7 1.5 0 0.7 1.5 0 0.7 1.5 0 0.7 0.46 3.141592653589793 0.7 4.0 1.5707963267948966 0.45 4.0 1.5707963267948966 0.45
+    pair_coeff @atom:A @atom:T oxdna2/hbond   seqav 1.0678 8.0 0.4 0.75 0.34 0.7 1.5 0 0.7 1.5 0 0.7 1.5 0 0.7 0.46 3.141592653589793 0.7 4.0 1.5707963267948966 0.45 4.0 1.5707963267948966 0.45
+    pair_coeff @atom:C @atom:G oxdna2/hbond   seqav 1.0678 8.0 0.4 0.75 0.34 0.7 1.5 0 0.7 1.5 0 0.7 1.5 0 0.7 0.46 3.141592653589793 0.7 4.0 1.5707963267948966 0.45 4.0 1.5707963267948966 0.45
+    pair_coeff @atom:* @atom:* oxdna2/xstk    47.5 0.575 0.675 0.495 0.655 2.25 0.791592653589793 0.58 1.7 1.0 0.68 1.7 1.0 0.68 1.5 0 0.65 1.7 0.875 0.68 1.7 0.875 0.68 
+    pair_coeff @atom:* @atom:* oxdna2/coaxstk 58.5 0.4 0.6 0.22 0.58 2.0 2.891592653589793 0.65 1.3 0 0.8 0.9 0 0.95 0.9 0 0.95 40.0 3.116592653589793
+    pair_coeff @atom:* @atom:* oxdna2/dh      \$\{Toxdna\} 1.0 0.815
+  }
+
+  write_once("In Settings") {
+    # create the "gOXDNA2" group consisting of all atoms in DNA.
+    # We can use this group later to perform calculations
+    # restricted to this group of atoms.  This might be useful
+    # if you have molecules in the simulation other than DNA.
+    group gOXDNA2 type @atom:A @atom:C @atom:G @atom:T
+  }
+  # (Note: This is safe to use when other molecule types are present.
+  #  because @atom:* wildcards will not match atoms outside of OXDNA2.)
+
+} # OXDNA2
+
+
+
+
+# Optional:
+#
+# In order to build a long polymer in moltemplate, you typically
+# would define an object for each monomer.  Later you can make
+# multiple copies of them and bond them together.  (See chapter 6
+# of the moltemplate manual.  This is what "genpoly_lt.py" does.)
+# In this case, we must define objects for "A", "C", "G", "T".
+# (Each consisting of only one "atom", in this case.  This is.
+#  unusual.  Moltemplate objects typically contain multiple atoms.)
+#
+# To avoid polluting the global namespace (with "A", "C", "G", "T"...)
+# I encapsulate these monomer objects within "OXDNA2_MONOMERS"
+
+
+OXDNA2_MONOMERS {
+
+  A inherits OXDNA2 {
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+    write("Data Atoms") {
+      $atom:f @atom:A 0.000000 0.000000 0.000000 $mol:... 1 1
+    }
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
+    }
+  }
+
+  C inherits OXDNA2 {
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+    write("Data Atoms") {
+      $atom:f @atom:C 0.000000 0.000000 0.000000 $mol:... 1 1
+    }
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
+    }
+  }
+
+  G inherits OXDNA2 {
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+    write("Data Atoms") {
+      $atom:f @atom:G 0.000000 0.000000 0.000000 $mol:... 1 1
+    }
+
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
+    }
+  }
+
+  T inherits OXDNA2 {
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+    write("Data Atoms") {
+      $atom:f @atom:G 0.000000 0.000000 0.000000 $mol:... 1 1
+    }
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f 1.17398450314 1.17398450314 1.17398450314  1.0 0.0 0.0 0.0
+    }
+  }
+
+
+  # We can also construct "monomers" consisting of base pairs convenient
+  # for building double-stranded DNA.  (Moltemplate does not care if the
+  # atoms in each "monomer" object are covalently bonded to eachother.)
+  # These monomers are named "AT", "TA", "CG", "GC".
+  # Suppose you build a polymer using this sequence of commands
+  # monomers[0] = new AT
+  # monomers[1] = new AT.rot(34.3,0,0,1).move(0,0,0.332)
+  # monomers[2] = new CG.rot(68.6,0,0,1).move(0,0,0.664)
+  # monomers[3] = new CG.rot(102.9,0,0,1).move(0,0,0.996)
+  # monomers[4] = new TA.rot(137.2,0,0,1).move(0,0,1.328)
+  # Then the "f" strand ("f"<->"forward strand") will have this sequence: AACCT
+  #  and the "r" strand ("r"<->"reverse strand") will have this sequence: TTGGA
+  #
+  # Note: The "genpoly_lt.py" program can generate long lists of "new" commands
+  #       automatically using any sequence and a geometric curve you provide.
+  #       (It can also add bonds linking the backbone atoms together.)
+  # Note: When double-stranded DNA polymers are built this way, each
+  #       strand will have the same LAMMPS molecule-ID.  ("$mol:...")
+  #       For most users this is not an issue, since molecule-IDs are
+  #       typically only used for visualization and post-processing.
+  #       If you want the two strands to have different molecule-IDs,
+  #       then you will build the two polymers independently and make
+  #       sure they wrap around each other in a realistic way.
+  #       (This is not difficult.  Moltemplate includes examples of
+  #        double-stranded DNA built this way as well.)
+
+  AT inherits OXDNA2 {
+
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+
+    write("Data Atoms") {
+      $atom:f @atom:A -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:T  0.600000 0.000000 0.000000 $mol:... 1 1
+    }
+
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
+    }
+  }
+
+  TA inherits OXDNA2 {
+
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+
+    write("Data Atoms") {
+      $atom:f @atom:T -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:A  0.600000 0.000000 0.000000 $mol:... 1 1
+    }
+
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
+    }
+  }
+
+  CG inherits OXDNA2 {
+
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+
+    write("Data Atoms") {
+      $atom:f @atom:C -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:G  0.600000 0.000000 0.000000 $mol:... 1 1
+    }
+
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
+    }
+  }
+
+  GC inherits OXDNA2 {
+
+    # "atom_style hybrid bond ellipsoid" uses this format:
+    # AtomID, Type, X, Y, Z, MoleculeID, EllipsoidFlag, Density
+
+    write("Data Atoms") {
+      $atom:f @atom:G -0.600000 0.000000 0.000000 $mol:... 1 1
+      $atom:r @atom:C  0.600000 0.000000 0.000000 $mol:... 1 1
+    }
+
+    # AtomID, shape, quaternion
+    write("Data Ellipsoids") {
+      $atom:f  1.17398450314 1.17398450314 1.173984503145  1.0 0.0 0.0 0.0
+      $atom:r  1.17398450314 1.17398450314 1.173984503145  0.0 0.0 1.0 0.0
+    }
+  }
+
+} #OXDNA2_MONOMERS
+
