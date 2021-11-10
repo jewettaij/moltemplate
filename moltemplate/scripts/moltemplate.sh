@@ -2252,7 +2252,7 @@ if [ -s "$in_settings" ]; then
     cat "$in_settings" >> "${OUT_FILE_SETTINGS}"
   else
     molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
-    export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2021 (https://doi.org/10.1039/c9cp04120f)\n"`
+    export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2019 (https://doi.org/10.1039/c9cp04120f)\n"`
   fi
   echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_INPUT_SCRIPT
   echo "" >> $OUT_FILE_INPUT_SCRIPT
