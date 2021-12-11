@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.19.12"
-G_DATE="2021-6-29"
+G_VERSION="2.19.13"
+G_DATE="2021-12-10"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -684,7 +684,7 @@ while [ "$i" -lt "$ARGC" ]; do
 
         # Find the columns of: position, quaternion, velocity, and bangular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
-        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/q[wxyz]/){printf "%i\n",i-2} }}') )
+        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/q[wxyz]/||$i~/c_q/||$i~/c_orient/){printf "%i\n",i-2} }}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
         angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
@@ -2252,7 +2252,7 @@ if [ -s "$in_settings" ]; then
     cat "$in_settings" >> "${OUT_FILE_SETTINGS}"
   else
     molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
-    export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2021 (https://doi.org/10.1039/c9cp04120f)\n"`
+    export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2019 (https://doi.org/10.1039/c9cp04120f)\n"`
   fi
   echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_INPUT_SCRIPT
   echo "" >> $OUT_FILE_INPUT_SCRIPT
@@ -2426,7 +2426,7 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     # the file after the in_prefix.
     echo "" >> "$OUT_FILE_INPUT_SCRIPT"
     echo "# ----------------- $SECTION_NAME Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-    
+
     # Commenting out the next line.
     #
     #cp -f "$file_name" "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
