@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 g_program_name = __file__.split('/')[-1]
-g_version_str  = '0.3.7'
-g_date_str     = '2021-8-25'
+g_version_str  = '0.3.8'
+g_date_str     = '2021-12-23'
 
 g_usage_msg = """
 
