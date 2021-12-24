@@ -380,6 +380,7 @@ class GPModSettings(object):
         self.setatoms_atoms = []
         self.setatoms_index_offsets = []
         self.setatoms_attributes = []
+        self.inherits = ''
 
 
 
