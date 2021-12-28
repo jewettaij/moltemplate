@@ -38,6 +38,7 @@ Usage:
       [-polymer-name pname] \\
       [-monomer-name mname] \\
       [-sequence sequence.txt] \\
+      [-bond a1 a2] \\
       [-bond btype a1 a2] \\
       [-angle    atype a1 a2 a3 i1 i2 i3] \\
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \\
@@ -102,6 +103,9 @@ class GPSettings(object):
         self.bonds_type = []
         self.bonds_atoms = []
         self.bonds_index_offsets = []
+        self.bonds_name_notype = []
+        self.bonds_atoms_notype = []
+        self.bonds_index_offsets_notype = []
         self.angles_name = []
         self.angles_type = []
         self.angles_atoms = []
@@ -131,15 +135,26 @@ class GPSettings(object):
                 self.infile_name = argv[i + 1]
                 del(argv[i:i + 2])
             elif argv[i].lower() == '-bond':
-                if i + 3 >= len(argv):
+                if i + 2 >= len(argv):
                     raise InputError(
-                        'Error: The ' + argv[i] + ' flag should be followed by 3 strings.\n')
-                # self.bonds_name.append(argv[i+1])
-                self.bonds_type.append(argv[i + 1])
-                self.bonds_atoms.append((argv[i + 2],
-                                         argv[i + 3]))
-                self.bonds_index_offsets.append((0, 1))
-                del(argv[i:i + 4])
+                        'Error: The ' + argv[i] + ' flag should be followed by at 2 or 3 strings.\n')
+                has_third_arg = True
+                if ((i + 3 >= len(argv)) or (argv[i+3][0:1] == '-')):
+                    has_third_arg = False
+                # Did the user specify the type of the bond?
+                if has_third_arg:
+                    # then the type was specified (put in "Data Bonds")
+                    self.bonds_type.append(argv[i + 1])
+                    self.bonds_atoms.append((argv[i + 2],
+                                             argv[i + 3]))
+                    self.bonds_index_offsets.append((0, 1))
+                    del(argv[i:i + 4])
+                else:
+                    # then the type was not specified (put in "Data Bond List")
+                    self.bonds_atoms_notype.append((argv[i + 1],
+                                                     argv[i + 2]))
+                    self.bonds_index_offsets_notype.append((0, 1))
+                    del(argv[i:i + 3])
             elif argv[i].lower() == '-angle':
                 if i + 7 >= len(argv):
                     raise InputError(
@@ -441,6 +456,11 @@ class GenPoly(object):
                 self.settings.bonds_name.append('genp_bond' + str(b + 1) + '_')
             else:
                 self.settings.bonds_name.append('genp_bond_')
+        for b in range(0, len(self.settings.bonds_atoms_notype)):
+            if len(self.settings.bonds_atoms_notype) > 1:
+                self.settings.bonds_name_notype.append('genp_bond_nt' + str(b + 1) + '_')
+            else:
+                self.settings.bonds_name_notype.append('genp_bond_nt')
         for b in range(0, len(self.settings.angles_type)):
             if len(self.settings.angles_type) > 1:
                 self.settings.angles_name.append('genp_angle' + str(b + 1) + '_')
@@ -878,6 +898,35 @@ class GenPoly(object):
             outfile.write("  }  # write(\"Data Bonds\") {...\n\n\n")
 
 
+        assert(len(self.settings.bonds_name_notype) ==
+               len(self.settings.bonds_atoms_notype) ==
+               len(self.settings.bonds_index_offsets_notype))
+
+        if len(self.settings.bonds_atoms_notype) > 0:
+            outfile.write("\n"
+                          "\n"
+                          "  write(\"Data Bond List\") {\n")
+
+        WrapPeriodic.bounds_err = False
+        for i in range(0, N):
+            test = False
+            for b in range(0, len(self.settings.bonds_atoms_notype)):
+                I = i + self.settings.bonds_index_offsets_notype[b][0]
+                J = i + self.settings.bonds_index_offsets_notype[b][1]
+                I = WrapPeriodic.Wrap(I, N)
+                J = WrapPeriodic.Wrap(J, N)
+                if WrapPeriodic.bounds_err:
+                    WrapPeriodic.bounds_err = False
+                    if not self.settings.connect_ends:
+                        continue
+                outfile.write(
+                    "    $bond:" + self.settings.bonds_name_notype[b] + str(i + 1))
+                outfile.write(" $atom:mon[" + str(I) + "]/" + self.settings.bonds_atoms_notype[
+                              b][0] + " $atom:mon[" + str(J) + "]/" + self.settings.bonds_atoms_notype[b][1] + "\n")
+        if len(self.settings.bonds_atoms_notype) > 0:
+            outfile.write("  }  # write(\"Data Bond List\") {...\n\n\n")
+
+
         assert(len(self.settings.angles_name) ==
                len(self.settings.angles_type) ==
                len(self.settings.angles_atoms) ==
@@ -1015,8 +1064,8 @@ class GenPoly(object):
 def main():
     try:
         g_program_name = __file__.split('/')[-1]
-        g_version_str = '0.1.9'
-        g_date_str = '2021-9-30'
+        g_version_str = '0.1.10'
+        g_date_str = '2021-12-28'
         sys.stderr.write(g_program_name + ' v' +
                          g_version_str + ' ' + g_date_str + '\n')
         argv = [arg for arg in sys.argv]

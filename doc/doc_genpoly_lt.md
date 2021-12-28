@@ -35,6 +35,7 @@ from the terminal) and a python module.  The former is documented below.
       [-polymer-name pname] \
       [-monomer-name mname] \
       [-sequence sequence.txt] \
+      [-bond a1 a2] \
       [-bond btype a1 a2] \
       [-angle    atype a1 a2 a3 i1 i2 i3] \
       [-dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4] \
@@ -119,10 +120,11 @@ from the terminal) and a python module.  The former is documented below.
                    end-cap monomers at places which are before and after the
                    integers specified using the "-cuts" argument.
 
-    -bond btype a1 a2
+     -bond btype a1 a2
              Add a bond between successive monomers of type btype.
              between atoms named a1 and a2 (all three arguments are strings and
              omit the @bond: and $atom: prefixes in moltemplate variables)
+             (Note: The bond's type, btype, can be omitted.  See below.)
              Multiple bonds between successive monomers can be added by having
              "-bond btype a1 a2" appear several times in the argument list.
              For example, double-stranded DNA can be implemented as a polymer
@@ -132,6 +134,12 @@ from the terminal) and a python module.  The former is documented below.
              genpoly_modify_lt.py program to add modifications to the polymer
              later.  (That program supports the "-bond btype a1 a2 i1 i2"
              argument allowing you to specify monomer indices i1, i2.)
+
+    -bond a1 a2
+             Add a bond between successive monomers between atoms named a1, a2.
+	     Here we omit the bond's type.  Omitting the bond's type is allowed
+             if you are using a force field (like OPLSAA), which looks up bond
+             types according to rules defined in the force field.
 
     -angle atype a1 a2 a3 i1 i2 i3
              Add a 3-body angle interaction between atoms a1 a2 a3 in monomers
@@ -148,7 +156,7 @@ from the terminal) and a python module.  The former is documented below.
              "-angle aname atype a1 a2 a3 i1 i2 i3"
              appear several times in the argument list with different parameters
           (NOTE: USUALLY THE "-angle" ARGUMENT IS NOT NEEDED IF YOU ARE USING
-                 A FORCE FIELD THAT AUTOMATICALLY GENERATES ANGLE INTERACTIONS.)
+                 A FORCE FIELD LIKE OPLSAA WHICH GENERATES ANGLE INTERACTIONS.)
 
     -dihedral dtype a1 a2 a3 a4 i1 i2 i3 i4
              Add a 4-body dihedral interaction between atoms a1 a2 a3 a4 in
@@ -161,7 +169,7 @@ from the terminal) and a python module.  The former is documented below.
              "-dihedral dname dtype a1 a2 a3 a4 i1 i2 i3 i4"
              appear several times in the argument list with different parameters
           (NOTE: USUALLY THE "-dihedral" ARGUMENT IS NOT NEEDED IF YOU ARE USING
-              A FORCE FIELD THAT AUTOMATICALLY GENERATES DIHEDRAL INTERACTIONS.)
+              A FORCE FIELD LIKE OPLSAA WHICH GENERATES DIHEDRAL INTERACTIONS.)
 
     -improper itype a1 a2 a3 a4 i1 i2 i3 i4
              Add a 4-body improper interaction between atoms a1 a2 a3 a4 in
@@ -174,7 +182,7 @@ from the terminal) and a python module.  The former is documented below.
              "-improper iname itype a1 a2 a3 a4 i1 i2 i3 i4"
              appear several times in the argument list with different parameters
           (NOTE: USUALLY THE "-improper" ARGUMENT IS NOT NEEDED IF YOU ARE USING
-               A FORCE FIELD THAT AUTOMATICALLY GENERATES IMPROPER INTERACTIONS,
+               A FORCE FIELD LIKE OPLSAA WHICH GENERATES IMPROPER INTERACTIONS.
                ...OR IF YOUR POLYMER DOES NOT CONTAIN BACKBONE IMPROPERS.)
 
     -inherits FORCE_FIELD
