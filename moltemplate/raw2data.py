@@ -16,8 +16,8 @@ except (ImportError, SystemError, ValueError):
     from extract_lammps_data import lammps_data_sections
 
 g_program_name = 'raw2data.py'
-g_date_str = '2016-12-21'
-g_version_str = 'v0.44.0'
+g_date_str = '2022-1-03'
+g_version_str = 'v0.44.1'
 
     #######  Main Code Below: #######
 def main():
@@ -126,8 +126,10 @@ def main():
             while line.strip() != '':
                 n_crds = len(frame_coords)
                 #sys.stdout.write("n_crds="+str(n_crds)+": \""+line.strip()+"\"\n")
-                frame_coords[frame_atom_order[n_crds]] = line.split()
-                #frame_vects[frame_atom_order[n_crds]] = ['0.0','0.0','0.0']
+                atomid = frame_atom_order[n_crds]
+                frame_coords[atomid] = line.split()
+                frame_coords_ixiyiz[atomid] = ['0','0','0']
+                #frame_vects[atomid] = ['0.0','0.0','0.0']
                 line = in_coord_file.readline()
 
             # Check to see if there are any blank lines at this location in the file
