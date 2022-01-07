@@ -16,8 +16,8 @@ except (ImportError, SystemError, ValueError):
     from extract_lammps_data import lammps_data_sections
 
 g_program_name = 'raw2data.py'
-g_date_str = '2022-1-03'
-g_version_str = 'v0.44.1'
+g_date_str = '2022-1-06'
+g_version_str = 'v0.44.2'
 
     #######  Main Code Below: #######
 def main():
@@ -128,7 +128,7 @@ def main():
                 #sys.stdout.write("n_crds="+str(n_crds)+": \""+line.strip()+"\"\n")
                 atomid = frame_atom_order[n_crds]
                 frame_coords[atomid] = line.split()
-                frame_coords_ixiyiz[atomid] = ['0','0','0']
+                #frame_coords_ixiyiz[atomid] = ['0','0','0']
                 #frame_vects[atomid] = ['0.0','0.0','0.0']
                 line = in_coord_file.readline()
 
@@ -158,7 +158,7 @@ def main():
                              None,
                              frame_natoms,
                              frame_coords,
-                             frame_coords_ixiyiz,
+                             None, #frame_coords_ixiyiz,
                              frame_vects,
                              frame_velocities,
                              None,
