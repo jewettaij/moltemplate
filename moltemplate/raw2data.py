@@ -151,22 +151,22 @@ def main():
             else:
                 out_file = sys.stdout
 
-            WriteFrameToData(out_file,
-                             None,
-                             misc_settings,
-                             data_settings,
-                             None,
-                             frame_natoms,
-                             frame_coords,
-                             None, #frame_coords_ixiyiz,
-                             frame_vects,
-                             frame_velocities,
-                             None,
-                             None,
-                             frame_xlo_str, frame_xhi_str,
-                             frame_ylo_str, frame_yhi_str,
-                             frame_zlo_str, frame_zhi_str,
-                             frame_xy_str, frame_xz_str, frame_yz_str)
+            WriteSnapshotToData(out_file,
+                                None,
+                                misc_settings,
+                                data_settings,
+                                None,
+                                frame_natoms,
+                                frame_coords,
+                                None, #frame_coords_ixiyiz,
+                                frame_vects,
+                                frame_velocities,
+                                None,
+                                None,
+                                frame_xlo_str, frame_xhi_str,
+                                frame_ylo_str, frame_yhi_str,
+                                frame_zlo_str, frame_zhi_str,
+                                frame_xy_str, frame_xz_str, frame_yz_str)
 
     except (ValueError, InputError) as err:
         sys.stderr.write('\n' + str(err) + '\n')
