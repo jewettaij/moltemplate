@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.19.14"
-G_DATE="2022-1-03"
+G_VERSION="2.20.0"
+G_DATE="2022-1-11"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -898,16 +898,32 @@ echo "" >&2
 
 
 
-
 # Now count the number of atom-types, bond-types, angle-types, etc...
 
-NATOMTYPES=`awk '/^@\/atom:/{n++}END{print n}' < ttree_assignments.txt`
-NBONDTYPES=`awk '/^@\/bond:/{n++}END{print n}' < ttree_assignments.txt`
-NANGLETYPES=`awk '/^@\/angle:/{n++}END{print n}' < ttree_assignments.txt`
-NDIHEDRALTYPES=`awk '/^@\/dihedral:/{n++}END{print n}' < ttree_assignments.txt`
-NIMPROPERTYPES=`awk '/^@\/improper:/{n++}END{print n}' < ttree_assignments.txt`
+# Find the number of atom types, bond types, angle types, dihedra types, etc...
+# The next line will count the number of times "@/atom" appears in the file:
+NATOMTYPES=`awk 'BEGIN{n=0} /^@\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+NBONDTYPES=`awk 'BEGIN{n=0} /^@\/bond:/{n++}END{print n}' < ttree_assignments.txt`
+NANGLETYPES=`awk 'BEGIN{n=0} /^@\/angle:/{n++}END{print n}' < ttree_assignments.txt`
+NDIHEDRALTYPES=`awk 'BEGIN{n=0} /^@\/dihedral:/{n++}END{print n}' < ttree_assignments.txt`
+NIMPROPERTYPES=`awk 'BEGIN{n=0} /^@\/improper:/{n++}END{print n}' < ttree_assignments.txt`
 
-if [ -z "$NATOMTYPES" ]; then
+# The next line will count the number of times "@{/atom" appears in the file:
+NATOMTYPES_SP=`awk 'BEGIN{n=0} /^@{\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+NBONDTYPES_SP=`awk 'BEGIN{n=0} /^@{\/bond:/{n++}END{print n}' < ttree_assignments.txt`
+NANGLETYPES_SP=`awk 'BEGIN{n=0} /^@{\/angle:/{n++}END{print n}' < ttree_assignments.txt`
+NDIHEDRALTYPES_SP=`awk 'BEGIN{n=0} /^@{\/dihedral:/{n++}END{print n}' < ttree_assignments.txt`
+NIMPROPERTYPES_SP=`awk 'BEGIN{n=0} /^@{\/improper:/{n++}END{print n}' < ttree_assignments.txt`
+# Add these numbers together to get the total number of times either
+# "@{atom" or "@{/atom" appears in the ttree_assignments.txt file.
+# This is the number of different atom types in the system.
+NATOMTYPES=$((NATOMTYPES + NATOMTYPES_SP))
+NBONDTYPES=$((NATOMTYPES + NBONDTYPES_SP))
+NANGLETYPES=$((NANGLETYPES + NANGLETYPES_SP))
+NDIHEDRALTYPES=$((NDIHEDRALTYPES + NDIHEDRALTYPES_SP))
+NIMPROPERTYPES=$((NIMPROPERTYPES + NIMPROPERTYPES_SP))
+
+if [ $NATOMTYPES -eq 0 ]; then
     # Moltemplate can be used as a simple hierarchical template renderer
     # that knows nothing about LAMMPS.  In that case NATOMTYPES is undefined.
     # In that case, terminate now and do not try to interpret the files.
@@ -921,6 +937,7 @@ fi
 # (Users are free to put whatever weird characters they want in other
 #  (custom) auxilliary files.  But not in the standard LAMMPS files.)
 
+
 IFS=$CR
 for file in $MOLTEMPLATE_TEMP_FILES; do
     if [ -e "$file" ]; then
@@ -931,7 +948,6 @@ for file in $MOLTEMPLATE_TEMP_FILES; do
     fi
 done
 IFS=$OIFS
-
 
 
 if [ -s "${data_atoms}" ]; then
@@ -979,9 +995,6 @@ else
         exit 200
     fi
 fi
-
-
-
 
 
 
@@ -1414,7 +1427,6 @@ done
 #if [ -s "${in_settings}.template" ]; then
 echo "expanding wildcards in \"_coeff\" commands" >&2
 
-
 IFS=$CR
 for file_name in $OUT_FILES_WITH_COEFF_COMMANDS; do
     #echo "  searching for \"_coeff\" commands in file \"$file_name\"" >&2
@@ -1439,8 +1451,6 @@ for file_name in $OUT_FILES_WITH_COEFF_COMMANDS; do
 done
 #fi
 IFS=$OIFS
-
-
 
 if [ -n "$LTTREE_POSTPROCESS_COMMAND" ]; then
     echo "" >&2
@@ -1739,11 +1749,23 @@ fi
 
 rm -f "$OUT_FILE_DATA"
 
-#NATOMS=`awk '/^\$\/atom:/{n++}END{print n}' < ttree_assignments.txt`
-#NBONDS=`awk '/^\$\/bond:/{n++}END{print n}' < ttree_assignments.txt`
-#NANGLES=`awk '/^\$\/angle:/{n++}END{print n}' < ttree_assignments.txt`
-#NDIHEDRALS=`awk '/^\$\/dihedral:/{n++}END{print n}' < ttree_assignments.txt`
-#NIMPROPERS=`awk '/^\$\/improper:/{n++}END{print n}' < ttree_assignments.txt`
+#NATOMS=`awk 'BEGIN{n=0} /^\\\$\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+#NBONDS=`awk 'BEGIN{n=0} /^\\\$\/bond:/{n++}END{print n}' < ttree_assignments.txt`
+#NANGLES=`awk 'BEGIN{n=0} /^\\\$\/angle:/{n++}END{print n}' < ttree_assignments.txt`
+#NDIHEDRALS=`awk 'BEGIN{n=0} /^\\\$\/dihedral:/{n++}END{print n}' < ttree_assignments.txt`
+#NIMPROPERS=`awk 'BEGIN{n=0} /^\\\$\/improper:/{n++}END{print n}' < ttree_assignments.txt`
+#
+#NATOMS_SP=`awk 'BEGIN{n=0} /^\\\${\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+#NBONDS_SP=`awk 'BEGIN{n=0} /^\\\${\/bond:/{n++}END{print n}' < ttree_assignments.txt`
+#NANGLES_SP=`awk 'BEGIN{n=0} /^\\\${\/angle:/{n++}END{print n}' < ttree_assignments.txt`
+#NDIHEDRALS_SP=`awk 'BEGIN{n=0} /^\\\${\/dihedral:/{n++}END{print n}' < ttree_assignments.txt`
+#NIMPROPERS_SP=`awk 'BEGIN{n=0} /^\\\${\/improper:/{n++}END{print n}' < ttree_assignments.txt`
+#
+#NATOMS=$((NATOMS + NATOMS_SP))
+#NBONDS=$((NBONDS + NBONDS_SP))
+#NANGLES=$((NANGLES + NANGLES_SP))
+#NDIHEDRALS=$((NDIHEDRALS + NDIHEDRALS_SP))
+#NIMPROPERS=$((NIMPROPERS + NIMPROPERS_SP))
 
 NATOMS="0"
 NBONDS="0"
@@ -2260,8 +2282,9 @@ fi
 
 
 if [ -s "$tmp_atom_coords" ]; then
-
-    NATOMS=`awk '/^\\\$\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+    NATOMS=`awk 'BEGIN{n=0} /^\\\$\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+    NATOMS_SP=`awk 'BEGIN{n=0} /^\\\${\/atom:/{n++}END{print n}' < ttree_assignments.txt`
+    NATOMS=$((NATOMS + NATOMS_SP))
     NATOMCRDS=`awk '{if (NF>=3) natom+=1} END{print(natom)}' < "$tmp_atom_coords"`
     if [ $NATOMS -ne $NATOMCRDS ]; then
         echo "Error: Number of atoms in coordinate file provided by user ($NATOMCRDS)" >&2

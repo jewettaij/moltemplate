@@ -575,6 +575,14 @@ def SplitQuotedString(string,
             reading_token = True
             escaped_state = False
 
+    # Remove any empty strings from the front or back of the list,
+    # just in case SplitQuotedString() fails to remove them.
+    # (Possible bug in SplitQuotedString(), but too lazy to investigate.)
+    if (len(tokens) > 0) and (tokens[0] == ''):
+        del tokens[0]
+    if (len(tokens) > 0) and (tokens[-1] == ''):
+        del tokens[-1]
+
     if len(string) > 0:
         tokens.append(token)
     return tokens

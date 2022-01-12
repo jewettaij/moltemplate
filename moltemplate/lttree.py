@@ -29,8 +29,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2020-3-10'
-g_version_str = '0.80.2'
+g_date_str = '2022-1-11'
+g_version_str = '0.80.3'
 
 
 import sys
@@ -321,7 +321,11 @@ def TransformAtomText(text, matrix, settings):
             line = line_orig.rstrip('\n')
             comment = ''
 
-        columns = line.split()
+        # Split the line into words (columns) using whitespace delimeters
+        columns = SplitQuotedString(line,
+                                    quotes='{',
+                                    endquote='}')
+
         if len(columns) > 0:
             if len(columns) == len(settings.column_names) + 3:
                 raise InputError('Error: lttree.py does not yet support integer unit-cell counters \n'
@@ -380,7 +384,10 @@ def TransformEllipsoidText(text, matrix, settings):
             line = line_orig.rstrip('\n')
             comment = ''
 
-        columns = line.split()
+        # Split the line into words (columns) using whitespace delimeters
+        columns = SplitQuotedString(line,
+                                    quotes='{',
+                                    endquote='}')
 
         if len(columns) != 0:
             if len(columns) != 8:
@@ -420,7 +427,10 @@ def CalcCM(text_Atoms,
         lines = text_Masses.split('\n')
         for i in range(0, len(lines)):
             line = lines[i]
-            columns = line.split()
+            # Split the line into words (columns) using whitespace delimeters
+            columns = SplitQuotedString(line,
+                                        quotes='{',
+                                        endquote='}')
         if len(columns) == 2:
             atomtype = columns[0]
             m = float(columns[1])
@@ -432,7 +442,10 @@ def CalcCM(text_Atoms,
         assert(settings != None)
         for i in range(0, len(lines)):
             line = lines[i]
-            columns = line.split()
+            # Split the line into words (columns) using whitespace delimeters
+            columns = SplitQuotedString(line,
+                                        quotes='{',
+                                        endquote='}')
             atomid = columns[settings.i_atomid]
             atomtype = columns[settings.i_atomtype]
             if atomtype not in types2masses[atomtype]:
@@ -443,7 +456,10 @@ def CalcCM(text_Atoms,
     # Pass 2 through the "Data Atoms" section: Find the center of mass.
     for i in range(0, len(lines)):
         line = lines[i]
-        columns = line.split()
+        # Split the line into words (columns) using whitespace delimeters
+        columns = SplitQuotedString(line,
+                                    quotes='{',
+                                    endquote='}')
         if len(columns) > 0:
             if len(columns) == len(settings.column_names) + 3:
                 raise InputError('Error: lttree.py does not yet support integer unit-cell counters (ix, iy, iz)\n'

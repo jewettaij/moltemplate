@@ -17,6 +17,13 @@
 
 import sys
 
+try:
+    from .ttree_lex import SplitQuotedString
+except (ImportError, SystemError, ValueError):
+    # not installed as a package
+    from ttree_lex import SplitQuotedString
+
+
 def main():
     in_stream = sys.stdin
 
@@ -42,7 +49,11 @@ def main():
             ic = line.find('#')
             line = line_orig[:ic]
 
-        tokens = line.strip().split()
+        # Split the line into words (tokens) using whitespace delimeters
+        tokens = SplitQuotedString(line,
+                                   quotes='{',
+                                   endquote='}')
+
         if len(tokens) == 2 + n:
             atom_ids = tuple(tokens[2:2 + n])
             if atom_ids in atom_ids_in_use:

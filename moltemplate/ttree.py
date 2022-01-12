@@ -102,8 +102,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2020-12-27'
-g_version_str = '0.86.7'
+g_date_str = '2022-1-11'
+g_version_str = '0.86.8'
 
 
 class ClassReference(object):
@@ -4855,10 +4855,23 @@ def WriteVarBindingsFile(node):
                                         var_binding.refs[0].srcloc.lineno)
                     else:
                         usage_example = ''
-                    out.write(#SafelyEncodeString(var_binding.full_name) + '   ' +
-                              var_binding.full_name + '   ' +
-                              #SafelyEncodeString(var_binding.value)
-                              var_binding.value
+
+                    # what is the name of this variable?
+                    var_name = var_binding.full_name
+                    # Edge case: Deal with variable names containing whitespace
+                    # Method 1:
+                    #var_name = SafelyEncodeString(var_binding.full_name)
+                    # Method 2: Enclose the string in {} brackets
+                    contains_whitespace = False
+                    for c in var_name:
+                        if c in ' \t\r\f\n':
+                            contains_whitespace = True
+                            break
+                    if contains_whitespace and len(var_name) > 0:
+                        var_name = var_name[0]+'{'+var_name[1:]+'}'
+                    out.write(var_name + '   ' +
+                              #var_binding.value
+                              SafelyEncodeString(var_binding.value)
                               + usage_example + '\n')
     out.close()
     for child in node.children.values():

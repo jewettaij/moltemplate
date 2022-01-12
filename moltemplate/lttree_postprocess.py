@@ -20,11 +20,11 @@ import sys
 
 try:
     from .lttree_styles import *
-    from .ttree_lex import ExtractCatName
+    from .ttree_lex import ExtractCatName, SplitQuotedString
 except (ImportError, SystemError, ValueError):
     # not installed as a package
     from lttree_styles import *
-    from ttree_lex import ExtractCatName
+    from ttree_lex import ExtractCatName, SplitQuotedString
 
 g_program_name = __file__.split('/')[-1]  # = 'lttree_postprocess.py'
 g_version_str = '0.6.2'
@@ -109,7 +109,10 @@ def main():
             else:
                 line = line_orig.rstrip('\n')
 
-            tokens = line.strip().split()
+            # Split the line into words (tokens) using whitespace delimiters
+            tokens = SplitQuotedString(line,
+                                       quotes='{',
+                                       endquote='}')
             if len(tokens) == 0:
                 pass
             elif len(tokens) <= i_max_column:
@@ -136,7 +139,11 @@ def main():
                 else:
                     line = line_orig.rstrip('\n')
 
-                tokens = line.strip().split()
+                #Split the line into words (tokens) using whitespace delimeters
+                tokens = SplitQuotedString(line,
+                                           quotes='{',
+                                           endquote='}')
+
                 if len(tokens) == 0:
                     pass
                 elif len(tokens) < 4:
@@ -161,7 +168,11 @@ def main():
                 else:
                     line = line_orig.rstrip('\n')
 
-                tokens = line.strip().split()
+                #Split the line into words (tokens) using whitespace delimeters
+                tokens = SplitQuotedString(line,
+                                           quotes='{',
+                                           endquote='}')
+
                 if len(tokens) == 0:
                     pass
                 elif len(tokens) < 5:
@@ -186,7 +197,11 @@ def main():
                 else:
                     line = line_orig.rstrip('\n')
 
-                tokens = line.strip().split()
+                #Split the line into words (tokens) using whitespace delimeters
+                tokens = SplitQuotedString(line,
+                                           quotes='{',
+                                           endquote='}')
+
                 if len(tokens) == 0:
                     pass
                 elif len(tokens) < 6:
@@ -213,7 +228,11 @@ def main():
                 else:
                     line = line_orig.rstrip('\n')
 
-                tokens = line.strip().split()
+                #Split the line into words (tokens) using whitespace delimeters
+                tokens = SplitQuotedString(line,
+                                           quotes='{',
+                                           endquote='}')
+
                 if len(tokens) == 0:
                     pass
                 elif len(tokens) < 6:
@@ -240,7 +259,11 @@ def main():
                 else:
                     line = line_orig.rstrip('\n')
 
-                tokens = line.strip().split()
+                #Split the line into words (tokens) using whitespace delimeters
+                tokens = SplitQuotedString(line,
+                                           quotes='{',
+                                           endquote='}')
+
                 if len(tokens) == 0:
                     pass
                 elif len(tokens) != 2:
@@ -276,7 +299,11 @@ def main():
                 line = line_orig.rstrip('\n')
                 usage_location_str = ''
 
-            tokens = line.strip().split()
+            # Split the line into words (tokens) using whitespace delimeters
+            tokens = SplitQuotedString(line,
+                                       quotes='{',
+                                       endquote='}')
+
             if len(tokens) == 0:
                 pass
             if len(tokens) > 0:
@@ -302,7 +329,7 @@ def main():
                     cat_name = ExtractCatName(descr_str)
 
                     if ((cat_name == 'atom') and
-                            (tokens[0] not in defined_atoms)):
+                        (tokens[0] not in defined_atoms)):
                         raise InputError('Error(' + g_program_name + '): ' + usage_location_str + '\n' +
                                          '      Reference to undefined $atom:\n\n' +
                                          '            ' + tokens[0] + '     (<--full name)\n\n' +
