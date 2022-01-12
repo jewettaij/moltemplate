@@ -44,7 +44,8 @@ try:
         WriteVarBindingsFile, StaticObj, InstanceObj, \
         BasicUI, ScopeBegin, ScopeEnd, WriteFileCommand, Render
     from .ttree_lex import InputError, TextBlock, DeleteLinesWithBadVars, \
-        TemplateLexer, TableFromTemplate, VarRef, TextBlock, ErrorLeader
+        TemplateLexer, TableFromTemplate, VarRef, TextBlock, ErrorLeader,
+        SplitQuotedString
     from .lttree_styles import AtomStyle2ColNames, ColNames2AidAtypeMolid, \
         ColNames2Coords, ColNames2Vects, \
         data_atoms, data_prefix, data_masses, \
