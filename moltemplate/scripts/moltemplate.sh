@@ -918,7 +918,7 @@ NIMPROPERTYPES_SP=`awk 'BEGIN{n=0} /^@{\/improper:/{n++}END{print n}' < ttree_as
 # "@{atom" or "@{/atom" appears in the ttree_assignments.txt file.
 # This is the number of different atom types in the system.
 NATOMTYPES=$((NATOMTYPES + NATOMTYPES_SP))
-NBONDTYPES=$((NATOMTYPES + NBONDTYPES_SP))
+NBONDTYPES=$((NBONDTYPES + NBONDTYPES_SP))
 NANGLETYPES=$((NANGLETYPES + NANGLETYPES_SP))
 NDIHEDRALTYPES=$((NDIHEDRALTYPES + NDIHEDRALTYPES_SP))
 NIMPROPERTYPES=$((NIMPROPERTYPES + NIMPROPERTYPES_SP))
