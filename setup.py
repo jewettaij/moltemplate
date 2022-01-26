@@ -105,9 +105,6 @@ setup(
   install_requires=[
       'numpy',
   ],
-  #python_requires='>=3.4.*',
-  setup_requires=['pytest-runner'],
-  tests_require=['pytest'],
   zip_safe=True,
   include_package_data=True
 )
