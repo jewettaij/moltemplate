@@ -7,7 +7,7 @@
 
 g_program_name = __file__.split('/')[-1]  # = 'interpolate_curve.py'
 g_version_str = '0.3.1'
-g_date_str = '2020-4-11'
+g_date_str = '2022-1-26'
 
 g_usage_str = """
 Usage:
@@ -52,7 +52,6 @@ def TDMAsolver(a, b, c, d):
         mc = ac[it-1]/bc[it-1]
         bc[it] = bc[it] - mc*cc[it-1] 
         dc[it] = dc[it] - mc*dc[it-1]
-        	    
     xc = bc
     xc[-1] = dc[-1]/bc[-1]
 

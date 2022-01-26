@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.20.2"
-G_DATE="2022-1-19"
+G_VERSION="2.20.3"
+G_DATE="2022-1-26"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -471,7 +471,7 @@ while [ "$i" -lt "$ARGC" ]; do
     elif [ "$A" = "-molc" ]; then
         # Set the -overlay-bonds, if not specified otherwise.
         unset REMOVE_DUPLICATE_BONDS
-	SETTINGS_MOLC="true"
+        SETTINGS_MOLC="true"
     elif [ "$A" = "-raw" ]; then
         if [ "$i" -eq "$ARGC" ]; then
             echo "$SYNTAX_MSG" >&2
@@ -715,14 +715,14 @@ while [ "$i" -lt "$ARGC" ]; do
           BOXSIZE_XY=${box[2]}
           BOXSIZE_XZ=${box[5]}
           BOXSIZE_YZ=${box[8]}
-	  TRICLINIC="True"
+          TRICLINIC="True"
         fi
 
         # Save the coordinates.
-	awk -v x=${pos[0]} -v y=${pos[1]} -v z=${pos[2]} 'NR>9{print $x" "$y" "$z}' "$tmp_dump" > "$tmp_atom_coords"
+        awk -v x=${pos[0]} -v y=${pos[1]} -v z=${pos[2]} 'NR>9{print $x" "$y" "$z}' "$tmp_dump" > "$tmp_atom_coords"
 
         # Save the orientations. Make sure that the columns reserved for quaternions are not used to store velocities.
-	if [[ ${#quat[@]} == 4 ]]; then 
+        if [[ ${#quat[@]} == 4 ]]; then 
            awk -v qw=${quat[0]} -v qx=${quat[1]} -v qy=${quat[2]} -v qz=${quat[3]} 'NR>9{print $qw" "$qx" "$qy" "$qz}' "$tmp_dump" > "$tmp_ellips_quat"
         fi
 
@@ -895,6 +895,15 @@ fi
 
 echo "" >&2
 
+
+
+# Invoking the $LTTREE_COMMAND should generate a file ("ttree_assignments.txt")
+# containing all of the "counter" variables (counters corresponding to
+# atoms, bonds, atom-types, bond-types, etc...).
+# Later, it will be convenient to create a version of this file
+# which only contains static counter variables
+# (ie. counter variables beginning with @, not $).
+awk '/@/ {print $0}' < ttree_assignments.txt > ttree_assignments_static.txt
 
 
 
@@ -1434,18 +1443,38 @@ for file_name in $OUT_FILES_WITH_COEFF_COMMANDS; do
     if ! awk '{if (match($1,/'_coeff/') && match($0,/'[*,?]/')) exit 1}' < "$file_name"; then
 
         echo "  expanding wildcards in \"_coeff\" commands in \"$file_name\"">&2
-        if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments.txt < "$file_name" > "${file_name}.tmp"; then
+        if ! eval $PYTHON_COMMAND "${PY_SCR_DIR}/postprocess_coeffs.py" ttree_assignments_static.txt < "$file_name" > "${file_name}.tmp"; then
             ERR_INTERNAL
         fi
 
         mv -f "${file_name}.tmp" "$file_name"
         # Now reassign integers to these variables
         bn=`basename "$file_name" .template`
-        if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
-             ttree_assignments.txt \
-             < "$file_name" \
-             > "$bn"; then
-            exit 6
+        if grep '\$' < "$file_name" > /dev/null; then
+            # If "$file_name" contains the $ character, then there might be
+            # $-style counter variables somewhere in the file.  In that case
+            # we must consider all the variables in the entire
+            # "ttree_assignments.txt" file, when substituting numbers for
+            # variables.  This is a very big file and can take a while to read
+            # so we don't do it unless it's necessary.
+            if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
+                 ttree_assignments.txt \
+                 < "$file_name" \
+                 > "$bn"; then
+                exit 6
+            fi
+        else
+            # If "$file_name" does not contains the $ character, then we can
+            # ignore all of the $-style variables in the "ttree_assignments.txt"
+            # file, which will save a lot of time.  In that case we can use
+            # "ttree_assignments_static.txt" instead which omits those lines
+            # of text and is much faster to parse as a result.
+            if ! $PYTHON_COMMAND "${PY_SCR_DIR}/ttree_render.py" \
+                 ttree_assignments_static.txt \
+                 < "$file_name" \
+                 > "$bn"; then
+                exit 6
+            fi
         fi
     fi
 done
@@ -2384,7 +2413,8 @@ done
 IFS=$OIFS
 
 
-
+# We no longer need the "ttree_assignments_static.txt" file.
+rm -f ttree_assignments_static.txt
 
 
 
