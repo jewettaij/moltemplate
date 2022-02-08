@@ -1,6 +1,6 @@
 Water, sodium, chloride mixture
 ==============
-A mixture SPC/E water with sodium and chloride ions.  The water molecules were initially arranged in a rectangular lattice.  The sodium and chloride ions were also arranged in a lattice, and were shifted to avoid overlap with the water molecules and each other.  *(Alternatively, you can create a single lattice and specify the number of water, sodium, and chloride ions you want in it using moltemplate's "new random([],[])" command, which is explained in the manual.  This gives you more control over the concentration of each ingredient.  You can also use PACKMOL to create random mixtures of molecules.)*
+A mixture SPC/E water with sodium and chloride ions.  The water molecules were initially arranged in a rectangular lattice.  The sodium and chloride ions were also arranged in a lattice, and were shifted to avoid overlap with the water molecules and each other.  *(Alternatively, you can create a single lattice and specify the number of water, sodium, and chloride ions you want in it using moltemplate's "new random([],[])" command, which is explained in [the manual](https://moltemplate.org/doc/moltemplate_manual.pdf#subsubsection.8.9.1).  This gives you more control over the concentration of each ingredient.  You can also use PACKMOL to create random mixtures of molecules.)*
 
 
 #### Images

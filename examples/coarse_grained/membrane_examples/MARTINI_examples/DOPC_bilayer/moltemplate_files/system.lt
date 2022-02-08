@@ -13,7 +13,7 @@ import "DOPC.lt"
 
 # Instead we use the "new random()" command to select from a list of
 # DOPC lipids that have been rotated by different amounts around the Z axis.
-# The "new random" command is discussed in chapter 6 of the moltemplate manual.
+# The "new random" command is discussed in chapter 8 of the moltemplate manual.
 
 lipids = new random([DOPC,
                      DOPC.rot(18,0,0,1),

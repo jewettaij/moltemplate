@@ -14,8 +14,8 @@ A small fraction of unit cells (selected randomly) have a amine group (NH2) atta
 *(The "new" and "new random" commands are explained in the moltemplate manual
 [link1](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.4.2),
 [link2](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.8.4), and
-[link3](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.8.8).)*
-
+[link3](http://moltemplate.org/doc/moltemplate_manual.pdf#subsection.8.8),
+[link4](http://moltemplate.org/doc/moltemplate_manual.pdf#subsubsection.8.9.1).)*
 
 
 #### There are no carbon-carbon bonds

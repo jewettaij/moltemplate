@@ -1,6 +1,6 @@
 Methane, water mixture
 ====================
-This example contains a mixture of water(SPCE) and methane.  The methane molecules use OPLSAA force-field, but the water molecules do not.  The water molecules were initially arranged in a rectangular lattice.  The methane molecules were also arranged in a lattice, and were shifted to avoid overlap with the water molecules.  *(Alternatively, you can create a single lattice and specify the number of water and methane molecules you want in it using moltemplate's "new random([],[])" command, which is explained in the manual.  This gives you more control over the concentration of each ingredient.  You can also use PACKMOL to create random mixtures of molecules.)*
+This example contains a mixture of water(SPCE) and methane.  The methane molecules use OPLSAA force-field, but the water molecules do not.  The water molecules were initially arranged in a rectangular lattice.  The methane molecules were also arranged in a lattice, and were shifted to avoid overlap with the water molecules.  *(Alternatively, you can create a single lattice and specify the number of water and methane molecules you want in it using moltemplate's "new random([],[])" command, which is explained in [the manual](http://moltemplate.org/doc/moltemplate_manual.pdf#subsubsection.8.9.1).  This gives you more control over the concentration of each ingredient.  You can also use PACKMOL to create random mixtures of molecules.)*
 
 
 ## Details

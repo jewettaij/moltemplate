@@ -14,7 +14,7 @@ import "DPPC.lt"
 
 # Instead we use the "new random()" command to select from a list of
 # DPPC lipids that have been rotated by different amounts around the Z axis.
-# The "new random" command is discussed in chapter 6 of the moltemplate manual.
+# The "new random" command is discussed in chapter 8 of the moltemplate manual.
 
 lipids = new random([DPPC,
                      DPPC.rot(18,0,0,1),
