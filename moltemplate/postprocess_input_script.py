@@ -22,6 +22,21 @@
 
 import sys
 
+
+
+
+g_filename = __file__.split('/')[-1]
+g_module_name = g_filename
+if g_filename.rfind('.py') != -1:
+    g_module_name = g_filename[:g_filename.rfind('.py')]
+g_date_str = '2019-11-11'
+g_version_str = '0.5.0'
+g_program_name = g_filename
+#sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
+
+
+
+
 def main():
     lines_orig = []
     f = None
@@ -107,12 +122,14 @@ def main():
                     # and tokens[5] is either 'i' or 'j'.
                     if len(pair_style_list) > 0:
                         if ((pair_style_list[0] == 'hybrid') or
-                                (pair_style_list[0] == 'hybrid/overlay')):
-                            if ((len(tokens) > 5) and (tokens[5] == 'i') and (tokens[3][0:6] == 'hbond/')):
+                            (pair_style_list[0] == 'hybrid/overlay')):
+                            if ((len(tokens) > 5) and (tokens[5] == 'i') and
+                                (tokens[3][0:6] == 'hbond/')):
                                 tokens[5] = 'j'
                                 sys.stderr.write(
                                     '  (and replaced \"i\" with \"j\")\n')
-                            elif ((len(tokens) > 5) and (tokens[5] == 'j') and (tokens[3][0:6] == 'hbond/')):
+                            elif ((len(tokens) > 5) and (tokens[5] == 'j') and
+                                  (tokens[3][0:6] == 'hbond/')):
                                 tokens[5] = 'i'
                                 sys.stderr.write(
                                     '  (and replaced \"j\" with \"i\")\n')
@@ -146,7 +163,7 @@ def main():
     if swap_occured:
         sys.stderr.write('\n'
                          '  WARNING: Atom order in some pair_coeff commands was swapped to pacify LAMMPS.\n'
-                         '  For some exotic pair_styles such as hbond/dreiding, this is not enough. If you\n'
+                         '  For some exotic (many-body) pair_styles, this might not work.  If you\n'
                          '  use exotic pair_styles, please verify the \"pair_coeff\" commands are correct.\n')
 
     if warn_wildcard:
