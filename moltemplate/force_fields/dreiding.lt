@@ -29,11 +29,11 @@ DREIDING {
     angle_style     harmonic
     dihedral_style  charmm
     improper_style  umbrella
-	special_bonds   dreiding	
+    special_bonds   dreiding
 
-	# Coefficients in non-bonding are just as an example
+    # Coefficients in non-bonding are just as an example
     pair_style      hybrid/overlay hbond/dreiding/lj 4 6 6.5 90 lj/cut/coul/long 10.0
-	kspace_style	ewald 0.0001
+    kspace_style	ewald 0.0001
 
     dielectric      1.0
    
@@ -38297,3 +38297,18 @@ DREIDING {
 
 }  # DREIDING
 
+
+
+
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.dreiding") containing a link to
+# a paper describing the DREIDING force field.
+
+write_once("log.cite.dreiding") {
+  "DREIDING: a generic force field for molecular simulations"
+  S.L. Mayo, B.D. Olafson, and W.A. Goddard,
+  J. Phys. Chem. 1990, 94, 26, 8897-8909
+  https://doi.org/10.1021/j100389a010
+}
