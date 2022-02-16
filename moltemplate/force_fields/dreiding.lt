@@ -32,8 +32,8 @@ DREIDING {
     special_bonds   dreiding
 
     # Coefficients in non-bonding are just as an example
-    pair_style hybrid/overlay lj/cut/coul/long 10.0 hbond/dreiding/lj 4 6 6.5 90
-    kspace_style    ewald 0.0001
+    pair_style      hybrid/overlay hbond/dreiding/lj 4 6 6.5 90 lj/cut/coul/long 10.0
+    kspace_style	ewald 0.0001
 
     dielectric      1.0
    
@@ -682,6 +682,7 @@ DREIDING {
 	pair_coeff  @atom:C_31  @atom:C_32 lj/cut/coul/long 0.1706027 3.5861795
 	pair_coeff  @atom:C_31  @atom:C_31 lj/cut/coul/long 0.1467 3.54845
 	pair_coeff  @atom:*_hd  @atom:*_hd hbond/dreiding/lj @atom:H_HB i 4.0 2.75 4
+	pair_coeff  @atom:*_hd  @atom:*_hd hbond/dreiding/lj @atom:H_HB j 4.0 2.75 4
 	pair_coeff  @atom:*_hd  @atom:*_ha hbond/dreiding/lj @atom:H_HB i 4.0 2.75 4
   } # End of 2-body (non-bonded) interactions
 
