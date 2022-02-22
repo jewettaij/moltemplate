@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/jewettaij/moltemplate.svg?style=svg)](https://circleci.com/gh/jewettaij/moltemplate)
+[![CodeQL](https://github.com/jewettaij/moltemplate/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jewettaij/moltemplate/actions/workflows/codeql-analysis.yml)
 [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
