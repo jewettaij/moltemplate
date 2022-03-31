@@ -484,7 +484,7 @@ OPLSAA {
     set type @atom:428 charge 0.06  # "N-Et Sulfonamide CH3-"
     set type @atom:429 charge 0.0  # "Aryl Sulfonamide C-SO2N"
     set type @atom:430 charge 0.03  # "Aryl Sulfoxide C-S=O"
-    set type @atom:431 charge 0.19  # "Et Ester -OCH2R"
+    set type @atom:431 charge 0.19  # "alkoxy carbon, Et Ester -OCH2R" (Price++Jorgensen,2001)
     set type @atom:432 charge 0.22  # "i-Pr Ester -OCHR2"
     set type @atom:433 charge 0.25  # "t-Bu Ester -OCR3"
     set type @atom:434 charge 1.374  # "Sulfone R-SO2-R"
