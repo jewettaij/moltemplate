@@ -6,6 +6,8 @@
 ############################################################################
 # This file was generated automatically using:
 # tinkerparm2lt.py -name OPLSAA -file loplsaa_ext.prm -dihedral-style opls -zeropad 3
+# (...and edited extensively by hand afterwards)
+
 
 
 # We will augment the definition of the "OPLSAA" force field below
