@@ -313,8 +313,8 @@ Optional arguments:
                 in the LAMMPS data file. If present, it will also write the
                 Ellipsoids and Velocities sections.
 
-                For data style ellipsoid, the dump file MUST be formatted in
-                the following order:
+                For data style ellipsoid, the dump file MUST include the
+                quaterions in the order: W,I,J,K, e.g.
                 "id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] ... "
                 Where: "q" is defined using:
                 compute q all property/atom quatw quati quatj quatk
@@ -684,7 +684,7 @@ while [ "$i" -lt "$ARGC" ]; do
 
         # Find the columns of: position, quaternion, velocity, and bangular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
-        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/q[wxyz]/||$i~/c_q/||$i~/c_orient/){printf "%i\n",i-2} }}') )
+        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^q[wxyz]$/||$i~/^c_q/||$i~/^c_orient/){printf "%i\n",i-2} }}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
         angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
