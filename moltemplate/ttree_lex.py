@@ -583,10 +583,9 @@ def SplitQuotedString(string,
     if (len(tokens) > 0) and (tokens[-1] == ''):
         del tokens[-1]
 
-    if (len(string) > 0) and (token != ''):
+    if (len(string) > 0) and (tokens[0] != ''):
         tokens.append(token)
     return tokens
-
 
 
 
