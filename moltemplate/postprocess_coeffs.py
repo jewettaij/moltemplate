@@ -225,7 +225,9 @@ def main():
                 # Check: Were there any whitespace characters in the text
                 #        separating token[1] from token[2]?
                 if ((left_paren1 == '{') and
-                    (len(SplitQuotedString(text_after1)) == 1)):
+                    (len(tokens) > 3) and
+                    (len(text_after1) > 1) and
+                    (not text_after1[-1].isspace())):
                     # If not, then tokens[1] and tokens[2] are both part of
                     # the 1st argument.
                     tokens[1] = tokens[1]+'@'+tokens[2]
@@ -237,8 +239,10 @@ def main():
                 left_paren2,typepattern2,text_after2=ExtractVarName(tokens[2])
                 # Check: Were there any whitespace characters in the text
                 #        separating token[2] from what follows?
-                if ((len(tokens) > 3) and
-                    (len(SplitQuotedString(text_after2)) == 1)):
+                if ((left_paren2 == '{') and
+                    (len(tokens) > 4) and
+                    (len(text_after2) > 1) and
+                    (not text_after2[-1].isspace())):
                     # If not, then tokens[2] and tokens[3] are both part of
                     # the 2nd argument.
                     tokens[2] = tokens[2]+'@'+tokens[3]

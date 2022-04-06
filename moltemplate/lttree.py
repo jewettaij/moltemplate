@@ -963,7 +963,7 @@ def main():
     except (ValueError, InputError) as err:
         if isinstance(err, ValueError):
             sys.stderr.write('Error converting string to numeric format.\n'
-                             '      This sometimes means you have neglected to specify the atom style\n'
+                             '      This sometimes means you have forgotten to specify the atom style\n'
                              '      (using the \"-atomstyle\" command).  Alternatively it could indicate\n'
                              '      that the moltemplate file contains non-numeric text in one of the\n'
                              '      .move(), .rot(), .scale(), .matrix(), or .quat() commands. If neither of\n'
