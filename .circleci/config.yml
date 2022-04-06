@@ -18,6 +18,7 @@ jobs:
       - run: bash tests/test_ltemplify.sh
       - run: bash tests/test_oplsaa.sh
       - run: bash tests/test_compass.sh
+      - run: bash tests/test_molc.sh
       - run: python tests/test_genpoly_lt.py
 
 workflows:

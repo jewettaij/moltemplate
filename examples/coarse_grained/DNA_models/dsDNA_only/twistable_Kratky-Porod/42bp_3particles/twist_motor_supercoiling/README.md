@@ -9,6 +9,16 @@ double-stranded (ds) DNA containing a "twist motor"
 
 ![Twisted DNA polymer](https://i1.ytimg.com/vi/TzCJ4BTUQ20/hqdefault.jpg)
 
+The "42bp3p" DNA model used in this example is shown below.
+
+![DNA model](../../images/DNA_models_similar_to_Benedetti++Stasiak_NAR2014.jpg)
+
+*(Note: The springs which controll the stiffness in the θB and φT directions
+control the bending and torsional stiffness of the polymer.
+They are non-linear springs which become infinitely strong if the polymer
+is bent by 60 degrees or twisted by 180 degrees.  This insures that the polymer will
+maintain its twist and writhe even when large forces are applied.)*
+
 In biology, machines like gyrase cause double stranded breaks
 allowing the polymer to pass through itself at times that would
 preferentially generate a negative supercoiling density throughout the DNA.
