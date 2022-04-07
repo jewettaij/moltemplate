@@ -64,6 +64,14 @@ Nucleic Acids Research (2014) Vol. 42, No. 5, 2848-2855, doi:10.1093/nar/gkt1353
 In this variant of the model, each monomer (consisting of 3 particles)
 represents 42 base pairs.  (Hence the name "42bp3p")
 
+*(Note: The springs which controll the stiffness in the θB and φT directions in
+the picture above control the bending and torsional stiffness of the polymer.
+They are non-linear springs which become infinitely strong if the polymer
+is bent by 60 degrees or twisted by 180 degrees.  This ensures that the polymer
+will maintain its twist and writhe even when large forces are applied.)*
+
+### Initial conformation
+
 In this example, moltemplate is used to arrange a coarse grained DNA polymer
 into a circle which has been stretched along the X-axis (see below)
 
@@ -112,7 +120,7 @@ new feature of LAMMPS called "fix twist".  (See "prerequisites" section.)
 ## Prerequisites
 
 LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
-(https://lammps.sandia.gov/doc/Build_package.html)
+(https://docs.lammps.org/Build_package.html)
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.
 (As of 2019-5-05, you must download "fix_twist.cpp" and "fix_twist.h" from

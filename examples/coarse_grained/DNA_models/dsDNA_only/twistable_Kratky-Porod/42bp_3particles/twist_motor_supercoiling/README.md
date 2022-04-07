@@ -9,22 +9,30 @@ double-stranded (ds) DNA containing a "twist motor"
 
 ![Twisted DNA polymer](https://i1.ytimg.com/vi/TzCJ4BTUQ20/hqdefault.jpg)
 
-The "42bp3p" DNA model used in this example is shown below.
+### DNA model (42bp3p)
+
+The earliest description of a DNA model similar to this one that I am aware of
+is provided in the appendix of this paper:
+F. Benedetti , J. Dorier, Y. Burnier, and A. Stasiak
+Nucleic Acids Research (2014) Vol. 42, No. 5, 2848-2855, doi:10.1093/nar/gkt1353
+
+In this variant of the model, each monomer (consisting of 3 particles)
+represents 42 base pairs.  (Hence the name "42bp3p")
 
 ![DNA model](../../images/DNA_models_similar_to_Benedetti++Stasiak_NAR2014.jpg)
 
 *(Note: The springs which controll the stiffness in the θB and φT directions
 control the bending and torsional stiffness of the polymer.
 They are non-linear springs which become infinitely strong if the polymer
-is bent by 60 degrees or twisted by 180 degrees.  This insures that the polymer will
-maintain its twist and writhe even when large forces are applied.)*
+is bent by 60 degrees or twisted by 180 degrees.  This ensures that the polymer
+will maintain its twist and writhe even when large forces are applied.)*
 
 In biology, machines like gyrase cause double stranded breaks
 allowing the polymer to pass through itself at times that would
 preferentially generate a negative supercoiling density throughout the DNA.
 These machines have the effect of twisting the DNA.
-In this example, "twist motors" are implemented in a much more simple way
-as rotary motors.
+However in this example, the agents responsible for twisting the DNA
+are "twist motors", implemented here as simple rotary motors using "fix twist".
 There are two types of rotary motors implemented:
 
 1) Motors that apply a constant torque to the polymer
@@ -44,7 +52,7 @@ Note: The polymer shown in some of these videos ("3bp2p") is different than the
 ##    Prerequisites
 
 LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
-(https://lammps.sandia.gov/doc/Build_package.html)
+(https://docs.lammps.org/Build_package.html)
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.
 (As of 2019-5-05, you must download "fix_twist.cpp" and "fix_twist.h" from
