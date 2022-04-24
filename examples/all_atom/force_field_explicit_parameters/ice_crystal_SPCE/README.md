@@ -17,7 +17,7 @@ Unit Cell (8 water molecules):
 
 <img src="images/ice_rect8_unitcell.png" width=60>
 
-Assembled crystal:
+Assembled crystal (3x2x2 unit cells):
 
 <img src="images/ice_rect8_crystal_3x2x2_LR.jpg" width=150>
 

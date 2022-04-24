@@ -882,7 +882,7 @@ class GraphMatcher(object):
                 for Je in self.G.neighbors[Iv]:
                     Jv = self.G.edges[Je].stop
                     if ((Jv == Iv_neighbor) and
-                            (not self.eoccupiedG[Je])):
+                        (not self.eoccupiedG[Je])):
 
                         # Match edge Je from big   graph G with
                         #  edge self.se from small graph g
@@ -928,7 +928,7 @@ class GraphMatcher(object):
 
     def ReformatMatch(self):
         #   (This is because we are assuming g is connected.
-        #    IT should not have any orphanned vertices.)
+        #    It should not have any orphanned vertices.)
         # Now return the match:
         #
         # There are different ways of doing this
