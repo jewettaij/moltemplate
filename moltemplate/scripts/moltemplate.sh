@@ -314,12 +314,13 @@ Optional arguments:
                 Ellipsoids and Velocities sections.
 
                 For data style ellipsoid, the dump file MUST include the
-                quaterions in the order: W,I,J,K, e.g.
-                "id type xu yu zu c_q[1] c_q[2] c_q[3] c_q[4] ... "
-                Where: "q" is defined using:
-                compute q all property/atom quatw quati quatj quatk
+                quaterions printed using one of the following computes:
+                compute q      all property/atom quatw quati quatj quatk
+		compute orient all property/atom quati quatj quatk quatw
+		The parser also accepts DUMP headers with "edited" names
+		such as qx, qy, qz, qw and quatx, quaty, quatz, quatw.
 
-                The box boundaries are also copied to the LAMMPS data file.
+                The box boundaries in the DUMP are used in the LAMMPS data file.
 
 -a "@atom:x 1"
 -a assignments.txt
@@ -362,8 +363,9 @@ Optional arguments:
                             by supplying a file (file.py) with symmetry rules.
                             See nbody_Dihedrals.py, nbody_Impropers.py (in the
                             moltemplate directory) to learn the file format.
+
 -molc              Additional post-processing for the file "In Settings". This
-                   options implicitly set -overlay-bonds.
+                   options implicitly sets "-overlay-bonds".
 
 EOF
 )
@@ -684,7 +686,15 @@ while [ "$i" -lt "$ARGC" ]; do
 
         # Find the columns of: position, quaternion, velocity, and bangular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
-        quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^q[wxyz]$/||$i~/^c_q/||$i~/^c_orient/){printf "%i\n",i-2} }}') )
+        # Quaternion order:
+	# (X,Y,Z,W) from "compute orient all property/atom quati quatj quatk quatw"
+	# (W,X,Y,Z) from "compute q      all property/atom quatw quati quatj quatk"
+	quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){
+               if($i~/^qw$/||$i~/^quatw$/||$i~/^c_q\[1\]$/||$i~/^c_orient\[4\]$/){qo[1]=i-2}
+               if($i~/^qx$/||$i~/^quatx$/||$i~/^c_q\[2\]$/||$i~/^c_orient\[1\]$/){qo[2]=i-2}
+               if($i~/^qy$/||$i~/^quaty$/||$i~/^c_q\[3\]$/||$i~/^c_orient\[2\]$/){qo[3]=i-2}
+               if($i~/^qz$/||$i~/^quatz$/||$i~/^c_q\[4\]$/||$i~/^c_orient\[3\]$/){qo[4]=i-2}
+               }}END{for(i in qo){printf "%i\n",qo[i]}}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
         angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
