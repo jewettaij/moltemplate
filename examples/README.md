@@ -12,7 +12,8 @@ Each example directory contains the following files and directories:
 |---------------------|--------------------------------------------------------|
 | images/             | This folder has pictures of the molecules in the system|
 | moltemplate_files/  | This folder contains LT files and other auxiliary files|
-| README_setup.sh     | Instructions for how to use moltemplate (executable)   |
+| README_setup.sh     | Instructions for how to use moltemplate to create files|
+| README_run.sh       | Instructions for how to run LAMMPS (after moltemplate) |
 | README_visualize.txt| Instructions for viewing in DATA/DUMP files in VMD     |
 
 ...and one or more LAMMPS input scripts with names like "run.in.min",
@@ -22,14 +23,14 @@ They also contain a (usually minimal) list of additional LAMMPS
 commands needed to run the simulation under reasonable conditions
 (specifying timesteps, integrators, and output file names, for example).
 
-You can run these LAMMPS scripts using
+You can run LAMMPS using commands like this:
 ```
    lmp_mpi -i run.in.npt
 ```
-(The name of your lammps binary, "lmp_mpi" in this example, may vary.
+(See the "README_run.sh" file in each directory for details.
+ The name of your lammps binary, "lmp_mpi" in this example, may vary.
  Sometimes, these scripts must be run in a certain order.  For example
- it may be necessary to run run.in.min to minimize the system before
- you can use run.in.npt, and later run.in.nvt.  The README_run.sh file
- in each subdirectory specifies indicates the order.  Many of these 
+ it may be necessary to run "run.in.min" to minimize the system before
+ you can use "run.in.npt", and later "run.in.nvt".  Many of these
  script files have not been optimized.)
 
