@@ -4,7 +4,7 @@
 # Do not expect a physical behaviour from this sample: long-range electrostatic
 # interactions are missing.
 #
-# -Otello M. Roscioni (U.Southampton)
+# Otello M. Roscioni (MaterialX)
 
 # Run with the command:
 # moltemplate.sh -atomstyle "atomid atomtype flag density x y z" system.lt -allow-wildcards -nocheck
@@ -25,7 +25,7 @@ BENZ {
   write_once("In Init") {
     units           real
     atom_style      ellipsoid
-    pair_style gayberne 1.0 1.0 -3.0 25.0
+    pair_style gayberne 1.0 1.0 -3.0 14.0
     pair_modify mix arithmetic
 
     # Neighbour list.  (Can be overridden)
@@ -36,7 +36,7 @@ BENZ {
 
   write_once("In Settings") {
     # Gay-Berne parameters.
-    pair_coeff  @atom:b1  @atom:b1  1.0 3.7275 0.7797 0.7797 3.6200 0.7797 0.7797 3.6200 25.0
+    pair_coeff  @atom:b1  @atom:b1 3.6200 3.7275 0.2154 0.2154 1 0.2154 0.2154 1 14.
   }
 
 

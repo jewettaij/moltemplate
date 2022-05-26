@@ -12,7 +12,7 @@ write_once("Data Boundary") {
 
 bulk = new BENZ [5].move(7, 0, 0)
 		[5].move(0, 7, 0).rot(10,0,1,0)
-		[5].move(0, 0, 7)
+	[5].move(0, 0, 7)
 
 # NOTE:
 # I included a .rot() rotation command above in order to demonstrate
