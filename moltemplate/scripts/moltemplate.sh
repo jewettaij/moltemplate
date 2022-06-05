@@ -318,7 +318,7 @@ Optional arguments:
                 compute q      all property/atom quatw quati quatj quatk
 		compute orient all property/atom quati quatj quatk quatw
 		The parser also accepts DUMP headers with "edited" names
-		such as qx, qy, qz, qw and quatx, quaty, quatz, quatw.
+		such as qi, qj, qk, qw and quati, quatj, quatk, quatw.
 
                 The box boundaries in the DUMP are used in the LAMMPS data file.
 
@@ -687,13 +687,13 @@ while [ "$i" -lt "$ARGC" ]; do
         # Find the columns of: position, quaternion, velocity, and bangular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
         # Quaternion order:
-	# (X,Y,Z,W) from "compute orient all property/atom quati quatj quatk quatw"
-	# (W,X,Y,Z) from "compute q      all property/atom quatw quati quatj quatk"
+	# (I,J,K,W) from "compute orient all property/atom quati quatj quatk quatw"
+	# (W,I,J,K) from "compute q      all property/atom quatw quati quatj quatk"
 	quat=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){
-               if($i~/^qw$/||$i~/^quatw$/||$i~/^c_q\[1\]$/||$i~/^c_orient\[4\]$/){qo[1]=i-2}
-               if($i~/^qx$/||$i~/^quatx$/||$i~/^c_q\[2\]$/||$i~/^c_orient\[1\]$/){qo[2]=i-2}
-               if($i~/^qy$/||$i~/^quaty$/||$i~/^c_q\[3\]$/||$i~/^c_orient\[2\]$/){qo[3]=i-2}
-               if($i~/^qz$/||$i~/^quatz$/||$i~/^c_q\[4\]$/||$i~/^c_orient\[3\]$/){qo[4]=i-2}
+               if(                         $i~/^qw$/||$i~/^quatw$/||$i~/^c_q\[1\]$/||$i~/^c_orient\[4\]$/){qo[1]=i-2}
+               if($i~/^qi$/||$i~/^quati$/||$i~/^qx$/||$i~/^quatx$/||$i~/^c_q\[2\]$/||$i~/^c_orient\[1\]$/){qo[2]=i-2}
+               if($i~/^qj$/||$i~/^quatj$/||$i~/^qy$/||$i~/^quaty$/||$i~/^c_q\[3\]$/||$i~/^c_orient\[2\]$/){qo[3]=i-2}
+               if($i~/^qk$/||$i~/^quatk$/||$i~/^qz$/||$i~/^quatz$/||$i~/^c_q\[4\]$/||$i~/^c_orient\[3\]$/){qo[4]=i-2}
                }}END{for(i in qo){printf "%i\n",qo[i]}}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
         angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
