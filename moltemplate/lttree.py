@@ -29,8 +29,8 @@ Additional LAMMPS-specific features may be added in the future.
 """
 
 g_program_name = __file__.split('/')[-1]  # ='lttree.py'
-g_date_str = '2022-1-11'
-g_version_str = '0.80.3'
+g_date_str = '2022-6-05'
+g_version_str = '0.80.4'
 
 
 import sys
@@ -338,7 +338,8 @@ def TransformAtomText(text, matrix, settings):
             if len(columns) < len(settings.column_names):
                 raise InputError('Error: The number of columns in your data file does not\n'
                                  '       match the LAMMPS atom_style you selected.\n'
-                                 '       Use the -atomstyle <style> command line argument.\n')
+                                 '       Use the -atomstyle <style> command line argument.\n'
+                                 '       (Alternatively this error can be caused by a missing } character.)\n')
             x0 = [0.0, 0.0, 0.0]
             x = [0.0, 0.0, 0.0]
             # Atomic coordinates transform using "affine" transformations
