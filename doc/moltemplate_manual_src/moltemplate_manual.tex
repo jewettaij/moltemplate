@@ -452,8 +452,8 @@ If you receive an error regarding permissions, then run pip this way instead:
 pip install moltemplate --user
 \end{verbatim}
 Make sure that your default pip install bin directory is in your \textit{PATH}.
-(This is usually something like \textapprox/.local/bin/ or
-\textapprox/anaconda3/bin/.  If you have installed anaconda, your PATH
+(This is usually something like \texttildelow/.local/bin/ or
+\texttildelow/anaconda3/bin/.  If you have installed anaconda, your PATH
 should have been updated for you automatically.)
 Later, you can uninstall moltemplate using:
 \begin{verbatim}
@@ -469,7 +469,7 @@ source ~/venv/bin/activate
 pip install moltemplate
 #(now do something useful with moltemplate...)
 \end{verbatim}
-(You will have to enter ``source \textapprox/venv/bin/activate''
+(You will have to enter ``source \texttildelow/venv/bin/activate''
  into a terminal beforehand every time you want to run moltemplate.)
 If all this fails, then try installing moltemplate by manually
 updating your \$PATH environment variable.
@@ -507,7 +507,7 @@ tar -xzvf moltemplate_2020-2-22.tar.gz
 (The date will vary from version to version.)
 
 Then move the unpacked moltemplate directory
-to your home directory (\textapprox/) and run:
+to your home directory (\texttildelow/) and run:
 \begin{verbatim}
 cd  ~/moltemplate
 pip install .  # (or "pip install --user", if that fails)
@@ -529,9 +529,9 @@ The \textit{PATH} variable helps the shell
 (eg. \textit{BASH}) find the programs
 you type into the terminal.  You must edit the PATH variable to include
 the subdirectory where the moltemplate.sh script is located 
-(eg. ``\textapprox/moltemplate/moltemplate/scripts/''), as well as
+(eg. ``\texttildelow/moltemplate/moltemplate/scripts/''), as well as
 the directory containing the most of the python scripts
-(eg. ``\textapprox/moltemplate/moltemplate/'').
+(eg. ``\texttildelow/moltemplate/moltemplate/'').
 
 If you use the \textbf{BASH} shell, typically you would edit your 
 \mbox{$\sim$/.bashrc} file
@@ -1411,7 +1411,7 @@ For users who are new to LAMMPS, the easiest way
 to do this is to modify an existing example 
 (such as the water box example in this section).
 (The official LAMMPS documentation 
-\url{http://lammps.sandia.gov/doc/Manual.html}
+\url{https://docs.lammps.org}
 is an excellent reference to look up LAMMPS commands
 you see in these examples that you are not familiar with.)
 
@@ -1792,9 +1792,9 @@ which can be downloaded from \url{http://moltemplate.org}.
 
    In addition to the examples, an introduction to LAMMP 
 input scripts is provided at these links:
-\url{http://lammps.sandia.gov/doc/Section_commands.html#cmd_1}.
-\url{http://lammps.sandia.gov/doc/Section_howto.html} and 
-\url{http://lammps.sandia.gov/doc/Section_howto.html#howto_15}
+\url{https://docs.lammps.org/Commands_input.html},
+\url{https://docs.lammps.org/Commands_structure.html}, and
+\url{https://docs.lammps.org/Commands_all.html}.
 
 
 Here is a list of basic input script commands 
@@ -1802,35 +1802,35 @@ used in the moltemplate examples
 (and links to their documentation):
 \begin{list}{}
 \item \textbf{run} \ 
-\url{http://lammps.sandia.gov/doc/run.html}
+\url{https://docs.lammps.org/run.html}
 \item \textbf{timestep} \ 
-\url{http://lammps.sandia.gov/doc/timestep.html}
-\item \textbf{thermo} \ \url{http://lammps.sandia.gov/doc/thermo.html}
-\item \textbf{dump} \ \url{http://lammps.sandia.gov/doc/dump.html}
-\item \textbf{read\_data} \ \url{http://lammps.sandia.gov/doc/read_data.html}
-\item \textbf{restart} \ \url{http://lammps.sandia.gov/doc/restart.html}
-\item \textbf{include} \ \url{http://lammps.sandia.gov/doc/include.html}
-\item \textbf{fix nve} \ \url{http://lammps.sandia.gov/doc/fix_nve.html}
-\item \textbf{fix nvt} \ \url{http://lammps.sandia.gov/doc/fix_nh.html}
-\item \textbf{fix npt} \ \url{http://lammps.sandia.gov/doc/fix_nh.html}
-\item \textbf{fix langevin} \ \url{http://lammps.sandia.gov/doc/fix_langevin.html}
-\item \textbf{fix} \ \url{http://lammps.sandia.gov/doc/fix.html}
-\item \textbf{group} \ \url{http://lammps.sandia.gov/doc/group.html}
-\item \textbf{compute} \ \url{http://lammps.sandia.gov/doc/compute.html}
-\item \textbf{print} \ \url{http://lammps.sandia.gov/doc/print.html}
-\item \textbf{variable} \ \url{http://lammps.sandia.gov/doc/variable.html}
-\item \textbf{rerun} \ \url{http://lammps.sandia.gov/doc/rerun.html}
-\item \textbf{fix rattle} \ \url{http://lammps.sandia.gov/doc/fix_shake.html}
-\item \textbf{fix shake} \ \url{http://lammps.sandia.gov/doc/fix_shake.html}
-\item \textbf{fix rigid} \ \url{http://lammps.sandia.gov/doc/fix_rigid.html}
+\url{https://docs.lammps.org/timestep.html}
+\item \textbf{thermo} \ \url{https://docs.lammps.org/thermo.html}
+\item \textbf{dump} \ \url{https://docs.lammps.org/dump.html}
+\item \textbf{read\_data} \ \url{https://docs.lammps.org/read_data.html}
+\item \textbf{restart} \ \url{https://docs.lammps.org/restart.html}
+\item \textbf{include} \ \url{https://docs.lammps.org/include.html}
+\item \textbf{fix nve} \ \url{https://docs.lammps.org/fix_nve.html}
+\item \textbf{fix nvt} \ \url{https://docs.lammps.org/fix_nh.html}
+\item \textbf{fix npt} \ \url{https://docs.lammps.org/fix_nh.html}
+\item \textbf{fix langevin} \ \url{https://docs.lammps.org/fix_langevin.html}
+\item \textbf{fix} \ \url{https://docs.lammps.org/fix.html}
+\item \textbf{group} \ \url{https://docs.lammps.org/group.html}
+\item \textbf{compute} \ \url{https://docs.lammps.org/compute.html}
+\item \textbf{print} \ \url{https://docs.lammps.org/print.html}
+\item \textbf{variable} \ \url{https://docs.lammps.org/variable.html}
+\item \textbf{rerun} \ \url{https://docs.lammps.org/rerun.html}
+\item \textbf{fix rattle} \ \url{https://docs.lammps.org/fix_shake.html}
+\item \textbf{fix shake} \ \url{https://docs.lammps.org/fix_shake.html}
+\item \textbf{fix rigid} \ \url{https://docs.lammps.org/fix_rigid.html}
 \end{list}
 In addition, all users should be familiar with the following commands:
 (These appear in the ``In Init'' section of most LT files.)
 \begin{list}{}
-\item \textbf{atom\_style} \ \url{http://lammps.sandia.gov/doc/atom_style.html}
-\item \textbf{pair\_style} \ \url{http://lammps.sandia.gov/doc/pair_style.html}
-\item \textbf{bond\_style} \ \url{http://lammps.sandia.gov/doc/bond_style.html}
-\item \textbf{angle\_style} \ \url{http://lammps.sandia.gov/doc/angle_style.html}
+\item \textbf{atom\_style} \ \url{https://docs.lammps.org/atom_style.html}
+\item \textbf{pair\_style} \ \url{https://docs.lammps.org/pair_style.html}
+\item \textbf{bond\_style} \ \url{https://docs.lammps.org/bond_style.html}
+\item \textbf{angle\_style} \ \url{https://docs.lammps.org/angle_style.html}
 \end{list}
 
 
@@ -1971,7 +1971,7 @@ input-script that you use when you run LAMMPS:
 \begin{verbatim}
 dump 1 all custom 1000 DUMP_FILE.lammpstrj id mol type x y z ix iy iz
 \end{verbatim}
-(The ``all'' and ``1000'', refer to the atom selection and save interval, which may differ depending on the kind of simulation you are running.  See \url{http://lammps.sandia.gov/doc/dump.html} for details.)
+(The ``all'' and ``1000'', refer to the atom selection and save interval, which may differ depending on the kind of simulation you are running.  See \url{https://docs.lammps.org/dump.html} for details.)
 
 
 Once you have a dump file, you can view it in VMD using:
@@ -2053,7 +2053,7 @@ as explained in \ref{sec:instance_variables}).
 Words following a ``@'' or a ``\$'' character
 are \textit{counter variables}. 
 (These are not to be confused with \textit{LAMMPS variables}
- \url{http://lammps.sandia.gov/doc/variable.html}).
+ \url{https://docs.lammps.org/variable.html}).
 By default, 
 \textit{all counter variables are substituted with a numeric counter}
 before they are written to a file. 
@@ -2259,7 +2259,7 @@ DATA file or INPUT scripts generated by moltemplate
 (Then the original files are moved to the ``output\_ttree/'' directory, 
  in an effort to clean things up and hide them from view.)
 Users can create their own custom sections to a LAMMPS data file.
-(See section \ref{sec:custom_data}.
+(See section \ref{sec:custom_data}.)
    %(Note: It is unwise to explicitly add blank lines to a data file section.
    %because LAMMPS may interpret them as section breaks. 
    %Moltemplate will add the section headers 
@@ -2837,7 +2837,7 @@ write("In Charges") {
 }
 \end{verbatim}
 \textit{(For reference, the LAMMPS' ``set'' command is explained here:
-        \url{https://lammps.sandia.gov/doc/set.html}.)}
+        \url{https://docs.lammps.org/set.html}.)}
 
 
 
@@ -4601,8 +4601,8 @@ However the formats are similar, and the relevant information can be extracted
 using a text-editor and converted to the other format.
 (Using a text-editor and awk, or a spreadsheet program.
 For more information on these file formats, 
-\url{http://lammps.sandia.gov/doc/read_data.html}
-\url{http://lammps.sandia.gov/doc/molecule.html}.)
+\url{https://docs.lammps.org/read_data.html}
+\url{https://docs.lammps.org/molecule.html}.)
 Again, feel free to contact \includegraphics[height=0.3cm]{author_email.png}
 to request support for LAMMPS-style molecule templates.
 
