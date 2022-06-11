@@ -439,17 +439,18 @@ which is available under the
 There are three ways to install moltemplate:
 
 \subsubsection*{Installation Method 1 (pip)}
-
-\textit{If you are familiar with pip}, you can install
+\label{sec:install_pip}
+\textit{If you are familiar with pip or pip3}, you can install
 moltemplate by typing following command in the terminal/shell:
   %from within outermost directory:
 \begin{verbatim}
-pip install moltemplate
+pip3 install moltemplate  # or "pip" if that fails
 \end{verbatim}
 %\textit{In order for this to work, this directory should contain a file named ``\textbf{setup.py}''.}  (If no such file exists, then either proceed to ``Installation Method 2'' below, or download a newer version of moltemplate.)
-If you receive an error regarding permissions, then run pip this way instead:
+If you receive an error regarding permissions,
+then run pip/pip3 this way instead:
 \begin{verbatim}
-pip install moltemplate --user
+pip3 install moltemplate --user   # or "pip" if that fails
 \end{verbatim}
 Make sure that your default pip install bin directory is in your \textit{PATH}.
 (This is usually something like \texttildelow/.local/bin/ or
@@ -457,16 +458,16 @@ Make sure that your default pip install bin directory is in your \textit{PATH}.
 should have been updated for you automatically.)
 Later, you can uninstall moltemplate using:
 \begin{verbatim}
-pip uninstall moltemplate
+pip3 uninstall moltemplate   # or "pip" if that fails
 \end{verbatim}
 
-\textit{If you run into difficulty with pip}, then try installing
+\textit{If you run into difficulty with pip/pip3}, then try installing
 moltemplate into a temporary virtual environment
 by running these commands:
 \begin{verbatim}
 python -m venv ~/venv     #(or "virtualenv venv" if using python2)
 source ~/venv/bin/activate
-pip install moltemplate
+pip3 install moltemplate  # or "pip" if that fails
 #(now do something useful with moltemplate...)
 \end{verbatim}
 (You will have to enter ``source \texttildelow/venv/bin/activate''
@@ -510,7 +511,7 @@ Then move the unpacked moltemplate directory
 to your home directory (\texttildelow/) and run:
 \begin{verbatim}
 cd  ~/moltemplate
-pip install .  # (or "pip install --user", if that fails)
+pip3 install .  # (or "pip3 install --user", or "pip" if that fails)
 \end{verbatim}
 
 As mentioned earlier, if you are having difficulty, try to installing
@@ -518,7 +519,8 @@ moltemplate in a virtual environment instead.  Using virtual environments
 is cleaner, and can avoid many of the common pitfalls that occur in computers
 with complex python installations.  To do that, follow the
 instructions above (in Method 1) to start a virtual environment,
-and \textit{then} run ``pip install .''.
+and follow the instructions for using pip or pip3 above.
+
 
 
 \subsubsection*{Installation Method 3 (updating your PATH)}
@@ -604,7 +606,7 @@ These include: \textit{nano}, \textit{ne},
 
 
 \pagebreak
-\section{Quick reference \textit{(skip on first reading)}}
+\section{Quick reference \textit{(SKIP ON FIRST READING)}}
 
 \section*{
 \textit{Note: New users should skip to section \ref{sec:tutorial}}
@@ -2021,7 +2023,7 @@ These commands have the following syntax
 \begin{verbatim}
 write_once(filename) {text_block}
 \end{verbatim}
-This creates a new file with the desired file name 
+This creates a new file
 and fills it with the text enclosed in curly brackets \{\}.
   %(after any necessary variable substitutions have been made). 
 Text blocks usually span multiple lines and contain counter variables 
@@ -2033,7 +2035,8 @@ same block of text to the file every time the molecule
 (using the ``new'' command, 
 after incrementing the appropriate counters,
 as explained in \ref{sec:instance_variables}).
- %incrementing any counter 
+
+%incrementing any counter
  %variables beginning with \$). 
   %When this happens, any counter variables beginning 
   %with \$ will be incremented.)
@@ -2045,6 +2048,9 @@ as explained in \ref{sec:instance_variables}).
    %However, new atoms are generated every time a new copy of a previously 
    %defined molecule is created.  This kind of data should be written using the
    %``write(``Data Atoms'')'' command.
+
+\textit{(Sections of files can also be created this way.
+See chapter \ref{sec:DataIn}.)},
 
 
 \subsection{Basics: counter variables}
@@ -2194,52 +2200,17 @@ and appendix \ref{sec:adv_variable_syntax}.)
 
 
 
-
-
-\subsection{Troubleshooting using the \textit{output\_ttree} directory}
-\label{sec:output_ttree}
-Users can see what numbers were assigned to each variable 
-by inspecting the contents of the ``output\_ttree'' subdirectory
-created by moltemplate. 
-Unfortunately, it not unusual for LAMMPS to crash the first time you 
-attempt to run it on a DATA file created by moltemplate.  This often occurs 
-if you failed to spell atom types and other variables consistently.
-The LAMMPS error message (located at the end of the ``log.lammps''
-file created by LAMMPS) will help you determine what type of mistake you made.
-(For example, what type of variable was misspelled or placed in the wrong place?)
-
-
-To help you, the ``output\_ttree'' directory contains a file named 
-``ttree\_assignments.txt''. 
-This is a simple 2-column text file containing a list of \textit{all} 
-of the variables you have created in one column, and the numbers they
-were assigned to in the second column.
-(There is also a comment on each line beginning with a ``\#'' character which
-indicates the file and line number where this variable is first used.)
-
-The ``output\_ttree'' directory also contains all of the files that you created.
-The versions with a ``.template'' extension contain text
-interspersed with \textit{full} variable names (before numeric substitution).
-(A spelling mistake, like using ``\$atom:h'' when you meant to say ``\$atom:h1''
-or ``@atom:H'' will show up in these files if you inspect them carefully.)
-This can help you identify where the mistake occurred
-in your LT files.
-
-Once a molecular system is debugged and working, users 
-can ignore or discard the contents of this directory.
-
-
 \subsection{``Data'' and ``In''}
 \label{sec:DataIn}
 Again, LAMMPS requires an \textit{input script} and a \textit{data file} 
 to run.    
 \textit{Moltemplate's job is to generate these files.}
 \textit{Input scripts} typically contain
-force-field styles, parameters and run settings
+force-field styles, parameters and run settings.
   %Moltemplate users control what goes in the input script
   %by writing to files with names beginning with \mbox{``In ''}.
 \textit{Data files} typically contain atom 
-coordinates and bonded topology data.
+coordinates, bonds, angles, dihedrals, and impropers.
   %Moltemplate users control what goes in the data file
   %by writing to files with names beginning with \mbox{``Data ''}.
 
@@ -2267,13 +2238,66 @@ Users can create their own custom sections to a LAMMPS data file.
 
 More generally, the ``write()'' and ``write\_once()'' commands can be used to
 create any other files you may need to run your simulations,
-which refer to the same \textit{@atom} and \textit{@bond} types.
+   %which refer to the same \textit{@atom} and \textit{@bond} types,
+not just DATA files and INPUT scripts.
    %Files whose names do not begin with ``In '' or ``Data '' can have any format
    %(and are not moved or cleaned up).
    %(These files are not removed or hidden later.) 
 (See section \ref{sec:aux_files} 
   % and \ref{sec:output_ttree} for examples
 for an example.)
+
+
+
+
+\subsection{Troubleshooting using the \textit{output\_ttree} directory}
+\label{sec:output_ttree}
+Unfortunately, it not unusual for LAMMPS to crash the first time you 
+attempt to run it on a DATA file created by moltemplate.  This often occurs 
+if you failed to spell atom types and other variables consistently.
+When this happens, LAMMPS will print an error message
+(located at the end of the ``log.lammps'' file created by LAMMPS)
+which can sometimes help you determine what type of mistake you made.
+It can be difficult to figure out what caused this error if you only
+look at the LAMMPS error message.
+
+Fortunately, when you run moltemplate, it creates a directory named
+``output\_ttree''. By looking at the LAMMPS error message, and looking
+at the files in the ``output\_ttree'' directory, you can usually
+figure out where the mistake is located in your moltemplate (.LT) files.
+
+A detailed example is shown here:
+
+\url{https://moltemplate.org/troubleshooting.html}.
+
+For example: Suppose when you run LAMMPS, you receive an error message:
+``All pair coeffs are not set'' or ``All masses are not set''.
+In that case, you should open the ``ttree\_assignments.txt'' file
+(located in the ``output\_ttree'' directory) and look for mispelled
+atom \textit{type} names (beginning with ``@/atom:'').
+On the other hand, if you get an error message
+``Invalid atom ID in Angles section of data file'',
+then look for mispelled atom \textit{ID} names in the
+``ttree\_assignments.txt'' file (these begin with ``\$/atom:'').
+
+The ``ttree\_assignments.txt'' file is a simple 2-column text file
+containing a list of \textit{all} 
+of the variables you have created in one column,
+and the numbers they were assigned to in the second column.
+There is also a comment on each line beginning with a ``\#'' character which
+indicates the file and line number where this variable is first used.
+\textit{(The ``output\_ttree'' directory also contains all of the files,
+and sections of files that you created before they were merged together
+to create the ``system.data'' file. Files with a ``.template'' extension
+contain text interspersed with full variable names
+before numeric substitution.)}
+Spelling mistakes, like using ``\$atom:h'' when you meant to say ``\$atom:h1''
+or ``@atom:H'' will show up in these files if you inspect them carefully.
+This can help you identify where the mistake occurred
+in your moltemplate (LT) files.
+
+Once a molecular system is debugged and working, users 
+can ignore or discard the contents of the ``output\_ttree'' directory.
 
 
 \subsection{\textit{(Advanced)} 
@@ -2295,7 +2319,11 @@ write_once("In Settings") {
 }
 \end{verbatim}
 As new force-field styles and/or fixes are added to LAMMPS, 
-the files they depend on can be embedded in an LT file in this way. 
+the files they depend on can be embedded in an LT file in this way.
+
+\textit{Note: Auxiliary files can contain references to atom types
+(@atom variables) and atom IDs (\$atom variables), as well as bonded
+interactions, although they don't appear in this example.}
 
 
 \subsection{\textit{(Advanced)} Making custom DATA sections}
