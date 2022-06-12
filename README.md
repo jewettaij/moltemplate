@@ -149,15 +149,15 @@ http://www.moltemplate.org
 
 ## Requirements
 
-Moltemplate requires the Bourne-shell, and a recent version of python
-(3.5 or higher recommended), and can run on MacOS, linux, or windows,
-if a suitable shell environment has been installed.
-(Note that python 2.7 may also work, but you must edit your
-[PATH](http://www.linfo.org/path_env_var.html)
-to install moltemplate instead of using *pip*.  Pip no longer works with
-old versions of python.)
+Moltemplate requires BASH and a recent version of Python (>3.5), NumPy,
+and can run on MacOS, linux, or windows.
 
-The *numpy* python module is also required.
+*(Note: On MacOS, it may eventually become necessary to use 3rd-party tools
+like "brew" to install BASH if apple removes BASH support in future updates.
+Python 2.7 may also work, but you must edit your
+[PATH](./INSTALL.md#Installation-method-2-Editing-bashrc)
+to install moltemplate instead of using pip/pip3.
+Pip no longer works with old versions of python.)*
 
 To use LAMMPS and moltemplate, you will also need to install (and learn how to
 use) a (unix-style) text editor.  (Word, Wordpad, and Notepad will not work.)
