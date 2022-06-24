@@ -2,9 +2,19 @@
 # License: MIT License  (See LICENSE.md)
 # Copyright (c) 2013
 # All rights reserved.
+#
+# Additional credit:
+# The organization of this code was inspired by the "isomorphvf2.py"
+# file (written by Christopher Ellison, https://github.com/chebee7i),
+# and the networkx code (https://github.com/networkx/networkx).
 
 
-#__all__ = ['Ugraph', 'GraphMatcher', 'DFS', 'GenError', 'GraphError', 'Disconnected', 'NotUndirected']
+"""
+Search for small graphs inside of big graphs.
+"""
+
+
+#___all___ = ['Ugraph', 'GraphMatcher', 'DFS', 'GenError', 'GraphError', 'Disconnected', 'NotUndirected']
 
 
 import sys
