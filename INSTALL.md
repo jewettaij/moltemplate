@@ -2,10 +2,19 @@ Moltemplate Installation
 ====================
 
 Before you install moltemplate,
-[you must install BASH and python](#OS-specific-suggestions).
+[you must install BASH, python](#OS-specific-suggestions).
 
-Once you have met those requirements,
-there are **two ways** to install moltemplate:
+Then, download moltemplate using:
+```
+git clone https://github.com/jewettaij/moltemplate DESTINATION_DIRECTORY
+```
+*(If you don't have git installed,
+you can also visit the [web site](https://github.com/jewettaij/moltemplate),
+click on the green "Code" button on the upper-right,
+select the "Download ZIP" menu option, and unpack the file.)*
+
+
+There are **two ways** to install moltemplate:
 1) using pip
 2) editing your .bashrc file
 
@@ -14,8 +23,12 @@ Use one method or the other *(not both)*.
 
 ## Installation method 1: *Using pip*
 
-If you are familiar with pip, then run the following command from
-within the directory where this README file is located:
+If you are familiar with *pip*, then
+enter the directory where this README file is located:
+```
+cd DESTINATION_DIRECTORY
+```
+and install moltemplate using *pip3* (which is sometimes also called "*pip*"):
 ```
 pip3 install .              # (or "pip", if that fails)
 ```

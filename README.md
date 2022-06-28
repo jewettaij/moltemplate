@@ -114,8 +114,17 @@ A detailed installation guide is located [here](./INSTALL.md).
 
 ### Quick installation overview
 
-Once you have installed the prerequesites mentioned above, run the
-following command from within the directory where this README file is located:
+Once you have installed the prerequesites mentioned above, download
+moltemplate using:
+```
+git clone https://github.com/jewettaij/moltemplate DESTINATION_DIRECTORY
+```
+*(See below if you don't have git installed.)*
+Then enter the directory where this README file is located:
+```
+cd DESTINATION_DIRECTORY
+```
+...and run the following command:
 ```
 pip3 install .              # (or "pip", if that fails)
 ```
@@ -138,6 +147,14 @@ If this fails then read the
 [installation troubleshooting guide](./INSTALL.md).
 This guide will offer several different installation methods
 and explain how to install the prerequisites needed.
+
+***Note:***
+*Alternatively, you can download and install moltemplate
+using a single command:*
+```
+pip install git+https://github.com/jewettaij/moltemplate.git
+```
+*...however this will omit all of the examples and documentation.*
 
 
 ## Web page
