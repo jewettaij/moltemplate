@@ -57,6 +57,7 @@ This repository contains 3 folders:
 - [doc](./doc/): documentation for moltemplate.sh, ltemplify.py, genpoly_lt.py, etc..
 - [examples](./examples/): examples built with moltemplate
 
+
 ### Documentation
 
 The best way to learn how to use moltemplate is to find an example
@@ -65,9 +66,12 @@ This repository includes approximately 50 [examples](./examples).
 Some of the moltemplate examples are also demonstrated (with pictures)
 [here](https://moltemplate.org/visual_examples.html).
 
-All moltemplate users should probably read chapter 4 of the
+All moltemplate users should probably chapter 4 of the
 [reference manual](./doc/moltemplate_manual.pdf)
-*(It's only a few pages long.  The first 3 chapters are optional.)*
+*(It's only 6 pages long.)*
+Then read chapters 6, 7, and 5.1-5.3.
+*(13 pages.  The first 3 chapters can be skipped.)*
+
 In addition, there are also several
 [talks/tutorials](https://moltemplate.org/doc/talks.html)
 online.
