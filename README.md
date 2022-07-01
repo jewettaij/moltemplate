@@ -132,7 +132,9 @@ cd DESTINATION_DIRECTORY
 ```
 pip3 install .              # (or "pip", if that fails)
 ```
-If that fails (with both "pip" and "pip3"), then try this instead:
+*(Note: In some environments, "pip3" is called "pip" instead.)*
+
+If the command above fails (with both "pip" and "pip3"), then try this instead:
 ```
 pip3 install . --user       # (or "pip", if that fails)
 ```
@@ -156,7 +158,7 @@ and explain how to install the prerequisites needed.
 *Alternatively, you can download and install moltemplate
 using a single command:*
 ```
-pip install git+https://github.com/jewettaij/moltemplate.git
+pip3 install git+https://github.com/jewettaij/moltemplate.git   # (or "pip", if that fails)
 ```
 *...however this will omit all of the examples and documentation.*
 
