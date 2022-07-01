@@ -1,7 +1,7 @@
 Where can I find the moltemplate manual?
 ===========
 
-###The PDF file for the moltemplate referance manual can be downloaded here:
+### The PDF file for the moltemplate referance manual can be downloaded here:
 
 **[https://www.moltemplate.org/doc/moltemplate_manual.pdf](https://www.moltemplate.org/doc/moltemplate_manual.pdf)**
 
@@ -12,7 +12,7 @@ Please let me know if the web site is down or the PDF file is out of date.
 I became concerned about the github download size.
 The moltemplate manual is a large binary file which changes rapidly.
 Every time a minor change was made to the manual,
-the git repository to grow by about 700kB in size.
+the git repository would grow by about 700kB in size.
 
 
 
