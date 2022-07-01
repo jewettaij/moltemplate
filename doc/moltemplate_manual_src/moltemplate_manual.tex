@@ -1761,13 +1761,13 @@ Data files typically contain atom coordinates and bonded topology data.
 
 Moltemplate will create the following files: 
 ``system.data'',
-``system.in'',
+``run.in.EXAMPLE'',
 ``system.in.init'',
 ``system.in.settings'',
 (and possibly other files including ``system.in.coords''). 
 These are LAMMPS input/data files, and they can be run in LAMMPS 
 with minimal modification (see below).
-The main input script file is named ``system.in'', and it usually contains
+The main input script file is named ``run.in.EXAMPLE'', and it usually contains
 just three lines:
 \begin{verbatim}
 include   "system.in.init"
@@ -1777,6 +1777,7 @@ include   "system.in.settings"
 
 To \textit{run} a simulation, you will have to 
 edit this file in order to add a couple of run commands.  
+\textit{(You can also rename the file if you like.)}
 These commands tell LAMMPS about the simulation conditions
 you want to use (temperature, pressure), 
 how long to run the simulation,
@@ -1883,13 +1884,13 @@ In addition, all users should be familiar with the following commands:
 %\end{verbatim}
 %After these modifications, LAMMPS can then be run using: 
 %\begin{verbatim}
-%lmp_linux -i system.in
+%lmp_linux -i run.in.EXAMPLE
 %\end{verbatim}
 %(Here we are assuming ``lmp\_linux'' is the name of your LAMMPS executable.)
 %A detailed explanation of these commands 
 %can be found in the LAMMPS Users Manual.
 %  %\textit{(Simple examples of LAMMPS script commands may be found in 
-%  %comments that appear at the end of ``system.in'' 
+%  %comments that appear at the end of ``run.in.EXAMPLE''
 %  %files created by moltemplate.sh.)}
 %  %(More detailed explanation of these commands 
 %  %can be found in the LAMMPS Users Manual.)
@@ -6283,9 +6284,9 @@ If so, then then append them to the end of your data file as well.
 \subsection{Now create the LAMMPS input script}
 
 \begin{verbatim}
-echo "include \"In Init\"" > system.in
-echo "read_data system.data" >> system.in
-echo "include \"In Settings\"" >> system.in
+echo "include \"In Init\"" > run.in.EXAMPLE
+echo "read_data system.data" >> run.in.EXAMPLE
+echo "include \"In Settings\"" >> run.in.EXAMPLE
 \end{verbatim}
 Lastly, you have to worry about supplying the atomic coordinates.
 (Unlike moltemplate, ttree.py does not handle atom coordinates.)
@@ -6332,7 +6333,7 @@ awk '{if (NF>=3) { \
 \end{verbatim}
 Finally import ``system.in.coords'' in your lammps input script using:
 \begin{verbatim}
-echo "include \"system.in.coords\"" >> system.in
+echo "include \"system.in.coords\"" >> run.in.EXAMPLE
 \end{verbatim}
 
 

@@ -837,7 +837,7 @@ fi
 
 
 
-
+OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE"
 OUT_FILE_INPUT_SCRIPT="${OUT_FILE_BASE}.in"
 OUT_FILE_INIT="${OUT_FILE_BASE}.in.init"
 OUT_FILE_SETTINGS="${OUT_FILE_BASE}.in.settings"
@@ -2267,35 +2267,35 @@ fi
 
 
 
-rm -f $OUT_FILE_INPUT_SCRIPT
+rm -f $OUT_FILE_EXAMPLE_SCRIPT
 
 if [ -s "$in_init" ]; then
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
     cp -f "$in_init" $OUT_FILE_INIT
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
-    echo "# ----------------- Init Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
-    echo "include \"$OUT_FILE_INIT\"" >> $OUT_FILE_INPUT_SCRIPT
-    #echo "# \"$in_init\" typically contains various styles, dimensions, and units:" >> $OUT_FILE_INPUT_SCRIPT
-    #echo "include \"$in_init\"" >> $OUT_FILE_INPUT_SCRIPT
-    #cat "$in_init" >> $OUT_FILE_INPUT_SCRIPT
-    echo "" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# ----------------- Init Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "include \"$OUT_FILE_INIT\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# \"$in_init\" typically contains various styles, dimensions, and units:" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "include \"$in_init\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #cat "$in_init" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 fi
 
 
-echo "" >> $OUT_FILE_INPUT_SCRIPT
-echo "# ----------------- Atom Definition Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-echo "" >> $OUT_FILE_INPUT_SCRIPT
-echo "read_data \"$OUT_FILE_DATA\"" >> $OUT_FILE_INPUT_SCRIPT
-echo "" >> $OUT_FILE_INPUT_SCRIPT
-echo "# ----------------- Settings Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-echo "" >> $OUT_FILE_INPUT_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# ----------------- Atom Definition Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "read_data \"$OUT_FILE_DATA\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# ----------------- Settings Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 
 
 if [ -s "$in_settings" ]; then
-  #echo "# \"$in_settings\" typically contains coeffs, fixes, groups & modify commands:" >> $OUT_FILE_INPUT_SCRIPT
-  #echo "include \"$in_settings\"" >> $OUT_FILE_INPUT_SCRIPT
-  #cat "$in_settings" >> $OUT_FILE_INPUT_SCRIPT
+  #echo "# \"$in_settings\" typically contains coeffs, fixes, groups & modify commands:" >> $OUT_FILE_EXAMPLE_SCRIPT
+  #echo "include \"$in_settings\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+  #cat "$in_settings" >> $OUT_FILE_EXAMPLE_SCRIPT
   if [ -z $SETTINGS_MOLC ]; then
     # Commenting out the next line.  We don't want to copy over the old file
     #cp -f "$in_settings" $OUT_FILE_SETTINGS
@@ -2315,8 +2315,8 @@ if [ -s "$in_settings" ]; then
     molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
     export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2019 (https://doi.org/10.1039/c9cp04120f)\n"`
   fi
-  echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_INPUT_SCRIPT
-  echo "" >> $OUT_FILE_INPUT_SCRIPT
+  echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+  echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 fi
 
 
@@ -2347,10 +2347,10 @@ if [ -s "$tmp_atom_coords" ]; then
     #
     #rm -f "$OUT_FILE_COORDS"
     #awk '{if (NF>=3) {natom++; print "set atom "natom"  x "$1"  y "$2"  z "$3"  image 0 0 0"}}' < "$tmp_atom_coords" >> "$OUT_FILE_COORDS"
-    #echo "# Load the atom coordinates:" >> $OUT_FILE_INPUT_SCRIPT
-    #echo "" >> $OUT_FILE_INPUT_SCRIPT
-    #echo "include \"$OUT_FILE_COORDS\"" >> $OUT_FILE_INPUT_SCRIPT
-    #echo "" >> $OUT_FILE_INPUT_SCRIPT
+    #echo "# Load the atom coordinates:" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "include \"$OUT_FILE_COORDS\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 
 else
     rm -f "$OUT_FILE_COORDS"
@@ -2487,14 +2487,14 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     # Create a new section in the lammps input script
     # matching the portion of the name of
     # the file after the in_prefix.
-    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
-    echo "# ----------------- $SECTION_NAME Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> "$OUT_FILE_EXAMPLE_SCRIPT"
+    echo "# ----------------- $SECTION_NAME Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
 
     # Commenting out the next line.
     #
-    #cp -f "$file_name" "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    #cp -f "$file_name" "${OUT_FILE_EXAMPLE_SCRIPT}.${FILE_SUFFIX}"
     #
-    # We don't want overwrite "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    # We don't want overwrite "${OUT_FILE_EXAMPLE_SCRIPT}.${FILE_SUFFIX}"
     # with the contents of "$file_name" because it's possible that the user
     # might have created both files (eg "In Charges" and "system.in.charges"),
     # and we don't want to erase anything.  Instead, print a warning message
@@ -2509,15 +2509,15 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     fi
     #...and append the contents to the end of the target file.
     cat "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
-    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
-    echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_INPUT_SCRIPT
+    echo "" >> "$OUT_FILE_EXAMPLE_SCRIPT"
+    echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_EXAMPLE_SCRIPT
     mv -f "$file_name" output_ttree/
 done
 
 if [ -e "$in_prefix_no_space" ]; then
-    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
-    cat "$in_prefix_no_space" >> "$OUT_FILE_INPUT_SCRIPT"
-    echo "" >> "$OUT_FILE_INPUT_SCRIPT"
+    echo "" >> "$OUT_FILE_EXAMPLE_SCRIPT"
+    cat "$in_prefix_no_space" >> "$OUT_FILE_EXAMPLE_SCRIPT"
+    echo "" >> "$OUT_FILE_EXAMPLE_SCRIPT"
     mv -f "$in_prefix_no_space" output_ttree/
 fi
 
@@ -2538,7 +2538,7 @@ fi
 
 echo "$RENDERED_FILES" > RENDERED_FILENAMES.tmp
 echo "$OUT_FILE_INIT" >> RENDERED_FILENAMES.tmp
-echo "$OUT_FILE_INPUT_SCRIPT " >> RENDERED_FILENAMES.tmp
+echo "$OUT_FILE_EXAMPLE_SCRIPT " >> RENDERED_FILENAMES.tmp
 echo "$OUT_FILE_SETTINGS " >> RENDERED_FILENAMES.tmp
 echo "$RENDERED_FILES_WITH_COEFF_COMMANDS" >> RENDERED_FILENAMES.tmp
 
@@ -2661,39 +2661,39 @@ rm -f input_scripts_so_far.tmp
 # ############ Optional: Add a fake run section as an example ############
 
 
-echo "" >> $OUT_FILE_INPUT_SCRIPT
-echo "# ----------------- Run Section -----------------" >> $OUT_FILE_INPUT_SCRIPT
-echo "" >> $OUT_FILE_INPUT_SCRIPT
-echo "# The lines above define the system you want to simulate." >> $OUT_FILE_INPUT_SCRIPT
-echo "# What you do next is up to you." >> $OUT_FILE_INPUT_SCRIPT
-echo "# Typically a user would minimize and equilibrate" >> $OUT_FILE_INPUT_SCRIPT
-echo "# the system using commands similar to the following:" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  ----   examples   ----" >> $OUT_FILE_INPUT_SCRIPT
-echo "#" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  -- minimize --" >> $OUT_FILE_INPUT_SCRIPT
-echo "# minimize 1.0e-5 1.0e-7 1000 10000" >> $OUT_FILE_INPUT_SCRIPT
-echo "# (Note: Some fixes, for example \"shake\", interfere with the minimize command," >> $OUT_FILE_INPUT_SCRIPT
-echo "#        You can use the \"unfix\" command to disable them before minimization.)" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  -- declare time step for normal MD --" >> $OUT_FILE_INPUT_SCRIPT
-echo "# timestep 1.0" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  -- run at constant pressure (Nose-Hoover)--" >> $OUT_FILE_INPUT_SCRIPT
-#echo "# timestep 1.0" >> $OUT_FILE_INPUT_SCRIPT
-echo "# fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0">>$OUT_FILE_INPUT_SCRIPT
-echo "#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --" >> $OUT_FILE_INPUT_SCRIPT
-echo "# fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  -- (This is good for sparse CG polymers in implicit solvent.)   --" >> $OUT_FILE_INPUT_SCRIPT
-echo "# fix fxLAN all langevin 300.0 300.0 5000 48279" >> $OUT_FILE_INPUT_SCRIPT
-echo "# fix fxNVE all nve  #(<--needed by fix langevin)" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  -- Now, finally run the simulation --" >> $OUT_FILE_INPUT_SCRIPT
-echo "# run   50000" >> $OUT_FILE_INPUT_SCRIPT
-#echo "# write_restart system_after_nvt.rst" >> $OUT_FILE_INPUT_SCRIPT
-#echo "# run   50000" >> $OUT_FILE_INPUT_SCRIPT
-#echo "# write_restart system_after_npt.rst" >> $OUT_FILE_INPUT_SCRIPT
-echo "#  ---- (end of examples) ----">> $OUT_FILE_INPUT_SCRIPT
-#echo "# It is the responsibility of the user to learn LAMMPS and specify these">>$OUT_FILE_INPUT_SCRIPT
-#echo "# these commands." >> $OUT_FILE_INPUT_SCRIPT
-echo "" >> $OUT_FILE_INPUT_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# ----------------- Run Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# The lines above define the system you want to simulate." >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# What you do next is up to you." >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# Typically a user would minimize and equilibrate" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# the system using commands similar to the following:" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  ----   examples   ----" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- minimize --" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# minimize 1.0e-5 1.0e-7 1000 10000" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# (Note: Some fixes, for example \"shake\", interfere with the minimize command," >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#        You can use the \"unfix\" command to disable them before minimization.)" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- declare time step for normal MD --" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# timestep 1.0" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- run at constant pressure (Nose-Hoover)--" >> $OUT_FILE_EXAMPLE_SCRIPT
+#echo "# timestep 1.0" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0">>$OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- (This is good for sparse CG polymers in implicit solvent.)   --" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# fix fxLAN all langevin 300.0 300.0 5000 48279" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# fix fxNVE all nve  #(<--needed by fix langevin)" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  -- Now, finally run the simulation --" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "# run   50000" >> $OUT_FILE_EXAMPLE_SCRIPT
+#echo "# write_restart system_after_nvt.rst" >> $OUT_FILE_EXAMPLE_SCRIPT
+#echo "# run   50000" >> $OUT_FILE_EXAMPLE_SCRIPT
+#echo "# write_restart system_after_npt.rst" >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "#  ---- (end of examples) ----">> $OUT_FILE_EXAMPLE_SCRIPT
+#echo "# It is the responsibility of the user to learn LAMMPS and specify these">>$OUT_FILE_EXAMPLE_SCRIPT
+#echo "# these commands." >> $OUT_FILE_EXAMPLE_SCRIPT
+echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 
 
 
