@@ -850,10 +850,10 @@ OUT_FILE_COORDS="${OUT_FILE_BASE}.in.coords"
 #
 # In earlier versions of moltemplate, I was careful only to delete the most
 # most common moltemplate-created files before running moltemplate again.
-#rm -f "$OUT_FILE_INPUT_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_DATA" "$OUT_FILE_COORDS"
+#rm -f "$OUT_FILE_EXAMPLE_SCRIPT" "$OUT_FILE_INIT" "$OUT_FILE_SETTINGS" "$OUT_FILE_DATA" "$OUT_FILE_COORDS"
 # However, now I now delete all files beginning with "${OUT_FILE_BASE}.in.*"
 # (except for those ending in .lt).
-for f in "${OUT_FILE_BASE}.data" "${OUT_FILE_BASE}".in.* "${OUT_FILE_BASE}.in"; do
+for f in "${OUT_FILE_BASE}.data" "${OUT_FILE_BASE}".in.*; do
   if [[ ! "$f" =~ .*\.lt ]]; then
     # Although it's unlikely somebody would name their moltemplate source file
     # "system.in.lt", just in case they do, we check to see if the file
