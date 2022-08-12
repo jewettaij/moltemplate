@@ -5,6 +5,12 @@ This example of the formation of a coarse-grained DPPC lipid-bilayer uses the Ma
 ### Images
 <img src="images/DPPC_martini_LR.jpg" height=110> <img src="images/plus.svg" height=80> <img src="images/water_martini_LR.jpg" width=70> <img src="images/rightarrow.svg" height=80> <img src="images/t=0_after_minimization_LR.jpg" width=170> <img src="images/rightarrow.svg" height=80> <img src="images/t=6ns_300K_NPT_LR.jpg" width=170> <img src="images/rightarrow.svg" height=80> <img src="images/t=13ns_450K_NVT_LR.jpg" width=170> <img src="images/rightarrow.svg" height=80> <img src="images/t=26ns_300K_NPT_LR.jpg" width=170>
 
+#### Video
+
+https://www.youtube.com/watch?v=vi5mYiWJRzc
+
+### Details
+
 The simulation size and number of lipids and water molecules is specified in the [mix_lipids+water.inp](./packmol_files/mix_lipids+water.inp) and [system.lt](./moltemplate_files/system.lt) files.  (The numbers in these files must agree.)  The simulation contitions can be controlled by editing the [run.in.anneal](run.in.anneal) and [run.in.nvt](run.in.nvt) files.
 
 

@@ -67,7 +67,14 @@ d) Try entering these commands:
 
     pbc wrap -sel type=1 -all -centersel type=2 -center com
 
-4) Optional: If you like, change the atom types in the PSF file so
+4)
+    You should check if your periodic boundary conditions are too small.
+    To do that:
+       select Graphics->Representations menu option
+       click on the "Periodic" tab, and
+       click on the "+x", "-x", "+y", "-y", "+z", "-z" checkboxes.
+
+5) Optional: If you like, change the atom types in the PSF file so
    that VMD recognizes the atom types, use something like:
 
 sed -e 's/   1    1      /   C    C      /g' < system.psf > temp1.psf

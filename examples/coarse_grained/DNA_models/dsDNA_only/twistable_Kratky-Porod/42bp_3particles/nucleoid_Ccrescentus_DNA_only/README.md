@@ -119,7 +119,7 @@ new feature of LAMMPS called "fix twist".  (See "prerequisites" section.)
 
 ## Prerequisites
 
-LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
+LAMMPS must be compiled with the "MOLECULE" AND "EXTRA-PAIR" packages enabled.
 (https://docs.lammps.org/Build_package.html)
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.

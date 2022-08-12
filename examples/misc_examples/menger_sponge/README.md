@@ -8,9 +8,14 @@ Moltemplate is useful for building larger molecular structures from smaller piec
 <img src="images/AlCell_LR.jpg" width=70> <img src="images/rightarrow.svg" height=80> <img src="images/lvl1_LR.jpg" width=90> <img src="images/rightarrow.svg" height=80> <img src="images/lvl2_LR.jpg" width=130> <img src="images/rightarrow.svg" height=80> <img src="images/lvl3_LR.jpg" width=200>
 <img src="images/rightarrow.svg" height=80> <img src="images/menger_sponge_lattice_8cells_t=0_zoom1_LR2.jpg" width=300>
 
+### Video
+
 A short simulation demonstrates that the resulting construct is not stable.
 
+https://www.youtube.com/watch?v=DfuMBN0OwKc
+
 <img src="images/rightarrow.svg" height=80> <img src="images/menger_sponge_lattice_8cells_t=7400_LR.jpg" width=300>
+
 
 ### Instructions
 

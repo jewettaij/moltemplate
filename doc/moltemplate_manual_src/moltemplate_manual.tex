@@ -1583,7 +1583,7 @@ wat2    = new SPCE.move(3.1034, 0.00, 0.00)
 wat3    = new SPCE.move(6.2068, 0.00, 0.00)
 wat4    = new SPCE.move(9.3102, 0.00, 0.00)
   :           :
-wat1000 = new SPCE.move(31.034, 31.034, 31.034)
+wat1000 = new SPCE.move(27.9306, 27.9306, 27.9306)
 \end{verbatim}
 Specifying geometry this way is tedious.
 Alternatively, moltemplate has simple commands for arranging multiple 
@@ -1739,11 +1739,13 @@ display periodic boundaries, and wrap atomic coordinates,
 read the short VMD tutorial in appendix \ref{sec:vmd_advanced}.
 
 \textit{(Note:
-As of 2019-9-03, 
+As of 2022-8-11,
 VMD does not have built-in support for exotic atom\_styles 
-such as ellipsoids and dipoles, but their are 3rd-party scripts, plugins 
-and settings you can use. Search the VMD and LAMMPS mailing lists 
-for help.})
+such as ellipsoids and dipoles.
+VMD also cannot be used to display simulations
+containing atoms or bonds which are created and destroyed.
+I recommend using OVITO \cite{OVITO}
+instead of VMD for these kinds of simulations.)}
 
 
 

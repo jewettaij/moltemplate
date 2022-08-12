@@ -5,6 +5,11 @@ Nanotube water capillary system
 
 <img src="images/graphene_unit_cell.jpg" width=110> <img src="images/rightarrow.svg" height=80> <img src="images/nanotube+walls_side_nopbc_LR.jpg" width=140> <img src="images/plus.svg" height=80> <img src="images/water_side_nopbc_LR.jpg" width=140> <img src="images/rightarrow.svg" height=80> <img src="images/nanotube+walls+water_side_pbc_t=0ps_LR.jpg" height=170> <img src="images/rightarrow.svg" height=80> <img src="images/nanotube+walls+water_side_pbc_t=305ps_LR.jpg" height=170>
 
+#### Video
+
+https://www.youtube.com/watch?v=U_-KUIuttfM
+
+
 ### Details
 
 This is a small version of a carbon-nanotube, water capillary system, inspired by this paper:
@@ -12,8 +17,22 @@ This is a small version of a carbon-nanotube, water capillary system, inspired b
 
 To investigate the behavior from that paper, it might be a good idea to increase the size of the water reservoir, the spacing between the walls, and the size of the system in the X and Y directions.
 
+Note that there are two ways to run this simulation,
+at constant volume or at constant pressure.
+(In the video above the simulation was run at constant volume.)
+
+
 ### Requirements
-To run this system at constant pressure, it might help to compile LAMMPS with the optional RIGID package, and apply "fix rigid" on the carbon atoms. (The use of fix rigid for this purpose is controversial.  See the [run.in.npt](run.in.npt) file for more details.)  Running at NVT defintely does not require this.
+
+*To run this system at constant pressure,
+LAMMPS must be compiled with the "RIGID" package enabled.
+So if LAMMPS generates the following error:
+"rigid: Unknown fix", then you must follow
+[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+and recompile LAMMPS.
+(Running simulations containing immobile objects at constant pressure in
+LAMMPS is complicated.  See the "run.in.npt" file for details.)*
+
 
 ### Notes:
 

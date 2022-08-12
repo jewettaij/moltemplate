@@ -93,7 +93,8 @@ the group of atoms that is supplied to the integrator.  (For details, see
 
 ##    Prerequisites
 
-LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
+LAMMPS must be compiled with the "MOLECULE" AND "EXTRA-MOLECULE"
+packages enabled.
 If you receive this error message (or something similar):
 "dihedral_style spherical: Unknown dihedral style", then you must follow
 [these instructions](https://lammps.sandia.gov/doc/Build_package.html),

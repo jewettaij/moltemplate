@@ -51,7 +51,7 @@ Note: The polymer shown in some of these videos ("3bp2p") is different than the
 
 ##    Prerequisites
 
-LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
+LAMMPS must be compiled with the "MOLECULE" AND "EXTRA-PAIR" packages enabled.
 (https://docs.lammps.org/Build_package.html)
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.

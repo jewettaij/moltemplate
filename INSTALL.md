@@ -218,6 +218,8 @@ prerequisites can be installed using Homebrew (or XCODE).
 However the anaconda version of python and pip is also available for mac OS,
 and it may be more reliable than the python version
 included with XCODE or Homebrew.
+*(Note: BASH can be installed using 3rd-party tools like "brew"
+if it is not included with the operating system by default.)*
 
 ## WINDOWS installation suggestions
 

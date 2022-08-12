@@ -27,8 +27,11 @@ https://www.youtube.com/watch?v=xU2QzDDmuyA
 
 ##    Prerequisites
 
-LAMMPS must be compiled with the "MOLECULE" AND "USER-MISC" packages enabled.
-(https://lammps.sandia.gov/doc/Build_package.html)
+LAMMPS must be compiled with the "MOLECULE" AND "EXTRA-MOLECULE"
+packages enabled.  If LAMMPS generates the following error:
+"dihedral_style spherical: Unknown dihedral style", then you must follow
+[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+and recompile LAMMPS.
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.
 (As of 2019-5-05, you must download "fix_twist.cpp" and "fix_twist.h" from
