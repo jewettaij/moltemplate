@@ -42,18 +42,18 @@ Moltemplate is inter-operable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
 [**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
-[**EMC**](http://montecarlo.sourceforge.net/),
 [**RED-server**](https://upjv.q4md-forcefieldtools.org/REDServer),
 [**LigParGen**](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**AmberTools**](https://ambermd.org/AmberTools.php),
 [**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
+[**EMC**](http://montecarlo.sourceforge.net/),
 [**CellPACK**](http://www.cellpack.org),
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
-and any other program that reads or generates
-[**LAMMPS data (.lmpdat)**](./doc/doc_ltemplify.md) files
+and any other program that generates
+[**LAMMPS DATA**](./doc/doc_ltemplify.md) (.lmpdat) files
 or
-[**MOL2**](./doc/doc_mol22lt.md)files.
+[**MOL2**](./doc/doc_mol22lt.md) files.
 (New force fields and examples are added continually by users.)
 
 
