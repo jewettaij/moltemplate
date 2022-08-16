@@ -178,6 +178,31 @@ telling moltemplate to load a file.
 In the example above, if you are using the GAFF2 force field, you would use
 *"--ff-file gaff2.lt"*.  (The "gaff2.lt" stores the GAFF2 parameters.)
 
+### --upper-case-types
+
+This will force all of the atom *type* names to use upper-case letters.
+*(This is useful for fixing some force-field specific format errors.)*
+
+
+### --lower-case-types
+
+This will force all of the atom *type* names to use lower-case letters.
+*(This is useful for fixing some force-field specific format errors.)*
+
+
+### --upper-case-names
+
+This will force all of the atom names to use upper-case letters.
+
+### --lower-case-names
+
+This will force all of the atom names to use lower-case letters.
+
+*(Note that atom names are used to identify atoms in bonds.
+They are not used to lookup force-field information.
+Make sure they remain uniquely named, even after changing capitalization.)*
+
+
 
 ## Python API
 

@@ -16,8 +16,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2022-8-15'
-g_version_str = '0.1.0'
+g_date_str = '2022-8-16'
+g_version_str = '0.1.1'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -79,6 +79,8 @@ def ConvertMol22Lt(fin = sys.stdin,
                    ff_filename = None,
                    object_name = None,
                    fcharges = None,
+                   atom_type_capitalization = None,
+                   atom_name_capitalization = None,
                    include_bond_types = False):
     """ Reads a MOL2 file (and an optional file containing charges)
         and creates a moltemplate file (LT file). """
@@ -151,6 +153,14 @@ def ConvertMol22Lt(fin = sys.stdin,
 
             # Process the information on this line
             # First make sure all arrays are large enough to store the new info
+            if atom_name_capitalization == 'upper':
+                atom_name = atom_name.upper()
+            elif atom_name_capitalization == 'lower':
+                atom_name = atom_name.lower()
+            if atom_type_capitalization == 'upper':
+                atom_type_name = atom_type_name.upper()
+            elif atom_type_capitalization == 'lower':
+                atom_type_name = atom_type_name.lower()
             if atom_id >= len(id2name):
                 num_ids = len(id2name)
                 assert(num_ids == len(id2type))
@@ -303,9 +313,9 @@ def ConvertMol22Lt(fin = sys.stdin,
 
     if object_name and object_name != "":
         fout.write(object_name + ff_str + ' {\n\n')
-        fout.write('# (Let moltemplate know that the atoms in each molecular subunit\n'
-                   '#  share the same molecule-ID "..." using the "create_var" command)\n\n\n')
-        fout.write('create_var {$mol}\n\n\n')
+        fout.write('# (Optional: Let moltemplate know that the atoms in each molecular subunit\n'
+                   '#  share the same molecule-ID "..." using the "create_var" command)\n\n')
+        fout.write('create_var {$mol}\n\n')
 
     # Now loop over all of the types of molecular subunits
     # defined in the MOL2 file, and convert them to moltemplate-style
@@ -495,18 +505,42 @@ def main():
                         dest='charge_filename',
                         required=False,
                         help='name of a text file containing the charge of each atom (optional)')
-        ap.add_argument('--name',
+        ap.add_argument('-name', '--name',
                         dest='object_name',
                         required=False,
                         help='name of the force field you are using (eg "GAFF2")')
-        ap.add_argument('--ff',
+        ap.add_argument('-ff', '--ff',
                         dest='ff_name',
                         required=False,
                         help='name of the force field you are using (eg "GAFF2")')
-        ap.add_argument('--ff-file',
+        ap.add_argument('-ff-file', '--ff-file',
                         dest='ff_filename',
                         required=False,
                         help='name of the file containing force field information (eg "gaff2.lt")')
+        ap.add_argument('-upper-case-types', '--upper-case-types',
+                        dest='upper_case_types',
+                        required=False,
+                        default=False,
+                        action='store_true',
+                        help='convert the atom type names to upper-case characters?')
+        ap.add_argument('-lower-case-types', '--lower-case-types',
+                        dest='lower_case_types',
+                        required=False,
+                        default=False,
+                        action='store_true',
+                        help='convert the atom type names to lower-case characters?')
+        ap.add_argument('-upper-case-names', '--upper-case-names',
+                        dest='upper_case_names',
+                        required=False,
+                        default=False,
+                        action='store_true',
+                        help='convert the atom type names to upper-case characters?')
+        ap.add_argument('-lower-case-names', '--lower-case-names',
+                        dest='lower_case_names',
+                        required=False,
+                        default=False,
+                        action='store_true',
+                        help='convert the atom type names to lower-case characters?')
         args = ap.parse_args()
         # Now figure out the names of the file(s) the user wants us to read
         # (By default, this program will read from the terminal (sys.stdin).)
@@ -523,12 +557,23 @@ def main():
             flt = open(args.lt_filename, 'w')
         else:
             flt = sys.stdout
-
+        atom_type_capitalization = ''
+        if args.upper_case_types:
+            atom_type_capitalization = 'upper'
+        elif args.lower_case_types:
+            atom_type_capitalization = 'lower'
+        atom_name_capitalization = ''
+        if args.upper_case_names:
+            atom_name_capitalization = 'upper'
+        elif args.lower_case_names:
+            atom_name_capitalization = 'lower'
         # Now convert the MOL2 file into an LT file
         ConvertMol22Lt(fmol2, flt,
                        ff_name = args.ff_name,
                        ff_filename = args.ff_filename,
                        object_name = args.object_name,
+                       atom_type_capitalization = atom_type_capitalization,
+                       atom_name_capitalization = atom_name_capitalization,
                        fcharges = fcharges)
 
     except (ValueError, InputError) as err:
