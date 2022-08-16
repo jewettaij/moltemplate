@@ -33,7 +33,8 @@ A polyphenylene sulfide (PPS) polymer:
 
 Later on, you would use this "PPS_5mer.lt" file we just created
 by referring to it in another file (usually "system.lt").
-Here is a usage example:
+Here is an example "system.lt" file which uses the "PPS_5mer.lt"
+file we just created:
 ```
 import "PPS_5mer.lt"
 pps5_copy = new PPS5  # (instantiate a single copy of the "PPS5" polymer)
@@ -43,6 +44,10 @@ To make multiple copies of "PPS5", you could use:
 import "PPS_5mer.lt"
 pps5_copy1 = new PPS5.move(-24.7, -3.9, -4.3)
 pps5_copy2 = new PPS5.move(-21.3, 1.9, 0.7)
+```
+To prepare a LAMMPS simulation, we would enter this command into the terminal:
+```
+moltemplate.sh system.lt
 ```
 
 ## Details
