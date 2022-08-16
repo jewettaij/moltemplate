@@ -38,6 +38,7 @@ from .ltemplify import main, Ltemplify
 from .dump2data import main
 from .raw2data import main
 from .extract_lammps_data import main
+from .mol22lt import main, ConvertMol22Lt
 from .genpoly_lt import main, GenPoly, GPSettings
 from .genpoly_modify_lt import main, GenPolyMod, GPModSettings, DistributePeriodic, DistributeRandom
 from .interpolate_curve import main, ResampleCurve, CalcNaturalCubicSplineCoeffs, SplineEval, SplineEvalD1, SplineEvalD2, SplineInterpEval, SplineInterpEvalD1, SplineInterpEvalD2, SplineCurvature2D, SplineInterpCurvature2D
@@ -52,6 +53,7 @@ __all__ = [# General modules for parsing and rendering text templates:
            # Coordinate transformations:
            'ttree_matrix_stack',
            'recenter_coords',
+           'mol22lt',
            'genpoly_lt',
            'interpolate_curve',
            'pdbsort',
