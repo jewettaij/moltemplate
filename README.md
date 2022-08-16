@@ -51,9 +51,9 @@ Moltemplate is inter-operable with
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that reads or generates
-[LAMMPS data (.lmpdat) files](./doc/doc_ltemplify.md)
+[**LAMMPS data (.lmpdat)**](./doc/doc_ltemplify.md) files
 or
-[MOL2 files.](./doc/doc_mol22lt.md)
+[**MOL2**](./doc/doc_mol22lt.md)files.
 (New force fields and examples are added continually by users.)
 
 
