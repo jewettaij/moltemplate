@@ -42,7 +42,7 @@ Moltemplate is inter-operable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
 [**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
-[**RED-server**](https://upjv.q4md-forcefieldtools.org/REDServer),
+[**PyRED-server**](https://upjv.q4md-forcefieldtools.org),
 [**LigParGen**](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**AmberTools**](https://ambermd.org/AmberTools.php),
 [**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
