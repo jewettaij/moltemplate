@@ -17,7 +17,7 @@ g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
 g_date_str = '2022-8-16'
-g_version_str = '0.1.1'
+g_version_str = '0.1.2'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -67,7 +67,7 @@ def ReadCharges(fcharges):
         # Does the file contain one column or two columns?
         charge = float(tokens[0])
         charges.append(charge)
-        return charges
+    return charges
 
 
 
@@ -133,7 +133,7 @@ def ConvertMol22Lt(fin = sys.stdin,
         # Read the lines in the "ATOM" section
         if section_name == "ATOM":
             if len(tokens) < 6:
-                raise InputError("The ATOM section of a MOL2 file should contain at least 6 columns.")
+                raise InputError("Error: The ATOM section of a MOL2 file should contain at least 6 columns.")
             # Parse the entries on each line
             atom_id    = int(tokens[0])
             atom_name  = tokens[1]
@@ -148,8 +148,11 @@ def ConvertMol22Lt(fin = sys.stdin,
             charge     = 0
             if len(tokens) > 8:
                 charge = float(tokens[8])
-            if atom_id-1 < len(external_charges):
-                charge = external_charges[atom_id-1];
+            if len(external_charges) > 0:
+                if atom_id-1 < len(external_charges):
+                    charge = external_charges[atom_id-1]
+                else:
+                    raise InputError("Error: The MOL2 file is longer than the charges file.")
 
             # Process the information on this line
             # First make sure all arrays are large enough to store the new info
@@ -202,7 +205,7 @@ def ConvertMol22Lt(fin = sys.stdin,
         # Read the lines in the "BOND" section
         elif section_name == "BOND":
             if len(tokens) < 3:
-                raise InputError("The BOND section of a MOL2 file should contain at least 3 columns.")
+                raise InputError("Error: The BOND section of a MOL2 file should contain at least 3 columns.")
             # Parse the entries on each line
             #bond_id     = int(tokens[0])   #discard
             atom1_id    = int(tokens[1])
@@ -419,7 +422,7 @@ def ConvertMol22Lt(fin = sys.stdin,
             subunit_name = subId2subName[sub_id]
             usage_instructions += '# '+subunit_name+'_instance' + \
                 ' = new ' + subunit_name + '\n'
-        usage_instructions = \
+        usage_instructions += \
             '#\n'+ \
             '# You could either put this command here, or in a separate file.\n' +\
             '# (...Such as "system.lt".  In that case remember to use moltemplate\'s\n' +\
@@ -483,6 +486,13 @@ def ConvertMol22Lt(fin = sys.stdin,
 
     # Finally print out a comment with a suggestion how to use this file.
     fout.write('\n' + usage_instructions)
+
+    # A final check to make sure that if the user supplied a file
+    # containing custom charges, the length of that file should equal
+    # the number of atoms in the MOL2 file
+    if ((len(external_charges) > 0) and
+        (len(external_charges) != len(id2type)-1)):
+        raise InputError("Error: The MOL2 file is shorter than the charges file.")
 
 
 def main():
