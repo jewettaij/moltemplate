@@ -26,11 +26,15 @@ mol22lt.py
       --ff-file "gaff2.lt"
 ```
 
+Later on, you would use this "butane.lt" file we just created
+by referring to it in another file (usually "system.lt").
+Here is a usage example:
 
 ```
 import "benzene.lt"
 benzene = new Benzene
 ```
+
 
 ## Description
 
