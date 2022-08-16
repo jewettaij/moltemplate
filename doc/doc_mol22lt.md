@@ -53,7 +53,7 @@ This program will extract the following information from a MOL2 file:
 
 This program will *IGNORE* the following information in a MOL2 file:
 
-- *any information not contained in the ATOM or BOND sections*
+- *any information* ***not*** *contained in the ATOM or BOND sections*
 - atom id (column 1 from the ATOM section)
 - bond id (column 1 from the BOND section)
 - bond type (column 4 from the BOND section)
@@ -130,11 +130,28 @@ If omitted, the charges in the MOL2 file are used instead (if present).
 
 ### --name MOLECULE_NAME
 
-If after the conversion, the LT contains a single molecule
-containing multiple different subunits (such as a polymer), you can
-combine them into a single molecule and specify the name of that molecule.
+By default *mol22lt.py* will treat each molecular subunit
+(a.k.a. "substructure") in the MOL2 file as an independent molecule.
+If there are bonds connecting them together, they will be included,
+however each molecular subunit will have a different molecule name.
+*(And the atoms in different subunits will be assigned to
+  different molecule-ID numbers.)*
+This is inconvenient to use.
+Later you want to create multiple copies of this entire molecule (polymer), you
+will have to copy each one of these molecular subunits that it is built from.
+
+The *--name* argument allows you to group everything together in
+a single molecule definition.  Later on, you can refer to this entire
+compound molecule using the *MOLECULE_NAME* you gave it.
+*(And all of the the atoms in the entire file will share the same molecule-ID.)*
+
 This is useful if you plan to use this molecule as a building block for
 creating larger simulations.
+
+*Note:* There is no need to use the *--name* argument
+if your MOL2 file only contains a single molecular subunit definition.
+This argument was intended for use with more complex molecules
+that contain multiple subunits, such as polymers.
 
 
 ### --ff FORCE_FIELD

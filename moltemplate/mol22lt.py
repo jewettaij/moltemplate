@@ -17,7 +17,7 @@ g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
 g_date_str = '2022-8-15'
-g_version_str = '0.0.3'
+g_version_str = '0.1.0'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -87,7 +87,7 @@ def ConvertMol22Lt(fin = sys.stdin,
 
     # If each subunit is part of a larger molecule (named object_name) then
     # merge the molecule-IDs together.  All atoms are part of the same molcule.
-    merge_mol_ids = (object_name != "")
+    merge_mol_ids = (object_name != None) and (object_name != "")
 
     external_charges = []
     # If there is an additional file containing charges, read that first
@@ -96,7 +96,7 @@ def ConvertMol22Lt(fin = sys.stdin,
 
     id2name = []     # lookup atom name from ID number
     id2type = []     # lookup atom name from ID number
-    id2subid = []
+    id2subId = []
     id2charge = []
     id2coords = []
     bonds_orig = []  # the list of bonds in the MOL2 file in the original order
@@ -154,10 +154,10 @@ def ConvertMol22Lt(fin = sys.stdin,
             if atom_id >= len(id2name):
                 num_ids = len(id2name)
                 assert(num_ids == len(id2type))
-                assert(num_ids == len(id2subid))
+                assert(num_ids == len(id2subId))
                 id2name    += (1 + atom_id - num_ids) * [""]
                 id2type    += (1 + atom_id - num_ids) * [""]
-                id2subid   += (1 + atom_id - num_ids) * [-1]
+                id2subId   += (1 + atom_id - num_ids) * [-1]
                 id2charge  += (1 + atom_id - num_ids) * [0]
                 id2coords  += (1 + atom_id - num_ids) * [[-1.0,-1.0,-1.0]]
             # Then, make sure this atomID number is unique
@@ -166,7 +166,7 @@ def ConvertMol22Lt(fin = sys.stdin,
             # Now store the result
             id2name[atom_id]   = atom_name
             id2type[atom_id]   = atom_type_name
-            id2subid[atom_id]  = sub_id
+            id2subId[atom_id]  = sub_id
             id2charge[atom_id] = charge
             id2coords[atom_id][0] = x
             id2coords[atom_id][1] = y
@@ -240,10 +240,10 @@ def ConvertMol22Lt(fin = sys.stdin,
     # make sure that every subunit has a unique name.
     # (The new name will be a combination of the original subunit name
     # and the subunit-ID number.)
-    # First count how many times the same name is used for different subIDs
-    for isub in range(1, num_subunits+1):
-        subunit_name = subId2subNameOrig[isub]
-        subNameOrig2subId[subunit_name].append(isub)
+    # First count how many times the same name is used for different subIds
+    for sub_id in range(1, num_subunits+1):
+        subunit_name = subId2subNameOrig[sub_id]
+        subNameOrig2subId[subunit_name].append(sub_id)
         if subunit_name == "":
             continue  # skip subunitIDs with blank names (no entry present)
 
@@ -251,7 +251,8 @@ def ConvertMol22Lt(fin = sys.stdin,
     for sub_name, sub_ids in sorted(subNameOrig2subId.items(),
                                     key = itemgetter(1)):
         if len(sub_ids) == 1:
-            subId2subName[isub] = sub_name
+            sub_id = sub_ids[0]
+            subId2subName[sub_id] = sub_name
             subNamesUsed.add(sub_name)
         else:
             assert(len(sub_ids) > 1)
@@ -267,7 +268,7 @@ def ConvertMol22Lt(fin = sys.stdin,
                 while True:
                     new_sub_name = sub_name + '_'*n_blanks + str(sub_id)
                     if not (new_sub_name in subNamesUsed):
-                        subId2subName[isub] = new_sub_name
+                        subId2subName[sub_id] = new_sub_name
                         subNamesUsed.add(new_sub_name)
                         break
                     n_blanks += 1
@@ -283,8 +284,8 @@ def ConvertMol22Lt(fin = sys.stdin,
     subId2bonds   = [[] for i in range(num_subunits+1)] #(+1 is explained above)
     for ib in range(0, len(bonds_orig)):
         ia1, ia2, bond_type = bonds_orig[ib]
-        if id2subid[ia1] == id2subid[ia2]:
-            subId2bonds[id2subid[ia1]].append([ia1, ia2, bond_type])
+        if id2subId[ia1] == id2subId[ia2]:
+            subId2bonds[id2subId[ia1]].append([ia1, ia2, bond_type])
         else:
             global_bonds.append([ia1, ia2, bond_type])
 
@@ -338,7 +339,7 @@ def ConvertMol22Lt(fin = sys.stdin,
                        str(id2coords[atom_id][0]) + ' ' +
                        str(id2coords[atom_id][1]) + ' ' +
                        str(id2coords[atom_id][2]) + '\n')
-        fout.write('  } # Atoms section\n\n')
+        fout.write('  } # Atoms section\n')
 
         ######## Print the "Bonds" section for this molecular subunit ########
         #
@@ -352,7 +353,7 @@ def ConvertMol22Lt(fin = sys.stdin,
             fout.write('\n'
                        '  #  bondId  atomId1 atomId2\n'
                        '\n')
-            fout.write('  write("Data Bond List"){\n')
+            fout.write('  write("Data Bond List") {\n')
         bonds = subId2bonds[sub_id]
         for ib in range(0, len(bonds)):
             assert(len(bonds[ib]) == 3)
@@ -370,30 +371,54 @@ def ConvertMol22Lt(fin = sys.stdin,
         # We are done with this molecular subunit's definition
         fout.write('}  # '+subunit_name+'\n\n\n\n')
 
-    if object_name and object_name != "":
+    if ((object_name and object_name != "") or
+        (len(global_bonds) > 0)):
         fout.write('# Now instantiate a copy of each molecular subunit we defined earlier.\n\n')
 
         for sub_id in range(1, num_subunits+1):
             subunit_name = subId2subName[sub_id]
-            fout.write(subunit_name + '_instance = new ' + sub_unit_name + '\n')
+            fout.write(subunit_name + '_instance = new ' + subunit_name + '\n')
+
+        if not (object_name and object_name != ""):
+            usage_instructions = \
+                '# -------- INSTRUCTIONS FOR USING THIS FILE: --------\n'+\
+                '# You can either run moltemplate.sh directly on this file\n'+\
+                '# or create a new LT file (eg "system.lt") and use moltemplate\'s\n'+\
+                '# "import" command to import this command in your system.lt file.\n'+\
+                '#\n'+\
+                '# Alternatively, you want to make multiple copies of the atoms in this file\n'+\
+                '# then re-run '+g_program_name+' with the "--name MOL_NAME" argument.\n'+\
+                '# This will encapsulate all of the text in this file within a molecule object\n'+\
+                '# (named MOL_NAME), which you can easily make multiple copies of later using\n'+\
+                '# moltemplate\'s "new" command.  For example:\n'+\
+                '# copy1 = new MOL_NAME\n'+\
+                '# copy2 = new MOL_NAME.move(5.2,0,0).rot(180,1,0,0)\n'+\
+                '# copy3 = new MOL_NAME.move(10.4,0,0)\n'+\
+                '# copy4 = new MOL_NAME.move(15.6,0,0).rot(180,1,0,0)\n'+\
+                '#   :   =   :\n'+\
+                '# ---------------------------------------------------\n'
+
     else:
-        fout.write('# INSTRUCTIONS FOR USING THIS FILE\n'
-                   '# So far, we have just defined (one or more) molecular subunits.\n'
-                   '# If you want to use these molecule(s) in a simulation, you must instantiate\n'
-                   '# copies of them.  To do that you would the "new" command.  For example:\n'
-                   '#\n')
+        usage_instructions = \
+            '# -------- INSTRUCTIONS FOR USING THIS FILE: --------\n'+\
+            '# So far, we have just defined (one or more) molecular subunits.\n' +\
+            '# If you want to use these molecule(s) in a simulation, you must instantiate\n' +\
+            '# copies of them.  To do that you would the "new" command.  For example:\n' +\
+            '#\n'
         for sub_id in range(1, num_subunits+1):
             subunit_name = subId2subName[sub_id]
-            fout.write('# '+subunit_name+'_instance' +
-                       ' = new ' + subunit_name + '\n')
-        fout.write('#\n'+
-                   '# You could either put this command here, or in a separate file.\n'
-                   '# (...Such as "system.lt".  In that case remember to use moltemplate\'s\n'
-                   '#  "import" command to import this file beforehand because you must ensure\n'
-                   '#  that the molecules in this file are loaded before they are used.)\n'
-                   '#\n'
-                   '# Note: You can also modify the position and orientation of each copy\n'
-                   '# using the .move() and .rot() commands.  (See the moltemplate manual.)\n')
+            usage_instructions += '# '+subunit_name+'_instance' + \
+                ' = new ' + subunit_name + '\n'
+        usage_instructions = \
+            '#\n'+ \
+            '# You could either put this command here, or in a separate file.\n' +\
+            '# (...Such as "system.lt".  In that case remember to use moltemplate\'s\n' +\
+            '#  "import" command to import this file beforehand because you must ensure\n' +\
+            '#  that the molecules in this file are loaded before they are used.)\n' +\
+            '#\n' +\
+            '# Note: You can also modify the position and orientation of each copy\n' +\
+            '# using the .move() and .rot() commands.  (See the moltemplate manual.)\n' +\
+            '# ---------------------------------------------------\n'
 
 
     fout.write('\n\n\n')
@@ -412,39 +437,42 @@ def ConvertMol22Lt(fin = sys.stdin,
         if include_bond_types:
             fout.write('write("Data Bonds"){\n')
         else:
-            fout.write('write("Data Bond List"){\n')
-        bonds = subId2bonds[sub_id]
+            fout.write('write("Data Bond List") {\n')
+        bonds = global_bonds
         for ib in range(0, len(bonds)):
-            assert(len(bonds) == 3)
+            assert(len(bonds[ib]) == 3)
             ia1, ia2, btype = bonds[ib]
-            subname1 = subId2SubName[id2subId[ia1]]
-            subname2 = subId2SubName[id2subId[ia2]]
-            fout.write('  $bond:'+str(ib+1))
+            subname1 = subId2subName[id2subId[ia1]]
+            subname2 = subId2subName[id2subId[ia2]]
+            fout.write('  $bond:b'+str(ib+1))
             if include_bond_types:
                 fout.write('  @bond:'+str(bond_type))
-            fout.write('  $atom:' + subname1 + '/' + id2atonName[ia1] +
-                       '  $atom:' + subname2 + '/' + id2atonName[ia2])
-            if (not include_bond_types) and (btype != ""):
-                fout.write('  # suggested bond type: ' + bond_type)
+            fout.write('  $atom:' + subname1 + '_instance/' + id2name[ia1] +
+                       '  $atom:' + subname2 + '_instance/' + id2name[ia2])
+            #if (not include_bond_types) and (btype != ""):
+            #    fout.write('  # suggested bond type: ' + bond_type)
             fout.write('\n')
         fout.write('} # global bonds section\n\n\n')
 
 
     if object_name and object_name != "":
         fout.write('} # ' + object_name + '\n\n\n')
-        fout.write('# INSTRUCTIONS FOR USING THIS FILE\n'
-                   '# So far, we have just defined a molecule named "'+object_name+'"\n'
-                   '# If you want to use this molecule in a simulation, you must instantiate\n'
-                   '# a copy of it.  To do that you would the "new" command.  For example:\n'
-                   '#\n'
-                   '# ' + object_name + '_instance = new ' +object_name+ '\n'
-                   '#\n'
-                   '# You could either put this command here, or in a separate file.\n'
-                   '# (...Such as "system.lt".  In that case remember to use moltemplate\'s\n'
-                   '#  "import" command to import this file beforehand because you must ensure\n'
-                   '#  that the molecule in this file is loaded before it is used.)\n')
+        usage_instructions = \
+            '# -------- INSTRUCTIONS FOR USING THIS FILE: --------\n'+\
+            '# So far, we have just defined a molecule named "'+object_name+'"\n'+ \
+            '# If you want to use this molecule in a simulation, you must instantiate\n'+\
+            '# a copy of it.  To do that you would the "new" command.  For example:\n'+\
+            '#\n'+\
+            '# ' + object_name + '_instance = new ' +object_name+ '\n'+\
+            '#\n'+\
+            '# You could either put this command here, or in a separate file.\n'+\
+            '# (...Such as "system.lt".  In that case remember to use moltemplate\'s\n'+\
+            '#  "import" command to import this file beforehand because you must ensure\n'+\
+            '#  that the molecule in this file is loaded before it is used.)\n'+\
+            '# ---------------------------------------------------\n'
 
-
+    # Finally print out a comment with a suggestion how to use this file.
+    fout.write('\n' + usage_instructions)
 
 
 def main():
