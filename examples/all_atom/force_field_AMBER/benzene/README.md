@@ -45,4 +45,4 @@ run a short simulation are provided in other README files.
 
 ### Requirements
 
-This example requires a version of LAMMPS compiled with support for the optional "USER-MISC" package (because the AMBER force field currently uses *dihedral_style fourier*).  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with the "USER-MISC" package.
+This example requires a version of LAMMPS compiled with support for the optional "EXTRA-MOLECULE" package (because the AMBER force field currently uses *dihedral_style fourier*).  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS to support this package.

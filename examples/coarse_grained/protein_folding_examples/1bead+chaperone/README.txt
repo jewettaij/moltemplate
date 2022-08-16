@@ -12,14 +12,12 @@
 #  placed outside the chaperone sphere, as opposed to inside.)
 #
 # -------- REQUIREMENTS: ---------
-# 1) These examples require the "USER-MISC" package.  (Use "make yes-USER-MISC")
-#   http://lammps.sandia.gov/doc/Section_start.html#start_3
-# 2) They also may require additional features and bug fixes for LAMMPS.
+# 1) These examples require additional features and bug fixes for LAMMPS.
 #   be sure to download and copy the "additional_lammps_code" from
 #   http://moltemplate.org     (upper-left corner menu)
-# 3) Unpack it
-# 4) copy the .cpp and .h files to the src folding of your lammps installation.
-# 5) Compile LAMMPS.
+# 2) Unpack it
+# 3) copy the .cpp and .h files to the src folding of your lammps installation.
+# 4) Compile LAMMPS.
 #
 
 -------------

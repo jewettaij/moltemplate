@@ -1,9 +1,10 @@
 # --- Running LAMMPS ---
 # -------- REQUIREMENTS: ---------
-# 1) This example requires building LAMMPS with the "USER-MISC" package.
-#    (because it makes use of "gaff.lt" which uses dihedral_style fourier)
-#    To do this, type "make yes-user-misc" before compiling LAMMPS.
-#   http://lammps.sandia.gov/doc/Section_start.html#start_3
+# This example requires building LAMMPS with the "EXTRA-MOLECULE" package.
+# (because it makes use of "gaff.lt" which uses dihedral_style fourier).
+# If you encounter the error *"Invalid dihedral_style"*, then this page:
+# https://lammps.sandia.gov/doc/Build_package.html
+# for instructions to compile LAMMPS to support this package.
 # -------- PREREQUISITES: --------
 # The 2 files "run.in.npt", and "run.in.nvt" are LAMMPS
 # input scripts which link to the input scripts and data files

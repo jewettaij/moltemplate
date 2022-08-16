@@ -51,8 +51,8 @@ EOF
 #  allows you to use more conventient "@atom:cx" shorthand notation instead.)
 
 echo "####################################################################"
-echo "# To use this, LAMMPS currently must be compiled with the USER-MISC package."
-echo "# (Type \"make yes-user-misc\" into the shell before compiling LAMMPS.)"
+echo "# To use this, LAMMPS must be compiled with the EXTRA-MOLECULE package"
+echo "# (See here for details: https://docs.lammps.org/Build_package.html)"
 echo "####################################################################"
 echo "#    This moltemplate (LT) file was generated automatically using"
 echo "# amberparm2lt.sh $1 $2"

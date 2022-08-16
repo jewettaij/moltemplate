@@ -12,14 +12,12 @@
 # I save the data relatively infrequently.
 #
 # -------- REQUIREMENTS: ---------
-# 1) This example requires the "USER-MISC" package.  (Use "make yes-USER-MISC")
-#   http://lammps.sandia.gov/doc/Section_start.html#start_3
-# 2) It also may require additional features and bug fixes for LAMMPS.
+# 1) These examples require additional features and bug fixes for LAMMPS.
 #   be sure to download and copy the "additional_lammps_code" from
 #   http://moltemplate.org     (upper-left corner menu)
-# 3) Unpack it
-# 4) copy the .cpp and .h files to the src folding of your lammps installation.
-# 5) Compile LAMMPS.
+# 2) Unpack it
+# 3) copy the .cpp and .h files to the src folding of your lammps installation.
+# 4) Compile LAMMPS.
 
 -------------
 Instructions on how to build LAMMPS input files and
