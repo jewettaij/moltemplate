@@ -17,7 +17,7 @@ g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
 g_date_str = '2022-8-16'
-g_version_str = '0.1.2'
+g_version_str = '0.2.0'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -266,6 +266,9 @@ def ConvertMol22Lt(fin = sys.stdin,
         if len(sub_ids) == 1:
             sub_id = sub_ids[0]
             subId2subName[sub_id] = sub_name
+            # If the caller requested a custom name for the molecule, use that.
+            if (object_name and (object_name != "") and (num_subunits == 1)):
+                subId2subName[sub_id] = object_name
             subNamesUsed.add(sub_name)
         else:
             assert(len(sub_ids) > 1)
@@ -314,7 +317,7 @@ def ConvertMol22Lt(fin = sys.stdin,
     if ff_name and ff_name != "":
         ff_str = ' inherits ' + ff_name
 
-    if object_name and object_name != "":
+    if (object_name and (object_name != "") and (num_subunits > 1)):
         fout.write(object_name + ff_str + ' {\n\n')
         fout.write('# (Optional: Let moltemplate know that the atoms in each molecular subunit\n'
                    '#  share the same molecule-ID "..." using the "create_var" command)\n\n')
@@ -384,10 +387,13 @@ def ConvertMol22Lt(fin = sys.stdin,
         # We are done with this molecular subunit's definition
         fout.write('}  # '+subunit_name+'\n\n\n\n')
 
-    if ((object_name and object_name != "") or
+    # If there are multiple molecular subunits
+    if ((object_name and object_name != "" and num_subunits>1) or
         (len(global_bonds) > 0)):
+
         fout.write('# Now instantiate a copy of each molecular subunit we defined earlier.\n\n')
 
+        assert((len(global_bonds) > 0) == (num_subunits > 1))
         for sub_id in range(1, num_subunits+1):
             subunit_name = subId2subName[sub_id]
             fout.write(subunit_name + '_instance = new ' + subunit_name + '\n')
@@ -434,7 +440,7 @@ def ConvertMol22Lt(fin = sys.stdin,
             '# ---------------------------------------------------\n'
 
 
-    fout.write('\n\n\n')
+    fout.write('\n\n')
 
 
     ####### We are done printing out the definitions of each molecular subunit
@@ -444,8 +450,7 @@ def ConvertMol22Lt(fin = sys.stdin,
     # different molecular subunits (if any)
 
     if len(global_bonds) > 0:
-        fout.write('\n\n\n'
-                   '# Bonds between atoms in different molecular subunits\n'
+        fout.write('# Bonds between atoms in different molecular subunits\n'
                    '\n')
         if include_bond_types:
             fout.write('write("Data Bonds"){\n')
@@ -465,10 +470,10 @@ def ConvertMol22Lt(fin = sys.stdin,
             #if (not include_bond_types) and (btype != ""):
             #    fout.write('  # suggested bond type: ' + bond_type)
             fout.write('\n')
-        fout.write('} # global bonds section\n\n\n')
+        fout.write('} # global bonds section\n\n')
 
 
-    if object_name and object_name != "":
+    if object_name and object_name != "" and num_subunits>1:
         fout.write('} # ' + object_name + '\n\n\n')
         usage_instructions = \
             '# -------- INSTRUCTIONS FOR USING THIS FILE: --------\n'+\

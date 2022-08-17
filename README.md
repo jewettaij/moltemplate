@@ -82,26 +82,39 @@ In addition, there are also several
 online.
 
 
-### Limitations for preparing all-atom simulations
+### Strategies for preparing all-atom simulations
 
-Moltemplate [does *not* choose atom types automatically ("atom typing")](https://moltemplate.org/force_field_recommendations.html),
-and currently cannot be used to build all-atom proteins from scratch.
-3rd-party tools may be needed to calculate atomic partial charges accurately.
-Some suggestions for selecting the appropriate atom types for your molecules
-are provided [here](https://moltemplate.org/force_field_recommendations.html).
-*(Users who are unsure how to choose atom types are
-encouraged to use
-the [ATB](https://atb.uq.edu.au) database,
-or use the DREIDING force field which has simple
-[atom type rules](./doc/DREIDING_Label_Manual.pdf),
-or *use a 3rd-party molecule-builder that supports atom typing
-(such as [EMC](http://montecarlo.sourceforge.net/))*.
-If necessary, you can then convert the
-molecular simulation files created earlier into LAMMPS format using
+Moltemplate was originally designed for preparing coarse-grained simulations.
+Fully atomistic simulations usually require choosing
+force-field specific atom types ("atom typing"),
+and the calculation of atomic charge.
+Moltemplate
+[does not do this](https://moltemplate.org/force_field_recommendations.html).
+To get around these limitations:
+
+* Users can use use *3rd-party molecule-builder tools* such as:
+[ATB](https://atb.uq.edu.au) database (LT format),
+[AmberTools](https://ambermd.org/AmberTools.php) (MOL2 format),
+[EMC](http://montecarlo.sourceforge.net/) (DATA format), and
+[LigParGen](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190) (DATA format), and
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
-You can then use [ltemplify.py](./doc/doc_ltemplify.md),
-to extract individual molecules from the LAMMPS DATA file, and
-modify them or combine them with other molecules using moltemplate.)*
+These tools can generate MOL2 or LAMMPS-DATA files
+which can be converted into moltemplate format (LT format) using
+[mol22lt.py](./doc/doc_mol22lt.md) or
+[ltemplify.py](./doc/doc_ltemplify.md)).
+*(If you want to try and select the atom types
+manually instead of using 3rd-party tools, read
+[these suggestions](https://moltemplate.org/force_field_recommendations.html).)*
+Alternatively, users can use the
+[DREIDING force field](./examples/all_atom/force_field_DREIDING)
+which has relatively simple
+[atom type rules](./doc/DREIDING_Label_Manual.pdf).
+
+* 3rd-party tools are often needed to calculate atomic partial charges
+accurately, such as [PyRED-server](https://upjv.q4md-forcefieldtools.org),
+and [AmberTools](https://ambermd.org/AmberTools.php).
+Alternatively, users can try using LAMMPS' built-in
+[fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature.
 
 
 
