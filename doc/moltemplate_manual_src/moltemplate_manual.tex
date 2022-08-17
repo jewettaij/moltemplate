@@ -3506,7 +3506,6 @@ If you want to move both polymers, you can use:
 \begin{verbatim}
 mol_complex/polymers[*].move(0,0.2,0.6)
 \end{verbatim}
-you could use a wildcard character ``*''
 (You can also use ranged (slice) notation, such as ``polymers[0-1]'',
  as an alternative to ``polymers[*]''. 
 See section \ref{sec:array_wildcards_intro}.
@@ -3520,8 +3519,8 @@ see section \ref{sec:molecule_customization}.)
 
 \subsubsection{Customizing individual atom locations}
 \label{sec:custom_atom}
-The ``move'' or ``rot'' commands can not be used to control the positions
-of \textit{individual atoms}.
+Unfortunately, the ``move'' or ``rot'' commands \textbf{\textit{cannot}}
+be used to control the positions of \textit{individual atoms}.
 Instead simply overwrite their coordinates this way:
 %$atom:mol_complex/polymers[0]/monomers[2]/CA $mol:mol_complex/polymers[1] @atom:R 0 6.4 8.0 0
 \begin{verbatim}
@@ -3529,11 +3528,29 @@ write("Data Atoms") {
   $atom:mol_complex/polymers[0]/monomers[2]/ca $mol:mol_complex @atom:R 0 6.4 8.2 0.6
 }
 \end{verbatim}
-This is an case where we must use the \textit{full} variable name of the atom
+This is a situation where we must use the \textit{full} name of the atom
 (``\$atom:mol\_complex/polymers[0]/monomers[2]/ca'')
 to indicate \textit{which} ``ca'' atom we want to overwrite
 (In this case, we want to modify the ``ca'' atom belonging to
- ``monomers[2]'' in ``polymers[0]'' in ``mol\_complex'').
+``monomers[2]'' in ``polymers[0]'' in ``mol\_complex'').
+In this example, the X,Y,Z numbers (6.4, 8.2, 0.6)
+are in the global coordinate system.
+If instead, the ``write("Data Atoms")'' statement appears
+inside the definition of the ``MolecularComplex'' object,
+we would specify the atom coordinates this way:
+\begin{verbatim}
+Molecular Complex inherits ForceField {
+  :
+  write("Data Atoms") {
+    $atom:polymers[0]/monomers[2]/ca $mol:... @atom:R 0 6.4 8.2 0.6
+  }
+}
+\end{verbatim}
+In that case, the atom coordinates will be defined
+within in the coordinate system of the ``MolecularComplex'' object,
+and will subject to any ``.move()'', ``.rot()'', or ``.scale()''
+commands which are applied to that object (or its copies).
+
 
 \subsubsection{Customizing individual bonds, angles, dihedrals,...}
 \label{sec:custom_bond}

@@ -51,6 +51,9 @@ To prepare a LAMMPS simulation, we would enter this command into the terminal:
 ```
 moltemplate.sh system.lt
 ```
+*(Once defined, molecules (like "PPS5") can be customized
+and combined with (bonded to) other molecules, as demonstrated in the
+[moltemplate manual](https://moltemplate.org/doc/moltemplate_manual.pdf#section.9).)*
 
 
 ## Details

@@ -100,8 +100,8 @@ the [ATB](https://atb.uq.edu.au) database (LT format),
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
 These tools can generate MOL2 or LAMMPS-DATA files
 which can be converted into moltemplate format (LT format) using
-[mol22lt.py](./doc/doc_mol22lt.md) or
-[ltemplify.py](./doc/doc_ltemplify.md).
+[mol22lt.py](./doc/doc_mol22lt.md#mol22ltpy) or
+[ltemplify.py](./doc/doc_ltemplify.md#ltemplifypy)
 *(If you want to try and select the atom types
 manually instead of using 3rd-party tools, read
 [these suggestions](https://moltemplate.org/force_field_recommendations.html).)*
