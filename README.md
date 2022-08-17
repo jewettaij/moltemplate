@@ -42,7 +42,7 @@ Moltemplate is inter-operable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
 [**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
-[**PyRED-server**](https://upjv.q4md-forcefieldtools.org),
+[**RED-server**](https://upjv.q4md-forcefieldtools.org),
 [**LigParGen**](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
 [**AmberTools**](https://ambermd.org/AmberTools.php),
 [**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
@@ -93,7 +93,7 @@ Moltemplate
 To get around these limitations:
 
 * Users can use use *3rd-party molecule-builder tools* such as:
-[ATB](https://atb.uq.edu.au) database (LT format),
+the [ATB](https://atb.uq.edu.au) database (LT format),
 [AmberTools](https://ambermd.org/AmberTools.php) (MOL2 format),
 [EMC](http://montecarlo.sourceforge.net/) (DATA format), and
 [LigParGen](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190) (DATA format), and
@@ -101,7 +101,7 @@ To get around these limitations:
 These tools can generate MOL2 or LAMMPS-DATA files
 which can be converted into moltemplate format (LT format) using
 [mol22lt.py](./doc/doc_mol22lt.md) or
-[ltemplify.py](./doc/doc_ltemplify.md)).
+[ltemplify.py](./doc/doc_ltemplify.md).
 *(If you want to try and select the atom types
 manually instead of using 3rd-party tools, read
 [these suggestions](https://moltemplate.org/force_field_recommendations.html).)*
@@ -109,10 +109,10 @@ Alternatively, users can use the
 [DREIDING force field](./examples/all_atom/force_field_DREIDING)
 which has relatively simple
 [atom type rules](./doc/DREIDING_Label_Manual.pdf).
-
-* 3rd-party tools are often needed to calculate atomic partial charges
-accurately, such as [PyRED-server](https://upjv.q4md-forcefieldtools.org),
-and [AmberTools](https://ambermd.org/AmberTools.php).
+* For atomic partial charges
+the [RED-server](https://upjv.q4md-forcefieldtools.org)
+is useful (which can generate a MOL2 file),
+*in addition to the tools listed above*.
 Alternatively, users can try using LAMMPS' built-in
 [fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature.
 
