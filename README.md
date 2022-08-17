@@ -38,6 +38,7 @@ and the
 and
 [**EFF**](./examples/misc_examples/explicit_electrons/eff_CH4)
 molecular models (and others).
+(New force fields and examples are added continually by users.)
 Moltemplate is inter-operable with
 [**ATB**](https://atb.uq.edu.au),
 [**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
@@ -51,10 +52,9 @@ Moltemplate is inter-operable with
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
 and any other program that generates
-[**LAMMPS DATA**](./doc/doc_ltemplify.md) (.lmpdat) files
+[**LAMMPS DATA**](https://docs.lammps.org/2001/data_format.html) (.lmpdat) files
 or
-[**MOL2**](./doc/doc_mol22lt.md) files.
-(New force fields and examples are added continually by users.)
+[**MOL2**](http://chemyang.ccnu.edu.cn/ccb/server/AIMMS/mol2.pdf) files.
 
 
 This repository contains 3 folders:
