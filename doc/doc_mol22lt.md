@@ -6,15 +6,6 @@ into moltemplate (LT) file format.
 
 ## *WARNING: ALPHA SOFTWARE. THIS SOFTWARE IS EXPERIMENTAL AS OF 2022-8-16*
 
-## *WARNING: THIS SOFTWARE DOES NOT WORK WITH MOL2 MULTIPLE CHAINS*
-This software does not work with MOL2 files
-containing multiple "chains".
-*("Chains" are optional features located in the
-[SUBSTRUCTURE section of some MOL2 files](http://chemyang.ccnu.edu.cn/ccb/server/AIMMS/mol2.pdf).)*
-As a workaround, if your MOL2 file contains multiple chains,
-split it into multiple MOL2 files (one per chain).
-Then convert each file separately.  (-Andrew 2022-8-16)
-
 
 ## Usage:
 
@@ -64,6 +55,17 @@ moltemplate.sh system.lt
 *(Once defined, molecules (like "PPS5") can be customized
 and combined with (bonded to) other molecules, as demonstrated in the
 [moltemplate manual](https://moltemplate.org/doc/moltemplate_manual.pdf#section.9).)*
+
+
+## *WARNING: THIS SOFTWARE DOES NOT WORK WITH MULTIPLE CHAINS*
+This software does not work with MOL2 files
+containing multiple "chains".
+*("Chains" are optional features located in the
+[SUBSTRUCTURE section of some MOL2 files](http://chemyang.ccnu.edu.cn/ccb/server/AIMMS/mol2.pdf).)*
+As a workaround, if your MOL2 file contains multiple chains,
+split it into multiple MOL2 files (one per chain).
+Then convert each file separately.  (-Andrew 2022-8-16)
+
 
 
 ## Details
