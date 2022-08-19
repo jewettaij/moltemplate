@@ -95,13 +95,13 @@ To get around these limitations:
 * Users can use use *3rd-party molecule-builder tools* such as:
 the [ATB](https://atb.uq.edu.au) database (LT format),
 [AmberTools](https://ambermd.org/AmberTools.php) (MOL2 format),
-[EMC](http://montecarlo.sourceforge.net/) (DATA format), and
+[EMC](http://montecarlo.sourceforge.net/) (DATA format),
 [LigParGen](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190) (DATA format), and
 [OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
 These tools can generate MOL2 or LAMMPS-DATA files
 which can be converted into moltemplate format (LT format) using
 [mol22lt.py](./doc/doc_mol22lt.md#mol22ltpy) or
-[ltemplify.py](./doc/doc_ltemplify.md#ltemplifypy)
+[ltemplify.py](./doc/doc_ltemplify.md#ltemplifypy).
 *(If you want to try and select the atom types
 manually instead of using 3rd-party tools, read
 [these suggestions](https://moltemplate.org/force_field_recommendations.html).)*
@@ -114,7 +114,7 @@ the [RED-server](https://upjv.q4md-forcefieldtools.org)
 is useful (which can generate a MOL2 file),
 *in addition to the tools listed above*.
 Alternatively, users can try using LAMMPS' built-in
-[fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature.
+[fix qeq](https://lammps.sandia.gov/doc/fix_qeq.html) feature.
 
 
 
