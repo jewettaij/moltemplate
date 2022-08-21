@@ -71,10 +71,10 @@ This repository includes approximately 50 [examples](./examples).
 Some of the moltemplate examples are also demonstrated (with pictures)
 [here](https://moltemplate.org/visual_examples.html).
 
-All moltemplate users should probably chapter 4 of the
+All moltemplate users should read chapter 4 of the
 [reference manual](./doc/moltemplate_manual.pdf)
 *(It's only 6 pages long. The first 3 chapters can be skipped.)*
-Then try chapters 6, 7, and 5.1-5.3.
+Chapters 6, 7, and 5.1-5.3 also also recommended.
 *(13 pages.)*
 
 In addition, there are also several
