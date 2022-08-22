@@ -119,16 +119,16 @@ tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="MASS")) {
 
 tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="BOND")) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.bond
 
-tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="ANGLE")) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.angle
+tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&(($1=="ANGL")||($1=="ANGLE"))) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.angle
 
-tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="DIHE")) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.dihedral
+tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&(($1=="DIHE")||($1=="DIHEDRAL"))) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.dihedral
 
-tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="IMPROPER")) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.improper
+tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&(($1=="IMPR") || ($1=="IMPROPER"))) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.improper
 
-tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="NONBON")) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.pair
+tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&(($1=="NONB")||($1=="NONBON")||($1=="NONBOND"))) {ignore=0} else {if (NF==1) {ignore=1} if (!ignore) {if (NF>0) print $0}}}' > ${FRCMOD_FILE}.pair
 
 
-./amberparm_atomdescr_to_lt.py < "${PARM_FILE}.mass" > "${PARM_FILE}.atomdescr.lt"
+./amberparm_atomdescr_to_lt.py < "${FRCMOD_FILE}.mass" > "${FRCMOD_FILE}.atomdescr.lt"
 ./amberparm_mass_to_lt.py < "${FRCMOD_FILE}.mass" > "${FRCMOD_FILE}.mass.lt"
 ./amberparm_pair_to_lt.py < "${FRCMOD_FILE}.pair" > "${FRCMOD_FILE}.pair.lt"
 ./amberparm_bond_to_lt.py < "${FRCMOD_FILE}.bond" > "${FRCMOD_FILE}.bond.lt"
@@ -142,7 +142,7 @@ tail -n +2 < "$FRCMOD_FILE" | awk 'BEGIN{ignore=1} {if ((NF==1)&&($1=="NONBON"))
 echo "#"
 echo "# --- Description of atom types ---"
 echo "#"
-cat "${PARM_FILE}.atomdescr.lt"
+cat "${FRCMOD_FILE}.atomdescr.lt"
 echo ""
 echo ""
 echo ""
