@@ -16,8 +16,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2022-8-16'
-g_version_str = '0.2.0'
+g_date_str = '2022-8-21'
+g_version_str = '0.2.1'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -102,11 +102,11 @@ def ConvertMol22Lt(fin = sys.stdin,
     id2charge = []
     id2coords = []
     bonds_orig = []  # the list of bonds in the MOL2 file in the original order
-    subId2atomNames = []
-    subId2subNameOrig = []
-    subId2subName = []
+    subId2atomNames   = defaultdict(dict)
+    subId2subNameOrig = {}
+    subId2subName     = {}
     subNameOrig2subId = defaultdict(list)
-    subNamesUsed = set([])
+    subNamesUsed      = set([])
 
     section_name = None
 
@@ -185,10 +185,6 @@ def ConvertMol22Lt(fin = sys.stdin,
             id2coords[atom_id][1] = y
             id2coords[atom_id][2] = z
             # Make sure the array with the info for each subunit is large enough
-            if sub_id >= len(subId2atomNames):
-                subId2atomNames += [{}] * (1 + sub_id - len(subId2atomNames))
-            if sub_id >= len(subId2subNameOrig):
-                subId2subNameOrig += [""] * (1 + sub_id - len(subId2subNameOrig))
             subId2subNameOrig[sub_id] = sub_name
             # For convenience, rename subId2atomNames[sub_id] to "atomName2id"
             atomName2id = subId2atomNames[sub_id]
@@ -226,13 +222,10 @@ def ConvertMol22Lt(fin = sys.stdin,
         assert(id2type[i] != "")
 
     # How many molecular subunits are present in this MOL2 file?
-    # The subunit-ID numbers in MOL2 files range from 1 to num_subunits.
-    #  So the subId2atomNames[num_subunits] is the last entry in that array.
-    #  This means the subId2atomNames[] array has num_subunits+1 entries,
-    #  since indexing in python begins at 0, not 1.)
-    num_subunits  = len(subId2atomNames)-1     # (the -1 is explained above)
+    num_subunits = len(subId2atomNames)
+    assert(num_subunits == len(subId2subNameOrig))
     global_bonds  = []
-    subId2subName = [""] * (num_subunits + 1)  # (the +1 is explained above)
+    subId2subName = {}
 
     # If the the MOL2 file contains multiple identical types of molecules
     # or molecular subunits, the resulting LT file will contain multiple
@@ -254,11 +247,9 @@ def ConvertMol22Lt(fin = sys.stdin,
     # (The new name will be a combination of the original subunit name
     # and the subunit-ID number.)
     # First count how many times the same name is used for different subIds
-    for sub_id in range(1, num_subunits+1):
-        subunit_name = subId2subNameOrig[sub_id]
-        subNameOrig2subId[subunit_name].append(sub_id)
-        if subunit_name == "":
-            continue  # skip subunitIDs with blank names (no entry present)
+    for sub_id, sub_name in subId2subNameOrig.items():
+        assert(sub_name != "")
+        subNameOrig2subId[sub_name].append(sub_id)
 
     # Then, for each subunit with a duplicated name, add a numeric suffix
     for sub_name, sub_ids in sorted(subNameOrig2subId.items(),
@@ -297,7 +288,7 @@ def ConvertMol22Lt(fin = sys.stdin,
     # Bonds between atoms in the same subunit should be grouped together
     # and written out as part of that molecular subunit's definition.
     # (Bonds between atoms in different subunits should be written out later.)
-    subId2bonds   = [[] for i in range(num_subunits+1)] #(+1 is explained above)
+    subId2bonds   = defaultdict(list)
     for ib in range(0, len(bonds_orig)):
         ia1, ia2, bond_type = bonds_orig[ib]
         if id2subId[ia1] == id2subId[ia2]:
@@ -326,8 +317,8 @@ def ConvertMol22Lt(fin = sys.stdin,
     # Now loop over all of the types of molecular subunits
     # defined in the MOL2 file, and convert them to moltemplate-style
     # molecule definitions (each containing a "Data Atoms" and "Bonds" section)
-    for sub_id in range(1, num_subunits+1):
-        subunit_name = subId2subName[sub_id]
+    for sub_id, sub_name in sorted(subId2subName.items(),
+                                   key = itemgetter(1)):
         # Print out the "Data Atoms" section of the LT file
         mol_id_name = "m"   # default molecule ID name
         # If the are multiple subunits which are part of the same molecule then
@@ -338,7 +329,7 @@ def ConvertMol22Lt(fin = sys.stdin,
         ###### Print the name of this type of molecular subunit followed by {}.
         # This will create a block of text enclosed in {} parenthesis
         # which defines the type of molecular subunit.
-        fout.write(subunit_name + ff_str + ' {\n'
+        fout.write(sub_name + ff_str + ' {\n'
                    '\n')
 
         ###### Print the "Data Atoms" section for this molecular subunit #####
@@ -385,7 +376,7 @@ def ConvertMol22Lt(fin = sys.stdin,
         fout.write('  } # Bonds section\n\n')
 
         # We are done with this molecular subunit's definition
-        fout.write('}  # '+subunit_name+'\n\n\n\n')
+        fout.write('}  # '+sub_name+'\n\n\n\n')
 
     # If there are multiple molecular subunits
     if ((object_name and object_name != "" and num_subunits>1) or
@@ -394,9 +385,9 @@ def ConvertMol22Lt(fin = sys.stdin,
         fout.write('# Now instantiate a copy of each molecular subunit we defined earlier.\n\n')
 
         assert((len(global_bonds) > 0) == (num_subunits > 1))
-        for sub_id in range(1, num_subunits+1):
-            subunit_name = subId2subName[sub_id]
-            fout.write(subunit_name + '_instance = new ' + subunit_name + '\n')
+        for sub_id, sub_name in sorted(subId2subName.items(),
+                                       key = itemgetter(1)):
+            fout.write(sub_name + '_instance = new ' + sub_name + '\n')
 
         if not (object_name and object_name != ""):
             usage_instructions = \
@@ -424,10 +415,10 @@ def ConvertMol22Lt(fin = sys.stdin,
             '# If you want to use these molecule(s) in a simulation, you must instantiate\n' +\
             '# copies of them.  To do that you would the "new" command.  For example:\n' +\
             '#\n'
-        for sub_id in range(1, num_subunits+1):
-            subunit_name = subId2subName[sub_id]
-            usage_instructions += '# '+subunit_name+'_instance' + \
-                ' = new ' + subunit_name + '\n'
+        for sub_id, sub_name in sorted(subId2subName.items(),
+                                       key = itemgetter(1)):
+            usage_instructions += '# '+sub_name+'_instance' + \
+                ' = new ' + sub_name + '\n'
         usage_instructions += \
             '#\n'+ \
             '# You could either put this command here, or in a separate file.\n' +\
