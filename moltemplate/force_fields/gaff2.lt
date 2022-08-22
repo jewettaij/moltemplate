@@ -14973,12 +14973,12 @@ GAFF2 {
   } # (end of Dihedrals By Type)
 
   write_once("In Settings") {
-    improper_coeff @improper:X-o-c-o cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-c-o cvff 10.5 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-ca-ha cvff 1.1 -1 2    # bsd.on C6H6 nmodes
     improper_coeff @improper:X-X-n-hn cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-n2-hn cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-na-hn cvff 1.1 -1 2    # JCC,7,(1986),230
+    improper_coeff @improper:X-o-c-o cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-c3-n-c3 cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-n2-ca-n2 cvff 10.5 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:c-c2-c2-c3 cvff 1.1 -1 2    # dac guess, 9/94
