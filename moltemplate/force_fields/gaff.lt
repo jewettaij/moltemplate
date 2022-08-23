@@ -12802,659 +12802,659 @@ GAFF {
   } # (end of Angles By Type)
 
   write_once("In Settings") {
-    dihedral_coeff @dihedral:X-c-c-X fourier 1.0 0.3 2 180.0 
-    dihedral_coeff @dihedral:X-c-c1-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c-cg-X fourier 1.0 0.0 2 180.0     # same as X-c-c1-X
-    dihedral_coeff @dihedral:X-c-ch-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c-c2-X fourier 1.0 2.175 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c-cu-X fourier 1.0 2.175 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c-cv-X fourier 1.0 2.175 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c-ce-X fourier 1.0 2.175 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c-cf-X fourier 1.0 2.175 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c-c3-X fourier 1.0 0.0 2 180.0     # JCC, 7, (1986), 230
-    dihedral_coeff @dihedral:X-c-cx-X fourier 1.0 0.0 2 180.0     # JCC, 7, (1986), 230
-    dihedral_coeff @dihedral:X-c-cy-X fourier 1.0 0.0 2 180.0     # JCC, 7, (1986), 230
-    dihedral_coeff @dihedral:X-c-ca-X fourier 1.0 1.0 2 180.0     # optimized by Junmei Wang, Jan-2013
-    dihedral_coeff @dihedral:X-c-cc-X fourier 1.0 2.875 2 180.0     # statistic value
-    dihedral_coeff @dihedral:X-c-cd-X fourier 1.0 2.875 2 180.0     # statistic value
-    dihedral_coeff @dihedral:X-c-n-X fourier 1.0 2.5 2 180.0     # AA,NMA (no c-n3, c-n4, c-nh)
-    dihedral_coeff @dihedral:X-c-n2-X fourier 1.0 4.15 2 180.0     # double bond, same as X-c2-n2-X
-    dihedral_coeff @dihedral:X-c-nc-X fourier 1.0 4.0 2 180.0     # same as X-C-NC-X
-    dihedral_coeff @dihedral:X-c-nd-X fourier 1.0 4.0 2 180.0     # same as X-C-NC-X
-    dihedral_coeff @dihedral:X-c-ne-X fourier 1.0 0.2 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-c-nf-X fourier 1.0 0.2 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-c-na-X fourier 2.0 1.45 2 180.0 0.35 4 180.0 
-    dihedral_coeff @dihedral:X-c-no-X fourier 1.0 0.45 2 180.0 
-    dihedral_coeff @dihedral:X-c-oh-X fourier 1.0 2.3 2 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:X-c-os-X fourier 1.0 2.7 2 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:X-c-p2-X fourier 1.0 6.65 2 180.0     # double bond, same as X-c2-p2-X
-    dihedral_coeff @dihedral:X-c-pc-X fourier 1.0 2.0 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-c-pd-X fourier 1.0 2.0 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-c-pe-X fourier 1.0 0.0 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-c-pf-X fourier 1.0 0.0 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-c-p3-X fourier 1.0 1.55 2 180.0 
-    dihedral_coeff @dihedral:X-c-p4-X fourier 1.0 1.35 2 180.0 
-    dihedral_coeff @dihedral:X-c-px-X fourier 1.0 1.35 2 180.0 
-    dihedral_coeff @dihedral:X-c-p5-X fourier 1.0 1.0 2 0.0 
-    dihedral_coeff @dihedral:X-c-py-X fourier 1.0 1.0 2 0.0 
-    dihedral_coeff @dihedral:X-c-sh-X fourier 1.0 2.25 2 180.0 
-    dihedral_coeff @dihedral:X-c-ss-X fourier 1.0 3.1 2 180.0 
-    dihedral_coeff @dihedral:X-c-s4-X fourier 1.0 0.2 2 180.0 
-    dihedral_coeff @dihedral:X-c-sx-X fourier 1.0 0.2 2 180.0 
-    dihedral_coeff @dihedral:X-c-s6-X fourier 1.0 0.5 2 0.0 
-    dihedral_coeff @dihedral:X-c-sy-X fourier 1.0 0.5 2 0.0 
-    dihedral_coeff @dihedral:X-c1-c1-X fourier 1.0 0.0 2 180.0     # for both triple and single bonds
-    dihedral_coeff @dihedral:X-c1-cg-X fourier 1.0 0.0 2 180.0     # for both triple and single bonds
-    dihedral_coeff @dihedral:X-c1-ch-X fourier 1.0 0.0 2 180.0     # for both triple and single bonds
-    dihedral_coeff @dihedral:X-cg-cg-X fourier 1.0 0.0 2 180.0     # for both triple and single bonds
-    dihedral_coeff @dihedral:X-ch-ch-X fourier 1.0 0.0 2 180.0     # for both triple and single bonds
-    dihedral_coeff @dihedral:X-cg-ch-X fourier 1.0 0.0 2 180.0     # for both triple and single bonds
-    dihedral_coeff @dihedral:X-c1-c2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-c3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-ca-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cc-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cd-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-ce-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cf-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cu-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cv-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cx-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-cy-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-n-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-n2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-n3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-n4-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-na-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-nb-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-nc-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-nd-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-ne-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-nf-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-nh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-no-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-oh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-os-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-p2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-pb-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-pc-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-pd-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-pe-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-pf-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-p3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-p4-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-px-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-p5-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-py-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-s2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-sh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-ss-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-s4-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-sx-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-s6-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c1-sy-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-c2-c2-X fourier 1.0 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c2-ce-X fourier 1.0 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-c2-cf-X fourier 1.0 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-ce-cf-X fourier 1.0 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-ce-ce-X fourier 1.0 1.0 2 180.0     # c2-c2 single bond, parm99
-    dihedral_coeff @dihedral:X-cf-cf-X fourier 1.0 1.0 2 180.0     # c2-c2 single bond, parm99
-    dihedral_coeff @dihedral:X-cc-cd-X fourier 1.0 4.0 2 180.0     # statistic value of parm94
-    dihedral_coeff @dihedral:X-cc-cc-X fourier 1.0 4.0 2 180.0     # statistic value of parm94
-    dihedral_coeff @dihedral:X-cd-cd-X fourier 1.0 4.0 2 180.0     # statistic value of parm94
-    dihedral_coeff @dihedral:X-c2-c3-X fourier 1.0 0.0 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c2-ca-X fourier 1.0 0.7 2 180.0     # optimized by Junmei Wang, March 2013
-    dihedral_coeff @dihedral:X-c2-n-X fourier 1.0 0.65 2 180.0 
-    dihedral_coeff @dihedral:X-c2-n2-X fourier 1.0 4.15 2 180.0     # double bond, parm99
-    dihedral_coeff @dihedral:X-c2-ne-X fourier 1.0 4.15 2 180.0     # double bond, parm99
-    dihedral_coeff @dihedral:X-c2-nf-X fourier 1.0 4.15 2 180.0     # double bond, parm99
-    dihedral_coeff @dihedral:X-ce-ne-X fourier 1.0 0.8 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-cf-nf-X fourier 1.0 0.8 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-c2-nc-X fourier 1.0 4.75 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-c2-nd-X fourier 1.0 4.75 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-cc-nd-X fourier 1.0 4.75 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-cd-nc-X fourier 1.0 4.75 2 180.0     # statistiv value from parm94
-    dihedral_coeff @dihedral:X-cc-nc-X fourier 1.0 4.75 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-cd-nd-X fourier 1.0 4.75 2 180.0     # statistiv value from parm94
-    dihedral_coeff @dihedral:X-c2-n3-X fourier 1.0 0.3 2 180.0     # intrpol.
-    dihedral_coeff @dihedral:X-c2-n4-X fourier 1.0 0.0 3 180.0     # intrpol.
-    dihedral_coeff @dihedral:X-c2-na-X fourier 1.0 0.625 2 180.0 
-    dihedral_coeff @dihedral:X-cc-na-X fourier 1.0 1.7 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-cd-na-X fourier 1.0 1.7 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-c2-nh-X fourier 1.0 0.675 2 180.0 
-    dihedral_coeff @dihedral:X-c2-no-X fourier 1.0 0.75 2 180.0 
-    dihedral_coeff @dihedral:X-c2-oh-X fourier 1.0 1.05 2 180.0     # parm99
-    dihedral_coeff @dihedral:X-c2-os-X fourier 1.0 1.05 2 180.0     # parm99
-    dihedral_coeff @dihedral:X-c2-p2-X fourier 1.0 6.65 2 180.0     # double bond
-    dihedral_coeff @dihedral:X-c2-pe-X fourier 1.0 6.65 2 180.0     # double bond
-    dihedral_coeff @dihedral:X-c2-pf-X fourier 1.0 6.65 2 180.0     # double bond
-    dihedral_coeff @dihedral:X-ce-pf-X fourier 1.0 6.65 2 180.0     # double bond
-    dihedral_coeff @dihedral:X-ce-pe-X fourier 1.0 0.95 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-cf-pf-X fourier 1.0 0.95 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-c2-pc-X fourier 1.0 4.75 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-c2-pd-X fourier 1.0 4.75 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-cc-pc-X fourier 1.0 4.75 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-cc-pd-X fourier 1.0 4.75 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-cd-pc-X fourier 1.0 4.75 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-cd-pd-X fourier 1.0 4.75 2 180.0     # estimated
-    dihedral_coeff @dihedral:X-c2-p3-X fourier 1.0 0.45 2 180.0 
-    dihedral_coeff @dihedral:X-c2-p4-X fourier 1.0 6.65 2 180.0     # c2=p4 double bond !!!
-    dihedral_coeff @dihedral:X-ce-p4-X fourier 1.0 6.65 2 180.0     # c2=p4 double bond !!!
-    dihedral_coeff @dihedral:X-cf-p4-X fourier 1.0 6.65 2 180.0     # c2=p4 double bond !!!
-    dihedral_coeff @dihedral:X-c2-px-X fourier 1.0 0.325 2 0.0 
-    dihedral_coeff @dihedral:X-ce-px-X fourier 1.0 0.325 2 0.0 
-    dihedral_coeff @dihedral:X-cf-px-X fourier 1.0 0.325 2 0.0 
-    dihedral_coeff @dihedral:X-c2-p5-X fourier 1.0 6.6499999999999995 2 180.0     # c2=p5 double bond !!!
-    dihedral_coeff @dihedral:X-ce-p5-X fourier 1.0 6.6499999999999995 2 180.0     # c2=p5 double bond !!!
-    dihedral_coeff @dihedral:X-cf-p5-X fourier 1.0 6.6499999999999995 2 180.0     # c2=p5 double bond !!!
-    dihedral_coeff @dihedral:X-c2-py-X fourier 1.0 1.4333333333333333 2 180.0 
-    dihedral_coeff @dihedral:X-ce-py-X fourier 1.0 1.4333333333333333 2 180.0 
-    dihedral_coeff @dihedral:X-cf-py-X fourier 1.0 1.4333333333333333 2 180.0 
-    dihedral_coeff @dihedral:X-c2-sh-X fourier 1.0 0.5 2 180.0 
-    dihedral_coeff @dihedral:X-c2-ss-X fourier 1.0 1.1 2 180.0 
-    dihedral_coeff @dihedral:X-c2-s4-X fourier 1.0 6.65 2 180.0     # c2=s4 double bond !!!
-    dihedral_coeff @dihedral:X-ce-s4-X fourier 1.0 6.65 2 180.0     # c2=s4 double bond !!!
-    dihedral_coeff @dihedral:X-cf-s4-X fourier 1.0 6.65 2 180.0     # c2=s4 double bond !!!
-    dihedral_coeff @dihedral:X-c2-sx-X fourier 1.0 0.6 2 0.0 
-    dihedral_coeff @dihedral:X-ce-sx-X fourier 1.0 0.6 2 0.0 
-    dihedral_coeff @dihedral:X-cf-sx-X fourier 1.0 0.6 2 0.0 
-    dihedral_coeff @dihedral:X-c2-s6-X fourier 1.0 6.6499999999999995 2 180.0     # c2=s6 double bond !!!
-    dihedral_coeff @dihedral:X-ce-s6-X fourier 1.0 6.6499999999999995 2 180.0     # c2=s6 double bond !!!
-    dihedral_coeff @dihedral:X-cf-s6-X fourier 1.0 6.6499999999999995 2 180.0     # c2=s6 double bond !!!
-    dihedral_coeff @dihedral:X-c2-sy-X fourier 1.0 1.2666666666666666 2 180.0 
-    dihedral_coeff @dihedral:X-ce-sy-X fourier 1.0 1.2666666666666666 2 180.0 
-    dihedral_coeff @dihedral:X-cf-sy-X fourier 1.0 1.2666666666666666 2 180.0 
-    dihedral_coeff @dihedral:X-c3-c3-X fourier 1.0 0.15555555555555556 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-cx-cx-X fourier 1.0 0.15555555555555556 3 0.0     # same as X-c3-c3-X
-    dihedral_coeff @dihedral:X-cy-cy-X fourier 1.0 0.15555555555555556 3 0.0     # same as X-c3-c3-X
-    dihedral_coeff @dihedral:X-c3-ca-X fourier 1.0 0.0 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-n-X fourier 1.0 0.0 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-cx-n-X fourier 1.0 0.0 2 0.0     # same as X-c3-n-X
-    dihedral_coeff @dihedral:X-cy-n-X fourier 1.0 0.0 2 0.0     # same as X-c3-n-X
-    dihedral_coeff @dihedral:X-c3-n2-X fourier 1.0 0.0 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-ne-X fourier 1.0 0.0 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-nf-X fourier 1.0 0.0 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-n3-X fourier 1.0 0.3 3 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:X-c3-n4-X fourier 1.0 0.15555555555555556 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-na-X fourier 1.0 0.0 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-nh-X fourier 1.0 0.0 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-no-X fourier 1.0 0.0 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-oh-X fourier 1.0 0.16666666666666666 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-os-X fourier 1.0 0.3833333333333333 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-p2-X fourier 1.0 0.26666666666666666 2 180.0 
-    dihedral_coeff @dihedral:X-c3-pe-X fourier 1.0 0.26666666666666666 2 180.0 
-    dihedral_coeff @dihedral:X-c3-pf-X fourier 1.0 0.26666666666666666 2 180.0 
-    dihedral_coeff @dihedral:X-c3-p3-X fourier 1.0 0.13333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-c3-p4-X fourier 1.0 0.13333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-c3-px-X fourier 1.0 0.13333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-c3-p5-X fourier 1.0 0.022222222222222223 3 0.0 
-    dihedral_coeff @dihedral:X-c3-py-X fourier 1.0 0.022222222222222223 3 0.0 
-    dihedral_coeff @dihedral:X-c3-sh-X fourier 1.0 0.25 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-ss-X fourier 1.0 0.3333333333333333 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:X-c3-s4-X fourier 1.0 0.19999999999999998 3 0.0 
-    dihedral_coeff @dihedral:X-c3-sx-X fourier 1.0 0.19999999999999998 3 0.0 
-    dihedral_coeff @dihedral:X-c3-s6-X fourier 1.0 0.14444444444444446 3 0.0 
-    dihedral_coeff @dihedral:X-c3-sy-X fourier 1.0 0.14444444444444446 3 0.0 
-    dihedral_coeff @dihedral:X-c3-cc-X fourier 1.0 0.0 3 0.0     # same as X-c3-ca-X
-    dihedral_coeff @dihedral:X-c3-cd-X fourier 1.0 0.0 3 0.0     # same as X-c3-ca-X
-    dihedral_coeff @dihedral:X-ca-ca-X fourier 1.0 3.625 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-ca-cp-X fourier 1.0 3.625 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-ca-cq-X fourier 1.0 3.625 2 180.0     # intrpol.bsd.on C6H6
-    dihedral_coeff @dihedral:X-cp-cp-X fourier 1.0 1.0 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-cq-cq-X fourier 1.0 1.0 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-ca-n-X fourier 1.0 0.45 2 180.0 
-    dihedral_coeff @dihedral:X-ca-n2-X fourier 1.0 0.0 3 180.0 
-    dihedral_coeff @dihedral:X-ca-ne-X fourier 1.0 0.0 3 180.0 
-    dihedral_coeff @dihedral:X-ca-nf-X fourier 1.0 0.0 3 180.0 
-    dihedral_coeff @dihedral:X-ca-n4-X fourier 1.0 1.75 2 0.0 
-    dihedral_coeff @dihedral:X-ca-na-X fourier 1.0 0.3 2 180.0 
-    dihedral_coeff @dihedral:X-ca-nb-X fourier 1.0 4.8 2 180.0     # same as X-CA-NC-X
-    dihedral_coeff @dihedral:X-ca-nc-X fourier 1.0 4.8 2 180.0     # same as X-CA-NC-X
-    dihedral_coeff @dihedral:X-ca-nd-X fourier 1.0 4.8 2 180.0     # same as X-CA-NC-X
-    dihedral_coeff @dihedral:X-ca-nh-X fourier 1.0 1.05 2 180.0 
-    dihedral_coeff @dihedral:X-cc-nh-X fourier 1.0 1.05 2 180.0     # same as X-ca-nh-X
-    dihedral_coeff @dihedral:X-cd-nh-X fourier 1.0 1.05 2 180.0     # same as X-ca-nh-X
-    dihedral_coeff @dihedral:X-ca-no-X fourier 1.0 0.6 2 180.0 
-    dihedral_coeff @dihedral:X-ca-oh-X fourier 1.0 0.9 2 180.0     # Junmei et al, 99
-    dihedral_coeff @dihedral:X-ca-os-X fourier 1.0 0.9 2 180.0     # same as X-ca-oh-X
-    dihedral_coeff @dihedral:X-ca-p2-X fourier 1.0 0.6 2 180.0 
-    dihedral_coeff @dihedral:X-ca-pe-X fourier 1.0 0.6 2 180.0     # same as X-ca-p2-X
-    dihedral_coeff @dihedral:X-ca-pf-X fourier 1.0 0.6 2 180.0     # same as X-ca-p2-X
-    dihedral_coeff @dihedral:X-ca-pc-X fourier 1.0 4.8 2 180.0     # estimated, intrpol
-    dihedral_coeff @dihedral:X-ca-pd-X fourier 1.0 4.8 2 180.0     # estimated, intrpol
-    dihedral_coeff @dihedral:X-ca-p3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-ca-p4-X fourier 1.0 0.525 2 180.0 
-    dihedral_coeff @dihedral:X-ca-px-X fourier 1.0 0.525 2 180.0     # estimated, same as X-ca-p4-X
-    dihedral_coeff @dihedral:X-ca-p5-X fourier 1.0 1.4666666666666668 2 180.0 
-    dihedral_coeff @dihedral:X-ca-py-X fourier 1.0 1.4666666666666668 2 180.0     # estimated, same as X-ca-p5-X
-    dihedral_coeff @dihedral:X-ca-sh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-ca-ss-X fourier 1.0 0.4 2 180.0 
-    dihedral_coeff @dihedral:X-ca-s4-X fourier 1.0 0.3 2 0.0 
-    dihedral_coeff @dihedral:X-ca-sx-X fourier 1.0 0.3 2 0.0     # estimated, same as X-ca-s4-X
-    dihedral_coeff @dihedral:X-ca-s6-X fourier 1.0 1.3 2 180.0 
-    dihedral_coeff @dihedral:X-ca-sy-X fourier 1.0 1.3 2 180.0     # estimated, same as X-ca-s6-X
-    dihedral_coeff @dihedral:X-n-cc-X fourier 1.0 1.65 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-n-cd-X fourier 1.0 1.65 2 180.0     # statistic value from parm94
-    dihedral_coeff @dihedral:X-n-n-X fourier 1.0 1.15 2 0.0 
-    dihedral_coeff @dihedral:X-n-n2-X fourier 1.0 0.4 2 0.0 
-    dihedral_coeff @dihedral:X-n-ne-X fourier 1.0 0.4 2 0.0 
-    dihedral_coeff @dihedral:X-n-nf-X fourier 1.0 0.4 2 0.0 
-    dihedral_coeff @dihedral:X-n-n3-X fourier 1.0 1.075 2 0.0 
-    dihedral_coeff @dihedral:X-n-n4-X fourier 1.0 0.95 2 0.0 
-    dihedral_coeff @dihedral:X-n-na-X fourier 1.0 0.7 2 0.0 
-    dihedral_coeff @dihedral:X-n-nc-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n-nd-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n-nh-X fourier 1.0 1.1 2 0.0 
-    dihedral_coeff @dihedral:X-n-no-X fourier 1.0 1.375 2 180.0 
-    dihedral_coeff @dihedral:X-n-oh-X fourier 1.0 1.5 2 0.0 
-    dihedral_coeff @dihedral:X-n-os-X fourier 1.0 1.1 2 0.0 
-    dihedral_coeff @dihedral:X-n-p2-X fourier 1.0 1.0 2 180.0 
-    dihedral_coeff @dihedral:X-n-pe-X fourier 1.0 1.0 2 180.0 
-    dihedral_coeff @dihedral:X-n-pf-X fourier 1.0 1.0 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n-pc-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n-pd-X fourier 1.0 4.8 2 180.0 
-    dihedral_coeff @dihedral:X-n-p3-X fourier 1.0 2.25 2 0.0 
-    dihedral_coeff @dihedral:X-n-p4-X fourier 1.0 0.325 2 0.0 
-    dihedral_coeff @dihedral:X-n-px-X fourier 1.0 0.325 2 0.0 
-    dihedral_coeff @dihedral:X-n-p5-X fourier 1.0 2.1999999999999997 2 180.0 
-    dihedral_coeff @dihedral:X-n-py-X fourier 1.0 2.1999999999999997 2 180.0 
-    dihedral_coeff @dihedral:X-n-sh-X fourier 1.0 1.1 2 0.0 
-    dihedral_coeff @dihedral:X-n-ss-X fourier 1.0 1.5 2 0.0 
-    dihedral_coeff @dihedral:X-n-s4-X fourier 1.0 1.5 3 0.0 
-    dihedral_coeff @dihedral:X-n-sx-X fourier 1.0 1.5 3 0.0 
-    dihedral_coeff @dihedral:X-n-s6-X fourier 1.0 1.0999999999999999 2 180.0 
-    dihedral_coeff @dihedral:X-n-sy-X fourier 1.0 1.0999999999999999 2 180.0 
-    dihedral_coeff @dihedral:X-n1-c2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-c3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-ca-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cc-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cd-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-ce-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cf-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cu-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cv-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cx-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-cy-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-n-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-n1-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-n2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-n3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-n4-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-na-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-nb-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-nc-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-nd-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-ne-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-nf-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-nh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-no-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-oh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-os-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-p2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-pb-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-pc-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-pd-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-pe-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-pf-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-p3-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-p4-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-px-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-p5-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-py-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-s2-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-sh-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-ss-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-s4-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-sx-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-s6-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n1-sy-X fourier 1.0 0.0 2 180.0 
-    dihedral_coeff @dihedral:X-n2-n2-X fourier 2.0 3.0 2 180.0 2.8 1 0.0     # double bond
-    dihedral_coeff @dihedral:X-n2-ne-X fourier 2.0 3.0 2 180.0 2.8 1 0.0     # double bond
-    dihedral_coeff @dihedral:X-n2-nf-X fourier 2.0 3.0 2 180.0 2.8 1 0.0     # double bond
-    dihedral_coeff @dihedral:X-ne-nf-X fourier 2.0 3.0 2 180.0 2.8 1 0.0     # double bond
-    dihedral_coeff @dihedral:X-ne-ne-X fourier 1.0 1.2 2 180.0     # single bond, intrpol
-    dihedral_coeff @dihedral:X-nf-nf-X fourier 1.0 1.2 2 180.0     # single bond, intrpol
-    dihedral_coeff @dihedral:X-nc-nc-X fourier 1.0 4.0 2 180.0     # estimated, intrpol
-    dihedral_coeff @dihedral:X-nd-nd-X fourier 1.0 4.0 2 180.0     # estimated, intrpol
-    dihedral_coeff @dihedral:X-nc-nd-X fourier 1.0 4.0 2 180.0     # estimated, intrpol
-    dihedral_coeff @dihedral:X-n2-nc-X fourier 2.0 3.0 2 180.0 2.8 1 0.0     # same as X-n2-n2-X
-    dihedral_coeff @dihedral:X-n2-nd-X fourier 2.0 3.0 2 180.0 2.8 1 0.0     # same as X-n2-n2-X
-    dihedral_coeff @dihedral:X-n2-n3-X fourier 1.0 6.1 2 180.0 
-    dihedral_coeff @dihedral:X-ne-n3-X fourier 1.0 6.1 2 180.0 
-    dihedral_coeff @dihedral:X-nf-n3-X fourier 1.0 6.1 2 180.0 
-    dihedral_coeff @dihedral:X-n2-n4-X fourier 1.0 8.0 2 180.0 
-    dihedral_coeff @dihedral:X-ne-n4-X fourier 1.0 8.0 2 180.0 
-    dihedral_coeff @dihedral:X-nf-n4-X fourier 1.0 8.0 2 180.0 
-    dihedral_coeff @dihedral:X-n2-na-X fourier 1.0 1.7 2 180.0 
-    dihedral_coeff @dihedral:X-ne-na-X fourier 1.0 1.7 2 180.0 
-    dihedral_coeff @dihedral:X-nf-na-X fourier 1.0 1.7 2 180.0 
-    dihedral_coeff @dihedral:X-na-nc-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-na-nd-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n2-nh-X fourier 1.0 2.8 2 180.0 
-    dihedral_coeff @dihedral:X-ne-nh-X fourier 1.0 2.8 2 180.0 
-    dihedral_coeff @dihedral:X-nf-nh-X fourier 1.0 2.8 2 180.0 
-    dihedral_coeff @dihedral:X-n2-no-X fourier 1.0 0.75 2 180.0 
-    dihedral_coeff @dihedral:X-ne-no-X fourier 1.0 0.75 2 180.0 
-    dihedral_coeff @dihedral:X-nf-no-X fourier 1.0 0.75 2 180.0 
-    dihedral_coeff @dihedral:X-n2-oh-X fourier 1.0 3.2 2 180.0 
-    dihedral_coeff @dihedral:X-ne-oh-X fourier 1.0 3.2 2 180.0 
-    dihedral_coeff @dihedral:X-nf-oh-X fourier 1.0 3.2 2 180.0 
-    dihedral_coeff @dihedral:X-n2-os-X fourier 1.0 3.0 2 180.0 
-    dihedral_coeff @dihedral:X-ne-os-X fourier 1.0 3.0 2 180.0 
-    dihedral_coeff @dihedral:X-nf-os-X fourier 1.0 3.0 2 180.0 
-    dihedral_coeff @dihedral:X-nc-os-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nc-ss-X fourier 1.0 4.8 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n2-p2-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n2-pe-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n2-pf-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-ne-pf-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n2-pc-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-n2-pd-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nc-p2-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nd-p2-X fourier 1.0 5.4 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nc-pc-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nd-pd-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nd-pc-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-nc-pd-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-ne-pe-X fourier 1.0 0.6 1 0.0     # single bond
-    dihedral_coeff @dihedral:X-nf-pf-X fourier 1.0 0.6 1 0.0     # single bond
-    dihedral_coeff @dihedral:X-n2-p3-X fourier 1.0 2.1 2 180.0 
-    dihedral_coeff @dihedral:X-n2-p4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-ne-p4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-nf-p4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-n2-p5-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-ne-p5-X fourier 1.0 1.0 3 180.0 
-    dihedral_coeff @dihedral:X-nf-p5-X fourier 1.0 1.0 3 180.0 
-    dihedral_coeff @dihedral:X-ne-px-X fourier 1.0 1.0 3 180.0 
-    dihedral_coeff @dihedral:X-nf-px-X fourier 1.0 1.0 3 180.0 
-    dihedral_coeff @dihedral:X-n2-sh-X fourier 1.0 2.1 2 180.0 
-    dihedral_coeff @dihedral:X-ne-sh-X fourier 1.0 2.1 2 180.0 
-    dihedral_coeff @dihedral:X-nf-sh-X fourier 1.0 2.1 2 180.0 
-    dihedral_coeff @dihedral:X-n2-ss-X fourier 2.0 2.8 2 180.0 1.3 1 180.0 
-    dihedral_coeff @dihedral:X-ne-ss-X fourier 2.0 2.8 2 180.0 1.3 1 180.0 
-    dihedral_coeff @dihedral:X-nf-ss-X fourier 2.0 2.8 2 180.0 1.3 1 180.0 
-    dihedral_coeff @dihedral:X-n2-s4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-ne-sx-X fourier 1.0 1.5 3 180.0 
-    dihedral_coeff @dihedral:X-nf-sx-X fourier 1.0 1.5 3 180.0 
-    dihedral_coeff @dihedral:X-n2-s6-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-ne-sy-X fourier 2.0 0.5 3 180.0 6.8 1 180.0 
-    dihedral_coeff @dihedral:X-nf-sy-X fourier 2.0 0.5 3 180.0 6.8 1 180.0 
-    dihedral_coeff @dihedral:X-n3-n3-X fourier 1.0 2.25 2 0.0 
-    dihedral_coeff @dihedral:X-n3-n4-X fourier 1.0 0.25 3 0.0 
-    dihedral_coeff @dihedral:X-n3-na-X fourier 1.0 1.6 2 0.0 
-    dihedral_coeff @dihedral:X-n3-nh-X fourier 1.0 1.9 2 0.0 
-    dihedral_coeff @dihedral:X-n3-no-X fourier 1.0 4.0 2 180.0 
-    dihedral_coeff @dihedral:X-n3-oh-X fourier 1.0 2.2 2 0.0 
-    dihedral_coeff @dihedral:X-n3-os-X fourier 1.0 1.8 2 0.0 
-    dihedral_coeff @dihedral:X-n3-p2-X fourier 1.0 3.2 2 180.0 
-    dihedral_coeff @dihedral:X-n3-pe-X fourier 1.0 3.2 2 180.0 
-    dihedral_coeff @dihedral:X-n3-pf-X fourier 1.0 3.2 2 180.0 
-    dihedral_coeff @dihedral:X-n3-p3-X fourier 1.0 2.35 2 0.0 
-    dihedral_coeff @dihedral:X-n3-p4-X fourier 1.0 2.1 2 180.0 
-    dihedral_coeff @dihedral:X-n3-px-X fourier 1.0 2.1 2 180.0 
-    dihedral_coeff @dihedral:X-n3-p5-X fourier 1.0 3.0 2 180.0 
-    dihedral_coeff @dihedral:X-n3-py-X fourier 1.0 3.0 2 180.0 
-    dihedral_coeff @dihedral:X-n3-sh-X fourier 1.0 3.1 2 0.0 
-    dihedral_coeff @dihedral:X-n3-ss-X fourier 1.0 2.6 2 0.0 
-    dihedral_coeff @dihedral:X-n3-s4-X fourier 1.0 3.75 2 0.0 
-    dihedral_coeff @dihedral:X-n3-sx-X fourier 1.0 3.75 2 0.0 
-    dihedral_coeff @dihedral:X-n3-s6-X fourier 1.0 3.1333333333333333 2 0.0 
-    dihedral_coeff @dihedral:X-n3-sy-X fourier 1.0 3.1333333333333333 2 0.0 
-    dihedral_coeff @dihedral:X-n4-n4-X fourier 1.0 0.18888888888888888 3 0.0 
-    dihedral_coeff @dihedral:X-n4-na-X fourier 1.0 0.2333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-n4-nh-X fourier 1.0 0.18333333333333335 3 0.0 
-    dihedral_coeff @dihedral:X-n4-no-X fourier 1.0 0.08333333333333333 3 180.0 
-    dihedral_coeff @dihedral:X-n4-oh-X fourier 1.0 0.3333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-n4-os-X fourier 1.0 0.5666666666666667 3 0.0 
-    dihedral_coeff @dihedral:X-n4-p2-X fourier 1.0 0.16666666666666666 3 180.0 
-    dihedral_coeff @dihedral:X-n4-pe-X fourier 1.0 0.16666666666666666 3 180.0 
-    dihedral_coeff @dihedral:X-n4-pf-X fourier 1.0 0.16666666666666666 3 180.0 
-    dihedral_coeff @dihedral:X-n4-p3-X fourier 1.0 0.15 3 0.0 
-    dihedral_coeff @dihedral:X-n4-p4-X fourier 1.0 0.05 3 0.0 
-    dihedral_coeff @dihedral:X-n4-px-X fourier 1.0 0.05 3 0.0 
-    dihedral_coeff @dihedral:X-n4-p5-X fourier 1.0 0.08888888888888889 3 0.0 
-    dihedral_coeff @dihedral:X-n4-py-X fourier 1.0 0.08888888888888889 3 0.0 
-    dihedral_coeff @dihedral:X-n4-sh-X fourier 1.0 0.6666666666666666 3 0.0 
-    dihedral_coeff @dihedral:X-n4-ss-X fourier 1.0 0.3333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-n4-s4-X fourier 1.0 0.2833333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-n4-sx-X fourier 1.0 0.2833333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-n4-s6-X fourier 1.0 0.13333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-n4-sy-X fourier 1.0 0.13333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-na-na-X fourier 1.0 0.9 2 0.0 
-    dihedral_coeff @dihedral:X-na-nh-X fourier 1.0 1.2 2 0.0 
-    dihedral_coeff @dihedral:X-na-no-X fourier 1.0 6.0 2 180.0 
-    dihedral_coeff @dihedral:X-na-oh-X fourier 1.0 1.0 2 0.0 
-    dihedral_coeff @dihedral:X-na-os-X fourier 1.0 0.65 2 0.0 
-    dihedral_coeff @dihedral:X-na-p2-X fourier 1.0 1.0 2 180.0 
-    dihedral_coeff @dihedral:X-na-pe-X fourier 1.0 1.0 2 180.0 
-    dihedral_coeff @dihedral:X-na-pf-X fourier 1.0 1.0 2 180.0 
-    dihedral_coeff @dihedral:X-na-p3-X fourier 1.0 1.45 2 0.0 
-    dihedral_coeff @dihedral:X-na-p4-X fourier 1.0 1.1 3 0.0 
-    dihedral_coeff @dihedral:X-na-px-X fourier 1.0 1.1 3 0.0 
-    dihedral_coeff @dihedral:X-na-p5-X fourier 1.0 0.8333333333333334 2 180.0 
-    dihedral_coeff @dihedral:X-na-py-X fourier 1.0 0.8333333333333334 2 180.0 
-    dihedral_coeff @dihedral:X-na-sh-X fourier 1.0 1.8 2 0.0 
-    dihedral_coeff @dihedral:X-na-ss-X fourier 1.0 7.8 2 0.0 
-    dihedral_coeff @dihedral:X-na-s4-X fourier 1.0 1.05 2 0.0 
-    dihedral_coeff @dihedral:X-na-sx-X fourier 1.0 1.05 2 0.0 
-    dihedral_coeff @dihedral:X-na-s6-X fourier 1.0 3.6666666666666665 2 180.0 
-    dihedral_coeff @dihedral:X-na-sy-X fourier 1.0 3.6666666666666665 2 180.0 
-    dihedral_coeff @dihedral:X-nh-nh-X fourier 1.0 1.8 3 180.0 
-    dihedral_coeff @dihedral:X-nh-no-X fourier 1.0 2.55 2 180.0 
-    dihedral_coeff @dihedral:X-nh-oh-X fourier 1.0 1.5 2 0.0 
-    dihedral_coeff @dihedral:X-nh-os-X fourier 1.0 1.5 1 0.0 
-    dihedral_coeff @dihedral:X-nh-p2-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-nh-pe-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-nh-pf-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-nh-p3-X fourier 1.0 2.35 2 0.0 
-    dihedral_coeff @dihedral:X-nh-p4-X fourier 1.0 1.175 3 0.0 
-    dihedral_coeff @dihedral:X-nh-px-X fourier 1.0 1.175 3 0.0 
-    dihedral_coeff @dihedral:X-nh-p5-X fourier 1.0 0.7999999999999999 2 0.0 
-    dihedral_coeff @dihedral:X-nh-py-X fourier 1.0 0.7999999999999999 2 0.0 
-    dihedral_coeff @dihedral:X-nh-sh-X fourier 1.0 1.6 2 0.0 
-    dihedral_coeff @dihedral:X-nh-ss-X fourier 1.0 2.1 2 0.0 
-    dihedral_coeff @dihedral:X-nh-s4-X fourier 2.0 0.75 2 0.0 0.1 3 180.0 
-    dihedral_coeff @dihedral:X-nh-sx-X fourier 2.0 0.75 2 0.0 0.1 3 180.0 
-    dihedral_coeff @dihedral:X-nh-s6-X fourier 1.0 0.09999999999999999 2 180.0 
-    dihedral_coeff @dihedral:X-nh-sy-X fourier 1.0 0.09999999999999999 2 180.0 
-    dihedral_coeff @dihedral:X-no-no-X fourier 2.0 0.4 4 180.0 1.8 2 180.0 
-    dihedral_coeff @dihedral:X-no-oh-X fourier 1.0 3.9 2 180.0 
-    dihedral_coeff @dihedral:X-no-os-X fourier 1.0 3.0 2 180.0 
-    dihedral_coeff @dihedral:X-no-p2-X fourier 1.0 0.3 2 180.0 
-    dihedral_coeff @dihedral:X-no-pe-X fourier 1.0 0.3 2 180.0 
-    dihedral_coeff @dihedral:X-no-pf-X fourier 1.0 0.3 2 180.0 
-    dihedral_coeff @dihedral:X-no-p3-X fourier 1.0 1.9 2 180.0 
-    dihedral_coeff @dihedral:X-no-p4-X fourier 1.0 0.575 2 180.0 
-    dihedral_coeff @dihedral:X-no-px-X fourier 1.0 0.575 2 180.0 
-    dihedral_coeff @dihedral:X-no-p5-X fourier 2.0 2.4 2 0.0 0.39999999999999997 3 0.0 
-    dihedral_coeff @dihedral:X-no-py-X fourier 2.0 2.4 2 0.0 0.39999999999999997 3 0.0 
-    dihedral_coeff @dihedral:X-no-sh-X fourier 1.0 2.3 2 180.0 
-    dihedral_coeff @dihedral:X-no-ss-X fourier 1.0 2.7 2 180.0 
-    dihedral_coeff @dihedral:X-no-s4-X fourier 1.0 2.6 2 180.0 
-    dihedral_coeff @dihedral:X-no-sx-X fourier 1.0 2.6 2 180.0 
-    dihedral_coeff @dihedral:X-no-s6-X fourier 1.0 0.3333333333333333 2 0.0 
-    dihedral_coeff @dihedral:X-no-sy-X fourier 1.0 0.3333333333333333 2 0.0 
-    dihedral_coeff @dihedral:X-oh-oh-X fourier 1.0 1.6 2 0.0 
-    dihedral_coeff @dihedral:X-oh-os-X fourier 1.0 1.6 2 0.0 
-    dihedral_coeff @dihedral:X-oh-p2-X fourier 1.0 1.5 2 180.0 
-    dihedral_coeff @dihedral:X-oh-pe-X fourier 1.0 1.5 2 180.0 
-    dihedral_coeff @dihedral:X-oh-pf-X fourier 1.0 1.5 2 180.0 
-    dihedral_coeff @dihedral:X-oh-p3-X fourier 1.0 0.4 3 180.0 
-    dihedral_coeff @dihedral:X-oh-p4-X fourier 1.0 0.7 1 0.0 
-    dihedral_coeff @dihedral:X-oh-px-X fourier 1.0 0.7 1 0.0 
-    dihedral_coeff @dihedral:X-oh-p5-X fourier 1.0 0.5333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-oh-py-X fourier 1.0 0.5333333333333333 3 0.0 
-    dihedral_coeff @dihedral:X-oh-sh-X fourier 1.0 2.4 2 0.0 
-    dihedral_coeff @dihedral:X-oh-ss-X fourier 1.0 2.4 2 0.0 
-    dihedral_coeff @dihedral:X-oh-s4-X fourier 1.0 5.0 1 0.0 
-    dihedral_coeff @dihedral:X-oh-sx-X fourier 1.0 5.0 1 0.0 
-    dihedral_coeff @dihedral:X-oh-s6-X fourier 1.0 9.5 1 180.0 
-    dihedral_coeff @dihedral:X-oh-sy-X fourier 1.0 9.5 1 180.0 
-    dihedral_coeff @dihedral:X-os-os-X fourier 1.0 1.0 1 0.0 
-    dihedral_coeff @dihedral:X-os-ss-X fourier 1.0 2.2 2 0.0 
-    dihedral_coeff @dihedral:X-os-sh-X fourier 1.0 1.8 2 0.0 
-    dihedral_coeff @dihedral:X-os-s4-X fourier 1.0 1.65 3 0.0 
-    dihedral_coeff @dihedral:X-os-sx-X fourier 1.0 1.65 3 0.0 
-    dihedral_coeff @dihedral:X-os-s6-X fourier 1.0 1.2 2 180.0 
-    dihedral_coeff @dihedral:X-os-sy-X fourier 1.0 1.2 2 180.0 
-    dihedral_coeff @dihedral:X-os-p2-X fourier 2.0 3.0 2 180.0 2.0 1 180.0 
-    dihedral_coeff @dihedral:X-os-pe-X fourier 2.0 3.0 2 180.0 2.0 1 180.0 
-    dihedral_coeff @dihedral:X-os-pf-X fourier 2.0 3.0 2 180.0 2.0 1 180.0 
-    dihedral_coeff @dihedral:X-os-p3-X fourier 1.0 2.2 2 0.0 
-    dihedral_coeff @dihedral:X-os-p4-X fourier 1.0 1.05 2 180.0 
-    dihedral_coeff @dihedral:X-os-px-X fourier 1.0 1.05 2 180.0 
-    dihedral_coeff @dihedral:X-os-p5-X fourier 1.0 0.7999999999999999 2 0.0 
-    dihedral_coeff @dihedral:X-os-py-X fourier 1.0 0.7999999999999999 2 0.0 
-    dihedral_coeff @dihedral:X-p2-p2-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-p2-pe-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-p2-pf-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-p2-pc-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-p2-pd-X fourier 1.0 6.6 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-pe-pe-X fourier 1.0 1.2 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-pf-pf-X fourier 1.0 1.2 2 180.0     # single bond
-    dihedral_coeff @dihedral:X-pc-pc-X fourier 1.0 7.2 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-pd-pd-X fourier 1.0 7.2 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-pc-pd-X fourier 1.0 7.2 2 180.0     # estimated, intrpol.
-    dihedral_coeff @dihedral:X-p2-p3-X fourier 1.0 1.2 1 0.0 
-    dihedral_coeff @dihedral:X-pe-p3-X fourier 1.0 1.2 1 0.0 
-    dihedral_coeff @dihedral:X-pf-p3-X fourier 1.0 1.2 1 0.0 
-    dihedral_coeff @dihedral:X-p2-p4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-pe-px-X fourier 1.0 2.45 2 0.0 
-    dihedral_coeff @dihedral:X-pf-px-X fourier 1.0 2.45 2 0.0 
-    dihedral_coeff @dihedral:X-p2-p5-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-pe-py-X fourier 1.0 1.9000000000000001 1 0.0 
-    dihedral_coeff @dihedral:X-pf-py-X fourier 1.0 1.9000000000000001 1 0.0 
-    dihedral_coeff @dihedral:X-p2-sh-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-pe-sh-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-pf-sh-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-p2-ss-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-pe-ss-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-pf-ss-X fourier 1.0 1.4 2 180.0 
-    dihedral_coeff @dihedral:X-p2-s4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-pe-sx-X fourier 1.0 1.5 2 0.0 
-    dihedral_coeff @dihedral:X-pf-sx-X fourier 1.0 1.5 2 0.0 
-    dihedral_coeff @dihedral:X-p2-s6-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-pe-sy-X fourier 1.0 0.39999999999999997 3 180.0 
-    dihedral_coeff @dihedral:X-pf-sy-X fourier 1.0 0.39999999999999997 3 180.0 
-    dihedral_coeff @dihedral:X-p3-p3-X fourier 1.0 0.5 3 0.0 
-    dihedral_coeff @dihedral:X-p3-p4-X fourier 1.0 0.9 1 0.0 
-    dihedral_coeff @dihedral:X-p3-px-X fourier 1.0 0.9 1 0.0 
-    dihedral_coeff @dihedral:X-p3-p5-X fourier 1.0 1.8333333333333333 2 180.0 
-    dihedral_coeff @dihedral:X-p3-py-X fourier 1.0 1.8333333333333333 2 180.0 
-    dihedral_coeff @dihedral:X-p3-sh-X fourier 1.0 4.6 2 0.0 
-    dihedral_coeff @dihedral:X-p3-ss-X fourier 1.0 1.15 3 0.0 
-    dihedral_coeff @dihedral:X-p3-s4-X fourier 1.0 3.85 2 0.0 
-    dihedral_coeff @dihedral:X-p3-sx-X fourier 1.0 3.85 2 0.0 
-    dihedral_coeff @dihedral:X-p3-s6-X fourier 1.0 0.26666666666666666 3 0.0 
-    dihedral_coeff @dihedral:X-p3-sy-X fourier 1.0 0.26666666666666666 3 0.0 
-    dihedral_coeff @dihedral:X-p4-p4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-px-px-X fourier 1.0 1.45 2 180.0 
-    dihedral_coeff @dihedral:X-p4-p5-X fourier 1.0 6.6499999999999995 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-px-py-X fourier 1.0 0.31666666666666665 2 180.0 
-    dihedral_coeff @dihedral:X-p4-s4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-px-sx-X fourier 1.0 0.85 1 0.0 
-    dihedral_coeff @dihedral:X-p4-s6-X fourier 1.0 6.6499999999999995 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-px-sy-X fourier 1.0 0.11666666666666665 3 0.0 
-    dihedral_coeff @dihedral:X-p4-sh-X fourier 1.0 0.25 1 180.0 
-    dihedral_coeff @dihedral:X-px-sh-X fourier 1.0 0.25 1 180.0 
-    dihedral_coeff @dihedral:X-p4-ss-X fourier 1.0 0.6 2 180.0 
-    dihedral_coeff @dihedral:X-px-ss-X fourier 1.0 0.6 2 180.0 
-    dihedral_coeff @dihedral:X-p5-p5-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-py-py-X fourier 1.0 0.6000000000000001 2 0.0 
-    dihedral_coeff @dihedral:X-p5-sh-X fourier 1.0 0.3 3 0.0 
-    dihedral_coeff @dihedral:X-py-sh-X fourier 1.0 0.3 3 0.0 
-    dihedral_coeff @dihedral:X-p5-ss-X fourier 1.0 3.8000000000000003 2 180.0 
-    dihedral_coeff @dihedral:X-py-ss-X fourier 1.0 3.8000000000000003 2 180.0 
-    dihedral_coeff @dihedral:X-p5-s4-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-py-sx-X fourier 1.0 0.26666666666666666 3 0.0 
-    dihedral_coeff @dihedral:X-p5-s6-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-py-sy-X fourier 1.0 0.2777777777777778 3 0.0 
-    dihedral_coeff @dihedral:X-sh-sh-X fourier 1.0 5.6 3 0.0 
-    dihedral_coeff @dihedral:X-sh-ss-X fourier 1.0 5.3 3 0.0 
-    dihedral_coeff @dihedral:X-sh-s4-X fourier 1.0 0.7 3 0.0 
-    dihedral_coeff @dihedral:X-sh-sx-X fourier 1.0 0.7 3 0.0 
-    dihedral_coeff @dihedral:X-sh-s6-X fourier 1.0 4.666666666666667 2 180.0 
-    dihedral_coeff @dihedral:X-sh-sy-X fourier 1.0 4.666666666666667 2 180.0 
-    dihedral_coeff @dihedral:X-ss-ss-X fourier 1.0 0.0 3 0.0 
-    dihedral_coeff @dihedral:X-ss-s4-X fourier 1.0 0.3 3 0.0 
-    dihedral_coeff @dihedral:X-ss-sx-X fourier 1.0 0.3 3 0.0 
-    dihedral_coeff @dihedral:X-ss-s6-X fourier 1.0 3.0666666666666664 2 180.0 
-    dihedral_coeff @dihedral:X-ss-sy-X fourier 1.0 3.0666666666666664 2 180.0 
-    dihedral_coeff @dihedral:X-s4-s4-X fourier 1.0 6.65 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-sx-sx-X fourier 1.0 0.625 3 0.0 
-    dihedral_coeff @dihedral:X-s4-s6-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-sx-sy-X fourier 1.0 4.333333333333333 2 180.0 
-    dihedral_coeff @dihedral:X-s6-s6-X fourier 1.0 6.666666666666667 2 180.0     # estimated !!!
-    dihedral_coeff @dihedral:X-sy-sy-X fourier 1.0 0.15555555555555556 2 180.0 
-    dihedral_coeff @dihedral:X-cf-pe-X fourier 1.0 6.65 2 180.0     # NEW
-    dihedral_coeff @dihedral:X-nd-os-X fourier 1.0 4.8 2 180.0     # NEW
-    dihedral_coeff @dihedral:X-nd-ss-X fourier 1.0 4.8 2 180.0     # NEW
-    dihedral_coeff @dihedral:X-nf-pe-X fourier 1.0 5.4 2 180.0     # NEW
-    dihedral_coeff @dihedral:c3-c-sh-hs fourier 2.0 2.25 2 180.0 1.3 1 180.0 
-    dihedral_coeff @dihedral:c2-c2-ss-c3 fourier 2.0 1.1 2 180.0 0.7 3 180.0 
-    dihedral_coeff @dihedral:c2-c2-n-c fourier 2.0 0.65 2 180.0 1.2 1 180.0 
-    dihedral_coeff @dihedral:c-n-p2-c2 fourier 2.0 1.0 2 180.0 1.9 1 180.0 
-    dihedral_coeff @dihedral:n-c3-c-n fourier 2.0 1.7 1 180.0 2.0 2 180.0 
-    dihedral_coeff @dihedral:c-n-c3-c fourier 2.0 0.85 2 180.0 0.8 1 0.0 
-    dihedral_coeff @dihedral:c3-c3-n-c fourier 4.0 0.5 4 180.0 0.15 3 180.0 0.0 2 0.0 0.53 1 0.0     # phi,psi,parm94
-    dihedral_coeff @dihedral:c3-c3-c-n fourier 2.0 0.1 4 0.0 0.07 2 0.0     # phi,psi,parm94
-    dihedral_coeff @dihedral:c2-ne-p5-o fourier 2.0 0.0 3 0.0 2.3 1 0.0 
-    dihedral_coeff @dihedral:c2-nf-p5-o fourier 2.0 0.0 3 0.0 2.3 1 0.0 
-    dihedral_coeff @dihedral:ce-ne-p5-o fourier 2.0 0.0 3 0.0 2.3 1 0.0 
-    dihedral_coeff @dihedral:ce-nf-p5-o fourier 2.0 0.0 3 0.0 2.3 1 0.0 
-    dihedral_coeff @dihedral:cf-ne-p5-o fourier 2.0 0.0 3 0.0 2.3 1 0.0 
-    dihedral_coeff @dihedral:cf-nf-p5-o fourier 2.0 0.0 3 0.0 2.3 1 0.0 
-    dihedral_coeff @dihedral:hn-n-c-o fourier 2.0 2.5 2 180.0 2.0 1 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:c3-ss-ss-c3 fourier 2.0 3.5 2 0.0 0.6 3 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:c3-n3-nh-ca fourier 2.0 1.9 2 0.0 1.9 3 0.0 
-    dihedral_coeff @dihedral:c3-n3-p5-o fourier 2.0 3.0 2 180.0 2.3 3 0.0 
-    dihedral_coeff @dihedral:ca-nh-oh-ho fourier 2.0 1.2 1 0.0 1.5 2 0.0 
-    dihedral_coeff @dihedral:oh-p5-os-c3 fourier 2.0 0.25 3 0.0 1.2 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:os-p5-os-c3 fourier 2.0 0.25 3 0.0 1.2 2 0.0     # JCC,7,(1986),230
-    dihedral_coeff @dihedral:h1-c3-c-o fourier 3.0 0.8 1 0.0 0.0 2 0.0 0.08 3 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c-o fourier 3.0 0.8 1 0.0 0.0 2 0.0 0.08 3 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-hc fourier 1.0 0.15 3 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-c3 fourier 1.0 0.16 3 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c2-c2 fourier 3.0 0.38 3 180.0 0.0 2 0.0 1.15 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:ho-oh-c3-c3 fourier 2.0 0.16 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:ho-oh-c-o fourier 2.0 2.3 2 180.0 1.9 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c2-c2-c-o fourier 2.0 2.175 2 180.0 0.3 3 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-c2-c2-c3 fourier 2.0 6.65 2 180.0 1.9 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-c3-c3-c3 fourier 3.0 0.18 3 0.0 0.25 2 180.0 0.2 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-c3-n3-c3 fourier 2.0 0.3 3 0.0 0.48 2 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-c3-os-c3 fourier 2.0 0.383 3 0.0 0.1 2 180.0 
-    dihedral_coeff @dihedral:c3-c3-os-c fourier 2.0 0.383 3 0.0 0.8 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-os-c3-os fourier 3.0 0.1 3 0.0 0.85 2 180.0 1.35 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-os-c3-na fourier 2.0 0.383 3 0.0 0.65 2 0.0     # parm98.dat, TC,PC,PAK
-    dihedral_coeff @dihedral:o-c-os-c3 fourier 2.0 2.7 2 180.0 1.4 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:os-c3-na-c2 fourier 2.0 0.0 2 0.0 2.5 1 0.0     # parm98, TC,PC,PAK
-    dihedral_coeff @dihedral:os-c3-c3-os fourier 2.0 0.144 3 0.0 1.175 2 0.0     # parm98, TC,PC,PAK
-    dihedral_coeff @dihedral:os-c3-c3-oh fourier 2.0 0.144 3 0.0 1.175 2 0.0     # parm98, TC,PC,PAK
-    dihedral_coeff @dihedral:oh-c3-c3-oh fourier 2.0 0.144 3 0.0 1.175 2 0.0     # parm98, TC,PC,PAK
-    dihedral_coeff @dihedral:f-c3-c3-f fourier 2.0 0.0 3 0.0 1.2 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:cl-c3-c3-cl fourier 2.0 0.0 3 0.0 0.45 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:br-c3-c3-br fourier 2.0 0.0 3 0.0 0.0 1 180.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:h1-c3-c3-os fourier 2.0 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:h1-c3-c3-oh fourier 2.0 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:h1-c3-c3-f fourier 2.0 0.0 3 0.0 0.19 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:h1-c3-c3-cl fourier 2.0 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:h1-c3-c3-br fourier 2.0 0.0 3 0.0 0.55 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-os fourier 2.0 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-oh fourier 2.0 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-f fourier 2.0 0.0 3 0.0 0.19 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-cl fourier 2.0 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:hc-c3-c3-br fourier 2.0 0.0 3 0.0 0.55 1 0.0     # Junmei et al, 1999
-    dihedral_coeff @dihedral:c3-c-n-c3 fourier 2.0 0.0 2 0.0 1.5 1 180.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-ss-sh-hs fourier 2.0 1.7666666666666666 3 0.0 2.7 2 0.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-n4-c3-ca fourier 2.0 0.15555555555555556 3 0.0 0.7 2 0.0     # Junmei, 2015
-    dihedral_coeff @dihedral:oh-c3-c3-n4 fourier 2.0 0.144 3 0.0 1.3 2 0.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-c3-n4-c3 fourier 1.0 0.15555555555555556 3 0.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-c-os-c3 fourier 3.0 2.7 2 180.0 0.0 1 0.0 1.15 3 0.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-c-os-p5 fourier 2.0 2.7 2 180.0 2.0 1 180.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c-os-p5-o fourier 3.0 0.8 2 0.0 1.1 1 0.0 0.5 3 180.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-c3-os-p5 fourier 2.0 0.3833333333333333 3 0.0 3.95 1 180.0     # Junmei, 2015
-    dihedral_coeff @dihedral:c3-os-p5-o fourier 2.0 0.8 2 0.0 0.55 3 0.0     # Junmei, 2015
-    dihedral_coeff @dihedral:ca-ca-os-p5 fourier 1.0 1.75 2 180.0     # Junmei, 2015
-    dihedral_coeff @dihedral:ca-os-p5-o fourier 2.0 0.8 2 180.0 0.1 3 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:X-c-c-X fourier 1 0.3 2 180.0 
+    dihedral_coeff @dihedral:X-c-c1-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c-cg-X fourier 1 0.0 2 180.0     # same as X-c-c1-X
+    dihedral_coeff @dihedral:X-c-ch-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c-c2-X fourier 1 2.175 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c-cu-X fourier 1 2.175 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c-cv-X fourier 1 2.175 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c-ce-X fourier 1 2.175 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c-cf-X fourier 1 2.175 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c-c3-X fourier 1 0.0 2 180.0     # JCC, 7, (1986), 230
+    dihedral_coeff @dihedral:X-c-cx-X fourier 1 0.0 2 180.0     # JCC, 7, (1986), 230
+    dihedral_coeff @dihedral:X-c-cy-X fourier 1 0.0 2 180.0     # JCC, 7, (1986), 230
+    dihedral_coeff @dihedral:X-c-ca-X fourier 1 1.0 2 180.0     # optimized by Junmei Wang, Jan-2013
+    dihedral_coeff @dihedral:X-c-cc-X fourier 1 2.875 2 180.0     # statistic value
+    dihedral_coeff @dihedral:X-c-cd-X fourier 1 2.875 2 180.0     # statistic value
+    dihedral_coeff @dihedral:X-c-n-X fourier 1 2.5 2 180.0     # AA,NMA (no c-n3, c-n4, c-nh)
+    dihedral_coeff @dihedral:X-c-n2-X fourier 1 4.15 2 180.0     # double bond, same as X-c2-n2-X
+    dihedral_coeff @dihedral:X-c-nc-X fourier 1 4.0 2 180.0     # same as X-C-NC-X
+    dihedral_coeff @dihedral:X-c-nd-X fourier 1 4.0 2 180.0     # same as X-C-NC-X
+    dihedral_coeff @dihedral:X-c-ne-X fourier 1 0.2 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-c-nf-X fourier 1 0.2 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-c-na-X fourier 2 1.45 2 180.0 0.35 4 180.0 
+    dihedral_coeff @dihedral:X-c-no-X fourier 1 0.45 2 180.0 
+    dihedral_coeff @dihedral:X-c-oh-X fourier 1 2.3 2 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:X-c-os-X fourier 1 2.7 2 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:X-c-p2-X fourier 1 6.65 2 180.0     # double bond, same as X-c2-p2-X
+    dihedral_coeff @dihedral:X-c-pc-X fourier 1 2.0 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-c-pd-X fourier 1 2.0 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-c-pe-X fourier 1 0.0 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-c-pf-X fourier 1 0.0 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-c-p3-X fourier 1 1.55 2 180.0 
+    dihedral_coeff @dihedral:X-c-p4-X fourier 1 1.35 2 180.0 
+    dihedral_coeff @dihedral:X-c-px-X fourier 1 1.35 2 180.0 
+    dihedral_coeff @dihedral:X-c-p5-X fourier 1 1.0 2 0.0 
+    dihedral_coeff @dihedral:X-c-py-X fourier 1 1.0 2 0.0 
+    dihedral_coeff @dihedral:X-c-sh-X fourier 1 2.25 2 180.0 
+    dihedral_coeff @dihedral:X-c-ss-X fourier 1 3.1 2 180.0 
+    dihedral_coeff @dihedral:X-c-s4-X fourier 1 0.2 2 180.0 
+    dihedral_coeff @dihedral:X-c-sx-X fourier 1 0.2 2 180.0 
+    dihedral_coeff @dihedral:X-c-s6-X fourier 1 0.5 2 0.0 
+    dihedral_coeff @dihedral:X-c-sy-X fourier 1 0.5 2 0.0 
+    dihedral_coeff @dihedral:X-c1-c1-X fourier 1 0.0 2 180.0     # for both triple and single bonds
+    dihedral_coeff @dihedral:X-c1-cg-X fourier 1 0.0 2 180.0     # for both triple and single bonds
+    dihedral_coeff @dihedral:X-c1-ch-X fourier 1 0.0 2 180.0     # for both triple and single bonds
+    dihedral_coeff @dihedral:X-cg-cg-X fourier 1 0.0 2 180.0     # for both triple and single bonds
+    dihedral_coeff @dihedral:X-ch-ch-X fourier 1 0.0 2 180.0     # for both triple and single bonds
+    dihedral_coeff @dihedral:X-cg-ch-X fourier 1 0.0 2 180.0     # for both triple and single bonds
+    dihedral_coeff @dihedral:X-c1-c2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-c3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-ca-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cc-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cd-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-ce-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cf-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cu-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cv-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cx-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-cy-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-n-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-n2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-n3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-n4-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-na-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-nb-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-nc-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-nd-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-ne-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-nf-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-nh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-no-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-oh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-os-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-p2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-pb-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-pc-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-pd-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-pe-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-pf-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-p3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-p4-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-px-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-p5-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-py-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-s2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-sh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-ss-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-s4-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-sx-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-s6-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c1-sy-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-c2-c2-X fourier 1 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c2-ce-X fourier 1 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-c2-cf-X fourier 1 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-ce-cf-X fourier 1 6.65 2 180.0     # c2=c2 double bond, intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-ce-ce-X fourier 1 1.0 2 180.0     # c2-c2 single bond, parm99
+    dihedral_coeff @dihedral:X-cf-cf-X fourier 1 1.0 2 180.0     # c2-c2 single bond, parm99
+    dihedral_coeff @dihedral:X-cc-cd-X fourier 1 4.0 2 180.0     # statistic value of parm94
+    dihedral_coeff @dihedral:X-cc-cc-X fourier 1 4.0 2 180.0     # statistic value of parm94
+    dihedral_coeff @dihedral:X-cd-cd-X fourier 1 4.0 2 180.0     # statistic value of parm94
+    dihedral_coeff @dihedral:X-c2-c3-X fourier 1 0.0 2 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c2-ca-X fourier 1 0.7 2 180.0     # optimized by Junmei Wang, March 2013
+    dihedral_coeff @dihedral:X-c2-n-X fourier 1 0.65 2 180.0 
+    dihedral_coeff @dihedral:X-c2-n2-X fourier 1 4.15 2 180.0     # double bond, parm99
+    dihedral_coeff @dihedral:X-c2-ne-X fourier 1 4.15 2 180.0     # double bond, parm99
+    dihedral_coeff @dihedral:X-c2-nf-X fourier 1 4.15 2 180.0     # double bond, parm99
+    dihedral_coeff @dihedral:X-ce-ne-X fourier 1 0.8 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-cf-nf-X fourier 1 0.8 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-c2-nc-X fourier 1 4.75 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-c2-nd-X fourier 1 4.75 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-cc-nd-X fourier 1 4.75 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-cd-nc-X fourier 1 4.75 2 180.0     # statistiv value from parm94
+    dihedral_coeff @dihedral:X-cc-nc-X fourier 1 4.75 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-cd-nd-X fourier 1 4.75 2 180.0     # statistiv value from parm94
+    dihedral_coeff @dihedral:X-c2-n3-X fourier 1 0.3 2 180.0     # intrpol.
+    dihedral_coeff @dihedral:X-c2-n4-X fourier 1 0.0 3 180.0     # intrpol.
+    dihedral_coeff @dihedral:X-c2-na-X fourier 1 0.625 2 180.0 
+    dihedral_coeff @dihedral:X-cc-na-X fourier 1 1.7 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-cd-na-X fourier 1 1.7 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-c2-nh-X fourier 1 0.675 2 180.0 
+    dihedral_coeff @dihedral:X-c2-no-X fourier 1 0.75 2 180.0 
+    dihedral_coeff @dihedral:X-c2-oh-X fourier 1 1.05 2 180.0     # parm99
+    dihedral_coeff @dihedral:X-c2-os-X fourier 1 1.05 2 180.0     # parm99
+    dihedral_coeff @dihedral:X-c2-p2-X fourier 1 6.65 2 180.0     # double bond
+    dihedral_coeff @dihedral:X-c2-pe-X fourier 1 6.65 2 180.0     # double bond
+    dihedral_coeff @dihedral:X-c2-pf-X fourier 1 6.65 2 180.0     # double bond
+    dihedral_coeff @dihedral:X-ce-pf-X fourier 1 6.65 2 180.0     # double bond
+    dihedral_coeff @dihedral:X-ce-pe-X fourier 1 0.95 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-cf-pf-X fourier 1 0.95 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-c2-pc-X fourier 1 4.75 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-c2-pd-X fourier 1 4.75 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-cc-pc-X fourier 1 4.75 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-cc-pd-X fourier 1 4.75 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-cd-pc-X fourier 1 4.75 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-cd-pd-X fourier 1 4.75 2 180.0     # estimated
+    dihedral_coeff @dihedral:X-c2-p3-X fourier 1 0.45 2 180.0 
+    dihedral_coeff @dihedral:X-c2-p4-X fourier 1 6.65 2 180.0     # c2=p4 double bond !!!
+    dihedral_coeff @dihedral:X-ce-p4-X fourier 1 6.65 2 180.0     # c2=p4 double bond !!!
+    dihedral_coeff @dihedral:X-cf-p4-X fourier 1 6.65 2 180.0     # c2=p4 double bond !!!
+    dihedral_coeff @dihedral:X-c2-px-X fourier 1 0.325 2 0.0 
+    dihedral_coeff @dihedral:X-ce-px-X fourier 1 0.325 2 0.0 
+    dihedral_coeff @dihedral:X-cf-px-X fourier 1 0.325 2 0.0 
+    dihedral_coeff @dihedral:X-c2-p5-X fourier 1 6.6499999999999995 2 180.0     # c2=p5 double bond !!!
+    dihedral_coeff @dihedral:X-ce-p5-X fourier 1 6.6499999999999995 2 180.0     # c2=p5 double bond !!!
+    dihedral_coeff @dihedral:X-cf-p5-X fourier 1 6.6499999999999995 2 180.0     # c2=p5 double bond !!!
+    dihedral_coeff @dihedral:X-c2-py-X fourier 1 1.4333333333333333 2 180.0 
+    dihedral_coeff @dihedral:X-ce-py-X fourier 1 1.4333333333333333 2 180.0 
+    dihedral_coeff @dihedral:X-cf-py-X fourier 1 1.4333333333333333 2 180.0 
+    dihedral_coeff @dihedral:X-c2-sh-X fourier 1 0.5 2 180.0 
+    dihedral_coeff @dihedral:X-c2-ss-X fourier 1 1.1 2 180.0 
+    dihedral_coeff @dihedral:X-c2-s4-X fourier 1 6.65 2 180.0     # c2=s4 double bond !!!
+    dihedral_coeff @dihedral:X-ce-s4-X fourier 1 6.65 2 180.0     # c2=s4 double bond !!!
+    dihedral_coeff @dihedral:X-cf-s4-X fourier 1 6.65 2 180.0     # c2=s4 double bond !!!
+    dihedral_coeff @dihedral:X-c2-sx-X fourier 1 0.6 2 0.0 
+    dihedral_coeff @dihedral:X-ce-sx-X fourier 1 0.6 2 0.0 
+    dihedral_coeff @dihedral:X-cf-sx-X fourier 1 0.6 2 0.0 
+    dihedral_coeff @dihedral:X-c2-s6-X fourier 1 6.6499999999999995 2 180.0     # c2=s6 double bond !!!
+    dihedral_coeff @dihedral:X-ce-s6-X fourier 1 6.6499999999999995 2 180.0     # c2=s6 double bond !!!
+    dihedral_coeff @dihedral:X-cf-s6-X fourier 1 6.6499999999999995 2 180.0     # c2=s6 double bond !!!
+    dihedral_coeff @dihedral:X-c2-sy-X fourier 1 1.2666666666666666 2 180.0 
+    dihedral_coeff @dihedral:X-ce-sy-X fourier 1 1.2666666666666666 2 180.0 
+    dihedral_coeff @dihedral:X-cf-sy-X fourier 1 1.2666666666666666 2 180.0 
+    dihedral_coeff @dihedral:X-c3-c3-X fourier 1 0.15555555555555556 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-cx-cx-X fourier 1 0.15555555555555556 3 0.0     # same as X-c3-c3-X
+    dihedral_coeff @dihedral:X-cy-cy-X fourier 1 0.15555555555555556 3 0.0     # same as X-c3-c3-X
+    dihedral_coeff @dihedral:X-c3-ca-X fourier 1 0.0 2 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-n-X fourier 1 0.0 2 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-cx-n-X fourier 1 0.0 2 0.0     # same as X-c3-n-X
+    dihedral_coeff @dihedral:X-cy-n-X fourier 1 0.0 2 0.0     # same as X-c3-n-X
+    dihedral_coeff @dihedral:X-c3-n2-X fourier 1 0.0 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-ne-X fourier 1 0.0 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-nf-X fourier 1 0.0 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-n3-X fourier 1 0.3 3 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:X-c3-n4-X fourier 1 0.15555555555555556 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-na-X fourier 1 0.0 2 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-nh-X fourier 1 0.0 2 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-no-X fourier 1 0.0 2 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-oh-X fourier 1 0.16666666666666666 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-os-X fourier 1 0.3833333333333333 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-p2-X fourier 1 0.26666666666666666 2 180.0 
+    dihedral_coeff @dihedral:X-c3-pe-X fourier 1 0.26666666666666666 2 180.0 
+    dihedral_coeff @dihedral:X-c3-pf-X fourier 1 0.26666666666666666 2 180.0 
+    dihedral_coeff @dihedral:X-c3-p3-X fourier 1 0.13333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-c3-p4-X fourier 1 0.13333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-c3-px-X fourier 1 0.13333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-c3-p5-X fourier 1 0.022222222222222223 3 0.0 
+    dihedral_coeff @dihedral:X-c3-py-X fourier 1 0.022222222222222223 3 0.0 
+    dihedral_coeff @dihedral:X-c3-sh-X fourier 1 0.25 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-ss-X fourier 1 0.3333333333333333 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:X-c3-s4-X fourier 1 0.19999999999999998 3 0.0 
+    dihedral_coeff @dihedral:X-c3-sx-X fourier 1 0.19999999999999998 3 0.0 
+    dihedral_coeff @dihedral:X-c3-s6-X fourier 1 0.14444444444444446 3 0.0 
+    dihedral_coeff @dihedral:X-c3-sy-X fourier 1 0.14444444444444446 3 0.0 
+    dihedral_coeff @dihedral:X-c3-cc-X fourier 1 0.0 3 0.0     # same as X-c3-ca-X
+    dihedral_coeff @dihedral:X-c3-cd-X fourier 1 0.0 3 0.0     # same as X-c3-ca-X
+    dihedral_coeff @dihedral:X-ca-ca-X fourier 1 3.625 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-ca-cp-X fourier 1 3.625 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-ca-cq-X fourier 1 3.625 2 180.0     # intrpol.bsd.on C6H6
+    dihedral_coeff @dihedral:X-cp-cp-X fourier 1 1.0 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-cq-cq-X fourier 1 1.0 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-ca-n-X fourier 1 0.45 2 180.0 
+    dihedral_coeff @dihedral:X-ca-n2-X fourier 1 0.0 3 180.0 
+    dihedral_coeff @dihedral:X-ca-ne-X fourier 1 0.0 3 180.0 
+    dihedral_coeff @dihedral:X-ca-nf-X fourier 1 0.0 3 180.0 
+    dihedral_coeff @dihedral:X-ca-n4-X fourier 1 1.75 2 0.0 
+    dihedral_coeff @dihedral:X-ca-na-X fourier 1 0.3 2 180.0 
+    dihedral_coeff @dihedral:X-ca-nb-X fourier 1 4.8 2 180.0     # same as X-CA-NC-X
+    dihedral_coeff @dihedral:X-ca-nc-X fourier 1 4.8 2 180.0     # same as X-CA-NC-X
+    dihedral_coeff @dihedral:X-ca-nd-X fourier 1 4.8 2 180.0     # same as X-CA-NC-X
+    dihedral_coeff @dihedral:X-ca-nh-X fourier 1 1.05 2 180.0 
+    dihedral_coeff @dihedral:X-cc-nh-X fourier 1 1.05 2 180.0     # same as X-ca-nh-X
+    dihedral_coeff @dihedral:X-cd-nh-X fourier 1 1.05 2 180.0     # same as X-ca-nh-X
+    dihedral_coeff @dihedral:X-ca-no-X fourier 1 0.6 2 180.0 
+    dihedral_coeff @dihedral:X-ca-oh-X fourier 1 0.9 2 180.0     # Junmei et al, 99
+    dihedral_coeff @dihedral:X-ca-os-X fourier 1 0.9 2 180.0     # same as X-ca-oh-X
+    dihedral_coeff @dihedral:X-ca-p2-X fourier 1 0.6 2 180.0 
+    dihedral_coeff @dihedral:X-ca-pe-X fourier 1 0.6 2 180.0     # same as X-ca-p2-X
+    dihedral_coeff @dihedral:X-ca-pf-X fourier 1 0.6 2 180.0     # same as X-ca-p2-X
+    dihedral_coeff @dihedral:X-ca-pc-X fourier 1 4.8 2 180.0     # estimated, intrpol
+    dihedral_coeff @dihedral:X-ca-pd-X fourier 1 4.8 2 180.0     # estimated, intrpol
+    dihedral_coeff @dihedral:X-ca-p3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-ca-p4-X fourier 1 0.525 2 180.0 
+    dihedral_coeff @dihedral:X-ca-px-X fourier 1 0.525 2 180.0     # estimated, same as X-ca-p4-X
+    dihedral_coeff @dihedral:X-ca-p5-X fourier 1 1.4666666666666668 2 180.0 
+    dihedral_coeff @dihedral:X-ca-py-X fourier 1 1.4666666666666668 2 180.0     # estimated, same as X-ca-p5-X
+    dihedral_coeff @dihedral:X-ca-sh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-ca-ss-X fourier 1 0.4 2 180.0 
+    dihedral_coeff @dihedral:X-ca-s4-X fourier 1 0.3 2 0.0 
+    dihedral_coeff @dihedral:X-ca-sx-X fourier 1 0.3 2 0.0     # estimated, same as X-ca-s4-X
+    dihedral_coeff @dihedral:X-ca-s6-X fourier 1 1.3 2 180.0 
+    dihedral_coeff @dihedral:X-ca-sy-X fourier 1 1.3 2 180.0     # estimated, same as X-ca-s6-X
+    dihedral_coeff @dihedral:X-n-cc-X fourier 1 1.65 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-n-cd-X fourier 1 1.65 2 180.0     # statistic value from parm94
+    dihedral_coeff @dihedral:X-n-n-X fourier 1 1.15 2 0.0 
+    dihedral_coeff @dihedral:X-n-n2-X fourier 1 0.4 2 0.0 
+    dihedral_coeff @dihedral:X-n-ne-X fourier 1 0.4 2 0.0 
+    dihedral_coeff @dihedral:X-n-nf-X fourier 1 0.4 2 0.0 
+    dihedral_coeff @dihedral:X-n-n3-X fourier 1 1.075 2 0.0 
+    dihedral_coeff @dihedral:X-n-n4-X fourier 1 0.95 2 0.0 
+    dihedral_coeff @dihedral:X-n-na-X fourier 1 0.7 2 0.0 
+    dihedral_coeff @dihedral:X-n-nc-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n-nd-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n-nh-X fourier 1 1.1 2 0.0 
+    dihedral_coeff @dihedral:X-n-no-X fourier 1 1.375 2 180.0 
+    dihedral_coeff @dihedral:X-n-oh-X fourier 1 1.5 2 0.0 
+    dihedral_coeff @dihedral:X-n-os-X fourier 1 1.1 2 0.0 
+    dihedral_coeff @dihedral:X-n-p2-X fourier 1 1.0 2 180.0 
+    dihedral_coeff @dihedral:X-n-pe-X fourier 1 1.0 2 180.0 
+    dihedral_coeff @dihedral:X-n-pf-X fourier 1 1.0 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n-pc-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n-pd-X fourier 1 4.8 2 180.0 
+    dihedral_coeff @dihedral:X-n-p3-X fourier 1 2.25 2 0.0 
+    dihedral_coeff @dihedral:X-n-p4-X fourier 1 0.325 2 0.0 
+    dihedral_coeff @dihedral:X-n-px-X fourier 1 0.325 2 0.0 
+    dihedral_coeff @dihedral:X-n-p5-X fourier 1 2.1999999999999997 2 180.0 
+    dihedral_coeff @dihedral:X-n-py-X fourier 1 2.1999999999999997 2 180.0 
+    dihedral_coeff @dihedral:X-n-sh-X fourier 1 1.1 2 0.0 
+    dihedral_coeff @dihedral:X-n-ss-X fourier 1 1.5 2 0.0 
+    dihedral_coeff @dihedral:X-n-s4-X fourier 1 1.5 3 0.0 
+    dihedral_coeff @dihedral:X-n-sx-X fourier 1 1.5 3 0.0 
+    dihedral_coeff @dihedral:X-n-s6-X fourier 1 1.0999999999999999 2 180.0 
+    dihedral_coeff @dihedral:X-n-sy-X fourier 1 1.0999999999999999 2 180.0 
+    dihedral_coeff @dihedral:X-n1-c2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-c3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-ca-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cc-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cd-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-ce-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cf-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cu-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cv-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cx-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-cy-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-n-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-n1-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-n2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-n3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-n4-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-na-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-nb-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-nc-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-nd-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-ne-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-nf-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-nh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-no-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-oh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-os-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-p2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-pb-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-pc-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-pd-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-pe-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-pf-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-p3-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-p4-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-px-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-p5-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-py-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-s2-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-sh-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-ss-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-s4-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-sx-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-s6-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n1-sy-X fourier 1 0.0 2 180.0 
+    dihedral_coeff @dihedral:X-n2-n2-X fourier 2 3.0 2 180.0 2.8 1 0.0     # double bond
+    dihedral_coeff @dihedral:X-n2-ne-X fourier 2 3.0 2 180.0 2.8 1 0.0     # double bond
+    dihedral_coeff @dihedral:X-n2-nf-X fourier 2 3.0 2 180.0 2.8 1 0.0     # double bond
+    dihedral_coeff @dihedral:X-ne-nf-X fourier 2 3.0 2 180.0 2.8 1 0.0     # double bond
+    dihedral_coeff @dihedral:X-ne-ne-X fourier 1 1.2 2 180.0     # single bond, intrpol
+    dihedral_coeff @dihedral:X-nf-nf-X fourier 1 1.2 2 180.0     # single bond, intrpol
+    dihedral_coeff @dihedral:X-nc-nc-X fourier 1 4.0 2 180.0     # estimated, intrpol
+    dihedral_coeff @dihedral:X-nd-nd-X fourier 1 4.0 2 180.0     # estimated, intrpol
+    dihedral_coeff @dihedral:X-nc-nd-X fourier 1 4.0 2 180.0     # estimated, intrpol
+    dihedral_coeff @dihedral:X-n2-nc-X fourier 2 3.0 2 180.0 2.8 1 0.0     # same as X-n2-n2-X
+    dihedral_coeff @dihedral:X-n2-nd-X fourier 2 3.0 2 180.0 2.8 1 0.0     # same as X-n2-n2-X
+    dihedral_coeff @dihedral:X-n2-n3-X fourier 1 6.1 2 180.0 
+    dihedral_coeff @dihedral:X-ne-n3-X fourier 1 6.1 2 180.0 
+    dihedral_coeff @dihedral:X-nf-n3-X fourier 1 6.1 2 180.0 
+    dihedral_coeff @dihedral:X-n2-n4-X fourier 1 8.0 2 180.0 
+    dihedral_coeff @dihedral:X-ne-n4-X fourier 1 8.0 2 180.0 
+    dihedral_coeff @dihedral:X-nf-n4-X fourier 1 8.0 2 180.0 
+    dihedral_coeff @dihedral:X-n2-na-X fourier 1 1.7 2 180.0 
+    dihedral_coeff @dihedral:X-ne-na-X fourier 1 1.7 2 180.0 
+    dihedral_coeff @dihedral:X-nf-na-X fourier 1 1.7 2 180.0 
+    dihedral_coeff @dihedral:X-na-nc-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-na-nd-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n2-nh-X fourier 1 2.8 2 180.0 
+    dihedral_coeff @dihedral:X-ne-nh-X fourier 1 2.8 2 180.0 
+    dihedral_coeff @dihedral:X-nf-nh-X fourier 1 2.8 2 180.0 
+    dihedral_coeff @dihedral:X-n2-no-X fourier 1 0.75 2 180.0 
+    dihedral_coeff @dihedral:X-ne-no-X fourier 1 0.75 2 180.0 
+    dihedral_coeff @dihedral:X-nf-no-X fourier 1 0.75 2 180.0 
+    dihedral_coeff @dihedral:X-n2-oh-X fourier 1 3.2 2 180.0 
+    dihedral_coeff @dihedral:X-ne-oh-X fourier 1 3.2 2 180.0 
+    dihedral_coeff @dihedral:X-nf-oh-X fourier 1 3.2 2 180.0 
+    dihedral_coeff @dihedral:X-n2-os-X fourier 1 3.0 2 180.0 
+    dihedral_coeff @dihedral:X-ne-os-X fourier 1 3.0 2 180.0 
+    dihedral_coeff @dihedral:X-nf-os-X fourier 1 3.0 2 180.0 
+    dihedral_coeff @dihedral:X-nc-os-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nc-ss-X fourier 1 4.8 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n2-p2-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n2-pe-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n2-pf-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-ne-pf-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n2-pc-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-n2-pd-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nc-p2-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nd-p2-X fourier 1 5.4 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nc-pc-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nd-pd-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nd-pc-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-nc-pd-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-ne-pe-X fourier 1 0.6 1 0.0     # single bond
+    dihedral_coeff @dihedral:X-nf-pf-X fourier 1 0.6 1 0.0     # single bond
+    dihedral_coeff @dihedral:X-n2-p3-X fourier 1 2.1 2 180.0 
+    dihedral_coeff @dihedral:X-n2-p4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-ne-p4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-nf-p4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-n2-p5-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-ne-p5-X fourier 1 1.0 3 180.0 
+    dihedral_coeff @dihedral:X-nf-p5-X fourier 1 1.0 3 180.0 
+    dihedral_coeff @dihedral:X-ne-px-X fourier 1 1.0 3 180.0 
+    dihedral_coeff @dihedral:X-nf-px-X fourier 1 1.0 3 180.0 
+    dihedral_coeff @dihedral:X-n2-sh-X fourier 1 2.1 2 180.0 
+    dihedral_coeff @dihedral:X-ne-sh-X fourier 1 2.1 2 180.0 
+    dihedral_coeff @dihedral:X-nf-sh-X fourier 1 2.1 2 180.0 
+    dihedral_coeff @dihedral:X-n2-ss-X fourier 2 2.8 2 180.0 1.3 1 180.0 
+    dihedral_coeff @dihedral:X-ne-ss-X fourier 2 2.8 2 180.0 1.3 1 180.0 
+    dihedral_coeff @dihedral:X-nf-ss-X fourier 2 2.8 2 180.0 1.3 1 180.0 
+    dihedral_coeff @dihedral:X-n2-s4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-ne-sx-X fourier 1 1.5 3 180.0 
+    dihedral_coeff @dihedral:X-nf-sx-X fourier 1 1.5 3 180.0 
+    dihedral_coeff @dihedral:X-n2-s6-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-ne-sy-X fourier 2 0.5 3 180.0 6.8 1 180.0 
+    dihedral_coeff @dihedral:X-nf-sy-X fourier 2 0.5 3 180.0 6.8 1 180.0 
+    dihedral_coeff @dihedral:X-n3-n3-X fourier 1 2.25 2 0.0 
+    dihedral_coeff @dihedral:X-n3-n4-X fourier 1 0.25 3 0.0 
+    dihedral_coeff @dihedral:X-n3-na-X fourier 1 1.6 2 0.0 
+    dihedral_coeff @dihedral:X-n3-nh-X fourier 1 1.9 2 0.0 
+    dihedral_coeff @dihedral:X-n3-no-X fourier 1 4.0 2 180.0 
+    dihedral_coeff @dihedral:X-n3-oh-X fourier 1 2.2 2 0.0 
+    dihedral_coeff @dihedral:X-n3-os-X fourier 1 1.8 2 0.0 
+    dihedral_coeff @dihedral:X-n3-p2-X fourier 1 3.2 2 180.0 
+    dihedral_coeff @dihedral:X-n3-pe-X fourier 1 3.2 2 180.0 
+    dihedral_coeff @dihedral:X-n3-pf-X fourier 1 3.2 2 180.0 
+    dihedral_coeff @dihedral:X-n3-p3-X fourier 1 2.35 2 0.0 
+    dihedral_coeff @dihedral:X-n3-p4-X fourier 1 2.1 2 180.0 
+    dihedral_coeff @dihedral:X-n3-px-X fourier 1 2.1 2 180.0 
+    dihedral_coeff @dihedral:X-n3-p5-X fourier 1 3.0 2 180.0 
+    dihedral_coeff @dihedral:X-n3-py-X fourier 1 3.0 2 180.0 
+    dihedral_coeff @dihedral:X-n3-sh-X fourier 1 3.1 2 0.0 
+    dihedral_coeff @dihedral:X-n3-ss-X fourier 1 2.6 2 0.0 
+    dihedral_coeff @dihedral:X-n3-s4-X fourier 1 3.75 2 0.0 
+    dihedral_coeff @dihedral:X-n3-sx-X fourier 1 3.75 2 0.0 
+    dihedral_coeff @dihedral:X-n3-s6-X fourier 1 3.1333333333333333 2 0.0 
+    dihedral_coeff @dihedral:X-n3-sy-X fourier 1 3.1333333333333333 2 0.0 
+    dihedral_coeff @dihedral:X-n4-n4-X fourier 1 0.18888888888888888 3 0.0 
+    dihedral_coeff @dihedral:X-n4-na-X fourier 1 0.2333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-n4-nh-X fourier 1 0.18333333333333335 3 0.0 
+    dihedral_coeff @dihedral:X-n4-no-X fourier 1 0.08333333333333333 3 180.0 
+    dihedral_coeff @dihedral:X-n4-oh-X fourier 1 0.3333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-n4-os-X fourier 1 0.5666666666666667 3 0.0 
+    dihedral_coeff @dihedral:X-n4-p2-X fourier 1 0.16666666666666666 3 180.0 
+    dihedral_coeff @dihedral:X-n4-pe-X fourier 1 0.16666666666666666 3 180.0 
+    dihedral_coeff @dihedral:X-n4-pf-X fourier 1 0.16666666666666666 3 180.0 
+    dihedral_coeff @dihedral:X-n4-p3-X fourier 1 0.15 3 0.0 
+    dihedral_coeff @dihedral:X-n4-p4-X fourier 1 0.05 3 0.0 
+    dihedral_coeff @dihedral:X-n4-px-X fourier 1 0.05 3 0.0 
+    dihedral_coeff @dihedral:X-n4-p5-X fourier 1 0.08888888888888889 3 0.0 
+    dihedral_coeff @dihedral:X-n4-py-X fourier 1 0.08888888888888889 3 0.0 
+    dihedral_coeff @dihedral:X-n4-sh-X fourier 1 0.6666666666666666 3 0.0 
+    dihedral_coeff @dihedral:X-n4-ss-X fourier 1 0.3333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-n4-s4-X fourier 1 0.2833333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-n4-sx-X fourier 1 0.2833333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-n4-s6-X fourier 1 0.13333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-n4-sy-X fourier 1 0.13333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-na-na-X fourier 1 0.9 2 0.0 
+    dihedral_coeff @dihedral:X-na-nh-X fourier 1 1.2 2 0.0 
+    dihedral_coeff @dihedral:X-na-no-X fourier 1 6.0 2 180.0 
+    dihedral_coeff @dihedral:X-na-oh-X fourier 1 1.0 2 0.0 
+    dihedral_coeff @dihedral:X-na-os-X fourier 1 0.65 2 0.0 
+    dihedral_coeff @dihedral:X-na-p2-X fourier 1 1.0 2 180.0 
+    dihedral_coeff @dihedral:X-na-pe-X fourier 1 1.0 2 180.0 
+    dihedral_coeff @dihedral:X-na-pf-X fourier 1 1.0 2 180.0 
+    dihedral_coeff @dihedral:X-na-p3-X fourier 1 1.45 2 0.0 
+    dihedral_coeff @dihedral:X-na-p4-X fourier 1 1.1 3 0.0 
+    dihedral_coeff @dihedral:X-na-px-X fourier 1 1.1 3 0.0 
+    dihedral_coeff @dihedral:X-na-p5-X fourier 1 0.8333333333333334 2 180.0 
+    dihedral_coeff @dihedral:X-na-py-X fourier 1 0.8333333333333334 2 180.0 
+    dihedral_coeff @dihedral:X-na-sh-X fourier 1 1.8 2 0.0 
+    dihedral_coeff @dihedral:X-na-ss-X fourier 1 7.8 2 0.0 
+    dihedral_coeff @dihedral:X-na-s4-X fourier 1 1.05 2 0.0 
+    dihedral_coeff @dihedral:X-na-sx-X fourier 1 1.05 2 0.0 
+    dihedral_coeff @dihedral:X-na-s6-X fourier 1 3.6666666666666665 2 180.0 
+    dihedral_coeff @dihedral:X-na-sy-X fourier 1 3.6666666666666665 2 180.0 
+    dihedral_coeff @dihedral:X-nh-nh-X fourier 1 1.8 3 180.0 
+    dihedral_coeff @dihedral:X-nh-no-X fourier 1 2.55 2 180.0 
+    dihedral_coeff @dihedral:X-nh-oh-X fourier 1 1.5 2 0.0 
+    dihedral_coeff @dihedral:X-nh-os-X fourier 1 1.5 1 0.0 
+    dihedral_coeff @dihedral:X-nh-p2-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-nh-pe-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-nh-pf-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-nh-p3-X fourier 1 2.35 2 0.0 
+    dihedral_coeff @dihedral:X-nh-p4-X fourier 1 1.175 3 0.0 
+    dihedral_coeff @dihedral:X-nh-px-X fourier 1 1.175 3 0.0 
+    dihedral_coeff @dihedral:X-nh-p5-X fourier 1 0.7999999999999999 2 0.0 
+    dihedral_coeff @dihedral:X-nh-py-X fourier 1 0.7999999999999999 2 0.0 
+    dihedral_coeff @dihedral:X-nh-sh-X fourier 1 1.6 2 0.0 
+    dihedral_coeff @dihedral:X-nh-ss-X fourier 1 2.1 2 0.0 
+    dihedral_coeff @dihedral:X-nh-s4-X fourier 2 0.75 2 0.0 0.1 3 180.0 
+    dihedral_coeff @dihedral:X-nh-sx-X fourier 2 0.75 2 0.0 0.1 3 180.0 
+    dihedral_coeff @dihedral:X-nh-s6-X fourier 1 0.09999999999999999 2 180.0 
+    dihedral_coeff @dihedral:X-nh-sy-X fourier 1 0.09999999999999999 2 180.0 
+    dihedral_coeff @dihedral:X-no-no-X fourier 2 0.4 4 180.0 1.8 2 180.0 
+    dihedral_coeff @dihedral:X-no-oh-X fourier 1 3.9 2 180.0 
+    dihedral_coeff @dihedral:X-no-os-X fourier 1 3.0 2 180.0 
+    dihedral_coeff @dihedral:X-no-p2-X fourier 1 0.3 2 180.0 
+    dihedral_coeff @dihedral:X-no-pe-X fourier 1 0.3 2 180.0 
+    dihedral_coeff @dihedral:X-no-pf-X fourier 1 0.3 2 180.0 
+    dihedral_coeff @dihedral:X-no-p3-X fourier 1 1.9 2 180.0 
+    dihedral_coeff @dihedral:X-no-p4-X fourier 1 0.575 2 180.0 
+    dihedral_coeff @dihedral:X-no-px-X fourier 1 0.575 2 180.0 
+    dihedral_coeff @dihedral:X-no-p5-X fourier 2 2.4 2 0.0 0.39999999999999997 3 0.0 
+    dihedral_coeff @dihedral:X-no-py-X fourier 2 2.4 2 0.0 0.39999999999999997 3 0.0 
+    dihedral_coeff @dihedral:X-no-sh-X fourier 1 2.3 2 180.0 
+    dihedral_coeff @dihedral:X-no-ss-X fourier 1 2.7 2 180.0 
+    dihedral_coeff @dihedral:X-no-s4-X fourier 1 2.6 2 180.0 
+    dihedral_coeff @dihedral:X-no-sx-X fourier 1 2.6 2 180.0 
+    dihedral_coeff @dihedral:X-no-s6-X fourier 1 0.3333333333333333 2 0.0 
+    dihedral_coeff @dihedral:X-no-sy-X fourier 1 0.3333333333333333 2 0.0 
+    dihedral_coeff @dihedral:X-oh-oh-X fourier 1 1.6 2 0.0 
+    dihedral_coeff @dihedral:X-oh-os-X fourier 1 1.6 2 0.0 
+    dihedral_coeff @dihedral:X-oh-p2-X fourier 1 1.5 2 180.0 
+    dihedral_coeff @dihedral:X-oh-pe-X fourier 1 1.5 2 180.0 
+    dihedral_coeff @dihedral:X-oh-pf-X fourier 1 1.5 2 180.0 
+    dihedral_coeff @dihedral:X-oh-p3-X fourier 1 0.4 3 180.0 
+    dihedral_coeff @dihedral:X-oh-p4-X fourier 1 0.7 1 0.0 
+    dihedral_coeff @dihedral:X-oh-px-X fourier 1 0.7 1 0.0 
+    dihedral_coeff @dihedral:X-oh-p5-X fourier 1 0.5333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-oh-py-X fourier 1 0.5333333333333333 3 0.0 
+    dihedral_coeff @dihedral:X-oh-sh-X fourier 1 2.4 2 0.0 
+    dihedral_coeff @dihedral:X-oh-ss-X fourier 1 2.4 2 0.0 
+    dihedral_coeff @dihedral:X-oh-s4-X fourier 1 5.0 1 0.0 
+    dihedral_coeff @dihedral:X-oh-sx-X fourier 1 5.0 1 0.0 
+    dihedral_coeff @dihedral:X-oh-s6-X fourier 1 9.5 1 180.0 
+    dihedral_coeff @dihedral:X-oh-sy-X fourier 1 9.5 1 180.0 
+    dihedral_coeff @dihedral:X-os-os-X fourier 1 1.0 1 0.0 
+    dihedral_coeff @dihedral:X-os-ss-X fourier 1 2.2 2 0.0 
+    dihedral_coeff @dihedral:X-os-sh-X fourier 1 1.8 2 0.0 
+    dihedral_coeff @dihedral:X-os-s4-X fourier 1 1.65 3 0.0 
+    dihedral_coeff @dihedral:X-os-sx-X fourier 1 1.65 3 0.0 
+    dihedral_coeff @dihedral:X-os-s6-X fourier 1 1.2 2 180.0 
+    dihedral_coeff @dihedral:X-os-sy-X fourier 1 1.2 2 180.0 
+    dihedral_coeff @dihedral:X-os-p2-X fourier 2 3.0 2 180.0 2.0 1 180.0 
+    dihedral_coeff @dihedral:X-os-pe-X fourier 2 3.0 2 180.0 2.0 1 180.0 
+    dihedral_coeff @dihedral:X-os-pf-X fourier 2 3.0 2 180.0 2.0 1 180.0 
+    dihedral_coeff @dihedral:X-os-p3-X fourier 1 2.2 2 0.0 
+    dihedral_coeff @dihedral:X-os-p4-X fourier 1 1.05 2 180.0 
+    dihedral_coeff @dihedral:X-os-px-X fourier 1 1.05 2 180.0 
+    dihedral_coeff @dihedral:X-os-p5-X fourier 1 0.7999999999999999 2 0.0 
+    dihedral_coeff @dihedral:X-os-py-X fourier 1 0.7999999999999999 2 0.0 
+    dihedral_coeff @dihedral:X-p2-p2-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-p2-pe-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-p2-pf-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-p2-pc-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-p2-pd-X fourier 1 6.6 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-pe-pe-X fourier 1 1.2 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-pf-pf-X fourier 1 1.2 2 180.0     # single bond
+    dihedral_coeff @dihedral:X-pc-pc-X fourier 1 7.2 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-pd-pd-X fourier 1 7.2 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-pc-pd-X fourier 1 7.2 2 180.0     # estimated, intrpol.
+    dihedral_coeff @dihedral:X-p2-p3-X fourier 1 1.2 1 0.0 
+    dihedral_coeff @dihedral:X-pe-p3-X fourier 1 1.2 1 0.0 
+    dihedral_coeff @dihedral:X-pf-p3-X fourier 1 1.2 1 0.0 
+    dihedral_coeff @dihedral:X-p2-p4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-pe-px-X fourier 1 2.45 2 0.0 
+    dihedral_coeff @dihedral:X-pf-px-X fourier 1 2.45 2 0.0 
+    dihedral_coeff @dihedral:X-p2-p5-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-pe-py-X fourier 1 1.9000000000000001 1 0.0 
+    dihedral_coeff @dihedral:X-pf-py-X fourier 1 1.9000000000000001 1 0.0 
+    dihedral_coeff @dihedral:X-p2-sh-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-pe-sh-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-pf-sh-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-p2-ss-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-pe-ss-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-pf-ss-X fourier 1 1.4 2 180.0 
+    dihedral_coeff @dihedral:X-p2-s4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-pe-sx-X fourier 1 1.5 2 0.0 
+    dihedral_coeff @dihedral:X-pf-sx-X fourier 1 1.5 2 0.0 
+    dihedral_coeff @dihedral:X-p2-s6-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-pe-sy-X fourier 1 0.39999999999999997 3 180.0 
+    dihedral_coeff @dihedral:X-pf-sy-X fourier 1 0.39999999999999997 3 180.0 
+    dihedral_coeff @dihedral:X-p3-p3-X fourier 1 0.5 3 0.0 
+    dihedral_coeff @dihedral:X-p3-p4-X fourier 1 0.9 1 0.0 
+    dihedral_coeff @dihedral:X-p3-px-X fourier 1 0.9 1 0.0 
+    dihedral_coeff @dihedral:X-p3-p5-X fourier 1 1.8333333333333333 2 180.0 
+    dihedral_coeff @dihedral:X-p3-py-X fourier 1 1.8333333333333333 2 180.0 
+    dihedral_coeff @dihedral:X-p3-sh-X fourier 1 4.6 2 0.0 
+    dihedral_coeff @dihedral:X-p3-ss-X fourier 1 1.15 3 0.0 
+    dihedral_coeff @dihedral:X-p3-s4-X fourier 1 3.85 2 0.0 
+    dihedral_coeff @dihedral:X-p3-sx-X fourier 1 3.85 2 0.0 
+    dihedral_coeff @dihedral:X-p3-s6-X fourier 1 0.26666666666666666 3 0.0 
+    dihedral_coeff @dihedral:X-p3-sy-X fourier 1 0.26666666666666666 3 0.0 
+    dihedral_coeff @dihedral:X-p4-p4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-px-px-X fourier 1 1.45 2 180.0 
+    dihedral_coeff @dihedral:X-p4-p5-X fourier 1 6.6499999999999995 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-px-py-X fourier 1 0.31666666666666665 2 180.0 
+    dihedral_coeff @dihedral:X-p4-s4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-px-sx-X fourier 1 0.85 1 0.0 
+    dihedral_coeff @dihedral:X-p4-s6-X fourier 1 6.6499999999999995 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-px-sy-X fourier 1 0.11666666666666665 3 0.0 
+    dihedral_coeff @dihedral:X-p4-sh-X fourier 1 0.25 1 180.0 
+    dihedral_coeff @dihedral:X-px-sh-X fourier 1 0.25 1 180.0 
+    dihedral_coeff @dihedral:X-p4-ss-X fourier 1 0.6 2 180.0 
+    dihedral_coeff @dihedral:X-px-ss-X fourier 1 0.6 2 180.0 
+    dihedral_coeff @dihedral:X-p5-p5-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-py-py-X fourier 1 0.6000000000000001 2 0.0 
+    dihedral_coeff @dihedral:X-p5-sh-X fourier 1 0.3 3 0.0 
+    dihedral_coeff @dihedral:X-py-sh-X fourier 1 0.3 3 0.0 
+    dihedral_coeff @dihedral:X-p5-ss-X fourier 1 3.8000000000000003 2 180.0 
+    dihedral_coeff @dihedral:X-py-ss-X fourier 1 3.8000000000000003 2 180.0 
+    dihedral_coeff @dihedral:X-p5-s4-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-py-sx-X fourier 1 0.26666666666666666 3 0.0 
+    dihedral_coeff @dihedral:X-p5-s6-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-py-sy-X fourier 1 0.2777777777777778 3 0.0 
+    dihedral_coeff @dihedral:X-sh-sh-X fourier 1 5.6 3 0.0 
+    dihedral_coeff @dihedral:X-sh-ss-X fourier 1 5.3 3 0.0 
+    dihedral_coeff @dihedral:X-sh-s4-X fourier 1 0.7 3 0.0 
+    dihedral_coeff @dihedral:X-sh-sx-X fourier 1 0.7 3 0.0 
+    dihedral_coeff @dihedral:X-sh-s6-X fourier 1 4.666666666666667 2 180.0 
+    dihedral_coeff @dihedral:X-sh-sy-X fourier 1 4.666666666666667 2 180.0 
+    dihedral_coeff @dihedral:X-ss-ss-X fourier 1 0.0 3 0.0 
+    dihedral_coeff @dihedral:X-ss-s4-X fourier 1 0.3 3 0.0 
+    dihedral_coeff @dihedral:X-ss-sx-X fourier 1 0.3 3 0.0 
+    dihedral_coeff @dihedral:X-ss-s6-X fourier 1 3.0666666666666664 2 180.0 
+    dihedral_coeff @dihedral:X-ss-sy-X fourier 1 3.0666666666666664 2 180.0 
+    dihedral_coeff @dihedral:X-s4-s4-X fourier 1 6.65 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-sx-sx-X fourier 1 0.625 3 0.0 
+    dihedral_coeff @dihedral:X-s4-s6-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-sx-sy-X fourier 1 4.333333333333333 2 180.0 
+    dihedral_coeff @dihedral:X-s6-s6-X fourier 1 6.666666666666667 2 180.0     # estimated !!!
+    dihedral_coeff @dihedral:X-sy-sy-X fourier 1 0.15555555555555556 2 180.0 
+    dihedral_coeff @dihedral:X-cf-pe-X fourier 1 6.65 2 180.0     # NEW
+    dihedral_coeff @dihedral:X-nd-os-X fourier 1 4.8 2 180.0     # NEW
+    dihedral_coeff @dihedral:X-nd-ss-X fourier 1 4.8 2 180.0     # NEW
+    dihedral_coeff @dihedral:X-nf-pe-X fourier 1 5.4 2 180.0     # NEW
+    dihedral_coeff @dihedral:c3-c-sh-hs fourier 2 2.25 2 180.0 1.3 1 180.0 
+    dihedral_coeff @dihedral:c2-c2-ss-c3 fourier 2 1.1 2 180.0 0.7 3 180.0 
+    dihedral_coeff @dihedral:c2-c2-n-c fourier 2 0.65 2 180.0 1.2 1 180.0 
+    dihedral_coeff @dihedral:c-n-p2-c2 fourier 2 1.0 2 180.0 1.9 1 180.0 
+    dihedral_coeff @dihedral:n-c3-c-n fourier 2 1.7 1 180.0 2.0 2 180.0 
+    dihedral_coeff @dihedral:c-n-c3-c fourier 2 0.85 2 180.0 0.8 1 0.0 
+    dihedral_coeff @dihedral:c3-c3-n-c fourier 4 0.5 4 180.0 0.15 3 180.0 0.0 2 0.0 0.53 1 0.0     # phi,psi,parm94
+    dihedral_coeff @dihedral:c3-c3-c-n fourier 2 0.1 4 0.0 0.07 2 0.0     # phi,psi,parm94
+    dihedral_coeff @dihedral:c2-ne-p5-o fourier 2 0.0 3 0.0 2.3 1 0.0 
+    dihedral_coeff @dihedral:c2-nf-p5-o fourier 2 0.0 3 0.0 2.3 1 0.0 
+    dihedral_coeff @dihedral:ce-ne-p5-o fourier 2 0.0 3 0.0 2.3 1 0.0 
+    dihedral_coeff @dihedral:ce-nf-p5-o fourier 2 0.0 3 0.0 2.3 1 0.0 
+    dihedral_coeff @dihedral:cf-ne-p5-o fourier 2 0.0 3 0.0 2.3 1 0.0 
+    dihedral_coeff @dihedral:cf-nf-p5-o fourier 2 0.0 3 0.0 2.3 1 0.0 
+    dihedral_coeff @dihedral:hn-n-c-o fourier 2 2.5 2 180.0 2.0 1 0.0     # J.C.cistrans-NMA DE
+    dihedral_coeff @dihedral:c3-ss-ss-c3 fourier 2 3.5 2 0.0 0.6 3 0.0     # JCC,7,(1986),230
+    dihedral_coeff @dihedral:c3-n3-nh-ca fourier 2 1.9 2 0.0 1.9 3 0.0 
+    dihedral_coeff @dihedral:c3-n3-p5-o fourier 2 3.0 2 180.0 2.3 3 0.0 
+    dihedral_coeff @dihedral:ca-nh-oh-ho fourier 2 1.2 1 0.0 1.5 2 0.0 
+    dihedral_coeff @dihedral:oh-p5-os-c3 fourier 2 0.25 3 0.0 1.2 2 0.0     # gg&gt ene.631g*/mp2
+    dihedral_coeff @dihedral:os-p5-os-c3 fourier 2 0.25 3 0.0 1.2 2 0.0     # gg&gt ene.631g*/mp2
+    dihedral_coeff @dihedral:h1-c3-c-o fourier 3 0.8 1 0.0 0.0 2 0.0 0.08 3 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c-o fourier 3 0.8 1 0.0 0.0 2 0.0 0.08 3 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-hc fourier 1 0.15 3 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-c3 fourier 1 0.16 3 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c2-c2 fourier 3 0.38 3 180.0 0.0 2 0.0 1.15 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:ho-oh-c3-c3 fourier 2 0.16 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:ho-oh-c-o fourier 2 2.3 2 180.0 1.9 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c2-c2-c-o fourier 2 2.175 2 180.0 0.3 3 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-c2-c2-c3 fourier 2 6.65 2 180.0 1.9 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-c3-c3-c3 fourier 3 0.18 3 0.0 0.25 2 180.0 0.2 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-c3-n3-c3 fourier 2 0.3 3 0.0 0.48 2 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-c3-os-c3 fourier 2 0.383 3 0.0 0.1 2 180.0 
+    dihedral_coeff @dihedral:c3-c3-os-c fourier 2 0.383 3 0.0 0.8 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-os-c3-os fourier 3 0.1 3 0.0 0.85 2 180.0 1.35 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-os-c3-na fourier 2 0.383 3 0.0 0.65 2 0.0     # Piotr et al.
+    dihedral_coeff @dihedral:o-c-os-c3 fourier 2 2.7 2 180.0 1.4 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:os-c3-na-c2 fourier 2 0.0 2 0.0 2.5 1 0.0     # parm98, TC,PC,PAK
+    dihedral_coeff @dihedral:os-c3-c3-os fourier 2 0.144 3 0.0 1.175 2 0.0     # Piotr et al.
+    dihedral_coeff @dihedral:os-c3-c3-oh fourier 2 0.144 3 0.0 1.175 2 0.0     # parm98, TC,PC,PAK
+    dihedral_coeff @dihedral:oh-c3-c3-oh fourier 2 0.144 3 0.0 1.175 2 0.0     # parm98, TC,PC,PAK
+    dihedral_coeff @dihedral:f-c3-c3-f fourier 2 0.0 3 0.0 1.2 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:cl-c3-c3-cl fourier 2 0.0 3 0.0 0.45 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:br-c3-c3-br fourier 2 0.0 3 0.0 0.0 1 180.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:h1-c3-c3-os fourier 2 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:h1-c3-c3-oh fourier 2 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:h1-c3-c3-f fourier 2 0.0 3 0.0 0.19 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:h1-c3-c3-cl fourier 2 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:h1-c3-c3-br fourier 2 0.0 3 0.0 0.55 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-os fourier 2 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-oh fourier 2 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-f fourier 2 0.0 3 0.0 0.19 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-cl fourier 2 0.0 3 0.0 0.25 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:hc-c3-c3-br fourier 2 0.0 3 0.0 0.55 1 0.0     # Junmei et al, 1999
+    dihedral_coeff @dihedral:c3-c-n-c3 fourier 2 0.0 2 0.0 1.5 1 180.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-ss-sh-hs fourier 2 1.7666666666666666 3 0.0 2.7 2 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-n4-c3-ca fourier 2 0.15555555555555556 3 0.0 0.7 2 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:oh-c3-c3-n4 fourier 2 0.144 3 0.0 1.3 2 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-c3-n4-c3 fourier 1 0.15555555555555556 3 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-c-os-c3 fourier 3 2.7 2 180.0 0.0 1 0.0 1.15 3 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-c-os-p5 fourier 2 2.7 2 180.0 2.0 1 180.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c-os-p5-o fourier 3 0.8 2 0.0 1.1 1 0.0 0.5 3 180.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-c3-os-p5 fourier 2 0.3833333333333333 3 0.0 3.95 1 180.0     # Junmei, 2015
+    dihedral_coeff @dihedral:c3-os-p5-o fourier 2 0.8 2 0.0 0.55 3 0.0     # Junmei, 2015
+    dihedral_coeff @dihedral:ca-ca-os-p5 fourier 1 1.75 2 180.0     # Junmei, 2015
+    dihedral_coeff @dihedral:ca-os-p5-o fourier 2 0.8 2 180.0 0.1 3 0.0     # Junmei, 2015
   } # (end of dihedral_coeffs)
 
   write_once("Data Dihedrals By Type") {
@@ -13479,7 +13479,6 @@ GAFF {
     @dihedral:X-c-nd-X @atom:* @atom:c @atom:nd @atom:*
     @dihedral:X-c-ne-X @atom:* @atom:c @atom:ne @atom:*
     @dihedral:X-c-nf-X @atom:* @atom:c @atom:nf @atom:*
-    @dihedral:X-c-na-X @atom:* @atom:c @atom:na @atom:*
     @dihedral:X-c-na-X @atom:* @atom:c @atom:na @atom:*
     @dihedral:X-c-no-X @atom:* @atom:c @atom:no @atom:*
     @dihedral:X-c-oh-X @atom:* @atom:c @atom:oh @atom:*
@@ -13765,12 +13764,8 @@ GAFF {
     @dihedral:X-n1-s6-X @atom:* @atom:n1 @atom:s6 @atom:*
     @dihedral:X-n1-sy-X @atom:* @atom:n1 @atom:sy @atom:*
     @dihedral:X-n2-n2-X @atom:* @atom:n2 @atom:n2 @atom:*
-    @dihedral:X-n2-n2-X @atom:* @atom:n2 @atom:n2 @atom:*
-    @dihedral:X-n2-ne-X @atom:* @atom:n2 @atom:ne @atom:*
     @dihedral:X-n2-ne-X @atom:* @atom:n2 @atom:ne @atom:*
     @dihedral:X-n2-nf-X @atom:* @atom:n2 @atom:nf @atom:*
-    @dihedral:X-n2-nf-X @atom:* @atom:n2 @atom:nf @atom:*
-    @dihedral:X-ne-nf-X @atom:* @atom:ne @atom:nf @atom:*
     @dihedral:X-ne-nf-X @atom:* @atom:ne @atom:nf @atom:*
     @dihedral:X-ne-ne-X @atom:* @atom:ne @atom:ne @atom:*
     @dihedral:X-nf-nf-X @atom:* @atom:nf @atom:nf @atom:*
@@ -13778,8 +13773,6 @@ GAFF {
     @dihedral:X-nd-nd-X @atom:* @atom:nd @atom:nd @atom:*
     @dihedral:X-nc-nd-X @atom:* @atom:nc @atom:nd @atom:*
     @dihedral:X-n2-nc-X @atom:* @atom:n2 @atom:nc @atom:*
-    @dihedral:X-n2-nc-X @atom:* @atom:n2 @atom:nc @atom:*
-    @dihedral:X-n2-nd-X @atom:* @atom:n2 @atom:nd @atom:*
     @dihedral:X-n2-nd-X @atom:* @atom:n2 @atom:nd @atom:*
     @dihedral:X-n2-n3-X @atom:* @atom:n2 @atom:n3 @atom:*
     @dihedral:X-ne-n3-X @atom:* @atom:ne @atom:n3 @atom:*
@@ -13833,18 +13826,13 @@ GAFF {
     @dihedral:X-ne-sh-X @atom:* @atom:ne @atom:sh @atom:*
     @dihedral:X-nf-sh-X @atom:* @atom:nf @atom:sh @atom:*
     @dihedral:X-n2-ss-X @atom:* @atom:n2 @atom:ss @atom:*
-    @dihedral:X-n2-ss-X @atom:* @atom:n2 @atom:ss @atom:*
     @dihedral:X-ne-ss-X @atom:* @atom:ne @atom:ss @atom:*
-    @dihedral:X-ne-ss-X @atom:* @atom:ne @atom:ss @atom:*
-    @dihedral:X-nf-ss-X @atom:* @atom:nf @atom:ss @atom:*
     @dihedral:X-nf-ss-X @atom:* @atom:nf @atom:ss @atom:*
     @dihedral:X-n2-s4-X @atom:* @atom:n2 @atom:s4 @atom:*
     @dihedral:X-ne-sx-X @atom:* @atom:ne @atom:sx @atom:*
     @dihedral:X-nf-sx-X @atom:* @atom:nf @atom:sx @atom:*
     @dihedral:X-n2-s6-X @atom:* @atom:n2 @atom:s6 @atom:*
     @dihedral:X-ne-sy-X @atom:* @atom:ne @atom:sy @atom:*
-    @dihedral:X-ne-sy-X @atom:* @atom:ne @atom:sy @atom:*
-    @dihedral:X-nf-sy-X @atom:* @atom:nf @atom:sy @atom:*
     @dihedral:X-nf-sy-X @atom:* @atom:nf @atom:sy @atom:*
     @dihedral:X-n3-n3-X @atom:* @atom:n3 @atom:n3 @atom:*
     @dihedral:X-n3-n4-X @atom:* @atom:n3 @atom:n4 @atom:*
@@ -13921,12 +13909,9 @@ GAFF {
     @dihedral:X-nh-sh-X @atom:* @atom:nh @atom:sh @atom:*
     @dihedral:X-nh-ss-X @atom:* @atom:nh @atom:ss @atom:*
     @dihedral:X-nh-s4-X @atom:* @atom:nh @atom:s4 @atom:*
-    @dihedral:X-nh-s4-X @atom:* @atom:nh @atom:s4 @atom:*
-    @dihedral:X-nh-sx-X @atom:* @atom:nh @atom:sx @atom:*
     @dihedral:X-nh-sx-X @atom:* @atom:nh @atom:sx @atom:*
     @dihedral:X-nh-s6-X @atom:* @atom:nh @atom:s6 @atom:*
     @dihedral:X-nh-sy-X @atom:* @atom:nh @atom:sy @atom:*
-    @dihedral:X-no-no-X @atom:* @atom:no @atom:no @atom:*
     @dihedral:X-no-no-X @atom:* @atom:no @atom:no @atom:*
     @dihedral:X-no-oh-X @atom:* @atom:no @atom:oh @atom:*
     @dihedral:X-no-os-X @atom:* @atom:no @atom:os @atom:*
@@ -13937,8 +13922,6 @@ GAFF {
     @dihedral:X-no-p4-X @atom:* @atom:no @atom:p4 @atom:*
     @dihedral:X-no-px-X @atom:* @atom:no @atom:px @atom:*
     @dihedral:X-no-p5-X @atom:* @atom:no @atom:p5 @atom:*
-    @dihedral:X-no-p5-X @atom:* @atom:no @atom:p5 @atom:*
-    @dihedral:X-no-py-X @atom:* @atom:no @atom:py @atom:*
     @dihedral:X-no-py-X @atom:* @atom:no @atom:py @atom:*
     @dihedral:X-no-sh-X @atom:* @atom:no @atom:sh @atom:*
     @dihedral:X-no-ss-X @atom:* @atom:no @atom:ss @atom:*
@@ -13970,10 +13953,7 @@ GAFF {
     @dihedral:X-os-s6-X @atom:* @atom:os @atom:s6 @atom:*
     @dihedral:X-os-sy-X @atom:* @atom:os @atom:sy @atom:*
     @dihedral:X-os-p2-X @atom:* @atom:os @atom:p2 @atom:*
-    @dihedral:X-os-p2-X @atom:* @atom:os @atom:p2 @atom:*
     @dihedral:X-os-pe-X @atom:* @atom:os @atom:pe @atom:*
-    @dihedral:X-os-pe-X @atom:* @atom:os @atom:pe @atom:*
-    @dihedral:X-os-pf-X @atom:* @atom:os @atom:pf @atom:*
     @dihedral:X-os-pf-X @atom:* @atom:os @atom:pf @atom:*
     @dihedral:X-os-p3-X @atom:* @atom:os @atom:p3 @atom:*
     @dihedral:X-os-p4-X @atom:* @atom:os @atom:p4 @atom:*
@@ -14066,151 +14046,80 @@ GAFF {
     @dihedral:X-nd-ss-X @atom:* @atom:nd @atom:ss @atom:*
     @dihedral:X-nf-pe-X @atom:* @atom:nf @atom:pe @atom:*
     @dihedral:c3-c-sh-hs @atom:c3 @atom:c @atom:sh @atom:hs
-    @dihedral:c3-c-sh-hs @atom:c3 @atom:c @atom:sh @atom:hs
-    @dihedral:c2-c2-ss-c3 @atom:c2 @atom:c2 @atom:ss @atom:c3
     @dihedral:c2-c2-ss-c3 @atom:c2 @atom:c2 @atom:ss @atom:c3
     @dihedral:c2-c2-n-c @atom:c2 @atom:c2 @atom:n @atom:c
-    @dihedral:c2-c2-n-c @atom:c2 @atom:c2 @atom:n @atom:c
-    @dihedral:c-n-p2-c2 @atom:c @atom:n @atom:p2 @atom:c2
     @dihedral:c-n-p2-c2 @atom:c @atom:n @atom:p2 @atom:c2
     @dihedral:n-c3-c-n @atom:n @atom:c3 @atom:c @atom:n
-    @dihedral:n-c3-c-n @atom:n @atom:c3 @atom:c @atom:n
-    @dihedral:c-n-c3-c @atom:c @atom:n @atom:c3 @atom:c
     @dihedral:c-n-c3-c @atom:c @atom:n @atom:c3 @atom:c
     @dihedral:c3-c3-n-c @atom:c3 @atom:c3 @atom:n @atom:c
-    @dihedral:c3-c3-n-c @atom:c3 @atom:c3 @atom:n @atom:c
-    @dihedral:c3-c3-n-c @atom:c3 @atom:c3 @atom:n @atom:c
-    @dihedral:c3-c3-n-c @atom:c3 @atom:c3 @atom:n @atom:c
-    @dihedral:c3-c3-c-n @atom:c3 @atom:c3 @atom:c @atom:n
     @dihedral:c3-c3-c-n @atom:c3 @atom:c3 @atom:c @atom:n
     @dihedral:c2-ne-p5-o @atom:c2 @atom:ne @atom:p5 @atom:o
-    @dihedral:c2-ne-p5-o @atom:c2 @atom:ne @atom:p5 @atom:o
-    @dihedral:c2-nf-p5-o @atom:c2 @atom:nf @atom:p5 @atom:o
     @dihedral:c2-nf-p5-o @atom:c2 @atom:nf @atom:p5 @atom:o
     @dihedral:ce-ne-p5-o @atom:ce @atom:ne @atom:p5 @atom:o
-    @dihedral:ce-ne-p5-o @atom:ce @atom:ne @atom:p5 @atom:o
-    @dihedral:ce-nf-p5-o @atom:ce @atom:nf @atom:p5 @atom:o
     @dihedral:ce-nf-p5-o @atom:ce @atom:nf @atom:p5 @atom:o
     @dihedral:cf-ne-p5-o @atom:cf @atom:ne @atom:p5 @atom:o
-    @dihedral:cf-ne-p5-o @atom:cf @atom:ne @atom:p5 @atom:o
-    @dihedral:cf-nf-p5-o @atom:cf @atom:nf @atom:p5 @atom:o
     @dihedral:cf-nf-p5-o @atom:cf @atom:nf @atom:p5 @atom:o
     @dihedral:hn-n-c-o @atom:hn @atom:n @atom:c @atom:o
-    @dihedral:hn-n-c-o @atom:hn @atom:n @atom:c @atom:o
-    @dihedral:c3-ss-ss-c3 @atom:c3 @atom:ss @atom:ss @atom:c3
     @dihedral:c3-ss-ss-c3 @atom:c3 @atom:ss @atom:ss @atom:c3
     @dihedral:c3-n3-nh-ca @atom:c3 @atom:n3 @atom:nh @atom:ca
-    @dihedral:c3-n3-nh-ca @atom:c3 @atom:n3 @atom:nh @atom:ca
-    @dihedral:c3-n3-p5-o @atom:c3 @atom:n3 @atom:p5 @atom:o
     @dihedral:c3-n3-p5-o @atom:c3 @atom:n3 @atom:p5 @atom:o
     @dihedral:ca-nh-oh-ho @atom:ca @atom:nh @atom:oh @atom:ho
-    @dihedral:ca-nh-oh-ho @atom:ca @atom:nh @atom:oh @atom:ho
-    @dihedral:oh-p5-os-c3 @atom:oh @atom:p5 @atom:os @atom:c3
     @dihedral:oh-p5-os-c3 @atom:oh @atom:p5 @atom:os @atom:c3
     @dihedral:os-p5-os-c3 @atom:os @atom:p5 @atom:os @atom:c3
-    @dihedral:os-p5-os-c3 @atom:os @atom:p5 @atom:os @atom:c3
     @dihedral:h1-c3-c-o @atom:h1 @atom:c3 @atom:c @atom:o
-    @dihedral:h1-c3-c-o @atom:h1 @atom:c3 @atom:c @atom:o
-    @dihedral:h1-c3-c-o @atom:h1 @atom:c3 @atom:c @atom:o
-    @dihedral:hc-c3-c-o @atom:hc @atom:c3 @atom:c @atom:o
-    @dihedral:hc-c3-c-o @atom:hc @atom:c3 @atom:c @atom:o
     @dihedral:hc-c3-c-o @atom:hc @atom:c3 @atom:c @atom:o
     @dihedral:hc-c3-c3-hc @atom:hc @atom:c3 @atom:c3 @atom:hc
     @dihedral:hc-c3-c3-c3 @atom:hc @atom:c3 @atom:c3 @atom:c3
     @dihedral:hc-c3-c2-c2 @atom:hc @atom:c3 @atom:c2 @atom:c2
-    @dihedral:hc-c3-c2-c2 @atom:hc @atom:c3 @atom:c2 @atom:c2
-    @dihedral:hc-c3-c2-c2 @atom:hc @atom:c3 @atom:c2 @atom:c2
-    @dihedral:ho-oh-c3-c3 @atom:ho @atom:oh @atom:c3 @atom:c3
     @dihedral:ho-oh-c3-c3 @atom:ho @atom:oh @atom:c3 @atom:c3
     @dihedral:ho-oh-c-o @atom:ho @atom:oh @atom:c @atom:o
-    @dihedral:ho-oh-c-o @atom:ho @atom:oh @atom:c @atom:o
-    @dihedral:c2-c2-c-o @atom:c2 @atom:c2 @atom:c @atom:o
     @dihedral:c2-c2-c-o @atom:c2 @atom:c2 @atom:c @atom:o
     @dihedral:c3-c2-c2-c3 @atom:c3 @atom:c2 @atom:c2 @atom:c3
-    @dihedral:c3-c2-c2-c3 @atom:c3 @atom:c2 @atom:c2 @atom:c3
-    @dihedral:c3-c3-c3-c3 @atom:c3 @atom:c3 @atom:c3 @atom:c3
-    @dihedral:c3-c3-c3-c3 @atom:c3 @atom:c3 @atom:c3 @atom:c3
     @dihedral:c3-c3-c3-c3 @atom:c3 @atom:c3 @atom:c3 @atom:c3
     @dihedral:c3-c3-n3-c3 @atom:c3 @atom:c3 @atom:n3 @atom:c3
-    @dihedral:c3-c3-n3-c3 @atom:c3 @atom:c3 @atom:n3 @atom:c3
-    @dihedral:c3-c3-os-c3 @atom:c3 @atom:c3 @atom:os @atom:c3
     @dihedral:c3-c3-os-c3 @atom:c3 @atom:c3 @atom:os @atom:c3
     @dihedral:c3-c3-os-c @atom:c3 @atom:c3 @atom:os @atom:c
-    @dihedral:c3-c3-os-c @atom:c3 @atom:c3 @atom:os @atom:c
-    @dihedral:c3-os-c3-os @atom:c3 @atom:os @atom:c3 @atom:os
-    @dihedral:c3-os-c3-os @atom:c3 @atom:os @atom:c3 @atom:os
     @dihedral:c3-os-c3-os @atom:c3 @atom:os @atom:c3 @atom:os
     @dihedral:c3-os-c3-na @atom:c3 @atom:os @atom:c3 @atom:na
-    @dihedral:c3-os-c3-na @atom:c3 @atom:os @atom:c3 @atom:na
-    @dihedral:o-c-os-c3 @atom:o @atom:c @atom:os @atom:c3
     @dihedral:o-c-os-c3 @atom:o @atom:c @atom:os @atom:c3
     @dihedral:os-c3-na-c2 @atom:os @atom:c3 @atom:na @atom:c2
-    @dihedral:os-c3-na-c2 @atom:os @atom:c3 @atom:na @atom:c2
-    @dihedral:os-c3-c3-os @atom:os @atom:c3 @atom:c3 @atom:os
     @dihedral:os-c3-c3-os @atom:os @atom:c3 @atom:c3 @atom:os
     @dihedral:os-c3-c3-oh @atom:os @atom:c3 @atom:c3 @atom:oh
-    @dihedral:os-c3-c3-oh @atom:os @atom:c3 @atom:c3 @atom:oh
-    @dihedral:oh-c3-c3-oh @atom:oh @atom:c3 @atom:c3 @atom:oh
     @dihedral:oh-c3-c3-oh @atom:oh @atom:c3 @atom:c3 @atom:oh
     @dihedral:f-c3-c3-f @atom:f @atom:c3 @atom:c3 @atom:f
-    @dihedral:f-c3-c3-f @atom:f @atom:c3 @atom:c3 @atom:f
-    @dihedral:cl-c3-c3-cl @atom:cl @atom:c3 @atom:c3 @atom:cl
     @dihedral:cl-c3-c3-cl @atom:cl @atom:c3 @atom:c3 @atom:cl
     @dihedral:br-c3-c3-br @atom:br @atom:c3 @atom:c3 @atom:br
-    @dihedral:br-c3-c3-br @atom:br @atom:c3 @atom:c3 @atom:br
-    @dihedral:h1-c3-c3-os @atom:h1 @atom:c3 @atom:c3 @atom:os
     @dihedral:h1-c3-c3-os @atom:h1 @atom:c3 @atom:c3 @atom:os
     @dihedral:h1-c3-c3-oh @atom:h1 @atom:c3 @atom:c3 @atom:oh
-    @dihedral:h1-c3-c3-oh @atom:h1 @atom:c3 @atom:c3 @atom:oh
-    @dihedral:h1-c3-c3-f @atom:h1 @atom:c3 @atom:c3 @atom:f
     @dihedral:h1-c3-c3-f @atom:h1 @atom:c3 @atom:c3 @atom:f
     @dihedral:h1-c3-c3-cl @atom:h1 @atom:c3 @atom:c3 @atom:cl
-    @dihedral:h1-c3-c3-cl @atom:h1 @atom:c3 @atom:c3 @atom:cl
-    @dihedral:h1-c3-c3-br @atom:h1 @atom:c3 @atom:c3 @atom:br
     @dihedral:h1-c3-c3-br @atom:h1 @atom:c3 @atom:c3 @atom:br
     @dihedral:hc-c3-c3-os @atom:hc @atom:c3 @atom:c3 @atom:os
-    @dihedral:hc-c3-c3-os @atom:hc @atom:c3 @atom:c3 @atom:os
-    @dihedral:hc-c3-c3-oh @atom:hc @atom:c3 @atom:c3 @atom:oh
     @dihedral:hc-c3-c3-oh @atom:hc @atom:c3 @atom:c3 @atom:oh
     @dihedral:hc-c3-c3-f @atom:hc @atom:c3 @atom:c3 @atom:f
-    @dihedral:hc-c3-c3-f @atom:hc @atom:c3 @atom:c3 @atom:f
-    @dihedral:hc-c3-c3-cl @atom:hc @atom:c3 @atom:c3 @atom:cl
     @dihedral:hc-c3-c3-cl @atom:hc @atom:c3 @atom:c3 @atom:cl
     @dihedral:hc-c3-c3-br @atom:hc @atom:c3 @atom:c3 @atom:br
-    @dihedral:hc-c3-c3-br @atom:hc @atom:c3 @atom:c3 @atom:br
-    @dihedral:c3-c-n-c3 @atom:c3 @atom:c @atom:n @atom:c3
     @dihedral:c3-c-n-c3 @atom:c3 @atom:c @atom:n @atom:c3
     @dihedral:c3-ss-sh-hs @atom:c3 @atom:ss @atom:sh @atom:hs
-    @dihedral:c3-ss-sh-hs @atom:c3 @atom:ss @atom:sh @atom:hs
     @dihedral:c3-n4-c3-ca @atom:c3 @atom:n4 @atom:c3 @atom:ca
-    @dihedral:c3-n4-c3-ca @atom:c3 @atom:n4 @atom:c3 @atom:ca
-    @dihedral:oh-c3-c3-n4 @atom:oh @atom:c3 @atom:c3 @atom:n4
     @dihedral:oh-c3-c3-n4 @atom:oh @atom:c3 @atom:c3 @atom:n4
     @dihedral:c3-c3-n4-c3 @atom:c3 @atom:c3 @atom:n4 @atom:c3
     @dihedral:c3-c-os-c3 @atom:c3 @atom:c @atom:os @atom:c3
-    @dihedral:c3-c-os-c3 @atom:c3 @atom:c @atom:os @atom:c3
-    @dihedral:c3-c-os-c3 @atom:c3 @atom:c @atom:os @atom:c3
-    @dihedral:c3-c-os-p5 @atom:c3 @atom:c @atom:os @atom:p5
     @dihedral:c3-c-os-p5 @atom:c3 @atom:c @atom:os @atom:p5
     @dihedral:c-os-p5-o @atom:c @atom:os @atom:p5 @atom:o
-    @dihedral:c-os-p5-o @atom:c @atom:os @atom:p5 @atom:o
-    @dihedral:c-os-p5-o @atom:c @atom:os @atom:p5 @atom:o
     @dihedral:c3-c3-os-p5 @atom:c3 @atom:c3 @atom:os @atom:p5
-    @dihedral:c3-c3-os-p5 @atom:c3 @atom:c3 @atom:os @atom:p5
-    @dihedral:c3-os-p5-o @atom:c3 @atom:os @atom:p5 @atom:o
     @dihedral:c3-os-p5-o @atom:c3 @atom:os @atom:p5 @atom:o
     @dihedral:ca-ca-os-p5 @atom:ca @atom:ca @atom:os @atom:p5
-    @dihedral:ca-os-p5-o @atom:ca @atom:os @atom:p5 @atom:o
     @dihedral:ca-os-p5-o @atom:ca @atom:os @atom:p5 @atom:o
   } # (end of Dihedrals By Type)
 
   write_once("In Settings") {
     improper_coeff @improper:X-X-c-o cvff 10.5 -1 2    # JCC,7,(1986),230
+    improper_coeff @improper:X-o-c-o cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-ca-ha cvff 1.1 -1 2    # bsd.on C6H6 nmodes
     improper_coeff @improper:X-X-n-hn cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-n2-hn cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-X-na-hn cvff 1.1 -1 2    # JCC,7,(1986),230
-    improper_coeff @improper:X-o-c-o cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-c3-n-c3 cvff 1.1 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:X-n2-ca-n2 cvff 10.5 -1 2    # JCC,7,(1986),230
     improper_coeff @improper:c-c2-c2-c3 cvff 1.1 -1 2    # dac guess, 9/94
@@ -14246,8 +14155,8 @@ GAFF {
   } # (end of improper_coeffs)
 
   write_once("Data Impropers By Type (gaff_imp.py)") {
-    @improper:X-o-c-o @atom:* @atom:o @atom:c @atom:o
     @improper:X-X-c-o @atom:* @atom:* @atom:c @atom:o
+    @improper:X-o-c-o @atom:* @atom:o @atom:c @atom:o
     @improper:X-X-ca-ha @atom:* @atom:* @atom:ca @atom:ha
     @improper:X-X-n-hn @atom:* @atom:* @atom:n @atom:hn
     @improper:X-X-n2-hn @atom:* @atom:* @atom:n2 @atom:hn
