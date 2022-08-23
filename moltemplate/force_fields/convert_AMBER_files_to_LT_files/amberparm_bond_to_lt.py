@@ -12,10 +12,10 @@ bond_style_name = 'harmonic'
 #  wildcards first enables moltemplate to override generic interactions
 #  containing wildcards which appear earlier in the LT file whenever it
 #  finds more specific interactions that appear later in the LT file.)
-# So we sort the entries ("lines") in this table according to
-#  1) the number of wildcard atom types (ie. atom types named "X")
-#  2) the original order the atoms appear in the file
-#     so that we can preserve the original order whenever possible
+# So we sort the entries ("lines") in this table so that
+#  1) A line containing a string with wildcards ("X", for example "X-O2-CO-O2")
+#     comes before an equivalent string without wildcards ("CO-O2-CO-O2")
+#  2) Otherwise, the order is determined by their original position in the list.
 lines_sorted = []
 sort_keys = []
 for i in range(0, len(lines_bonds)):
@@ -24,19 +24,12 @@ for i in range(0, len(lines_bonds)):
     sort_keys.append((atypes, i, line))
 def compare_lines(a, b):
     assert((len(a) == 3) and (len(b) == 3) and (len(a[0]) == len(b[0])))
-    if (a[0] == b[0]):
-        if a[1] < b[1]:
-            return -1
-        elif a[1] > b[1]:
-            return 1
-        else:
-            return 0
-    a_includes_b = True
+    a_includes_b = ('X' in a[0])  # does a[0] have any wildcards?
     for i in range(0, len(a[0])):
         if not (a[0][i] == 'X' or a[0][i] == b[0][i]):
             a_includes_b = False
             break
-    b_includes_a = True
+    b_includes_a = ('X' in b[0])  # does b[0] have any wildcards?
     for i in range(0, len(b[0])):
         if not (b[0][i] == 'X' or a[0][i] == b[0][i]):
             b_includes_a = False
