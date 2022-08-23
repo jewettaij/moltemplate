@@ -2,22 +2,72 @@
 
 import sys
 
-lines_gaff = sys.stdin.readlines()
+lines_impropers = sys.stdin.readlines()
 improper_style_name = 'cvff'
 
+# Preprocessing step.
+# We want entries with more wildcards to appear earlier in the LT file.
+# (Why? Moltemplate processes the rules in the "By Type" section of the
+#  resulting LT file in the order in which they appear.  Putting the
+#  wildcards first enables moltemplate to override generic interactions
+#  containing wildcards which appear earlier in the LT file whenever it
+#  finds more specific interactions that appear later in the LT file.)
+# So we sort the entries ("lines") in this table according to
+#  1) the number of wildcard atom types (ie. atom types named "X")
+#  2) the original order the atoms appear in the file
+#     so that we can preserve the original order whenever possible
+lines_sorted = []
+sort_keys = []
+for i in range(0, len(lines_impropers)):
+    line = lines_impropers[i]
+    atypes = tuple(map(str.strip, line[:11].split('-')))
+    sort_keys.append((atypes, i, line))
+def compare_lines(a, b):
+    assert((len(a) == 3) and (len(b) == 3) and (len(a[0]) == len(b[0])))
+    if (a[0] == b[0]):
+        if a[1] < b[1]:
+            return -1
+        elif a[1] > b[1]:
+            return 1
+        else:
+            return 0
+    a_includes_b = True
+    for i in range(0, len(a[0])):
+        if not (a[0][i] == 'X' or a[0][i] == b[0][i]):
+            a_includes_b = False
+            break
+    b_includes_a = True
+    for i in range(0, len(b[0])):
+        if not (b[0][i] == 'X' or a[0][i] == b[0][i]):
+            b_includes_a = False
+            break
+    if (a_includes_b or (a[1] < b[1])):
+        return -1
+    elif (b_includes_a or (b[1] < a[1])):
+        return 1
+    else:
+        return 0
+import functools
+for _, _, line in sorted(sort_keys,
+                         key = functools.cmp_to_key(compare_lines)):
+    lines_sorted.append(line)
+
+
+# Now loop through the list again to generate the text of the
+# LT file which contains the force field parameters
 sys.stdout.write('  write_once("In Settings") {\n')
 
-for i in range(0, len(lines_gaff)):
-    line = lines_gaff[i]
+for i in range(0, len(lines_sorted)):
+    line = lines_sorted[i]
     atypes = line[:11].split('-')
     atype1 = atypes[0].strip()
     atype2 = atypes[1].strip()
     atype3 = atypes[2].strip()
     atype4 = atypes[3].strip()
-    at1 = atype1.replace('X','*')
-    at2 = atype2.replace('X','*')
-    at3 = atype3.replace('X','*')
-    at4 = atype4.replace('X','*')
+    atype1 = atype1.replace('*','star')
+    atype2 = atype2.replace('*','star')
+    atype3 = atype3.replace('*','star')
+    atype4 = atype4.replace('*','star')
     # NOTE: In "gaff.dat", the central atom is the third atom
     # http://archive.ambermd.org/201307/0519.html
     # We will have to select a module file from the "nbody_alt_symmetry"
@@ -48,19 +98,30 @@ sys.stdout.write('  } # (end of improper_coeffs)\n')
 sys.stdout.write('\n')
 sys.stdout.write('  write_once("Data Impropers By Type (gaff_imp.py)") {\n')
 
-for i in range(0, len(lines_gaff)):
-    line = lines_gaff[i]
+for i in range(0, len(lines_sorted)):
+    line = lines_sorted[i]
     atypes = line[:11].split('-')
     atype1 = atypes[0].strip()
     atype2 = atypes[1].strip()
     atype3 = atypes[2].strip()
     atype4 = atypes[3].strip()
-    at1 = atype1.replace('X','*')
-    at2 = atype2.replace('X','*')
-    at3 = atype3.replace('X','*')
-    at4 = atype4.replace('X','*')
-
+    atype1 = atype1.replace('*','star')
+    atype2 = atype2.replace('*','star')
+    atype3 = atype3.replace('*','star')
+    atype4 = atype4.replace('*','star')
     impropertype = '@improper:'+atype1+'-'+atype2+'-'+atype3+'-'+atype4
+    at1 = atype1
+    at2 = atype2
+    at3 = atype3
+    at4 = atype4
+    if at1 == 'X':
+        at1 = '*'
+    if at2 == 'X':
+        at2 = '*'
+    if at3 == 'X':
+        at3 = '*'
+    if at4 == 'X':
+        at4 = '*'
     sys.stdout.write('    '+impropertype+' @atom:'+at1+' @atom:'+at2+' @atom:'+at3+' @atom:'+at4+'\n')
     #       The improper-angle is the angle between the planes
     #       defined by at1,at2,at3, and at2,at3,at3

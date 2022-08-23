@@ -10,6 +10,9 @@ for i in range(0, len(lines_gaff)):
     line = lines_gaff[i]
     tokens= line.split()
     atype = tokens[0]
+    atype = atype.replace('*','star')
+    #atype = atype.replace('X','*')
+    assert(atype != 'X')
     mass=tokens[1]
     # what is the next number?  (the one in tokens[2]?)
     comments=' '.join(tokens[3:])

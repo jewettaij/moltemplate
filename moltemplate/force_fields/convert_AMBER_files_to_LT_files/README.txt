@@ -23,28 +23,6 @@ Find out how to run this bash script by invoking it without any arguments:
 
 ./amberparm2lt.sh
 
------------- IMPORTANT ------------
-
-BEFORE YOU RUN THIS SCRIPT, BE SURE TO CHANGE THE ORDER OF THE IMPROPER DIHEDRAL
-PARAMETERS SO THAT THE "SPECIFIC" IMPROPER DIHEDRALS APPEAR LAST, AND THE
-"GENERIC" IMPROPER DIHEDRALS APPEAR FIRST.
-
-For example replace these two lines:
-
-X -o -c -o          1.1          180.          2.           JCC,7,(1986),230
-X -X -c -o          10.5         180.          2.           JCC,7,(1986),230
-
-with these two lines:
-
-X -X -c -o          10.5         180.          2.           JCC,7,(1986),230
-X -o -c -o          1.1          180.          2.           JCC,7,(1986),230
-
-Why:
-This is the order that moltemplate expects: generic first. specific last.
-So far only the improper dihedral parameters in the gaff.dat file seem
-to violate this order.  The bonds, angles and dihedrals seem to obey this,
-but check to make sure.
-
 
 There is a discussion of these parameters here:
 http://structbio.vanderbilt.edu/archives/amber-archive/2005/3444.php
@@ -66,8 +44,3 @@ excerpt:
 > no match is found, then a search is made to see if a "generic" (aka wild-card)
 > torsion with match.
 > ...good luck...dac
-
-Good luck
-
--Andrew
-2014-4-19

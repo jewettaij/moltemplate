@@ -23,6 +23,9 @@ for i in range(0, len(lines_gaff)):
     line = lines_gaff[i]
     tokens= line.split()
     atype = tokens[0]
+    atype = atype.replace('*','star')
+    #atype = atype.replace('X','*')
+    assert(atype != 'X')
 
     # UGGHHH
 
