@@ -34,9 +34,9 @@ def compare_lines(a, b):
         if not (b[0][i] == 'X' or a[0][i] == b[0][i]):
             b_includes_a = False
             break
-    if (a_includes_b or (a[1] < b[1])):
+    if ((a_includes_b and (a[0] != b[0])) or (a[1] < b[1])):
         return -1
-    elif (b_includes_a or (b[1] < a[1])):
+    elif ((b_includes_a and (b[0] != a[0])) or (b[1] < a[1])):
         return 1
     else:
         return 0
@@ -74,9 +74,12 @@ sys.stdout.write('  } # (end of bond_coeffs)\n')
 sys.stdout.write('\n')
 sys.stdout.write('  write_once("Data Bonds By Type") {\n')
 
+
 for i in range(0, len(lines_sorted)):
     line = lines_sorted[i]
     atypes = line[:6].split('-')
+    atype1 = atypes[0].strip()
+    atype2 = atypes[1].strip()
     atype1 = atype1.replace('*','star')
     atype2 = atype2.replace('*','star')
     bondtype = '@bond:'+atype1+'-'+atype2

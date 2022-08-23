@@ -34,9 +34,9 @@ def compare_lines(a, b):
         if not (b[0][i] == 'X' or a[0][i] == b[0][i]):
             b_includes_a = False
             break
-    if (a_includes_b or (a[1] < b[1])):
+    if ((a_includes_b and (a[0] != b[0])) or (a[1] < b[1])):
         return -1
-    elif (b_includes_a or (b[1] < a[1])):
+    elif ((b_includes_a and (b[0] != a[0])) or (b[1] < a[1])):
         return 1
     else:
         return 0
@@ -80,7 +80,7 @@ for i in range(0, len(lines_sorted)):
     elif (179.999 < abs(dn) < 180.001):
         sys.stdout.write('    improper_coeff '+impropertype+' '+improper_style_name+' '+str(Kn)+' -1 '+str(n)+comments+'\n')
     else:
-        sys.stderr.write('Error: Illegal bondImproper parameters:\n'
+        sys.stderr.write('Error: Illegal Improper parameters:\n'
                          '       As of 2013-8-03, LAMMPS doens hot have an improper style\n'
                          '       which can handle impropers with gamma != 0 or 180\n')
         exit(-1)

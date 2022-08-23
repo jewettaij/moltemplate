@@ -15,10 +15,10 @@ in_dihedral_coeffs = []
 #  wildcards first enables moltemplate to override generic interactions
 #  containing wildcards which appear earlier in the LT file whenever it
 #  finds more specific interactions that appear later in the LT file.)
-# So we sort the entries ("lines") in this table so that
-#  1) A line containing a string with wildcards ("X", for example "X-O2-CO-O2")
-#     comes before an equivalent string without wildcards ("CO-O2-CO-O2")
-#  2) Otherwise, the order is determined by their original position in the list.
+# So we sort the entries ("lines") in this table according to
+#  1) the number of wildcard atom types (ie. atom types named "X")
+#  2) the original order the atoms appear in the file
+#     so that we can preserve the original order whenever possible
 lines_sorted = []
 sort_keys = []
 for i in range(0, len(lines_dihedrals)):
@@ -28,19 +28,26 @@ for i in range(0, len(lines_dihedrals)):
     sort_keys.append((atypes, i, line))
 def compare_lines(a, b):
     assert((len(a) == 3) and (len(b) == 3) and (len(a[0]) == len(b[0])))
-    a_includes_b = ('X' in a[0])  # does a[0] have any wildcards?
+    if (a[0] == b[0]):
+        if a[1] < b[1]:
+            return -1
+        elif a[1] > b[1]:
+            return 1
+        else:
+            return 0
+    a_includes_b = True
     for i in range(0, len(a[0])):
         if not (a[0][i] == 'X' or a[0][i] == b[0][i]):
             a_includes_b = False
             break
-    b_includes_a = ('X' in b[0])  # does b[0] have any wildcards?
+    b_includes_a = True
     for i in range(0, len(b[0])):
         if not (b[0][i] == 'X' or a[0][i] == b[0][i]):
             b_includes_a = False
             break
-    if ((a_includes_b and (a[0] != b[0])) or (a[1] < b[1])):
+    if (a_includes_b or (a[1] < b[1])):
         return -1
-    elif ((b_includes_a and (b[0] != a[0])) or (b[1] < a[1])):
+    elif (b_includes_a or (b[1] < a[1])):
         return 1
     else:
         return 0
@@ -74,16 +81,24 @@ for i in range(0, len(lines_sorted)):
     dn = float(tokens[2])
     n = int(float(tokens[3]))
     comments=' '.join(tokens[4:])
+    #print("dihedraltype = "+str(dihedraltype)+
+    #      ", tokens["+str(i)+"] = "+str(tokens))
+    #print("n = "+str(n))
     if len(comments.strip()) > 0:
         comments = '    # ' + comments
     in_dihedral_coeffs.append([dihedraltype, Kn, n, dn, comments])
+    #print(Kn, n, dn)
 
 
+#for entry in in_dihedral_coeffs:
+#    print(entry)
+#exit()
 
 
 # ---- processing dihedral fourier series ----
 # ---- (negative "n" values means the Fourier series is not yet complete.)
-i_orig = 1
+
+i_orig = 0
 i = 1
 while i < len(in_dihedral_coeffs):
     type_str = in_dihedral_coeffs[i][0]
@@ -91,8 +106,25 @@ while i < len(in_dihedral_coeffs):
     n = in_dihedral_coeffs[i][2]
     dn = in_dihedral_coeffs[i][3]
     comments = in_dihedral_coeffs[i][-1]
-    #sys.stderr.write("orig_dihedral_coeffs["+str(i_orig)+"] = "+str(in_dihedral_coeffs[i])+"\n")
+
+    sys.stderr.write("orig_dihedral_coeffs["+str(i_orig)+"] = "+str(in_dihedral_coeffs[i])+"\n")
+
+    #if (i>0):
+    #    sys.stderr.write('prev_n='+str(in_dihedral_coeffs[i-1][-3])+'\n')
+    #sys.stderr.write('n='+str(n)+'\n')
+
     if ((i>0) and (in_dihedral_coeffs[i-1][-3] < 0)):
+
+        #sys.stdout.write('interaction_before_append: '+str(in_dihedral_coeffs[i-1])+'\n')
+        #if not (in_dihedral_coeffs[i-1][0] == in_dihedral_coeffs[i][0]):
+        #    print(''.join(lines_sorted))
+        #    print(' '.join(map(str,in_dihedral_coeffs[i-1])))
+        #    print(' '.join(map(str,in_dihedral_coeffs[i])))
+        #    print("i="+str(i)+
+        #          ", in_dihedral_coeffs[i-1][0] == "+str(in_dihedral_coeffs[i-1][0])+
+        #          ", in_dihedral_coeffs[i][0] == "+str(in_dihedral_coeffs[i][0]))
+        #    print("in_dihedral_coeffs[i-1][2]="+str(in_dihedral_coeffs[i-1][2]))
+        #    print("in_dihedral_coeffs[i][2]="+str(in_dihedral_coeffs[i][2]))
         assert(in_dihedral_coeffs[i-1][0] == in_dihedral_coeffs[i][0])
         in_dihedral_coeffs[i-1][-3] = -in_dihedral_coeffs[i-1][-3]
         old_comments = in_dihedral_coeffs[i-1][-1]
@@ -102,9 +134,10 @@ while i < len(in_dihedral_coeffs):
         in_dihedral_coeffs[i-1].append(n)
         in_dihedral_coeffs[i-1].append(dn)
         in_dihedral_coeffs[i-1].append(comments)
+        #sys.stdout.write('interaction_after_append: '+str(in_dihedral_coeffs[i-1])+'\n')
         del in_dihedral_coeffs[i]
     else:
-        #sys.stderr.write("in_dihedral_coeffs["+str(i-1)+"] = "+str(in_dihedral_coeffs[i-1])+"\n")
+        sys.stderr.write("in_dihedral_coeffs["+str(i-1)+"] = "+str(in_dihedral_coeffs[i-1])+"\n")
         i += 1
     i_orig += 1
 
@@ -138,9 +171,6 @@ sys.stdout.write('  write_once("Data Dihedrals By Type") {\n')
 for i in range(0, len(lines_sorted)):
     line = lines_sorted[i]
     atypes = line[:11].split('-')
-    if (i > 0) and (atypes == atypes_prev):
-        continue   # no need to redundantly repeat the same rule multiple times
-    atypes_prev = atypes
     atype1 = atypes[0].strip()
     atype2 = atypes[1].strip()
     atype3 = atypes[2].strip()

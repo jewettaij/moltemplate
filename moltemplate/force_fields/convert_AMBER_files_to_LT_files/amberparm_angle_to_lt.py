@@ -34,9 +34,9 @@ def compare_lines(a, b):
         if not (b[0][i] == 'X' or a[0][i] == b[0][i]):
             b_includes_a = False
             break
-    if (a_includes_b or (a[1] < b[1])):
+    if ((a_includes_b and (a[0] != b[0])) or (a[1] < b[1])):
         return -1
-    elif (b_includes_a or (b[1] < a[1])):
+    elif ((b_includes_a and (b[0] != a[0])) or (b[1] < a[1])):
         return 1
     else:
         return 0
