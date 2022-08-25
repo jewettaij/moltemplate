@@ -2,7 +2,7 @@
 
 # Author: Andrew Jewett
 # License: MIT License  (See LICENSE.md)
-# All rights reserved.
+# Copyright (c) 2022
 
 
 import sys
@@ -491,6 +491,8 @@ def ConvertMol22Lt(fin = sys.stdin,
         raise InputError("Error: The MOL2 file is shorter than the charges file.")
 
 
+
+
 def main():
     # Inform the user what version of the software they are using
     sys.stderr.write(g_program_name + ' v' +
@@ -514,7 +516,7 @@ def main():
         ap.add_argument('-name', '--name',
                         dest='object_name',
                         required=False,
-                        help='name of the force field you are using (eg "GAFF2")')
+                        help='name of the molecule or molecular subunit you want to create.')
         ap.add_argument('-ff', '--ff',
                         dest='ff_name',
                         required=False,

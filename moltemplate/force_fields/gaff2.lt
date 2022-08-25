@@ -1,150 +1,158 @@
-# AMBER General Force Field for organic molecules (Version 2.11, May 2016)
-# Converted from the "gaff2.dat" file distributed with AmberTools22 on 2022-8-15
 ####################################################################
 # To use this, LAMMPS must be compiled with the EXTRA-MOLECULE package
 # (See here for details: https://docs.lammps.org/Build_package.html)
-####################################################################
+#######################################################################
 #    This moltemplate (LT) file was generated automatically using
-# amberparm2lt.sh gaff2.dat GAFF2
-####################################################################
-#    Background information and usage explanation:
-# This file contanis a list of atom types and rules for generating bonded
-# interactions between these atoms (hopefully) according to AMBER conventions.
-# By using the atom types shown below in your own molecules, bonds and angular
-# interactions will be automatically generated.
-# AMBER (GAFF) force-field parameters will also be assigned to each angle
-# interaction (according to these atom types).
-# One way to apply the GAFF force field to a particular type of molecule, is
-# to use the "inherits" keyword when you define that molecule.  For example:
-# import("gaff.lt")
-# MoleculeType inherits GAFF {
-#   write_once("Data Atoms") {
-#     $atom:C1 $mol:... @atom:cx 0.0 4.183 3.194 13.285
-#     $atom:C2 $mol:... @atom:cx 0.0 4.291 4.618 13.382
-#        :       :         :
+#      amber2lt.py --in gaff2.dat --name GAFF2 --out gaff2.lt
+#######################################################################
+#      USAGE SUGGESTIONS:
+# Suppose you named your force field "GAFF"  (using amber2lt.py's "--name"
+# argument) and saved it in a file named "gaff.lt".  Then, in order to create
+# molecules that use this force field, create a file for each type of molecule
+# (eg "benzene.lt") and use this format:
+# #---- "benzene.lt" file -----
+# import "gaff.lt"
+# Benzene inherits GAFF {
+#   write('Data Atoms') {
+#     $atom:c1  $mol  @atom:ca  -0.115   -0.739   1.189  -0.00733
+#     $atom:c2  $mol  @atom:ca  -0.115    0.614   1.208   0.35167
+#        :        :        :
+#   }
+#   write("Data Bond List") {
+#     $bond:b1 $atom:C1 $atom:C2
+#        :
 #   }
 # }
-#(See "Inheritance" and "short names vs. full names" in the moltemplate manual.)
-####################################################################
-#    Moltemplate can not assign atom charge.  You must assign atomic
-# charges yourself.  (Moltemplate is only a simple text manipulation tool.)
-# You can do this afterwards using commands like "set atom 70 charge -0.212"
-# For details, see http://lammps.sandia.gov/doc/set.html)
-####################################################################
 #
-# --- Description of atom types ---
+# ------- How to generate molecule files (such as "benzene.lt") -------
 #
-#  @atom:c  Sp2 C carbonyl group
-#  @atom:cs  Sp2 C in c=S
-#  @atom:c1  Sp C
-#  @atom:c2  Sp2 C
-#  @atom:c3  Sp3 C
-#  @atom:ca  Sp2 C in pure aromatic systems
-#  @atom:cp  Head Sp2 C that connect two rings in biphenyl sys.
-#  @atom:cq  Head Sp2 C that connect two rings in biphenyl sys. identical to cp
-#  @atom:cc  Sp2 carbons in non-pure aromatic systems
-#  @atom:cd  Sp2 carbons in non-pure aromatic systems, identical to cc
-#  @atom:ce  Inner Sp2 carbons in conjugated systems
-#  @atom:cf  Inner Sp2 carbons in conjugated systems, identical to ce
-#  @atom:cg  Inner Sp carbons in conjugated systems
-#  @atom:ch  Inner Sp carbons in conjugated systems, identical to cg
-#  @atom:cx  Sp3 carbons in triangle systems
-#  @atom:cy  Sp3 carbons in square systems
-#  @atom:cu  Sp2 carbons in triangle systems
-#  @atom:cv  Sp2 carbons in square systems
-#  @atom:cz  Sp2 carbon in guanidine group
-#  @atom:h1  H bonded to aliphatic carbon with 1 electrwd. group
-#  @atom:h2  H bonded to aliphatic carbon with 2 electrwd. group
-#  @atom:h3  H bonded to aliphatic carbon with 3 electrwd. group
-#  @atom:h4  H bonded to non-sp3 carbon with 1 electrwd. group
-#  @atom:h5  H bonded to non-sp3 carbon with 2 electrwd. group
-#  @atom:ha  H bonded to aromatic carbon
-#  @atom:hc  H bonded to aliphatic carbon without electrwd. group
-#  @atom:hn  H bonded to nitrogen atoms
-#  @atom:ho  Hydroxyl group
-#  @atom:hp  H bonded to phosphate
-#  @atom:hs  Hydrogen bonded to sulphur
-#  @atom:hw  Hydrogen in water
-#  @atom:hx  H bonded to C next to positively charged group
-#  @atom:f  Fluorine
-#  @atom:cl  Chlorine
-#  @atom:br  Bromine
-#  @atom:i  Iodine
-#  @atom:n  Sp2 nitrogen in amide groups
-#  @atom:n1  Sp N
-#  @atom:n2  aliphatic Sp2 N with two connected atoms
-#  @atom:n3  Sp3 N with three connected atoms
-#  @atom:n4  Sp3 N with four connected atoms
-#  @atom:na  Sp2 N with three connected atoms
-#  @atom:nb  Sp2 N in pure aromatic systems
-#  @atom:nc  Sp2 N in non-pure aromatic systems
-#  @atom:nd  Sp2 N in non-pure aromatic systems, identical to nc
-#  @atom:ne  Inner Sp2 N in conjugated systems
-#  @atom:nf  Inner Sp2 N in conjugated systems, identical to ne
-#  @atom:nh  Amine N connected one or more aromatic rings
-#  @atom:no  Nitro N
-#  @atom:ns  amind N, with 1 attached hydrogen atom
-#  @atom:nt  amide N, with 2 attached hydrogen atoms
-#  @atom:nx  like n4, but only has one hydrogen atom
-#  @atom:ny  like n4, but only has two hydrogen atoms
-#  @atom:nz  like n4, but only has three three hydrogen atoms
-#  @atom:n+  NH4+
-#  @atom:nu  like nh, but only has one attached hydrogen atom
-#  @atom:nv  like nh, but only has two attached hydrogen atoms
-#  @atom:n7  like n3, but only has one attached hydrogen atom
-#  @atom:n8  like n3, but only has two attached hydrogen atoms
-#  @atom:n9  NH3
-#  @atom:ni  like n in RG3
-#  @atom:nj  like n in RG4
-#  @atom:nk  like n4/nx/ny in RG3
-#  @atom:nl  like n4/nx/ny in RG4
-#  @atom:nm  like nh in RG3
-#  @atom:nn  like nh in RG4
-#  @atom:np  like n3 in RG3
-#  @atom:nq  like n3 in RG4
-#  @atom:n5  like n7 in RG3
-#  @atom:n6  like n7 in RG4
-#  @atom:o  Oxygen with one connected atom
-#  @atom:oh  Oxygen in hydroxyl group
-#  @atom:os  Ether and ester oxygen
-#  @atom:op  os in 3-memberred rings
-#  @atom:oq  os in 4-memberred rings
-#  @atom:ow  Oxygen in water
-#  @atom:p2  Phosphate with two connected atoms
-#  @atom:p3  Phosphate with three connected atoms, such as PH3
-#  @atom:p4  Phosphate with three connected atoms, such as O=P(CH3)2
-#  @atom:p5  Phosphate with four connected atoms, such as O=P(OH)3
-#  @atom:pb  Sp2 P in pure aromatic systems
-#  @atom:pc  Sp2 P in non-pure aromatic systems
-#  @atom:pd  Sp2 P in non-pure aromatic systems, identical to pc
-#  @atom:pe  Inner Sp2 P in conjugated systems
-#  @atom:pf  Inner Sp2 P in conjugated systems, identical to pe
-#  @atom:px  Special p4 in conjugated systems
-#  @atom:py  Special p5 in conjugated systems
-#  @atom:s  S with one connected atom
-#  @atom:s2  S with two connected atom, involved at least one double bond
-#  @atom:s4  S with three connected atoms
-#  @atom:s6  S with four connected atoms
-#  @atom:sh  Sp3 S connected with hydrogen
-#  @atom:ss  Sp3 S in thio-ester and thio-ether
-#  @atom:sp  ss in 3-memberred rings
-#  @atom:sq  ss in 4-memberred rings
-#  @atom:sx  Special s4 in conjugated systems
-#  @atom:sy  Special s6 in conjugated systems
-#  @atom:Cu  Copper
-
-
+# You can try to generate these files manually, but you must be careful
+# to choose the correct @atom types for each atom (eg "@atom:ca"),
+# and you must obtain the atomic charge (column 4) by other means. (See below.)
+#
+# Recommended method:
+#
+# Use AmberTools to create a MOL2 file containing one of the molecules
+# you want to simulate.  Suppose you use AmberTools to prepare a MOL2 file
+# containing a single benzene molecule (named "benzene.mol2")
+# and a corresponding FRCMOD file (named "benzene.frcmod").  Use:
+#
+# mol22lt.py --in benzene.mol2 --out benzene.lt --name Benzene \
+#            --ff MyForceField --ff my_force_field.lt
+# amber2lt.py --in benzene.frcmod --name MyForceField >> my_force_field.lt
+#
+# ...The resulting "benzene.lt" file will have this format:
+# #---- "benzene.lt" file -----
+# import "my_force_field.lt"
+# Benzene inherits MyForceField {
+#   :
+# }
+# Repeat this for each different type of molecule you want in your simulation.
+# (If it is a molecule with multiple chains, do this for every chain.)
+# (If you want to start over, delete the "my_force_field.lt" file.)
+#######################################################################
 
 
 GAFF2 {
 
-  # ----------------------------------------------------------------------
-  # The basic atom nomenclature and conventions are explained here:
-  #   http://ambermd.org/antechamber/gaff.pdf
-  # For reference, the original gaff.dat file and format documentation are here:
-  #   http://ambermd.org/AmberTools-get.html
-  #   http://ambermd.org/formats.html#parm.dat
-  # ----------------------------------------------------------------------
+  #  @atom:c  Sp2 C carbonyl group
+  #  @atom:cs  Sp2 C in c=S
+  #  @atom:c1  Sp C
+  #  @atom:c2  Sp2 C
+  #  @atom:c3  Sp3 C
+  #  @atom:ca  Sp2 C in pure aromatic systems
+  #  @atom:cp  Head Sp2 C that connect two rings in biphenyl sys.
+  #  @atom:cq  Head Sp2 C that connect two rings in biphenyl sys. identical to cp
+  #  @atom:cc  Sp2 carbons in non-pure aromatic systems
+  #  @atom:cd  Sp2 carbons in non-pure aromatic systems, identical to cc
+  #  @atom:ce  Inner Sp2 carbons in conjugated systems
+  #  @atom:cf  Inner Sp2 carbons in conjugated systems, identical to ce
+  #  @atom:cg  Inner Sp carbons in conjugated systems
+  #  @atom:ch  Inner Sp carbons in conjugated systems, identical to cg
+  #  @atom:cx  Sp3 carbons in triangle systems
+  #  @atom:cy  Sp3 carbons in square systems
+  #  @atom:cu  Sp2 carbons in triangle systems
+  #  @atom:cv  Sp2 carbons in square systems
+  #  @atom:cz  Sp2 carbon in guanidine group
+  #  @atom:h1  H bonded to aliphatic carbon with 1 electrwd. group
+  #  @atom:h2  H bonded to aliphatic carbon with 2 electrwd. group
+  #  @atom:h3  H bonded to aliphatic carbon with 3 electrwd. group
+  #  @atom:h4  H bonded to non-sp3 carbon with 1 electrwd. group
+  #  @atom:h5  H bonded to non-sp3 carbon with 2 electrwd. group
+  #  @atom:ha  H bonded to aromatic carbon
+  #  @atom:hc  H bonded to aliphatic carbon without electrwd. group
+  #  @atom:hn  H bonded to nitrogen atoms
+  #  @atom:ho  Hydroxyl group
+  #  @atom:hp  H bonded to phosphate
+  #  @atom:hs  Hydrogen bonded to sulphur
+  #  @atom:hw  Hydrogen in water
+  #  @atom:hx  H bonded to C next to positively charged group
+  #  @atom:f  Fluorine
+  #  @atom:cl  Chlorine
+  #  @atom:br  Bromine
+  #  @atom:i  Iodine
+  #  @atom:n  Sp2 nitrogen in amide groups
+  #  @atom:n1  Sp N
+  #  @atom:n2  aliphatic Sp2 N with two connected atoms
+  #  @atom:n3  Sp3 N with three connected atoms
+  #  @atom:n4  Sp3 N with four connected atoms
+  #  @atom:na  Sp2 N with three connected atoms
+  #  @atom:nb  Sp2 N in pure aromatic systems
+  #  @atom:nc  Sp2 N in non-pure aromatic systems
+  #  @atom:nd  Sp2 N in non-pure aromatic systems, identical to nc
+  #  @atom:ne  Inner Sp2 N in conjugated systems
+  #  @atom:nf  Inner Sp2 N in conjugated systems, identical to ne
+  #  @atom:nh  Amine N connected one or more aromatic rings
+  #  @atom:no  Nitro N
+  #  @atom:ns  amind N, with 1 attached hydrogen atom
+  #  @atom:nt  amide N, with 2 attached hydrogen atoms
+  #  @atom:nx  like n4, but only has one hydrogen atom
+  #  @atom:ny  like n4, but only has two hydrogen atoms
+  #  @atom:nz  like n4, but only has three three hydrogen atoms
+  #  @atom:n+  NH4+
+  #  @atom:nu  like nh, but only has one attached hydrogen atom
+  #  @atom:nv  like nh, but only has two attached hydrogen atoms
+  #  @atom:n7  like n3, but only has one attached hydrogen atom
+  #  @atom:n8  like n3, but only has two attached hydrogen atoms
+  #  @atom:n9  NH3
+  #  @atom:ni  like n in RG3
+  #  @atom:nj  like n in RG4
+  #  @atom:nk  like n4/nx/ny in RG3
+  #  @atom:nl  like n4/nx/ny in RG4
+  #  @atom:nm  like nh in RG3
+  #  @atom:nn  like nh in RG4
+  #  @atom:np  like n3 in RG3
+  #  @atom:nq  like n3 in RG4
+  #  @atom:n5  like n7 in RG3
+  #  @atom:n6  like n7 in RG4
+  #  @atom:o  Oxygen with one connected atom
+  #  @atom:oh  Oxygen in hydroxyl group
+  #  @atom:os  Ether and ester oxygen
+  #  @atom:op  os in 3-memberred rings
+  #  @atom:oq  os in 4-memberred rings
+  #  @atom:ow  Oxygen in water
+  #  @atom:p2  Phosphate with two connected atoms
+  #  @atom:p3  Phosphate with three connected atoms, such as PH3
+  #  @atom:p4  Phosphate with three connected atoms, such as O=P(CH3)2
+  #  @atom:p5  Phosphate with four connected atoms, such as O=P(OH)3
+  #  @atom:pb  Sp2 P in pure aromatic systems
+  #  @atom:pc  Sp2 P in non-pure aromatic systems
+  #  @atom:pd  Sp2 P in non-pure aromatic systems, identical to pc
+  #  @atom:pe  Inner Sp2 P in conjugated systems
+  #  @atom:pf  Inner Sp2 P in conjugated systems, identical to pe
+  #  @atom:px  Special p4 in conjugated systems
+  #  @atom:py  Special p5 in conjugated systems
+  #  @atom:s  S with one connected atom
+  #  @atom:s2  S with two connected atom, involved at least one double bond
+  #  @atom:s4  S with three connected atoms
+  #  @atom:s6  S with four connected atoms
+  #  @atom:sh  Sp3 S connected with hydrogen
+  #  @atom:ss  Sp3 S in thio-ester and thio-ether
+  #  @atom:sp  ss in 3-memberred rings
+  #  @atom:sq  ss in 4-memberred rings
+  #  @atom:sx  Special s4 in conjugated systems
+  #  @atom:sy  Special s6 in conjugated systems
+  #  @atom:Cu  Copper
 
   write_once("Data Masses") {
     @atom:c 12.01
@@ -14932,6 +14940,5 @@ GAFF2 {
     special_bonds   amber
   }
 
-}
-
+} # GAFF2
 
