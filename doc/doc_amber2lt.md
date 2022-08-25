@@ -78,9 +78,11 @@ Benzene inherits MyForceField {
 
 ```
 If you have multiple molecules, you can repeat this process for each of them.
-(Each time, you do, your "my_force_field.lt" file will grow larger and larger.
- This will augment the existing force field with new atom and interaction
- types each time.)
+(Each time, you do, your "my_force_field.lt" file will grow larger and larger
+ as *amber2lt.py* appends more and more atom types and interaction types
+ to the existing file.
+ *If you need to make changes to the original FRCMOD file, remember to
+ delete the "my_force_field.lt" file before you start over again.*)
 
 
 
