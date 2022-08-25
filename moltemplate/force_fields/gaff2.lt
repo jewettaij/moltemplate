@@ -38,7 +38,7 @@
 # and a corresponding FRCMOD file (named "benzene.frcmod").  Use:
 #
 # mol22lt.py --in benzene.mol2 --out benzene.lt --name Benzene \
-#            --ff MyForceField --ff my_force_field.lt
+#            --ff MyForceField --ff-file my_force_field.lt
 # amber2lt.py --in benzene.frcmod --name MyForceField >> my_force_field.lt
 #
 # ...The resulting "benzene.lt" file will have this format:
