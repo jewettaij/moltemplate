@@ -9,6 +9,8 @@
 # (...and edited extensively by hand afterwards)
 
 
+import "oplsaa.lt"   # Load the original definition of the "OPLSAA" object
+
 
 # We will augment the definition of the "OPLSAA" force field below
 # to include atom types and dihedral interactions from the 2 papers above
