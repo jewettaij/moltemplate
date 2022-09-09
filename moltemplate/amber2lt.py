@@ -51,8 +51,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2022-9-08'
-g_version_str = '0.2.0'
+g_date_str = '2022-9-09'
+g_version_str = '0.2.1'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -104,7 +104,7 @@ def IsFloat(s):
 
 def ExtractFFTableAB(lines,
                      num_atom_types,
-                     optional_section_name = '',
+                     allowed_section_names = None,
                      num_skip_lines = 0,
                      blanks_before_target = -1):
     count_blanks = 0
@@ -146,14 +146,14 @@ def ExtractFFTableAB(lines,
                     a = i
             else:
                 tokens = line.strip().split()
-                if optional_section_name and (optional_section_name != ''):
+                if allowed_section_names and len(allowed_section_names) > 0:
                     if ((len(tokens) == 1) and
-                        (not tokens[0] in optional_section_name)):
-                        raise InputError('Format Error: Expected "' +
-                                         optional_section_name +
-                                         '". Found "' +
+                        (not tokens[0] in allowed_section_names)):
+                        raise InputError('Format Error: Expected ' +
+                                         str(allowed_section_names) +
+                                         '. Found \'' +
                                          tokens[0]+
-                                         '". (Split file and use --bond, --angle, --dihedral, --improper arguments instead.)')
+                                         '\'. (Split file and use --bond, --angle, --dihedral, --improper arguments instead.)')
                 elif len(tokens) != 0:
                     raise InputError('Format Error: Unnexpected text: "' +
                                      line.strip() + '"')
@@ -167,22 +167,22 @@ def ExtractFFTableAB(lines,
 
 
 def ExtractMassTextAB(lines, num_skip_lines = 0):
-    return ExtractFFTableAB(lines, 1, ('MASS'), num_skip_lines)
+    return ExtractFFTableAB(lines, 1, ('MASS', 'MASSES'), num_skip_lines)
 
 def ExtractBondTextAB(lines, num_skip_lines = 0):
-    return ExtractFFTableAB(lines, 2, ('BOND'), num_skip_lines)
+    return ExtractFFTableAB(lines, 2, ('BOND', 'BONDS'), num_skip_lines)
 
 def ExtractAngleTextAB(lines, num_skip_lines = 0):
-    return ExtractFFTableAB(lines, 3, ('ANGL'), num_skip_lines)
+    return ExtractFFTableAB(lines, 3, ('ANGL', 'ANGLE', 'ANGLES'), num_skip_lines)
 
 def ExtractDihedralTextAB(lines, num_skip_lines = 0):
-    return ExtractFFTableAB(lines, 4, ('DIHE'), num_skip_lines)
+    return ExtractFFTableAB(lines, 4, ('DIHE', 'DIHEDRAL', 'DIHEDRALS', 'TOR', 'TORSION', 'TORSIONS'), num_skip_lines)
 
 def ExtractImproperTextAB(lines, num_skip_lines = 0):
-    return ExtractFFTableAB(lines, 4, ('IMPR'), num_skip_lines)
+    return ExtractFFTableAB(lines, 4, ('IMPR', 'IMPROPER', 'IMPROPERS'), num_skip_lines)
 
 def ExtractPairTextAB(lines, num_skip_lines = 0):
-    return ExtractFFTableAB(lines, 1, ('NONB', 'MOD4'), num_skip_lines)
+    return ExtractFFTableAB(lines, 1, ('NONB', 'NONBON', 'NONBOND', 'NONBONDED', 'MOD4'), num_skip_lines)
 
 
 
