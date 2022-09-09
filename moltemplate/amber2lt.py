@@ -51,8 +51,8 @@ g_filename = __file__.split('/')[-1]
 g_module_name = g_filename
 if g_filename.rfind('.py') != -1:
     g_module_name = g_filename[:g_filename.rfind('.py')]
-g_date_str = '2022-8-24'
-g_version_str = '0.1.0'
+g_date_str = '2022-9-08'
+g_version_str = '0.2.0'
 g_program_name = g_filename
 #sys.stderr.write(g_program_name+' v'+g_version_str+' '+g_date_str+' ')
 
@@ -630,9 +630,11 @@ def ConvertImproper2Lt(lines_improper):
 
 
 
-def ConvertPair2Lt(lines_pair):
+def ConvertPair2Lt(lines_pair,
+                   lines_mass=[]):
     output_lines = []
     pair_style = 'lj/charmm/coul/long'
+    atom_types_in_pairs = set([])
     # NOTE: LAMMPS complains if you attempt to use lj/charmm/coul/long
     # on a system if it does not contain any charged particles.
     # Moltemplate does not assign atomic charge,
@@ -646,6 +648,7 @@ def ConvertPair2Lt(lines_pair):
         atype = atype.replace('*','star')
         #atype = atype.replace('X','*')
         assert(atype != 'X')
+        atom_types_in_pairs.add(atype)
         # UGGHHH
         # OLD CODE:
         #sig=tokens[1]
@@ -673,6 +676,17 @@ def ConvertPair2Lt(lines_pair):
         if len(comments.strip()) > 0:
             output_lines.append('   # '+comments)
         output_lines.append('\n')
+    # Any missing pair_coeffs (for atoms that are defined in the Masses section)
+    # should be supplied with default values (so that LAMMPS doesn't complain).
+    for i in range(0, len(lines_mass)):
+        line = lines_mass[i]
+        tokens= line.split()
+        atype = tokens[0]
+        if not (atype in atom_types_in_pairs):
+            eps = '0.0'
+            sig = '1.0'
+            output_lines.append('    pair_coeff @atom:'+atype+' @atom:'+atype+' '+pair_style+' '+eps+' '+sig+' # (default parameters)\n')
+            sys.stderr.write('WARNING: No Lennard-Jones parameters defined for atom type "'+atype+'" in source file.\n')
     output_lines.append('  } # (end of pair_coeffs)\n')
     return output_lines
 
@@ -696,7 +710,7 @@ def ConvertAmberSections2Lt(object_name,
     lines_angle_new      = ConvertAngle2Lt(lines_angle)
     lines_dihedral_new   = ConvertDihedral2Lt(lines_dihedral)
     lines_improper_new   = ConvertImproper2Lt(lines_improper)
-    lines_pair_new       = ConvertPair2Lt(lines_pair)
+    lines_pair_new       = ConvertPair2Lt(lines_pair, lines_mass)
 
     lines_prefix = []
     if object_name and object_name != "":

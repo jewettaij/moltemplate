@@ -352,6 +352,8 @@ GAFF2 {
     pair_coeff @atom:pe @atom:pe lj/charmm/coul/long 0.2295 3.6940224448971026
     pair_coeff @atom:pf @atom:pf lj/charmm/coul/long 0.2295 3.6940224448971026
     pair_coeff @atom:Cu @atom:Cu lj/charmm/coul/long 0.1729 3.9377723341802997   # Esitmated by Junmei
+    pair_coeff @atom:hw @atom:hw lj/charmm/coul/long 0.0 1.0 # (default parameters)
+    pair_coeff @atom:ow @atom:ow lj/charmm/coul/long 0.0 1.0 # (default parameters)
   } # (end of pair_coeffs)
 
   write_once("In Settings") {
