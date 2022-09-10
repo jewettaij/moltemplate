@@ -59,8 +59,7 @@
 
 \subsubsection*{Warning:
   This manual does not explain how build molecules that use
-  all-atom force fields, or how to to run reactive (a.k.a. ``active-matter'')
-  simulations.}
+  all-atom force fields, or how to to run reactive simulations.}
 However numerous examples and README files are available to
 demonstrate how to run these kinds of simulations.
 Downloading these examples is highly recommended.
@@ -70,7 +69,7 @@ Downloading these examples is highly recommended.
 
 
 
-Moltemplate is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
+Moltemplate \cite{MOLTEMPLATE} is a general molecule builder and force-field database system for LAMMPS.  A simple file format has been created to store molecule definitions and force-fields (the LAMMPS-template format, “LT”). 
 LT files are templates containing \textit{all} of the text relevant to a particular molecule (including coordinates, bond-topology, angles, force-field parameters, constraints, groups and fixes).  Moltemplate can then duplicate the molecule, customize it, and use it as a building-block for constructing larger, more complex molecules.  (These molecules can be used to build larger molecules.)  Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be inserted, moved, deleted and/or replaced).
 
 Moltemplate is extremely flexible.
@@ -79,43 +78,45 @@ It supports all LAMMPS force-field styles and nearly all atom-styles
 
 \subsection*{\textit{All-atom simulations}}
 \label{sec:all_atom_limitations}
-Moltemplate was designed for coarse-grained simulations.
-To prepare realistic all-atom simulations,
-you can \textit{either} use the \textbf{ATB} service
-(\url{https://atb.uq.edu.au}) to download a realistic LT file describing
-your molecules, \textit{or} create an LT file by hand.
-In the later case, if you want to use one of the force-field parameter
-sets included with moltemplate (eg. OPLSAA, GAFF2, COMPASS),
-you must choose the \textit{type} of each atom in the molecule by hand.
-\textit{\textbf{Moltemplate does not assign atom types automatically.}}
-For example, to create an LT file for a molecule that contains
-a carbon atom, you must choose which \textit{type} of carbon
-atom is most appropriate for that atom.
-(For most force fields, there are many types of carbon atoms to choose from.)
-To do that, you must choose a force field (eg. OPLSAA), and read the
-force field's LT file (eg. ``oplsaa.lt''), and choose from the list of atom
-type descriptions in that file, the one which most closely matches that atom.
-(Its partial charge may also need to be adjusted.)
- %Moltemplate comes with examples of simple molecules built this way.
-This is not difficult for simple organic molecules like polyethylene or benzene,
-but it is not trivial for complex molecules like proteins and many ligands.
 
-Unlike other molecule builders, moltemplate does not infer atom types
-from their local bond environment or from information from PDB files.
-Moltemplate also does not repair incomplete PDB files or calculate
-atomic partial charges using physics.  While moltemplate can read PDB files, 
-\textit{\textbf{moltemplate currently only reads atomic coordinates from PDB
-files and discards all other information.}}
 
-\subsubsection*{Strategy for preparing all atom simulations}
-Consequently, for complex molecules, users are currently
-encouraged to either use \textbf{ATB} \cite{ATB},
-\textit{\textbf{or}} prepare simulation files using a different
-molecule building program that supports automatic atom type (and charge)
-assignment, and save (or convert) the resulting files to LAMMPS DATA format.
-Once in LAMMPS DATA format, they can be converted into moltemplate format
-(if desired) using the ``ltemplify.py'' utility.
-(See appendix \ref{sec:ltemplify}.)
+Moltemplate was originally designed for preparing coarse-grained simulations.
+Fully atomistic simulations usually require choosing
+force-field specific atom types ("atom typing"),
+and the calculation of atomic charge.
+Moltemplate
+\href{https://moltemplate.org/force_field_recommendations.html}{\tt does not do this}.
+Moltemplate also does not repair incomplete PDB files.
+
+To get around these limitations
+\textit{users can use use \textbf{3rd-party molecule-builder tools} such as}:
+the \href{https://atb.uq.edu.au}{\tt ATB} database (LT format),
+\href{https://ambermd.org/AmberTools.php}{\tt AmberTools} (MOL2 format),
+\href{http://montecarlo.sourceforge.net/}{\tt EMC} (DATA format)
+\href{https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190}{\tt LigParGen} (DATA format),
+and
+\href{https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html}{\tt OpenBabel} (DATA format).
+These tools can generate MOL2 or LAMMPS-DATA files
+which can be converted into moltemplate format (LT format) using
+\href{https://github.com/jewettaij/moltemplate/blob/master/doc/doc_mol22lt.md}{\tt mol22lt.py}
+or
+\href{https://github.com/jewettaij/moltemplate/blob/master/doc/doc_ltemplify.md#ltemplifypy}{\tt ltemplify.py}
+\textit{(If you want to try and select the atom types
+  manually instead of using 3rd-party tools, read
+\href{https://moltemplate.org/force_field_recommendations.html}{\tt these suggestions}.)}
+Alternatively, users can use the
+\href{https://github.com/jewettaij/moltemplate/tree/master/examples/all_atom/force_field_DREIDING}{\tt DREIDING force field}
+which has relatively simple
+\href{https://github.com/jewettaij/moltemplate/tree/master//doc/DREIDING_Label_Manual.pdf}{\tt atom type rules}.
+
+\textit{For atomic partial charges
+the \href{https://upjv.q4md-forcefieldtools.org}{\tt RED-server}
+is useful (which can generate a MOL2 file),
+in addition to the tools listed above.
+Alternatively, users can try using LAMMPS' built-in
+\href{https://lammps.sandia.gov/doc/fix_qeq.html}{\tt fix qeq}
+feature.}
+
 
 
 
@@ -127,6 +128,8 @@ Once in LAMMPS DATA format, they can be converted into moltemplate format
   %A file format has been created to store molecule definitions (the LAMMPS-template format, ``LT''). Typical ``.LT'' files contain atom coordinates, topology data (bonds), LAMMPS force-field data, and other LAMMPS settings (such as group definitions, fixes, and user-defined input files) for a type of molecule (or a molecular subunit).  Molecules can be copied, combined, and linked together to define new molecules. (These can be used to define larger molecules.)
   %%Unlimited levels of object composition, nesting, and inheritance are supported.)
   %Once built, individual molecules and subunits can be customized (atoms and bonds, and subunits can be moved, deleted and replaced).
+
+
 
 \subsection*{Requirements}
 
@@ -1789,7 +1792,7 @@ Moltemplate.sh can not do this for you.
 Some simple examples (which you can paste into your input script)
 are provided in the 
 \textit{online examples} 
-which can be downloaded from \url{http://moltemplate.org}.
+which can be downloaded from \url{https://moltemplate.org/examples.html}.
   %directories which are bundled with moltemplate.
 (These example input scripts 
  typically have names like ``run.in.nvt'' and ``run.in.npt''.)
