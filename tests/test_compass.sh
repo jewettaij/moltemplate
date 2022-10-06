@@ -17,4 +17,4 @@ test_compass() {
   cd ../
 }
 
-. shunit2/shunit2
+. tests/shunit2/shunit2
