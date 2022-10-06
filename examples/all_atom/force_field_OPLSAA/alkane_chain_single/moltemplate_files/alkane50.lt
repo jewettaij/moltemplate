@@ -67,7 +67,8 @@ Alkane50 inherits OPLSAA {
   monomers[46] = new CH2.rot(8280,1,0,0).move(57.6528258,0,0)
   monomers[47] = new CH2.rot(8460,1,0,0).move(58.9061481,0,0)
   monomers[48] = new CH2.rot(8640,1,0,0).move(60.1594704,0,0)
-  monomers[49] = new CH3.rot(180.0,0,0,1).move(61.4127927,0,0)
+  monomers[49] = new CH3.rot(8820,1,0,0).rot(180,0,1,0).move(61.4127927,0,0)
+  # (See below for a python script to generate this long list of commands.)
 
   ## Alternative strategies:
   ##
@@ -164,7 +165,7 @@ Alkane50 inherits OPLSAA {
 #for i in range(1,N-1):
 #    print('  monomers['+str(i)+'] = new CH2.rot('+str(180*i)+',1,0,0).move('+str(i*1.2533223)+',0,0)')
 #i=N-1
-#print('  monomers['+str(i)+'] = new CH3.rot(180.0,0,0,1).move('+str(i*1.2533223)+',0,0)')
+#print('  monomers['+str(i)+'] = new CH3.rot('+str(180*i)+',1,0,0).rot(180,0,1,0).move('+str(i*1.2533223)+',0,0)')
 ## generate the list of bonds
 #print('  write("Data Bond List") {')
 #for i in range(0,N-1):
