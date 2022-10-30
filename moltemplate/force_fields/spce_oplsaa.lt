@@ -1,12 +1,12 @@
-# file "spce_oplsaa.lt" 
+# file "spce_oplsaa.lt"
 #
 #    H1     H2
 #      \   /
 #        O
-
-# This is an implementation of the SPC/E water model which is comptabile
-# with OPLS-related force fields.  This version uses a pair_style which
-# matches the pair_style used by "oplsaa.lt" and "loplsaa.lt".
+#
+# This file contains an implementation of the SPC/E water model which is
+# comptabile with OPLS-related force fields.  This version uses a
+# pair_style which matches the pair_style used by "oplsaa.lt" and "loplsaa.lt".
 # The OPLSAA force field (as implemented by moltemplate) uses a Lennard Jones
 # pair style with an abrupt cutoff (instead of a smooth truncation function).
 #    (Note to self: The pair_style used by OPLSAA/M (2015) is:

@@ -36,6 +36,25 @@
 # DREIDING-STYLE HYDROGEN BONDS, OR SIMS NEEDING NON-STANDARD AUXILIARY FILES.
 # (This script relies on ltemplify.py and inherits its limitations.)
 
+if [ ! -f system.data ] || [ ! -f system.in.init ] || [ ! -f system.in.settings ];
+then
+    echo "============================ ERROR ==============================" >&2
+    echo "The following files must be exist for this script to work" >&2
+    echo "  system.data,  system.in.init,  system.in.settings" >&2
+    echo "This script assumes that the files you created with moltemplate begin" >&2
+    echo "with \"system\".  If those files are absent, it means that you did not run" >&2
+    echo "  moltemplate.sh system.lt [...]" >&2
+    echo "This happens if you named your \"system.lt\" file something else." >&2
+    echo "To get around this error, change your main .lt file to \"system.lt\"," >&2
+    echo "and try running moltemplate.sh again.  Alternatively, you can try" >&2
+    echo "renaming ALL of the generated files (including the files ending in:" >&2
+    echo "\".data\", \".in.init\", \".in.settings\", and \".in.charges\" if present)" >&2
+    echo "  to:" >&2
+    echo "system.data, system.in.init, system.in.settings (system.in.charges if present)" >&2
+    echo "================================================================" >&2
+    exit 1
+fi
+
 PATH_TO_DATA_FILE="."
 
 pushd "$PATH_TO_DATA_FILE"
