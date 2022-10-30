@@ -9,6 +9,10 @@
 #
 # If you use this file in a simulation, please email me to let me know
 # if it worked.  -Andrew 2019-10-16,   (jewett dot aij at gmail dot com)
+#
+#########################################################
+# Note: This file was intended for use in a simulation that uses the OPLSAA
+# force field.
 #########################################################
 # There are several different versions of TIP3P:
 #
@@ -18,7 +22,7 @@
 #                 # which uses long-range electrostatic
 #########################################################
 
-# file "tip3f_1983_oplsaa.lt" 
+# file "tip3f_1987_oplsaa.lt"
 #
 #    h1     h2
 #      \   /
@@ -27,11 +31,11 @@
 # This is the flexible version of TIP3P suitable for use in a simulation
 # using the OPLSAA force field (as implemented in the "oplsaa.lt" file).
 # For model details, see:
-# Dang, Pettitt, J. Phys. Chem, (1997) Vol 91, 3349-3354
+# Dang, Pettitt, J. Phys. Chem, (1987) Vol 91, 3349-3354
 
 import "oplsaa.lt"  # <-- defines OPLSAA, @atom:68, @atom:69
 
-TIP3F_1983_oplsaa inherits OPLSAA {
+TIP3F_1987_oplsaa inherits OPLSAA {
 
   # Atom types from "oplsaa.lt"
   # @atom:68 <--> "TIP3F Water O"
@@ -78,6 +82,11 @@ TIP3F_1983_oplsaa inherits OPLSAA {
     set type @atom:68 charge -0.834  # "TIP3F Water O"
     set type @atom:69 charge  0.417  # "TIP3F Water H"
   }
+
+  # If you decide to use these charges, then remember to include the line:
+  #   include "system.in.charges"
+  # ...somewhere in the final LAMMPS input script that you use to minimize and
+  # run your simulations (such as "run_min.in", "run_npt.in", "run.in.nvt"...)
 
 } # "TIP3F_1987_oplsaa" water molecule type
 

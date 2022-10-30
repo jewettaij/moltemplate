@@ -1,16 +1,26 @@
-# file "tip5p.lt" 
+# file "tip5p_oplsaa.lt"
 #
 #    h1     h2
 #      \   /
 #        o
 #       / \
-#     LP   LP 
+#    LP1   LP2
 #
 # This file defines the 5-site water model TIP5P
 # You must used a rigid-body-integrator like "fix rigid" to simulate this 
 # molecule to prevent its shape from becoming deformed during the simulation.
 # (No angle, dihedral, or improper interactions have been defined.)
+#
+# Note: This file was intended for use in a simulation that uses the OPLSAA
+# force field.  This is different from the other water models included with
+# moltemplate (eg. "tip3p_1983.lt", "spce.lt").  Those files explicitly include
+# the the force-field parameters and bond geometry in the file itself.  This
+# means you can use those files in simulations that use any force field.
+# However that kind of information was omitted from this file.  Instead the
+# force field parameters and bond geometry are defined in the "oplsaa.lt" file.
+#
 # Credit: This file was contributed by Cheng Chen (Queen Mary University)
+
 
 import "oplsaa.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
 
