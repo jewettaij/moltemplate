@@ -22,6 +22,15 @@ at constant volume or at constant pressure.
 (In the video above the simulation was run at constant volume.)
 
 
+#### Hexagonal vs Rectangular
+
+Note: The "graphene.lt" file used here generates *hexagonal* crystals.
+If you prefer to create rectangular crystals, a rectangular version
+of that file is available
+[here](https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/graphene_rectangular.lt).
+(Instructions are included in the comments in that file.)
+
+
 ### Requirements
 
 *To run this system at constant pressure,

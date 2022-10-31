@@ -1,12 +1,21 @@
-# The minimal unit cell for graphine contains only 2 atoms:
-# (which I arbitrarily named "C1" and "C2")
+#####################################################################
+# NOTE: This is a hexagonal unit cell.  The crystals you make from it
+# will be hexagonal.  Some users prefer to work with rectangular crystals.
+# There is a rectangular version of the graphene unit cell containing 4 atoms
+# stored in a file named "graphene_rectangular.lt" located in this directory.
+#####################################################################
+
+
+
+# The minimal unit cell for graphene is hexagonal and contains only 2 atoms:
+# (which I arbitrarily named "c1" and "c2")
 
 Graphene {
 
   # atomID   molID     atomType charge      x              y         z
   write("Data Atoms") {
-    $atom:C1  $mol:...  @atom:C   0.0  -0.61487803668695 -0.355   0.0000
-    $atom:C2  $mol:...  @atom:C   0.0   0.61487803668695  0.355   0.0000
+    $atom:c1  $mol:...  @atom:C   0.0  -0.61487803668695 -0.355   0.0000
+    $atom:c2  $mol:...  @atom:C   0.0   0.61487803668695  0.355   0.0000
   }
 
   # Now define the "C" atom type

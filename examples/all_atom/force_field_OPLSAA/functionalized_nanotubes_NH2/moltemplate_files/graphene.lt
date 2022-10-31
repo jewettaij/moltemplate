@@ -1,3 +1,15 @@
+#####################################################################
+# NOTE: This is a hexagonal unit cell.  The crystals you make from it
+# will be hexagonal.  Some users prefer to work with rectangular crystals.
+# There is a rectangular version of the graphene unit cell containing 4 atoms:
+# https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/graphene_rectangular.lt
+# If you prefer to work with rectangular graphene, download that file and use
+# import "graphene_rectangular.lt" in place of this file.  (The unit cell
+# size and geometry is included in comments at the bottom of that file.)
+#####################################################################
+
+
+
 # The minimal unit cell for graphine contains only 2 atoms:
 # (which I arbitrarily named "c1" and "c2")
 

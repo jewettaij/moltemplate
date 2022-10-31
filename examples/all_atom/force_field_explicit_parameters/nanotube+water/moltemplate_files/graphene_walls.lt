@@ -23,12 +23,12 @@ Wall {
   delete unitcells[8][5-7]   # delete 3 unit cells (2 atoms each, 6 atoms total)
   delete unitcells[9][5-6]   # delete 2 unit cells (2 atoms each, 4 atoms total)
   # Optional fine tuning: delete a few additional atoms around the edges
-  delete unitcells[5][6]/C2   # delete a single atom
-  delete unitcells[6][5]/C2   # delete a single atom
-  delete unitcells[6][9]/C1   # delete a single atom
-  delete unitcells[8][4]/C2   # delete a single atom
-  delete unitcells[8][8]/C1   # delete a single atom
-  delete unitcells[9][7]/C1   # delete a single atom
+  delete unitcells[5][6]/c2   # delete a single atom
+  delete unitcells[6][5]/c2   # delete a single atom
+  delete unitcells[6][9]/c1   # delete a single atom
+  delete unitcells[8][4]/c2   # delete a single atom
+  delete unitcells[8][8]/c1   # delete a single atom
+  delete unitcells[9][7]/c1   # delete a single atom
 }
 
 # Make two copies of the wall, and place them on either end of the nanotube

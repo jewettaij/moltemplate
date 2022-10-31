@@ -18,6 +18,15 @@ A small fraction of unit cells (selected randomly) have a amine group (NH2) atta
 [link4](http://moltemplate.org/doc/moltemplate_manual.pdf#subsubsection.8.9.1).)*
 
 
+#### Hexagonal vs Rectangular
+
+Note: The "graphene.lt" file used here generates *hexagonal* crystals.
+If you prefer to create rectangular crystals, a rectangular version
+of that file is available
+[here](https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/graphene_rectangular.lt).
+(Instructions are included in the comments in that file.)
+
+
 #### There are no carbon-carbon bonds
 
 In the nanotubes, I did not try to connect the carbon atoms together with bonds.  It is possible to build nanotubes with carbon bonds, but this example does not need them.  Instead, the carbon atoms in the nanotubes are rigid (as well as the nitrogen atoms which are directly bonded to them).  However the nanotubes are allowed to move, as are the remaining atoms in the amine groups (the two hydrogen atoms).

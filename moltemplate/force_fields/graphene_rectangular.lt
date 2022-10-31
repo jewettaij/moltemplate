@@ -1,22 +1,21 @@
-#####################################################################
-# NOTE: This is a hexagonal unit cell.  The crystals you make from it
-# will be hexagonal.  Some users prefer to work with rectangular crystals.
-# There is a rectangular version of the graphene unit cell containing 4 atoms:
-# https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/graphene_rectangular.lt
-# If you prefer to work with rectangular graphene, download that file and use
-# import "graphene_rectangular.lt" in place of this file.  (The unit cell
-# size and geometry is included in comments at the bottom of that file.)
-#####################################################################
+# This is a rectangular-shaped unit cell for graphene containing 4 atoms.
+#
+# (Note: The minimal unit cell for graphine is hexagonal and contains only
+#  2 atoms.  But hexagonal unit cells are not always easy to work with.
+#  So this rectangular version was included for convenience.)
+#
+# The size and shape of this rectangular unit cell are described
+# in comments below, near the end of this file.
 
-# The minimal unit cell for graphine contains only 2 atoms:
-# (which I arbitrarily named "c1" and "c2")
 
 Graphene {
 
   # atomID   molID     atomType charge      x              y         z
   write("Data Atoms") {
-    $atom:c1  $mol:...  @atom:C   0.0  -0.61487803668695 -0.355   0.0000
-    $atom:c2  $mol:...  @atom:C   0.0   0.61487803668695  0.355   0.0000
+    $atom:c1  $mol:...  @atom:C   0.0  -0.61487803668695  -1.420   0.0000
+    $atom:c2  $mol:...  @atom:C   0.0   0.61487803668695  -0.710   0.0000
+    $atom:c3  $mol:...  @atom:C   0.0   0.61487803668695   0.710   0.0000
+    $atom:c4  $mol:...  @atom:C   0.0  -0.61487803668695   1.420   0.0000
   }
 
   # Now define the "C" atom type
@@ -51,15 +50,18 @@ Graphene {
 
 
 
-# This is a 2-dimensional hexagonal unit cell.  The unit vectors are:
+# This is a 2-dimensional rectangular unit cell.  The unit vectors are:
 #
 # (2.4595121467478,    0,     0)    
-# (1.2297560733739,  2.13,    0)
+# (0,               4.26,     0)
 #
 # You can create a sheet of single-layer graphene this way:
 #
-# small_crystal = new Graphene [3].move(2.45951214, 0, 0)
-#                              [3].move(1.229756, 2.13, 0)
+# import "graphene_rectangular.lt"
+#
+# small_crystal = new Graphene [5].move(2.45951214, 0, 0)
+#                              [3].move(0, 4.26, 0)
+#
 #
 # For thicker sheets, follow the instructions in the "graphite.lt" file.
 #
