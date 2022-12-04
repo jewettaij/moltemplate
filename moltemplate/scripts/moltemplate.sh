@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.20.15"
-G_DATE="2022-10-30"
+G_VERSION="2.20.16"
+G_DATE="2022-12-03"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -837,7 +837,12 @@ fi
 
 
 
-OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE"
+OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE"  # default LAMMPS input script example
+if [ "$OUT_FILE_BASE" != "system" ]; then
+    # For users who choose custom .LT file names,
+    # the files that moltemplate creates should have custom names also:
+    OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE.${OUT_FILE_BASE}"
+fi
 OUT_FILE_INPUT_SCRIPT="${OUT_FILE_BASE}.in"
 OUT_FILE_INIT="${OUT_FILE_BASE}.in.init"
 OUT_FILE_SETTINGS="${OUT_FILE_BASE}.in.settings"
