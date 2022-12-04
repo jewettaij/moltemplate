@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # We keep track of the program name and version.
 # (This is only used for generating error messages.)

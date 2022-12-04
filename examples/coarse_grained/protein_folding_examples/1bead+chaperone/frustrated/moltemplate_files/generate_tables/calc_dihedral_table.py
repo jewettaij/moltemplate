@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Calculate a table of dihedral angle interactions used in the alpha-helix
 # and beta-sheet regions of the frustrated protein model described in

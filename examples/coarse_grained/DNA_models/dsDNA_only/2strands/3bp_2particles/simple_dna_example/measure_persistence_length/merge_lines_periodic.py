@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import sys, math
 
 g_filename    = __file__.split('/')[-1]

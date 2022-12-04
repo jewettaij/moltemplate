@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # Author: Andrew Jewett (jewett.aij at g mail)
 # Copyright (c) 2017, California Institute of Technology
 # All rights reserved.

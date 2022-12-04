@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 # Author: Jason Lambert, Andrew Jewett (jewett.aij at g mail)
 #  (some additional corrections by Miguel Gonzalez, Yue Chun Chiu and others)

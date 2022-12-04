@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Author: Andrew Jewett (jewett.aij at g mail)
 #         http://www.chem.ucsb.edu/~sheagroup

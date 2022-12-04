@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Calculate a table of pairwise energies and forces between "INT" atoms
 # in the lipid membrane model described in

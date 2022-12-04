@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 g_program_name = __file__.split('/')[-1]
 g_version_str  = '0.3.8'

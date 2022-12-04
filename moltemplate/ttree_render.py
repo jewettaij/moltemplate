@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Author: Andrew Jewett (jewett.aij@gmail.com)
 # License: MIT License  (See LICENSE.md)

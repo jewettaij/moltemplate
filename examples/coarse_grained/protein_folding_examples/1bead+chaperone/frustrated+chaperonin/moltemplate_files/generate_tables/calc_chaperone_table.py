@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Calculate a table of pairwise energies and forces between atoms in the
 # protein and a chaperone provided in the supplemental materials section of:
