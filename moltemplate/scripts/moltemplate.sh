@@ -404,6 +404,7 @@ DUMP_FILE=""
 RAW_FILE=""
 LT_FILE=""
 OUT_FILE_BASE="system"
+OUT_FILE_EXAMPLE_SCRIPT=""
 # REMOVE_DUPLICATE variables:
 # ...If true (default), then any duplicate entries in the lists of bonds
 # bonds, angles, dihedrals, or impropers in the LAMMPS DATA file
@@ -474,6 +475,14 @@ while [ "$i" -lt "$ARGC" ]; do
         # Set the -overlay-bonds, if not specified otherwise.
         unset REMOVE_DUPLICATE_BONDS
         SETTINGS_MOLC="true"
+    elif [ "$A" = "-lammps-script" ]; then
+        if [ "$i" -eq "$ARGC" ]; then
+            echo "ERROR: File name expected following the -lammps-script argument" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+        OUT_FILE_EXAMPLE_SCRIPT="$A"
     elif [ "$A" = "-raw" ]; then
         if [ "$i" -eq "$ARGC" ]; then
             echo "$SYNTAX_MSG" >&2
@@ -836,19 +845,21 @@ fi
 
 
 
-
-OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE"  # default LAMMPS input script example
-if [ "$OUT_FILE_BASE" != "system" ]; then
-    # For users who choose custom .LT file names,
-    # the files that moltemplate creates should have custom names also:
-    OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE.${OUT_FILE_BASE}"
-fi
 OUT_FILE_INPUT_SCRIPT="${OUT_FILE_BASE}.in"
 OUT_FILE_INIT="${OUT_FILE_BASE}.in.init"
 OUT_FILE_SETTINGS="${OUT_FILE_BASE}.in.settings"
 OUT_FILE_DATA="${OUT_FILE_BASE}.data"
 OUT_FILE_COORDS="${OUT_FILE_BASE}.in.coords"
 
+
+if [ "$OUT_FILE_EXAMPLE_SCRIPT" == "" ]; then
+    OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE"  # default LAMMPS input script example
+    if [ "$OUT_FILE_BASE" != "system" ]; then
+        # For users who choose custom .LT file names,
+        # the files that moltemplate creates should have custom names also:
+        OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE.${OUT_FILE_BASE}"
+    fi
+fi
 
 #  Now delete any old files lying around which were
 #  created by previous invocations of moltemplate.
@@ -2267,7 +2278,6 @@ if [ -s "$data_impropers" ]; then
 #else
 #    echo "WARNING: missing file \"$data_impropers\"" >&2
 fi
-
 
 
 

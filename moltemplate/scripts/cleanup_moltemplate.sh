@@ -81,9 +81,8 @@ while [ "$i" -lt "$ARGC" ]; do
     eval A=\${ARGV${i}}
 
     if [ "$A" = "-base" ]; then
-        # Change the atom ordering rules in a 2-body bonded interaction:
         if [ "$i" -eq "$ARGC" ]; then
-            echo "ERROR cleanup_moltemplate.sh: base file name expected following -base argument" >&2
+            echo "ERROR cleanup_moltemplate.sh: Base file name expected following -base argument" >&2
             exit 7
         fi
         i=$((i+1))
