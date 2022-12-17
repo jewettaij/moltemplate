@@ -856,8 +856,8 @@ if [ "$OUT_FILE_EXAMPLE_SCRIPT" == "" ]; then
     OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE"  # default LAMMPS input script example
     if [ "$OUT_FILE_BASE" != "system" ]; then
         # For users who choose custom .LT file names,
-        # the files that moltemplate creates should have custom names also:
-        OUT_FILE_EXAMPLE_SCRIPT="run.in.EXAMPLE.${OUT_FILE_BASE}"
+        # the execution script should have the same custom name:
+        OUT_FILE_EXAMPLE_SCRIPT=$OUT_FILE_INPUT_SCRIPT
     fi
 fi
 
