@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.20.17"
-G_DATE="2022-12-03"
+G_VERSION="2.20.18"
+G_DATE="2022-12-24"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -306,7 +306,7 @@ Optional arguments:
                 (Support for triclinic cells is experimental as of 2012-2-13.
                  Other molecular structure formats may be supported later.)
 
--dump dump_file An optional dump_file argument can be supplied as an argument
+-dump dump_file  An optional dump_file argument can be supplied as an argument
                 following "-dump".
 
                 This option should be used to overwrite the coordinate section
@@ -321,6 +321,11 @@ Optional arguments:
 		such as qi, qj, qk, qw and quati, quatj, quatk, quatw.
 
                 The box boundaries in the DUMP are used in the LAMMPS data file.
+
+-raw raw_file   An optional file containing RAW atomic coordinates. RAW files are
+                simple 3-column ASCII files contain X Y Z coordinates for every
+		atom, separated by spaces.)
+		
 
 -a "@atom:x 1"
 -a assignments.txt
@@ -339,16 +344,16 @@ Optional arguments:
                 "-b" is similar to "-a". However, in this case, no attempt
                 is made to assign exclusive (unique) values to each variable.
 -nocheck
-               Normally moltemplate.sh checks for common errors and typos and
-               halts if it thinks it has found one.  This forces the variables
-               and categories as well as write(file) and write_once(file)
-               commands to obey standard naming conventions.  The "-nocheck"
-               argument bypasses these checks and eliminates these restrictions.
+                Normally moltemplate.sh checks for common errors and typos and
+                halts if it thinks it has found one.  This forces the variables
+                and categories as well as write(file) and write_once(file)
+                commands to obey standard naming conventions.  The "-nocheck"
+                argument bypasses these checks and eliminates these restrictions.
 
--checkff       This cause moltemplate.sh to check to make sure that there
-               are valid angle and dihedral interactions defined for every
-               3 or 4 consecutively bonded atoms in the system
-               (defined in "Angles/Dihedrals By Type").
+-checkff        This cause moltemplate.sh to check to make sure that there
+                are valid angle and dihedral interactions defined for every
+                3 or 4 consecutively bonded atoms in the system
+                (defined in "Angles/Dihedrals By Type").
 
 -overlay-angles     Normally, moltemplate.sh checks to see if multiple angle
 -overlay-dihedrals  interactions are defined for the same triplet of atoms.
@@ -364,8 +369,25 @@ Optional arguments:
                             See nbody_Dihedrals.py, nbody_Impropers.py (in the
                             moltemplate directory) to learn the file format.
 
--molc              Additional post-processing for the file "In Settings". This
-                   options implicitly sets "-overlay-bonds".
+-molc           Additional post-processing for the file "In Settings". This
+                options implicitly sets "-overlay-bonds".
+
+-lammps-script basename 
+                By default, moltemplate.sh writes a LAMMPS execution script with
+		the same base name of the input LT file. If the LT file has the
+		special name "system.lt", then the LAMMPS execution script is
+		named run.in.EXAMPLE. This behaviour can be overwritten by
+		specifying a custom basename for the execution script. Note that
+		the INIT, DATA, SETTINGS, and RUN files will still have the same
+		basename of the parent LT file.
+
+-run-example    Append an example run section at the end of the example input
+                script. The commands are commented out and need manual editing
+		to get a meaningful simulation.
+
+-forbid-wildcards  Forbid the use of "*" and "?" characters in "pair coeff",
+                "bond coeff", "angle coeff", "dihedral coeff", and
+		"improper coeff" commands.
 
 EOF
 )
@@ -417,6 +439,7 @@ REMOVE_DUPLICATE_IMPROPERS="true"
 SETTINGS_MOLC=""
 CHECKFF=""
 RUN_VMD_AT_END=""
+APPEND_EXAMPLE_SCRIPT=""
 
 
 ARGC=0
@@ -475,6 +498,8 @@ while [ "$i" -lt "$ARGC" ]; do
         # Set the -overlay-bonds, if not specified otherwise.
         unset REMOVE_DUPLICATE_BONDS
         SETTINGS_MOLC="true"
+    elif [ "$A" = "-run-example" ]; then
+        APPEND_EXAMPLE_SCRIPT="true"
     elif [ "$A" = "-lammps-script" ]; then
         if [ "$i" -eq "$ARGC" ]; then
             echo "ERROR: File name expected following the -lammps-script argument" >&2
@@ -752,8 +777,7 @@ while [ "$i" -lt "$ARGC" ]; do
         elif [[ ${#vel[@]} == 3 && ${#angmom[@]} == 3 ]]; then 
            awk -v vx=${vel[0]} -v vy=${vel[1]} -v vz=${vel[2]} -v ax=${angmom[0]} -v ay=${angmom[1]} -v az=${angmom[2]} 'NR>9{print $1 " "$vx" "$vy" "$vz" "$ax" "$ay" "$az}' "$tmp_dump" > "$data_velocities"
         fi
-
-
+    
     elif [ "$A" = "-atomstyle" ] || [ "$A" = "-atom-style" ] || [ "$A" = "-atom_style" ]; then
         if [ "$i" -eq "$ARGC" ]; then
             echo "$SYNTAX_MSG" >&2
@@ -783,8 +807,7 @@ while [ "$i" -lt "$ARGC" ]; do
         else
             TTREE_ARGS="${TTREE_ARGS} $ATOM_STYLE_ARG"
         fi
-
-
+	
     #else:  If the arguments are not understood in this script, then
     #       pass them on to "lttree.py"
     else
@@ -2286,7 +2309,8 @@ rm -f $OUT_FILE_EXAMPLE_SCRIPT
 
 if [ -s "$in_init" ]; then
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-    cp -f "$in_init" $OUT_FILE_INIT
+    #  Remove leading blank spaces in the post-processed script.
+    sed 's/^ *//' "$in_init" > $OUT_FILE_INIT
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
     echo "# ----------------- Init Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
@@ -2325,7 +2349,8 @@ if [ -s "$in_settings" ]; then
       echo "         You should choose one file name or the other, but not both." >&2
     fi
     #...and append the contents to the end of the target file.
-    cat "$in_settings" >> "${OUT_FILE_SETTINGS}"
+    #  Also, remove leading blank spaces.
+    sed 's/^ *//' "$in_settings" >> "${OUT_FILE_SETTINGS}"
   else
     molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
     export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2019 (https://doi.org/10.1039/c9cp04120f)\n"`
@@ -2523,7 +2548,8 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
       echo "         You should choose one file name or the other, but not both." >&2
     fi
     #...and append the contents to the end of the target file.
-    cat "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    #  Also, remove leading blank spaces.
+    sed 's/^ *//' "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
     echo "" >> "$OUT_FILE_EXAMPLE_SCRIPT"
     echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_EXAMPLE_SCRIPT
     mv -f "$file_name" output_ttree/
@@ -2674,42 +2700,41 @@ rm -f input_scripts_so_far.tmp
 
 
 # ############ Optional: Add a fake run section as an example ############
-
-
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# ----------------- Run Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# The lines above define the system you want to simulate." >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# What you do next is up to you." >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# Typically a user would minimize and equilibrate" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# the system using commands similar to the following:" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  ----   examples   ----" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- minimize --" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# minimize 1.0e-5 1.0e-7 1000 10000" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# (Note: Some fixes, for example \"shake\", interfere with the minimize command," >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#        You can use the \"unfix\" command to disable them before minimization.)" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- declare time step for normal MD --" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# timestep 1.0" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- run at constant pressure (Nose-Hoover)--" >> $OUT_FILE_EXAMPLE_SCRIPT
-#echo "# timestep 1.0" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0">>$OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- (This is good for sparse CG polymers in implicit solvent.)   --" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# fix fxLAN all langevin 300.0 300.0 5000 48279" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# fix fxNVE all nve  #(<--needed by fix langevin)" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  -- Now, finally run the simulation --" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# run   50000" >> $OUT_FILE_EXAMPLE_SCRIPT
-#echo "# write_restart system_after_nvt.rst" >> $OUT_FILE_EXAMPLE_SCRIPT
-#echo "# run   50000" >> $OUT_FILE_EXAMPLE_SCRIPT
-#echo "# write_restart system_after_npt.rst" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "#  ---- (end of examples) ----">> $OUT_FILE_EXAMPLE_SCRIPT
-#echo "# It is the responsibility of the user to learn LAMMPS and specify these">>$OUT_FILE_EXAMPLE_SCRIPT
-#echo "# these commands." >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-
+if [ ! -z $APPEND_EXAMPLE_SCRIPT ]; then
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# ----------------- Run Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# The lines above define the system you want to simulate." >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# What you do next is up to you." >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# Typically a user would minimize and equilibrate" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# the system using commands similar to the following:" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  ----   examples   ----" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- minimize --" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# minimize 1.0e-5 1.0e-7 1000 10000" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# (Note: Some fixes, for example \"shake\", interfere with the minimize command," >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#        You can use the \"unfix\" command to disable them before minimization.)" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- declare time step for normal MD --" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# timestep 1.0" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- run at constant pressure (Nose-Hoover)--" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# timestep 1.0" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# fix   fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0">>$OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- ALTERNATELY, run at constant volume (Nose-Hoover) --" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# fix   fxnvt all nvt temp 300.0 300.0 500.0 tchain 1" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- ALTERNATELY, run at constant volume using Langevin dynamics. --" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- (This is good for sparse CG polymers in implicit solvent.)   --" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# fix fxLAN all langevin 300.0 300.0 5000 48279" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# fix fxNVE all nve  #(<--needed by fix langevin)" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  -- Now, finally run the simulation --" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# run   50000" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# write_restart system_after_nvt.rst" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# run   50000" >> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# write_restart system_after_npt.rst" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "#  ---- (end of examples) ----">> $OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# It is the responsibility of the user to learn LAMMPS and specify these">>$OUT_FILE_EXAMPLE_SCRIPT
+    #echo "# these commands." >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+fi
 
 
 # Finally, if the -vmd argument was included, start up VMD and

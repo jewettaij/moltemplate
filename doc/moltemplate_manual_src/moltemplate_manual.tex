@@ -1247,10 +1247,12 @@ Read all of the atomic coordinates from an external PDB file
 -dump coords.lammpstrj
 &
 Read all of the atomic coordinates from a LAMMPS dump (trajectory) file.
-(If ellipsoids are present, the dump file must be formatted in the
-following order:  ``id type xu yu zu c\_q[1] c\_q[2] c\_q[3] c\_q[4] ... ``
-where ``q'' is defined by
-``compute q all property/atom quatw quati quatj quatk''.)
+If ellipsoids are present, the dump file must also contain the quaterions
+printed  from one of the following computes:
+``compute q all property/atom quatw quati quatj quatk''
+``compute orient all property/atom quati quatj quatk quatw''.
+The parser also accepts DUMP headers with edited quaterion names
+such as qi, qj, qk, qw and quati, quatj, quatk, quatw.
 \\
 \hline
 -a '\textit{variable} \textit{value}'
@@ -1364,24 +1366,41 @@ Helpful additional post-processing for users of the \textbf{MOLC}
 coarse-grained model
 \\
 \hline
-\begin{tabular}[t]{l}
--short-comment-names
-\\
--full-comment-names
-\end{tabular}
-&
-Moltemplate writes atom type names in the comments following
-the ``Masses'' section of a LAMMPS data file.
-These two arguments control whether or not the \textit{short}
-or \textit{full} versions of the atom type names are printed there.
-(Default: short. See section \ref{sec:full_names} for details.)
-\\
-\hline
+%\begin{tabular}[t]{l}
+%-short-comment-names
+%\\
+%-full-comment-names
+%\end{tabular}
+%&
+%Moltemplate writes atom type names in the comments following
+%the ``Masses'' section of a LAMMPS data file.
+%These two arguments control whether or not the \textit{short}
+%or \textit{full} versions of the atom type names are printed there.
+%(Default: short. See section \ref{sec:full_names} for details.)
+%\\
+%\hline
 -forbid-wildcards &
 Forbid the use of ``*'' and ``?'' characters in
 ``pair\_coeff'', ``bond\_coeff'', ``angle\_coeff'', ``dihedral\_coeff'',
 and ``improper\_coeff'' commands.  (eg: ``bond\_coeff @bond:CH?? ...'', ``pair\_coeff @atom:C* @atom:C* ...''.  These are allowed by default.)
 \\
+\hline
+-lammps-script basename &
+                By default, moltemplate.sh writes a LAMMPS execution script with
+		the same base name of the input LT file. If the LT file has the
+		special name "system.lt", then the LAMMPS execution script is
+		named run.in.EXAMPLE. This behaviour can be overwritten by
+		specifying a custom basename for the execution script. Note that
+		the INIT, DATA, SETTINGS, and RUN files will still have the same
+		basename of the parent LT file.
+\\
+\hline
+-run-example &
+    Append an example run section at the end of the example input
+                script. The commands are commented out and need manual editing
+		to get a meaningful simulation.
+\\
+\hline\hline
 \end{longtable}
 
 
