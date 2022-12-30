@@ -324,7 +324,7 @@ Optional arguments:
 
 -raw raw_file   An optional file containing RAW atomic coordinates. RAW files are
                 simple 3-column ASCII files contain X Y Z coordinates for every
-		atom, separated by spaces.)
+		atom, separated by spaces.
 		
 
 -a "@atom:x 1"
