@@ -355,11 +355,13 @@ Optional arguments:
                 3 or 4 consecutively bonded atoms in the system
                 (defined in "Angles/Dihedrals By Type").
 
--overlay-angles     Normally, moltemplate.sh checks to see if multiple angle
--overlay-dihedrals  interactions are defined for the same triplet of atoms.
--overlay-impropers  If so, it deletes the redundant ones (keeping the last one).
--overlay-bonds     (It does the same thing for bonds, dihedrals, and impropers.)
-                    Use these options to prevent that behavoir.
+-overlay-bonds      Normally, moltemplate.sh checks to see if multiple angle
+-overlay-angles     interactions are defined for the same triplet of atoms.
+-overlay-dihedrals  If so, it deletes the redundant ones (keeping the last one).
+-overlay-impropers  (It does the same thing for bonds, dihedrals, and impropers.)
+-overlay-all        Use these options to prevent that behavoir, or to prevent
+                    reordering of atom indexes, e.g. by allowing to define a bond
+                    between atom 3 and 2 instead of 2 and 3.
 
 -angle-symmetry file.py     Normally moltemplate.sh reorders the atoms in each
 -dihedral-symmetry file.py  angle, dihedral, improper, and bond interaction.
@@ -480,16 +482,16 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
     elif [ "$A" = "-checkff" ]; then
         CHECKFF="$A"
-    elif [ "$A" = "-overlay-bonds" ]; then
+    elif [ "$A" = "-overlay-bonds" ] || [ "$A" = "-overlay-all" ]; then
         # In that case, do not remove duplicate bond interactions
         unset REMOVE_DUPLICATE_BONDS
-    elif [ "$A" = "-overlay-angles" ]; then
+    elif [ "$A" = "-overlay-angles" ] || [ "$A" = "-overlay-all" ]; then
         # In that case, do not remove duplicate angle interactions
         unset REMOVE_DUPLICATE_ANGLES
-    elif [ "$A" = "-overlay-dihedrals" ]; then
+    elif [ "$A" = "-overlay-dihedrals" ] || [ "$A" = "-overlay-all" ]; then
         # In that case, do not remove duplicate dihedral interactions
         unset REMOVE_DUPLICATE_DIHEDRALS
-    elif [ "$A" = "-overlay-impropers" ]; then
+    elif [ "$A" = "-overlay-impropers" ] || [ "$A" = "-overlay-all" ]; then
         # In that case, do not remove duplicate improper interactions
         unset REMOVE_DUPLICATE_IMPROPERS
     elif [ "$A" = "-vmd" ]; then

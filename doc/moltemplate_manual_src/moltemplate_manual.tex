@@ -1302,6 +1302,8 @@ are non-exclusive.
 \\
 -overlay-impropers
 \\
+-overlay-all
+\\
 \end{tabular}
 & 
 By default moltemplate overwrites 
@@ -1310,9 +1312,12 @@ involve the same set of atoms.
 These flags disable that behavior.
 This can be useful when you want to superimpose 
 multiple angular or dihedral forces on the same set of atoms
-(eg. to enable more complex force fields).
+(e.g. to enable more complex force fields).
 Note: Each duplicate must still be given an unique
 \$bond, \$angle, \$dihedral, \$improper style variable name.
+These options also prevent reordering of atom indexes,
+e.g. by allowing to define a bond between
+atom 3 and 2 instead of 2 and 3.
 \\
 \hline
 -nocheck &
