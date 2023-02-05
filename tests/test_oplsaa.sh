@@ -11,6 +11,8 @@ test_oplsaa() {
       cleanup_moltemplate.sh
       NUM_IMPROPERS=`grep impropers system.data | awk '{print $1}'`
       assertTrue "cleanup_moltemplate.sh failed: system.data missing impropers" "[ $NUM_IMPROPERS -gt 0 ]"
+      NUM_IMPROPER_TYPES=`grep "improper types" system.data | awk '{print $1}'`
+      assertTrue "cleanup_moltemplate.sh failed: wrong number of improper types after cleanup" "[ $NUM_IMPROPER_TYPES -eq 2 ]"
       assertTrue "cleanup_moltemplate.sh failed: system.in.charges file not created" "[ -s system.in.charges ]"
     cd ../
     rm -rf ethylene+benzene/

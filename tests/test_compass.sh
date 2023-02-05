@@ -11,6 +11,8 @@ test_compass() {
       cleanup_moltemplate.sh
       NUM_DIHEDRALS=`grep dihedrals system.data | awk '{print $1}'`
       assertTrue "cleanup_moltemplate.sh failed: system.data missing dihedrals" "[ $NUM_DIHEDRALS -gt 0 ]"
+      NUM_DIHEDRAL_TYPES=`grep "dihedral types" system.data | awk '{print $1}'`
+      assertTrue "cleanup_moltemplate.sh failed: wrong number of dihedral types after cleanup" "[ $NUM_DIHEDRAL_TYPES -eq 3 ]"
       assertTrue "cleanup_moltemplate.sh failed: system.in.charges file not created" "[ -s system.in.charges ]"
     cd ../
     rm -rf alkane_chain_single/
