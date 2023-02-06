@@ -54,7 +54,8 @@ fi
 # Determine the directory in which the python scripts are located.
 # (such as ltemplify.py).  It could either be the directory where the script
 # file is located, OR it could be the parent of this directory.
-PY_SCR_DIR=`dirname "$0"`
+SH_SCR_DIR=`dirname "$0"`
+PY_SCR_DIR=$SH_SCR_DIR
 if [ ! -s "${PY_SCR_DIR}/ltemplify.py" ]; then
     PY_SCR_DIR="$PY_SCR_DIR/.."
 fi
@@ -223,7 +224,7 @@ cd new_lt_file_TMP
 
   # Now, run moltemplate on this new .LT file.
   # Interpret the "${BASE_NAME}.lt literally. Don't check for duplicates("-overlay...")
-  if ! "${PY_SCR_DIR}/scripts/moltemplate.sh" "${BASE_NAME}.lt" \
+  if ! "${SH_SCR_DIR}/moltemplate.sh" "${BASE_NAME}.lt" \
                       -overlay-bonds -overlay-angles \
                       -overlay-dihedrals -overlay-impropers; then
       echo "ERROR: cleanup_moltemplate.sh: unable to convert the simplified LT file to LAMMPS files" >&2
