@@ -72,7 +72,7 @@ Some of the moltemplate examples are also demonstrated (with pictures)
 [here](https://moltemplate.org/visual_examples.html).
 
 All moltemplate users should read chapter 4 of the
-[reference manual](https://moltemplate.org/doc/moltemplate_manual.pdf)
+[reference manual](https://moltemplate.org/doc/moltemplate_manual.pdf#section.4)
 *(It's only 6 pages long. The first 3 chapters can be skipped.)*
 Chapters 6, 7, and 5.1-5.3 also also recommended.
 *(13 pages.)*
