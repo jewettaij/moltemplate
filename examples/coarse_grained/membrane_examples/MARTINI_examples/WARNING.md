@@ -1,7 +1,18 @@
 WARNING regarding the MARTINI force field in moltemplate
 ====================
 
-The MARTINI lipid examples have been implemented on two different
+These examples use version 2.0 of the MARTINI force field
+However MARTINI version 3.0 was released in 2021.
+Furthermore, only a small subset of the coarse-grained molecules
+available in MARTINI have been converted into moltemplate (LT) format.
+The DRYMARTINI forcefield also remains unavailable.
+
+*(These limitations will remain until somebody bothers to write a program which
+converts ITP files (from the [MARTINI website](https:cgmartini.nl) website)
+into moltemplate (LT) format.  Please contact me if you are willing
+to assist with that.  -Andrew 2023-3-01.)*
+
+The MARTINI lipid examples here have been implemented on two different
 occasions by different people.
 
 1) The current implementation was created by David Stelter and
