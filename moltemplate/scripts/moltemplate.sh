@@ -720,7 +720,7 @@ while [ "$i" -lt "$ARGC" ]; do
         IFS=$CR
         box=( $(head -8 "$tmp_dump" | awk 'NR>5{for (i=1;i<=NF;i++){printf "%g\n",$i}}') )
 
-        # Find the columns of: position, quaternion, velocity, and bangular momentum.
+        # Find the columns of: position, quaternion, velocity, and angular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
         # Quaternion order:
 	# (I,J,K,W) from "compute orient all property/atom quati quatj quatk quatw"
@@ -732,7 +732,7 @@ while [ "$i" -lt "$ARGC" ]; do
                if($i~/^qk$/||$i~/^quatk$/||$i~/^qz$/||$i~/^quatz$/||$i~/^c_q\[4\]$/||$i~/^c_orient\[3\]$/){qo[4]=i-2}
                }}END{for(i in qo){printf "%i\n",qo[i]}}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
-        angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
+        angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/||$i~/AngularMomentum[XYZ]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
 
         # Orthorombic box.
