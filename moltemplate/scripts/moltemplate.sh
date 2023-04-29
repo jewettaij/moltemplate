@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.20.19"
-G_DATE="2022-2-06"
+G_VERSION="2.20.20"
+G_DATE="2023-4-20"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -720,7 +720,7 @@ while [ "$i" -lt "$ARGC" ]; do
         IFS=$CR
         box=( $(head -8 "$tmp_dump" | awk 'NR>5{for (i=1;i<=NF;i++){printf "%g\n",$i}}') )
 
-        # Find the columns of: position, quaternion, velocity, and bangular momentum.
+        # Find the columns of: position, quaternion, velocity, and angular momentum.
         pos=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/^[xyz]/){printf "%i\n",i-2} }}') )
         # Quaternion order:
 	# (I,J,K,W) from "compute orient all property/atom quati quatj quatk quatw"
@@ -732,7 +732,7 @@ while [ "$i" -lt "$ARGC" ]; do
                if($i~/^qk$/||$i~/^quatk$/||$i~/^qz$/||$i~/^quatz$/||$i~/^c_q\[4\]$/||$i~/^c_orient\[3\]$/){qo[4]=i-2}
                }}END{for(i in qo){printf "%i\n",qo[i]}}') )
         vel=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/v[xyz]/){printf "%i\n",i-2} }}') )
-        angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/){printf "%i\n",i-2} }}') )
+        angmom=( $(sed -n '9p;9q' "$tmp_dump" | awk '{for(i=1; i<=NF; i++){if($i~/angmom[xyz]/||$i~/AngularMomentum[XYZ]/){printf "%i\n",i-2} }}') )
         IFS=$OIFS
 
         # Orthorombic box.
@@ -983,13 +983,17 @@ NANGLETYPES=$((NANGLETYPES + NANGLETYPES_SP))
 NDIHEDRALTYPES=$((NDIHEDRALTYPES + NDIHEDRALTYPES_SP))
 NIMPROPERTYPES=$((NIMPROPERTYPES + NIMPROPERTYPES_SP))
 
-if [ $NATOMTYPES -eq 0 ]; then
+
+# OMR: Moltemplate can handle the creation of valid input decks for LAMMPS even
+# if the input LT file doesn't contain any atom. This could happen if the simulation
+# has a rerun command, or a box is created in the simulation script.
+#
+#if [[ $NATOMTYPES -eq 0 ]]; then
     # Moltemplate can be used as a simple hierarchical template renderer
     # that knows nothing about LAMMPS.  In that case NATOMTYPES is undefined.
     # In that case, terminate now and do not try to interpret the files.
-    exit 0
-fi
-
+    #exit 0
+#fi
 
 
 # Attempt to remove any the DOS (windows) return-cairrage characters
@@ -1031,10 +1035,10 @@ if [ -s "${data_atoms}" ]; then
     fi
     mv -f "${data_atoms}.tmp" "${data_atoms}"
 else
-    if [ -n "$NATOMTYPES" ]; then
+    if [[ $NATOMTYPES -eq 0 ]] && [[ -n "$LTTREE_CHECK_COMMAND" ]]; then
         echo "Error: There are no atoms in your system. Suggestions:" >&2
         echo "" >&2
-        echo "       Your files must contain at least one" >&2
+        echo "       Your files should contain at least one" >&2
         echo "           write(\"${data_atoms}\")" >&2
         echo "       command.  These commands are typically located somewhere in" >&2
         echo "       one of the molecule object(s) you have defined." >&2
@@ -1052,10 +1056,11 @@ else
         echo "       namespace, a force-field name or category containing only the" >&2
         echo "       definitions of other molecules, lacking any atoms of its own.)" >&2
         echo "" >&2
-        exit 200
+	echo "       To override this error, run Moltemplate using the \"-nocheck\" argument." >&2
+        echo "" >&2
+	exit 200
     fi
 fi
-
 
 
 
@@ -2304,7 +2309,11 @@ if [ -s "$data_impropers" ]; then
 #    echo "WARNING: missing file \"$data_impropers\"" >&2
 fi
 
-
+# OMR: if Moltemplate has been invoked without creating any atom,
+# delete the spurious data file before proceeding.
+if [[ $NATOMTYPES -eq 0 ]]; then
+  rm -f $OUT_FILE_DATA
+fi
 
 
 rm -f $OUT_FILE_EXAMPLE_SCRIPT
@@ -2323,14 +2332,13 @@ if [ -s "$in_init" ]; then
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 fi
 
-
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# ----------------- Atom Definition Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "read_data \"$OUT_FILE_DATA\"" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "# ----------------- Settings Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
-echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+if [[ -e $OUT_FILE_DATA ]]; then
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "# ----------------- Atom Definition Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "read_data \"$OUT_FILE_DATA\"" >> $OUT_FILE_EXAMPLE_SCRIPT
+    echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
+fi
 
 
 if [ -s "$in_settings" ]; then
@@ -2357,6 +2365,8 @@ if [ -s "$in_settings" ]; then
     molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
     export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2019 (https://doi.org/10.1039/c9cp04120f)\n"`
   fi
+  echo "# ----------------- Settings Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
+  echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
   echo "include \"$OUT_FILE_SETTINGS\"" >> $OUT_FILE_EXAMPLE_SCRIPT
   echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
 fi
