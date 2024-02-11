@@ -482,17 +482,23 @@ while [ "$i" -lt "$ARGC" ]; do
         fi
     elif [ "$A" = "-checkff" ]; then
         CHECKFF="$A"
-    elif [ "$A" = "-overlay-bonds" ] || [ "$A" = "-overlay-all" ]; then
+    elif [ "$A" = "-overlay-bonds" ]; then
         # In that case, do not remove duplicate bond interactions
         unset REMOVE_DUPLICATE_BONDS
-    elif [ "$A" = "-overlay-angles" ] || [ "$A" = "-overlay-all" ]; then
+    elif [ "$A" = "-overlay-angles" ]; then
         # In that case, do not remove duplicate angle interactions
         unset REMOVE_DUPLICATE_ANGLES
-    elif [ "$A" = "-overlay-dihedrals" ] || [ "$A" = "-overlay-all" ]; then
+    elif [ "$A" = "-overlay-dihedrals" ]; then
         # In that case, do not remove duplicate dihedral interactions
         unset REMOVE_DUPLICATE_DIHEDRALS
-    elif [ "$A" = "-overlay-impropers" ] || [ "$A" = "-overlay-all" ]; then
+    elif [ "$A" = "-overlay-impropers" ]; then
         # In that case, do not remove duplicate improper interactions
+        unset REMOVE_DUPLICATE_IMPROPERS
+    elif [ "$A" = "-overlay-all" ]; then
+        # In that case, do not remove duplicate bonded interactions, nor reorder the bonded terms.
+        unset REMOVE_DUPLICATE_BONDS
+        unset REMOVE_DUPLICATE_ANGLES
+        unset REMOVE_DUPLICATE_DIHEDRALS
         unset REMOVE_DUPLICATE_IMPROPERS
     elif [ "$A" = "-vmd" ]; then
         RUN_VMD_AT_END="true"
@@ -2321,7 +2327,7 @@ rm -f $OUT_FILE_EXAMPLE_SCRIPT
 if [ -s "$in_init" ]; then
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
     #  Remove leading blank spaces in the post-processed script.
-    sed 's/^ *//' "$in_init" > $OUT_FILE_INIT
+    sed 's/^ *//; s/^	*//' "$in_init" > $OUT_FILE_INIT
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
     echo "# ----------------- Init Section -----------------" >> $OUT_FILE_EXAMPLE_SCRIPT
     echo "" >> $OUT_FILE_EXAMPLE_SCRIPT
@@ -2360,7 +2366,7 @@ if [ -s "$in_settings" ]; then
     fi
     #...and append the contents to the end of the target file.
     #  Also, remove leading blank spaces.
-    sed 's/^ *//' "$in_settings" >> "${OUT_FILE_SETTINGS}"
+    sed 's/^ *//; s/^	*//' "$in_settings" >> "${OUT_FILE_SETTINGS}"
   else
     molc.sh "$in_settings" "$in_init" >> $OUT_FILE_SETTINGS
     export MOLTEMPLATE_CITE_LIST=`printf "$MOLTEMPLATE_CITE_LIST\nRicci et al. Phys.Chem.Chem.Phys 2019 (https://doi.org/10.1039/c9cp04120f)\n"`
@@ -2561,7 +2567,7 @@ ls "${in_prefix}"* 2> /dev/null | while read file_name; do
     fi
     #...and append the contents to the end of the target file.
     #  Also, remove leading blank spaces.
-    sed 's/^ *//' "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
+    sed 's/^ *//; s/^	*//' "$file_name" >> "${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}"
     echo "" >> "$OUT_FILE_EXAMPLE_SCRIPT"
     echo "include \"${OUT_FILE_INPUT_SCRIPT}.${FILE_SUFFIX}\"" >> $OUT_FILE_EXAMPLE_SCRIPT
     mv -f "$file_name" output_ttree/
