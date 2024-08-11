@@ -146,7 +146,7 @@ OPLSAA {
     set type @atom:90 charge -0.115  # "Aromatic C"
     set type @atom:91 charge 0.115  # "Aromatic H-C"
     set type @atom:92 charge 0.0  # "Naphthalene Fusion C"
-    set type @atom:93 charge -0.065  # "Ethyl Benzene CH3-"
+    set type @atom:93 charge -0.065  # "Methyl Benzene CH3-"
     set type @atom:94 charge -0.005  # "Ethyl Benzene -CH2-"
     set type @atom:95 charge -0.115  # "Diene =CH-CH="
     set type @atom:96 charge -0.683  # "Alcohol -OH"
