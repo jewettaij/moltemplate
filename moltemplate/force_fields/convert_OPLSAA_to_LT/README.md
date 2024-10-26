@@ -43,10 +43,10 @@ Ethylene inherits OPLSAA {
 ```
 See the examples in the force_field_OPLSAA2023/ subdirectory directory for details.
 
-Note: The `--par` and `--sb` can also be URLs.
-The "oplsaa2023.lt" file was generated this way using the published parameters from [this paper](https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602).
+
+The "oplsaa2023.lt" file is normally generated using the published parameters from [this paper](https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602).  Unless otherwise specified in the header, the `oplsaa2lt.py` program is run using these arguments:
 ```
 ./oplsaa2lt.py --name OPLSAA --out oplsaa2023.lt \
-  --par https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_002.txt \
-  --sb  https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_003.txt
+  --par ../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par \
+  --sb  ../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb
 ```

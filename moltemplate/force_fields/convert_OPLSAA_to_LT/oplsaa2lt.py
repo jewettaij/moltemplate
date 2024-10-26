@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 
 import argparse
-import io
-import urllib.request
-import urllib.error
 import sys
 
 from oplsaa2lt_utils import (bond_header, file_equivalences_header,
@@ -172,19 +169,21 @@ def main(argv):
     ap.add_argument(
         "--par",
         dest="infile_name_par",
-        default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par",
-        help="name of the BOSS .par file. (It can be a URL. Example: --par=https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_002.txt)",
+        required=True,
+        # default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par",
+        help="name of the BOSS .par file.  (Example: \"oplsaa.par\")",
     )
     ap.add_argument(
         "--sb",
         dest="infile_name_sb",
-        default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb",
-        help="name of the BOSS .sb file. (It can be a URL. Example: --par=https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_003.txt)",
+        required=True,
+        # default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb",
+        help="name of the BOSS .sb file.  (Example: \"oplsaa.sb\")",
     )
     ap.add_argument(
         "--out",
         dest="outfile_name",
-        default="",
+        required=True,
         help="name of the .lt file you want to create.",
     )
     ap.add_argument(
@@ -196,22 +195,6 @@ def main(argv):
     )
 
     args = ap.parse_args(argv[1:])
-
-    if args.infile_name_par.startswith("http"):
-        url = args.infile_name_par
-        resource = urllib.request.urlopen(url)
-        text_in = resource.read().decode('utf-8')
-        infile_par = io.StringIO(text_in)
-    else:
-        infile_par = open(args.infile_name_par)
-
-    if args.infile_name_sb.startswith("http"):
-        url = args.infile_name_sb
-        resource = urllib.request.urlopen(url)
-        text_in = resource.read().decode('utf-8')
-        infile_sb = io.StringIO(text_in)
-    else:
-        infile_sb = open(args.infile_name_sb)
 
     if args.outfile_name != "":
         outfile = open(args.outfile_name, 'w')
@@ -226,15 +209,15 @@ def main(argv):
 
     # Import bond and angle information from the ".sb" BOSS file.
     # (Eg. https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_003.txt)
-    lines_sb = infile_sb.readlines()
-    infile_sb.close()
+    with open(args.infile_name_sb, "r") as infile_sb:
+       lines_sb = infile_sb.readlines()
     bonds, angles = get_bonds_and_angles(lines_sb)
 
 
     # Import atom, dihedral, and improper information from the ".par" BOSS file.
     # (Eg. https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_002.txt)
-    lines_par = infile_par.readlines()
-    infile_par.close()
+    with open(args.infile_name_par, "r") as infile_par:
+       lines_par = infile_par.readlines()
     dihedrals, impropers = get_dihedrals_and_impropers(lines_par)
 
 
@@ -313,114 +296,112 @@ def main(argv):
     #####################       in this way I can keep the comment blocks from the original FF file
     ################################################################################################
     atoms: list[Atom] = []
-    outfile.write("# This file was generated automatically using:\n")
-    outfile.write("# " + g_program_name + " " + " ".join(argv[1:]) + "\n")
-    outfile.write("")
-    outfile.write(file_header)
-    outfile.write("  # NOTE2: I tried to maintain the same two-letter 'general' types as from\n")
-    outfile.write("  #  the original FF file. However, some changes had to be made to comply\n")
-    outfile.write("  #  to the inner functioning of moltemplate. Such changes were:\n  #\n")
-    for original, new in TYPE_CONVERSION_TUPLES:
-        outfile.write(f"  #    {original} --> {new}\n")
+    with open(args.outfile_name, "w") as outfile:
+        outfile.write("# This file was generated automatically using:\n")
+        outfile.write("# " + g_program_name + " " + " ".join(argv[1:]) + "\n")
+        outfile.write("")
+        outfile.write(file_header)
+        outfile.write("  # NOTE2: I tried to maintain the same two-letter 'general' types as from\n")
+        outfile.write("  #  the original FF file. However, some changes had to be made to comply\n")
+        outfile.write("  #  to the inner functioning of moltemplate. Such changes were:\n  #\n")
+        for original, new in TYPE_CONVERSION_TUPLES:
+            outfile.write(f"  #    {original} --> {new}\n")
 
-    outfile.write("\n  # NOTE3: The original FF file had types for different water models,\n")
-    outfile.write("  #  but it was missing the relevant bonded interactions; therefore, I\n")
-    outfile.write("  #  skipped the water types from the original FF, and hardcoded some simple\n")
-    outfile.write("  #  water models, with the relevant bonded parameters\n")
+        outfile.write("\n  # NOTE3: The original FF file had types for different water models,\n")
+        outfile.write("  #  but it was missing the relevant bonded interactions; therefore, I\n")
+        outfile.write("  #  skipped the water types from the original FF, and hardcoded some simple\n")
+        outfile.write("  #  water models, with the relevant bonded parameters\n")
 
-    outfile.write("\n  # NOTE4: Water TIP*/SPC* models parameters are taken from LAMMPS doc,\n")
-    outfile.write("  #  the user is invited to read the proper sections in the LAMMPS user manual\n")
-    outfile.write("  #  to properly understand how to setup a simulation with the desided model.\n")
-    outfile.write("  #  As for OPC, it seems it could be implemented in LAMMPS similarly to the\n")
-    outfile.write("  #   TIP4P model (where OM distance should be 0.1594 angstrom).\n")
+        outfile.write("\n  # NOTE4: Water TIP*/SPC* models parameters are taken from LAMMPS doc,\n")
+        outfile.write("  #  the user is invited to read the proper sections in the LAMMPS user manual\n")
+        outfile.write("  #  to properly understand how to setup a simulation with the desided model.\n")
+        outfile.write("  #  As for OPC, it seems it could be implemented in LAMMPS similarly to the\n")
+        outfile.write("  #   TIP4P model (where OM distance should be 0.1594 angstrom).\n")
 
-    outfile.write('\n\n  write_once("In Charges") {\n')
-    for line in lines_par[2:]:
-        if line.startswith("#    Add more charge and L-J parameters"):
-            break
-        if line.startswith("#"):
-            outfile.write(f"    {line}")
-        else:
-            atom = parse_atom_line(line)
-            if atom is not None:
-                atoms.append(atom)
-                outfile.write(f"    {atom.charge_line}")
-    for atom in wat_atoms:
-        outfile.write(f"    {atom.charge_line}")
-    outfile.write("  } # (end of atom partial charges)\n")
-    outfile.write('\n\n  write_once("Data Masses") {\n')
-    atoms += wat_atoms
-    for atom in atoms:
-        outfile.write(f"    {atom.mass_line}")
-    outfile.write("  } # (end of atom masses)\n")
+        outfile.write('\n\n  write_once("In Charges") {\n')
+        for line in lines_par[2:]:
+            if line.startswith("#    Add more charge and L-J parameters"):
+                break
+            if line.startswith("#"):
+                outfile.write(f"    {line}")
+            else:
+                atom = parse_atom_line(line)
+                if atom is not None:
+                    atoms.append(atom)
+                    outfile.write(f"    {atom.charge_line}")
+        for atom in wat_atoms:
+            outfile.write(f"    {atom.charge_line}")
+        outfile.write("  } # (end of atom partial charges)\n")
+        outfile.write('\n\n  write_once("Data Masses") {\n')
+        atoms += wat_atoms
+        for atom in atoms:
+            outfile.write(f"    {atom.mass_line}")
+        outfile.write("  } # (end of atom masses)\n")
 
-    outfile.write(file_equivalences_header)
-    for atom in atoms:
-        outfile.write(f"  {atom.repl_line}")
+        outfile.write(file_equivalences_header)
+        for atom in atoms:
+            outfile.write(f"  {atom.repl_line}")
 
-    outfile.write(nb_header)
-    outfile.write('  write_once("In Settings") {\n')
-    for atom in atoms:
-        outfile.write(f"    {atom.nb_line}")
-    outfile.write("  } # (end of pair_coeffs)\n")
+        outfile.write(nb_header)
+        outfile.write('  write_once("In Settings") {\n')
+        for atom in atoms:
+            outfile.write(f"    {atom.nb_line}")
+        outfile.write("  } # (end of pair_coeffs)\n")
 
-    outfile.write("\n\n\n\n")
-    outfile.write("  # NOTE: all bonded interaction name can't have '*' or '?' characters, so in each\n")
-    outfile.write("  #   bonded sections such characters will be replaced with another character\n")
-    outfile.write("  #   that, at the time of writing, is not used for atom types (* -> £, ? -> €).\n\n")
-    outfile.write(bond_header)
-    outfile.write('\n  write_once("In Settings") {\n')
-    for bond in bonds:
-        if not bond.to_skip:
-            outfile.write(f"    {bond.coeff_line}")
-    outfile.write("  } # (end of bond_coeffs)\n")
-    outfile.write('\n  write_once("Data Bonds By Type") {\n')
-    for bond in bonds:
-        if not bond.to_skip:
-            outfile.write(f"    {bond.bytype_line}")
-    outfile.write("  } # (end of bonds by type)\n")
+        outfile.write("\n\n\n\n")
+        outfile.write("  # NOTE: all bonded interaction name can't have '*' or '?' characters, so in each\n")
+        outfile.write("  #   bonded sections such characters will be replaced with another character\n")
+        outfile.write("  #   that, at the time of writing, is not used for atom types (* -> £, ? -> €).\n\n")
+        outfile.write(bond_header)
+        outfile.write('\n  write_once("In Settings") {\n')
+        for bond in bonds:
+            if not bond.to_skip:
+                outfile.write(f"    {bond.coeff_line}")
+        outfile.write("  } # (end of bond_coeffs)\n")
+        outfile.write('\n  write_once("Data Bonds By Type") {\n')
+        for bond in bonds:
+            if not bond.to_skip:
+                outfile.write(f"    {bond.bytype_line}")
+        outfile.write("  } # (end of bonds by type)\n")
 
-    outfile.write(angle_header)
-    outfile.write('\n  write_once("In Settings") {\n')
-    for angle in angles:
-        if not angle.to_skip:
-            outfile.write(f"    {angle.coeff_line}")
-    outfile.write("  } # (end of angle_coeffs)\n")
-    outfile.write('\n  write_once("Data Angles By Type") {\n')
-    for angle in angles:
-        if not angle.to_skip:
-            outfile.write(f"    {angle.bytype_line}")
-    outfile.write("  } # (end of angles by type)\n")
+        outfile.write(angle_header)
+        outfile.write('\n  write_once("In Settings") {\n')
+        for angle in angles:
+            if not angle.to_skip:
+                outfile.write(f"    {angle.coeff_line}")
+        outfile.write("  } # (end of angle_coeffs)\n")
+        outfile.write('\n  write_once("Data Angles By Type") {\n')
+        for angle in angles:
+            if not angle.to_skip:
+                outfile.write(f"    {angle.bytype_line}")
+        outfile.write("  } # (end of angles by type)\n")
 
-    outfile.write(dihedral_header)
-    outfile.write('\n  write_once("In Settings") {\n')
-    for dihedral in dihedrals:
-        if not dihedral.to_skip:
-            outfile.write(f"    {dihedral.coeff_line}")
-    outfile.write("  } # (end of dihedral_coeffs)\n")
-    outfile.write('\n  write_once("Data Dihedrals By Type") {\n')
-    for dihedral in dihedrals:
-        if not dihedral.to_skip:
-            outfile.write(f"    {dihedral.bytype_line}")
-    outfile.write("  } # (end of dihedrals by type)\n")
+        outfile.write(dihedral_header)
+        outfile.write('\n  write_once("In Settings") {\n')
+        for dihedral in dihedrals:
+            if not dihedral.to_skip:
+                outfile.write(f"    {dihedral.coeff_line}")
+        outfile.write("  } # (end of dihedral_coeffs)\n")
+        outfile.write('\n  write_once("Data Dihedrals By Type") {\n')
+        for dihedral in dihedrals:
+            if not dihedral.to_skip:
+                outfile.write(f"    {dihedral.bytype_line}")
+        outfile.write("  } # (end of dihedrals by type)\n")
 
-    outfile.write(improper_header)
-    outfile.write('\n  write_once("In Settings") {\n')
-    for improper in impropers:
-        if not improper.to_skip:
-            outfile.write(f"    {improper.coeff_line}")
-    outfile.write("  } # (end of improper_coeffs)\n")
-    outfile.write('\n  write_once("Data Impropers By Type (opls_imp.py)") {\n')
-    for improper in impropers:
-        if not improper.to_skip:
-            outfile.write(f"    {improper.bytype_line}")
-    outfile.write("  } # (end of impropers by type)\n")
+        outfile.write(improper_header)
+        outfile.write('\n  write_once("In Settings") {\n')
+        for improper in impropers:
+            if not improper.to_skip:
+                outfile.write(f"    {improper.coeff_line}")
+        outfile.write("  } # (end of improper_coeffs)\n")
+        outfile.write('\n  write_once("Data Impropers By Type (opls_imp.py)") {\n')
+        for improper in impropers:
+            if not improper.to_skip:
+                outfile.write(f"    {improper.bytype_line}")
+        outfile.write("  } # (end of impropers by type)\n")
 
-    outfile.write(closing_stuff)
-    outfile.write("}\n")
-
-    if outfile != sys.stdout:
-        outfile.close()
+        outfile.write(closing_stuff)
+        outfile.write("}\n")
 
 
 if __name__ == '__main__':
