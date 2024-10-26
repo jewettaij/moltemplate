@@ -2,19 +2,24 @@
 
 file_header = """
 # This file contains OPLSAA parameters and rules for creating angle, dihedral,
-# and improper interactions according to OPLSAA conventions, taken from
-# "Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-1"
+# and improper interactions according to OPLSAA conventions.
+# (By default, this information in this file comes from this paper:
+# https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602
+# However that might not be true if custom "oplsaa.par" and "oplsaa.sb"
+# files were used when generating this file.)
 #
 # USAGE: You can create molecules using this force-field this way:
 #
+import "oplsaa2023.lt"
+
 # MyMolecule inherits OPLSAA {
-#  # atom-id  mol-id atom-type charge    X        Y        Z
-#  write('Data Atoms') {
-#    $atom:C1  $mol @atom:88  0.00  -0.6695    0.000000  0.000000
-#    $atom:H11 $mol @atom:89  0.00  -1.234217 -0.854458  0.000000
-#         :              :     :      :         :         :
-#   }
-# }
+  # atom-id mol-id atom-type charge   X       Y       Z
+  write('Data Atoms') {
+    $atom:c1  $mol @atom:54  0.00 -0.6695   0.00000  0.000
+    $atom:h11 $mol @atom:60  0.00 -1.23422 -0.85446  0.000
+    :
+  }
+} # Ethylene
 #
 # You can omit the atom charge in your molecule definition.
 # (Partial charges will be assigned later according to the force field rules.)

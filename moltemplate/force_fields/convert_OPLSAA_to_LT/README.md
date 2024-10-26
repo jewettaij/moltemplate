@@ -1,0 +1,52 @@
+oplsaa2lt.py
+==========================
+
+**oplsaa2lt.py** converts a pair of BOSS input files (.par, .sb) into a moltemplate-compatible .LT file
+
+# Typical Usage
+If you have downloaded the latest BOSS parameter files
+(eg "oplsaa.par", and "oplsaa.sb"),
+you can convert them to a moltemplate file (eg. "oplsaa.lt") this way:
+```
+./oplsaa2lt.py --name OPLSAA --out oplsaa.lt \
+  --par oplsaa.par \
+  --sb  oplsaa.sb
+```
+In this example, the two BOSS files
+- `oplsaa.par` contains atom definitions, dihedral and improper interaction paramters.
+- `oplsaa.sb` contains bond and angle parameters.
+*(Example .par and .sb files are located in the ../oplsaa2023_original_format/ directory.  Those files were published in 2023.)*
+
+This creates a moltemplate file named "oplsaa2023.lt" containing a force-field object named "OPLSAA"
+```
+OPLSAA {
+  :   (Atom types and force-field parameters go here...)
+}
+```
+Later on, users can use this file to define molecules using this syntax:
+```
+import "oplsaa2023.lt"
+
+Ethylene inherits OPLSAA {
+  # atom-id mol-id atom-type charge   X       Y       Z     # comment
+  write('Data Atoms') {
+    $atom:c1  $mol @atom:54  0.00 -0.6695   0.00000  0.000  #54<->"n-CH3 all-atom C: alkanes"
+    $atom:h11 $mol @atom:60  0.00 -1.23422 -0.85446  0.000  #60<->"H all-atom H: alkanes"
+    :
+  }
+  # BondID     AtomID1  AtomID2
+  write('Data Bond List') {
+    $bond:c1h1 $atom:c1 $atom:h11
+    :
+  }
+} # Ethylene
+```
+See the examples in the force_field_OPLSAA2023/ subdirectory directory for details.
+
+Note: The `--par` and `--sb` can also be URLs.
+The "oplsaa2023.lt" file was generated this way using the published parameters from [this paper](https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602).
+```
+./oplsaa2lt.py --name OPLSAA --out oplsaa2023.lt \
+  --par https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_002.txt \
+  --sb  https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_003.txt
+```

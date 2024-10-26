@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+import argparse
+import io
+import urllib.request
+import urllib.error
+import sys
 
 from oplsaa2lt_utils import (bond_header, file_equivalences_header,
                    file_header, closing_stuff, nb_header,
@@ -7,10 +12,13 @@ from oplsaa2lt_utils import (bond_header, file_equivalences_header,
 
 from oplsaa2lt_classes import Atom, Bond, Angle, Dihedral, Improper
 
-FILE_WITH_TYPES_AND_DIHEDRALS = "./Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-2.txt"
-FILE_WITH_BOND_AND_ANGLES = "./Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-3.txt"
 
-NEW_LT_FILENAME = "oplsaa2023.lt"
+__author__ = "Domenico Marson and Andrew Jewett"
+__version__ = '0.1.0'
+__date__ = '2024-10-25'
+
+g_program_name = __file__.split('/')[-1]
+
 
 TYPE_CONVERSION_TUPLES = (
     ('C:', "C°"), # moltemplate doesn't like :
@@ -132,20 +140,6 @@ def get_dihedrals_and_impropers(input_lines) -> tuple[list[Dihedral], list[Impro
     return loaded_dihedrals, loaded_impropers
 
 
-################################################################################################
-################################################################################################
-# LET'S START PARSING THE FF FILES
-################################################################################################
-################################################################################################
-
-with open(FILE_WITH_BOND_AND_ANGLES) as f:
-    lines = f.readlines()
-bonds, angles = get_bonds_and_angles(lines)
-
-with open(FILE_WITH_TYPES_AND_DIHEDRALS) as f:
-    lines = f.readlines()
-dihedrals, impropers = get_dihedrals_and_impropers(lines)
-
 # NOTE: PROBLEM WITH SAME-TYPES BONDED INTERACTIONS...
 # the same dihedral (from atom types POV) can have != parameters, based on comment...
 #  e.g.:
@@ -167,180 +161,267 @@ def check_uniqueness(
                 if it1_coeff == it2_coeff and skip_equal_parameters:
                     it2.to_skip = True
 
-for interactions in [bonds, angles, dihedrals, impropers]:
-    interactions.sort(key=lambda k: k.typename)
-    interactions.sort(key=lambda k: k.sort_key)
-    check_uniqueness(interactions, skip_equal_parameters=True)
 
 
-################################################################################################
-# LET'S ADD SOME WATER MODELS 
-################################################################################################
-
-STARTING_WAT_TYPE = 9999
-wat_atoms: list[Atom] = []
-
-# TIP3P water
-# the same bonded interactions are good for TIP4P and TIP5P
-# (LAMMPS proposes these k values if one want to go with a flexible TIP3P model;
-#  note that they are different from the TIP3F, TIP4F and TIP5F parameters in the old oplsaa.lt)
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-0, atomic_number=16, type_str="tipO", charge="-0.830", sigma="3.188", epsilon="0.102", comment="TIP3P/F water O, long-range Coulombic solver"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-1, atomic_number=1, type_str="tipH", charge="+0.415", sigma="0.0", epsilon="0.0", comment="TIP3P/F water H, long-range Coulombic solver"))
-bonds.append(Bond(types=["tipO", "tipH"], k="450.00", eq="0.9572", comment="TIP3/4/5P/F O-H"))
-angles.append(Angle(types=["tipH", "tipO", "tipH"], k="55.00", eq="104.52", comment="TIP3/4/5P/F H-O-H"))
-
-# TIP4P water
-# user should change the pair_style to the one that treat internally the O-M interaction,
-#   and so the O-M distance (0.1250) should be added there and not as a bond...
-# also, this should not be used without fix shake, so no flexible variant
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-2, atomic_number=16, type_str="tipO", charge="0.00", sigma="3.16435", epsilon="0.16275", comment="TIP4P water O, long-range Coulombic solver"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-3, atomic_number=1, type_str="tipH", charge="+0.5242", sigma="0.0", epsilon="0.0", comment="TIP4P water H, long-range Coulombic solver"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-4, atomic_number=0, type_str="tipM", charge="-1.0484", sigma="1.0", epsilon="0.0", comment="TIP4P water M, long-range Coulombic solver"))
-# bonds.append(Bond(types=["tipO", "tipM"], k="900.00", eq="0.15", comment="TIP4P O-M"))
-# angles.append(Angle(types=["tipH", "tipO", "tipM"], k="50.00", eq="52.26", comment="TIP4P H-O-M"))
-
-# TIP5P water
-# user should be running this with fix rigid, so no flexible variant is provided;
-#   also, bonds shouldn't matter for this model,
-#   as it is kept rigid but "fix rigid" and not by bonded interactions
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-5, atomic_number=16, type_str="tipO", charge="0.00", sigma="3.0970", epsilon="0.1780", comment="TIP5P water O, long-range Coulombic solver"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-6, atomic_number=1, type_str="tipH", charge="+0.241", sigma="1.0", epsilon="0.0", comment="TIP5P water H, long-range Coulombic solver"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-7, atomic_number=0, type_str="tipL", charge="-0.241", sigma="1.0", epsilon="0.0", comment="TIP5P water L, long-range Coulombic solver"))
-# bonds.append(Bond(types=["tipO", "tipL"], k="900.00", eq="0.70", comment="TIP5P O-L"))
-# angles.append(Angle(types=["tipL5", "tipO", "tipL5"], k="50.00", eq="109.47", comment="TIP5P L-O-L"))
-# angles.append(Angle(types=["tipH", "tipO", "tipL5"], k="50.00", eq="110.6948", comment="TIP5P H-O-L"))
-
-# SPC and SPC/E (the same, just changes the charges on H and O...)
-# should be used with fix shake, LAMMPS doesn't mention a flexible variant
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-8, atomic_number=16, type_str="spcO", charge="-0.820", sigma="3.166", epsilon="0.1553", comment="SPC water O"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-10, atomic_number=16, type_str="spcO", charge="-0.8476", sigma="3.166", epsilon="0.1553", comment="SPC/E water O"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-9, atomic_number=1, type_str="spcH", charge="+0.410", sigma="0.0", epsilon="0.0", comment="SPC water H"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-11, atomic_number=1, type_str="spcH", charge="+0.4238", sigma="0.0", epsilon="0.0", comment="SPC/E water H"))
-bonds.append(Bond(types=["spcO", "spcH"], k="450.00", eq="1.000", comment="SPC-SPC/E O-H"))
-angles.append(Angle(types=["spcH", "spcO", "spcH"], k="55.00", eq="109.47", comment="SPC-SPC/E H-O-H"))
-
-# OPC
-# I saw users using this water model via the lj/long/tip4p/long pair_style,
-#   so as for TIP4P users need to provide O-E distance (0.1594) there and use fix shake.
-# parameters are taken from AmberTools2024
-#   where LJ distance parameter is provided as half r_min, not sigma, hence the conversion
-HALFRMIN2SIGMA = 2/(2**(1/6))
-sigma_opc_o = f"{1.777167268 * HALFRMIN2SIGMA:10.6f}".strip()
-sigma_opc_ep = f"{1 * HALFRMIN2SIGMA:10.6f}".strip()
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-12, atomic_number=16, type_str="opcO", charge="0.00", sigma=sigma_opc_o, epsilon="0.21280", comment="OPC water O"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-13, atomic_number=1, type_str="opcH", charge="+0.679142", sigma="0.0", epsilon="0.0", comment="OPC water H"))
-wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-14, atomic_number=0, type_str="opcE", charge="-1.358284", sigma=sigma_opc_ep, epsilon="0.0", comment="OPC water E"))
-bonds.append(Bond(types=["opcO", "opcH"], k="450.00", eq="0.8724", comment="OPC O-H"))
-angles.append(Angle(types=["opcH", "opcO", "opcH"], k="55.00", eq="103.6", comment="OPC H-O-H"))
-# bonds.append(Bond(types=["opcO", "opcE"], k="450.00", eq="0.1594", comment="OPC O-LP"))
 
 
-################################################################################################
-###### LET'S START WRITING STUFF
-##################### NOTE: i load and write the atom types concurrently,
-#####################       in this way I can keep the comment blocks from the original FF file
-################################################################################################
-atoms: list[Atom] = []
-with open(NEW_LT_FILENAME, "w") as f:
-    f.write(file_header)
-    f.write("  # NOTE2: I tried to maintain the same two-letter 'general' types as from\n")
-    f.write("  #  the original FF file. However, some changes had to be made to comply\n")
-    f.write("  #  to the inner functioning of moltemplate. Such changes were:\n  #\n")
+def main(argv):
+    sys.stderr.write(g_program_name + ", version " +
+                     __version__ + ", " + __date__ + "\n")
+    ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--par",
+        dest="infile_name_par",
+        default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par",
+        help="name of the BOSS .par file. (It can be a URL. Example: --par=https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_002.txt)",
+    )
+    ap.add_argument(
+        "--sb",
+        dest="infile_name_sb",
+        default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb",
+        help="name of the BOSS .sb file. (It can be a URL. Example: --par=https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_003.txt)",
+    )
+    ap.add_argument(
+        "--out",
+        dest="outfile_name",
+        default="",
+        help="name of the .lt file you want to create.",
+    )
+    ap.add_argument(
+        "--name",
+        dest="object_name",
+        default="OPLSAA",
+        required=False,
+        help='name of the moltemplate object you want to create. (Default: "OPLSAA")',
+    )
+
+    args = ap.parse_args(argv[1:])
+
+    if args.infile_name_par.startswith("http"):
+        url = args.infile_name_par
+        resource = urllib.request.urlopen(url)
+        text_in = resource.read().decode('utf-8')
+        infile_par = io.StringIO(text_in)
+    else:
+        infile_par = open(args.infile_name_par)
+
+    if args.infile_name_sb.startswith("http"):
+        url = args.infile_name_sb
+        resource = urllib.request.urlopen(url)
+        text_in = resource.read().decode('utf-8')
+        infile_sb = io.StringIO(text_in)
+    else:
+        infile_sb = open(args.infile_name_sb)
+
+    if args.outfile_name != "":
+        outfile = open(args.outfile_name, 'w')
+    else:
+        outfile = sys.stdout  # print to the terminal
+
+    ################################################################################################
+    ################################################################################################
+    # LET'S START PARSING THE FF FILES
+    ################################################################################################
+    ################################################################################################
+
+    # Import bond and angle information from the ".sb" BOSS file.
+    # (Eg. https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_003.txt)
+    lines_sb = infile_sb.readlines()
+    infile_sb.close()
+    bonds, angles = get_bonds_and_angles(lines_sb)
+
+
+    # Import atom, dihedral, and improper information from the ".par" BOSS file.
+    # (Eg. https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602/suppl_file/jp3c06602_si_002.txt)
+    lines_par = infile_par.readlines()
+    infile_par.close()
+    dihedrals, impropers = get_dihedrals_and_impropers(lines_par)
+
+
+    for interactions in [bonds, angles, dihedrals, impropers]:
+        interactions.sort(key=lambda k: k.typename)
+        interactions.sort(key=lambda k: k.sort_key)
+        check_uniqueness(interactions, skip_equal_parameters=True)
+
+
+    ################################################################################################
+    # LET'S ADD SOME WATER MODELS 
+    ################################################################################################
+
+    STARTING_WAT_TYPE = 9999
+    wat_atoms: list[Atom] = []
+
+    # TIP3P water
+    # the same bonded interactions are good for TIP4P and TIP5P
+    # (LAMMPS proposes these k values if one want to go with a flexible TIP3P model;
+    #  note that they are different from the TIP3F, TIP4F and TIP5F parameters in the old oplsaa.lt)
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-0, atomic_number=16, type_str="tipO", charge="-0.830", sigma="3.188", epsilon="0.102", comment="TIP3P/F water O, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-1, atomic_number=1, type_str="tipH", charge="+0.415", sigma="0.0", epsilon="0.0", comment="TIP3P/F water H, long-range Coulombic solver"))
+    bonds.append(Bond(types=["tipO", "tipH"], k="450.00", eq="0.9572", comment="TIP3/4/5P/F O-H"))
+    angles.append(Angle(types=["tipH", "tipO", "tipH"], k="55.00", eq="104.52", comment="TIP3/4/5P/F H-O-H"))
+
+    # TIP4P water
+    # user should change the pair_style to the one that treat internally the O-M interaction,
+    #   and so the O-M distance (0.1250) should be added there and not as a bond...
+    # also, this should not be used without fix shake, so no flexible variant
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-2, atomic_number=16, type_str="tipO", charge="0.00", sigma="3.16435", epsilon="0.16275", comment="TIP4P water O, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-3, atomic_number=1, type_str="tipH", charge="+0.5242", sigma="0.0", epsilon="0.0", comment="TIP4P water H, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-4, atomic_number=0, type_str="tipM", charge="-1.0484", sigma="1.0", epsilon="0.0", comment="TIP4P water M, long-range Coulombic solver"))
+    # bonds.append(Bond(types=["tipO", "tipM"], k="900.00", eq="0.15", comment="TIP4P O-M"))
+    # angles.append(Angle(types=["tipH", "tipO", "tipM"], k="50.00", eq="52.26", comment="TIP4P H-O-M"))
+
+    # TIP5P water
+    # user should be running this with fix rigid, so no flexible variant is provided;
+    #   also, bonds shouldn't matter for this model,
+    #   as it is kept rigid but "fix rigid" and not by bonded interactions
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-5, atomic_number=16, type_str="tipO", charge="0.00", sigma="3.0970", epsilon="0.1780", comment="TIP5P water O, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-6, atomic_number=1, type_str="tipH", charge="+0.241", sigma="1.0", epsilon="0.0", comment="TIP5P water H, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-7, atomic_number=0, type_str="tipL", charge="-0.241", sigma="1.0", epsilon="0.0", comment="TIP5P water L, long-range Coulombic solver"))
+    # bonds.append(Bond(types=["tipO", "tipL"], k="900.00", eq="0.70", comment="TIP5P O-L"))
+    # angles.append(Angle(types=["tipL5", "tipO", "tipL5"], k="50.00", eq="109.47", comment="TIP5P L-O-L"))
+    # angles.append(Angle(types=["tipH", "tipO", "tipL5"], k="50.00", eq="110.6948", comment="TIP5P H-O-L"))
+
+    # SPC and SPC/E (the same, just changes the charges on H and O...)
+    # should be used with fix shake, LAMMPS doesn't mention a flexible variant
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-8, atomic_number=16, type_str="spcO", charge="-0.820", sigma="3.166", epsilon="0.1553", comment="SPC water O"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-10, atomic_number=16, type_str="spcO", charge="-0.8476", sigma="3.166", epsilon="0.1553", comment="SPC/E water O"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-9, atomic_number=1, type_str="spcH", charge="+0.410", sigma="0.0", epsilon="0.0", comment="SPC water H"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-11, atomic_number=1, type_str="spcH", charge="+0.4238", sigma="0.0", epsilon="0.0", comment="SPC/E water H"))
+    bonds.append(Bond(types=["spcO", "spcH"], k="450.00", eq="1.000", comment="SPC-SPC/E O-H"))
+    angles.append(Angle(types=["spcH", "spcO", "spcH"], k="55.00", eq="109.47", comment="SPC-SPC/E H-O-H"))
+
+    # OPC
+    # I saw users using this water model via the lj/long/tip4p/long pair_style,
+    #   so as for TIP4P users need to provide O-E distance (0.1594) there and use fix shake.
+    # parameters are taken from AmberTools2024
+    #   where LJ distance parameter is provided as half r_min, not sigma, hence the conversion
+    HALFRMIN2SIGMA = 2/(2**(1/6))
+    sigma_opc_o = f"{1.777167268 * HALFRMIN2SIGMA:10.6f}".strip()
+    sigma_opc_ep = f"{1 * HALFRMIN2SIGMA:10.6f}".strip()
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-12, atomic_number=16, type_str="opcO", charge="0.00", sigma=sigma_opc_o, epsilon="0.21280", comment="OPC water O"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-13, atomic_number=1, type_str="opcH", charge="+0.679142", sigma="0.0", epsilon="0.0", comment="OPC water H"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-14, atomic_number=0, type_str="opcE", charge="-1.358284", sigma=sigma_opc_ep, epsilon="0.0", comment="OPC water E"))
+    bonds.append(Bond(types=["opcO", "opcH"], k="450.00", eq="0.8724", comment="OPC O-H"))
+    angles.append(Angle(types=["opcH", "opcO", "opcH"], k="55.00", eq="103.6", comment="OPC H-O-H"))
+    # bonds.append(Bond(types=["opcO", "opcE"], k="450.00", eq="0.1594", comment="OPC O-LP"))
+
+
+
+    ################################################################################################
+    ###### LET'S START WRITING STUFF
+    ##################### NOTE: i load and write the atom types concurrently,
+    #####################       in this way I can keep the comment blocks from the original FF file
+    ################################################################################################
+    atoms: list[Atom] = []
+    outfile.write("# This file was generated automatically using:\n")
+    outfile.write("# " + g_program_name + " " + " ".join(argv[1:]) + "\n")
+    outfile.write("")
+    outfile.write(file_header)
+    outfile.write("  # NOTE2: I tried to maintain the same two-letter 'general' types as from\n")
+    outfile.write("  #  the original FF file. However, some changes had to be made to comply\n")
+    outfile.write("  #  to the inner functioning of moltemplate. Such changes were:\n  #\n")
     for original, new in TYPE_CONVERSION_TUPLES:
-        f.write(f"  #    {original} --> {new}\n")
+        outfile.write(f"  #    {original} --> {new}\n")
 
-    f.write("\n  # NOTE3: The original FF file had types for different water models,\n")
-    f.write("  #  but it was missing the relevant bonded interactions; therefore, I\n")
-    f.write("  #  skipped the water types from the original FF, and hardcoded some simple\n")
-    f.write("  #  water models, with the relevant bonded parameters\n")
+    outfile.write("\n  # NOTE3: The original FF file had types for different water models,\n")
+    outfile.write("  #  but it was missing the relevant bonded interactions; therefore, I\n")
+    outfile.write("  #  skipped the water types from the original FF, and hardcoded some simple\n")
+    outfile.write("  #  water models, with the relevant bonded parameters\n")
 
-    f.write("\n  # NOTE4: Water TIP*/SPC* models parameters are taken from LAMMPS doc,\n")
-    f.write("  #  the user is invited to read the proper sections in the LAMMPS user manual\n")
-    f.write("  #  to properly understand how to setup a simulation with the desided model.\n")
-    f.write("  #  As for OPC, it seems it could be implemented in LAMMPS similarly to the\n")
-    f.write("  #   TIP4P model (where OM distance should be 0.1594 angstrom).\n")
+    outfile.write("\n  # NOTE4: Water TIP*/SPC* models parameters are taken from LAMMPS doc,\n")
+    outfile.write("  #  the user is invited to read the proper sections in the LAMMPS user manual\n")
+    outfile.write("  #  to properly understand how to setup a simulation with the desided model.\n")
+    outfile.write("  #  As for OPC, it seems it could be implemented in LAMMPS similarly to the\n")
+    outfile.write("  #   TIP4P model (where OM distance should be 0.1594 angstrom).\n")
 
-    f.write('\n\n  write_once("In Charges") {\n')
-    for line in lines[2:]:
+    outfile.write('\n\n  write_once("In Charges") {\n')
+    for line in lines_par[2:]:
         if line.startswith("#    Add more charge and L-J parameters"):
             break
         if line.startswith("#"):
-            f.write(f"    {line}")
+            outfile.write(f"    {line}")
         else:
             atom = parse_atom_line(line)
             if atom is not None:
                 atoms.append(atom)
-                f.write(f"    {atom.charge_line}")
+                outfile.write(f"    {atom.charge_line}")
     for atom in wat_atoms:
-        f.write(f"    {atom.charge_line}")
-    f.write("  } # (end of atom partial charges)\n")
-    f.write('\n\n  write_once("Data Masses") {\n')
+        outfile.write(f"    {atom.charge_line}")
+    outfile.write("  } # (end of atom partial charges)\n")
+    outfile.write('\n\n  write_once("Data Masses") {\n')
     atoms += wat_atoms
     for atom in atoms:
-        f.write(f"    {atom.mass_line}")
-    f.write("  } # (end of atom masses)\n")
+        outfile.write(f"    {atom.mass_line}")
+    outfile.write("  } # (end of atom masses)\n")
 
-    f.write(file_equivalences_header)
+    outfile.write(file_equivalences_header)
     for atom in atoms:
-        f.write(f"  {atom.repl_line}")
+        outfile.write(f"  {atom.repl_line}")
 
-    f.write(nb_header)
-    f.write('  write_once("In Settings") {\n')
+    outfile.write(nb_header)
+    outfile.write('  write_once("In Settings") {\n')
     for atom in atoms:
-        f.write(f"    {atom.nb_line}")
-    f.write("  } # (end of pair_coeffs)\n")
+        outfile.write(f"    {atom.nb_line}")
+    outfile.write("  } # (end of pair_coeffs)\n")
 
-    f.write("\n\n\n\n")
-    f.write("  # NOTE: all bonded interaction name can't have '*' or '?' characters, so in each\n")
-    f.write("  #   bonded sections such characters will be replaced with another character\n")
-    f.write("  #   that, at the time of writing, is not used for atom types (* -> £, ? -> €).\n\n")
-    f.write(bond_header)
-    f.write('\n  write_once("In Settings") {\n')
+    outfile.write("\n\n\n\n")
+    outfile.write("  # NOTE: all bonded interaction name can't have '*' or '?' characters, so in each\n")
+    outfile.write("  #   bonded sections such characters will be replaced with another character\n")
+    outfile.write("  #   that, at the time of writing, is not used for atom types (* -> £, ? -> €).\n\n")
+    outfile.write(bond_header)
+    outfile.write('\n  write_once("In Settings") {\n')
     for bond in bonds:
         if not bond.to_skip:
-            f.write(f"    {bond.coeff_line}")
-    f.write("  } # (end of bond_coeffs)\n")
-    f.write('\n  write_once("Data Bonds By Type") {\n')
+            outfile.write(f"    {bond.coeff_line}")
+    outfile.write("  } # (end of bond_coeffs)\n")
+    outfile.write('\n  write_once("Data Bonds By Type") {\n')
     for bond in bonds:
         if not bond.to_skip:
-            f.write(f"    {bond.bytype_line}")
-    f.write("  } # (end of bonds by type)\n")
+            outfile.write(f"    {bond.bytype_line}")
+    outfile.write("  } # (end of bonds by type)\n")
 
-    f.write(angle_header)
-    f.write('\n  write_once("In Settings") {\n')
+    outfile.write(angle_header)
+    outfile.write('\n  write_once("In Settings") {\n')
     for angle in angles:
         if not angle.to_skip:
-            f.write(f"    {angle.coeff_line}")
-    f.write("  } # (end of angle_coeffs)\n")
-    f.write('\n  write_once("Data Angles By Type") {\n')
+            outfile.write(f"    {angle.coeff_line}")
+    outfile.write("  } # (end of angle_coeffs)\n")
+    outfile.write('\n  write_once("Data Angles By Type") {\n')
     for angle in angles:
         if not angle.to_skip:
-            f.write(f"    {angle.bytype_line}")
-    f.write("  } # (end of angles by type)\n")
+            outfile.write(f"    {angle.bytype_line}")
+    outfile.write("  } # (end of angles by type)\n")
 
-    f.write(dihedral_header)
-    f.write('\n  write_once("In Settings") {\n')
+    outfile.write(dihedral_header)
+    outfile.write('\n  write_once("In Settings") {\n')
     for dihedral in dihedrals:
         if not dihedral.to_skip:
-            f.write(f"    {dihedral.coeff_line}")
-    f.write("  } # (end of dihedral_coeffs)\n")
-    f.write('\n  write_once("Data Dihedrals By Type") {\n')
+            outfile.write(f"    {dihedral.coeff_line}")
+    outfile.write("  } # (end of dihedral_coeffs)\n")
+    outfile.write('\n  write_once("Data Dihedrals By Type") {\n')
     for dihedral in dihedrals:
         if not dihedral.to_skip:
-            f.write(f"    {dihedral.bytype_line}")
-    f.write("  } # (end of dihedrals by type)\n")
+            outfile.write(f"    {dihedral.bytype_line}")
+    outfile.write("  } # (end of dihedrals by type)\n")
 
-    f.write(improper_header)
-    f.write('\n  write_once("In Settings") {\n')
+    outfile.write(improper_header)
+    outfile.write('\n  write_once("In Settings") {\n')
     for improper in impropers:
         if not improper.to_skip:
-            f.write(f"    {improper.coeff_line}")
-    f.write("  } # (end of improper_coeffs)\n")
-    f.write('\n  write_once("Data Impropers By Type (opls_imp.py)") {\n')
+            outfile.write(f"    {improper.coeff_line}")
+    outfile.write("  } # (end of improper_coeffs)\n")
+    outfile.write('\n  write_once("Data Impropers By Type (opls_imp.py)") {\n')
     for improper in impropers:
         if not improper.to_skip:
-            f.write(f"    {improper.bytype_line}")
-    f.write("  } # (end of impropers by type)\n")
+            outfile.write(f"    {improper.bytype_line}")
+    outfile.write("  } # (end of impropers by type)\n")
 
-    f.write(closing_stuff)
-    f.write("}\n")
+    outfile.write(closing_stuff)
+    outfile.write("}\n")
+
+    if outfile != sys.stdout:
+        outfile.close()
+
+
+if __name__ == '__main__':
+    main(sys.argv)
