@@ -8164,29 +8164,29 @@ OPLSAA {
   write_once("In Settings") {
     # The following force field parameters were converted from
     # the tinker parameter file (oplsaa.prm) and then edited by hand:
-    # Thanks to David Huang (adelaide.edu.au) for the corrections:
+    # Thanks to David Huang (adelaide.edu.au) and Domenico Marson for corrections!
  
-    improper_coeff @improper:X_X_003_004  10.5 180.0  # (moltemplate)
+    improper_coeff @improper:X_X_003_004  21.0 180.0  # (moltemplate)
     # <==> "imptors 0 0 3 4  21.000 180.0 2" in oplsaa.prm (tinker)
     # <==> "define improper_O_C_X_Y 180.0 43.93200 2" in oplsaa.ff (gromacs)
 
-    improper_coeff @improper:X_X_003_052  10.5 180.0  # (moltemplate)
+    improper_coeff @improper:X_X_003_052  21.0 180.0  # (moltemplate)
     # <==> "imptors 0 0 3 52  21.000 180.0 2" in oplsaa.prm (tinker)
     # <==> "define improper_O_C_X_Y 180.0 43.93200 2" in oplsaa.ff (gromacs)
 
-    improper_coeff @improper:X_X_024_X  1.0 180.0  # (moltemplate)
-    # <==> "imptors 0 0 24 0  5.000 180.0 2" in oplsaa.prm (tinker) - INCORRECT?
-    # <==> "define improper_Z_N_X_Y 180.0 4.18400 2" in oplsaa.ff (gromacs)
+    improper_coeff @improper:X_X_024_X  5.0 180.0  # (moltemplate)
+    # <==> "imptors 0 0 24 0  5.000 180.0 2" in oplsaa.prm (tinker)
+    # <==> "define improper_Z_N_X_Y 180.0 4.18400 2" in oplsaa.ff (gromacs) - INCORRECT?
 
-    improper_coeff @improper:X_X_047_X  15.0 180.0  # (moltemplate)
+    improper_coeff @improper:X_X_047_X  30.0 180.0  # (moltemplate)
     # <==> "imptors 0 0 47 0  30.000 180.0 2" in oplsaa.prm (tinker)
     # <==> "define improper_Z_CM_X_Y 180.0 62.76000 2" in oplsaa.ff (gromacs)
 
-    improper_coeff @improper:X_X_048_X  1.1 180.0  # (moltemplate)
-    # <==> "imptors 0 0 48 0  5.000 180.0 2" in oplsaa.prm (tinker) - INCORRECT?
-    # <==> "define improper_Z_CA_X_Y 180.0 4.60240 2" in oplsaa.ff (gromacs)
+    improper_coeff @improper:X_X_048_X  5.0 180.0  # (moltemplate)
+    # <==> "imptors 0 0 48 0  5.000 180.0 2" in oplsaa.prm (tinker)
+    # <==> "define improper_Z_CA_X_Y 180.0 4.60240 2" in oplsaa.ff (gromacs) - INCORRECT?
 
-    improper_coeff @improper:055_055_X_055  10.5 180.0
+    improper_coeff @improper:055_055_X_055  21.0 180.0
     # <==> "define improper_N2_X_N2_N2 180.0 43.93200" in oplsaa.ff (gromacs)
     # <==> no corresponding line found in oplsaa.prm (tinker)
 
@@ -8197,8 +8197,8 @@ OPLSAA {
     # and there is no corresponding line from opls-a.prm (emc (BASF))
     # I'm not sure what the "NO" and "ON" correspond to.  If I had to guess,
     # the corresponding moltemplate line might be one of these two choices:
-    # improper_coeff @improper:X_103_102_102  10.5 180.0  ?
-    # improper_coeff @improper:X_102_103_103  10.5 180.0  ?
+    # improper_coeff @improper:X_103_102_102  21.0 180.0  ?
+    # improper_coeff @improper:X_102_103_103  21.0 180.0  ?
     # but I'd prefer to leave this out.
 
   } #(end of improper_coeffs)
