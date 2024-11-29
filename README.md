@@ -4,16 +4,10 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
 [![PyPI Downloads](https://img.shields.io/pypi/dm/moltemplate?logo=pypi&logoColor=white&color=blue&label=PyPI)](https://pypi.org/project/moltemplate)
 [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/moltemplate?logo=condaforge&color=blue&label=Conda)](https://anaconda.org/conda-forge/moltemplate)
+[![Paper](https://img.shields.io/badge/J.MolBiol-2021.5.28-blue?logo=elsevier&logoColor=white)](https://doi.org/10.1016/j.jmb.2021.166841)
 [![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](https://moltemplate.org)
 
 
-[![Paper](https://img.shields.io/badge/J.MolBiol-2021.5.28-blue?logo=elsevier&logoColor=white)](https://doi.org/10.1016/j.jmb.2021.166841)
-
-
-
-[//]: # ((Commenting out. Not needed: [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate))
-[//]: # (Commenting out. Not needed: [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md))
-[//]: # (Commenting out. Not needed: [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]())
 
 
 
