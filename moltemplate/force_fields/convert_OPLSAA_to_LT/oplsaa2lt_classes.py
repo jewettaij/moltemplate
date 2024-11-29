@@ -198,7 +198,7 @@ class BondedInteraction(ABC):
         # acting on the same atom types, then
         # add a unique integer to the name of this interaction type.
         if self.duplicate_count > 0:
-            return f"_{self.duplicate_count}"
+            return f"__{self.duplicate_count}"
         return ""
 
 
