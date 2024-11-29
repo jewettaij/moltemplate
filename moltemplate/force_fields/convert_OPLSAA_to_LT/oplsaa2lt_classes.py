@@ -44,14 +44,14 @@ class Atom:
         self.epsilon = epsilon
         self.bonded_type = type_str
 
-        # NOTE: taking care of LP, which have atomic number 02, but it's not He...
+        # NOTE: taking care of LP, which has atomic number 02, but it's not He...
         if self.type_str == "LP":
             self.atomic_number = 0
 
         self.element: str = data_from_atm_num[atomic_number]['element']
         self.mass: str = data_from_atm_num[atomic_number]['mass']
 
-        self.comment = f"{self.element:2s} | {comment}"
+        self.comment = f"{self.element:2s} - {self.bonded_type:4s} | {comment}"
 
     @property
     def type_long(self) -> str:
