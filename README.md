@@ -1,10 +1,19 @@
 [![CircleCI](https://circleci.com/gh/jewettaij/moltemplate.svg?style=svg)](https://circleci.com/gh/jewettaij/moltemplate)
 [![CodeQL](https://github.com/jewettaij/moltemplate/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jewettaij/moltemplate/actions/workflows/codeql-analysis.yml)
-[![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md)
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate)
+[![Requires Python 3.4+](https://img.shields.io/badge/Python-3.4+-blue.svg?logo=python&logoColor=white)](https://python.org/downloads)
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/moltemplate?logo=pypi&logoColor=white&color=blue&label=PyPI)](https://pypi.org/project/moltemplate)
+[![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/moltemplate?logo=condaforge&color=blue&label=Conda)](https://anaconda.org/conda-forge/moltemplate)
 [![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](https://moltemplate.org)
-[![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]()
+
+
+[![Paper](https://img.shields.io/badge/J.MolBiol-2021.5.28-blue?logo=elsevier&logoColor=white)](https://doi.org/10.1016/j.jmb.2021.166841)
+
+
+
+[//]: # ((Commenting out. Not needed: [![PyPI - Downloads](https://img.shields.io/pypi/dm/moltemplate)](https://pypistats.org/packages/moltemplate))
+[//]: # (Commenting out. Not needed: [![GitHub](https://img.shields.io/github/license/jewettaij/moltemplate)](./LICENSE.md))
+[//]: # (Commenting out. Not needed: [![GitHub repo size](https://img.shields.io/github/repo-size/jewettaij/moltemplate)]())
 
 
 
@@ -191,7 +200,7 @@ http://www.moltemplate.org
 
 ## Requirements
 
-Moltemplate requires BASH and a recent version of Python (>3.5), NumPy,
+Moltemplate requires BASH and Python (3.4+), NumPy,
 and can run on MacOS, linux, or windows.
 
 *(Note: On MacOS, it may eventually become necessary to use 3rd-party tools
