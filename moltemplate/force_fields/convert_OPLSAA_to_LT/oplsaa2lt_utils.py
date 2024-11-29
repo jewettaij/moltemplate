@@ -10,20 +10,20 @@ file_header = """
 #
 # USAGE: You can create molecules using this force-field this way:
 #
-import "oplsaa2023.lt"
-
-# MyMolecule inherits OPLSAA {
-  # atom-id mol-id atom-type charge   X       Y       Z
-  write('Data Atoms') {
-    $atom:c1  $mol @atom:54  0.00 -0.6695   0.00000  0.000
-    $atom:h11 $mol @atom:60  0.00 -1.23422 -0.85446  0.000
-    :
-  }
-} # Ethylene
+# import "oplsaa.lt"
 #
-# You can omit the atom charge in your molecule definition.
-# (Partial charges will be assigned later according to the force field rules.)
-# Responsibility for choosing the atom types (eg "@atom:88", "@atom:89") falls
+# MyMolecule inherits OPLSAA {
+#   # atom-id mol-id atom-type charge   X       Y       Z
+#   write('Data Atoms') {
+#     $atom:c1  $mol @atom:143  0.00 -0.6695   0.00000  0.000
+#     $atom:h11 $mol @atom:144  0.00 -1.23422 -0.85446  0.000
+#     :
+#   }
+# }
+#
+# The atom charge in your molecule definition are ignored here and can be set
+# to 0.0.  (Charges will be assigned later according to the force field rules.)
+# Responsibility for choosing the atom types (eg "@atom:143", "@atom:144") falls
 # on the user.  You must select the type of each atom in the molecule carefully
 # by looking at the description in the "In Charges" section of this file
 # (see below), and looking for a reasonable match. If your simulation is
@@ -99,7 +99,6 @@ improper_header = """
   # https://docs.lammps.org/dihedral_opls.html
   # https://docs.lammps.org/improper_cvff.html
   # https://docs.lammps.org/improper_harmonic.html
-  # NOTE: impropers are a WIP, currently implemented as improper_cvff
   # Syntax:
   # improper_coeff ImproperTypeName  parameters
 
@@ -118,7 +117,7 @@ closing_stuff = """
     bond_style harmonic
     angle_style harmonic
     dihedral_style opls
-    improper_style cvff
+    improper_style cvff  #("harmonic" also works but coeffs should be 2x larger)
     # NOTE: in the original oplsaa.lt file the pair style was
     #   lj/cut/coul/long 11.0 11.0
     # but with an accompanying note stating that OPLSAA/M (2015) 

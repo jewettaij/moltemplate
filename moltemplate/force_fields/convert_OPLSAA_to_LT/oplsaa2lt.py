@@ -24,7 +24,7 @@ TYPE_CONVERSION_TUPLES = (
     ("O$", "O^"), # $ is used by moltemplate
     ("C#", "C|"), # moltemplate doesn't like #
     ("N*", "N§"), # leaving N* would create a mess in bonded interactions
-
+    ("C(O)", "CparenO"),  # moltemplate doesn't like ( or )
 )
 
 
@@ -151,12 +151,17 @@ def check_uniqueness(
             continue
         for it2 in of_what[idx+1:]:
             if it1.types == it2.types:
-                it2.to_comment = True
                 it1_coeff = it1.coeff_line.lstrip("#").split("#")[0]
                 it2_coeff = it2.coeff_line.lstrip("#").split("#")[0]
                 #print(it1_coeff, it2_coeff)
                 if it1_coeff == it2_coeff and skip_equal_parameters:
                     it2.to_skip = True
+                if not it2.to_skip:
+                    # If we are not skipping this interaction, then
+                    # keep track of the number of duplicate interactions of this type
+                    if it1.duplicate_count == 0:
+                        it1.duplicate_count = 1
+                    it2.duplicate_count = it1.duplicate_count + 1
 
 
 
@@ -220,7 +225,7 @@ def main(argv):
        lines_par = infile_par.readlines()
     dihedrals, impropers = get_dihedrals_and_impropers(lines_par)
 
-
+        
     for interactions in [bonds, angles, dihedrals, impropers]:
         interactions.sort(key=lambda k: k.typename)
         interactions.sort(key=lambda k: k.sort_key)
