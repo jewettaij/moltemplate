@@ -1592,7 +1592,10 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         # Ignore comment lines (postprocessing removes them)
                         pass
-                    elif (not ((len(table[i]) >= 3) and
+                    elif (not ((# Ignore lines beginning with '#'
+                                isinstance(table[i][0],TextBlock) and
+                                (str(table[i][0])[:2] == '"#')) or
+                               (len(table[i]) >= 3) and
                                isinstance(table[i][0], VarRef) and
                                (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'bond') and
@@ -1620,7 +1623,10 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         # Ignore comment lines (postprocessing removes them)
                         pass
-                    elif (not ((len(table[i]) >= 4) and
+                    elif (not ((# Ignore lines beginning with '#'
+                                isinstance(table[i][0],TextBlock) and
+                                (str(table[i][0])[:2] == '"#')) or
+                               (len(table[i]) >= 4) and
                                isinstance(table[i][0], VarRef) and
                                (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'angle') and
@@ -1648,7 +1654,10 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         # Ignore comment lines (postprocessing removes them)
                         pass
-                    elif (not ((len(table[i]) >= 5) and
+                    elif (not ((# Ignore lines beginning with '#'
+                                isinstance(table[i][0],TextBlock) and
+                                (str(table[i][0])[:2] == '"#')) or
+                               (len(table[i]) >= 5) and
                                isinstance(table[i][0], VarRef) and
                                (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'dihedral') and
@@ -1676,7 +1685,10 @@ def CheckSyntaxStatic(context_node,
                           (table[i][0].text == '#')):
                         # Ignore comment lines (postprocessing removes them)
                         pass
-                    elif (not ((len(table[i]) >= 5) and
+                    elif (not ((# Ignore lines beginning with '#'
+                                isinstance(table[i][0],TextBlock) and
+                                (str(table[i][0])[:2] == '"#')) or
+                               (len(table[i]) >= 5) and
                                isinstance(table[i][0], VarRef) and
                                (table[i][0].prefix in ('@', '@{')) and
                                (table[i][0].nptr.cat_name == 'improper') and
