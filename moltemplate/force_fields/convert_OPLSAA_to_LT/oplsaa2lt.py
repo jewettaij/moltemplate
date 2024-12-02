@@ -11,8 +11,8 @@ from oplsaa2lt_classes import Atom, Bond, Angle, Dihedral, Improper
 
 
 __author__ = "Domenico Marson and Andrew Jewett"
-__version__ = '0.1.0'
-__date__ = '2024-10-25'
+__version__ = '0.1.3'
+__date__ = '2024-12-01'
 
 g_program_name = __file__.split('/')[-1]
 
@@ -24,7 +24,7 @@ TYPE_CONVERSION_TUPLES = (
     ("O$", "O^"), # $ is used by moltemplate
     ("C#", "C|"), # moltemplate doesn't like #
     ("N*", "N§"), # leaving N* would create a mess in bonded interactions
-    ("C(O)", "CparenO"),  # moltemplate doesn't like ( or )
+    ("C(O)", "CparenO"),  # moltemplate doesn't like "(" or ")"
 )
 
 

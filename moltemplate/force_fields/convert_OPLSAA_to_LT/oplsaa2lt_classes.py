@@ -182,17 +182,6 @@ class BondedInteraction(ABC):
         return priority_tuple
 
     @property
-    def _check_if_comment(self) -> str:
-        # If there are multiple verions of this interaction, comment out the duplicates
-        if self.duplicate_count > 1:
-            return "#"
-        # The next 2 lines are no longer needed
-        # (Instead, we replace "C(O)" with "CparenO")
-        # if self.typename == "HC_CT_CT_C(O)"
-        #     return "#"
-        return ""
-
-    @property
     def _duplicate_count_str(self) -> str:
         # If there N multiple verions of this interaction
         # acting on the same atom types, then
@@ -214,8 +203,7 @@ class Bond(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"{self._check_if_comment}"
-        l += f"@{type(self).kind}:{self.typename}"
+        l = f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
         l += f" @atom:*_b{self.ty1}_a*_d*_i*"
         l += f" @atom:*_b{self.ty2}_a*_d*_i*\n"
@@ -223,8 +211,7 @@ class Bond(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = ""  # l = f"{self._check_if_comment}"
-        l += f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
+        l = f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
         return l
 
 
@@ -240,8 +227,7 @@ class Angle(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"{self._check_if_comment}"
-        l += f"@{type(self).kind}:{self.typename}"
+        l = f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
         l += f" @atom:*_b*_a{self.ty1}_d*_i*"
         l += f" @atom:*_b*_a{self.ty2}_d*_i*"
@@ -250,8 +236,7 @@ class Angle(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = ""  # l = f"{self._check_if_comment}"
-        l += f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
+        l = f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
         return l
 
 
@@ -266,8 +251,7 @@ class Dihedral(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"{self._check_if_comment}"
-        l += f"@{type(self).kind}:{self.typename}"
+        l = f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
         l += f" @atom:*_b*_a*_d{self.ty1}_i*"
         l += f" @atom:*_b*_a*_d{self.ty2}_i*"
@@ -277,8 +261,7 @@ class Dihedral(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = ""  # l = f"{self._check_if_comment}"
-        l += f"{self._coeff_line_base}{self._duplicate_count_str} {self.v1} {self.v2} {self.v3} {self.v4}"
+        l = f"{self._coeff_line_base}{self._duplicate_count_str} {self.v1} {self.v2} {self.v3} {self.v4}"
         l += f" # {self.comment} \n"
         return l
 
@@ -301,8 +284,7 @@ class Improper(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"{self._check_if_comment}"
-        l += f"@{type(self).kind}:{self.typename}"
+        l = f"@{type(self).kind}:{self.typename}"
         l += f" @atom:*_b*_a*_d*_i{self.ty1}"
         l += f" @atom:*_b*_a*_d*_i{self.ty2}"
         l += f" @atom:*_b*_a*_d*_i{self.ty3}"
@@ -311,9 +293,8 @@ class Improper(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = ""  # l = f"{self._check_if_comment}"
         # If using "improper_style cvff", then use:
-        l += f"{self._coeff_line_base}{self._duplicate_count_str} {float(self.v2)/2:.4f} -1 2 # {self.comment}\n"
+        l = f"{self._coeff_line_base}{self._duplicate_count_str} {float(self.v2)/2:.4f} -1 2 # {self.comment}\n"
         # If using "improper_style harmonic", then use this instead:
         # l += f"{self._coeff_line_base}{self._duplicate_count_str} {float(self.v2)} 180.0 # {self.comment}\n"
         return l
