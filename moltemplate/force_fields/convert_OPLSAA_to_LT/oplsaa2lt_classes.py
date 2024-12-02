@@ -61,10 +61,7 @@ class Atom:
         interaction (bond, angle, dihedral, improper), underscore separated.
         """
         l = f"{self.type_id}"
-        l += f"_b{self.bonded_type}"
-        l += f"_a{self.bonded_type}"
-        l += f"_d{self.bonded_type}"
-        l += f"_i{self.bonded_type}"
+        l += f"_{self.bonded_type}"
         return l
 
     @property
@@ -205,8 +202,8 @@ class Bond(BondedInteraction):
     def bytype_line(self) -> str:
         l = f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
-        l += f" @atom:*_b{self.ty1}_a*_d*_i*"
-        l += f" @atom:*_b{self.ty2}_a*_d*_i*\n"
+        l += f" @atom:*_{self.ty1}"
+        l += f" @atom:*_{self.ty2}\n"
         return l
 
     @property
@@ -229,9 +226,9 @@ class Angle(BondedInteraction):
     def bytype_line(self) -> str:
         l = f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
-        l += f" @atom:*_b*_a{self.ty1}_d*_i*"
-        l += f" @atom:*_b*_a{self.ty2}_d*_i*"
-        l += f" @atom:*_b*_a{self.ty3}_d*_i*\n"
+        l += f" @atom:*_{self.ty1}"
+        l += f" @atom:*_{self.ty2}"
+        l += f" @atom:*_{self.ty3}\n"
         return l
 
     @property
@@ -253,10 +250,10 @@ class Dihedral(BondedInteraction):
     def bytype_line(self) -> str:
         l = f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
-        l += f" @atom:*_b*_a*_d{self.ty1}_i*"
-        l += f" @atom:*_b*_a*_d{self.ty2}_i*"
-        l += f" @atom:*_b*_a*_d{self.ty3}_i*"
-        l += f" @atom:*_b*_a*_d{self.ty4}_i*\n"
+        l += f" @atom:*_{self.ty1}"
+        l += f" @atom:*_{self.ty2}"
+        l += f" @atom:*_{self.ty3}"
+        l += f" @atom:*_{self.ty4}\n"
         return l
 
     @property
@@ -285,10 +282,10 @@ class Improper(BondedInteraction):
     @property
     def bytype_line(self) -> str:
         l = f"@{type(self).kind}:{self.typename}"
-        l += f" @atom:*_b*_a*_d*_i{self.ty1}"
-        l += f" @atom:*_b*_a*_d*_i{self.ty2}"
-        l += f" @atom:*_b*_a*_d*_i{self.ty3}"
-        l += f" @atom:*_b*_a*_d*_i{self.ty4}\n"
+        l += f" @atom:*_{self.ty1}"
+        l += f" @atom:*_{self.ty2}"
+        l += f" @atom:*_{self.ty3}"
+        l += f" @atom:*_{self.ty4}\n"
         return l
 
     @property
