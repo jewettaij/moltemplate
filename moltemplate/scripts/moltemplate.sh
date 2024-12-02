@@ -6,8 +6,8 @@
 # Copyright (c) 2013
 
 G_PROGRAM_NAME="moltemplate.sh"
-G_VERSION="2.20.22"
-G_DATE="2024-11-26"
+G_VERSION="2.20.23"
+G_DATE="2024-12-01"
 
 echo "${G_PROGRAM_NAME} v${G_VERSION} ${G_DATE}" >&2
 echo "" >&2
@@ -363,6 +363,12 @@ Optional arguments:
                     reordering of atom indexes, e.g. by allowing to define a bond
                     between atom 3 and 2 instead of 2 and 3.
 
+-report-duplicates filter_id filter_type
+              Warn when multiple bonds, angles, dihedrals, or impropers were found
+              between the same atoms (regardless of whether ``-overlay-'' was used).
+              The filter_id and filter_type arguments will ignore interactions whose
+              ids or types lack those strings. (Normally set them to "".  See manual.)
+
 -angle-symmetry file.py     Normally moltemplate.sh reorders the atoms in each
 -dihedral-symmetry file.py  angle, dihedral, improper, and bond interaction.
 -improper-symmetry file.py  TO TURN OFF ATOM REORDERING, SET file.py to "NONE"
@@ -438,6 +444,9 @@ REMOVE_DUPLICATE_BONDS="true"
 REMOVE_DUPLICATE_ANGLES="true"
 REMOVE_DUPLICATE_DIHEDRALS="true"
 REMOVE_DUPLICATE_IMPROPERS="true"
+REPORT_DUPLICATES=""
+RD_ID_FILTER=""
+RD_TYPE_FILTER=""
 SETTINGS_MOLC=""
 CHECKFF=""
 RUN_VMD_AT_END=""
@@ -500,6 +509,18 @@ while [ "$i" -lt "$ARGC" ]; do
         unset REMOVE_DUPLICATE_ANGLES
         unset REMOVE_DUPLICATE_DIHEDRALS
         unset REMOVE_DUPLICATE_IMPROPERS
+    elif [ "$A" = "-report-duplicates" ]; then
+        REPORT_DUPLICATES="true"
+        if [ "$i+1" -eq "$ARGC" ]; then
+            echo "ERROR: Expected 2 string arguments following the -report-duplicates argument" >&2
+            exit 7
+        fi
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+        RD_ID_FILTER="$A"
+        i=$((i+1))
+        eval A=\${ARGV${i}}
+        RD_TYPE_FILTER="$A"
     elif [ "$A" = "-vmd" ]; then
         RUN_VMD_AT_END="true"
     elif [ "$A" = "-molc" ]; then
@@ -674,7 +695,7 @@ while [ "$i" -lt "$ARGC" ]; do
             # the transformation formula from the LAMMPS documentation 
             # https://lammps.sandia.gov/doc/Howto_triclinic.html  (which matches
             # http://www.ccl.net/cca/documents/molecular-modeling/node4.html)
-            TRICLINIC="True"
+            TRICLINIC="true"
             PI=3.1415926535897931
             BOXSIZE_X=$BOXSIZE_A
             BOXSIZE_Y=`awk -v PI="$PI" -v BOXSIZE_B="$BOXSIZE_B" -v GAMMA="$GAMMA" 'BEGIN{print BOXSIZE_B*sin(GAMMA*PI/180.0)}'`
@@ -767,7 +788,7 @@ while [ "$i" -lt "$ARGC" ]; do
           BOXSIZE_XY=${box[2]}
           BOXSIZE_XZ=${box[5]}
           BOXSIZE_YZ=${box[8]}
-          TRICLINIC="True"
+          TRICLINIC="true"
         fi
 
         # Save the coordinates.
@@ -1588,11 +1609,19 @@ if [ -s "${data_bonds}" ]; then
             ERR_INTERNAL
         fi
         mv "${data_bonds}.tmp" "${data_bonds}"
-        if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 2 \
-                             < "${data_bonds}.template" \
-                             > "${data_bonds}.tmp"; then
-            ERR_INTERNAL
-        fi
+	if [ ! -z "$REPORT_DUPLICATES" ]; then
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 2 Bond warning_duplicate_bonds.txt "$RD_ID_FILTER" "$RD_TYPE_FILTER" \
+                               < "${data_bonds}.template" \
+                               > "${data_bonds}.tmp"; then
+              ERR_INTERNAL
+          fi
+	else
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 2 \
+                               < "${data_bonds}.template" \
+                               > "${data_bonds}.tmp"; then
+              ERR_INTERNAL
+          fi
+	fi
         mv "${data_bonds}.tmp" "${data_bonds}.template"
     fi
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/renumber_DATA_first_column.py" \
@@ -1626,10 +1655,18 @@ if [ -s "${data_angles}" ]; then
             ERR_INTERNAL
         fi
         mv "${data_angles}.tmp" "${data_angles}"
-        if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 3 \
-                             < "${data_angles}.template" \
-                             > "${data_angles}.tmp"; then
-            ERR_INTERNAL
+	if [ ! -z "$REPORT_DUPLICATES" ]; then
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 3 Angle warning_duplicate_angles.txt "$RD_ID_FILTER" "$RD_TYPE_FILTER" \
+                               < "${data_angles}.template" \
+                               > "${data_angles}.tmp"; then
+              ERR_INTERNAL
+          fi
+	else
+	  if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 3 \
+                               < "${data_angles}.template" \
+                               > "${data_angles}.tmp"; then
+              ERR_INTERNAL
+          fi
         fi
         mv "${data_angles}.tmp" "${data_angles}".template
     fi
@@ -1667,6 +1704,7 @@ fi
 
 
 
+
 if [ -s "${data_dihedrals}" ]; then
     SUBGRAPH_SCRIPT="nbody_Dihedrals.py"
     if [ -n "$SUBGRAPH_SCRIPT_DIHEDRALS" ]; then
@@ -1687,11 +1725,19 @@ if [ -s "${data_dihedrals}" ]; then
             ERR_INTERNAL
         fi
         mv "${data_dihedrals}.tmp" "${data_dihedrals}"
-        if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 4 \
-                             < "${data_dihedrals}.template" \
-                             > "${data_dihedrals}.tmp"; then
-            ERR_INTERNAL
-        fi
+	if [ ! -z "$REPORT_DUPLICATES" ]; then
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 4 Dihedral warning_duplicate_dihedrals.txt "$RD_ID_FILTER" "$RD_TYPE_FILTER" \
+                               < "${data_dihedrals}.template" \
+                               > "${data_dihedrals}.tmp"; then
+              ERR_INTERNAL
+          fi
+	else
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 4 \
+                               < "${data_dihedrals}.template" \
+                               > "${data_dihedrals}.tmp"; then
+              ERR_INTERNAL
+          fi
+	fi
         mv "${data_dihedrals}.tmp" "${data_dihedrals}.template"
     fi
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/renumber_DATA_first_column.py" \
@@ -1726,6 +1772,9 @@ EOF
 fi
 
 
+
+
+
 if [ -s "${data_impropers}" ]; then
     SUBGRAPH_SCRIPT="nbody_Impropers.py"
     if [ -n "$SUBGRAPH_SCRIPT_IMPROPERS" ]; then
@@ -1746,11 +1795,19 @@ if [ -s "${data_impropers}" ]; then
             ERR_INTERNAL
         fi
         mv "${data_impropers}.tmp" "${data_impropers}"
-        if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 4 \
-                             < "${data_impropers}.template" \
-                             > "${data_impropers}.tmp"; then
-            ERR_INTERNAL
-        fi
+	if [ ! -z "$REPORT_DUPLICATES" ]; then
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 4 Improper warning_duplicate_impropers.txt "$RD_ID_FILTER" "$RD_TYPE_FILTER" \
+                               < "${data_impropers}.template" \
+                               > "${data_impropers}.tmp"; then
+              ERR_INTERNAL
+          fi
+	else
+          if ! $PYTHON_COMMAND "${PY_SCR_DIR}/remove_duplicates_nbody.py" 4 \
+                               < "${data_impropers}.template" \
+                               > "${data_impropers}.tmp"; then
+              ERR_INTERNAL
+          fi
+	fi
         mv "${data_impropers}.tmp" "${data_impropers}.template"
     fi
     if ! $PYTHON_COMMAND "${PY_SCR_DIR}/renumber_DATA_first_column.py" \
@@ -1983,7 +2040,7 @@ if [ -s "$data_boundary" ]; then
     if [ -n "$BOXSIZE_XY" ] || [ -n "$BOXSIZE_XZ" ] || [ -n "$BOXSIZE_YZ" ]; then
         if [ -n "$BOXSIZE_XY" ] && [ -n "$BOXSIZE_XZ" ] && [ -n "$BOXSIZE_YZ" ]; then
             #echo "triclinic_parameters: XY XZ YZ = $BOXSIZE_XY $BOXSIZE_XZ $BOXSIZE_YZ" >&2
-            TRICLINIC="True"
+            TRICLINIC="true"
         else
             echo "Error: Problem with triclinic format (\"xy xz yz\") in \"$data_boundary\"" >&2
             exit 13

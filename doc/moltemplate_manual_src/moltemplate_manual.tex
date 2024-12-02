@@ -1292,7 +1292,6 @@ are non-exclusive.
  See appendix \ref{sec:manual_assignment}.)
 \\
 \hline
-
 \begin{tabular}[t]{l}
 -overlay-bonds
 \\
@@ -1404,6 +1403,15 @@ and ``improper\_coeff'' commands.  (eg: ``bond\_coeff @bond:CH?? ...'', ``pair\_
     Append an example run section at the end of the example input
                 script. The commands are commented out and need manual editing
 		to get a meaningful simulation.
+\\
+\hline
+-report-duplicates filter\_id filter\_type &
+Generate a warning file to report whenever multiple bonds, angles, dihedrals,
+or impropers were found between the same atoms (regardless of whether ``-overlay-'' was used).
+The filter\_id and filter\_type arguments are strings which will ignore interactions
+whose id and type strings unless they contain filter\_id and filter\_type, respectively
+\textit{(If they are set to the empty string, "", then all duplicates are reported.
+When using the OPLSAA force-field, use ``-report-duplicates bytype \_\_''.)}
 \\
 \hline\hline
 \end{longtable}
