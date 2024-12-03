@@ -43,11 +43,9 @@ def rename_type(ty: str) -> str:
     for orig, changed in TYPE_CONVERSION_TUPLES:
         ty = ty.replace(orig, changed)
     if len(ty) == 1:
-        # It is a good idea to make sure these strings are the same length.
-        # It doesn't matter which character we add to the end, as long
-        # as it's so rare that it's unlikely to be used by anyone else.
-        ty += '⋄' # (eg "C"->"C⋄")
-    assert len(ty) == 2  # The "ty" strings should all be 2-characters long
+        # It is a good idea to make sure these strings are the same length (2).
+        ty += '~' # (eg "C"->"C~")  It doesn't matter which character we add
+    assert len(ty) == 2  # The "ty" strings should all be 2-characters long.
     return ty
 
 
