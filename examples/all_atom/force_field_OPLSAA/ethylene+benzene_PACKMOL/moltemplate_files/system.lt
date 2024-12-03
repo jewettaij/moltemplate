@@ -1,0 +1,24 @@
+import "ethylene.lt"  # <- defines the "Ethylene" molecule type.
+import "benzene.lt"  # <- defines the "Benzene" molecule type.
+
+
+# Periodic boundary conditions:
+write_once("Data Boundary") {
+   0.0  48.00  xlo xhi
+   0.0  48.00  ylo yhi
+   0.0  48.00  zlo zhi
+}
+
+# NOTE: The order that you instantiate the molecules should match the order that
+#       they appear in the XYZ file which PACKMOL creates, which should match
+#       the order they are created in the PACKMOL .INP file.
+#       (In bot cases, 216 "Ethylenes" are created before the 108 "Benzenes".)
+
+# Create 216 "Ethylene" molecules
+
+ethylenes = new Ethylene [216]
+
+# Create 108 "Benzene" molecules
+
+benzenes  = new Benzene[108]
+

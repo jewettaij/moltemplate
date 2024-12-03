@@ -1,0 +1,113 @@
+# This example looks complicated because I split the
+# hexadecane molecule into individual CH2 and CH3 monomers.
+#
+# I defined it this way so that you can easily modify 
+# it to change the length of the alkane chain.
+
+
+import "ch2group.lt"  # load the definition of the "CH2" object
+import "ch3group.lt"  # load the definition of the "CH3" object
+
+
+
+Hexadecane inherits OPLSAA {
+
+  create_var {$mol}  # optional:force all monomers to share the same molecule-ID
+
+  # Now create an array of 14 "CH2" monomers and 2 "CH3" monomers
+
+  ## --- Method 1: Specify the position of each monomer manually ---
+  monomers[0] = new CH3.rot(0,1,0,0).move(0.0,0,0)
+  monomers[1] = new CH2.rot(180,1,0,0).move(1.2533223,0,0)
+  monomers[2] = new CH2.rot(360,1,0,0).move(2.5066446,0,0)
+  monomers[3] = new CH2.rot(540,1,0,0).move(3.7599669,0,0)
+  monomers[4] = new CH2.rot(720,1,0,0).move(5.0132892,0,0)
+  monomers[5] = new CH2.rot(900,1,0,0).move(6.2666115,0,0)
+  monomers[6] = new CH2.rot(1080,1,0,0).move(7.5199338,0,0)
+  monomers[7] = new CH2.rot(1260,1,0,0).move(8.7732561,0,0)
+  monomers[8] = new CH2.rot(1440,1,0,0).move(10.0265784,0,0)
+  monomers[9] = new CH2.rot(1620,1,0,0).move(11.2799007,0,0)
+  monomers[10] = new CH2.rot(1800,1,0,0).move(12.533223,0,0)
+  monomers[11] = new CH2.rot(1980,1,0,0).move(13.7865453,0,0)
+  monomers[12] = new CH2.rot(2160,1,0,0).move(15.0398676,0,0)
+  monomers[13] = new CH2.rot(2340,1,0,0).move(16.2931899,0,0)
+  monomers[14] = new CH2.rot(2520,1,0,0).move(17.5465122,0,0)
+  monomers[15] = new CH3.rot(2700,1,0,0).rot(180,0,1,0).move(18.7998345,0,0)
+  # (See below for a python script to generate this long list of commands.)
+
+  ## Alternative strategies:
+  ##
+  ## --- Method 2: Create many monomers with a single "new" command ---
+  ## The first monomer is of type "CH3"
+  # monomers[0] = new CH3
+  ## The monomers in the middle of the polymer (indices 1-14) are of type "CH2"
+  ## We can create them all with a single command.
+  # monomers[1-14] = new CH2[14].rot(180,1,0,0).move(1.2533223,0,0)
+  ##   Note: Each monomer is rotated 180 degrees with respect to the previous
+  ##         monomer, and then moved 1.2533223 Angstroms down the X axis.
+  ## Now move monomers 1-14 to avoid overlap with the first monomer(monomers[0])
+  # monomers[1-14].rot(180,1,0,0).move(1.2533223,0,0)
+  ## The final monomer is of type "CH3" and we want to position it at the end:
+  # monomers[15] = new CH3.rot(180.0,0,0,1).move(18.7998345,0,0)
+  ## Note: 18.7998345 = (16-1) * 1.2533223
+  ##
+  ## --- Method 3: create polymer and redefine the ends: ----
+  ## Create a long polymer consisting only of monomers of type "CH2"
+  # monomers = new CH2 [16].rot(180,1,0,0).move(1.2533223,0,0)
+  ## Delete the CH2 monomers at the beginning and end, and replace them with CH3
+  # delete monomers[0]
+  # delete monomers[15]
+  # monomers[0] = new CH3
+  # monomers[15] = new CH3
+  ## Move the final CH3 monomer to the correct location at the end of the chain:
+  # monomers[15].rot(180.0,0,0,1).move(18.7998345,0,0)
+  ## (Note: This approach changes the order of the atoms in the DATA file.)
+
+
+  # Now add a list of bonds connecting the carbon atoms together:
+
+  write('Data Bond List') {
+    $bond:b1  $atom:monomers[0]/c $atom:monomers[1]/c
+    $bond:b2  $atom:monomers[1]/c $atom:monomers[2]/c
+    $bond:b3  $atom:monomers[2]/c $atom:monomers[3]/c
+    $bond:b4  $atom:monomers[3]/c $atom:monomers[4]/c
+    $bond:b5  $atom:monomers[4]/c $atom:monomers[5]/c
+    $bond:b6  $atom:monomers[5]/c $atom:monomers[6]/c
+    $bond:b7  $atom:monomers[6]/c $atom:monomers[7]/c
+    $bond:b8  $atom:monomers[7]/c $atom:monomers[8]/c
+    $bond:b9  $atom:monomers[8]/c $atom:monomers[9]/c
+    $bond:b10  $atom:monomers[9]/c $atom:monomers[10]/c
+    $bond:b11  $atom:monomers[10]/c $atom:monomers[11]/c
+    $bond:b12  $atom:monomers[11]/c $atom:monomers[12]/c
+    $bond:b13  $atom:monomers[12]/c $atom:monomers[13]/c
+    $bond:b14  $atom:monomers[13]/c $atom:monomers[14]/c
+    $bond:b15  $atom:monomers[14]/c $atom:monomers[15]/c
+  }
+
+} # Hexadecane
+
+
+
+# -------------------------------------------------------------------------
+# Note: The following short python script was used to generate the text above:
+#N=16
+#print('  monomers[0] = new CH3')
+#for i in range(1,N-1):
+#    print('  monomers['+str(i)+'] = new CH2.rot('+str(180*i)+',1,0,0).move('+str(i*1.2533223)+',0,0)')
+#i=N-1
+#print('  monomers['+str(i)+'] = new CH3.rot('+str(180*i)+',1,0,0).rot(180,0,1,0).move('+str(i*1.2533223)+',0,0)')
+## generate the list of bonds
+#print('  write("Data Bond List") {')
+#for i in range(0,N-1):
+#    print('    $bond:b'+str(i+1)+'  $atom:monomers['+str(i)+']/c $atom:monomers['+str(i+1)+']/c')
+#print('  }')
+# ---------- (scratchwork calculations for the atomic coordinates) ----------
+# Lcc = 1.5350 # length of the C-C bond (Sp3)
+# Lch = 1.0930 # length of the C-H bond
+# theta=2*atan(sqrt(2)) # ~= 109.5 degrees = tetrahedronal angle (C-C-C angle)
+# DeltaXc = Lcc*sin(theta/2)  # = 1.2533222517240594
+# DeltaYc = Lcc*cos(theta/2)  # = 0.8862326632060754
+#                             # 0.5*DeltaYc = 0.4431163316030377
+# DeltaZh = Lch*sin(theta/2)  # = 0.8924307629540046
+# DeltaYh = Lch*cos(theta/2)  # = 0.6310438442242609
+# -------------------------------------------------------------------------

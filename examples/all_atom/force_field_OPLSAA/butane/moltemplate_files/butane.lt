@@ -1,0 +1,106 @@
+import "ch2group.lt"  # load the definition of the "CH2" object
+import "ch3group.lt"  # load the definition of the "CH3" object
+
+
+Butane inherits OPLSAA {
+
+  create_var {$mol}  # optional:force all monomers to share the same molecule-ID
+
+  # Create an array of 4 objects distributed along the X axis
+
+  monomer1 = new CH3
+  monomer2 = new CH2.rot(180,1,0,0).move(1.2533223,0,0)
+  monomer3 = new CH2.move(2.5066446,0,0)
+  monomer4 = new CH3.rot(180,0,0,1).move(3.7599669,0,0)
+
+  # Now add a list of bonds connecting the carbon atoms together:
+  # (Angles, dihedrals, impropers will be automatically added later.)
+
+  write('Data Bond List') {
+    $bond:b1  $atom:monomer1/c $atom:monomer2/c
+    $bond:b2  $atom:monomer2/c $atom:monomer3/c
+    $bond:b3  $atom:monomer3/c $atom:monomer4/c
+  }
+
+  # The angles, dihedrals, and impropers will be generated automatically as well
+  # However, by default, moltemplate might not always choose the optimal 
+  # parameters (types) for each dihedral.  In this example, we can do better
+  # by overriding one of the dihedral interactions which was chosen by default.
+  #
+  # ---- OPTIONAL: Customize the dihedrals ----
+  #
+  # The default type choice for dihedrals is:
+  # "@dihedral:CT_CT_CT_CT__1", which is a generic dihedral for alkane carbons
+  # However we can improve the simulation accuracy by selecting this version:
+  # "@dihedral:CT_CT_CT_CT__2" which is specific to butane (and is more stiff).
+
+  write("Data Dihedrals") {
+    $dihedral:c1_c2_c3_c4 @dihedral:CT_CT_CT_CT__2 $atom:monomer1/c $atom:monomer2/c $atom:monomer3/c $atom:monomer4/c
+  }
+
+  # NOTE: If you remove or comment out the write("Data Dihedrals") section above
+  # the simulation will still run, but with suboptimal dihedral parameters.
+
+} # Butane
+
+
+
+
+
+# HOW TO TELL IF YOU NEED A CUSTOM "Data Dihedrals" section:
+#
+# The "oplsaa.lt" file contains lists of many types of interactions.
+# This "oplsaa.lt" file is too long to browse through all these interactions
+# to see which best apply to your molecule.
+#
+# Instead, you can ask moltemplate to warn you if it encountered any ambiguity
+# in the best dihedral type to use, by running it this way:
+#
+#   moltemplate.sh system.lt -report-duplicates bytype __
+#
+# It will generate a file named "warning_duplicate_dihedrals.txt" if it was
+# unsure what the best choice was.  The file will be long, since the same
+# warning will be printed for every copy of each molecule with ambiguous
+# dihedral.  So it's better to do this on a small system.lt file with only
+# one copy of each molecule type.
+#
+# Open up the "warning_duplicate_dihedrals.txt".  It will list out the possible
+# choices (such as "@dihedral:CT_CT_CT_CT__1", "@dihedral:CT_CT_CT_CT__2").
+#
+# Open up the "oplsaa.lt" file and search for these interactions.
+# "oplsaa.lt" usually has a comment next to each choice explaining when
+# to use it (eg. "@dihedral:CT_CT_CT_CT__2 ... # butane only OPLS/2020").
+# Choose best the dihedral type for your molecule ("@dihedral:CT_CT_CT_CT__2")
+#
+# Once you have determined the best @dihedral type to use, create a custom
+# "Data Dihedrals" section similar to the one in the example above.
+# Each line should have 6 entries:
+#
+#   $dihedral:SOME_UNIQUE_NAME  @dihedral:BEST_TYPE  followed by the four $atoms
+#
+# Do this for each interaction you want to override.
+# (Note: Overriden dihedrals don't appear in the warning_duplicate_dihedrals.txt
+#  file.  So when all ambiguous dihedrals have been overriden, this file will
+#  go away.)
+#
+#
+# NOTE:
+# In addition to dihedrals, ambiguity can also happen for bonds, angles, 
+# and impropers.  For example, you might also notice a file named
+# "warning_duplicate_angles.txt".  If so, follow the same procedure described
+# above to choose the best angle type.  Then create a custom "Data Angles"
+# section (similar to the "Data Dihedrals" section above) with 5 columns
+# on each line ($angle, @angle, and the three $atoms).
+
+
+
+
+######### (scratchwork calculations for the atomic coordinates) #########
+# Lcc = 1.5350 # length of the C-C bond (Sp3)
+# Lch = 1.0930 # length of the C-H bond
+# theta=2*atan(sqrt(2)) # ~= 109.5 degrees = tetrahedronal angle (C-C-C angle)
+# DeltaXc = Lcc*sin(theta/2)  # = 1.2533222517240594
+# DeltaYc = Lcc*cos(theta/2)  # = 0.8862326632060754
+#                             # 0.5*DeltaYc = 0.4431163316030377
+# DeltaZh = Lch*sin(theta/2)  # = 0.8924307629540046
+# DeltaYh = Lch*cos(theta/2)  # = 0.6310438442242609

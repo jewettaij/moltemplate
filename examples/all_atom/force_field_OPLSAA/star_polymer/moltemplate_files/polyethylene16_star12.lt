@@ -1,0 +1,76 @@
+import "polyethylene16.lt"  # define "Polyethylene16"
+
+
+
+Polyethylene16Star12 inherits OPLSAA {
+
+  # optional:force all monomers to share the same molecule-ID
+
+  create_var {$mol}  
+
+  # Define a central atom, to which the 3 polymers will be attached:
+
+  #   atom-id   mol-id  atom-type   charge    x     y     z
+
+  write("Data Atoms") {
+    $atom:center $mol  @atom:Center  0.0    0.0  0.0   0.0
+  }
+
+  # Suppose that you want this central atom to be a large atom.
+  # (Perhaps it represents a larger structure that you do not want
+  #  to bother modeling explicitly, like a small crystal.  See below.)
+  # Because this atom is NOT defined in the OPLSAA force field, 
+  # we must define the properties of this new atom type ("Center").
+  # We can make its mass and radius as large as we like.
+  # (But keep in mind, large particles will slow down the simulation.)
+
+  write_once("Data Masses") {
+    @atom:Center 500.0   # Center atom's mass
+  }
+
+  # Van der Waals (Lennard Jones) parameters for "Center":
+  #             atom-type1  atom-type2    epsilon  sigma(diameter)
+  write_once("In Settings") {
+    pair_coeff @atom:Center @atom:Center  0.01000  6.0000
+  }
+
+  # Instantiate 12 copies of the polymer:
+
+  polys = new Polyethylene16.move(6.0,0,0) [12].rot(30,0,0,1)
+
+  # Bond them to the "center" atom:
+
+  write('Data Bonds') {
+    $bond:b1  @bond:CenBond $atom:center $atom:polys[0]/monomers[0]/c
+    $bond:b2  @bond:CenBond $atom:center $atom:polys[1]/monomers[0]/c
+    $bond:b3  @bond:CenBond $atom:center $atom:polys[2]/monomers[0]/c
+    $bond:b4  @bond:CenBond $atom:center $atom:polys[3]/monomers[0]/c
+    $bond:b5  @bond:CenBond $atom:center $atom:polys[4]/monomers[0]/c
+    $bond:b6  @bond:CenBond $atom:center $atom:polys[5]/monomers[0]/c
+    $bond:b7  @bond:CenBond $atom:center $atom:polys[6]/monomers[0]/c
+    $bond:b8  @bond:CenBond $atom:center $atom:polys[7]/monomers[0]/c
+    $bond:b9  @bond:CenBond $atom:center $atom:polys[8]/monomers[0]/c
+    $bond:b10  @bond:CenBond $atom:center $atom:polys[9]/monomers[0]/c
+    $bond:b11  @bond:CenBond $atom:center $atom:polys[10]/monomers[0]/c
+    $bond:b12  @bond:CenBond $atom:center $atom:polys[11]/monomers[0]/c
+  }
+
+  # Define the properties of this bond type
+  # (since it is not in the OPLSAA force field)
+  #              bond-type    K    r0(must be larger than atom radius)
+  write_once("In Settings") {
+    bond_coeff @bond:CenBond 100.0 6.0
+  }
+}
+
+# NOTE:
+# If you want to replace the central atom with a larger metalic crystal,
+# there's an example of a metalic crystal in moltemplate format here:
+# https://github.com/jewettaij/moltemplate/tree/master/examples/all_atom/force_field_explicit_parameters/aluminum_crystal_strain
+# By default, the crystal will have a rectangular or parallelepiped shape,
+# unless you discard the atoms on the corners (using the "delete" command).
+# You will probably want to make the metal crystal rigid (using fix rigid).
+# (I recommend using fix rigid.)
+# Otherwise, you will have to convert the metalic force-field parameters to be
+# compatible with the OPLSA units ("units real"), and use a "hybrid" pair style
+# (because force fields for metals do not use lennard-jones pairwise forces).

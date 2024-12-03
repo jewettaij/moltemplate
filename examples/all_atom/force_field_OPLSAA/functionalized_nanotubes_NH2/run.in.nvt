@@ -1,0 +1,85 @@
+# PREREQUISITES:
+#
+#     You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#     (You do not need to run LAMMPS to equilibrate the system before
+#      using this file.)
+#
+# Requirements:
+#
+# Make sure that LAMMPS is compiled with support for the optional RIGID package.
+
+# ------------------------------- Initialization Section --------------------
+
+include system.in.init
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data system.data
+
+# ------------------------------- Settings Section --------------------------
+
+include system.in.settings
+include system.in.charges
+
+# Optional: Don't bother to calculate forces between graphene atoms in the
+#           same nanotube because these nanotubes are rigid.  (This does not
+#           effect the behavior of the simulation.)  For details, see:
+#           https://lammps.sandia.gov/doc/neigh_modify.html
+
+neigh_modify exclude molecule/intra gGraphene
+
+
+# ------------------------------- Run Section -------------------------------
+
+# The gGraphene atoms belong to carbon nanotubes that are rigid.
+# (Note: The "gGraphene" group was defined in system.in.settings.)
+# The remaining atoms (gFlexible) can move freely.
+
+group gRigid    union    gGraphene gGraphene
+group gFlexible subtract all gRigid
+
+# Unfortunately you can not use the LAMMPS "minimize" command on this system
+# because we are using fix_rigid.  Instead, we can use langevin dynamics with
+# a fast damping parameter and a small timestep.
+
+print "--------- beginning minimization ---------"
+
+# Give each atom a random initial velocity consistent with a system at 1.0K.
+velocity all create 1.0 12345
+
+timestep        0.1
+fix fxlan gFlexible langevin 1.0 1.0 20.0 48279
+fix fxnve gFlexible nve/limit 0.01  #<--needed by fix langevin (see lammps docs)
+thermo          50
+run 4000
+
+unfix fxlan
+unfix fxnve
+
+# -- simulation protocol --
+
+print "--------- beginning simulation ---------"
+
+dump            1 all custom 1000 traj_nvt.lammpstrj id mol type x y z ix iy iz
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo          100  # time interval for printing out "thermo" data
+
+
+
+# ------------------------- NVT ---------------------------
+
+fix fxRigid gRigid rigid/nve molecule
+fix fxFlexible gFlexible nve
+# Run the simulation at 298K using a thermostat with a time  of 10000.0
+fix fxLanvegin all langevin 298 298 10000.0 48279
+
+reset_timestep 0
+
+timestep 1.0
+
+run    200000
+
+write_data  system_after_run.data
+

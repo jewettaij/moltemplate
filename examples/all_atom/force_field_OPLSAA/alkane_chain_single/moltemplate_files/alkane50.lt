@@ -1,0 +1,183 @@
+# This is a simple example showing how to build a long polymer
+# (in this case, an alkane chain).  I split the
+# hexadecane molecule into individual CH2 and CH3 monomers.
+# I defined it this way so that you can easily modify 
+# it to change the length of the alkane chain.
+
+
+import "ch2group.lt"  # load the definition of the "CH2" object
+import "ch3group.lt"  # load the definition of the "CH3" object
+
+# This is a long polymer consisting of 48 CH2 groups and 2 CH3 end-caps.
+
+
+Alkane50 inherits OPLSAA {
+
+  create_var {$mol}  # optional:force all monomers to share the same molecule-ID
+
+  # Now create an array of 48 "CH2" monomers and 2 "CH3" monomers
+
+  ## --- Method 1: Specify the position of each monomer manually ---
+  monomers[0] = new CH3.rot(0,1,0,0).move(0.0,0,0)
+  monomers[1] = new CH2.rot(180,1,0,0).move(1.2533223,0,0)
+  monomers[2] = new CH2.rot(360,1,0,0).move(2.5066446,0,0)
+  monomers[3] = new CH2.rot(540,1,0,0).move(3.7599669,0,0)
+  monomers[4] = new CH2.rot(720,1,0,0).move(5.0132892,0,0)
+  monomers[5] = new CH2.rot(900,1,0,0).move(6.2666115,0,0)
+  monomers[6] = new CH2.rot(1080,1,0,0).move(7.5199338,0,0)
+  monomers[7] = new CH2.rot(1260,1,0,0).move(8.7732561,0,0)
+  monomers[8] = new CH2.rot(1440,1,0,0).move(10.0265784,0,0)
+  monomers[9] = new CH2.rot(1620,1,0,0).move(11.2799007,0,0)
+  monomers[10] = new CH2.rot(1800,1,0,0).move(12.533223,0,0)
+  monomers[11] = new CH2.rot(1980,1,0,0).move(13.7865453,0,0)
+  monomers[12] = new CH2.rot(2160,1,0,0).move(15.0398676,0,0)
+  monomers[13] = new CH2.rot(2340,1,0,0).move(16.2931899,0,0)
+  monomers[14] = new CH2.rot(2520,1,0,0).move(17.5465122,0,0)
+  monomers[15] = new CH2.rot(2700,1,0,0).move(18.7998345,0,0)
+  monomers[16] = new CH2.rot(2880,1,0,0).move(20.0531568,0,0)
+  monomers[17] = new CH2.rot(3060,1,0,0).move(21.3064791,0,0)
+  monomers[18] = new CH2.rot(3240,1,0,0).move(22.5598014,0,0)
+  monomers[19] = new CH2.rot(3420,1,0,0).move(23.8131237,0,0)
+  monomers[20] = new CH2.rot(3600,1,0,0).move(25.066446,0,0)
+  monomers[21] = new CH2.rot(3780,1,0,0).move(26.3197683,0,0)
+  monomers[22] = new CH2.rot(3960,1,0,0).move(27.5730906,0,0)
+  monomers[23] = new CH2.rot(4140,1,0,0).move(28.8264129,0,0)
+  monomers[24] = new CH2.rot(4320,1,0,0).move(30.0797352,0,0)
+  monomers[25] = new CH2.rot(4500,1,0,0).move(31.3330575,0,0)
+  monomers[26] = new CH2.rot(4680,1,0,0).move(32.5863798,0,0)
+  monomers[27] = new CH2.rot(4860,1,0,0).move(33.8397021,0,0)
+  monomers[28] = new CH2.rot(5040,1,0,0).move(35.0930244,0,0)
+  monomers[29] = new CH2.rot(5220,1,0,0).move(36.3463467,0,0)
+  monomers[30] = new CH2.rot(5400,1,0,0).move(37.599669,0,0)
+  monomers[31] = new CH2.rot(5580,1,0,0).move(38.8529913,0,0)
+  monomers[32] = new CH2.rot(5760,1,0,0).move(40.1063136,0,0)
+  monomers[33] = new CH2.rot(5940,1,0,0).move(41.3596359,0,0)
+  monomers[34] = new CH2.rot(6120,1,0,0).move(42.6129582,0,0)
+  monomers[35] = new CH2.rot(6300,1,0,0).move(43.8662805,0,0)
+  monomers[36] = new CH2.rot(6480,1,0,0).move(45.1196028,0,0)
+  monomers[37] = new CH2.rot(6660,1,0,0).move(46.3729251,0,0)
+  monomers[38] = new CH2.rot(6840,1,0,0).move(47.6262474,0,0)
+  monomers[39] = new CH2.rot(7020,1,0,0).move(48.8795697,0,0)
+  monomers[40] = new CH2.rot(7200,1,0,0).move(50.132892,0,0)
+  monomers[41] = new CH2.rot(7380,1,0,0).move(51.3862143,0,0)
+  monomers[42] = new CH2.rot(7560,1,0,0).move(52.6395366,0,0)
+  monomers[43] = new CH2.rot(7740,1,0,0).move(53.8928589,0,0)
+  monomers[44] = new CH2.rot(7920,1,0,0).move(55.1461812,0,0)
+  monomers[45] = new CH2.rot(8100,1,0,0).move(56.3995035,0,0)
+  monomers[46] = new CH2.rot(8280,1,0,0).move(57.6528258,0,0)
+  monomers[47] = new CH2.rot(8460,1,0,0).move(58.9061481,0,0)
+  monomers[48] = new CH2.rot(8640,1,0,0).move(60.1594704,0,0)
+  monomers[49] = new CH3.rot(8820,1,0,0).rot(180,0,1,0).move(61.4127927,0,0)
+  # (See below for a python script to generate this long list of commands.)
+
+  ## Alternative strategies:
+  ##
+  ## --- Method 2: Create many monomers with a single "new" command ---
+  ## The first monomer is of type "CH3"
+  # monomers[0] = new CH3
+  ## The monomers in the middle of the polymer (indices 1-48) are of type "CH2"
+  ## We can create them all with a single command.
+  # monomers[1-48] = new CH2[48].rot(180,1,0,0).move(1.2533223,0,0)
+  ##   Note: Each monomer is rotated 180 degrees with respect to the previous
+  ##         monomer, and then moved 1.2533223 Angstroms down the X axis.
+  ## Now move monomers 1-14 to avoid overlap with the first monomer(monomers[0])
+  # monomers[1-48].rot(180,1,0,0).move(1.2533223,0,0)
+  ## The final monomer is of type "CH3" and we want to position it at the end:
+  # monomers[49] = new CH3.rot(180.0,0,0,1).move(61.4127927,0,0)
+  ## Note 61.4127927=(50-1)*1.2533223
+  ##
+  ## --- Method 3: create polymer and redefine the ends: ----
+  ## Create a long polymer consisting only of monomers of type "CH2"
+  # monomers = new CH2 [50].rot(180,1,0,0).move(1.2533223,0,0)
+  ## Delete the CH2 monomers at the beginning and end, and replace them with CH3
+  # delete monomers[0]
+  # delete monomers[49]
+  # monomers[0] = new CH3
+  # monomers[49] = new CH3.rot(180.0,0,0,1).move(61.4127927,0,0)
+  ## (Note: This approach changes the order of the atoms in the DATA file.)
+
+
+
+
+  # Now add a list of bonds connecting the carbon atoms together:
+  # (Angles, dihedrals, impropers will be automatically added later.)
+
+  write('Data Bond List') {
+    $bond:b1  $atom:monomers[0]/c $atom:monomers[1]/c
+    $bond:b2  $atom:monomers[1]/c $atom:monomers[2]/c
+    $bond:b3  $atom:monomers[2]/c $atom:monomers[3]/c
+    $bond:b4  $atom:monomers[3]/c $atom:monomers[4]/c
+    $bond:b5  $atom:monomers[4]/c $atom:monomers[5]/c
+    $bond:b6  $atom:monomers[5]/c $atom:monomers[6]/c
+    $bond:b7  $atom:monomers[6]/c $atom:monomers[7]/c
+    $bond:b8  $atom:monomers[7]/c $atom:monomers[8]/c
+    $bond:b9   $atom:monomers[8]/c $atom:monomers[9]/c
+    $bond:b10  $atom:monomers[9]/c $atom:monomers[10]/c
+    $bond:b11  $atom:monomers[10]/c $atom:monomers[11]/c
+    $bond:b12  $atom:monomers[11]/c $atom:monomers[12]/c
+    $bond:b13  $atom:monomers[12]/c $atom:monomers[13]/c
+    $bond:b14  $atom:monomers[13]/c $atom:monomers[14]/c
+    $bond:b15  $atom:monomers[14]/c $atom:monomers[15]/c
+    $bond:b16  $atom:monomers[15]/c $atom:monomers[16]/c
+    $bond:b17  $atom:monomers[16]/c $atom:monomers[17]/c
+    $bond:b18  $atom:monomers[17]/c $atom:monomers[18]/c
+    $bond:b19  $atom:monomers[18]/c $atom:monomers[19]/c
+    $bond:b20  $atom:monomers[19]/c $atom:monomers[20]/c
+    $bond:b21  $atom:monomers[20]/c $atom:monomers[21]/c
+    $bond:b22  $atom:monomers[21]/c $atom:monomers[22]/c
+    $bond:b23  $atom:monomers[22]/c $atom:monomers[23]/c
+    $bond:b24  $atom:monomers[23]/c $atom:monomers[24]/c
+    $bond:b25  $atom:monomers[24]/c $atom:monomers[25]/c
+    $bond:b26  $atom:monomers[25]/c $atom:monomers[26]/c
+    $bond:b27  $atom:monomers[26]/c $atom:monomers[27]/c
+    $bond:b28  $atom:monomers[27]/c $atom:monomers[28]/c
+    $bond:b29  $atom:monomers[28]/c $atom:monomers[29]/c
+    $bond:b30  $atom:monomers[29]/c $atom:monomers[30]/c
+    $bond:b31  $atom:monomers[30]/c $atom:monomers[31]/c
+    $bond:b32  $atom:monomers[31]/c $atom:monomers[32]/c
+    $bond:b33  $atom:monomers[32]/c $atom:monomers[33]/c
+    $bond:b34  $atom:monomers[33]/c $atom:monomers[34]/c
+    $bond:b35  $atom:monomers[34]/c $atom:monomers[35]/c
+    $bond:b36  $atom:monomers[35]/c $atom:monomers[36]/c
+    $bond:b37  $atom:monomers[36]/c $atom:monomers[37]/c
+    $bond:b38  $atom:monomers[37]/c $atom:monomers[38]/c
+    $bond:b39  $atom:monomers[38]/c $atom:monomers[39]/c
+    $bond:b40  $atom:monomers[39]/c $atom:monomers[40]/c
+    $bond:b41  $atom:monomers[40]/c $atom:monomers[41]/c
+    $bond:b42  $atom:monomers[41]/c $atom:monomers[42]/c
+    $bond:b43  $atom:monomers[42]/c $atom:monomers[43]/c
+    $bond:b44  $atom:monomers[43]/c $atom:monomers[44]/c
+    $bond:b45  $atom:monomers[44]/c $atom:monomers[45]/c
+    $bond:b46  $atom:monomers[45]/c $atom:monomers[46]/c
+    $bond:b47  $atom:monomers[46]/c $atom:monomers[47]/c
+    $bond:b48  $atom:monomers[47]/c $atom:monomers[48]/c
+    $bond:b49  $atom:monomers[48]/c $atom:monomers[49]/c
+  }
+
+} # Alkane50
+
+
+
+# -------------------------------------------------------------------------
+# Note: The following short python script was used to generate the text above:
+#N=50
+#print('  monomers[0] = new CH3')
+#for i in range(1,N-1):
+#    print('  monomers['+str(i)+'] = new CH2.rot('+str(180*i)+',1,0,0).move('+str(i*1.2533223)+',0,0)')
+#i=N-1
+#print('  monomers['+str(i)+'] = new CH3.rot('+str(180*i)+',1,0,0).rot(180,0,1,0).move('+str(i*1.2533223)+',0,0)')
+## generate the list of bonds
+#print('  write("Data Bond List") {')
+#for i in range(0,N-1):
+#    print('    $bond:b'+str(i+1)+'  $atom:monomers['+str(i)+']/c $atom:monomers['+str(i+1)+']/c')
+#print('  }')
+# ---------- (scratchwork calculations for the atomic coordinates) ----------
+# Lcc = 1.5350 # length of the C-C bond (Sp3)
+# Lch = 1.0930 # length of the C-H bond
+# theta=2*atan(sqrt(2)) # ~= 109.5 degrees = tetrahedronal angle (C-C-C angle)
+# DeltaXc = Lcc*sin(theta/2)  # = 1.2533222517240594
+# DeltaYc = Lcc*cos(theta/2)  # = 0.8862326632060754
+#                             # 0.5*DeltaYc = 0.4431163316030377
+# DeltaZh = Lch*sin(theta/2)  # = 0.8924307629540046
+# DeltaYh = Lch*cos(theta/2)  # = 0.6310438442242609
+# -------------------------------------------------------------------------

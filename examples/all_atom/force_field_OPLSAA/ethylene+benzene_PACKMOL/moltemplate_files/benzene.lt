@@ -1,0 +1,57 @@
+import "oplsaa.lt"
+
+# The "oplsaa.lt" file contains force-field parameters, atom type definitions,
+# partial charges, masses and bond-angle rules for the atoms in your system.
+# Note:
+# Atom type @atom:145 corresponds to "Benzene C"
+# Atom type @atom:146 corresponds to "Benzene H"
+
+
+
+Benzene inherits OPLSAA {
+
+  # atom-id mol-id atom-type  charge  X     Y      Z         #  comment
+
+  write("Data Atoms") {
+    $atom:c1  $mol  @atom:145  0.00 -0.739  1.189 -0.00733   # @atom:145 <--> Benzene C
+    $atom:c2  $mol  @atom:145  0.00  0.614  1.208  0.35167   # @atom:145 <--> Benzene C
+    $atom:c3  $mol  @atom:145  0.00  1.353  0.019  0.35867   # @atom:145 <--> Benzene C
+    $atom:c4  $mol  @atom:145  0.00  0.739 -1.189  0.00667   # @atom:145 <--> Benzene C
+    $atom:c5  $mol  @atom:145  0.00 -0.614 -1.208 -0.35133   # @atom:145 <--> Benzene C
+    $atom:c6  $mol  @atom:145  0.00 -1.353 -0.019 -0.35833   # @atom:145 <--> Benzene C
+    $atom:h1  $mol  @atom:146  0.00 -1.309  2.106 -0.01233   # @atom:146 <--> Benzene H
+    $atom:h2  $mol  @atom:146  0.00  1.088  2.14   0.62267   # @atom:146 <--> Benzene H
+    $atom:h3  $mol  @atom:146  0.00  2.397  0.034  0.63467   # @atom:146 <--> Benzene H
+    $atom:h4  $mol  @atom:146  0.00  1.309 -2.106  0.01267   # @atom:146 <--> Benzene H
+    $atom:h5  $mol  @atom:146  0.00 -1.088 -2.14  -0.62233   # @atom:146 <--> Benzene H
+    $atom:h6  $mol  @atom:146  0.00 -2.397 -0.034 -0.63533   # @atom:146 <--> Benzene H
+  }
+
+  # Note: You don't have to specify the charge in this example because we are
+  #       using the OPLSAA force-field which assigns charge according to
+  #       atom-type.  Just leave these numbers as 0.00 for now.
+  # Note: LAMMPS expects an integer in the 2nd column (the Molecule-ID number).
+  #       If we put "$mol" there, moltemplate will generate this integer for you
+
+  # A list of the bonds in the molecule:
+  # BondID     AtomID1  AtomID2
+
+  write("Data Bond List") {
+    $bond:c12  $atom:c1 $atom:c2
+    $bond:c23  $atom:c2 $atom:c3
+    $bond:c34  $atom:c3 $atom:c4
+    $bond:c45  $atom:c4 $atom:c5
+    $bond:c56  $atom:c5 $atom:c6
+    $bond:c61  $atom:c6 $atom:c1
+    $bond:c1h1 $atom:c1 $atom:h1
+    $bond:c2h2 $atom:c2 $atom:h2
+    $bond:c3h3 $atom:c3 $atom:h3
+    $bond:c4h4 $atom:c4 $atom:h4
+    $bond:c5h5 $atom:c5 $atom:h5
+    $bond:c6h6 $atom:c6 $atom:h6
+  }
+
+  # In the "Data Bond List" section we don't have to specify the bond type.
+  # The bond-type will be determined by the atom type (according to "oplsaa.lt")
+
+} # Benzene

@@ -1,0 +1,45 @@
+import "oplsaa.lt"
+
+# The "oplsaa.lt" file contains force-field parameters, atom type definitions,
+# partial charges, masses and bond-angle rules for the atoms in your system.
+# Note:
+# Atom type 143 corresponds to "alkene C (H2-C=)"
+# Atom type 144 corresponds to "alkene H (H-C=)"
+
+
+
+Ethylene inherits OPLSAA {
+
+  # atom-id mol-id atom-type charge  X      Y      Z   # comment
+
+  write('Data Atoms') {
+    $atom:c1  $mol @atom:143 0.0 -0.6695   0.00000 0.0  #143->"alkene C (H2-C=)"
+    $atom:c2  $mol @atom:143 0.0  0.6695   0.00000 0.0  #143->"alkene C (H2-C=)"
+    $atom:h11 $mol @atom:144 0.0 -1.23422 -0.85446 0.0  #144->"alkene H (H-C=)"
+    $atom:h12 $mol @atom:144 0.0 -1.23422  0.85446 0.0  #144->"alkene H (H-C=)"
+    $atom:h21 $mol @atom:144 0.0  1.23422 -0.85446 0.0  #144->"alkene H (H-C=)"
+    $atom:h22 $mol @atom:144 0.0  1.23422  0.85446 0.0  #144->"alkene H (H-C=)"
+  }
+
+  # Note: You don't have to specify the charge in this example because we are
+  #       using the OPLSAA force-field which assigns charge according to
+  #       atom-type.  Just leave these numbers as 0.00 for now.
+  # Note: LAMMPS expects an integer in the 2nd column (the Molecule-ID number).
+  #       If we put "$mol" there, moltemplate will generate this integer for you
+
+  # A list of the bonds in the molecule:
+  # BondID     AtomID1  AtomID2
+
+  write('Data Bond List') {
+    $bond:c12  $atom:c1 $atom:c2
+    $bond:c1h1 $atom:c1 $atom:h11
+    $bond:c1h2 $atom:c1 $atom:h12
+    $bond:c2h1 $atom:c2 $atom:h21
+    $bond:c2h2 $atom:c2 $atom:h22
+  }
+
+  # In the "Data Bond List" section we don't have to specify the bond type.
+  # The bond-type will be determined by the atom type (according to "oplsaa.lt")
+
+} # Ethylene
+

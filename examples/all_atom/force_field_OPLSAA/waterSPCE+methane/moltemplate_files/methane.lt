@@ -1,0 +1,31 @@
+import "oplsaa.lt"
+
+# file used to generate "oplsaa.lt".
+
+# atom         138  CH4    all-atom C: methane mod 1/2020
+# atom         140  H      all-atom H: alkanes
+
+Methane inherits OPLSAA {
+
+  # atomID   molID  atomTyle  charge     X        Y          Z
+  write('Data Atoms') {
+    $atom:c  $mol:. @atom:138   0.0   0.000000   0.000000   0.000000
+    $atom:h1 $mol:. @atom:140   0.0   0.000000   0.000000   1.089000
+    $atom:h2 $mol:. @atom:140   0.0   1.026719   0.000000  -0.363000
+    $atom:h3 $mol:. @atom:140   0.0  -0.513360  -0.889165  -0.363000
+    $atom:h4 $mol:. @atom:140   0.0  -0.513360   0.889165  -0.363000
+  }
+
+  #  Charges will be assigned by OPLSAA2008, so we leave them 0.0 here.
+  #
+  #  (The "." in "$mol:." refers to this molecule-object's molecule-ID number.
+  #   The "." simply means this molecule is not a part of a larger molecule.)
+
+  write('Data Bond List') {
+    $bond:ch1 $atom:c $atom:h1
+    $bond:ch2 $atom:c $atom:h2
+    $bond:ch3 $atom:c $atom:h3
+    $bond:ch4 $atom:c $atom:h4
+  }
+
+} # Methane
