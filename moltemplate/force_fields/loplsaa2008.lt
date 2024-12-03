@@ -1,0 +1,283 @@
+############################################################################
+## Extra OPLSAA parameters and atom types for long hydrocarbon chains from:
+## LOPLS2012 Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4),1459
+## LOPLS2015 Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287
+## CREDIT: Sebastian Echeverri, Andrew Jewett (file format conversion)
+############################################################################
+# This file was generated automatically using:
+# tinkerparm2lt.py -name OPLSAA -file loplsaa_ext.prm -dihedral-style opls -zeropad 3
+# (...and edited extensively by hand afterwards)
+
+
+import "oplsaa2008.lt"   # Load the original definition of the "OPLSAA" object
+
+
+# We will augment the definition of the "OPLSAA" force field below
+# to include atom types and dihedral interactions from the 2 papers above
+# (LOPLS2012, LOPLS2015).
+
+
+OPLSAA {
+
+  # Below we will use lammps "set" command to assign atom charges
+  # by atom type.  https://docs.lammps.org/set.html
+  # (Each set command is followed by an atom type description.)
+
+  write_once("In Charges") {
+
+    # LOPLS(2012):
+    set type @atom:80L charge -0.222    # "Alkane CH3- (LOPLS,2012 CT_CH3)"
+    set type @atom:81L charge -0.148    # "Alkane -CH2- (LOPLS,2012 CT_CH2)"
+    set type @atom:85LCH3 charge 0.074  # "Alkane H-C CH3 (LOPLS,2012 HC_CH3)"
+    set type @atom:85LCH2 charge 0.074  # "Alkane H-C CH2 (LOPLS,2012 HC_CH2)"
+    set type @atom:87L charge -0.16     # "Alkene RH-C= (LOPLS,2012 CM_CH)"
+    set type @atom:89L charge 0.16      # "Alkene H-C= (LOPLS,2012 HC_CH)"
+    set type @atom:86L charge 0.0       # "Alkene R2-C= (LOPLS,2012)"
+    set type @atom:88L charge -0.23     # "Alkene H2-C= (LOPLS,2012)"
+    set type @atom:169L charge 0.005    # "Chloroalkene Cl-CH= (LOPLS,2012)"
+    set type @atom:266L charge -0.07    # "Uracil & Thymine C5 (LOPLS,2012)"
+    set type @atom:267L charge 0.08     # "Uracil & Thymine C6 (LOPLS,2012)"
+    set type @atom:280L charge -0.06    # "Cytosine C5 (LOPLS,2012)"
+    set type @atom:281L charge 0.1      # "Cytosine C6 (LOPLS,2012)"
+    set type @atom:324L charge -0.06    # "CytosineH+ C5 (LOPLS,2012)"
+    set type @atom:325L charge 0.1      # "CytosineH+ C6 (LOPLS,2012)"
+    set type @atom:340L charge 0.18     # "Trifluorothymine CF3- (LOPLS,2012)"
+    set type @atom:342L charge 0.12     # "Chloroalkene Cl2-C= (LOPLS,2012)"
+    set type @atom:458L charge -0.03    # "Vinyl Ether =CH-OR (LOPLS,2012)"
+    set type @atom:459L charge 0.085    # "Vinyl Ether =CR-OR (LOPLS,2012)"
+    set type @atom:649L charge -0.344   # "Cl..CH3..Cl- Sn2 TS (LOPLS,2012)"
+    set type @atom:900L charge -0.25    # "Allene/Ketene H2C=C=X (LOPLS,2012)"
+    set type @atom:901L charge -0.1     # "Allene/Ketene HRC=C=X (LOPLS,2012)"
+    set type @atom:902L charge 0.05     # "Allene/Ketene R2C=C=X (LOPLS,2012)"
+
+    # LOPLS(2015): Alcohols
+    set type @atom:96L charge -0.683    # "Alcohol -OH (LOPLS,2015)"
+    set type @atom:97L charge 0.418     # "Alcohol -OH (LOPLS,2015)"
+    set type @atom:111L charge -0.7     # "Diol -OH (LOPLS,2015)"
+    set type @atom:112L charge 0.435    # "Diol -OH (LOPLS,2015)"
+    set type @atom:113L charge -0.73    # "Triol -OH (LOPLS,2015)"
+    set type @atom:114L charge 0.465    # "Triol -OH (LOPLS,2015)"
+    set type @atom:718L charge 0.06     # "Aliphatic hydrogen diols and triols (LOPLS,2015)"
+    # commenting out the next line which appeared in earlier versions...
+    #set type @atom:118L charge 0.06    # "Aliphatic hydrogen monoalcohols (LOPLS,2015)"
+    # ...because 118L is compatible with 118 from the original "oplsaa.lt"
+    #    file.  So you can use @atom:118 instead.
+
+    # LOPLS(2015): Esters
+    set type @atom:406L charge 0.75     # "Ester -COOR carbonyl carbon (LOPLS,2015)"
+    set type @atom:407L charge -0.55    # "Ester C=O carbonyl oxygen (LOPLS,2015)
+    set type @atom:408L charge -0.45    # "Ester COR alkoxy oxygen (LOPLS,2015)"
+    # commenting out these lines which appeared in earlier versions...
+    #set type @atom:81LL charge 0.19    # "Ester COR alkoxy carbon (LOPLS,2015)"
+    #set type @atom:718LL charge 0.03   # "α-methoxy hydrogen (LOPLS,2015)"
+    # ...because 81LL and 718LL are compatible with 431 and 718, respectively,
+    #    from the original "oplsaa.lt" file. So you can use @atom:431 instead
+    #    of @atom:81LL, and @atom:718 instead of @atom:718LL
+  } #(end of atom partial charges)
+
+
+  write_once("Data Masses") {
+    @atom:80L 12.011   # 80L
+    @atom:81L 12.011   # 81L
+    @atom:85LCH3 1.008 # 85LCH3
+    @atom:85LCH2 1.008 # 85LCH2
+    @atom:87L 12.011   # 87L
+    @atom:89L 1.008    # 89L
+    @atom:86L 12.011   # 86L
+    @atom:88L 12.011   # 88L
+    @atom:96L 15.999   # 96L
+    @atom:97L 1.008    # 97L
+    @atom:111L 15.999  # 111L
+    @atom:112L 1.008   # 112L
+    @atom:113L 15.999  # 113L
+    @atom:114L 1.008   # 114L
+    @atom:169L 12.011  # 169L
+    @atom:266L 12.011  # 266L
+    @atom:267L 12.011  # 267L
+    @atom:280L 12.011  # 280L
+    @atom:281L 12.011  # 281L
+    @atom:324L 12.011  # 324L
+    @atom:325L 12.011  # 325L
+    @atom:340L 12.011  # 340L
+    @atom:342L 12.011  # 342L
+    @atom:406L 12.011  # 406L
+    @atom:407L 15.999  # 407L
+    @atom:408L 15.999  # 408L
+    @atom:458L 12.011  # 458L
+    @atom:459L 12.011  # 459L
+    @atom:649L 12.011  # 649L
+    @atom:718L 1.008   # 718L
+    @atom:900L 12.011  # 900L
+    @atom:901L 12.011  # 901L
+    @atom:902L 12.011  # 902L
+  } #(end of atom masses)
+
+
+  # ---------- EQUIVALENCE CATEGORIES for bonded interaction lookup ----------
+  #   Each type of atom has a separate ID used for looking up bond parameters
+  #   and a separate ID for looking up 3-body angle interaction parameters
+  #   and a separate ID for looking up 4-body dihedral interaction parameters
+  #   and a separate ID for looking up 4-body improper interaction parameters
+  #   The complete @atom type name includes ALL of these ID numbers.  There's
+  #   no need to force the end-user to type the complete name of each atom.
+  #   The "replace" command used below informs moltemplate that the short
+  #   @atom names we have been using above are equivalent to the complete
+  #   @atom names used below:
+
+  replace{ @atom:80L @atom:80L_b013_a013_d013L_i013 }
+  replace{ @atom:81L @atom:81L_b013_a013_d013L_i013 }
+  replace{ @atom:85LCH3 @atom:85LCH3_b046_a046_d046_i046 }
+  replace{ @atom:85LCH2 @atom:85LCH2_b046_a046_d046_i046 }
+  replace{ @atom:87L @atom:87L_b047_a047_d047L_i047 }
+  replace{ @atom:89L @atom:89L_b046_a046_d046_i046 }
+  replace{ @atom:86L @atom:86L_b047_a047_d047L_i047 }
+  replace{ @atom:88L @atom:88L_b047_a047_d047L_i047 }
+  replace{ @atom:96L @atom:96L_b005_a005_d005L_i005 }
+  replace{ @atom:97L @atom:97L_b007_a007_d007L_i007 }
+  replace{ @atom:111L @atom:111L_b005_a005_d005L_i005 }
+  replace{ @atom:112L @atom:112L_b007_a007_d007L_i007 }
+  replace{ @atom:113L @atom:113L_b005_a005_d005L_i005 }
+  replace{ @atom:114L @atom:114L_b007_a007_d007L_i007 }
+  replace{ @atom:169L @atom:169L_b047_a047_d047L_i047 }
+  replace{ @atom:266L @atom:266L_b047_a047_d047L_i047 }
+  replace{ @atom:267L @atom:267L_b047_a047_d047L_i047 }
+  replace{ @atom:280L @atom:280L_b047_a047_d047L_i047 }
+  replace{ @atom:281L @atom:281L_b047_a047_d047L_i047 }
+  replace{ @atom:324L @atom:324L_b047_a047_d047L_i047 }
+  replace{ @atom:325L @atom:325L_b047_a047_d047L_i047 }
+  replace{ @atom:340L @atom:340L_b047_a047_d047L_i047 }
+  replace{ @atom:342L @atom:342L_b047_a047_d047L_i047 }
+  replace{ @atom:406L @atom:406L_b003_a003_d003L_i003 }
+  replace{ @atom:407L @atom:407L_b004_a004_d004L_i004 }
+  replace{ @atom:408L @atom:408L_b020_a020_d020L_i020 }
+  replace{ @atom:458L @atom:458L_b047_a047_d047L_i047 }
+  replace{ @atom:459L @atom:459L_b047_a047_d047L_i047 }
+  replace{ @atom:649L @atom:649L_b047_a047_d047L_i047 }
+  replace{ @atom:718L @atom:718L_b046_a046_d046_i046 }
+  replace{ @atom:900L @atom:900L_b047_a047_d047L_i047 }
+  replace{ @atom:901L @atom:901L_b047_a047_d047L_i047 }
+  replace{ @atom:902L @atom:902L_b047_a047_d047L_i047 }
+
+
+
+
+  # --------------- Non-Bonded interactions: ---------------------
+  # https://docs.lammps.org/pair_lj_cut_coul.html
+  # Syntax:
+  # pair_coeff    AtomType1    AtomType2   parameters...
+
+  write_once("In Settings") {
+    pair_coeff @atom:80L_b013_a013_d013L_i013   @atom:80L_b013_a013_d013L_i013   0.066 3.5
+    pair_coeff @atom:81L_b013_a013_d013L_i013   @atom:81L_b013_a013_d013L_i013   0.066 3.5
+    pair_coeff @atom:85LCH3_b046_a046_d046_i046 @atom:85LCH3_b046_a046_d046_i046 0.03 2.5
+    pair_coeff @atom:85LCH2_b046_a046_d046_i046 @atom:85LCH2_b046_a046_d046_i046 0.026290630975 2.5
+    pair_coeff @atom:87L_b047_a047_d047L_i047   @atom:87L_b047_a047_d047L_i047   0.076 3.55
+    pair_coeff @atom:89L_b046_a046_d046_i046    @atom:89L_b046_a046_d046_i046    0.03 2.42
+    pair_coeff @atom:86L_b047_a047_d047L_i047   @atom:86L_b047_a047_d047L_i047   0.076 3.55
+    pair_coeff @atom:88L_b047_a047_d047L_i047   @atom:88L_b047_a047_d047L_i047   0.076 3.55
+    pair_coeff @atom:96L_b005_a005_d005L_i005   @atom:96L_b005_a005_d005L_i005   0.17 3.12
+    pair_coeff @atom:97L_b007_a007_d007L_i007   @atom:97L_b007_a007_d007L_i007   0.0 0.0
+    pair_coeff @atom:111L_b005_a005_d005L_i005  @atom:111L_b005_a005_d005L_i005  0.17 3.07
+    pair_coeff @atom:112L_b007_a007_d007L_i007  @atom:112L_b007_a007_d007L_i007  0.0 0.0
+    pair_coeff @atom:113L_b005_a005_d005L_i005  @atom:113L_b005_a005_d005L_i005  0.17 3.07
+    pair_coeff @atom:114L_b007_a007_d007L_i007  @atom:114L_b007_a007_d007L_i007  0.0 0.0
+    pair_coeff @atom:169L_b047_a047_d047L_i047  @atom:169L_b047_a047_d047L_i047  0.076 3.55
+    pair_coeff @atom:266L_b047_a047_d047L_i047  @atom:266L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:267L_b047_a047_d047L_i047  @atom:267L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:280L_b047_a047_d047L_i047  @atom:280L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:281L_b047_a047_d047L_i047  @atom:281L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:324L_b047_a047_d047L_i047  @atom:324L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:325L_b047_a047_d047L_i047  @atom:325L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:340L_b047_a047_d047L_i047  @atom:340L_b047_a047_d047L_i047  0.08 3.5
+    pair_coeff @atom:342L_b047_a047_d047L_i047  @atom:342L_b047_a047_d047L_i047  0.076 3.55
+    pair_coeff @atom:406L_b003_a003_d003L_i003  @atom:406L_b003_a003_d003L_i003  0.105 3.1875
+    pair_coeff @atom:407L_b004_a004_d004L_i004  @atom:407L_b004_a004_d004L_i004  0.168 3.108
+    pair_coeff @atom:408L_b020_a020_d020L_i020  @atom:408L_b020_a020_d020L_i020  0.17 2.55
+    pair_coeff @atom:458L_b047_a047_d047L_i047  @atom:458L_b047_a047_d047L_i047  0.076 3.55
+    pair_coeff @atom:459L_b047_a047_d047L_i047  @atom:459L_b047_a047_d047L_i047  0.076 3.55
+    pair_coeff @atom:649L_b047_a047_d047L_i047  @atom:649L_b047_a047_d047L_i047  0.076 3.55
+    pair_coeff @atom:718L_b046_a046_d046_i046   @atom:718L_b046_a046_d046_i046   0.015 2.42
+    pair_coeff @atom:900L_b047_a047_d047L_i047  @atom:900L_b047_a047_d047L_i047  0.086 3.3
+    pair_coeff @atom:901L_b047_a047_d047L_i047  @atom:901L_b047_a047_d047L_i047  0.086 3.3
+    pair_coeff @atom:902L_b047_a047_d047L_i047  @atom:902L_b047_a047_d047L_i047  0.086 3.3
+  } #(end of pair_coeffs)
+
+
+
+  # ----------- Dihedral Interactions: ------------
+  # https://docs.lammps.org/dihedral_opls.html
+  # Syntax:
+  # dihedral_coeff DihedralTypeName  parameters...
+
+  write_once("In Settings") {
+    dihedral_coeff @dihedral:013L_013L_013L_013L  0.6446926386 -0.2143420172 0.1782194073 0.0
+    dihedral_coeff @dihedral:X_047L_047L_X        0.0  12.2502629063 0.0 0.0
+    dihedral_coeff @dihedral:047L_047L_013L_013L -0.8050121893 0.3218905354 -0.1032768881 0.0
+    dihedral_coeff @dihedral:013L_013L_013L_047L  0.4821902486 0.1343683078 0.1777461759 0.0
+    dihedral_coeff @dihedral:046_013_005L_007L    0.00962596 -0.0145554 0.381091 0.0
+    dihedral_coeff @dihedral:046_013_013_005L     0.0143774 0.033021 0.26687 0.0
+    dihedral_coeff @dihedral:013_013_005L_007L   -0.675785 -0.0160421 0.373199 0.0
+    dihedral_coeff @dihedral:013_013_013_005L     1.31261 -0.266307 0.637867 0.0
+    dihedral_coeff @dihedral:005L_013_013_005L    2.69106 -0.849706 0.725731 0.0
+    dihedral_coeff @dihedral:013_003L_020L_013    3.11923 5.73771 0.0 0.0
+    dihedral_coeff @dihedral:013_020L_003L_004L   0.0 5.73772 0.0 0.0
+    dihedral_coeff @dihedral:046_013_003L_020L   -0.00742471 0.00217734 0.111803 0.0
+    dihedral_coeff @dihedral:003L_020L_013_013   -1.7354 -1.24844 0.623897 0.0
+    dihedral_coeff @dihedral:046_013_013_020L     0.0113337 0.0236209 0.429747 0.0
+    dihedral_coeff @dihedral:013_013_003L_020L    0.884988 -0.626905 -0.493344 0.0
+    dihedral_coeff @dihedral:013_013_003L_004L   -0.276019 1.23685 -0.670745 0.0
+    dihedral_coeff @dihedral:003L_013_013_046    -0.0021152 0.0173542 -0.295208 0.0
+    dihedral_coeff @dihedral:003L_013_013_013    -2.30738 -0.627326 0.621951 0.0
+    dihedral_coeff @dihedral:013_013_013_020L     2.25871 -1.02408 1.0071 0.0
+    dihedral_coeff @dihedral:020L_013_013_020L    4.66787 -2.62698 1.3248 0.0
+    dihedral_coeff @dihedral:005L_013_013_020L    5.03208 -2.37742 1.23809 0.0
+  } #(end of dihedral_coeffs)
+
+  # Rules for creating dihedral interactions according to atom type:
+  #   DihedralTypeName     AtomType1     AtomType2     AtomType3     AtomType4
+  #   (* = wildcard)
+
+  write_once("Data Dihedrals By Type") {
+    @dihedral:013L_013L_013L_013L  @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d013L*_i*
+    @dihedral:X_047L_047L_X        @atom:*                 @atom:*_b*_a*_d047L*_i* @atom:*_b*_a*_d047L*_i* @atom:*
+    @dihedral:047L_047L_013L_013L  @atom:*_b*_a*_d047L*_i* @atom:*_b*_a*_d047L*_i* @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d013L*_i*
+    @dihedral:013L_013L_013L_047L  @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d013L*_i* @atom:*_b*_a*_d047L*_i*
+    @dihedral:046_013_005L_007L    @atom:*_b*_a*_d046*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d005L*_i* @atom:*_b*_a*_d007L*_i*
+    @dihedral:046_013_013_005L     @atom:*_b*_a*_d046*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d005L*_i*
+    @dihedral:013_013_005L_007L    @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d005L*_i* @atom:*_b*_a*_d007L*_i*
+    @dihedral:013_013_013_005L     @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d005L*_i*
+    @dihedral:005L_013_013_005L    @atom:*_b*_a*_d005L*_i* @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d005L*_i*
+    @dihedral:013_003L_020L_013    @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d020L*_i* @atom:*_b*_a*_d013*_i*
+    @dihedral:013_020L_003L_004L   @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d020L*_i* @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d004L*_i*
+    @dihedral:046_013_003L_020L    @atom:*_b*_a*_d046*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d020L*_i*
+    @dihedral:003L_020L_013_013    @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d020L*_i* @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*
+    @dihedral:046_013_013_020L     @atom:*_b*_a*_d046*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d020L*_i*
+    @dihedral:013_013_003L_020L    @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d020L*_i*
+    @dihedral:013_013_003L_004L    @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d004L*_i*
+    @dihedral:003L_013_013_046     @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d046*_i*
+    @dihedral:003L_013_013_013     @atom:*_b*_a*_d003L*_i* @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*
+    @dihedral:013_013_013_020L     @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d020L*_i*
+    @dihedral:020L_013_013_020L    @atom:*_b*_a*_d020L*_i* @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d020L*_i*
+    @dihedral:005L_013_013_020L    @atom:*_b*_a*_d005L*_i* @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d013*_i*  @atom:*_b*_a*_d020L*_i*
+  } #(end of dihedrals by type)
+
+}  # OPLSAA
+
+
+
+
+# OPTIONAL:
+# Generate a file ("log.cite.loplsaa") containing 
+# a couple papers describing the LOPLS force field.
+
+write_once("log.cite.loplsaa") {
+  If you use any atom types from the "loplsaa.lt" file whose description (in
+  the "In Charges" section) contains "LOPLS,2012", here is the relevant paper:
+  Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4),1459
+  https://doi.org/10.1021/ct200908r
+
+  If you use any atom types from the "loplsaa.lt" file whose description (in
+  the "In Charges" section) contains "LOPLS,2015", here is the relevant paper:
+  Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287
+  https://doi.org/10.1021/acs.jpcb.5b08569
+}

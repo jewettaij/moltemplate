@@ -1,0 +1,88 @@
+# This example looks complicated because I split the
+# hexadecane molecule into individual CH2 and CH3 monomers.
+#
+# I defined it this way so that you can easily modify 
+# it to change the length of the alkane chain.
+
+
+import "oplsaa2008.lt" # load the "OPLSAA" force-field information
+import "ch2group.lt"   # load the definition of the "CH2" object
+import "ch3group.lt"   # load the definition of the "CH3" object
+
+
+
+Polyethylene16 inherits OPLSAA {
+
+
+  create_var {$mol}  # optional:force all monomers to share the same molecule-ID
+
+
+  # Now create an array of 16 "CH2" objects distributed along the X axis
+
+  monomers = new CH2 [16].rot(180,1,0,0).move(1.2533223,0,0)
+
+  #   Each monomer is rotated 180 degrees with respect to the previous
+  #   monomer, and then moved 1.2533223 Angstroms down the X axis.
+
+  # ---- Now, modify the ends: ---
+  # Delete the CH2 groups at the end of the chain, and replace it with CH3.
+
+  delete monomers[15]
+
+  monomers[15] = new CH3
+
+  # Move the CH3 group to the correct location at the end of the chain:
+
+  monomers[15].rot(180.0,0,0,1).move(18.7998345,0,0)
+  # Note: 18.7998345 = (16-1) * 1.2533223
+
+
+  # Now add a list of bonds connecting the carbon atoms together:
+
+  write('Data Bond List') {
+    $bond:b1  $atom:monomers[0]/c $atom:monomers[1]/c
+    $bond:b2  $atom:monomers[1]/c $atom:monomers[2]/c
+    $bond:b3  $atom:monomers[2]/c $atom:monomers[3]/c
+    $bond:b4  $atom:monomers[3]/c $atom:monomers[4]/c
+    $bond:b5  $atom:monomers[4]/c $atom:monomers[5]/c
+    $bond:b6  $atom:monomers[5]/c $atom:monomers[6]/c
+    $bond:b7  $atom:monomers[6]/c $atom:monomers[7]/c
+    $bond:b8  $atom:monomers[7]/c $atom:monomers[8]/c
+    $bond:b9   $atom:monomers[8]/c $atom:monomers[9]/c
+    $bond:b10  $atom:monomers[9]/c $atom:monomers[10]/c
+    $bond:b11  $atom:monomers[10]/c $atom:monomers[11]/c
+    $bond:b12  $atom:monomers[11]/c $atom:monomers[12]/c
+    $bond:b13  $atom:monomers[12]/c $atom:monomers[13]/c
+    $bond:b14  $atom:monomers[13]/c $atom:monomers[14]/c
+    $bond:b15  $atom:monomers[14]/c $atom:monomers[15]/c
+  }
+
+} # Polyethylene16
+
+
+########################## NOTES ############################
+### (scratchwork calculations for the atomic coordinates) ###
+# Lcc = 1.5350 # length of the C-C bond (Sp3)
+# Lch = 1.0930 # length of the C-H bond
+# theta=2*atan(sqrt(2)) # ~= 109.5 degrees = tetrahedronal angle (C-C-C angle)
+# DeltaXc = Lcc*sin(theta/2)  # = 1.2533222517240594
+# DeltaYc = Lcc*cos(theta/2)  # = 0.8862326632060754
+#                             # 0.5*DeltaYc = 0.4431163316030377
+# DeltaZh = Lch*sin(theta/2)  # = 0.8924307629540046
+# DeltaYh = Lch*cos(theta/2)  # = 0.6310438442242609
+############################################################
+#       Polyethylene16 is frequently called "hexadecane".
+#       However hexadecane has 16 carbon atoms: CH3-(CH2)^14-CH3.
+#
+#       However Polyethylene16 was defined as (CH2)^15-CH3.
+#       Only one end of Polyethylene16 was capped with a CH3group.
+#       This was done to allow you to add another bond to the other
+#       end of the polymer so you can attach it to something else.)
+#       If you prefer, you could start with hexadecane and delete
+#       monomer[0] and then replace it with CH2group again.  But
+#       I thought that defining everything from scratch is easier.)
+#
+#       You can download the "hexadecane.lt" file here:
+#       https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_OPLSAA/hexadecane/moltemplate_files/hexadecane.lt
+############################################################
+

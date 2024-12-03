@@ -1,0 +1,65 @@
+import "graphene.lt"   # Defines @atom:Graphene/C
+import "oplsaa2008.lt" # Defines @atom:OPLSAA/739
+import "nh2.lt"        # Defines "NH2"
+
+Graphene_NH2 {
+
+  # As with "Graphene", we define a two-atom unit cell, but we change one
+  # of them to one of the atom types defined in OPLSAA ("oplsaa2008.lt").
+  # This means that "oplsaa2008.lt" will lookup the angle interactions between
+  # the C-N-H atoms for us. (We can also specify those manually, if you prefer.)
+  # @atom:OPLSAA/733 corresponds to "Amine CH3-NH2", charge 0, mass 12.011
+  # This atom (@atom:733) is definitely not the same type of carbon I would
+  # expect to see in graphene, but it's the most similar carbon I could find in
+  # the OPLSAA force field (among the 6 types of amine-binding carbons there).
+  #
+  # For the other atom type, we borrow the "C" atom type defined in "Graphene"
+  #
+  # atomID    molID       atomType      charge     x         y        z
+  write("Data Atoms") {
+    $atom:c1  $mol:...  @atom:OPLSAA/733  0.0  -0.614878  -0.355   0.0000
+    $atom:c2  $mol:...  @atom:Graphene/C  0.0   0.614878   0.355   0.0000
+  }
+
+  # Now make a copy of the the NH2 (amine) group and position it above
+  # the first carbon atom ($atom:c1)
+
+  nh2 = new NH2.move(-0.614878, -0.355, 1.448)  #(1.448 is the C-N bond length)
+
+  # Now lets add a bond connecting the carbon and nitrogen atoms together.
+  # (The bond type will be automatically selected and is @bond:OPLSAA/013_044 .)
+  #
+  write("Data Bond List") {
+    $bond:c1n $atom:c1 $atom:nh2/n
+  }
+  #
+  # Note that if you want to specify the bond type manually, use this instead:
+  # write("Data Bonds") {
+  #   @bond:c1n @bond:CUSTOM_BOND_TYPE $atom:c1 $atom:nh2/n
+  # }
+
+  # Note that the charge of the connected carbon atom will have to be modified
+  # to neutralize the NH2 atoms. (The sum of the charges in "NH2" is -0.18.)
+  write("In Charges") {
+    set atom $atom:c1 charge 0.18 #(This overrides the charges in oplsaa2008.lt)
+  }
+
+  write("In Settings") {
+    # Include both carbon atoms in the "gGraphene" group, as well as the
+    # nitrogen atom.
+    group gGraphene id $atom:c1 $atom:c2 $atom:nh2/n
+
+    # Later on, this group of atoms will be made rigid.  I included the
+    # nitrogen atom in this group so that I don't have to worry about
+    # defining realistic angles and dihedral interactions that keep the
+    # carbon-nitrogen bond perpendicular to the surface.  I just immobilized
+    # both carbon and nitrogen atoms at the desired angle and distance.
+    # (The two hydrogen atoms attached to the nitrogen atom can move.)
+    # Why?  I am not aware of a realistic bonded force field for carbon atoms
+    # in graphene.  That's why I did not bother trying to connect the carbon
+    # atoms together with bonds.  If I had, then it would be easy
+    # to generate angles that automatically point the carbon-nitrogen
+    # bond in the correct direction (by using write_once("Data Angles By Type")
+    # to create a rule for generating these angle interactions automatically).
+  }
+} # GrapheneNH2

@@ -1,0 +1,24 @@
+import "tip5p_oplsaa2008.lt"  # <-defines the "TIP5P" (water) molecule type
+import "ethanol.lt"       # <-defines the "Ethanol" molecule type
+
+
+waters = new TIP5P [8].move(0.00, 0.00, 3.45) 
+                   [8].move(0.00, 3.45, 0.00) 
+                   [8].move(3.45, 0.00, 0.00)
+
+ethanols = new Ethanol [4].move(0.0, 0.0, 6.9) 
+                       [4].move(0.0, 6.9, 0.0) 
+                       [4].move(6.9, 0.0, 0.0)
+
+# move the methanol molecules slightly to avoid overlap with the water molecules
+ethanols[*][*][*].move(1.725, 1.725, 1.725)
+
+
+
+# Periodic boundary conditions:
+write_once("Data Boundary") {
+   0.0  27.6  xlo xhi
+   0.0  27.6  ylo yhi
+   0.0  27.6  zlo zhi
+}
+
