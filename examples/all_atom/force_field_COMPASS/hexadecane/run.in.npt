@@ -20,7 +20,16 @@ include         system.in.charges
 
 # ------------------------------- Run Section -------------------------------
 
-# To avoid explosions, I have a 4-step equilibraion process (expand, minimize, 
+# Explanation.
+# Unless you use packmol (or some other geometry generation program),
+# the initial geometry created by moltemplate using a lattice is
+# extremely unrealistic for a liquid, and likely to put the system
+# a kinetic trap (local minimum). So this example uses high temperatures
+# to completely obliterate any memory of that initial lattice shape.
+# Then it uses a combination of high pressures and cooling to bring
+# the system back down to a temperature and density of a liquid at 1atm, 300K.
+
+# I am using a 4-step equilibraion process (expand, minimize,
 # reorient, compress).  The system (as defined in the "system.data" file) 
 # is already expanded.  That means there are 3 steps left:
 
