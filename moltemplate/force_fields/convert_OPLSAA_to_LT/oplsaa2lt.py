@@ -42,9 +42,12 @@ def rename_type(ty: str) -> str:
     ty = ty.strip()
     for orig, changed in TYPE_CONVERSION_TUPLES:
         ty = ty.replace(orig, changed)
+    if ty in ["X", "Y", "Z"]:
+        # In BOSS files, "X", "Y", "Z" indicate wildcards
+        ty = "??"  # But here we use "??" to indicate wildcards
     if len(ty) == 1:
         # It is a good idea to make sure these strings are the same length (2).
-        ty += '~' # (eg "C"->"C~")  It doesn't matter which character we add
+        ty += "~" # (eg "C"->"C~")  It doesn't matter which character we add
     assert len(ty) == 2  # The "ty" strings should all be 2-characters long.
     return ty
 
@@ -131,11 +134,28 @@ def get_dihedrals_and_impropers(input_lines) -> tuple[list[Dihedral], list[Impro
             if dihed_definition.endswith("P in"):
                 dihed_definition = dihed_definition.replace("P in", "P")
             types = list(map(rename_type, dihed_definition.split('-')))
+            assert len(types) == 4
             comment = l[DEFINITION_END+1:].strip()
-            #if dihed_definition == "HC-CT-CT-C(O)"
             if "improper" in comment:
-                loaded_impropers.append(
-                    Improper(types=types, v1=v1, v2=v2, v3=v3, v4=v4, comment=comment))
+                # I've had good results using the "cenIsortJKL.py" symmetry
+                # rules with OPLSAA.  (When I use those settings, the resulting
+                # LAMMPS data files agrees with the data files from LigParGen.)
+                # But in order for this to work, we need to swap the first two atom
+                # types, since now the first atom is the center. -Andrew 2024-12-04
+                types = [types[1], types[0], types[2], types[3]] # see above comment
+                improper = Improper(types=types, v1=v1, v2=v2, v3=v3, v4=v4, comment=comment)
+                # There is a weird problem with "allenes improper" interactions
+                # that appear in the 2023 version of the BOSS files.
+                # Those files specify improper interactions between atoms
+                # that are typically collinear.  That would be numerically
+                # unstable so we must comment these out.  This seems like
+                # a bug in the BOSS files.  Perhaps later I'll report this.
+                # But for now, I just comment them out.
+                if comment.strip() == "allenes improper":
+                    improper.to_comment = True
+
+                loaded_impropers.append(improper)
+
             else:
                 loaded_dihedrals.append(
                     Dihedral(types=types, v1=v1, v2=v2, v3=v3, v4=v4, comment=comment))
@@ -404,7 +424,7 @@ def main(argv):
             if not improper.to_skip:
                 outfile.write(f"    {improper.coeff_line}")
         outfile.write("  } # (end of improper_coeffs)\n")
-        outfile.write('\n  write_once("Data Impropers By Type (opls_imp.py)") {\n')
+        outfile.write('\n  write_once("Data Impropers By Type (cenIsortJKL.py)") {\n')
         for improper in impropers:
             if not improper.to_skip:
                 outfile.write(f"    {improper.bytype_line}")

@@ -96,6 +96,7 @@ class BondedInteraction(ABC):
         self.comment = comment
         self.duplicate_count = 0
         self.to_skip = False
+        self.to_comment = False
 
     @property
     def ty1(self) -> str:
@@ -190,6 +191,12 @@ class BondedInteraction(ABC):
             return f"__{self.duplicate_count}"
         return ""
 
+    @property
+    def _prepend_comment_if_needed(self) -> str:
+        if self.to_comment:
+            return "# UNTRUSTED: "
+        return ""
+
 
 class Bond(BondedInteraction):
     kind = "bond"
@@ -203,7 +210,8 @@ class Bond(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"@{type(self).kind}:{self.typename}"
+        l = self._prepend_comment_if_needed
+        l += f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
         l += f" @atom:*_b{self.ty1}*_a*_d*_i*"
         l += f" @atom:*_b{self.ty2}*_a*_d*_i*\n"
@@ -211,7 +219,8 @@ class Bond(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
+        l = self._prepend_comment_if_needed
+        l += f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
         return l
 
 
@@ -227,7 +236,8 @@ class Angle(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"@{type(self).kind}:{self.typename}"
+        l = self._prepend_comment_if_needed
+        l += f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
         l += f" @atom:*_b*_a{self.ty1}*_d*_i*"
         l += f" @atom:*_b*_a{self.ty2}*_d*_i*"
@@ -236,7 +246,8 @@ class Angle(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
+        l = self._prepend_comment_if_needed
+        l += f"{self._coeff_line_base}{self._duplicate_count_str} {self.k} {self.eq} # {self.comment}\n"
         return l
 
 
@@ -251,7 +262,8 @@ class Dihedral(BondedInteraction):
 
     @property
     def bytype_line(self) -> str:
-        l = f"@{type(self).kind}:{self.typename}"
+        l = self._prepend_comment_if_needed
+        l += f"@{type(self).kind}:{self.typename}"
         l += f"{self._duplicate_count_str}"
         l += f" @atom:*_b*_a*_d{self.ty1}*_i*"
         l += f" @atom:*_b*_a*_d{self.ty2}*_i*"
@@ -261,7 +273,8 @@ class Dihedral(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
-        l = f"{self._coeff_line_base}{self._duplicate_count_str} {self.v1} {self.v2} {self.v3} {self.v4}"
+        l = self._prepend_comment_if_needed
+        l += f"{self._coeff_line_base}{self._duplicate_count_str} {self.v1} {self.v2} {self.v3} {self.v4}"
         l += f" # {self.comment} \n"
         return l
 
@@ -275,16 +288,10 @@ class Improper(BondedInteraction):
         self.v1, self.v2, self.v3, self.v4 = v1, v2, v3, v4
         self.comment = comment
 
-        # replacing every X/Y/Z with "*", I don't know if that's the correct approach,
-        # as if this was the intended behaviour I think in the FF file they would have used
-        # "*", as they did in the dihedrals sections...
-        for i, ty in enumerate(self.types):
-            if ty in ("X", "Y", "Z"):
-                self.types[i] = "*"
-
     @property
     def bytype_line(self) -> str:
-        l = f"@{type(self).kind}:{self.typename}"
+        l = self._prepend_comment_if_needed
+        l += f"@{type(self).kind}:{self.typename}"
         l += f" @atom:*_b*_a*_d*_i{self.ty1}*"
         l += f" @atom:*_b*_a*_d*_i{self.ty2}*"
         l += f" @atom:*_b*_a*_d*_i{self.ty3}*"
@@ -293,8 +300,9 @@ class Improper(BondedInteraction):
 
     @property
     def coeff_line(self) -> str:
+        l = self._prepend_comment_if_needed
         # If using "improper_style cvff", then use:
-        l = f"{self._coeff_line_base}{self._duplicate_count_str} {float(self.v2)/2:.4f} -1 2 # {self.comment}\n"
+        l += f"{self._coeff_line_base}{self._duplicate_count_str} {float(self.v2)/2:.4f} -1 2 # {self.comment}\n"
         # If using "improper_style harmonic", then use this instead:
         # l += f"{self._coeff_line_base}{self._duplicate_count_str} {float(self.v2)} 180.0 # {self.comment}\n"
         return l

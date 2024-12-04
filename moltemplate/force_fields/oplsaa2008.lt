@@ -8207,7 +8207,7 @@ OPLSAA {
   # Rules for creating improper interactions according to atom type:
   #   ImproperTypeName   AtomType1    AtomType2       AtomType3       AtomType4
   #   (* = wildcard)
-  write_once("Data Impropers By Type (opls_imp.py)") {
+  write_once("Data Impropers By Type (cenKswapIL.py)") {
     @improper:X_X_003_004 @atom:* @atom:* @atom:*_b*_a*_d*_i003* @atom:*_b*_a*_d*_i004*
     @improper:X_X_003_052 @atom:* @atom:* @atom:*_b*_a*_d*_i003* @atom:*_b*_a*_d*_i052*
     @improper:X_X_024_X @atom:* @atom:* @atom:*_b*_a*_d*_i024* @atom:*

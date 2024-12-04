@@ -10333,33 +10333,25 @@ OPLSAA {
 
 
   write_once("In Settings") {
-    improper_coeff @improper:O~_C~_€€_€€ 10.5000 -1 2 # improper torsion
-    improper_coeff @improper:€€_CA_€€_€€ 2.5000 -1 2 # improper torsion 9/08 was 2.2
-    improper_coeff @improper:€€_CM_€€_€€ 15.0000 -1 2 # improper torsion
-    improper_coeff @improper:€€_N~_€€_€€ 2.5000 -1 2 # improper torsion 9/08 was 2.0
-    # The next 4 impropers weren't in the 2008 version.  They are in the 2023 version
-    # Unfortunately, they are causing problems, overwriting legitimate impropers.
-    # For now, I will comment them out.
-    # Later, I will revisit these -Andrew 2024-12-02
-    # improper_coeff @improper:CM_CT_CM_CT -4.0000 -1 2 # allenes improper
-    # improper_coeff @improper:CM_CT_CM_HC -4.0000 -1 2 # allenes improper
-    # improper_coeff @improper:CM_HC_CM_CT -4.0000 -1 2 # allenes improper
-    # improper_coeff @improper:CM_HC_CM_HC -4.0000 -1 2 # allenes improper
+    improper_coeff @improper:CA_€€_€€_€€ 2.5000 -1 2 # improper torsion 9/08 was 2.2
+    improper_coeff @improper:CM_€€_€€_€€ 15.0000 -1 2 # improper torsion
+    improper_coeff @improper:N~_€€_€€_€€ 2.5000 -1 2 # improper torsion 9/08 was 2.0
+    improper_coeff @improper:C~_O~_€€_€€ 10.5000 -1 2 # improper torsion
+    # UNTRUSTED: improper_coeff @improper:CT_CM_CM_CT -4.0000 -1 2 # allenes improper
+    # UNTRUSTED: improper_coeff @improper:CT_CM_CM_HC -4.0000 -1 2 # allenes improper
+    # UNTRUSTED: improper_coeff @improper:HC_CM_CM_CT -4.0000 -1 2 # allenes improper
+    # UNTRUSTED: improper_coeff @improper:HC_CM_CM_HC -4.0000 -1 2 # allenes improper
   } # (end of improper_coeffs)
 
-  write_once("Data Impropers By Type (opls_imp.py)") {
-    @improper:O~_C~_€€_€€ @atom:*_b*_a*_d*_iO~* @atom:*_b*_a*_d*_iC~* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
-    @improper:€€_CA_€€_€€ @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_iCA* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
-    @improper:€€_CM_€€_€€ @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
-    @improper:€€_N~_€€_€€ @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_iN~* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
-    # The next 4 impropers weren't in the 2008 version.  They are in the 2023 version
-    # Unfortunately, they are causing problems, overwriting legitimate impropers.
-    # For now, I will comment them out.
-    # Later, I will revisit these -Andrew 2024-12-02
-    # @improper:CM_CT_CM_CT @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCT* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCT*
-    # @improper:CM_CT_CM_HC @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCT* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iHC*
-    # @improper:CM_HC_CM_CT @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iHC* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCT*
-    # @improper:CM_HC_CM_HC @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iHC* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iHC*
+  write_once("Data Impropers By Type (cenIsortJKL.py)") {
+    @improper:CA_€€_€€_€€ @atom:*_b*_a*_d*_iCA* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
+    @improper:CM_€€_€€_€€ @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
+    @improper:N~_€€_€€_€€ @atom:*_b*_a*_d*_iN~* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
+    @improper:C~_O~_€€_€€ @atom:*_b*_a*_d*_iC~* @atom:*_b*_a*_d*_iO~* @atom:*_b*_a*_d*_i??* @atom:*_b*_a*_d*_i??*
+    # UNTRUSTED: @improper:CT_CM_CM_CT @atom:*_b*_a*_d*_iCT* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCT*
+    # UNTRUSTED: @improper:CT_CM_CM_HC @atom:*_b*_a*_d*_iCT* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iHC*
+    # UNTRUSTED: @improper:HC_CM_CM_CT @atom:*_b*_a*_d*_iHC* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCT*
+    # UNTRUSTED: @improper:HC_CM_CM_HC @atom:*_b*_a*_d*_iHC* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iCM* @atom:*_b*_a*_d*_iHC*
   } # (end of impropers by type)
 
 
