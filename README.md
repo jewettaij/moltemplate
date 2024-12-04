@@ -24,7 +24,7 @@ Moltemplate was intended for building custom coarse-grained molecular models,
 but it can be used to prepare realistic all-atom simulations as well.
 It currently supports the
 [**OPLSAA**(2023)](./examples/all_atom/force_field_OPLSAA),
-[**OPLSUA**](./examples/all_atom/force_field_OPLSUA_united_atom),
+[**OPLSUA**(2008)](./examples/all_atom/legacy_force_field_examples/force_field_OPLSUA_united_atom),
 [**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**DREIDING**](./examples/all_atom/force_field_DREIDING),

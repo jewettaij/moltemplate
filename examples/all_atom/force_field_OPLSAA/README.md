@@ -2,20 +2,19 @@ This directory contains some examples of all-atom simulations using the OPLSAA f
 
 ### WARNING
 
-There is no gaurantee that simulations prepared using moltemplate will reproduce the behavior of other MD codes.  If you notice a problem with these examples, please report it. Peer-review is the only way to improve this software (or any software).  (jewett.aij @ gmail.com)
+There is no guarantee that simulations prepared using moltemplate will reproduce the behavior of other MD codes.  If you notice a problem with these examples, please report it. Peer-review is the only way to improve this software (or any software).  (jewett.aij @ gmail.com)
 
 
 ### Duplicate dihedrals, angles, and bonds
 
-Sometimes OPLSAA has multiple plausible choices for the dihedral forces
-between atoms in your molecules.
-(This also sometimes occurs for angles and bonds.)
-When this happens, a "warning_duplicate_dihedrals.txt" file will be
-generated.  *You can ignore these files*.  But if you want to maximize
-the accuracy of your simulation, you should read the warning messages
-in those files and modify your .lt files accordingly.
+- The new (2023) version of OPLSAA gives you many additional choices for your dihedral, angle, and bond interactions.  This makes it possible for you to improve your simulation accuracy, but it also requires more effort on your part.  To see the list of choices, you must now run moltemplate with the "-report-duplicates bytype __" arguments.  For example:
+```
+moltemplate.sh  system.lt  -report-duplicates bytype __
+```
+- If you see a file named "warning_duplicate_dihedrals.txt", "warning_duplicate_angles.txt", "warning_duplicate_bonds.txt", or "warning_duplicate_impropers.txt" after running moltemplate, then it is a good idea to read the first few warning messages
+in those files and modify your .lt files accordingly (for example, by adding a custom "Data Dihedrals" section).
 
-Several example .lt files demonstrate how to do that:
+Several example .lt files demonstrate how to do that, including:
 - butane/moltemplate_files/butane.lt
 - benzene+benzoic_acid/moltemplate_files/benzoic_acid.lt
 

@@ -271,12 +271,12 @@ OPLSAA {
 # a couple papers describing the LOPLS force field.
 
 write_once("log.cite.loplsaa") {
-  If you use any atom types from the "loplsaa.lt" file whose description (in
+  If you use any atom types from the "loplsaa2008.lt" file whose description (in
   the "In Charges" section) contains "LOPLS,2012", here is the relevant paper:
   Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4),1459
   https://doi.org/10.1021/ct200908r
 
-  If you use any atom types from the "loplsaa.lt" file whose description (in
+  If you use any atom types from the "loplsaa2008.lt" file whose description (in
   the "In Charges" section) contains "LOPLS,2015", here is the relevant paper:
   Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287
   https://doi.org/10.1021/acs.jpcb.5b08569

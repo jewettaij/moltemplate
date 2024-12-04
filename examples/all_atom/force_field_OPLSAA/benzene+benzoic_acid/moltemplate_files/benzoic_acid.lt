@@ -9,14 +9,14 @@ import "oplsaa.lt"
 # For this simple molecule, most of the atom types from OPLSAA were easy to guess:
 #
 #   See the "oplsaa.lt" file for explanation of atom types.  Excerpt:
-# Atom type @atom:145 corresponds to "C  | Benzene C"
-# Atom type @atom:146 corresponds to "H  | Benzene H"
-# Atom type @atom:165 corresponds to "C  | Cipso in styrene"
-# Atom type @atom:267 corresponds to "C  | Co in CCOOH carboxylic acid"  (generic)
-# Atom type @atom:470 corresponds to "C  | Co in benzoic acid"  (use this instead)
-# Atom type @atom:268 corresponds to "O  | Oh in CCOOH R in RCOOH is"
-# Atom type @atom:269 corresponds to "O  | Oc in CCOOH neutral; use 135-140"
-# Atom type @atom:270 corresponds to "H  | H in CCOOH"
+# Atom type @atom:145 corresponds to "C - CA | Benzene C"
+# Atom type @atom:146 corresponds to "H - HA | Benzene H"
+# Atom type @atom:165 corresponds to "C - CA | Cipso in styrene"
+# Atom type @atom:267 corresponds to "C - C~ | Co in CCOOH carboxylic acid"  (generic)
+# Atom type @atom:470 corresponds to "C - C~ | Co in benzoic acid"  (use this instead)
+# Atom type @atom:268 corresponds to "O - OH | Oh in CCOOH R in RCOOH is"
+# Atom type @atom:269 corresponds to "O - O~ | Oc in CCOOH neutral; use 135-140"
+# Atom type @atom:270 corresponds to "H - HO | H in CCOOH"
 
 
 BenzoicAcid inherits OPLSAA {
@@ -24,21 +24,21 @@ BenzoicAcid inherits OPLSAA {
   # atom-id mol-id atom-type charge  X     Y      Z     #  comment
 
   write("Data Atoms") {
-    $atom:co  $mol @atom:470  0.0  1.647 -0.077  0.001  # C⋄ | Co in benzoic acid
-    $atom:o1  $mol @atom:269  0.0  2.221 -1.147  0.001  # O⋄ | Oc in CCOOH neutral
-    $atom:o2  $mol @atom:268  0.0  2.357  1.068 -0.004  # O⋄ | Oh in CCOOH R in RCOOH
-    $atom:ho2 $mol @atom:270  0.0  3.321  0.987 -0.007  # H⋄ | H in CCOOH
-    $atom:c1  $mol @atom:165  0.0  0.171 -0.030  0.000  # C⋄ | Cipso in styrene"
-    $atom:c2  $mol @atom:145  0.0 -0.569 -1.214 -0.000  # C⋄ | Benzene C
-    $atom:c3  $mol @atom:145  0.0 -1.947 -1.163 -0.001  # C⋄ | Benzene C
-    $atom:c4  $mol @atom:145  0.0 -2.597  0.058 -0.002  # C⋄ | Benzene C
-    $atom:c5  $mol @atom:145  0.0 -1.871  1.236 -0.002  # C⋄ | Benzene C
-    $atom:c6  $mol @atom:145  0.0 -0.492  1.199  0.006  # C⋄ | Benzene C
-    $atom:h2  $mol @atom:146  0.0 -0.062 -2.168 -0.000  # H⋄ | Benzene H
-    $atom:h3  $mol @atom:146  0.0 -2.520 -2.078 -0.001  # H⋄ | Benzene H
-    $atom:h4  $mol @atom:146  0.0 -3.677  0.093 -0.003  # H⋄ | Benzene H
-    $atom:h5  $mol @atom:146  0.0 -2.385  2.186 -0.002  # H⋄ | Benzene H
-    $atom:h6  $mol @atom:146  0.0  0.074  2.119  0.011  # H⋄ | Benzene H
+    $atom:co  $mol @atom:470  0.0  1.647 -0.077  0.001  # C~ | Co in benzoic acid
+    $atom:o1  $mol @atom:269  0.0  2.221 -1.147  0.001  # O~ | Oc in CCOOH neutral
+    $atom:o2  $mol @atom:268  0.0  2.357  1.068 -0.004  # OH | Oh in CCOOH R in RCOOH
+    $atom:ho2 $mol @atom:270  0.0  3.321  0.987 -0.007  # HO | H in CCOOH
+    $atom:c1  $mol @atom:165  0.0  0.171 -0.030  0.000  # CA | Cipso in styrene"
+    $atom:c2  $mol @atom:145  0.0 -0.569 -1.214 -0.000  # CA | Benzene C
+    $atom:c3  $mol @atom:145  0.0 -1.947 -1.163 -0.001  # CA | Benzene C
+    $atom:c4  $mol @atom:145  0.0 -2.597  0.058 -0.002  # CA | Benzene C
+    $atom:c5  $mol @atom:145  0.0 -1.871  1.236 -0.002  # CA | Benzene C
+    $atom:c6  $mol @atom:145  0.0 -0.492  1.199  0.006  # CA | Benzene C
+    $atom:h2  $mol @atom:146  0.0 -0.062 -2.168 -0.000  # HA | Benzene H
+    $atom:h3  $mol @atom:146  0.0 -2.520 -2.078 -0.001  # HA | Benzene H
+    $atom:h4  $mol @atom:146  0.0 -3.677  0.093 -0.003  # HA | Benzene H
+    $atom:h5  $mol @atom:146  0.0 -2.385  2.186 -0.002  # HA | Benzene H
+    $atom:h6  $mol @atom:146  0.0  0.074  2.119  0.011  # HA | Benzene H
   }
 
   # Note1: LAMMPS expects an integer in the 2nd column (the Molecule-ID number).
