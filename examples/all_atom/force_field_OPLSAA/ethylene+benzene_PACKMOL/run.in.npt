@@ -37,7 +37,7 @@ print "----------------------------------------------------------------"
 print "--- Run a simulation using a Nose-Hoover Thermostat/Barostat ---"
 print "----------------------------------------------------------------"
 dump            1 all custom 1000 traj_npt.lammpstrj id mol type x y z ix iy iz
-# temperature: 300 K, pressure: 150 barr
+# temperature: 300 K, pressure: 150 atm
 fix             fxnpt all npt temp 300.0 300.0 100.0 iso 150.0 150.0 1000.0 drag 1.0
 thermo          100
 #thermo_modify  flush yes

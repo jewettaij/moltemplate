@@ -53,7 +53,7 @@ print "          (In case there are any.  I'm not certain there are."
 print "           Later we will restore ordinary pressure.)"
 print "---------------------------------------------------------------------------"
 fix fxlan all langevin  298.0 298.0  5000  123456  # temp: 298 K
-fix fxnph all nph  iso 500.0 500.0 1000.0   # pressure: 500 barr
+fix fxnph all nph  iso 500.0 500.0 1000.0   # pressure: 500 atm
 
 run 80000
 unfix fxlan
@@ -64,7 +64,7 @@ unfix fxnph
 print "---------------------------------------------------------------------------"
 print "--- Now continue the simulation using a Nose-Hoover Thermostat/Barostat ---"
 print "---------------------------------------------------------------------------"
-# temperature: 298 K, pressure: 1 barr
+# temperature: 298 K, pressure: 1 atm
 fix             fxnpt all npt temp 298.0 298.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 #thermo_modify  flush yes
 
