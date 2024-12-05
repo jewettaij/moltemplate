@@ -40,21 +40,24 @@ SPC_oplsaa inherits OPLSAA {
     $bond:OH2  $atom:O $atom:H2
   }
 
-  write_once("In Constraints") {
+  write_once("In Settings") {
 
     # Define a group for the spc water molecules. (We will use "spc" below.)
     group spc type  @atom:76  @atom:77
 
     # Constrain the angles and distances in spc water:
-    # (See "fix rattle" (See https://lammps.sandia.gov/doc/fix_shake.html)
+    # (See "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
 
-    fix fRattleSPC spc rattle 0.0001 10 100 b @bond:042_043 a @angle:043_042_043
+    fix fShakeSPC spc shake 0.0001 10 100 b @bond:042_043 a @angle:043_042_043
+    # It's a good idea to put this command in your LAMMPS input scripts:
+    #  unfix fShakeSPC   # <-- this disables fix shake
+    # ...before minimization and pressure equilibration.  (compatibility issues)
 
     # Note:    Bonds of type "@bond:042_043"
     #  and    Angles of type "@angle:043_042_043"
     # ...are defined in the "oplsaa.lt" file. These codes are used to lookup the
     # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPC water.
-    # (Also see "fix rattle" (See https://lammps.sandia.gov/doc/fix_shake.html)
+    # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
 
     # ------- Remember to put this command in your LAMMPS input script! -------
     #

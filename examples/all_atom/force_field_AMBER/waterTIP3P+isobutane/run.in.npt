@@ -9,6 +9,15 @@
 
 include     "system.in.init"         # specify the style of force field used
 
+# Weird LAMMPS issue:
+# The "system.in.init" file contains definitions for bond, angle, dihedral,
+# and improper interactions that were defined in the AMBER/GAFF force-field.
+# But since the molecules in this example do not have any improper interactions,
+# LAMMPS will object and not allow us to run the simulation.  
+# To get around this, tell LAMMPS to disable improper interactions:
+
+improper_style none
+
 # ------------------------------- Atom Definition Section -------------------
 
 read_data   "system.data"            # load atom coordinates and topology
@@ -22,10 +31,9 @@ include      "system.in.settings"    # load the force field parameters
 
 # -- minimization protocol --
 
-minimize 1.0e-4 1.0e-6 100000 400000
+unfix fShakeTIP3P    # Disable SHAKE during minimization and pressure equilibr
 
-# (Apply constraints after minimization and after other fixes which exert force)
-include         system.in.constraints
+minimize 1.0e-4 1.0e-6 100000 400000
 
 
 # -- simulation protocol --
@@ -42,9 +50,6 @@ thermo_style custom step temp ke pe etotal epair ebond eangle edihed press vol
 
 fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
-include      "system.in.constraints" # apply constraints (after minimization
-                                     # and after all integration fixes)
-
-run          200000
+run          50000
 
 write_data   "system_after_npt.data"

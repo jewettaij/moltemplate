@@ -59,11 +59,6 @@ TIP3P_2004 {
     bond_coeff   @bond:OH         harmonic       450.0  0.9572
     angle_coeff  @angle:HOH       harmonic       55.0   104.52
 
-    # Note: Since we are using RATTLE constraints, the bond and angle strength
-    # parameters ("450.0", "55.0") do not matter.  But the equilibrium bond
-    # length ("0.9572") and equilibrium angle ("104.52") does matter.  LAMMPS
-    # obtains these numbers from the bond_coeff and angle_coeff commands.
-
     #########################################################################
     ####  There are two choices for for the O-O interactions
     #########################################################################
@@ -95,18 +90,17 @@ TIP3P_2004 {
   }
 
 
-  write_once("In Constraints") {
+  write_once("In Settings") {
     # Optional: Constrain the angles and distances.
     #           (Most implementations use this, but it is optional.)
     # First, define a group for the tip3p water molecules:
     group tip3p type  @atom:O  @atom:H
 
-    # Then use "fix rattle" (See https://lammps.sandia.gov/doc/fix_shake.html)
-    fix fRattleTIP3P tip3p rattle 0.0001 10 100 b @bond:OH a @angle:HOH
-
-    # Remember to put this command in your LAMMPS input script:
-    #  include system.in.constraints
-    # ...AFTER minimization and after all integration fixes.
+    # Then use "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
+    fix fShakeTIP3P tip3p shake 0.0001 10 100 b @bond:OH a @angle:HOH
+    # It's a good idea to put this command in your LAMMPS input scripts:
+    #  unfix fShakeTIP3P   # <-- this disables fix shake
+    # ...before minimization and pressure equilibration.  (compatibility issues)
   }
 
 

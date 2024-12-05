@@ -63,6 +63,8 @@ print "--------- beginning simulation (using fix nvt) ---------"
 
 dump            1 all custom 1000 traj_npt.lammpstrj id mol type x y z ix iy iz
 
+unfix fShakeSPCE    # Disable SHAKE during minimization and pressure equilibr
+
 thermo_style    custom step temp pe etotal press vol epair ebond eangle edihed
 thermo          200  # time interval for printing out "thermo" data
 
@@ -86,15 +88,10 @@ fix Ffreezestuff Cgraphene rigid single force * off off off torque * off off off
 #  so this may no longer be true.  Please use this example with caution.)
 
 
-
 # Thermostat+Barostat
 # Set temp=300K, pressure=200bar, and equilibrate volume only in the z direction
 
 fix fxMoveStuff mobile npt temp 300 300 100 z 200 200 1000.0 dilate mobile drag 2.0
-
-include      "system.in.constraints" # apply constraints (after minimization
-                                     # and after all integration fixes)
-
 
 #  ----------------------------------------
 
@@ -112,31 +109,28 @@ reset_timestep 0
 
 timestep 0.25
 
-run    100000
+run    20000
 
 timestep 0.5
 
-run    200000
+run    50000
 
 
-# Hopefully the barostat is no longer oscillating. Increase the timestep and
-# also get get rid of "drag 2.0". (A non-zero drag parameter will result in
-# unrealistic fluctuations of volume under NPT conditions.)
-# drag 2.0  <-- commenting out
-#
-# Set temp=300K, pressure=0bar, and equilibrate volume only in the z direction
+# Hopefully the barostat is no longer oscillating.  Then we can try using fix
+# npt again and omit the "drag 2.0" argument. (A non-zero drag parameter will
+# result in unrealistic fluctuations of volume under NPT conditions.)
+# First, undo the previous "fix npt"
 
 unfix fxMoveStuff
-unfix fRattleSPCE  # (must undo all the fixes from "system.in.constraints")
+
+# Then re-apply "fix npt"
+# Set temp=300K, pressure=0bar, and equilibrate volume only in the z direction
 fix fxMoveStuff mobile npt temp 300 300 100 z 0 0 1000.0 dilate mobile
 fix_modify fxMoveStuff temp tempMobile
-include      "system.in.constraints" # apply constraints AFTER integration fixes
-                                     # (such as "fix npt" used above)
-                                     # https://lammps.sandia.gov/doc/fix_shake.html
 
-timestep 0.5
+timestep 0.5  # (Perhaps we can increase this timestep to 1.0?  I'm not sure.)
 
-run    1000000
+run    5000000
 
 write_data  system_after_npt.data
 

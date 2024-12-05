@@ -47,9 +47,6 @@ thermo          500  # time interval for printing out "thermo" data
 # Integrate the equations of motion:
 fix fxMoveStuff mobile nvt temp 300.0 300.0 100.0
 
-include      "system.in.constraints" # apply constraints (after minimization
-                                     # and after all integration fixes)
-
 # The next two lines recalculate the temperature 
 # using only the mobile degrees of freedom:
 

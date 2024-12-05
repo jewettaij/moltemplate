@@ -49,27 +49,26 @@ TIP3P_1983_oplsaa inherits OPLSAA {
     $bond:oh2  $atom:o $atom:h2
   }
 
-  write_once("In Constraints") {
+  write_once("In Settings") {
 
     # Define a group for the tip3p water molecules. (We will use "tip3p" below.)
     group tip3p type  @atom:63  @atom:64
 
     # Optional: Constrain the angles and distances.
     #           (Most implementations use this, but it is optional.)
-    # (See "fix rattle" (See https://lammps.sandia.gov/doc/fix_shake.html)
-    fix fRattleTIP3P tip3p rattle 0.0001 10 100 b @bond:031_032 a @angle:032_031_032
+    # (See "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
+    fix fShakeTIP3P tip3p shake 0.0001 10 100 b @bond:tipO_tipH a @angle:tipH_tipO_tipH
 
-    # Note:    Bonds of type "@bond:031_032"
-    #  and    Angles of type "@angle:032_031_032"
+    # Note:    Bonds of type "@bond:tipO_tipH"
+    #  and    Angles of type "@angle:tipH_tipO_tipH"
     # ...are defined in the "oplsaa.lt" file. These codes are used to lookup the
     # OH bond length (0.9572 Angstroms) and HOH angle (104.52°) used in
     # the TIP3P water model.
 
 
-
-    # Remember to put this command in your LAMMPS input script:
-    #  include system.in.constraints
-    # ...AFTER minimization and after all integration fixes.
+    # It's a good idea to put this command in your LAMMPS input scripts:
+    #  unfix fShakeTIP3P   # <-- this disables fix shake
+    # ...before minimization and pressure equilibration.  (compatibility issues)
   }
 
 } # "TIP3P_1983_oplsaa" water molecule type

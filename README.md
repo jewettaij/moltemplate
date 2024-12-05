@@ -23,6 +23,7 @@ is a *general* cross-platform text-based molecule builder for
 Moltemplate was intended for building custom coarse-grained molecular models,
 but it can be used to prepare realistic all-atom simulations as well.
 It currently supports the
+[**ATB**](https://atb.uq.edu.au) molecule database, the
 [**OPLSAA**(2023)](./examples/all_atom/force_field_OPLSAA),
 [**OPLSUA**(2008)](./examples/all_atom/legacy_force_field_examples/force_field_OPLSUA_united_atom),
 [**LOPLS**(2015)](./examples/all_atom/force_field_OPLSAA/hexadecane),
@@ -30,34 +31,30 @@ It currently supports the
 [**DREIDING**](./examples/all_atom/force_field_DREIDING),
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
 [**TraPPE**(1998)](./examples/coarse_grained/solvent_models/manybodywaterMW+hydrocarbonsTraPPE)
+[**EFF**](./examples/misc_examples/explicit_electrons/eff_CH4),
 force fields,
-the
-[**ATB**](https://atb.uq.edu.au) molecule database,
 and the
 [**MOLC**](https://pubs.rsc.org/en/content/articlelanding/2019/cp/c9cp04120f),
 [**mW**](https://doi.org/10.1021/jp805227c),
 [**ELBA**(water)](./examples/coarse_grained/solvent_models/ELBAwater%2Bmethanol),
-[**oxDNA2**](https://dna.physics.ox.ac.uk/index.php/DNA_model_introduction),
 and
-[**EFF**](./examples/misc_examples/explicit_electrons/eff_CH4)
+[**oxDNA2**](https://dna.physics.ox.ac.uk/index.php/DNA_model_introduction),
 molecular models (and others).
 (New force fields and examples are added continually by users.)
 Moltemplate is inter-operable with
 [**ATB**](https://atb.uq.edu.au),
-[**VMD/topotools**](https://www.ks.uiuc.edu/Research/vmd),
-[**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
-[**RED-server**](https://upjv.q4md-forcefieldtools.org),
-[**LigParGen**](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190),
-[**AmberTools**](https://ambermd.org/AmberTools.php),
 [**Open Babel**](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html),
+[**AmberTools**](https://ambermd.org/AmberTools.php),
+[**LigParGen**](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=191),
+[**RED-server**](https://upjv.q4md-forcefieldtools.org),
+[**VMD**](https://www.ks.uiuc.edu/Research/vmd),
+[**topotools**](https://sites.google.com/site/akohlmey/software/topotools/tutorial-introduction),
+[**PACKMOL**](http://m3g.iqm.unicamp.br/packmol/home.shtml),
 [**EMC**](http://montecarlo.sourceforge.net/),
 [**CellPACK**](http://www.cellpack.org),
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
-and any other program that generates
-[**LAMMPS DATA**](https://docs.lammps.org/2001/data_format.html) (.lmpdat) files
-or
-[**MOL2**](http://chemyang.ccnu.edu.cn/ccb/server/AIMMS/mol2.pdf) files.
+and any other program that generates [**MOL2**](https://github.com/UnixJunkie/mol2-file-format-spec/blob/master/mol2.pdf) or [**LAMMPS DATA**](https://docs.lammps.org/2001/data_format.html) (.lmpdat) files *(by using the [mol22lt.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_mol22lt.md) and [ltemplify.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_ltemplify.md") file converters)*.
 
 
 This repository contains 3 folders:

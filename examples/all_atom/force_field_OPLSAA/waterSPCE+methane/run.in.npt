@@ -23,7 +23,8 @@ include      "system.in.charges"     # load the charge of each atom
 
 # -- minimization protocol --
 
-thermo        50
+unfix fShakeSPCE    # Disable SHAKE during minimization and pressure equilibr
+
 minimize 1.0e-4 1.0e-6 100000 400000
 
 # Optional: write the coordinates after minimization
@@ -36,11 +37,6 @@ write_data   "system_after_min.data"
 timestep     1.0
 dump         1 all custom 5000 traj_npt.lammpstrj id mol type x y z ix iy iz
 
-# COMMENTING OUT SHAKE/RATTLE CONSTRAINTS DURING PRESSURE EQUILIBRATION
-# (Pressure and SHAKE/RATTLE are currently not working well together (2024/11).
-#  Once the pressure has equilibrated, we will turn them on.  See "run.in.nvt")
-#include      "system.in.constraints" # apply constraints (after minimization but
-#                                     # before fixes that effect the box size)
 
 # Turn on the barostat and thermostat
 fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0

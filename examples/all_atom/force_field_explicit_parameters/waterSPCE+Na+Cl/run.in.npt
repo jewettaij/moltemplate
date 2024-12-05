@@ -21,20 +21,20 @@ include      "system.in.settings"    # load the force field parameters
 
 # -- minimization protocol --
 
+unfix fShakeSPCE    # Disable SHAKE during minimization and pressure equilibr
 
 # Note: The minimization step is not necessary in this example.  However
 #       in general, it's always a good idea to minimize the system beforehand.
 minimize 1.0e-3 1.0e-5 100000 400000
 
+
 # -- simulation protocol --
 
 
-timestep     1.0
+timestep     0.8
 dump         1 all custom 200 traj_npt.lammpstrj id mol type x y z ix iy iz
-fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
-include      "system.in.constraints" # apply constraints (after minimization
-                                     # and after all integration fixes)
+fix          fxnpt all npt temp 300.0 300.0 100.0 iso 1.0 1.0 1000.0 drag 1.0
 
 thermo       100
 
@@ -43,7 +43,7 @@ run          10000
 # Now that the system's temperature has become more equilibrated,
 # we can increase the timestep:
 
-timestep     2.0
-run          50000
+timestep     1.0   # (Note: You can increase this to 2.0 if SHAKE/RATTLE is on.)
+#run          50000
 
 write_data   system_after_npt.data
