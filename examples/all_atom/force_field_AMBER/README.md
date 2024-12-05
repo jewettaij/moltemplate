@@ -26,8 +26,8 @@ Instead, I suggest using AmberTools to create MOL2 and FRCMOD files
 that define your molecule.  These files MOL2 and FRCMOD files will
 hopefully contain reasonable charges and @atom types for your molecule
 *(although you should still check them before use)*.
-Then convert those files into moltemplate format
-automatically using *amber2lt.py* and *mol22lt.py*.
+Then convert those files into moltemplate format automatically using
+[amber2lt.py](../../../doc/doc_amber2lt.md) and [mol22lt.py](../../../doc/doc_mol22lt.md).
 
 For example, suppose you ran AmberTools and it created a file named "benzene.mol2" and "benzene.frcmod" (and some other files).  You can use *amber2lt.py* and *mol22lt.py* to create all of the moltemplate files you need this way:
 
