@@ -271,7 +271,7 @@ Make sure they remain uniquely named, even after changing capitalization.)*
 
 ## Working with multiple chains
 
-As a workaround, if your MOL2 file contains multiple chains,
+If your MOL2 file contains multiple chains,
 split it into multiple MOL2 files (one per chain).
 Then convert each file separately.
 Afterwards, if you want to define a large molecular complex
@@ -281,8 +281,8 @@ multiple chain subunits.  For example, suppose we have a .mol2 file containing
 two chains. If we split that file into two files ("chainA.mol2", "chainB.mol2"),
 we can create two .lt files, one for each chain:
 ```
-mol22lt.py --in chainA.mol2 --out chainA.lt --name ChainA --ff GAFF2 --ff-file "gaff2.lt
-mol22lt.py --in chainB.mol2 --out chainB.lt --name ChainB --ff GAFF2 --ff-file "gaff2.lt
+mol22lt.py --in chainA.mol2 --out chainA.lt --name ChainA --ff GAFF2 --ff-file "gaff2.lt"
+mol22lt.py --in chainB.mol2 --out chainB.lt --name ChainB --ff GAFF2 --ff-file "gaff2.lt"
 ```
 Then we can then can manually create a new .lt file
 (eg. "protein_with_2_chains.lt")

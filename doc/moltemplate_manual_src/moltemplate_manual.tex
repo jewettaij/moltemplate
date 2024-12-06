@@ -1477,7 +1477,7 @@ Coordinates of a single water molecule in our example.
    %combining this LT file with other LT files.)
 In addition to coordinates, topology and force-field settings, 
 ``LT'' files can optionally include any other kind of LAMMPS settings
-including RATTLE constraints, k-space settings, and even group definitions.
+including RATTLE or SHAKE constraints, k-space settings, and even group definitions.
   %\pagebreak
 \begin{verbatim}
 # (NOTE: Text following '#' characters are comments)
@@ -1544,8 +1544,8 @@ SPCE {
 
     # Group definitions and constraints can also go in the "In Settings" section
     group spce type  @atom:O  @atom:H
-    fix fRATTLE spce rattle 0.0001 10 100 b @bond:OH a @angle:HOH
-    # (lammps quirk: Remember to "unfix fRATTLE" during minimization.)
+    fix fSHAKE spce shake 0.0001 10 100 b @bond:OH a @angle:HOH
+    # (lammps quirk: Remember to "unfix fSHAKE" during minimization.)
   }
 
   # LAMMPS supports a large number of force-field styles. We must select
@@ -3960,8 +3960,8 @@ SPCE {
   # miscellaneous
   write_once("In Settings") {
     group spce type  @atom:O  @atom:H
-    fix fRATTLE spce rattle 0.0001 10 100 b @bond:OH a @angle:HOH
-    # (Remember to "unfix" fRATTLE during minimization.)
+    fix fSHAKE spce shake 0.0001 10 100 b @bond:OH a @angle:HOH
+    # (Remember to "unfix" fSHAKE during minimization.)
   }
 
 } # SPCE
