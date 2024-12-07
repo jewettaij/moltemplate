@@ -1,0 +1,15 @@
+The protocols used to equilibrate pressure and temperature in "run.in.npt"
+as well as "run.in.nvt" have not been carefully tested.  You will have to
+run a short simulation to confirm that the system has the correct energy
+and volume for a system under these conditions.  (It might help to create a
+version of TIP5P water with very stiff springs which does not rely on
+"fix rigid" which can be simulated together with ethanol using a suitably
+small timestep.  I apologize that we have not done this step for you already.)
+
+Also: These protocols have also not been tested for efficiency.  Specifically,
+the flexible ethanol and rigid TIP5P molecules may diffuse at vastly different
+rates due to the fact that different computer code is used to integrate their
+equations of motion.
+
+Please send corrections or suggestions to jewett.aij -at- gmail dot com
+(and/or submit a pull-request).

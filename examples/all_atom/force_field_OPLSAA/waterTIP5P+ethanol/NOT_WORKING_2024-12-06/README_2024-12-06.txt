@@ -1,0 +1,14 @@
+There is something wrong with the "run.in.nvt" file in this example,
+so I moved it into this directory.
+
+- Today, when I ran a simulation using the (NVT) protocol in the "run.in.nvt" file (contained in this directory), the water molecules hardly move.
+
+- But when I ran the same simulation using the constant-pressure protocol (run.in.npt), the water molecules are much more mobile.
+
+I don't know why the NVT simulations are no longer working.  This protocol used to work several years ago.  (But I'm not surprised that it broke.  The fixes that implement constraints have changed several times over the years.)
+
+I don't have time to dig into why this is happening today.  If anyone figures
+out how to get this example working under NVT conditions, please contact me.
+
+-Andrew 2024-12-06
+

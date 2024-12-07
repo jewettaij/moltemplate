@@ -23,7 +23,7 @@ include      "system.in.charges"     # load the charge of each atom
 
 # -- minimization protocol --
 
-unfix fShakeSPCE    # Disable SHAKE during minimization and pressure equilibr
+unfix fShakeTIP3P    # Disable SHAKE during minimization and pressure equilibr
 
 minimize 1.0e-4 1.0e-6 100000 400000
 
@@ -35,7 +35,7 @@ write_data   "system_after_min.data"
 
 
 timestep     1.0
-dump         1 all custom 2000 traj_npt.lammpstrj id mol type x y z ix iy iz
+dump         1 all custom 5000 traj_npt.lammpstrj id mol type x y z ix iy iz
 
 
 # Turn on the barostat and thermostat

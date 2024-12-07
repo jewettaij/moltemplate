@@ -23,7 +23,7 @@
 
 import "oplsaa.lt"  # <-- defines OPLSAA, @atom:9991 and @atom:9990
 
-SPC_oplsaa inherits OPLSAA {
+SPC inherits OPLSAA {
 
   # Atom types from "oplsa.lt"
   # @atom:9991 <--> "spcO | SPC water O"
@@ -41,7 +41,6 @@ SPC_oplsaa inherits OPLSAA {
   }
 
   write_once("In Settings") {
-
     # Define a group for the spc water molecules. (We will use "spc" below.)
     group spc type  @atom:9991  @atom:9990
 
@@ -58,13 +57,6 @@ SPC_oplsaa inherits OPLSAA {
     # ...are defined in the "oplsaa.lt" file. These codes are used to lookup the
     # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPC water.
     # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
-
-    # ------- Remember to put this command in your LAMMPS input script! -------
-    #
-    #  include system.in.constraints
-    #
-    # ...AFTER minimization and after all integration fixes.
-    # -------------------------------------------------------------------------
   }
 
 } # end of definition of the "SPC" water molecule type

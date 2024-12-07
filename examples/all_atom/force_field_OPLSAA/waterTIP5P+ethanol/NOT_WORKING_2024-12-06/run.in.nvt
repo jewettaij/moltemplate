@@ -1,0 +1,55 @@
+# PREREQUISITES:
+#
+# 1)  You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#     (See README_setup.sh for details.)
+#
+# 2)  You must then run the minimization simulation beforehand using:
+#     lmp_mpi -i run.in.min    (assuming "lmp_mpi" is your lammps binary's name)
+#
+# 3)  You must then run the pressure equilibration  simulation beforehand using:
+#     lmp_mpi -i run.in.npt    (assuming "lmp_mpi" is your lammps binary's name)
+
+# ------------------------------- Initialization Section --------------------
+
+include         system.in.init
+
+# ------------------------------- Atom Definition Section -------------------
+
+#read_data       system.data            <-commenting out
+#read_data       system_after_min.data  <-commenting out
+read_data       system_after_npt.data
+
+# ------------------------------- Settings Section --------------------------
+
+include         system.in.settings     #(define force fields and constraints)
+
+# ------------------------------- Run Section -------------------------------
+
+# -- files containing trajectory data and other information --
+
+thermo_style    custom step temp pe etotal press vol epair ebond eangle edihed
+thermo_modify   norm yes
+thermo          100
+dump            1 all custom 100 traj_nvt.lammpstrj id mol type x y z ix iy iz
+
+# -- simulation protocol --
+
+velocity all create 298.0 12345   # choose the starting velocities randomly
+
+
+timestep  1.0
+
+
+group gRigid    union    gH2O gH2O
+group gFlexible subtract all gRigid
+
+fix fxRigid gH2O rigid/nve/small molecule
+fix fxFlexible gFlexible nve
+fix fxLanvegin all langevin 298 298 10000.0 48279
+# (Note: fix nvt probably works too, instead of fix nve + fix langevin)
+
+run		1000000
+
+write_data   system_after_npt.data
+

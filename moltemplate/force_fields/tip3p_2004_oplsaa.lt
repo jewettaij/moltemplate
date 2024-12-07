@@ -30,9 +30,14 @@
 # However that kind of information was omitted from this file.  Instead the
 # force field parameters and bond geometry are defined in the "oplsaa.lt" file.
 
-TIP3P_2004 {
 
-  # Atom types from "oplsaa2008.lt"
+
+import "oplsaa.lt"   # <-- defines @atom:9999 and @atom:9998
+
+
+TIP3P inherits OPLSAA {
+
+  # Atom types from "oplsaa.lt"
   # @atom:9999 <--> "TIP3P Water O"
   # @atom:9998 <--> "TIP3P Water H"
 
@@ -52,8 +57,8 @@ TIP3P_2004 {
   write_once("In Settings") {
     # Optional: Constrain the angles and distances.
     #           (Most implementations use this, but it is optional.)
-    # First, define a group for the tip3p water molecules:
-    group tip3p type  @atom:O  @atom:H
+    # First, define a group for the atoms in tip3p water molecules:
+    group tip3p  type  @atom:9999 @atom:9998
 
     # Then use "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
     fix fShakeTIP3P tip3p shake 0.0001 10 100 b @bond:tipO_tipH a @angle:tipH_tipO_tipH
@@ -80,5 +85,5 @@ TIP3P_2004 {
     #pair_modify  mix arithmetic  # LEAVE THIS UNSPECIFIED!
   }
 
-} # "TIP3P_2004" water molecule type
+} # "TIP3P" water molecule type
 

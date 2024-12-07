@@ -1,0 +1,43 @@
+# PREREQUISITES:
+#
+#     You must use moltemplate.sh to create 3 files:
+#        system.data  system.in.init  system.in.settings
+#     (See README_setup.sh for details.)
+
+# ------------------------------- Initialization Section --------------------
+
+include         system.in.init
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       system.data
+
+# ------------------------------- Settings Section --------------------------
+
+include         system.in.settings
+
+# ------------------------------- Run Section -------------------------------
+
+
+# -- files containing trajectory data and other information --
+
+thermo_style    custom step temp pe etotal epair ebond eangle edihed
+thermo_modify   norm yes
+thermo          100
+dump            1 all custom 1000 traj_min.lammpstrj id mol type x y z ix iy iz
+
+# -- minimization protocol --
+
+timestep 0.05
+
+group gRigid    union    gH2O gH2O
+group gFlexible subtract all gRigid
+
+fix fxRigid gH2O rigid/nve/small molecule
+fix fxFlexible gFlexible nve/limit 0.0001
+fix fxLanvegin all langevin 298 0 10.0 48279
+
+run 10000
+
+
+write_data   system_after_min.data

@@ -1,7 +1,6 @@
 import "ethylene.lt"  # <- defines the "Ethylene" molecule type.
 import "benzene.lt"  # <- defines the "Benzene" molecule type.
 
-
 # Periodic boundary conditions:
 write_once("Data Boundary") {
    0.0  48.00  xlo xhi

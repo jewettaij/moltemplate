@@ -1,5 +1,5 @@
+import "tip3p_2004_oplsaa.lt" # <- defines the "SPCE" (water) molecule type.
 import "methane.lt"     # <- defines the "Methane" molecule type (uses OPLSAA)
-import "spce_oplsaa.lt" # <- defines the "SPCE" (water) molecule type.
 
 # Periodic boundary conditions:
 write_once("Data Boundary") {
@@ -11,9 +11,9 @@ write_once("Data Boundary") {
 # The next command generates a (rather dense) cubic lattice with
 # spacing 3.45 Angstroms. (The pressure must be equilibrated later.)
 
-waters = new SPCE [12].move(0.00, 0.00, 3.45) 
-                  [12].move(0.00, 3.45, 0.00) 
-                  [12].move(3.45, 0.00, 0.00)
+waters = new TIP3P [12].move(0.00, 0.00, 3.45) 
+                   [12].move(0.00, 3.45, 0.00) 
+                   [12].move(3.45, 0.00, 0.00)
 
 # Now add methane molecules:
 

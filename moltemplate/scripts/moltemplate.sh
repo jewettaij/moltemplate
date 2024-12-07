@@ -511,7 +511,7 @@ while [ "$i" -lt "$ARGC" ]; do
         unset REMOVE_DUPLICATE_IMPROPERS
     elif [ "$A" = "-report-duplicates" ]; then
         REPORT_DUPLICATES="true"
-        if [ "$i+1" -eq "$ARGC" ]; then
+        if [ "$((i+1))" -eq "$ARGC" ]; then
             echo "ERROR: Expected 2 string arguments following the -report-duplicates argument" >&2
             exit 7
         fi
