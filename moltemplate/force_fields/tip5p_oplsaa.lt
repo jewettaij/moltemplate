@@ -1,0 +1,60 @@
+# file "tip5p_oplsaa.lt"
+#
+#    h1     h2
+#      \   /
+#        o
+#       / \
+#    LP1   LP2
+#
+# This file defines the 5-site water model TIP5P
+# You must used a rigid-body-integrator like "fix rigid" to simulate this 
+# molecule to prevent its shape from becoming deformed during the simulation.
+# (No angle, dihedral, or improper interactions have been defined.)
+#
+# Note: This file was intended for use in a simulation that uses the OPLSAA
+# force field.  This is different from the other water models included with
+# moltemplate (eg. "tip3p_1983.lt", "spce.lt").  Those files explicitly include
+# the the force-field parameters and bond geometry in the file itself.  This
+# means you can use those files in simulations that use any force field.
+# However that kind of information was omitted from this file.  Instead the
+# force field parameters and bond geometry are defined in the "oplsaa.lt" file.
+#
+# Credit: This file was contributed by Cheng Chen (Queen Mary University)
+
+
+import "oplsaa.lt"  #<-- defines OPLSAA and @atom:9994, @atom:9993, @atom:9992
+
+TIP5P inherits OPLSAA {
+
+  # Atom types from "oplsaa.lt"
+  # @atom:9994  <-->  tipO | TIP5P water O
+  # @atom:9993  <-->  tipH | TIP5P water H
+  # @atom:9992  <-->  tipL | TIP5P water L
+
+  # Atom-ID Mol-ID Atom-Type     charge      X      Y       Z
+  write("Data Atoms") {
+    $atom:o   $mol:w @atom:9994  0.0000    0.00000 0.00000 0.00000
+    $atom:h1  $mol:w @atom:9993  0.2410    0.00000 0.81649 0.57736
+    $atom:h2  $mol:w @atom:9993  0.2410    0.00000 -0.81649 0.57736
+    $atom:LP1 $mol:w @atom:9992 -0.2410    0.57154 0.00000 -0.404151
+    $atom:LP2 $mol:w @atom:9992 -0.2410   -0.57154 0.00000 -0.404151
+  }
+
+  write("Data Bond List") {
+    $bond:oh1 $atom:o $atom:h1
+    $bond:oh2 $atom:o $atom:h2
+    $bond:oLP1 $atom:o $atom:LP1
+    $bond:oLP2 $atom:o $atom:LP2
+  }
+
+  write_once("In Settings") {
+    # Define a group.  We will apply "fix rigid" to the atoms 
+    # in this group to preserve the shape of each molecule.
+    group gH2O type  @atom:9994 @atom:9993 @atom:9992
+    # explanation:  http://lammps.sandia.gov/doc/group.html
+  }
+
+} # end of definition of "TIP5P" water molecule type
+
+
+

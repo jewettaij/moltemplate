@@ -1,4 +1,6 @@
 #########################################################
+# This file defines the 1983 version of the TIP3P water model.
+# WARNING: PLEASE USE THE 2004 VERSION OF TIP3P INSTEAD (if possible).
 # WARNING: THIS FILE HAS NOT BEEN TESTED!
 # (If you use this file in a simulation, please email me to let me know
 #  if it worked.  -Andrew 2019-10-16,   (jewett dot aij at gmail dot com))
@@ -17,59 +19,95 @@
 #        o
 #
 # This is the version of "tip3p_1983.lt" suitable for use in a simulation
-# using the OPLSAA force field (as implemented in the "oplsaa.lt" file).
+# using the OPLSAA force field.
+#
 # For model details, see:
 # Jorgensen, Chandrasekhar, Madura, Impey, Klein, J Chem Phys, 79, 926 (1983)
 #
-# Note: This file was intended for use in a simulation that uses the OPLSAA
-# force field.  This is different from the other water models included with
-# moltemplate (eg. "tip3p_1983.lt", "spce.lt").  Those files explicitly include
-# the the force-field parameters and bond geometry in the file itself.  This
-# makes it easier to use those files in simulations that use other force fields.
-# However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa.lt" file.
+# NOTE:This file does NOT use any of the official OPLS atom types in "oplsaa.lt"
+# The TIP3P atom types in that file are for the 2004 version of TIP3P (not 1983)
+# Consequently, I redefined the atom types in this file.
 
-
-import "oplsaa.lt"  # <-- defines OPLSAA, @atom:63 and @atom:64
-
-TIP3P_1983_oplsaa inherits OPLSAA {
-
-  # Atom types from "oplsa.lt"
-  # @atom:63 <--> "TIP3P Water O"
-  # @atom:64 <--> "TIP3P Water H"
+TIP3P_1983 {
 
   write("Data Atoms") {
-    $atom:o  $mol:w @atom:63 -0.834   0.0000000   0.00000 0.000000
-    $atom:h1 $mol:w @atom:64  0.417   0.756950327 0.00000 0.5858822766
-    $atom:h2 $mol:w @atom:64  0.417  -0.756950327 0.00000 0.5858822766
+    $atom:o   $mol:w  @atom:O -0.834   0.0000000   0.00000 0.000000
+    $atom:h1  $mol:w  @atom:H  0.417   0.756950327 0.00000 0.5858822766
+    $atom:h2  $mol:w  @atom:H  0.417  -0.756950327 0.00000 0.5858822766
   }
 
-  write("Data Bond List") {
-    $bond:oh1  $atom:o $atom:h1
-    $bond:oh2  $atom:o $atom:h2
+  write("Data Bonds") {
+    $bond:oh1 @bond:OH $atom:o $atom:h1
+    $bond:oh2 @bond:OH $atom:o $atom:h2
+  }
+
+  write("Data Angles") {
+    $angle:hoh @angle:HOH $atom:h1 $atom:o $atom:h2
   }
 
   write_once("In Settings") {
+    bond_coeff   @bond:OH        450.0  0.9572
+    angle_coeff  @angle:HOH      55.0   104.52
+    # Note: Since we are using SHAKE constraints, the bond and angle strength
+    # parameters ("450.0", "55.0") do not matter.  But the equilibrium bond
+    # length ("0.9572") and equilibrium angle ("104.52") does matter.  LAMMPS
+    # obtains these numbers from the bond_coeff and angle_coeff commands.
+
+    #########################################################################
+    ####  There are two choices for for the O-O interactions
+    #########################################################################
+    ####  O-O nonbonded interactions
+
+    #   For the 1983 Jorgensen version of TIP3P use:
+    pair_coeff  @atom:O  @atom:O   0.1521 3.1507
+
+    #   For the 2004 Price & Brooks version of TIP3P use:
+    #pair_coeff  @atom:O  @atom:O   0.102 3.188
+
+    #########################################################################
+    ####  There are three choices for for the O-H and H-H interactions
+    #########################################################################
+    #### 1) The original Jorgensen 1983 and 2004 Price & Brooks models have no
+    #     mixed OH or HH interactions. For this behavior, uncomment these lines:
+    # pair_coeff  @atom:H  @atom:H   0.00 0.4000
+    # pair_coeff  @atom:O  @atom:H   0.00 1.7753
+    #########################################################################
+    #### 2) CHARMM uses an arithmetic mixing-rule for the O-H sigma parameter
+    #pair_coeff @atom:H  @atom:H   0.0460 0.4000
+    #pair_coeff @atom:O  @atom:H   0.0836 1.7753#arithmetic
+    #########################################################################
+    #### 3) OPLS-AA uses a geometric mixing-fule for the O-H sigma parameter,
+    ####    If you want to use this, uncomment the following two lines:
+    pair_coeff @atom:H  @atom:H   0.0460 0.4000
+    pair_coeff @atom:O  @atom:H   0.0836 1.1226 #geometric
+    #########################################################################
 
     # Define a group for the tip3p water molecules. (We will use "tip3p" below.)
-    group tip3p type  @atom:63  @atom:64
+    group tip3p type  @atom:O  @atom:H
 
     # Optional: Constrain the angles and distances.
     #           (Most implementations use this, but it is optional.)
     # (See "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
-    fix fShakeTIP3P tip3p shake 0.0001 10 100 b @bond:tipO_tipH a @angle:tipH_tipO_tipH
-
-    # Note:    Bonds of type "@bond:tipO_tipH"
-    #  and    Angles of type "@angle:tipH_tipO_tipH"
-    # ...are defined in the "oplsaa.lt" file. These codes are used to lookup the
-    # OH bond length (0.9572 Angstroms) and HOH angle (104.52°) used in
-    # the TIP3P water model.
-
+    fix fShakeTIP3P tip3p shake 0.0001 10 100 b @bond:OH a @angle:HOH
 
     # It's a good idea to put this command in your LAMMPS input scripts:
     #  unfix fShakeTIP3P   # <-- this disables fix shake
     # ...before minimization and pressure equilibration.  (compatibility issues)
   }
 
-} # "TIP3P_1983_oplsaa" water molecule type
+  write_once("In Init") {
+    # -- Default styles (for solo "TIP3P_1983" water) --
+    units        real
+    atom_style   full
+
+    bond_style   harmonic
+    angle_style  harmonic
+
+    # COMMENTING OUT: LEAVE THE pair_style UNSPECIFIED
+    # pair_style   lj/charmm/coul/charmm 7.5 8.0 10.0 10.5
+    # pair_style   lj/charmm/coul/long 8.0 10.0 10.0
+    # pair_modify  mix arithmetic  # LEAVE THIS UNSPECIFIED
+  }
+
+} # "TIP3P_1983" water molecule type
 

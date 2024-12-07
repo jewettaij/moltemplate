@@ -265,19 +265,27 @@ def main(argv):
     wat_atoms: list[Atom] = []
 
     # TIP3P water
-    # the same bonded interactions are good for TIP4P and TIP5P
-    # (LAMMPS proposes these k values if one want to go with a flexible TIP3P model;
-    #  note that they are different from the TIP3F, TIP4F and TIP5F parameters in the old oplsaa.lt)
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-0, atomic_number=16, type_str="tipO", charge="-0.830", sigma="3.188", epsilon="0.102", comment="TIP3P/F water O, long-range Coulombic solver"))
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-1, atomic_number=1, type_str="tipH", charge="+0.415", sigma="0.0", epsilon="0.0", comment="TIP3P/F water H, long-range Coulombic solver"))
+    # Note: TIP3P shares the same bonded interactions with TIP4P, TIP5P, etc...
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-0, atomic_number=8, type_str="tipO", charge="-0.834", sigma="3.188", epsilon="0.102", comment="TIP3P water O, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-1, atomic_number=1, type_str="tipH", charge="+0.417", sigma="0.0", epsilon="0.0", comment="TIP3P water H, long-range Coulombic solver"))
+    # (LAMMPS proposes using these k values if you want to use a flexible TIP3P model.)
     bonds.append(Bond(types=["tipO", "tipH"], k="450.00", eq="0.9572", comment="TIP3/4/5P/F O-H"))
     angles.append(Angle(types=["tipH", "tipO", "tipH"], k="55.00", eq="104.52", comment="TIP3/4/5P/F H-O-H"))
+
+    #############################################
+    # COMMENTING OUT: I can't figure out which water model this refers to: TIP3P/F
+    # TIP3P/F water   <--Is it TIP3P/Fs?  (If so, the charges are wrong.)
+    # wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-0, atomic_number=8, type_str="tipO", charge="-0.830", sigma="3.188", epsilon="0.102", comment="TIP3P/F water O, long-range Coulombic solver"))
+    # wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-1, atomic_number=1, type_str="tipH", charge="+0.415", sigma="0.0", epsilon="0.0", comment="TIP3P/F water H, long-range Coulombic solver"))
+    # bonds.append(Bond(types=["tipO", "tipH"], k="450.00", eq="0.9572", comment="TIP3/4/5P/F O-H"))
+    # angles.append(Angle(types=["tipH", "tipO", "tipH"], k="55.00", eq="104.52", comment="TIP3/4/5P/F H-O-H"))
+    #############################################
 
     # TIP4P water
     # user should change the pair_style to the one that treat internally the O-M interaction,
     #   and so the O-M distance (0.1250) should be added there and not as a bond...
     # also, this should not be used without fix shake, so no flexible variant
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-2, atomic_number=16, type_str="tipO", charge="0.00", sigma="3.16435", epsilon="0.16275", comment="TIP4P water O, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-2, atomic_number=8, type_str="tipO", charge="0.00", sigma="3.16435", epsilon="0.16275", comment="TIP4P water O, long-range Coulombic solver"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-3, atomic_number=1, type_str="tipH", charge="+0.5242", sigma="0.0", epsilon="0.0", comment="TIP4P water H, long-range Coulombic solver"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-4, atomic_number=0, type_str="tipM", charge="-1.0484", sigma="1.0", epsilon="0.0", comment="TIP4P water M, long-range Coulombic solver"))
     # bonds.append(Bond(types=["tipO", "tipM"], k="900.00", eq="0.15", comment="TIP4P O-M"))
@@ -287,7 +295,7 @@ def main(argv):
     # user should be running this with fix rigid, so no flexible variant is provided;
     #   also, bonds shouldn't matter for this model,
     #   as it is kept rigid but "fix rigid" and not by bonded interactions
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-5, atomic_number=16, type_str="tipO", charge="0.00", sigma="3.0970", epsilon="0.1780", comment="TIP5P water O, long-range Coulombic solver"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-5, atomic_number=8, type_str="tipO", charge="0.00", sigma="3.0970", epsilon="0.1780", comment="TIP5P water O, long-range Coulombic solver"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-6, atomic_number=1, type_str="tipH", charge="+0.241", sigma="1.0", epsilon="0.0", comment="TIP5P water H, long-range Coulombic solver"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-7, atomic_number=0, type_str="tipL", charge="-0.241", sigma="1.0", epsilon="0.0", comment="TIP5P water L, long-range Coulombic solver"))
     # bonds.append(Bond(types=["tipO", "tipL"], k="900.00", eq="0.70", comment="TIP5P O-L"))
@@ -296,8 +304,8 @@ def main(argv):
 
     # SPC and SPC/E (the same, just changes the charges on H and O...)
     # should be used with fix shake, LAMMPS doesn't mention a flexible variant
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-8, atomic_number=16, type_str="spcO", charge="-0.820", sigma="3.166", epsilon="0.1553", comment="SPC water O"))
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-10, atomic_number=16, type_str="spcO", charge="-0.8476", sigma="3.166", epsilon="0.1553", comment="SPC/E water O"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-8, atomic_number=8, type_str="spcO", charge="-0.820", sigma="3.166", epsilon="0.1553", comment="SPC water O"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-10, atomic_number=8, type_str="spcO", charge="-0.8476", sigma="3.166", epsilon="0.1553", comment="SPC/E water O"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-9, atomic_number=1, type_str="spcH", charge="+0.410", sigma="0.0", epsilon="0.0", comment="SPC water H"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-11, atomic_number=1, type_str="spcH", charge="+0.4238", sigma="0.0", epsilon="0.0", comment="SPC/E water H"))
     bonds.append(Bond(types=["spcO", "spcH"], k="450.00", eq="1.000", comment="SPC-SPC/E O-H"))
@@ -311,7 +319,7 @@ def main(argv):
     HALFRMIN2SIGMA = 2/(2**(1/6))
     sigma_opc_o = f"{1.777167268 * HALFRMIN2SIGMA:10.6f}".strip()
     sigma_opc_ep = f"{1 * HALFRMIN2SIGMA:10.6f}".strip()
-    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-12, atomic_number=16, type_str="opcO", charge="0.00", sigma=sigma_opc_o, epsilon="0.21280", comment="OPC water O"))
+    wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-12, atomic_number=8, type_str="opcO", charge="0.00", sigma=sigma_opc_o, epsilon="0.21280", comment="OPC water O"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-13, atomic_number=1, type_str="opcH", charge="+0.679142", sigma="0.0", epsilon="0.0", comment="OPC water H"))
     wat_atoms.append(Atom(type_id=STARTING_WAT_TYPE-14, atomic_number=0, type_str="opcE", charge="-1.358284", sigma=sigma_opc_ep, epsilon="0.0", comment="OPC water E"))
     bonds.append(Bond(types=["opcO", "opcH"], k="450.00", eq="0.8724", comment="OPC O-H"))

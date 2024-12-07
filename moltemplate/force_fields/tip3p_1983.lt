@@ -1,4 +1,6 @@
 #############################################################
+# This file defines the 1983 version of the TIP3P water model.
+# WARNING: PLEASE USE THE 2004 VERSION OF TIP3P INSTEAD (if possible).
 # WARNING: THIS FILE HAS NOT BEEN TESTED!
 # (If you use this file in a simulation, please email me to let me know
 #  if it worked.  -Andrew 2014-5,   (jewett dot aij at gmail dot com))

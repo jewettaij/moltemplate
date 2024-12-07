@@ -1077,19 +1077,19 @@ OPLSAA {
     set type @atom:1270 charge      0.080 # C  - CY   | CHC%CH ethynylcyclopropane OPLS-2020
     set type @atom:1271 charge     -0.140 # C  - CZ   | ethynylcyclopropane
     #                                                                                                   
-    set type @atom:9999 charge     -0.830 # S  - tipO | TIP3P/F water O, long-range Coulombic solver
-    set type @atom:9998 charge     +0.415 # H  - tipH | TIP3P/F water H, long-range Coulombic solver
-    set type @atom:9997 charge       0.00 # S  - tipO | TIP4P water O, long-range Coulombic solver
+    set type @atom:9999 charge     -0.834 # O  - tipO | TIP3P water O, long-range Coulombic solver
+    set type @atom:9998 charge     +0.417 # H  - tipH | TIP3P water H, long-range Coulombic solver
+    set type @atom:9997 charge       0.00 # O  - tipO | TIP4P water O, long-range Coulombic solver
     set type @atom:9996 charge    +0.5242 # H  - tipH | TIP4P water H, long-range Coulombic solver
     set type @atom:9995 charge    -1.0484 # XX - tipM | TIP4P water M, long-range Coulombic solver
-    set type @atom:9994 charge       0.00 # S  - tipO | TIP5P water O, long-range Coulombic solver
+    set type @atom:9994 charge       0.00 # O  - tipO | TIP5P water O, long-range Coulombic solver
     set type @atom:9993 charge     +0.241 # H  - tipH | TIP5P water H, long-range Coulombic solver
     set type @atom:9992 charge     -0.241 # XX - tipL | TIP5P water L, long-range Coulombic solver
-    set type @atom:9991 charge     -0.820 # S  - spcO | SPC water O
-    set type @atom:9989 charge    -0.8476 # S  - spcO | SPC/E water O
+    set type @atom:9991 charge     -0.820 # O  - spcO | SPC water O
+    set type @atom:9989 charge    -0.8476 # O  - spcO | SPC/E water O
     set type @atom:9990 charge     +0.410 # H  - spcH | SPC water H
     set type @atom:9988 charge    +0.4238 # H  - spcH | SPC/E water H
-    set type @atom:9987 charge       0.00 # S  - opcO | OPC water O
+    set type @atom:9987 charge       0.00 # O  - opcO | OPC water O
     set type @atom:9986 charge  +0.679142 # H  - opcH | OPC water H
     set type @atom:9985 charge  -1.358284 # XX - opcE | OPC water E
   } # (end of atom partial charges)
@@ -2071,19 +2071,19 @@ OPLSAA {
     @atom:1269 12.011
     @atom:1270 12.011
     @atom:1271 12.011
-    @atom:9999 32.065
+    @atom:9999 15.999
     @atom:9998 1.008
-    @atom:9997 32.065
+    @atom:9997 15.999
     @atom:9996 1.008
     @atom:9995 0.00000000000000001
-    @atom:9994 32.065
+    @atom:9994 15.999
     @atom:9993 1.008
     @atom:9992 0.00000000000000001
-    @atom:9991 32.065
-    @atom:9989 32.065
+    @atom:9991 15.999
+    @atom:9989 15.999
     @atom:9990 1.008
     @atom:9988 1.008
-    @atom:9987 32.065
+    @atom:9987 15.999
     @atom:9986 1.008
     @atom:9985 0.00000000000000001
   } # (end of atom masses)

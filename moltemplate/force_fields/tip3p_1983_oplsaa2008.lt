@@ -1,0 +1,75 @@
+#########################################################
+# WARNING: THIS FILE HAS NOT BEEN TESTED!
+# (If you use this file in a simulation, please email me to let me know
+#  if it worked.  -Andrew 2019-10-16,   (jewett dot aij at gmail dot com))
+#########################################################
+# There are two different versions of TIP3P:
+#
+# tip3p_1983.lt   # The implementation of TIP3P used by CHARMM (I think).
+# tip3p_2004.lt   # The newer Price & Brooks, J. Chem Phys 2004 model 
+#                 # which uses long-range coulombics
+#########################################################
+
+# file "tip3p_1983_oplsaa2008.lt" 
+#
+#    h1     h2
+#      \   /
+#        o
+#
+# This is the version of "tip3p_1983.lt" suitable for use in a simulation
+# using the OPLSAA force field (as implemented in the "oplsaa2008.lt" file).
+# For model details, see:
+# Jorgensen, Chandrasekhar, Madura, Impey, Klein, J Chem Phys, 79, 926 (1983)
+#
+# Note: This file was intended for use in a simulation that uses the OPLSAA
+# force field.  This is different from the other water models included with
+# moltemplate (eg. "tip3p_1983.lt", "spce.lt").  Those files explicitly include
+# the the force-field parameters and bond geometry in the file itself.  This
+# makes it easier to use those files in simulations that use other force fields.
+# However that kind of information was omitted from this file.  Instead the
+# force field parameters and bond geometry are defined in the "oplsaa2008.lt" file.
+
+
+import "oplsaa2008.lt"  # <-- defines OPLSAA, @atom:63 and @atom:64
+
+TIP3P_1983_oplsaa inherits OPLSAA {
+
+  # Atom types from "oplsaa2008.lt"
+  # @atom:63 <--> "TIP3P Water O"
+  # @atom:64 <--> "TIP3P Water H"
+
+  write("Data Atoms") {
+    $atom:o  $mol:w @atom:63 -0.834   0.0000000   0.00000 0.000000
+    $atom:h1 $mol:w @atom:64  0.417   0.756950327 0.00000 0.5858822766
+    $atom:h2 $mol:w @atom:64  0.417  -0.756950327 0.00000 0.5858822766
+  }
+
+  write("Data Bond List") {
+    $bond:oh1  $atom:o $atom:h1
+    $bond:oh2  $atom:o $atom:h2
+  }
+
+  write_once("In Settings") {
+
+    # Define a group for the tip3p water molecules. (We will use "tip3p" below.)
+    group tip3p type  @atom:63  @atom:64
+
+    # Optional: Constrain the angles and distances.
+    #           (Most implementations use this, but it is optional.)
+    # (See "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
+    fix fShakeTIP3P tip3p shake 0.0001 10 100 b @bond:031_032 a @angle:032_031_032
+
+    # Note:    Bonds of type "@bond:031_032"
+    #  and    Angles of type "@angle:032_031_032"
+    # ...are defined in the "oplsaa2008.lt" file. These codes are used to lookup the
+    # OH bond length (0.9572 Angstroms) and HOH angle (104.52°) used in
+    # the TIP3P water model.
+
+
+    # It's a good idea to put this command in your LAMMPS input scripts:
+    #  unfix fShakeTIP3P   # <-- this disables fix shake
+    # ...before minimization and pressure equilibration.  (compatibility issues)
+  }
+
+} # "TIP3P_1983_oplsaa" water molecule type
+
