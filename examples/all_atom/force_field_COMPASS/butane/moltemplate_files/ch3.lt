@@ -1,16 +1,14 @@
-# This file contains a definition for the "CH2" molecular subunit.
+# This file contains a definition for the "CH3" molecular subunit.
 # First, load the COMPASS force field parameters we will need:
 
 import "compass_published.lt" # <-- defines the "COMPASS" force field
 
 # (The "compass_published.lt" file is located in the "force_fields" 
 #  subdirectory distributed with moltemplate.)
-# Then define "CH2":
 
 
 
-
-CH2 inherits COMPASS {
+CH3 inherits COMPASS {
 
   # atom-id  mol-id   atom-type  charge   x             y                z
 
@@ -18,14 +16,16 @@ CH2 inherits COMPASS {
     $atom:c  $mol:... @atom:c4   0.0    0.000000     0.000000      0.000000
     $atom:h1 $mol:... @atom:h1   0.0    0.000000     0.631044      0.892431
     $atom:h2 $mol:... @atom:h1   0.0    0.000000     0.631044     -0.892431
+    $atom:h3 $mol:... @atom:h1   0.0   -0.892431    -0.631044      0.000000
   }
 
   write('Data Bond List') {
     $bond:ch1 $atom:c $atom:h1
     $bond:ch2 $atom:c $atom:h2
+    $bond:ch3 $atom:c $atom:h3
   }
 
-} # CH2
+} # CH3
 
 
 
@@ -44,8 +44,6 @@ CH2 inherits COMPASS {
 
 
 
-
-
 # Optional: Shift all the coordinates in the +Y direction by 0.4431163.
 #           This way, the carbon atom is no longer located at 0,0,0, but the
 #           axis of an alkane chain containing this monomer is at 0,0,0.
@@ -53,8 +51,7 @@ CH2 inherits COMPASS {
 #            If this is confusing, then simply add 0.4431163 to the Y 
 #            coordinates in the "Data Atoms" section above.)
 
-CH2.move(0,0.4431163,0)
-
+CH3.move(0,0.4431163,0)
 
 
 

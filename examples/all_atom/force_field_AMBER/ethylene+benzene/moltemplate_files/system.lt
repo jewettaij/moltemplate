@@ -1,5 +1,5 @@
 import "ethylene.lt"  # <- defines the "Ethylene" molecule type.
-import "benzene.lt"  # <- defines the "Benzene" molecule type.
+import "benzene.lt"   # <- defines the "Benzene" molecule type.
 
 
 # Periodic boundary conditions:
@@ -28,7 +28,13 @@ benzenes  = new Benzene[6].move(8.0, 0, 0)
 
 benzenes[*][*][*].move(4.0, 4.0, 4.0)
 
-# Note: There is also an example which shows how to generate the coordinates
-# using PACKMOL. (That allows us to omit the coordinates and .move() commands
-# and allows you to specify the number of molecules you want more precisely.
-# It is one of the OPLSAA examples.)
+
+
+# Note1: You can use the "new random" command to create mixtures of different
+#       molecule types containing an arbitrary number of molecules arranged on
+#       a periodic lattice.  (This works if all molecules have similar size.)
+#       See manual (ch8.9.1): https://moltemplate.org/doc/moltemplate_manual.pdf
+# Note2: More generally you can use PACKMOL to create mixtures of molecules.
+#       It allows us to omit the coordinates and .move() commands.  And you can
+#       specify the number of molecules you want more precisely.  See example:
+# https://github.com/jewettaij/moltemplate/tree/master/examples/all_atom/force_field_OPLSAA/ethylene+benzene_PACKMOL/

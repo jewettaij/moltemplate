@@ -10,11 +10,13 @@ import "loplsaa.lt"   # <-- defines the standard "OPLSAA" force field as well as
 		      #     To use the ordinary OPLSAA force field parameters,
 		      #     (instead of the Sui et al. parameters), change the
 		      #     atom types below from "@atom:54L","@atom:60LCH3" to
-		      #     "@atom:54" and "@atom:85"  (defined in "oplsaa.lt")
+		      #     "@atom:54" and "@atom:60"  (defined in "oplsaa.lt")
+
+# The "loplsaa.lt" and "oplsaa.lt" files are located at:
+# https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
+# If you want to customize these files, download them and copy them to this folder.
 
 
-
-# Then define "CH3":
 
 
 CH3 inherits OPLSAA {

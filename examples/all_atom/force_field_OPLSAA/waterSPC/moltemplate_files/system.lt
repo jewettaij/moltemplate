@@ -1,7 +1,9 @@
 import "spc_oplsaa.lt" # <- defines the "SPC" (water) molecule type
 
-# NOTE: The "spc_oplsaa.lt" file is located in the moltemplate/force_fields/
-#       folder (distributed with moltemplate).
+# Note: The "spc_oplsaa.lt" file is located at:
+# https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
+# (If you want to customize it, you can download it and copy it to this folder.)
+
 
 # Periodic boundary conditions:
 write_once("Data Boundary") {

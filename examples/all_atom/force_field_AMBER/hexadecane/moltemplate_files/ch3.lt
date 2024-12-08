@@ -1,47 +1,48 @@
-
 import "gaff.lt"    # <-- defines the "GAFF" force field
 
 
 # The "gaff.lt" file is usually located in $MOLTEMPLATE_PATH (and is 
 # distributed with moltemplate. See the "Installation" section in the manual.)
-# It contains definitions of the atoms "c3", "hc", as well as the force-field
-# parameters for bonded and non-bonded interactions between them 
+# It contains definitions of the "@atom:c3", "@atom:hc", atoms as well as the
+# force-field parameters for bonded and non-bonded interactions between them 
 # (and many other atoms).
-
+#
 # WARNING: CHARGES ARE INCORRECT
 # For this example, I manually looked up the charge of each atom using the 
 # OPLSAA parameters from the "oplsaa.prm" file distributed with TINKER:
 # http://dasher.wustl.edu/tinker/distribution/params/oplsaa.prm
 #  ----->  DO NOT DO THIS!  <-----
-# Normally simulations in AMBER are assigned charges using the
+# Normally simulations in AMBER are typically assigned charges using the
 # "HF/6-31G* RESP2" or "AM1-BCC3" methods using AmberTools.
 # Using the OPLSAA charges instead will NOT reproduce the behavior of AMBER.
 # For more details how to calculate charges correctly, see:
 # https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
 
 
-CH2 inherits GAFF {
+CH3 inherits GAFF {
 
-  # atom-id  mol-id atom-type  charge    x        y                z
+  # atom-id  mol-id atom-type  charge     x             y                z
 
   write("Data Atoms") {
-    $atom:c  $mol:... @atom:c3 -0.120  0.000  0.000             0.000
-    $atom:h1 $mol:... @atom:hc  0.060  0.000  0.63104384422426  0.892430762954
-    $atom:h2 $mol:... @atom:hc  0.060  0.000  0.63104384422426 -0.892430762954
+    $atom:c  $mol:... @atom:c3 -0.180   0.000000     0.000000          0.000000
+    $atom:h1 $mol:... @atom:hc  0.060   0.000000   0.6310438442242609 0.8924307629540046
+    $atom:h2 $mol:... @atom:hc  0.060   0.000000   0.6310438442242609 -0.8924307629540046
+    $atom:h3 $mol:... @atom:hc  0.060  -0.8924307629540046 -0.6310438442242609 0.000000
   }
 
   #  Note: The "..." in "$mol:..." tells moltemplate that this molecule may
   #        be a part of a larger molecule, and (if so) to use the larger
   #        parent object's molecule id number as it's own.
-  #        The CH2 group is part of the Hexadecane molecule.
+  #        The CH3 group is part of the Hexadecane molecule.
 
   # Now specify which pairs of atoms are bonded:
   write('Data Bond List') {
     $bond:ch1 $atom:c $atom:h1
     $bond:ch2 $atom:c $atom:h2
+    $bond:ch3 $atom:c $atom:h3
   }
 
-} # CH2
+} # CH3
 
 
 # Optional: Shift all the coordinates in the +Y direction by 0.4431163.
@@ -51,7 +52,7 @@ CH2 inherits GAFF {
 #            If this is confusing, then simply add 0.4431163 to the Y 
 #            coordinates in the "Data Atoms" section above.)
 
-CH2.move(0,0.4431163,0)
+CH3.move(0,0.4431163,0)
 
 
 
@@ -65,3 +66,4 @@ CH2.move(0,0.4431163,0)
 #                             # 0.5*DeltaYc = 0.4431163316030377
 # DeltaZh = Lch*sin(theta/2)  # = 0.8924307629540046
 # DeltaYh = Lch*cos(theta/2)  # = 0.6310438442242609
+

@@ -1,6 +1,19 @@
 import "ethanol.lt"       # <-defines the "Ethanol" molecule type
 import "tip5p_oplsaa.lt"  # <-defines the "TIP5P" (water) molecule type
 
+# Note: The "tip5p_oplsaa.lt" file is located at:
+# https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
+# (If you want to customize it, you can download it and copy it to this folder.)
+
+
+
+# Periodic boundary conditions:
+write_once("Data Boundary") {
+   0.0  27.6  xlo xhi
+   0.0  27.6  ylo yhi
+   0.0  27.6  zlo zhi
+}
+
 
 waters = new TIP5P [8].move(0.00, 0.00, 3.45) 
                    [8].move(0.00, 3.45, 0.00) 
@@ -15,10 +28,11 @@ ethanols[*][*][*].move(1.725, 1.725, 1.725)
 
 
 
-# Periodic boundary conditions:
-write_once("Data Boundary") {
-   0.0  27.6  xlo xhi
-   0.0  27.6  ylo yhi
-   0.0  27.6  zlo zhi
-}
-
+# Note1: You can use the "new random" command to create mixtures of different
+#        molecule types containing an arbitrary number of molecules arranged on
+#        a periodic lattice.  (This works if all molecules have similar size.)
+#       See manual (ch8.9.1): https://moltemplate.org/doc/moltemplate_manual.pdf
+# Note2: More generally you can use PACKMOL to create mixtures of molecules.
+#       It allows us to omit the coordinates and .move() commands.  And you can
+#       specify the number of molecules you want more precisely.  See example:
+# https://github.com/jewettaij/moltemplate/tree/master/examples/all_atom/force_field_OPLSAA/ethylene+benzene_PACKMOL/

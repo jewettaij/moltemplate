@@ -1,14 +1,7 @@
 import "oplsaa.lt"
 
-# The "oplsaa.lt" file contains force-field parameters, atom type definitions,
-# partial charges, masses and bond-angle rules for the atoms in your system.
 
-
-# Atom type choices:
-#
-# For this simple molecule, most of the atom types from OPLSAA were easy to guess:
-#
-#   See the "oplsaa.lt" file for explanation of atom types.  Excerpt:
+# The "oplsaa.lt" file defines these atom types:
 # Atom type @atom:145 corresponds to "C - CA | Benzene C"
 # Atom type @atom:146 corresponds to "H - HA | Benzene H"
 # Atom type @atom:165 corresponds to "C - CA | Cipso in styrene"
@@ -17,6 +10,9 @@ import "oplsaa.lt"
 # Atom type @atom:268 corresponds to "O - OH | Oh in CCOOH R in RCOOH is"
 # Atom type @atom:269 corresponds to "O - O~ | Oc in CCOOH neutral; use 135-140"
 # Atom type @atom:270 corresponds to "H - HO | H in CCOOH"
+# The "oplsaa.lt" file is located at:
+# https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
+# If you want to customize oplsaa.lt, download it and copy it to this folder.
 
 
 BenzoicAcid inherits OPLSAA {

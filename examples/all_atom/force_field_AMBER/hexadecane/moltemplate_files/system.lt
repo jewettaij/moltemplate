@@ -12,6 +12,7 @@ molecules = new Hexadecane [12].move(0, 0, 5.2)
                            [2].move(31.2, 0, 0)
 
 
+
 # NOTE: The spacing between molecules is large.  There should be extra room to
 # move during the initial stages of equilibration.  However, you will have to
 # run the simulation at NPT conditions later to compress the system to a 

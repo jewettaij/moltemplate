@@ -1,5 +1,5 @@
-import "ch2group.lt"  # load the definition of the "CH2" object
-import "ch3group.lt"  # load the definition of the "CH3" object
+import "ch2.lt"  # load the definition of the "CH2" object
+import "ch3.lt"  # load the definition of the "CH3" object
 
 
 Butane inherits OPLSAA {

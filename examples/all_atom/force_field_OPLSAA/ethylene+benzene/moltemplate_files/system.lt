@@ -1,5 +1,5 @@
 import "ethylene.lt"  # <- defines the "Ethylene" molecule type.
-import "benzene.lt"  # <- defines the "Benzene" molecule type.
+import "benzene.lt"   # <- defines the "Benzene" molecule type.
 
 # Periodic boundary conditions:
 write_once("Data Boundary") {
@@ -28,10 +28,13 @@ benzenes  = new Benzene[6].move(8.0, 0, 0)
 benzenes[*][*][*].move(4.0, 4.0, 4.0)
 
 
-# Note1: You can use the new_random command to create random mixtures of different
-#        molecule types containing any number of molecules (and vacancies)
-#        arranged on a periodic lattice.
-#
-# Note2: You can also use PACKMOL to create mixtures of molecules, and import the
-#        coordinates into moltemplate using the "-xyz" or "-pdb" command-line argument.
+
+# Note1: You can use the "new random" command to create mixtures of different
+#        molecule types containing an arbitrary number of molecules arranged on
+#        a periodic lattice.  (This works if all molecules have similar size.)
+#       See manual (ch8.9.1): https://moltemplate.org/doc/moltemplate_manual.pdf
+# Note2: More generally you can use PACKMOL to create mixtures of molecules.
+#       It allows us to omit the coordinates and .move() commands.  And you can
+#       specify the number of molecules you want more precisely.  See example:
+# https://github.com/jewettaij/moltemplate/tree/master/examples/all_atom/force_field_OPLSAA/ethylene+benzene_PACKMOL/
 

@@ -5,8 +5,8 @@
 # it to change the length of the alkane chain.
 
 
-import "ch2group.lt"  # load the definition of the "CH2" object
-import "ch3group.lt"  # load the definition of the "CH3" object
+import "ch2.lt"  # load the definition of the "CH2" object
+import "ch3.lt"  # load the definition of the "CH3" object
 
 # This is a long polymer consisting of 48 CH2 groups and 2 CH3 end-caps.
 

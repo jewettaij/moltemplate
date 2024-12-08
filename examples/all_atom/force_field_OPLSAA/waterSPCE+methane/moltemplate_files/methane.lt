@@ -1,9 +1,13 @@
 import "oplsaa.lt"
 
-# file used to generate "oplsaa.lt".
+# The "oplsaa.lt" file defines these atom types:
+# @atom:138  CH4  C: methane mod 1/2020
+# @atom:140  H    H: alkanes
+# The "oplsaa.lt" file is located at:
+# https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
+# If you want to customize oplsaa.lt, download it and copy it to this folder.
 
-# atom         138  CH4    all-atom C: methane mod 1/2020
-# atom         140  H      all-atom H: alkanes
+
 
 Methane inherits OPLSAA {
 
