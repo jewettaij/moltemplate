@@ -11,6 +11,7 @@ import "oplsaa.lt"
 # (If you want to customize this file files, download it and copy it to this folder.)
 
 
+
 CH3 inherits OPLSAA {
 
   # atom-id  mol-id   atom-type  charge   x             y                z

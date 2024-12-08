@@ -12,7 +12,7 @@
 # MyMolecule inherits OPLSAA {
 #  # atom-id  mol-id atom-type charge    X        Y        Z
 #  write('Data Atoms') {
-#    $atom:C1  $mol @atom:CTH2   0.00  -0.6695    0.000000  0.000000
+#    $atom:C1  $mol @atom:CTH2 0.00  -0.6695    0.000000  0.000000
 #    $atom:H11 $mol @atom:HCen 0.00  -1.234217 -0.854458  0.000000
 #         :              :     :      :         :         :
 #   }
@@ -29,16 +29,16 @@ OPLSAA {
   # by atom type.  http://lammps.sandia.gov/doc/set.html
 
   write_once("In Charges") {
-    set type @atom:CT3        charge -0.18      # "Alkane CH3-"
-    set type @atom:CT2        charge -0.12      # "Alkane -CH2-"
-    set type @atom:CTH        charge -0.06      # "Alkane >CH-"
-    set type @atom:CT         charge  0.0       # "Alkane >C<"
-    set type @atom:HCal       charge  0.06      # "Alkane H-C"
-    set type @atom:CH2en      charge -0.23      # "Alkene H2-C="
-    set type @atom:HCen       charge  0.115     # "Alkene H-C="
+    set type @atom:CT3H        charge -0.18      # "C - CT | -CH3 C: alkane"
+    set type @atom:CT2H        charge -0.12      # "C - CT | -CH2- C: alkanes"
+    set type @atom:CT1H        charge -0.06      # "C - CT | >CH- C: alkanes"
+    set type @atom:CT0H        charge  0.0       # "C - CT | >C< C: alkanes"
+    set type @atom:HCan        charge  0.06      # "H - HC | H: alkanes"
+    set type @atom:CMH2        charge -0.23      # "C - CM | alkene C (H2-C=)"
+    set type @atom:HCen        charge  0.115     # "H - HC | alkene H (H-C=)"
   } #(end of atom partial charges)
 
-  # NOTE: In addition to setting atom charge by atom type, you can add
+  # NOTE: In addition to setting atom charge by atom type, you can instead add
   #    write_once("Data Charge By Bond") {
   #      @atom:A @atom:B 0.05 -0.05
   #    }
@@ -48,12 +48,12 @@ OPLSAA {
 
 
   write_once("Data Masses") {
-    @atom:CT3     12.011
-    @atom:CT2     12.011
-    @atom:CTH     12.011
-    @atom:CT      12.011
-    @atom:HCal     1.008
-    @atom:CH2en    12.011
+    @atom:CT3H     12.011
+    @atom:CT2H     12.011
+    @atom:CT1H     12.011
+    @atom:CT0H     12.011
+    @atom:HCan     1.008
+    @atom:CMH2     12.011
     @atom:HCen     1.008
   } #(end of atom masses)
 
@@ -70,13 +70,13 @@ OPLSAA {
   #  @atom names we have been using above are equivalent to the complete
   #  @atom names used below:
 
-  replace{ @atom:CT3 @atom:CT3_b13_a13_d13_i13 }
-  replace{ @atom:CT2 @atom:CT2_b13_a13_d13_i13 }
-  replace{ @atom:CTH @atom:CTH_b13_a13_d13_i13 }
-  replace{ @atom:CT  @atom:CT_b13_a13_d13_i13 }
-  replace{ @atom:HCal @atom:HCal_b46_a46_d46_i46 }
-  replace{ @atom:CH2en @atom:CH2en_b47_a47_d47_i47 }
-  replace{ @atom:HCen  @atom:HCen_b46_a46_d46_i46 }
+  replace{ @atom:CT3H @atom:CT3H_bCT_aCT_dCT_iCT }
+  replace{ @atom:CT2H @atom:CT2H_bCT_aCT_dCT_iCT }
+  replace{ @atom:CT1H @atom:CT1H_bCT_aCT_dCT_iCT }
+  replace{ @atom:CT0H  @atom:CT0H_bCT_aCT_dCT_iCT }
+  replace{ @atom:HCan @atom:HCan_bHC_aHC_dHC_iHC }
+  replace{ @atom:CMH2 @atom:CMH2_bCM_aCM_dCM_iCM }
+  replace{ @atom:HCen  @atom:HCen_bHC_aHC_dHC_iHC }
 
 
   # ------------------ Non-Bonded Interactions: -------------------------
@@ -85,13 +85,13 @@ OPLSAA {
   # pair_coeff    AtomType1    AtomType2   pair_style_name  parameters...
 
   write_once("In Settings") {
-    pair_coeff @atom:CT3_b13_a13_d13_i13  @atom:CT3_b13_a13_d13_i13 lj/cut/coul/long 0.066 3.5
-    pair_coeff @atom:CT2_b13_a13_d13_i13  @atom:CT2_b13_a13_d13_i13 lj/cut/coul/long 0.066 3.5
-    pair_coeff @atom:CTH_b13_a13_d13_i13  @atom:CTH_b13_a13_d13_i13 lj/cut/coul/long 0.066 3.5
-    pair_coeff @atom:CT_b13_a13_d13_i13   @atom:CT_b13_a13_d13_i13 lj/cut/coul/long 0.066 3.5
-    pair_coeff @atom:HCal_b46_a46_d46_i46 @atom:HCal_b46_a46_d46_i46 lj/cut/coul/long 0.03 2.5
-    pair_coeff @atom:CH2en_b47_a47_d47_i47 @atom:CH2en_b47_a47_d47_i47 lj/cut/coul/long 0.076 3.55
-    pair_coeff @atom:HCen_b46_a46_d46_i46  @atom:HCen_b46_a46_d46_i46 lj/cut/coul/long 0.03 2.42
+    pair_coeff @atom:CT3H_bCT_aCT_dCT_iCT  @atom:CT3H_bCT_aCT_dCT_iCT  0.066 3.5
+    pair_coeff @atom:CT2H_bCT_aCT_dCT_iCT  @atom:CT2H_bCT_aCT_dCT_iCT  0.066 3.5
+    pair_coeff @atom:CT1H_bCT_aCT_dCT_iCT  @atom:CT1H_bCT_aCT_dCT_iCT  0.066 3.5
+    pair_coeff @atom:CT0H_bCT_aCT_dCT_iCT  @atom:CT0H_bCT_aCT_dCT_iCT  0.066 3.5
+    pair_coeff @atom:HCan_bHC_aHC_dHC_iHC  @atom:HCan_bHC_aHC_dHC_iHC  0.03 2.5
+    pair_coeff @atom:CMH2_bCM_aCM_dCM_iCM @atom:CMH2_bCM_aCM_dCM_iCM  0.076 3.55
+    pair_coeff @atom:HCen_bHC_aHC_dHC_iHC  @atom:HCen_bHC_aHC_dHC_iHC  0.03 2.42
   } #(end of pair_coeffs)
 
 
@@ -102,11 +102,11 @@ OPLSAA {
   # bond_coeff BondTypeName BondStyle  parameters...
 
   write_once("In Settings") {
-    bond_coeff @bond:13-13 harmonic 268.0 1.529
-    bond_coeff @bond:13-46 harmonic 340.0 1.09
-    bond_coeff @bond:13-47 harmonic 317.0 1.51
-    bond_coeff @bond:46-47 harmonic 340.0 1.08
-    bond_coeff @bond:47-47 harmonic 549.0 1.34
+    bond_coeff @bond:CT_CT   268.0 1.529
+    bond_coeff @bond:CT_HC  340.0 1.09
+    bond_coeff @bond:CT_CM   317.0 1.51
+    bond_coeff @bond:HC_CM   340.0 1.08
+    bond_coeff @bond:CM_CM   549.0 1.34
   } #(end of bond_coeffs)
 
   # Rules for assigning bond types by atom type:
@@ -114,11 +114,11 @@ OPLSAA {
   #   (* = wildcard)
 
   write_once("Data Bonds By Type") {
-    @bond:13-13 @atom:*_b13_a*_d*_i* @atom:*_b13_a*_d*_i*
-    @bond:13-46 @atom:*_b13_a*_d*_i* @atom:*_b46_a*_d*_i*
-    @bond:13-47 @atom:*_b13_a*_d*_i* @atom:*_b47_a*_d*_i*
-    @bond:46-47 @atom:*_b46_a*_d*_i* @atom:*_b47_a*_d*_i*
-    @bond:47-47 @atom:*_b47_a*_d*_i* @atom:*_b47_a*_d*_i*
+    @bond:CT_CT @atom:*_bCT_a*_d*_i* @atom:*_bCT_a*_d*_i*
+    @bond:CT_HC @atom:*_bCT_a*_d*_i* @atom:*_bHC_a*_d*_i*
+    @bond:CT_CM @atom:*_bCT_a*_d*_i* @atom:*_bCM_a*_d*_i*
+    @bond:HC_CM @atom:*_bHC_a*_d*_i* @atom:*_bCM_a*_d*_i*
+    @bond:CM_CM @atom:*_bCM_a*_d*_i* @atom:*_bCM_a*_d*_i*
   } #(end of bonds by type)
 
 
@@ -129,17 +129,17 @@ OPLSAA {
   # angle_coeff AngleTypeName  AngleStyle  parameters...
 
   write_once("In Settings") {
-    angle_coeff @angle:13-13-13 harmonic 58.35 112.7
-    angle_coeff @angle:13-13-46 harmonic 37.5 110.7
-    angle_coeff @angle:13-13-47 harmonic 63.0 111.1
-    angle_coeff @angle:13-47-13 harmonic 70.0 130.0
-    angle_coeff @angle:13-47-46 harmonic 35.0 117.0
-    angle_coeff @angle:13-47-47 harmonic 70.0 124.0
-    angle_coeff @angle:46-13-46 harmonic 33.0 107.8
-    angle_coeff @angle:46-13-47 harmonic 35.0 109.5
-    angle_coeff @angle:46-47-46 harmonic 35.0 117.0
-    angle_coeff @angle:46-47-47 harmonic 35.0 120.0
-    angle_coeff @angle:47-13-47 harmonic 63.0 112.4
+    angle_coeff @angle:CT_CT_CT   58.35 112.7
+    angle_coeff @angle:CT_CT_HC  37.5 110.7
+    angle_coeff @angle:CT_CT_CM  63.0 111.1
+    angle_coeff @angle:CT_CM_CT  70.0 130.0
+    angle_coeff @angle:CT_CM_HC  35.0 117.0
+    angle_coeff @angle:CT_CM_CM  70.0 124.0
+    angle_coeff @angle:HC_CT_HC  33.0 107.8
+    angle_coeff @angle:HC_CT_CM  35.0 109.5
+    angle_coeff @angle:HC_CM_HC  35.0 117.0
+    angle_coeff @angle:HC_CM_CM  35.0 120.0
+    angle_coeff @angle:CM_CT_CM  63.0 112.4
   } #(end of angle_coeffs)
 
   # Rules for creating angle interactions according to atom type:
@@ -147,17 +147,17 @@ OPLSAA {
   #   (* = wildcard)
 
   write_once("Data Angles By Type") {
-    @angle:13-13-13 @atom:*_b*_a13_d*_i* @atom:*_b*_a13_d*_i* @atom:*_b*_a13_d*_i*
-    @angle:13-13-46 @atom:*_b*_a13_d*_i* @atom:*_b*_a13_d*_i* @atom:*_b*_a46_d*_i*
-    @angle:13-13-47 @atom:*_b*_a13_d*_i* @atom:*_b*_a13_d*_i* @atom:*_b*_a47_d*_i*
-    @angle:13-47-13 @atom:*_b*_a13_d*_i* @atom:*_b*_a47_d*_i* @atom:*_b*_a13_d*_i*
-    @angle:13-47-46 @atom:*_b*_a13_d*_i* @atom:*_b*_a47_d*_i* @atom:*_b*_a46_d*_i*
-    @angle:13-47-47 @atom:*_b*_a13_d*_i* @atom:*_b*_a47_d*_i* @atom:*_b*_a47_d*_i*
-    @angle:46-13-46 @atom:*_b*_a46_d*_i* @atom:*_b*_a13_d*_i* @atom:*_b*_a46_d*_i*
-    @angle:46-13-47 @atom:*_b*_a46_d*_i* @atom:*_b*_a13_d*_i* @atom:*_b*_a47_d*_i*
-    @angle:46-47-46 @atom:*_b*_a46_d*_i* @atom:*_b*_a47_d*_i* @atom:*_b*_a46_d*_i*
-    @angle:46-47-47 @atom:*_b*_a46_d*_i* @atom:*_b*_a47_d*_i* @atom:*_b*_a47_d*_i*
-    @angle:47-13-47 @atom:*_b*_a47_d*_i* @atom:*_b*_a13_d*_i* @atom:*_b*_a47_d*_i*
+    @angle:CT_CT_CT @atom:*_b*_aCT_d*_i* @atom:*_b*_aCT_d*_i* @atom:*_b*_aCT_d*_i*
+    @angle:CT_CT_HC @atom:*_b*_aCT_d*_i* @atom:*_b*_aCT_d*_i* @atom:*_b*_aHC_d*_i*
+    @angle:CT_CT_CM @atom:*_b*_aCT_d*_i* @atom:*_b*_aCT_d*_i* @atom:*_b*_aCM_d*_i*
+    @angle:CT_CM_CT @atom:*_b*_aCT_d*_i* @atom:*_b*_aCM_d*_i* @atom:*_b*_aCT_d*_i*
+    @angle:CT_CM_HC @atom:*_b*_aCT_d*_i* @atom:*_b*_aCM_d*_i* @atom:*_b*_aHC_d*_i*
+    @angle:CT_CM_CM @atom:*_b*_aCT_d*_i* @atom:*_b*_aCM_d*_i* @atom:*_b*_aCM_d*_i*
+    @angle:HC_CT_HC @atom:*_b*_aHC_d*_i* @atom:*_b*_aCT_d*_i* @atom:*_b*_aHC_d*_i*
+    @angle:HC_CT_CM @atom:*_b*_aHC_d*_i* @atom:*_b*_aCT_d*_i* @atom:*_b*_aCM_d*_i*
+    @angle:HC_CM_HC @atom:*_b*_aHC_d*_i* @atom:*_b*_aCM_d*_i* @atom:*_b*_aHC_d*_i*
+    @angle:HC_CM_CM @atom:*_b*_aHC_d*_i* @atom:*_b*_aCM_d*_i* @atom:*_b*_aCM_d*_i*
+    @angle:CM_CT_CM @atom:*_b*_aCM_d*_i* @atom:*_b*_aCT_d*_i* @atom:*_b*_aCM_d*_i*
   } #(end of angles by type)
 
 
@@ -169,29 +169,29 @@ OPLSAA {
 
   write_once("In Settings") {
     # General rules:
-    dihedral_coeff @dihedral:X-47-47-X opls 0.0 14.0 0.0 0.0
-    dihedral_coeff @dihedral:X-13-13-13 opls 1.711 -0.5 0.663 0.0
-    dihedral_coeff @dihedral:X-13-47-13 opls 1.711 -0.5 0.663 0.0
-    dihedral_coeff @dihedral:X-13-47-46 opls 0.0 0.0 0.468 0.0
-    dihedral_coeff @dihedral:X-13-47-47 opls 0.5 0.0 0.0 0.0
+    dihedral_coeff @dihedral:X_CM_CM_X  0.0 14.0 0.0 0.0
+    dihedral_coeff @dihedral:X_CT_CT_CT  1.711 -0.5 0.663 0.0
+    dihedral_coeff @dihedral:X_CT_CM_CT  1.711 -0.5 0.663 0.0
+    dihedral_coeff @dihedral:X_CT_CM_HC  0.0 0.0 0.468 0.0
+    dihedral_coeff @dihedral:X_CT_CM_CM  0.5 0.0 0.0 0.0
 
     # Specific rules (which override the general rules):
-    dihedral_coeff @dihedral:13-13-13-13 opls 1.3 -0.05 0.2 0.0
-    dihedral_coeff @dihedral:13-13-13-47 opls 1.3 -0.05 0.2 0.0
-    dihedral_coeff @dihedral:13-13-47-13 opls 2.817 -0.169 0.543 0.0
-    dihedral_coeff @dihedral:13-13-47-47 opls 0.346 0.405 -0.904 0.0
-    dihedral_coeff @dihedral:13-47-47-13 opls 0.0 14.0 0.0 0.0
-    dihedral_coeff @dihedral:13-47-47-46 opls 0.0 14.0 0.0 0.0
-    dihedral_coeff @dihedral:46-13-13-46 opls 0.0 0.0 0.3 0.0
-    dihedral_coeff @dihedral:46-13-13-47 opls 0.0 0.0 0.366 0.0
-    dihedral_coeff @dihedral:46-13-47-13 opls 0.0 0.0 0.3 0.0
-    dihedral_coeff @dihedral:46-13-47-46 opls 0.0 0.0 0.318 0.0
-    dihedral_coeff @dihedral:46-13-47-47 opls 0.0 0.0 -0.372 0.0
-    dihedral_coeff @dihedral:46-47-47-46 opls 0.0 14.0 0.0 0.0
-    dihedral_coeff @dihedral:47-13-47-13 opls 0.0 -8.0 0.0 0.0
-    dihedral_coeff @dihedral:47-13-47-46 opls 0.0 -8.0 0.0 0.0
-    dihedral_coeff @dihedral:47-46-47-13 opls 0.0 -8.0 0.0 0.0
-    dihedral_coeff @dihedral:47-46-47-46 opls 0.0 -8.0 0.0 0.0
+    dihedral_coeff @dihedral:CT_CT_CT_CT  1.3 -0.05 0.2 0.0
+    dihedral_coeff @dihedral:CT_CT_CT_CM  1.3 -0.05 0.2 0.0
+    dihedral_coeff @dihedral:CT_CT_CM_CT  2.817 -0.169 0.543 0.0
+    dihedral_coeff @dihedral:CT_CT_CM_CM  0.346 0.405 -0.904 0.0
+    dihedral_coeff @dihedral:CT_CM_CM_CT  0.0 14.0 0.0 0.0
+    dihedral_coeff @dihedral:CT_CM_CM_HC  0.0 14.0 0.0 0.0
+    dihedral_coeff @dihedral:HC_CT_CT_HC  0.0 0.0 0.3 0.0
+    dihedral_coeff @dihedral:HC_CT_CT_CM  0.0 0.0 0.366 0.0
+    dihedral_coeff @dihedral:HC_CT_CM_CT  0.0 0.0 0.3 0.0
+    dihedral_coeff @dihedral:HC_CT_CM_HC  0.0 0.0 0.318 0.0
+    dihedral_coeff @dihedral:HC_CT_CM_CM  0.0 0.0 -0.372 0.0
+    dihedral_coeff @dihedral:HC_CM_CM_HC  0.0 14.0 0.0 0.0
+    dihedral_coeff @dihedral:CM_CT_CM_CT  0.0 -8.0 0.0 0.0
+    dihedral_coeff @dihedral:CM_CT_CM_HC  0.0 -8.0 0.0 0.0
+    dihedral_coeff @dihedral:CM_HC_CM_CT  0.0 -8.0 0.0 0.0
+    dihedral_coeff @dihedral:CM_HC_CM_HC  0.0 -8.0 0.0 0.0
   } #(end of dihedral_coeffs)
 
   # Rules for creating dihedral interactions according to atom type:
@@ -199,49 +199,49 @@ OPLSAA {
   #   (* = wildcard)
 
   write_once("Data Dihedrals By Type") {
-    @dihedral:X-47-47-X   @atom:*              @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i* @atom:*
-    @dihedral:X-13-13-13  @atom:*              @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i*
-    @dihedral:X-13-47-13  @atom:*              @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i*
-    @dihedral:X-13-47-46  @atom:*              @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i*
-    @dihedral:X-13-47-47  @atom:*              @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i*
-    @dihedral:13-13-13-13 @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i*
-    @dihedral:13-13-13-47 @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i*
-    @dihedral:13-13-47-13 @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i*
-    @dihedral:13-13-47-47 @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i*
-    @dihedral:13-47-47-13 @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i*
-    @dihedral:13-47-47-46 @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i*
-    @dihedral:46-13-13-46 @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d46_i*
-    @dihedral:46-13-13-47 @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i*
-    @dihedral:46-13-47-13 @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i*
-    @dihedral:46-13-47-46 @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i*
-    @dihedral:46-13-47-47 @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i*
-    @dihedral:46-47-47-46 @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i*
-    @dihedral:47-13-47-13 @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i*
-    @dihedral:47-13-47-46 @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i*
-    @dihedral:47-46-47-13 @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d13_i*
-    @dihedral:47-46-47-46 @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i* @atom:*_b*_a*_d47_i* @atom:*_b*_a*_d46_i*
+    @dihedral:X_CM_CM_X   @atom:*              @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i* @atom:*
+    @dihedral:X_CT_CT_CT  @atom:*              @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:X_CT_CM_CT  @atom:*              @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:X_CT_CM_HC  @atom:*              @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i*
+    @dihedral:X_CT_CM_CM  @atom:*              @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i*
+    @dihedral:CT_CT_CT_CT @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:CT_CT_CT_CM @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i*
+    @dihedral:CT_CT_CM_CT @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:CT_CT_CM_CM @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i*
+    @dihedral:CT_CM_CM_CT @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:CT_CM_CM_HC @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i*
+    @dihedral:HC_CT_CT_HC @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dHC_i*
+    @dihedral:HC_CT_CT_CM @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i*
+    @dihedral:HC_CT_CM_CT @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:HC_CT_CM_HC @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i*
+    @dihedral:HC_CT_CM_CM @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i*
+    @dihedral:HC_CM_CM_HC @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i*
+    @dihedral:CM_CT_CM_CT @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:CM_CT_CM_HC @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i*
+    @dihedral:CM_HC_CM_CT @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dCT_i*
+    @dihedral:CM_HC_CM_HC @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i* @atom:*_b*_a*_dCM_i* @atom:*_b*_a*_dHC_i*
   } #(end of dihedrals by type)
 
 
 
 
   # ---------- Improper Interactions  ----------
-  # http://lammps.sandia.gov/doc/improper_harmonic.html
+  # http://lammps.sandia.gov/doc/improper_cvff.html
 
   write_once("In Settings") {
-    improper_coeff @improper:X-X-47-X harmonic 15.0 180.0
+    improper_coeff @improper:CM_X_X_X  15.0000 -1 2
   }
 
   #   ImproperTypeName   AtomType1    AtomType2       AtomType3       AtomType4
   #   (* = wildcard)
 
-  write_once("Data Impropers By Type (opls_imp.py)") {
-    @improper:X-X-47-X   @atom:*      @atom:*   @atom:*_b*_a*_d*_i47   @atom:*
+  write_once("Data Impropers By Type (cenIsortJKL.py)") {
+    @improper:CM_X_X_X   @atom:*      @atom:*   @atom:*_b*_a*_d*_iCM   @atom:*
   }
 
   # NOTE: Sometimes the default improper-creation rules do not work for a 
-  #       particular force-field.  The "(opls_imp.py)" text above tells
-  #       moltemplate to look for a file named "opls_imp.py" (normally found in
+  #       particular force-field.  The "(cenIsortJKL.py)" text above tells
+  #       moltemplate to look for a file named "cenIsortJKL.py" (normally found in
   #       "src/nbody_alternate_symmetry/") which tells moltemplate to change
   #       the order in the list of atoms in an improper interaction, or the
   #       criteria used to decide whether a new improper interaction should
@@ -257,27 +257,15 @@ OPLSAA {
   write_once("In Init") {
     units real
     atom_style full
-    bond_style hybrid harmonic
-    angle_style hybrid harmonic
-    dihedral_style hybrid opls
-    improper_style hybrid harmonic
-    pair_style hybrid lj/cut/coul/long 10.0 10.0
+    bond_style harmonic
+    angle_style harmonic
+    dihedral_style opls
+    improper_style cvff
+    pair_style lj/cut/coul/long 9.0 11.0
     pair_modify mix geometric
     special_bonds lj/coul 0.0 0.0 0.5
     kspace_style pppm 0.0001
   } #end of init parameters
-
-  # Optional:
-  #       I use "hybrid" styles in case the user later wishes to
-  #       combine the molecules built using this force-field with other
-  #       molecules that use other styles.  (This is not necessarily
-  #       a good idea, but LAMMPS and moltemplate both allow it.)
-  #       For more information:
-  #       http://lammps.sandia.gov/doc/pair_hybrid.html
-  #       http://lammps.sandia.gov/doc/bond_hybrid.html
-  #       http://lammps.sandia.gov/doc/angle_hybrid.html
-  #       http://lammps.sandia.gov/doc/dihedral_hybrid.html
-  #       http://lammps.sandia.gov/doc/improper_hybrid.html
 
 
 }  # OPLSAA

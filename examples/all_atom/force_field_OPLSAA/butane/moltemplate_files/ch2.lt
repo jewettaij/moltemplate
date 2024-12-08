@@ -12,7 +12,6 @@ import "oplsaa.lt"
 
 
 
-
 CH2 inherits OPLSAA {
 
   # atom-id  mol-id   atom-type  charge   x             y                z
