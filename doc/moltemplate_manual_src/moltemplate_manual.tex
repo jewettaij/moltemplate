@@ -2849,7 +2849,6 @@ write("Data Atoms") {
 
 
 
-
 \subsection{``In Charges''}
 \label{sec:in_charges}
 Recall that moltemplate was designed for simulating coarse grained molecular
@@ -2994,6 +2993,84 @@ the file in your local directory has priority.)}
   %}
   %\end{verbatim}
 
+
+
+\subsection{Extending an existing force field}
+\label{sec:extending_a_force_field}
+Rather than create an entire force field file from scratch,
+users typically want to modify an existing force field
+to add some custom atom types or bond types.
+
+You can do that either by
+
+\begin{list}{}
+\item 1) modifying the original force field file and copying it into the folder with your other .lt files
+\item 2) creating a new file that only contains the changes
+\end{list}
+
+The second technique is demonstrated below.
+
+\begin{verbatim}
+# --- new file "force_field_variant.lt" ---
+
+import "forcefield.lt"  #<--defines "ForceField"
+
+ForceField {
+  # ADD YOUR NEW ATOM TYPES AND BONDED INTERACTIONS HERE
+  # Note: This will not overwrite the preexisting "ForceField" object.
+  #       (Instead, it augments the "ForceField" object defined earlier.)
+
+  # Now add a new atom type ("@atom:CB")
+  write_once("Data Masses") {
+    @atom:CB 20.0
+  }
+  :
+
+  # Define a new dihedral interaction:
+  write_once("Data Dihedrals By Type") {
+    @dihedral:XCCX @atom:* @atom:CA @atom:CA @atom:*
+  }
+  :
+}
+\end{verbatim}
+In the last line of this example, ``@atom:*'' will match with
+``@atom:CA'', ``@atom:R'', and ``@atom:CB'',
+since they all belong to the same ``\mbox{ForceField}'' object.
+Molecules that use the new force field version will
+import the new ``force\_field\_variant.lt'' file.
+
+\begin{verbatim}
+import "forcefield_variant.lt"
+
+MoleculeV2 inherits ForceField {
+   # Here you can refer to @atoms, @bonds, etc... defined in either file:
+   # - "forcefield.lt"  (eg. @atom:CA, @atom:R, ...)
+   # - "forcefield_variant.lt"  (eg. @atom:CB, @dihedral:XCCX)
+}
+\end{verbatim}
+
+Incidentally, this is how the LOPLS force field was implemented.
+See \href{https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/loplsaa.lt}{\tt loplsaa.lt}.
+
+
+\textit{
+\textbf{Don't try to create a new force-field object}
+containing only the new @atom, @bond, @angle, @dihedral or @improper types.
+Augment the existing force-field instead.
+As explained in section \ref{sec:full_names},
+@atom types, @bond types
+(and even wildcards like ``@atom:*'')
+are given full-names that include the name of the (force field)
+object they are defined in.
+In the example above, ``@atom:CB'' is shorthand for ``@atom:/ForceField/CB'', and ``@atom:*'' is shorthand for ``@atom:/ForceField/*'', etc...
+If you define a new force-field object
+(for example, ``ForceField2 inherits ForceField''),
+then some @atom types will be defined in ``ForceField''
+and others (such as ``@atom:CB'') will be defined in ``ForceField2''.
+Then you will have to clarify the full atom type names and wildcards
+for every @atom, @bond,... in your force-field everywhere.
+It is \href{https://github.com/jewettaij/moltemplate/issues/103}{\tt easy to make mistakes.}
+}
 
 
 
@@ -3820,7 +3897,7 @@ I recommend placing the coordinate transforms applied to
 an entire molecule type \textbf{after} all of its internal details 
 (bonds, atoms, subunits) have been declared, as we did here.}
 
-\subsubsection*{\textit{(Advanced)} Inheritance}
+  \subsubsection*{\textit{(Advanced)} Inheritance}
 \label{sec:inheritance_intro}
 The \textit{MolecularComplex0} molecule is a type of \textit{MolecularComplex} molecule.
 For those who are familiar with programming, 
@@ -3839,8 +3916,6 @@ which includes atom types and features from
 Section \ref{sec:inheritance} mentions one way to do this
 and section \ref{sec:inheritance_vs_object_composition}
 discusses alternate approaches.
-
-
 
 
 
@@ -4531,6 +4606,11 @@ first parent in the list of parents following the ``inherits'' keyword.
 (``TraPPE'' in this example.)
   %Note: This feature has not been rigorously tested as of 2019-9-03.)
 }
+
+
+\subsubsection*{IMPORTANT: Force fields should not inherit from other force-fields}
+For details and workarounds, see \ref{sec:extending_a_force_field}.
+
 
 \subsubsection{Inheritance \textit{vs.} Nesting}
 \label{sec:inheritance_vs_nesting}
