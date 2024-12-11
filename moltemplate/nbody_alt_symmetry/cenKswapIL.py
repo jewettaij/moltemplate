@@ -8,7 +8,7 @@ except:
 # To use it, add "(opls_imp.py)" to the name of the "Data Impropers By Type"
 # section, and make sure this file is located in the "common" directory.
 # For example:
-# write_once("Data Impropers By Type (opls_imp.py)") {
+# write_once("Data Impropers By Type (cenKswapIL.py)") {
 #   ...
 # }
 
