@@ -11,8 +11,8 @@ from oplsaa2lt_classes import Atom, Bond, Angle, Dihedral, Improper
 
 
 __author__ = "Domenico Marson and Andrew Jewett"
-__version__ = '0.1.3'
-__date__ = '2024-12-01'
+__version__ = '0.1.4'
+__date__ = '2024-12-28'
 
 g_program_name = __file__.split('/')[-1]
 

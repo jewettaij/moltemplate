@@ -95,9 +95,9 @@ To get around these limitations:
 * Users can use use *3rd-party molecule-builder tools* such as:
 the [ATB](https://atb.uq.edu.au) database (LT format),
 [AmberTools](https://ambermd.org/AmberTools.php) (MOL2 format),
-[EMC](http://montecarlo.sourceforge.net/) (DATA format),
-[LigParGen](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190) (DATA format), and
-[OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format").
+[LigParGen](https://moltemplate.org/doc/moltemplate_talk_2019-8-15.pdf#page=190) (DATA format),
+[OpenBabel](https://open-babel.readthedocs.io/en/latest/FileFormats/The_LAMMPS_data_format.html "Convert 3rd party sim files to LAMMPS DATA format"), and
+[EMC](http://montecarlo.sourceforge.net/) (DATA format).
 These tools can generate MOL2 or LAMMPS-DATA files
 which can be converted into moltemplate format (LT format) using
 [mol22lt.py](./doc/doc_mol22lt.md#mol22ltpy) or
