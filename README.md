@@ -29,7 +29,7 @@ It currently supports the
 [**AMBER**(GAFF,GAFF2)](./examples/all_atom/force_field_AMBER),
 [**DREIDING**](./examples/all_atom/force_field_DREIDING),
 [**COMPASS**](./examples/all_atom/force_field_COMPASS),
-[**TraPPE**(1998)](./examples/coarse_grained/solvent_models/manybodywaterMW+hydrocarbonsTraPPE)
+[**TraPPE**(1998)](./examples/coarse_grained/solvent_models/manybodywaterMW+hydrocarbonsTraPPE),
 [**EFF**](./examples/misc_examples/explicit_electrons/eff_CH4),
 force fields,
 and the
@@ -53,7 +53,7 @@ Moltemplate is inter-operable with
 [**CellPACK**](http://www.cellpack.org),
 [**Vipster**](https://sgsaenger.github.io/vipster),
 [**struc2lammpsdf**](https://nanohub.org/resources/struc2lammpsdf),
-and any other program that generates [**MOL2**](https://github.com/UnixJunkie/mol2-file-format-spec/blob/master/mol2.pdf) or [**LAMMPS DATA**](https://docs.lammps.org/2001/data_format.html) (.lmpdat) files *(by using the [mol22lt.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_mol22lt.md) and [ltemplify.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_ltemplify.md") file converters)*.
+and any other program that generates [**MOL2**](https://github.com/UnixJunkie/mol2-file-format-spec/blob/master/mol2.pdf) or [**LAMMPS DATA**](https://docs.lammps.org/2001/data_format.html) (.lmpdat) files *(by using the [mol22lt.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_mol22lt.md) and [ltemplify.py](https://github.com/jewettaij/moltemplate/blob/master/doc/doc_ltemplify.md) file converters)*.
 
 
 This repository contains 3 folders:

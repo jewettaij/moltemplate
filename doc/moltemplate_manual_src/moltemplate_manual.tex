@@ -2847,6 +2847,44 @@ write("Data Atoms") {
 \end{verbatim}
 
 
+\subsection{\textit{Advanced Topic: Improper Symmetry}}
+\textit{Most users can skip this section on first reading.}
+
+Improper interactions typically used to enforce planarity of 3 atoms surrounding
+a central hub atom.  For example, one might define an improper interaction for amonia (NH3) this way:
+\begin{verbatim}
+write_once("Data Impropers By Type") {
+  @improper:N_H_H_H @atom:N @atom:H @atom:H @atom:H
+}
+\end{verbatim}
+\textit{By default only one},
+improper interaction is created for these 4 atoms.
+The first atom (eg. ``N'') is assumed to be the central atom
+(with the order of the surrounding atoms chosen arbitrarily).
+
+\textit{However this need not be true.}  Some improper interaction styles are angle-dependent.  And different permutations of atom order result in 3 different improper angles (and thus different forces).
+
+Suppose you want your force-field to generate a new improper interaction for each of these 3 angles (with different atom orders).  And suppose you want the 2nd atom to be the central atom.  In that case you would use:
+\begin{verbatim}
+write_once("Data Impropers By Type (cenJswapIL.py)") {
+  @improper:N_H_H_H @atom:N @atom:H @atom:H @atom:H
+}
+\end{verbatim}
+For details, see the ``cenJswapIL.py'' file (located in the ``nbody\_alt\_symmetry/'' folder).  You can create your own symmetry rules as well by adding files to this directory.
+
+Note: By default, the rules defined in the ``cenIsortJKL.py'' file are used.
+
+\subsection{\textit{Advanced Topic: Symmetry in \$bonds, \$angles, \$dihedrals}}
+\textit{Most users can skip this section on first reading.}
+
+The angle between atoms (1,2,3) is identical to the angle between atoms
+in reverse-order (3,2,1).
+So, by default, moltemplate will only define a single
+\$angle interaction listing the atoms in this order: 1,2,3 (not 3,2,1).
+\textit{(Similarly, forces due to bonds, angles, and
+dihedral interactions are identical when the order of atoms is reversed,
+so they are only generated once.)}
+However this can also be overridden.  (For example, see the ``angles\_nosymm.py'' file located in the ``nbody\_alt\_symmetry/'' folder.)
 
 
 \subsection{``In Charges''}
