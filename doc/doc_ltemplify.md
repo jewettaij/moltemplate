@@ -22,11 +22,11 @@ This way, moltemplate users can build complicated simulations using
 this molecule as a building block (perhaps along with other molecules).
 The resulting LT file will include atom types, charges, coordinates,
 topology, force field parameters, force field styles,
-[groups](https://lammps.sandia.gov/doc/group.html),
+[groups](https://docs.lammps.org/group.html),
 and some of the fixes that effect the molecule (such as
-[fix rigid](https://lammps.sandia.gov/doc/fix_rigid.html),
-[fix shake](https://lammps.sandia.gov/doc/fix_shake.html), and
-[fix rattle](https://lammps.sandia.gov/doc/fix_shake.html)).
+[fix rigid](https://docs.lammps.org/fix_rigid.html),
+[fix shake](https://docs.lammps.org/fix_shake.html), and
+[fix rattle](https://docs.lammps.org/fix_shake.html)).
 Other information will be omitted.
 
 Note: This program is both a stand-alone executable program (that can be run

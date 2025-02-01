@@ -23,7 +23,7 @@ c) unpack it
 d) copy the .cpp and .h files to the src folding of your lammps installation.
 e) (re)compile LAMMPS.
 
-2) This example uses "dihedral_style fourier" which requires a version of LAMMPS compiled with support for the optional "EXTRA-MOLECULE" package.  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS to support this package.
+2) This example uses "dihedral_style fourier" which requires a version of LAMMPS compiled with support for the optional "EXTRA-MOLECULE" package.  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://docs.lammps.org/Build_package.html) for instructions to compile LAMMPS to support this package.
 
 
 ### Instructions

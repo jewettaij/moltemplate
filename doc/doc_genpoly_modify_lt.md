@@ -183,14 +183,14 @@ However this program can be used to modify any polymer (not just DNA).
           Generate a file containing LAMMPS commands which will modify
           attributes of M atoms at each location specified by the user.
           This is done using the LAMMPS' "set" command.
-          https://lammps.sandia.gov/doc/set.html
+          https://docs.lammps.org/set.html
           "M" is the number of atoms you want to modify at each location.
           "filename" is the name of a file where the LAMMPS commands will be
              stored.  (You must use LAMMPS' "include" command to read this
              file in order to apply these changes.)
           "attribute" specifies the attribute of the atoms that you wish to
              change.  (Eg "type", "charge", "mass". For a list of attributes see
-             https://lammps.sandia.gov/doc/set.html)
+             https://docs.lammps.org/set.html)
           a1, a2, ... aM are atom IDs whose attributes will be changed
           i1, i2, ... iM are the monomer indices specifying the relative
              position of each monomer to which atoms a1, a2, ... aM belong
@@ -231,9 +231,9 @@ However this program can be used to modify any polymer (not just DNA).
           "keyword" is the string specifying what kind of restraint or twist
              motor you want to use.  As of 2020-5-22, for "fix restrain",
              the keywords are "bond", "lbond", "angle", or "dihedral".
-             (See https://lammps.sandia.gov/doc/fix_restrain.html)
+             (See https://docs.lammps.org/fix_restrain.html)
              For "fix twist", the available keywords are "torque" or "constrain"
-             (See https://lammps.sandia.gov/doc/fix_twist.html)
+             (See https://docs.lammps.org/fix_twist.html)
           "group" is the set of atoms you wish to consider when applying this
              fix.  (Atoms outside this set will be ignored.  In LAMMPS, all
              fixes require a group argument.)  Typically it is set to "all".

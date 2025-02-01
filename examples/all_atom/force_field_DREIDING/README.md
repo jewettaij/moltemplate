@@ -16,7 +16,7 @@ WARNING:
 ***PLEASE DO NOT DO THIS!***
 This is not how the DREIDING force field should be used.  It will probably not result in accurate behavior.
 
-Alternatively LAMMPS' [fix qeq/point](https://lammps.sandia.gov/doc/fix_qeq.html) feature can be used to assign partial charges.  **QEq** is one of the built-in methods [used by Gaussian to assign partial charges to atoms](https://gaussian.com/mm/) in molecules that are modeled using the DREIDING force field.
+Alternatively LAMMPS' [fix qeq/point](https://docs.lammps.org/fix_qeq.html) feature can be used to assign partial charges.  **QEq** is one of the built-in methods [used by Gaussian to assign partial charges to atoms](https://gaussian.com/mm/) in molecules that are modeled using the DREIDING force field.
 If this fix is run infrequently (or if it is run only once at the beginning of the simulation), then it should not slow the simulation down significantly.
 
 In addition to the QEq method, the [Gasteiger method](https://doi.org/10.1016/0040-4020(80)80168-2)

@@ -21,7 +21,7 @@ file.  If not specified, the atom style is "full" by default.
 
 ATOMSTYLE is a quoted string, such as "full" or "hybrid sphere dipole"
 indicating the format of the data file.  It can be any of the
-[LAMMPS atom styles](http://lammps.sandia.gov/doc/atom_style.html)
+[LAMMPS atom styles](https://docs.lammps.org/atom_style.html)
 such as "angle", "bond", "charge", "full", "molecular", "dipole", "ellipsoid"
 or any hybrid combination of these styles.  (See caveats below.)
 

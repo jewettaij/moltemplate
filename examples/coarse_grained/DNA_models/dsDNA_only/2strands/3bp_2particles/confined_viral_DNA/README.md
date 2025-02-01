@@ -97,7 +97,7 @@ LAMMPS must be compiled with the "MOLECULE" AND "EXTRA-MOLECULE"
 packages enabled.
 If you receive this error message (or something similar):
 "dihedral_style spherical: Unknown dihedral style", then you must follow
-[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+[these instructions](https://docs.lammps.org/Build_package.html),
 and recompile LAMMPS.
 
 
@@ -137,13 +137,13 @@ In order to reach a plausible equilibrium conformation,
 it is necessary to allow the polymer to pass through itself.
 In LAMMPS the later can be done using any of the following pair styles:
 
-https://lammps.sandia.gov/doc/pair_fep_soft.html
+https://docs.lammps.org/pair_fep_soft.html
 
-https://lammps.sandia.gov/doc/pair_table.html
+https://docs.lammps.org/pair_table.html
 
-https://lammps.sandia.gov/doc/pair_soft.html
+https://docs.lammps.org/pair_soft.html
 
-https://lammps.sandia.gov/doc/pair_gauss.html
+https://docs.lammps.org/pair_gauss.html
 
 http://moltemplate.org/lammps_code/pair_lj_charmm_coul_charmm_inter.html
 (Search for "soft-core".  Note: This feature requires you to recompile LAMMPS.)

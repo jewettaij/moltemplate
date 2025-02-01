@@ -41,5 +41,5 @@ To run the simulation at constant pressure
 LAMMPS must be compiled with the "RIGID" package enabled.
 So if LAMMPS generates the following error:
 "rigid: Unknown fix", then you must follow
-[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+[these instructions](https://docs.lammps.org/Build_package.html),
 and recompile LAMMPS.

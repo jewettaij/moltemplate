@@ -5,25 +5,39 @@ This directory contains some examples of all-atom simulations using the OPLSAA f
 There is no guarantee that simulations prepared using moltemplate will reproduce the behavior of other MD codes.  If you notice a problem with these examples, please report it. Peer-review is the only way to improve this software (or any software).  (jewett.aij @ gmail.com)
 
 
-### Duplicate dihedrals, angles, and bonds
 
-*OPTIONAL:*
+### Suggestion: Make a local copy of the "oplsaa.lt" file
+
+WARNING: The OPLSAA force field changes slightly over time.
+When it happens, it can cause the names of the
+@atoms, @bonds, @angles, and @dihedrals types to change.
+This could break backward compatibility,
+and cause moltemplate.sh to fail when reading your .lt files.
+So if you are using OPLSAA, it's a good idea to make a backup copy of the
+[oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt)
+(located in the
+[moltemplate/force_fields/](../../../moltemplate/force_fields/) folder).
+Copy it to the folder with your other .lt files for the simulation you are working on.  (Moltemplate will look in the local folder first for all the .lt files that it needs, including "oplsaa.lt".)
+This will protect you from force-field parameter changes, and you
+will be able to continue using your existing atom and bonded type names safely.
+
+
+### Optional: Duplicate dihedrals, angles, and bonds
+
 Sometimes, even after you have specified the (OPLSAA-specific) atom types
 for the atoms in your molecule, there may be multiple possible choices
 of dihedral, angle, or bond interactions between those atoms
 available in OPLSAA force field (stored in the "oplsaa.lt" file).
-When that happens, moltemplate.sh will attempt to make a reasonable guess,
-chosing the most common version of the interaction between those atom types.
-However, you now have the option to override this choice:
+When that happens, moltemplate.sh will *attempt to make a reasonable guess*,
+chosing the original (oldest, most common) version of the interaction between
+those atom types.  However, you can override this choice:
 
-- The new (2023) version of OPLSAA gives you many additional choices for your dihedral, angle, and bond interactions.  This gives you an opportunity to improve your simulation accuracy, but it also requires more effort on your part.  To see the list of choices, you must now run moltemplate with the "-report-duplicates bytype __" arguments.  For example:
+- The new (2023) version of OPLSAA contains many additional choices for your dihedral, angle, and bond interactions.  This gives you an opportunity to improve your simulation accuracy, but it also requires more effort on your part.  To see the list of choices, you must now run moltemplate with the "-report-duplicates bytype __" arguments.  For example:
 ```
 moltemplate.sh  system.lt  -report-duplicates bytype __
 ```
 - If you see a file named "warning_duplicate_dihedrals.txt", "warning_duplicate_angles.txt", "warning_duplicate_bonds.txt", or "warning_duplicate_impropers.txt" after running moltemplate, then it might be a good idea to read the first few warning messages
-in those files and modify your .lt files accordingly (for example, by adding a custom "Data Dihedrals" section).
-
-Several example .lt files demonstrate how to do that, including:
+in those files and modify your .lt files accordingly (for example, by adding a custom "Data Dihedrals" section).  Several example .lt files demonstrate how to do that, including:
 - butane/moltemplate_files/butane.lt
 - benzene+benzoic_acid/moltemplate_files/benzoic_acid.lt
 
@@ -91,12 +105,17 @@ of the [spce.lt](waterSPCE+methane/moltemplate_files/spce.lt) file.
 
 
 
-### Improper angles
+
+
+
+### Minor issue: Improper angles
 
 The style of improper interaction used by OPLS force fields depends on an angle which depends on the order of the atoms surrounding the central atom. When multiple atoms have the same type, this creates ambiguity in atom order. Since there is no guarantee that moltemplate will choose the same atom order as other molecule builders (such as VMD), this can lead to small unavoidable discrepancies in energies and forces computed by LAMMPS and NAMD.  But their effect should be neglegible.
 *(Please let us know if this is not the case.)*
 
-### Bloated lammps input scripts
+
+
+### Minor issue: Bloated lammps input scripts
 
 By default, LAMMPS input scripts prepared using moltemplate contain the entire contents of the OPLS force-field, even when simulating small systems with just a few atom types.
 

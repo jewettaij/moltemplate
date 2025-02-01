@@ -1,7 +1,7 @@
 # -------- REQUIREMENTS: ---------
 # 1) This example requires the "EXTRA-MOLECULE" package.
 #    If you encounter the error *"Invalid dihedral_style"*, then see this page:
-#    https://lammps.sandia.gov/doc/Build_package.html
+#    https://docs.lammps.org/Build_package.html
 #    for instructions to compile LAMMPS to support this package.
 # 2) It also may require additional features and bug fixes for LAMMPS.
 #   be sure to download and copy the "additional_lammps_code" from

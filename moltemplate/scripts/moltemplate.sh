@@ -693,7 +693,7 @@ while [ "$i" -lt "$ARGC" ]; do
         if [ `echo "$ALPHA!=90.0"|bc` -eq 1 ] || [ `echo "$BETA!=90.0"|bc` -eq 1 ] || [ `echo "$GAMMA!=90.0"|bc` -eq 1 ]; then
             # I transform the parameters from one format to the other by inverting
             # the transformation formula from the LAMMPS documentation 
-            # https://lammps.sandia.gov/doc/Howto_triclinic.html  (which matches
+            # https://docs.lammps.org/Howto_triclinic.html  (which matches
             # http://www.ccl.net/cca/documents/molecular-modeling/node4.html)
             TRICLINIC="true"
             PI=3.1415926535897931
@@ -775,7 +775,7 @@ while [ "$i" -lt "$ARGC" ]; do
         # Triclinic box.
         # For triclinic systems the first two columns of "ITEM: BOX BOUNDS" in 
         # the dump describe a bounding box around the system, not the system 
-        # itself. See https://lammps.sandia.gov/doc/dump.html and https://lammps.sandia.gov/doc/Howto_triclinic.html
+        # itself. See https://docs.lammps.org/dump.html and https://docs.lammps.org/Howto_triclinic.html
         if [ ${#box[@]} == 9 ]; then
           xtilt=( $(echo "0.0 ${box[2]} ${box[5]} $(bc -l<<<${box[2]}+${box[5]})"|xargs -n1|sort -n) )
           ytilt=( $(echo "0.0 ${box[8]}"|xargs -n1|sort -n) )

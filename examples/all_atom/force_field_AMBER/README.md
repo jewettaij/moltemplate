@@ -101,7 +101,7 @@ Alternatively, you can try using the [OpenForceField tools](https://github.com/o
 
 ### Requirements
 
-The AMBER examples require a version of LAMMPS compiled with support for the optional "EXTRA-MOLECULE" package (because the AMBER force field currently uses *dihedral_style fourier*).  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS to support this package.
+The AMBER examples require a version of LAMMPS compiled with support for the optional "EXTRA-MOLECULE" package (because the AMBER force field currently uses *dihedral_style fourier*).  If you encounter the error *"Invalid dihedral_style"*, then see [this page](https://docs.lammps.org/Build_package.html) for instructions to compile LAMMPS to support this package.
 
 
 ### Improper angles

@@ -75,7 +75,7 @@ Because this atom type belongs to the OPLSAA force field,
 in order to modify its charge, we must modify the same file that will
 contain the final list of charges for all the OPLSAA atoms:
 the "system.in.charges" file.  To do that, we append a
-["set" command](https://lammps.sandia.gov/doc/set.html)
+["set" command](https://docs.lammps.org/set.html)
 to the "In Charges" section at the end of the
 ["graphene_nh2.lt"](moltemplate_files/graphene_nh2.lt) file.
 That "set" command modifies the charge of this individual \$atom:c1 atom.
@@ -85,7 +85,7 @@ to the end of a file named "system.in.XXX".  In this case, XXX="charges".)
 
 ### Requirements
 
-To run this you must have a version of LAMMPS which has been compiled with support for the optional MOLECULE and RIGID packages.  If you encounter errors when running LAMMPS then see [this page](https://lammps.sandia.gov/doc/Build_package.html) for instructions to compile LAMMPS with these packages enabled.
+To run this you must have a version of LAMMPS which has been compiled with support for the optional MOLECULE and RIGID packages.  If you encounter errors when running LAMMPS then see [this page](https://docs.lammps.org/Build_package.html) for instructions to compile LAMMPS with these packages enabled.
 
 
 ### Notes:

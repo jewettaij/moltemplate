@@ -30,7 +30,7 @@ https://www.youtube.com/watch?v=xU2QzDDmuyA
 LAMMPS must be compiled with the "MOLECULE" AND "EXTRA-MOLECULE"
 packages enabled.  If LAMMPS generates the following error:
 "dihedral_style spherical: Unknown dihedral style", then you must follow
-[these instructions](https://lammps.sandia.gov/doc/Build_package.html),
+[these instructions](https://docs.lammps.org/Build_package.html),
 and recompile LAMMPS.
 
 It also requires that the "fix twist" feature has been enabled in LAMMPS.

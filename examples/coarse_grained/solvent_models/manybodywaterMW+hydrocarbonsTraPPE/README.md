@@ -56,4 +56,4 @@ This example requires that LAMMPS was built with the "MANYBODY" package.
 If lammps complains of a missing pair style, you will have to recompile
 LAMMPS with the "MANYBODY" package enabled.
 For details see:
-https://lammps.sandia.gov/doc/Build_package.html
+https://docs.lammps.org/Build_package.html

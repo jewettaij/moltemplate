@@ -170,7 +170,7 @@ dump2data.py -t 10000 \
 ```
 In general, the -atomstyle argument can be any of the atom styles listed in the
 table at:
-http://lammps.sandia.gov/doc/atom_style.html
+https://docs.lammps.org/atom_style.html
 ...such as "angle", "bond", "charge", "full", "molecular", "dipole",
 "ellipsoid", or any hybrid combination of these styles.
 (When using hybrid atom styles, you must enclose the argument in quotes,
