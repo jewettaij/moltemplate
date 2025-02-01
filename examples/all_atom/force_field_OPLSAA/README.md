@@ -7,16 +7,27 @@ There is no guarantee that simulations prepared using moltemplate will reproduce
 
 ### Duplicate dihedrals, angles, and bonds
 
-- The new (2023) version of OPLSAA gives you many additional choices for your dihedral, angle, and bond interactions.  This makes it possible for you to improve your simulation accuracy, but it also requires more effort on your part.  To see the list of choices, you must now run moltemplate with the "-report-duplicates bytype __" arguments.  For example:
+*OPTIONAL:*
+Sometimes, even after you have specified the (OPLSAA-specific) atom types
+for the atoms in your molecule, there may be multiple possible choices
+of dihedral, angle, or bond interactions between those atoms
+available in OPLSAA force field (stored in the "oplsaa.lt" file).
+When that happens, moltemplate.sh will attempt to make a reasonable guess,
+chosing the most common version of the interaction between those atom types.
+However, you now have the option to override this choice:
+
+- The new (2023) version of OPLSAA gives you many additional choices for your dihedral, angle, and bond interactions.  This gives you an opportunity to improve your simulation accuracy, but it also requires more effort on your part.  To see the list of choices, you must now run moltemplate with the "-report-duplicates bytype __" arguments.  For example:
 ```
 moltemplate.sh  system.lt  -report-duplicates bytype __
 ```
-- If you see a file named "warning_duplicate_dihedrals.txt", "warning_duplicate_angles.txt", "warning_duplicate_bonds.txt", or "warning_duplicate_impropers.txt" after running moltemplate, then it is a good idea to read the first few warning messages
+- If you see a file named "warning_duplicate_dihedrals.txt", "warning_duplicate_angles.txt", "warning_duplicate_bonds.txt", or "warning_duplicate_impropers.txt" after running moltemplate, then it might be a good idea to read the first few warning messages
 in those files and modify your .lt files accordingly (for example, by adding a custom "Data Dihedrals" section).
 
 Several example .lt files demonstrate how to do that, including:
 - butane/moltemplate_files/butane.lt
 - benzene+benzoic_acid/moltemplate_files/benzoic_acid.lt
+
+
 
 
 ### Atomic charges

@@ -114,7 +114,7 @@ the [RED-server](https://upjv.q4md-forcefieldtools.org)
 is useful (which can generate a MOL2 file),
 *in addition to the tools listed above*.
 Alternatively, users can try using LAMMPS' built-in
-[fix qeq](https://lammps.sandia.gov/doc/fix_qeq.html) feature.
+[fix qeq](https://docs.lammps.org/fix_qeq.html) feature.
 
 
 

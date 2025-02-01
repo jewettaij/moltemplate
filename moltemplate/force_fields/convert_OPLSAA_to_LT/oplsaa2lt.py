@@ -9,10 +9,16 @@ from oplsaa2lt_utils import (bond_header, file_equivalences_header,
 
 from oplsaa2lt_classes import Atom, Bond, Angle, Dihedral, Improper
 
+from collections import defaultdict
+from distutils.version import StrictVersion
+
+# This code only works with python 3.7 and later
+version = sys.version_info
+assert version.major > 3 or (version.major == 3 and version.minor >= 7)
 
 __author__ = "Domenico Marson and Andrew Jewett"
-__version__ = '0.1.4'
-__date__ = '2024-12-28'
+__version__ = '1.0.0'
+__date__ = '2025-1-31'
 
 g_program_name = __file__.split('/')[-1]
 
@@ -163,31 +169,109 @@ def get_dihedrals_and_impropers(input_lines) -> tuple[list[Dihedral], list[Impro
 
 
 # NOTE: PROBLEM WITH SAME-TYPES BONDED INTERACTIONS...
-# the same dihedral (from atom types POV) can have != parameters, based on comment...
+# The same dihedral (from atom types POV) can have != parameters, based on comment...
 #  e.g.:
 #   102   0.000     5.500     0.00      0.0        O -C -OH-HO     carboxylic acid - aliphatic
 #   210   0.000     5.000     0.00      0.0        O -C -OH-HO     benzoic acids
 # the same problem is observed also for bonds and angles...
 def check_uniqueness(
-        of_what: list[Dihedral]|list[Improper]|list[Angle]|list[Bond],
-        skip_equal_parameters: bool = False):
-    for idx, it1 in enumerate(of_what):
-        if it1.to_skip:
-            continue
-        for it2 in of_what[idx+1:]:
+    interactions: list[Dihedral]|list[Improper]|list[Angle]|list[Bond],
+) -> None:
+    ##### My apologies for this ugly code. #####
+    # It wasn't planned that way, but we keep finding
+    # more special cases that need custom code added.
+    # PAR and SB files have grown over time and we keep
+    # finding more redundancy problems that need fixing.
+
+    # Step1: Remove duplicate interactions.
+    # Create a dictionary of all the duplicate interactions
+    # which share the same atom types and coefficients
+    # (excluding comments).
+    typescoeff_to_interaction = defaultdict(dict)
+    for interaction in interactions:
+        types = tuple(interaction.types)
+        # Find the text containing the force field parameters ("coeffs")
+        coeff = interaction.coeff_line
+        # Typically, this is "angle_coeff @angle:C3_N~_H~ 38. 118.4 # "
+        # But we only want "38. 118.4 # ".
+        # So we ignore the text before the first two spaces:
+        ispace1 = coeff.find(" ")
+        ispace2 = coeff.find(" ", ispace1+1)
+        ispace2 = ispace2+1
+        coeff = coeff[ispace2:].strip()  # eg. "38. 118.4 #"
+        # Finally, strip off the comment
+        coeff_no_comment = coeff.lstrip("#").split("#")[0].strip()
+        # Instead of storing the interaction at (types, coeff_no_comment),
+        # I store an additional dictionary (whose key is (types, coeff)).
+        # That way I can keep track of all the different comments that
+        # were added to this (otherwise identical) interaction.
+        # We want to keep all of them, but discard the ones that are
+        # trivially similar to each other.
+        typescoeff_to_interaction[(types, coeff_no_comment)][(types, coeff)] = interaction
+    # Copy the the non-redudant entries back into "interactions" again.
+    i = 0
+    for coeff_no_comment, coeff_interactions in typescoeff_to_interaction.items():
+        for typescoeff, interaction in coeff_interactions.items():
+            # Edge case: We want to ignore interactions if
+            # they lack a comment and are otherwise identical.
+            # ...so we also check for (coeff != coeff_no_comment).
+            coeff = typescoeff[1]
+            coeff_blank_comment = coeff
+            i_comment = coeff.find("#")
+            if i_comment > 0:
+                coeff_blank_comment = coeff[:i_comment+1]
+                comment = coeff[i_comment+1:]
+            if len(coeff_interactions) == 1:
+                interactions[i] = interaction
+                i += 1
+            elif coeff not in (coeff_no_comment, coeff_blank_comment):
+                # For some reason, a lot of comments only contain ' "'
+                # We want to skip those too.
+                if comment.strip() != '"':
+                    interactions[i] = interaction
+                    i += 1
+
+    del interactions[i:]
+
+    for idx, it1 in enumerate(interactions):
+        for it2 in interactions[idx+1:]:
             if it1.types == it2.types:
                 it1_coeff = it1.coeff_line.lstrip("#").split("#")[0]
                 it2_coeff = it2.coeff_line.lstrip("#").split("#")[0]
-                #print(it1_coeff, it2_coeff)
-                if it1_coeff == it2_coeff and skip_equal_parameters:
-                    it2.to_skip = True
-                if not it2.to_skip:
-                    # If we are not skipping this interaction, then
-                    # keep track of the number of duplicate interactions of this type
-                    if it1.duplicate_count == 0:
-                        it1.duplicate_count = 1
-                    it2.duplicate_count = it1.duplicate_count + 1
+                # If we are not skipping this interaction, then
+                # keep track of the number of duplicate interactions of this type
+                if it1.duplicate_count == 0:
+                    it1.duplicate_count = 1
+                it2.duplicate_count = it1.duplicate_count + 1
 
+
+
+def sort_duplicates(
+    interactions: list[Dihedral]|list[Improper]|list[Angle]|list[Bond],
+) -> None:
+        # According to William Jorgensen, if duplicate bonded interactions
+        # are defined for -exactly- the same atom types, then
+        # the most general interaction is the one that appears earliest in
+        # the PAR file (ie. the one with the lowest self.duplicate_count).
+        # Since, in this case, we lack any other criteria to choose from, we
+        # want moltemplate to select the most general interaction by default
+        # for those atoms.  But in order to make it do that, it must appear
+        # last in the generated .lt file.  So (if all other criteria are equal)
+        # So we sort the interactions with multiple duplicates
+        # according to the duplicate_count (in reverse order).
+        interaction_orderkey_pairs = []
+        counter = 0
+        for x in interactions:
+            if x.duplicate_count <= 1:
+                counter += 1  # (counter is the same for each duplicate)
+            k=(counter, -x.duplicate_count)  # key to be used for sorting
+            interaction_orderkey_pairs.append((k, x))
+        # Now sort by k
+        # (ie. sort by -duplicate_count, but only when duplicate_count is > 0)
+        interaction_orderkey_pairs.sort(key = lambda x: x[0])  # sort by k
+        # Strip off the key and store the result in interactions.
+        for i in range(len(interactions)):
+            interactions[i] = interaction_orderkey_pairs[i][1]
 
 
 
@@ -250,11 +334,12 @@ def main(argv):
        lines_par = infile_par.readlines()
     dihedrals, impropers = get_dihedrals_and_impropers(lines_par)
 
-        
+
     for interactions in [bonds, angles, dihedrals, impropers]:
-        interactions.sort(key=lambda k: k.typename)
-        interactions.sort(key=lambda k: k.sort_key)
-        check_uniqueness(interactions, skip_equal_parameters=True)
+        interactions.sort(key=lambda x: x.typename)
+        interactions.sort(key=lambda x: x.sort_key)
+        check_uniqueness(interactions)
+        sort_duplicates(interactions)
 
 
     ################################################################################################

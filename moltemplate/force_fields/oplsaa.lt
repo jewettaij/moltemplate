@@ -4288,8 +4288,8 @@ OPLSAA {
     bond_coeff @bond:CP_NT 481. 1.380 # JT-R 2014/04 2-amino thiophenes
     bond_coeff @bond:CP_OH 278. 1.366 # JT-R 2014/04 2-alkyl thiophenes, MP2/aug-cc-pVTZ
     bond_coeff @bond:CP_OS 340. 1.356 # JT-R 2014/04 thiophene ethers
-    bond_coeff @bond:CP_SA__1 250. 1.74 # wlj
     bond_coeff @bond:CP_SA__2 250. 1.71 # MKD New Thiophene -MP2(full)/6-311G(d,p), JT-R 2014/04 change "S " to SA
+    bond_coeff @bond:CP_SA__1 250. 1.74 # wlj
     bond_coeff @bond:CP_SH 220. 1.763 # JT-R 2014/04 thiophene thiol
     bond_coeff @bond:CP_S~ 250. 1.74 # wlj
     bond_coeff @bond:CQ_H5 367. 1.08 # 
@@ -4374,8 +4374,8 @@ OPLSAA {
     bond_coeff @bond:CV_I~ 250. 2.08 # wlj
     bond_coeff @bond:CV_NB 410. 1.394 # ADE,GUA,HIS
     bond_coeff @bond:CW_Br 300. 1.87 # wlj
-    bond_coeff @bond:CW_C=__1 481. 1.454 # JT-R 2014/04 2-vinyl furans
     bond_coeff @bond:CW_C=__2 549. 1.365 # 
+    bond_coeff @bond:CW_C=__1 481. 1.454 # JT-R 2014/04 2-vinyl furans
     bond_coeff @bond:CW_CM 481. 1.454 # JT-R 2014/04 2-vinyl furans
     bond_coeff @bond:CW_CT 278. 1.488 # jpt changed from 317. 1.504 jtr: HID CB-CG
     bond_coeff @bond:CW_CW 512. 1.375 # 
@@ -4758,8 +4758,8 @@ OPLSAA {
     @bond:CP_NT @atom:*_bCP*_a*_d*_i* @atom:*_bNT*_a*_d*_i*
     @bond:CP_OH @atom:*_bCP*_a*_d*_i* @atom:*_bOH*_a*_d*_i*
     @bond:CP_OS @atom:*_bCP*_a*_d*_i* @atom:*_bOS*_a*_d*_i*
-    @bond:CP_SA__1 @atom:*_bCP*_a*_d*_i* @atom:*_bSA*_a*_d*_i*
     @bond:CP_SA__2 @atom:*_bCP*_a*_d*_i* @atom:*_bSA*_a*_d*_i*
+    @bond:CP_SA__1 @atom:*_bCP*_a*_d*_i* @atom:*_bSA*_a*_d*_i*
     @bond:CP_SH @atom:*_bCP*_a*_d*_i* @atom:*_bSH*_a*_d*_i*
     @bond:CP_S~ @atom:*_bCP*_a*_d*_i* @atom:*_bS~*_a*_d*_i*
     @bond:CQ_H5 @atom:*_bCQ*_a*_d*_i* @atom:*_bH5*_a*_d*_i*
@@ -4844,8 +4844,8 @@ OPLSAA {
     @bond:CV_I~ @atom:*_bCV*_a*_d*_i* @atom:*_bI~*_a*_d*_i*
     @bond:CV_NB @atom:*_bCV*_a*_d*_i* @atom:*_bNB*_a*_d*_i*
     @bond:CW_Br @atom:*_bCW*_a*_d*_i* @atom:*_bBr*_a*_d*_i*
-    @bond:CW_C=__1 @atom:*_bCW*_a*_d*_i* @atom:*_bC=*_a*_d*_i*
     @bond:CW_C=__2 @atom:*_bCW*_a*_d*_i* @atom:*_bC=*_a*_d*_i*
+    @bond:CW_C=__1 @atom:*_bCW*_a*_d*_i* @atom:*_bC=*_a*_d*_i*
     @bond:CW_CM @atom:*_bCW*_a*_d*_i* @atom:*_bCM*_a*_d*_i*
     @bond:CW_CT @atom:*_bCW*_a*_d*_i* @atom:*_bCT*_a*_d*_i*
     @bond:CW_CW @atom:*_bCW*_a*_d*_i* @atom:*_bCW*_a*_d*_i*
@@ -5197,7 +5197,7 @@ OPLSAA {
     angle_coeff @angle:C3_N3_H3 35. 109.5 # 
     angle_coeff @angle:C3_NT_C3 51.8 107.2 # "
     angle_coeff @angle:C3_NT_H~ 43.2 108.1 # wlj MM3 based
-    angle_coeff @angle:C3_N~_H~ 38. 118.4 # 
+    angle_coeff @angle:C3_N~_H~ 38. 118.4 # TEST!!!!!!!
     angle_coeff @angle:C3_N§_CB 70. 125.8 # 9 methylated guan,aden
     angle_coeff @angle:C3_N§_CE 70. 128.8 # Methylated purines
     angle_coeff @angle:C3_N§_CK 70. 128.8 # 
@@ -5647,8 +5647,8 @@ OPLSAA {
     angle_coeff @angle:CR_NA_NB 56. 113.1 # "
     angle_coeff @angle:CR_NB_CB 70. 110.0 # wlj
     angle_coeff @angle:CR_NB_CR 70. 110.0 # JT-R thiadiazoles
-    angle_coeff @angle:CR_NB_CV__1 70. 104.0 # wlj ai purine 6/14
     angle_coeff @angle:CR_NB_CV__2 70. 110.0 # HIS(OL) wlj 1/97
+    angle_coeff @angle:CR_NB_CV__1 70. 104.0 # wlj ai purine 6/14
     angle_coeff @angle:CR_NB_CW 70. 110.0 # 
     angle_coeff @angle:CR_NB_DM 10.0 125. # wlj
     angle_coeff @angle:CR_NB_NB 70. 109.0 # wlj 12/06
@@ -5731,7 +5731,8 @@ OPLSAA {
     angle_coeff @angle:CT_CT_CZ 58.35 112.7 # wlj
     angle_coeff @angle:CT_CT_Cl 69. 109.8 # wlj - from MM2
     angle_coeff @angle:CT_CT_F~ 50. 109.5 # PAK F-CT-HC (emd 5-09-94)
-    angle_coeff @angle:CT_CT_HC 37.5 110.7 # CHARMM 22
+    angle_coeff @angle:CT_CT_HC__2 37.5 110.7 # CHARMM 22 parameter file
+    angle_coeff @angle:CT_CT_HC__1 37.5 110.7 # CHARMM 22
     angle_coeff @angle:CT_CT_I~ 75. 112.0 # wlj
     angle_coeff @angle:CT_CT_N2 80.0 111.2 # ARG JCP 76, 1439
     angle_coeff @angle:CT_CT_N3 80.0 111.2 # LYS(OL) JCP 76, 1439
@@ -5760,8 +5761,8 @@ OPLSAA {
     angle_coeff @angle:CT_CX_CX 70. 130.7 # jtr: HIP CB-CG-CD2
     angle_coeff @angle:CT_CX_NA 70. 121.6 # jtr - copy from CT-CW-NA for HIP
     angle_coeff @angle:CT_CY_CT 35. 114.3 # "
-    angle_coeff @angle:CT_CY_O^__1 37.5 114.0 # "
     angle_coeff @angle:CT_CY_O^__2 37.5 117.2 # "
+    angle_coeff @angle:CT_CY_O^__1 37.5 114.0 # "
     angle_coeff @angle:CT_CZ_CZ 150. 180. # do 11/98 - JPOC, 9, 191(1996)
     angle_coeff @angle:CT_CZ_NZ 150. 180. # wlj
     angle_coeff @angle:CT_Cl_DM 10.0 109.47 # wlj 1/19
@@ -5849,8 +5850,8 @@ OPLSAA {
     angle_coeff @angle:CV_CC_NA 70. 120.00 # HIS(OL)
     angle_coeff @angle:CV_CT_CT 63.0 114.0 # jtr: HIE CA-CB-CG
     angle_coeff @angle:CV_CT_HC 35.0 109.5 # jtr: HIE HB-CB-CG
-    angle_coeff @angle:CV_CW_NA__1 70. 106.3 # wlj " " imidazole
     angle_coeff @angle:CV_CW_NA__2 70. 103.6 # wlj 6/13
+    angle_coeff @angle:CV_CW_NA__1 70. 106.3 # wlj " " imidazole
     angle_coeff @angle:CV_CW_OA 70. 108.0 # "
     angle_coeff @angle:CV_CW_OS 70. 108.0 # "
     angle_coeff @angle:CV_C~_NA 70. 111.3 # GUA
@@ -5872,8 +5873,8 @@ OPLSAA {
     angle_coeff @angle:CW_CT_HC 35.0 109.5 # jtr: HID HB-CB-CG
     angle_coeff @angle:CW_CT_S~ 50. 114.7 # wlj
     angle_coeff @angle:CW_CV_C! 70. 125.7 # "
-    angle_coeff @angle:CW_CV_NB__1 70. 111.0 # wlj " " "
     angle_coeff @angle:CW_CV_NB__2 70. 108.7 # wlj 6/13
+    angle_coeff @angle:CW_CV_NB__1 70. 111.0 # wlj " " "
     angle_coeff @angle:CW_CW_NA 70. 120.0 # 
     angle_coeff @angle:CW_CW_NB 70. 120.0 # 
     angle_coeff @angle:CW_C~_O~ 80. 120.4 # bhap, copy from CA-C -O rcr HIVRT
@@ -6153,8 +6154,8 @@ OPLSAA {
     angle_coeff @angle:HC_CY_NT 35. 114.3 # nev, copy from HC-CY-CT rcr HIVRT
     angle_coeff @angle:HC_CY_N^ 35. 111.0 # "
     angle_coeff @angle:HC_CY_N~ 35. 108.0 # "
-    angle_coeff @angle:HC_CY_O^__1 37.5 114.0 # "
     angle_coeff @angle:HC_CY_O^__2 37.5 117.2 # "
+    angle_coeff @angle:HC_CY_O^__1 37.5 114.0 # "
     angle_coeff @angle:HC_CY_S~ 37.5 108.0 # "
     angle_coeff @angle:HC_CZ_CZ 112. 180. # do 1/99 - JPOC, 9, 191(1996)
     angle_coeff @angle:HC_C~_HC 35. 115.0 # wlj check
@@ -6251,9 +6252,8 @@ OPLSAA {
     angle_coeff @angle:NA_CR_CA 70. 125.0 # wlj
     angle_coeff @angle:NA_CR_CT 70. 125.0 # wlj
     angle_coeff @angle:NA_CR_NA 70. 106.7 # MKD MP2(full)/aug-ccpVTZ - aminoimidazol,HIP
-    angle_coeff @angle:NA_CR_NB__1 70. 110.5 # MKD MP2(full)/6-311G(d,p) changed from 120.0
     angle_coeff @angle:NA_CR_NB__2 70. 114.0 # wlj ai purine 6/14
-    angle_coeff @angle:NA_CR_NB__3 70. 110.5 # MKD MP2(full)/6-311G(d,p) changed from 120.0
+    angle_coeff @angle:NA_CR_NB__1 70. 110.5 # MKD MP2(full)/6-311G(d,p) changed from 120.0
     angle_coeff @angle:NA_CR_NC 70. 126.2 # wlj
     angle_coeff @angle:NA_CR_SY 70. 120. # wlj
     angle_coeff @angle:NA_CT_C~ 63. 109.6 # MKD MP2/6-311G(d,p)
@@ -6276,9 +6276,8 @@ OPLSAA {
     angle_coeff @angle:NB_CR_OS 70. 115.0 # "
     angle_coeff @angle:NB_CR_SA 70. 115.0 # "
     angle_coeff @angle:NB_CR_SY 70. 120. # wlj
-    angle_coeff @angle:NB_CR_S~__1 70. 113.6 # wlj
     angle_coeff @angle:NB_CR_S~__2 70. 115.0 # "
-    angle_coeff @angle:NB_CR_S~__3 70. 113.6 # wlj
+    angle_coeff @angle:NB_CR_S~__1 70. 113.6 # wlj
     angle_coeff @angle:NB_CU_CS 70. 111.9 # "
     angle_coeff @angle:NB_CU_CT 70. 118.9 # "
     angle_coeff @angle:NB_CU_CZ 70. 118.9 # 
@@ -6288,8 +6287,8 @@ OPLSAA {
     angle_coeff @angle:NB_CW_CT 70. 118.9 # "
     angle_coeff @angle:NB_NA_CA 70. 118.4 # "
     angle_coeff @angle:NB_NA_CT 70. 118.4 # "
-    angle_coeff @angle:NB_NA_CW__1 56. 113.1 # "
     angle_coeff @angle:NB_NA_CW__2 56. 111.4 # wlj 6/13
+    angle_coeff @angle:NB_NA_CW__1 56. 113.1 # "
     angle_coeff @angle:NB_NA_H~ 56. 119.3 # " wlj 6/13
     angle_coeff @angle:NB_NB_DM 10.0 125. # wlj
     angle_coeff @angle:NB_NB_NA 70. 107.0 # wlj 6/13
@@ -6297,7 +6296,8 @@ OPLSAA {
     angle_coeff @angle:NB_NB_OA 70. 110.0 # JT-R oxatriazoles
     angle_coeff @angle:NB_NB_SA 70. 114.0 # JT-R thiatriazole
     angle_coeff @angle:NB_NX_CW 56. 113.1 # MKD synonym for NB-NA-CW
-    angle_coeff @angle:NB_OA_CR 70. 101.3 # JT-R oxatriazoles
+    angle_coeff @angle:NB_OA_CR__2 70. 101.3 # JT-R oxatriazole
+    angle_coeff @angle:NB_OA_CR__1 70. 101.3 # JT-R oxatriazoles
     angle_coeff @angle:NB_OA_NB 70. 103.4 # JT-R oxatriazole
     angle_coeff @angle:NB_OS_CR 70. 101.3 # JT-R oxatriazoles
     angle_coeff @angle:NB_OS_DM 10.0 125. # wlj
@@ -6319,8 +6319,8 @@ OPLSAA {
     angle_coeff @angle:NC_CM_N~ 70. 118.0 # wlj 6/14 ai
     angle_coeff @angle:NC_CQ_CT 70. 115.5 # wlj
     angle_coeff @angle:NC_CQ_NC 70. 129.1 # 
-    angle_coeff @angle:NC_C~_HC__1 35. 122.0 # wlj
     angle_coeff @angle:NC_C~_HC__2 35. 116.0 # wlj imine - check
+    angle_coeff @angle:NC_C~_HC__1 35. 122.0 # wlj
     angle_coeff @angle:NC_C~_NA 70. 118.6 # 
     angle_coeff @angle:NC_C~_O~ 80. 122.5 # CYT
     angle_coeff @angle:NC_NZ_NZ 100. 180.0 # wlj azide
@@ -6423,8 +6423,8 @@ OPLSAA {
     angle_coeff @angle:OY_SY_NT 74.0 108.9 # nev, copy from OY-SY-CT rcr HIVRT
     angle_coeff @angle:OY_SY_N~ 120.0 107.0 # 
     angle_coeff @angle:OY_SY_OH 74.0 108.7 # 
-    angle_coeff @angle:OY_SY_OY__1 104.0 123.0 # wlj 9/19 from MeSO2F
     angle_coeff @angle:OY_SY_OY__2 104.0 119.0 # 
+    angle_coeff @angle:OY_SY_OY__1 104.0 123.0 # wlj 9/19 from MeSO2F
     angle_coeff @angle:OY_SZ_CT 74.0 107.0 # 
     angle_coeff @angle:OY_SZ_DM 10.0 90. # dummy
     angle_coeff @angle:O~_C~_Br 75. 119.0 # wlj
@@ -7082,8 +7082,8 @@ OPLSAA {
     @angle:CR_NA_NB @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:CR_NB_CB @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCB*_d*_i*
     @angle:CR_NB_CR @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i*
-    @angle:CR_NB_CV__1 @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCV*_d*_i*
     @angle:CR_NB_CV__2 @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCV*_d*_i*
+    @angle:CR_NB_CV__1 @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCV*_d*_i*
     @angle:CR_NB_CW @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCW*_d*_i*
     @angle:CR_NB_DM @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aDM*_d*_i*
     @angle:CR_NB_NB @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i*
@@ -7166,7 +7166,8 @@ OPLSAA {
     @angle:CT_CT_CZ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCZ*_d*_i*
     @angle:CT_CT_Cl @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCl*_d*_i*
     @angle:CT_CT_F~ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aF~*_d*_i*
-    @angle:CT_CT_HC @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
+    @angle:CT_CT_HC__2 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
+    @angle:CT_CT_HC__1 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
     @angle:CT_CT_I~ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aI~*_d*_i*
     @angle:CT_CT_N2 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aN2*_d*_i*
     @angle:CT_CT_N3 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aN3*_d*_i*
@@ -7195,8 +7196,8 @@ OPLSAA {
     @angle:CT_CX_CX @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCX*_d*_i* @atom:*_b*_aCX*_d*_i*
     @angle:CT_CX_NA @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCX*_d*_i* @atom:*_b*_aNA*_d*_i*
     @angle:CT_CY_CT @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aCT*_d*_i*
-    @angle:CT_CY_O^__1 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aO^*_d*_i*
     @angle:CT_CY_O^__2 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aO^*_d*_i*
+    @angle:CT_CY_O^__1 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aO^*_d*_i*
     @angle:CT_CZ_CZ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCZ*_d*_i* @atom:*_b*_aCZ*_d*_i*
     @angle:CT_CZ_NZ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCZ*_d*_i* @atom:*_b*_aNZ*_d*_i*
     @angle:CT_Cl_DM @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCl*_d*_i* @atom:*_b*_aDM*_d*_i*
@@ -7284,8 +7285,8 @@ OPLSAA {
     @angle:CV_CC_NA @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCC*_d*_i* @atom:*_b*_aNA*_d*_i*
     @angle:CV_CT_CT @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i*
     @angle:CV_CT_HC @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
-    @angle:CV_CW_NA__1 @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aNA*_d*_i*
     @angle:CV_CW_NA__2 @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aNA*_d*_i*
+    @angle:CV_CW_NA__1 @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aNA*_d*_i*
     @angle:CV_CW_OA @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aOA*_d*_i*
     @angle:CV_CW_OS @atom:*_b*_aCV*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aOS*_d*_i*
     @angle:CV_C~_NA @atom:*_b*_aCV*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aNA*_d*_i*
@@ -7307,8 +7308,8 @@ OPLSAA {
     @angle:CW_CT_HC @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
     @angle:CW_CT_S~ @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aS~*_d*_i*
     @angle:CW_CV_C! @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCV*_d*_i* @atom:*_b*_aC!*_d*_i*
-    @angle:CW_CV_NB__1 @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCV*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:CW_CV_NB__2 @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCV*_d*_i* @atom:*_b*_aNB*_d*_i*
+    @angle:CW_CV_NB__1 @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCV*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:CW_CW_NA @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aNA*_d*_i*
     @angle:CW_CW_NB @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:CW_C~_O~ @atom:*_b*_aCW*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aO~*_d*_i*
@@ -7588,8 +7589,8 @@ OPLSAA {
     @angle:HC_CY_NT @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aNT*_d*_i*
     @angle:HC_CY_N^ @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aN^*_d*_i*
     @angle:HC_CY_N~ @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aN~*_d*_i*
-    @angle:HC_CY_O^__1 @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aO^*_d*_i*
     @angle:HC_CY_O^__2 @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aO^*_d*_i*
+    @angle:HC_CY_O^__1 @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aO^*_d*_i*
     @angle:HC_CY_S~ @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCY*_d*_i* @atom:*_b*_aS~*_d*_i*
     @angle:HC_CZ_CZ @atom:*_b*_aHC*_d*_i* @atom:*_b*_aCZ*_d*_i* @atom:*_b*_aCZ*_d*_i*
     @angle:HC_C~_HC @atom:*_b*_aHC*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aHC*_d*_i*
@@ -7686,9 +7687,8 @@ OPLSAA {
     @angle:NA_CR_CA @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aCA*_d*_i*
     @angle:NA_CR_CT @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aCT*_d*_i*
     @angle:NA_CR_NA @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNA*_d*_i*
-    @angle:NA_CR_NB__1 @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:NA_CR_NB__2 @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i*
-    @angle:NA_CR_NB__3 @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i*
+    @angle:NA_CR_NB__1 @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:NA_CR_NC @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aNC*_d*_i*
     @angle:NA_CR_SY @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aSY*_d*_i*
     @angle:NA_CT_C~ @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aC~*_d*_i*
@@ -7711,9 +7711,8 @@ OPLSAA {
     @angle:NB_CR_OS @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aOS*_d*_i*
     @angle:NB_CR_SA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aSA*_d*_i*
     @angle:NB_CR_SY @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aSY*_d*_i*
-    @angle:NB_CR_S~__1 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aS~*_d*_i*
     @angle:NB_CR_S~__2 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aS~*_d*_i*
-    @angle:NB_CR_S~__3 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aS~*_d*_i*
+    @angle:NB_CR_S~__1 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCR*_d*_i* @atom:*_b*_aS~*_d*_i*
     @angle:NB_CU_CS @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCU*_d*_i* @atom:*_b*_aCS*_d*_i*
     @angle:NB_CU_CT @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCU*_d*_i* @atom:*_b*_aCT*_d*_i*
     @angle:NB_CU_CZ @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCU*_d*_i* @atom:*_b*_aCZ*_d*_i*
@@ -7723,8 +7722,8 @@ OPLSAA {
     @angle:NB_CW_CT @atom:*_b*_aNB*_d*_i* @atom:*_b*_aCW*_d*_i* @atom:*_b*_aCT*_d*_i*
     @angle:NB_NA_CA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCA*_d*_i*
     @angle:NB_NA_CT @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCT*_d*_i*
-    @angle:NB_NA_CW__1 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCW*_d*_i*
     @angle:NB_NA_CW__2 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCW*_d*_i*
+    @angle:NB_NA_CW__1 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aCW*_d*_i*
     @angle:NB_NA_H~ @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i* @atom:*_b*_aH~*_d*_i*
     @angle:NB_NB_DM @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aDM*_d*_i*
     @angle:NB_NB_NA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNA*_d*_i*
@@ -7732,7 +7731,8 @@ OPLSAA {
     @angle:NB_NB_OA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i*
     @angle:NB_NB_SA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aSA*_d*_i*
     @angle:NB_NX_CW @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNX*_d*_i* @atom:*_b*_aCW*_d*_i*
-    @angle:NB_OA_CR @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aCR*_d*_i*
+    @angle:NB_OA_CR__2 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aCR*_d*_i*
+    @angle:NB_OA_CR__1 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aCR*_d*_i*
     @angle:NB_OA_NB @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:NB_OS_CR @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOS*_d*_i* @atom:*_b*_aCR*_d*_i*
     @angle:NB_OS_DM @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOS*_d*_i* @atom:*_b*_aDM*_d*_i*
@@ -7754,8 +7754,8 @@ OPLSAA {
     @angle:NC_CM_N~ @atom:*_b*_aNC*_d*_i* @atom:*_b*_aCM*_d*_i* @atom:*_b*_aN~*_d*_i*
     @angle:NC_CQ_CT @atom:*_b*_aNC*_d*_i* @atom:*_b*_aCQ*_d*_i* @atom:*_b*_aCT*_d*_i*
     @angle:NC_CQ_NC @atom:*_b*_aNC*_d*_i* @atom:*_b*_aCQ*_d*_i* @atom:*_b*_aNC*_d*_i*
-    @angle:NC_C~_HC__1 @atom:*_b*_aNC*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aHC*_d*_i*
     @angle:NC_C~_HC__2 @atom:*_b*_aNC*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aHC*_d*_i*
+    @angle:NC_C~_HC__1 @atom:*_b*_aNC*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aHC*_d*_i*
     @angle:NC_C~_NA @atom:*_b*_aNC*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aNA*_d*_i*
     @angle:NC_C~_O~ @atom:*_b*_aNC*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aO~*_d*_i*
     @angle:NC_NZ_NZ @atom:*_b*_aNC*_d*_i* @atom:*_b*_aNZ*_d*_i* @atom:*_b*_aNZ*_d*_i*
@@ -7858,8 +7858,8 @@ OPLSAA {
     @angle:OY_SY_NT @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSY*_d*_i* @atom:*_b*_aNT*_d*_i*
     @angle:OY_SY_N~ @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSY*_d*_i* @atom:*_b*_aN~*_d*_i*
     @angle:OY_SY_OH @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSY*_d*_i* @atom:*_b*_aOH*_d*_i*
-    @angle:OY_SY_OY__1 @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSY*_d*_i* @atom:*_b*_aOY*_d*_i*
     @angle:OY_SY_OY__2 @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSY*_d*_i* @atom:*_b*_aOY*_d*_i*
+    @angle:OY_SY_OY__1 @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSY*_d*_i* @atom:*_b*_aOY*_d*_i*
     @angle:OY_SZ_CT @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSZ*_d*_i* @atom:*_b*_aCT*_d*_i*
     @angle:OY_SZ_DM @atom:*_b*_aOY*_d*_i* @atom:*_b*_aSZ*_d*_i* @atom:*_b*_aDM*_d*_i*
     @angle:O~_C~_Br @atom:*_b*_aO~*_d*_i* @atom:*_b*_aC~*_d*_i* @atom:*_b*_aBr*_d*_i*
@@ -7956,8 +7956,8 @@ OPLSAA {
     dihedral_coeff @dihedral:€€_CS_C~_€€ 0.0 7.250 0.0 0.0 #  
     dihedral_coeff @dihedral:€€_CW_CV_€€ 0.0 10.75 0.0 0.0 #  
     dihedral_coeff @dihedral:€€_CW_CW_€€ 0.0 10.75 0.0 0.0 #  
-    dihedral_coeff @dihedral:€€_CW_NA_€€__1 0.0 2.80 0.0 0.0 #  
     dihedral_coeff @dihedral:€€_CW_NA_€€__2 0.0 3.0 0.0 0.0 #  
+    dihedral_coeff @dihedral:€€_CW_NA_€€__1 0.0 2.80 0.0 0.0 #  
     dihedral_coeff @dihedral:€€_CW_NB_€€ 0.0 10.0 0.0 0.0 #  
     dihedral_coeff @dihedral:€€_CY_CY_€€ 0.0 0.0 0.0 0.0 # small ring 
     dihedral_coeff @dihedral:€€_CY_C^_€€ 0.0 0.0 0.0 0.0 # small ring 
@@ -8047,10 +8047,10 @@ OPLSAA {
     dihedral_coeff @dihedral:C€_CA_SH_HS 0.000 0.610 0.000 0.0 # aromatic thiol 
     dihedral_coeff @dihedral:C€_CW_CV_HA 0.0 10.75 0.0 0.0 #  
     dihedral_coeff @dihedral:C€_CW_CW_HA 0.0 10.75 0.0 0.0 #  
-    dihedral_coeff @dihedral:C€_NA_CT_CT__1 1.00 -0.35 0.0 0.0 # imidazoles, indoles, purines 
     dihedral_coeff @dihedral:C€_NA_CT_CT__2 0.00 -0.576 0.0 0.0 # Ping added for .. 
-    dihedral_coeff @dihedral:C€_NA_CT_OS__1 1.50 -1.50 0.0 0.0 # imidazoles, indoles, purines 
+    dihedral_coeff @dihedral:C€_NA_CT_CT__1 1.00 -0.35 0.0 0.0 # imidazoles, indoles, purines 
     dihedral_coeff @dihedral:C€_NA_CT_OS__2 0.00 -1.876 0.0 0.0 # Ping added for chi in nucleoside 
+    dihedral_coeff @dihedral:C€_NA_CT_OS__1 1.50 -1.50 0.0 0.0 # imidazoles, indoles, purines 
     dihedral_coeff @dihedral:C€_NC_CQ_HA 0.0 7.250 0.0 0.0 #  
     dihedral_coeff @dihedral:C€_N^_CT_HC 0.0 0.0 0.0 0.0 # small ring 
     dihedral_coeff @dihedral:C€_N~_CQ_HA 0.0 7.250 0.0 0.0 #  
@@ -8136,8 +8136,8 @@ OPLSAA {
     dihedral_coeff @dihedral:CT_CM_C~_O€ 0.900 0.230 -0.505 0.0 # 2-Me-1,3-butadiene-like 
     dihedral_coeff @dihedral:CT_CT_CC_N€ 2.366 -0.262 0.505 0.0 # " 
     dihedral_coeff @dihedral:CT_CT_CO_O€ 1.3 -0.50 0.0 0.0 # alcohols, ethers OPLS/2020 
-    dihedral_coeff @dihedral:CT_CT_CT_O€__1 1.3 -0.50 0.0 0.0 # alcohols, ethers OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_CT_O€__2 -1.336 0.0 0.0 0.0 # hexopyranoses 
+    dihedral_coeff @dihedral:CT_CT_CT_O€__1 1.3 -0.50 0.0 0.0 # alcohols, ethers OPLS/2020 
     dihedral_coeff @dihedral:CT_C~_NC_O€ 0.0 14.0 0.0 0.0 # oxime 
     dihedral_coeff @dihedral:CT_OS_CT_O€ -0.521 -2.018 1.996 0.0 # acetals AA (Sugars:see 150-155) 
     dihedral_coeff @dihedral:CW_CV_CS_C€ 0.0 2.17 0.0 0.0 # biphenyl-like 
@@ -8233,11 +8233,11 @@ OPLSAA {
     dihedral_coeff @dihedral:CA_C!_CS_CS 0.0 1.49 0.0 0.0 # biaryl_3,4 
     dihedral_coeff @dihedral:CA_C!_CS_CW 0.0 1.49 0.0 0.0 # biaryl_4 
     dihedral_coeff @dihedral:CA_C!_CU_NB 0.0 2.17 0.0 0.0 # biphenyl-like 
-    dihedral_coeff @dihedral:CA_C!_CV_NB__1 0.0 2.17 0.0 0.0 # biphenyl-like 
     dihedral_coeff @dihedral:CA_C!_CV_NB__2 0.0 1.59 0.0 0.0 # 4-phenyltriazole 
+    dihedral_coeff @dihedral:CA_C!_CV_NB__1 0.0 2.17 0.0 0.0 # biphenyl-like 
     dihedral_coeff @dihedral:CA_C!_CW_CS 0.0 1.49 0.0 0.0 # biaryl_5 
-    dihedral_coeff @dihedral:CA_C!_CW_NA__1 0.0 2.17 0.0 0.0 # biphenyl-like 
     dihedral_coeff @dihedral:CA_C!_CW_NA__2 0.0 2.0 0.0 0.0 # biaryl_7 
+    dihedral_coeff @dihedral:CA_C!_CW_NA__1 0.0 2.17 0.0 0.0 # biphenyl-like 
     dihedral_coeff @dihedral:CA_C!_CW_NS 0.0 3.01 0.0 0.22 # biaryl_8  keep V4 
     dihedral_coeff @dihedral:CA_C!_CW_OS 0.0 1.73 0.0 0.0 # biaryl_6 
     dihedral_coeff @dihedral:CA_C!_CW_SA 0.0 2.17 0.0 0.0 # biphenyl-like 
@@ -8248,8 +8248,8 @@ OPLSAA {
     dihedral_coeff @dihedral:CA_C!_NX_CW 0.0 1.47 0.0 -0.07 # biaryl_10 
     dihedral_coeff @dihedral:CA_C!_NX_NB 0.0 1.76 0.0 0.0 # biaryl_11 
     dihedral_coeff @dihedral:CA_C!_N~_CM 0.0 2.17 0.0 0.0 # biphenyl-like 
-    dihedral_coeff @dihedral:CA_C!_N~_C~__1 0.0 2.17 0.0 0.0 # biphenyl-like 
     dihedral_coeff @dihedral:CA_C!_N~_C~__2 0.0 1.76 0.0 0.23 # biaryl_62 
+    dihedral_coeff @dihedral:CA_C!_N~_C~__1 0.0 2.17 0.0 0.0 # biphenyl-like 
     dihedral_coeff @dihedral:CA_C=_CM_CT 0.0 14.0 0.0 0.0 # alkene 
     dihedral_coeff @dihedral:CA_C=_CM_HC 0.0 14.0 0.0 0.0 # alkene 
     dihedral_coeff @dihedral:CA_CA_Br_XB 0.000 0.000 0.000 0.0 # halogen bond 
@@ -8346,12 +8346,12 @@ OPLSAA {
     dihedral_coeff @dihedral:CH_C2_C2_C2 -3.400 1.250 3.100 0.0 # UA alkanes with scl14 = 2,2 
     dihedral_coeff @dihedral:CH_C2_C2_CH -3.400 1.250 3.100 0.0 # UA alkanes with scl14 = 2,2 
     dihedral_coeff @dihedral:CH_C2_OH_HO 0.300 0.000 1.300 0.0 # Alcohols   with scl14 = 2,2 
-    dihedral_coeff @dihedral:CK_NA_CT_CT__1 2.756 -0.872 -3.680 0.0 # Ping added,nucleoside 
     dihedral_coeff @dihedral:CK_NA_CT_CT__2 -1.00 -0.35 0.0 0.0 # imidazoles, indoles, purines 
+    dihedral_coeff @dihedral:CK_NA_CT_CT__1 2.756 -0.872 -3.680 0.0 # Ping added,nucleoside 
     dihedral_coeff @dihedral:CK_NA_CT_OS -1.50 -1.50 0.0 0.0 # imidazoles, indoles, purines 
     dihedral_coeff @dihedral:CK_N§_CT_CT -1.00 -0.35 0.0 0.0 # imidazoles, indoles, purines 
-    dihedral_coeff @dihedral:CK_N§_CT_OS__1 3.132 -1.491 2.744 0.0 # Ping added,nucleoside 
     dihedral_coeff @dihedral:CK_N§_CT_OS__2 -1.50 -1.50 0.0 0.0 # imidazoles, indoles, purines 
+    dihedral_coeff @dihedral:CK_N§_CT_OS__1 3.132 -1.491 2.744 0.0 # Ping added,nucleoside 
     dihedral_coeff @dihedral:CM_C=_C=_CM 1.423 4.055 0.858 0.0 # diene C=C-C=C 
     dihedral_coeff @dihedral:CM_C=_C=_CT 0.0 0.0 -0.372 0.0 # diene - generic 
     dihedral_coeff @dihedral:CM_C=_C=_HC 0.0 0.0 -0.372 0.0 # diene - generic 
@@ -8440,20 +8440,20 @@ OPLSAA {
     dihedral_coeff @dihedral:CT_CT_CT_Br 0.0 0.0 0.400 0.0 # alkyl bromide 
     dihedral_coeff @dihedral:CT_CT_CT_CA 0.000 0.000 0.000 0.0 # alkyl benzenes 
     dihedral_coeff @dihedral:CT_CT_CT_CO 0.850 -0.200 0.200 0.0 # hydrocarbon OPLS/2020 
-    dihedral_coeff @dihedral:CT_CT_CT_CT__1 0.850 -0.200 0.200 0.0 # hydrocarbon OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_CT_CT__2 1.100 -0.200 0.200 0.0 # butane only OPLS/2020 
+    dihedral_coeff @dihedral:CT_CT_CT_CT__1 0.850 -0.200 0.200 0.0 # hydrocarbon OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_CT_CZ 0.000 -0.650 0.0 0.0 # alkyne, nitrile 
     dihedral_coeff @dihedral:CT_CT_CT_Cl 0.0 0.0 0.400 0.0 # alkyl chloride 
-    dihedral_coeff @dihedral:CT_CT_CT_C~__1 -3.185 -0.825 0.493 0.0 # carboxylate ion 
-    dihedral_coeff @dihedral:CT_CT_CT_C~__2 -1.697 -0.456 0.585 0.0 # aldehyde & ketone & acyl halide 
-    dihedral_coeff @dihedral:CT_CT_CT_C~__3 -1.267 0.479 -0.486 0.0 # Chi-2  Gln OPLS-AA/M 
     dihedral_coeff @dihedral:CT_CT_CT_C~__4 -0.885 1.025 -1.293 0.0 # Chi-2  Glu OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_CT_C~__3 -1.267 0.479 -0.486 0.0 # Chi-2  Gln OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_CT_C~__2 -1.697 -0.456 0.585 0.0 # aldehyde & ketone & acyl halide 
+    dihedral_coeff @dihedral:CT_CT_CT_C~__1 -3.185 -0.825 0.493 0.0 # carboxylate ion 
     dihedral_coeff @dihedral:CT_CT_CT_F~ 0.300 -0.4 0.400 0.0 # alkyl fluoride 
     dihedral_coeff @dihedral:CT_CT_CT_I~ 0.0 0.0 0.400 0.0 # alkyl iodide 
     dihedral_coeff @dihedral:CT_CT_CT_N3 2.732 -0.229 0.485 0.0 # ammonium ion all-atom 
     dihedral_coeff @dihedral:CT_CT_CT_NT 2.392 -0.674 0.550 0.0 # amine all-atom 
-    dihedral_coeff @dihedral:CT_CT_CT_OH__1 2.0 -0.20 0.0 0.0 # alcohols         OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_CT_OH__2 -1.552 0.0 0.000 0.0 # polyols  AA 
+    dihedral_coeff @dihedral:CT_CT_CT_OH__1 2.0 -0.20 0.0 0.0 # alcohols         OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_CT_OS 1.3 -0.50 0.0 0.0 # ethers           OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_CT_SH 1.262 -0.198 0.465 0.0 # thiol all-atom  (mod 11/99) 
     dihedral_coeff @dihedral:CT_CT_CT_SY 1.262 -0.198 0.465 0.0 # (mod 11/99) 
@@ -8466,22 +8466,22 @@ OPLSAA {
     dihedral_coeff @dihedral:CT_CT_C~_Cl 0.0 0.0 0.0 0.0 # acyl halide 
     dihedral_coeff @dihedral:CT_CT_C~_F~ 0.0 0.0 0.0 0.0 # acyl halide 
     dihedral_coeff @dihedral:CT_CT_C~_HC 0.0 0.0 0.0 0.0 # aldehyde 
-    dihedral_coeff @dihedral:CT_CT_C~_N~__1 1.779 0.419 -0.110 0.0 # Psi' peptides AA/M 
-    dihedral_coeff @dihedral:CT_CT_C~_N~__2 2.844 -0.361 -0.325 0.0 # propanamide OPLS-AA/M 
-    dihedral_coeff @dihedral:CT_CT_C~_N~__3 3.260 0.440 0.600 0.0 # lastl (psi) torsion for beta-3-peptid 
-    dihedral_coeff @dihedral:CT_CT_C~_N~__4 5.029 0.719 2.240 0.0 # Psi' Pro OPLS-AA/M 
     dihedral_coeff @dihedral:CT_CT_C~_N~__5 1.494 -0.511 0.125 0.0 # Chi-2  Asn OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_C~_N~__4 5.029 0.719 2.240 0.0 # Psi' Pro OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_C~_N~__3 3.260 0.440 0.600 0.0 # lastl (psi) torsion for beta-3-peptid 
+    dihedral_coeff @dihedral:CT_CT_C~_N~__2 2.844 -0.361 -0.325 0.0 # propanamide OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_C~_N~__1 1.779 0.419 -0.110 0.0 # Psi' peptides AA/M 
     dihedral_coeff @dihedral:CT_CT_C~_O2 0.000 1.000 1.350 0.0 # Chi-2  Asp OPLS-AA/M 
-    dihedral_coeff @dihedral:CT_CT_C~_OH__1 1.000 0.546 0.450 0.0 # RCOOH acid 
     dihedral_coeff @dihedral:CT_CT_C~_OH__2 0.0 1.412 0.00 0.0 # dicarboxylic acid 
+    dihedral_coeff @dihedral:CT_CT_C~_OH__1 1.000 0.546 0.450 0.0 # RCOOH acid 
     dihedral_coeff @dihedral:CT_CT_C~_OS 0.000 0.000 -0.5530 0.0 # esters 
-    dihedral_coeff @dihedral:CT_CT_C~_O~__1 0.000 0.000 0.000 0.0 # peptides 
-    dihedral_coeff @dihedral:CT_CT_C~_O~__2 0.406 1.304 0.139 0.0 # propanamide OPLS-AA/M 
-    dihedral_coeff @dihedral:CT_CT_C~_O~__3 0.000 0.546 0.000 0.0 # RCOOH acid 
-    dihedral_coeff @dihedral:CT_CT_C~_O~__4 -0.750 -0.550 -0.250 0.0 # dicarboxylic acid 
-    dihedral_coeff @dihedral:CT_CT_C~_O~__5 -0.277 1.228 -0.694 0.0 # aldehyde & ketone & acyl halide 
-    dihedral_coeff @dihedral:CT_CT_C~_O~__6 -1.000 -1.900 -0.900 0.0 # 1,2-diacid monoanion 
     dihedral_coeff @dihedral:CT_CT_C~_O~__7 1.656 1.304 0.439 0.0 # Chi-2' Asn OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_C~_O~__6 -1.000 -1.900 -0.900 0.0 # 1,2-diacid monoanion 
+    dihedral_coeff @dihedral:CT_CT_C~_O~__5 -0.277 1.228 -0.694 0.0 # aldehyde & ketone & acyl halide 
+    dihedral_coeff @dihedral:CT_CT_C~_O~__4 -0.750 -0.550 -0.250 0.0 # dicarboxylic acid 
+    dihedral_coeff @dihedral:CT_CT_C~_O~__3 0.000 0.546 0.000 0.0 # RCOOH acid 
+    dihedral_coeff @dihedral:CT_CT_C~_O~__2 0.406 1.304 0.139 0.0 # propanamide OPLS-AA/M 
+    dihedral_coeff @dihedral:CT_CT_C~_O~__1 0.000 0.000 0.000 0.0 # peptides 
     dihedral_coeff @dihedral:CT_CT_N2_CA 1.829 0.243 -0.498 0.0 # ethylguanidinium ion 
     dihedral_coeff @dihedral:CT_CT_N2_H3 -0.190 -0.417 0.418 0.0 # guanidinium 
     dihedral_coeff @dihedral:CT_CT_N2_H~ -0.190 -0.417 0.418 0.0 # guanidinium 
@@ -8490,15 +8490,15 @@ OPLSAA {
     dihedral_coeff @dihedral:CT_CT_NC_NZ 0.0 0.0 0.0 0.0 # azides 
     dihedral_coeff @dihedral:CT_CT_NM_CT 2.859 2.058 -11.266 0.0 #  
     dihedral_coeff @dihedral:CT_CT_NO_ON 0.0 0.40 0.0 0.0 # nitroethane 
-    dihedral_coeff @dihedral:CT_CT_NT_H~__1 -0.190 -0.417 0.418 0.0 # amine all-atom See 197. 
-    dihedral_coeff @dihedral:CT_CT_NT_H~__2 0.000 4.000 0.000 0.0 # azetidine - 4 membered cyclic amines 
-    dihedral_coeff @dihedral:CT_CT_NT_H~__3 0.200 -0.417 0.418 0.0 # pyrrolidine 5 membered cyclic amines 
-    dihedral_coeff @dihedral:CT_CT_NT_H~__4 0.819 -0.417 0.418 0.0 # cyclic amines 
     dihedral_coeff @dihedral:CT_CT_NT_H~__5 1.522 -0.417 0.418 0.0 # cyclic 1,4-diamines 
+    dihedral_coeff @dihedral:CT_CT_NT_H~__4 0.819 -0.417 0.418 0.0 # cyclic amines 
+    dihedral_coeff @dihedral:CT_CT_NT_H~__3 0.200 -0.417 0.418 0.0 # pyrrolidine 5 membered cyclic amines 
+    dihedral_coeff @dihedral:CT_CT_NT_H~__2 0.000 4.000 0.000 0.0 # azetidine - 4 membered cyclic amines 
+    dihedral_coeff @dihedral:CT_CT_NT_H~__1 -0.190 -0.417 0.418 0.0 # amine all-atom See 197. 
     dihedral_coeff @dihedral:CT_CT_N~_CT 2.859 2.058 -11.266 0.0 # "       chi4 CG-CD-N-CA 
     dihedral_coeff @dihedral:CT_CT_N~_SY 2.929 -2.533 0.497 0.0 # sulfonamide 
-    dihedral_coeff @dihedral:CT_CT_OH_HO__1 -0.5 0.2 0.3 0.0 # alcohols OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_OH_HO__2 2.674 -2.883 1.026 0.0 # hexopyranoses 
+    dihedral_coeff @dihedral:CT_CT_OH_HO__1 -0.5 0.2 0.3 0.0 # alcohols OPLS/2020 
     dihedral_coeff @dihedral:CT_CT_OS_C~ -1.220 -0.126 0.4220 0.0 # esters 
     dihedral_coeff @dihedral:CT_CT_OS_P~ -1.42 -0.62 0.1 0.0 # methyl ethyl phosphate 
     dihedral_coeff @dihedral:CT_CT_P+_CT 1.000 -0.500 0.500 0.0 # " 
@@ -8529,8 +8529,8 @@ OPLSAA {
     dihedral_coeff @dihedral:CT_C~_N~_CT 2.300 6.089 0.000 0.0 # amides - V1 changed to 2.3 
     dihedral_coeff @dihedral:CT_C~_N~_H~ 0.000 4.900 0.000 0.0 # amides 
     dihedral_coeff @dihedral:CT_C~_N~_OH 4.542 6.603 1.045 0.0 # hydroxamic acids 
-    dihedral_coeff @dihedral:CT_C~_OH_HO__1 1.500 5.500 0.00 0.0 # carboxylic acid - aliphatic 
     dihedral_coeff @dihedral:CT_C~_OH_HO__2 3.200 4.900 0.000 0.0 # 1,2-diacid monoanion 
+    dihedral_coeff @dihedral:CT_C~_OH_HO__1 1.500 5.500 0.00 0.0 # carboxylic acid - aliphatic 
     dihedral_coeff @dihedral:CT_C~_OS_CA 1.500 5.000 0.000 0.0 # phenyl acetate 
     dihedral_coeff @dihedral:CT_C~_OS_CT 4.669 5.124 0.0000 0.0 # esters 
     dihedral_coeff @dihedral:CT_N2_CA_N2 0.000 7.936 0.000 0.0 # methylguanidinium ion 
@@ -8544,10 +8544,10 @@ OPLSAA {
     dihedral_coeff @dihedral:CT_NS_CW_C! 0.0 5.00 0.0 0.0 #  
     dihedral_coeff @dihedral:CT_NS_CW_CS 0.0 5.00 0.0 0.0 #  
     dihedral_coeff @dihedral:CT_NT_CP_SA -1.10 0.12 0.0 0.6 # 2-amino thiophenes JT-R 2014/04 fit A 
+    dihedral_coeff @dihedral:CT_NT_CT_CT__4 1.464 -0.128 0.695 0.0 # exocyclic 1,4-diamines 
+    dihedral_coeff @dihedral:CT_NT_CT_CT__3 1.536 -0.128 0.695 0.0 # exocyclic amines 
+    dihedral_coeff @dihedral:CT_NT_CT_CT__2 0.416 -0.128 0.695 0.0 # amine all-atom 
     dihedral_coeff @dihedral:CT_NT_CT_CT__1 0.416 -0.128 0.695 0.0 # amine (repeated here so taken first b 
-    dihedral_coeff @dihedral:CT_NT_CT_CT__2 1.536 -0.128 0.695 0.0 # exocyclic amines 
-    dihedral_coeff @dihedral:CT_NT_CT_CT__3 1.464 -0.128 0.695 0.0 # exocyclic 1,4-diamines 
-    dihedral_coeff @dihedral:CT_NT_CT_CT__4 0.416 -0.128 0.695 0.0 # amine all-atom 
     dihedral_coeff @dihedral:CT_NT_NT_CT 0.0 0.0 0.3 0.0 # generic hydrazines 
     dihedral_coeff @dihedral:CT_NT_NT_H~ 0.0 0.0 0.3 0.0 # generic 
     dihedral_coeff @dihedral:CT_NT_OH_HO 0.0 0.0 0.3 0.0 # generic 
@@ -8667,22 +8667,23 @@ OPLSAA {
     dihedral_coeff @dihedral:C~_CM_CM_HC 0.0 14.0 0.0 0.0 # alkene 
     dihedral_coeff @dihedral:C~_CM_CM_N~ 0.0 14.0 0.0 0.0 # conj. amide 
     dihedral_coeff @dihedral:C~_CT_CT_CA -1.406 1.777 0.000 0.0 # Chi-1' Phe, Tyr OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__1 -2.060 -0.313 0.315 0.0 # butanamide 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__10 -4.16 -0.76 0.96 0.16 # alkyl_hydantoin 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__9 -1.971 0.770 0.000 0.0 # Chi-1' Arg OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__8 -2.538 0.911 0.000 0.0 # Chi-1' Gln,Glh,Lys,Lyn,Arn OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__7 -1.764 0.700 0.000 0.0 # Chi-1' Glu OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__6 -0.911 0.699 0.000 0.0 # Chi-1' Met OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__5 -1.422 1.068 0.000 0.0 # Chi-1' Val,Ile OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__4 2.994 0.252 0.300 0.0 # Chi-1 Val,Ile OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__3 -1.751 1.606 0.000 0.0 # Chi-1' Pro OPLS-AA/M 
     dihedral_coeff @dihedral:C~_CT_CT_CT__2 -1.751 1.606 0.000 0.0 # Chi-1' Leu OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__3 2.994 0.252 0.300 0.0 # Chi-1 Val,Ile OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__4 -1.422 1.068 0.000 0.0 # Chi-1' Val,Ile OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__5 -0.911 0.699 0.000 0.0 # Chi-1' Met OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__6 -1.764 0.700 0.000 0.0 # Chi-1' Glu OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__7 -2.538 0.911 0.000 0.0 # Chi-1' Gln,Glh,Lys,Lyn,Arn OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__8 -1.971 0.770 0.000 0.0 # Chi-1' Arg OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_CT__9 -4.16 -0.76 0.96 0.16 # alkyl_hydantoin 
+    dihedral_coeff @dihedral:C~_CT_CT_CT__1 -2.060 -0.313 0.315 0.0 # butanamide 
     dihedral_coeff @dihedral:C~_CT_CT_CV -1.282 1.645 -0.017 0.0 # Chi-1' Hie OPLS-AA/M 
     dihedral_coeff @dihedral:C~_CT_CT_CW -1.282 1.645 -0.017 0.0 # Chi-1' Hie OPLS-AA/M 
     dihedral_coeff @dihedral:C~_CT_CT_CX -1.708 1.516 -0.502 0.0 # Chi-1' Hip OPLS-AA/M 
-    dihedral_coeff @dihedral:C~_CT_CT_C~__1 -0.550 0.000 1.000 0.0 # dicarboxylic acid 
-    dihedral_coeff @dihedral:C~_CT_CT_C~__2 0.800 0.000 0.900 0.0 # 1,2-diacid monoanion 
-    dihedral_coeff @dihedral:C~_CT_CT_C~__3 1.543 0.696 0.000 0.0 # Chi-1' Asp,Ash OPLS-AA/M 
     dihedral_coeff @dihedral:C~_CT_CT_C~__4 0.598 1.558 0.255 0.0 # Chi-1' Asn OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_C~__3 1.543 0.696 0.000 0.0 # Chi-1' Asp,Ash OPLS-AA/M 
+    dihedral_coeff @dihedral:C~_CT_CT_C~__2 0.800 0.000 0.900 0.0 # 1,2-diacid monoanion 
+    dihedral_coeff @dihedral:C~_CT_CT_C~__1 -0.550 0.000 1.000 0.0 # dicarboxylic acid 
     dihedral_coeff @dihedral:C~_CT_CT_HC 0.0 0.0 0.074 0.0 # dicarboxylic acid 
     dihedral_coeff @dihedral:C~_CT_CT_OH -5.793 0.405 0.000 0.0 # Chi-1 for Ser & Thr OPLS-AA/M 
     dihedral_coeff @dihedral:C~_C~_CT_HC 0.000 0.000 0.085 0.0 # dicarbonyls    " 
@@ -8693,14 +8694,14 @@ OPLSAA {
     dihedral_coeff @dihedral:C~_NC_OS_CT 3.0 3.0 0.0 0.0 # oxime   11/00 
     dihedral_coeff @dihedral:C~_NM_CT_CT -1.396 -0.427 0.000 0.0 # tertiary amide 
     dihedral_coeff @dihedral:C~_NM_CT_HC 0.000 0.000 -0.139 0.0 # tertiary amide 
-    dihedral_coeff @dihedral:C~_N~_CT_CT__1 -0.682 0.130 0.338 0.0 # Phi' peptides AA/M 
-    dihedral_coeff @dihedral:C~_N~_CT_CT__2 -1.396 -0.427 0.000 0.0 # N-ethylformamide 
     dihedral_coeff @dihedral:C~_N~_CT_CT__3 1.130 -1.420 0.440 0.0 # first (theta) torsion for beta-3-pept 
+    dihedral_coeff @dihedral:C~_N~_CT_CT__2 -1.396 -0.427 0.000 0.0 # N-ethylformamide 
+    dihedral_coeff @dihedral:C~_N~_CT_CT__1 -0.682 0.130 0.338 0.0 # Phi' peptides AA/M 
     dihedral_coeff @dihedral:C~_N~_CT_C~ -2.511 0.210 -0.200 0.0 # Phi  peptides AA/M 
-    dihedral_coeff @dihedral:C~_N~_CT_HC__1 0.0 0.0 0.0 0.0 # Phi" peptides AA 
     dihedral_coeff @dihedral:C~_N~_CT_HC__2 0.000 0.000 -0.139 0.0 # N-methylformamide 
-    dihedral_coeff @dihedral:C~_N~_CY_CY__1 -1.396 -0.427 0.000 0.0 # small ring 
+    dihedral_coeff @dihedral:C~_N~_CT_HC__1 0.0 0.0 0.0 0.0 # Phi" peptides AA 
     dihedral_coeff @dihedral:C~_N~_CY_CY__2 -0.71 2.1 -1.83 0.0 # biaryl_ether_15_scan_2 
+    dihedral_coeff @dihedral:C~_N~_CY_CY__1 -1.396 -0.427 0.000 0.0 # small ring 
     dihedral_coeff @dihedral:C~_N~_CY_C^ -1.396 -0.427 0.000 0.0 # small ring 
     dihedral_coeff @dihedral:C~_N~_OH_HO 5.519 -6.700 0.581 0.0 # hydroxamic acids 
     dihedral_coeff @dihedral:C~_OS_CT_HC 0.000 0.000 0.1980 0.0 # esters 
@@ -8802,8 +8803,8 @@ OPLSAA {
     dihedral_coeff @dihedral:HC_CT_CT_OS 0.0 0.0 0.300 0.0 # alcohols, ethers AA 
     dihedral_coeff @dihedral:HC_CT_CT_P+ 0.000 0.000 0.300 0.0 # " 
     dihedral_coeff @dihedral:HC_CT_CT_SH 0.000 0.000 0.452 0.0 # thiol all-atom 
-    dihedral_coeff @dihedral:HC_CT_CT_SY__1 0.000 0.000 0.452 0.0 #  
     dihedral_coeff @dihedral:HC_CT_CT_SY__2 0.0 0.0 0.3500 0.0 # sulfone 
+    dihedral_coeff @dihedral:HC_CT_CT_SY__1 0.000 0.000 0.452 0.0 #  
     dihedral_coeff @dihedral:HC_CT_CT_S~ 0.000 0.000 0.452 0.0 # sulfide all-atom 
     dihedral_coeff @dihedral:HC_CT_CW_OA 0.0 0.0 0.340 0.0 # 2-Methyl Furan JT-R 2014/04 fit AA/CM 
     dihedral_coeff @dihedral:HC_CT_CY_CT 0.000 0.000 0.300 0.0 # small ring 
@@ -8837,9 +8838,9 @@ OPLSAA {
     dihedral_coeff @dihedral:HC_CT_NZ_CZ 0.0 0.0 0.0 0.0 # isonitriles 
     dihedral_coeff @dihedral:HC_CT_N~_H~ 0.000 0.000 0.000 0.0 # N-methylformamide 
     dihedral_coeff @dihedral:HC_CT_N~_SY 1.362 -1.457 0.149 0.0 # sulfonamide 
-    dihedral_coeff @dihedral:HC_CT_OH_HO__1 0.0 0.0 0.3524 0.0 # alcohols AA 5/02 modified from 0.45 
-    dihedral_coeff @dihedral:HC_CT_OH_HO__2 -2.589 -1.123 0.270 0.0 # axial cyclohexanol 
     dihedral_coeff @dihedral:HC_CT_OH_HO__3 0.000 0.000 0.476 0.0 # trifluoroethanol 
+    dihedral_coeff @dihedral:HC_CT_OH_HO__2 -2.589 -1.123 0.270 0.0 # axial cyclohexanol 
+    dihedral_coeff @dihedral:HC_CT_OH_HO__1 0.0 0.0 0.3524 0.0 # alcohols AA 5/02 modified from 0.45 
     dihedral_coeff @dihedral:HC_CT_OS_CA 0.0 0.0 0.76 0.0 # ethers AA 
     dihedral_coeff @dihedral:HC_CT_OS_CM 0.0 0.0 0.76 0.0 # ethers AA 
     dihedral_coeff @dihedral:HC_CT_OS_CO 0.0 0.0 0.76 0.0 # ethers AA 
@@ -8883,8 +8884,8 @@ OPLSAA {
     dihedral_coeff @dihedral:HC_C|_C|_CT 0.0 14.0 0.0 0.0 # triene 
     dihedral_coeff @dihedral:HC_C|_C|_HC 0.0 14.0 0.0 0.0 # triene 
     dihedral_coeff @dihedral:HC_C~_C~_CT 0.800 -0.760 0.000 0.0 # dicarbonyls    " 
-    dihedral_coeff @dihedral:HC_C~_C~_HC__1 0.000 0.000 0.300 0.0 #  
     dihedral_coeff @dihedral:HC_C~_C~_HC__2 0.800 0.000 0.000 0.0 # dicarbonyls    " 
+    dihedral_coeff @dihedral:HC_C~_C~_HC__1 0.000 0.000 0.300 0.0 #  
     dihedral_coeff @dihedral:HC_C~_C~_O~ 0.000 0.000 0.000 0.0 #  
     dihedral_coeff @dihedral:HC_C~_NC_H~ 0.0 14.0 0.0 0.0 # imine 
     dihedral_coeff @dihedral:HC_C~_N~_CT 2.300 6.089 0.000 0.0 # amides - V1 changed to 2.3 
@@ -8914,7 +8915,8 @@ OPLSAA {
     dihedral_coeff @dihedral:H~_NT_NT_H~ 0.0 0.0 0.3 0.0 # generic 
     dihedral_coeff @dihedral:H~_NT_OH_HO 0.0 0.0 0.3 0.0 # generic 
     dihedral_coeff @dihedral:H~_NT_OS_CT 0.0 0.0 0.3 0.0 # generic 
-    dihedral_coeff @dihedral:H~_N~_CT_CT 0.000 0.000 0.000 0.0 # peptides 
+    dihedral_coeff @dihedral:H~_N~_CT_CT__2 0.000 0.000 0.000 0.0 # N-ethylformamide 
+    dihedral_coeff @dihedral:H~_N~_CT_CT__1 0.000 0.000 0.000 0.0 # peptides 
     dihedral_coeff @dihedral:H~_N~_CT_C~ 0.000 0.000 0.000 0.0 # peptides 
     dihedral_coeff @dihedral:H~_N~_C~_C~ 0.000 4.900 0.000 0.0 # dicarbonyls    " 
     dihedral_coeff @dihedral:H~_N~_OH_HO 2.722 -5.154 0.000 0.0 # hydroxamic acids 
@@ -8995,23 +8997,23 @@ OPLSAA {
     dihedral_coeff @dihedral:NT_CW_NA_H~ 0.0 7.250 0.0 0.0 # JT-R 2014/04 added for 2-aminopyrro 
     dihedral_coeff @dihedral:NT_CW_OA_CW 0.0 7.250 0.0 0.0 # JT-R 2014/04 added for 2NH2Furan 
     dihedral_coeff @dihedral:N~_CT_CT_CA 1.712 0.725 0.366 0.0 # Chi-1 Phe, Tyr OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_CT__7 0.103 0.653 0.563 0.0 # Chi-1  Arg OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_CT__6 0.884 0.897 0.880 0.0 # Chi-1  Gln,Glh,Lys,Lyn,Arn OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_CT__5 1.987 0.457 0.820 0.0 # Chi-1  Glu OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_CT__4 0.214 0.541 0.392 0.0 # Chi-1  Met OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_CT__3 1.964 0.000 0.659 0.0 # N-propylformamide 
+    dihedral_coeff @dihedral:N~_CT_CT_CT__2 1.572 0.159 0.200 0.0 # Chi-1  Pro OPLS-AA/M 
     dihedral_coeff @dihedral:N~_CT_CT_CT__1 1.572 0.159 0.200 0.0 # Chi-1 Leu OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_CT_CT__2 1.964 0.000 0.659 0.0 # N-propylformamide 
-    dihedral_coeff @dihedral:N~_CT_CT_CT__3 0.214 0.541 0.392 0.0 # Chi-1  Met OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_CT_CT__4 1.987 0.457 0.820 0.0 # Chi-1  Glu OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_CT_CT__5 0.884 0.897 0.880 0.0 # Chi-1  Gln,Glh,Lys,Lyn,Arn OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_CT_CT__6 0.103 0.653 0.563 0.0 # Chi-1  Arg OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_CT_CT__7 1.572 0.159 0.200 0.0 # Chi-1  Pro OPLS-AA/M 
     dihedral_coeff @dihedral:N~_CT_CT_CV -0.542 0.435 0.000 0.0 # Chi-1  Hie OPLS-AA/M 
     dihedral_coeff @dihedral:N~_CT_CT_CW -0.542 0.435 0.000 0.0 # Chi-1  Hid OPLS-AA/M 
     dihedral_coeff @dihedral:N~_CT_CT_CX -3.038 0.419 0.000 0.0 # Chi-1  Hip OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_CT_C~__1 -9.000 2.000 0.800 0.0 # Central (phi) torsion for beta-3-pept 
-    dihedral_coeff @dihedral:N~_CT_CT_C~__2 -7.890 0.662 0.997 0.0 # Chi-1  Asp,Ash OPLS-AA/M 
     dihedral_coeff @dihedral:N~_CT_CT_C~__3 -5.501 1.527 0.000 0.0 # Chi-1  Asn OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_C~__2 -7.890 0.662 0.997 0.0 # Chi-1  Asp,Ash OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_CT_C~__1 -9.000 2.000 0.800 0.0 # Central (phi) torsion for beta-3-pept 
     dihedral_coeff @dihedral:N~_CT_CT_HC 0.000 0.000 0.464 0.0 # N-ethylformamide 
     dihedral_coeff @dihedral:N~_CT_CT_OH 6.258 -1.037 1.367 0.0 # Chi-1 for Ser & Thr OPLS-AA/M 
-    dihedral_coeff @dihedral:N~_CT_C~_N~__1 1.810 2.155 -0.470 0.0 # Psi  peptides AA/M 
     dihedral_coeff @dihedral:N~_CT_C~_N~__2 -0.940 2.755 -2.670 0.0 # Psi  Pro OPLS-AA/M 
+    dihedral_coeff @dihedral:N~_CT_C~_N~__1 1.810 2.155 -0.470 0.0 # Psi  peptides AA/M 
     dihedral_coeff @dihedral:N~_CT_C~_O~ 0.000 0.000 0.000 0.0 # peptides 
     dihedral_coeff @dihedral:N~_C~_C~_CT -0.500 0.200 0.000 0.0 # dicarbonyls    " 
     dihedral_coeff @dihedral:N~_C~_C~_HC -0.900 0.300 0.000 0.0 # dicarbonyls    " 
@@ -9025,12 +9027,12 @@ OPLSAA {
     dihedral_coeff @dihedral:N~_C~_N~_H~ 0.000 4.900 0.000 0.0 # imides 
     dihedral_coeff @dihedral:N~_C~_OH_HO -2.000 5.000 0.0 0.0 # carbamates 
     dihedral_coeff @dihedral:N~_C~_OS_CT -2.000 5.000 0.0 0.0 # carbamates 
-    dihedral_coeff @dihedral:O2_P~_OS_CT__1 0.0 0.0 0.00 0.0 # phosphonates 
     dihedral_coeff @dihedral:O2_P~_OS_CT__2 0.90 -2.93 2.64 0.0 # dimethyl phosphate 
+    dihedral_coeff @dihedral:O2_P~_OS_CT__1 0.0 0.0 0.00 0.0 # phosphonates 
     dihedral_coeff @dihedral:OA_CR_NB_CU 0.0 7.250 0.0 0.0 #  
     dihedral_coeff @dihedral:OA_CR_N~_CA 0.0 2.100 0.0 0.0 # diarylamine 
-    dihedral_coeff @dihedral:OA_CR_N~_H~__1 0.0 2.100 0.0 0.0 # diarylamine 
     dihedral_coeff @dihedral:OA_CR_N~_H~__2 0.0 2.133 0.0 0.0 # aniline-like 
+    dihedral_coeff @dihedral:OA_CR_N~_H~__1 0.0 2.100 0.0 0.0 # diarylamine 
     dihedral_coeff @dihedral:OA_CW_CS_CS 0.0 7.250 0.0 0.0 # JT-R 2014/04 added for Furans 
     dihedral_coeff @dihedral:OA_CW_CS_HA 0.0 7.250 0.0 0.0 #  
     dihedral_coeff @dihedral:OA_CW_CT_CT 0.14 -0.09 0.54 0.0 # 2-alkyl furans  JT-R 2014/04 fit AA+C 
@@ -9042,9 +9044,9 @@ OPLSAA {
     dihedral_coeff @dihedral:OA_CW_OH_HO 1.3 -1.0 0.33 0.0 # 2-hydroxyfuran JT-R 2014/04 fit AA/CM 
     dihedral_coeff @dihedral:OA_CW_OS_CT 1.5 -0.574 1.3 0.0 # 2-methoxyfuran JT-R 2014/04 fit AA/CM 
     dihedral_coeff @dihedral:OA_CW_S~_CT 1.2 -2.84 1.2 0.0 # 2-thiomethylfuran JT-R 2014/04 fit AA 
-    dihedral_coeff @dihedral:OH_CT_CT_OH__1 9.508 0.00 0.000 0.0 # diols only  AA 
-    dihedral_coeff @dihedral:OH_CT_CT_OH__2 12.234 0.00 0.000 0.0 # triols only AA 
     dihedral_coeff @dihedral:OH_CT_CT_OH__3 9.066 0.0 0.0 0.0 # hexopyranoses 
+    dihedral_coeff @dihedral:OH_CT_CT_OH__2 12.234 0.00 0.000 0.0 # triols only AA 
+    dihedral_coeff @dihedral:OH_CT_CT_OH__1 9.508 0.00 0.000 0.0 # diols only  AA 
     dihedral_coeff @dihedral:OH_CT_CT_OS 4.319 0.0 0.0 0.0 # hexopyranoses 
     dihedral_coeff @dihedral:OH_CW_CS_CS 0.0 7.250 0.0 0.0 # JT-R 2014/04 added for 2-hydroxypyr 
     dihedral_coeff @dihedral:OH_CW_CS_HA 0.0 7.250 0.0 0.0 # JT-R 2014/04 added for 2-hydroxypyr 
@@ -9079,11 +9081,11 @@ OPLSAA {
     dihedral_coeff @dihedral:O~_C~_N~_CY 0.000 6.089 0.000 0.0 # small ring amides 
     dihedral_coeff @dihedral:O~_C~_N~_H~ 0.000 4.900 0.000 0.0 # amides   wlj 6/20/97 
     dihedral_coeff @dihedral:O~_C~_N~_OH 0.000 6.603 0.000 0.0 # hydroxamic acids 
-    dihedral_coeff @dihedral:O~_C~_OH_HO__1 0.000 5.500 0.00 0.0 # carboxylic acid - aliphatic 
     dihedral_coeff @dihedral:O~_C~_OH_HO__2 0.000 5.000 0.00 0.0 # benzoic acids 
+    dihedral_coeff @dihedral:O~_C~_OH_HO__1 0.000 5.500 0.00 0.0 # carboxylic acid - aliphatic 
     dihedral_coeff @dihedral:O~_C~_OS_CA 0.000 5.000 0.000 0.0 # phenyl acetate 
-    dihedral_coeff @dihedral:O~_C~_OS_CT__1 0.000 5.124 0.0000 0.0 # esters 
     dihedral_coeff @dihedral:O~_C~_OS_CT__2 0.000 5.000 0.00 0.0 # benzoic esters 
+    dihedral_coeff @dihedral:O~_C~_OS_CT__1 0.000 5.124 0.0000 0.0 # esters 
     dihedral_coeff @dihedral:O~_P~_OH_HO 0.0 0.0 0.00 0.0 # phosphonates 
     dihedral_coeff @dihedral:O~_P~_OS_CA 0.0 0.0 0.00 0.0 # phosphonates 
     dihedral_coeff @dihedral:P~_OS_CT_HC 0.0 0.0 0.30 0.0 # phosphonates 
@@ -9105,8 +9107,8 @@ OPLSAA {
     dihedral_coeff @dihedral:SA_CR_NT_CA 0.0 2.100 0.0 0.0 # diarylamine 
     dihedral_coeff @dihedral:SA_CR_NT_H~ 0.0 2.100 0.0 0.0 # diarylamine 
     dihedral_coeff @dihedral:SA_CR_N~_CA 0.0 2.100 0.0 0.0 # diarylamine 
-    dihedral_coeff @dihedral:SA_CR_N~_H~__1 0.0 2.100 0.0 0.0 # diarylamine 
     dihedral_coeff @dihedral:SA_CR_N~_H~__2 0.0 2.133 0.0 0.0 # aniline-like 
+    dihedral_coeff @dihedral:SA_CR_N~_H~__1 0.0 2.100 0.0 0.0 # diarylamine 
     dihedral_coeff @dihedral:SA_CW_CU_HA 0.0 10.75 0.0 0.0 #  
     dihedral_coeff @dihedral:SA_CW_CV_HA 0.0 10.75 0.0 0.0 #  
     dihedral_coeff @dihedral:SA_CW_CW_HA 0.0 10.75 0.0 0.0 #  
@@ -9153,8 +9155,8 @@ OPLSAA {
     @dihedral:€€_CS_C~_€€ @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_d??*_i*
     @dihedral:€€_CW_CV_€€ @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_d??*_i*
     @dihedral:€€_CW_CW_€€ @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_d??*_i*
-    @dihedral:€€_CW_NA_€€__1 @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_d??*_i*
     @dihedral:€€_CW_NA_€€__2 @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_d??*_i*
+    @dihedral:€€_CW_NA_€€__1 @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_d??*_i*
     @dihedral:€€_CW_NB_€€ @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNB*_i* @atom:*_b*_a*_d??*_i*
     @dihedral:€€_CY_CY_€€ @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_d??*_i*
     @dihedral:€€_CY_C^_€€ @atom:*_b*_a*_d??*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dC^*_i* @atom:*_b*_a*_d??*_i*
@@ -9244,10 +9246,10 @@ OPLSAA {
     @dihedral:C€_CA_SH_HS @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dSH*_i* @atom:*_b*_a*_dHS*_i*
     @dihedral:C€_CW_CV_HA @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_dHA*_i*
     @dihedral:C€_CW_CW_HA @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dHA*_i*
-    @dihedral:C€_NA_CT_CT__1 @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C€_NA_CT_CT__2 @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C€_NA_CT_OS__1 @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
+    @dihedral:C€_NA_CT_CT__1 @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C€_NA_CT_OS__2 @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
+    @dihedral:C€_NA_CT_OS__1 @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:C€_NC_CQ_HA @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dNC*_i* @atom:*_b*_a*_dCQ*_i* @atom:*_b*_a*_dHA*_i*
     @dihedral:C€_N^_CT_HC @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dN^*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:C€_N~_CQ_HA @atom:*_b*_a*_dC?*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCQ*_i* @atom:*_b*_a*_dHA*_i*
@@ -9333,8 +9335,8 @@ OPLSAA {
     @dihedral:CT_CM_C~_O€ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO?*_i*
     @dihedral:CT_CT_CC_N€ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCC*_i* @atom:*_b*_a*_dN?*_i*
     @dihedral:CT_CT_CO_O€ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCO*_i* @atom:*_b*_a*_dO?*_i*
-    @dihedral:CT_CT_CT_O€__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dO?*_i*
     @dihedral:CT_CT_CT_O€__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dO?*_i*
+    @dihedral:CT_CT_CT_O€__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dO?*_i*
     @dihedral:CT_C~_NC_O€ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dNC*_i* @atom:*_b*_a*_dO?*_i*
     @dihedral:CT_OS_CT_O€ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dO?*_i*
     @dihedral:CW_CV_CS_C€ @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dC?*_i*
@@ -9430,11 +9432,11 @@ OPLSAA {
     @dihedral:CA_C!_CS_CS @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dCS*_i*
     @dihedral:CA_C!_CS_CW @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dCW*_i*
     @dihedral:CA_C!_CU_NB @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCU*_i* @atom:*_b*_a*_dNB*_i*
-    @dihedral:CA_C!_CV_NB__1 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_dNB*_i*
     @dihedral:CA_C!_CV_NB__2 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_dNB*_i*
+    @dihedral:CA_C!_CV_NB__1 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_dNB*_i*
     @dihedral:CA_C!_CW_CS @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCS*_i*
-    @dihedral:CA_C!_CW_NA__1 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i*
     @dihedral:CA_C!_CW_NA__2 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i*
+    @dihedral:CA_C!_CW_NA__1 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i*
     @dihedral:CA_C!_CW_NS @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNS*_i*
     @dihedral:CA_C!_CW_OS @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:CA_C!_CW_SA @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dSA*_i*
@@ -9445,8 +9447,8 @@ OPLSAA {
     @dihedral:CA_C!_NX_CW @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dNX*_i* @atom:*_b*_a*_dCW*_i*
     @dihedral:CA_C!_NX_NB @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dNX*_i* @atom:*_b*_a*_dNB*_i*
     @dihedral:CA_C!_N~_CM @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCM*_i*
-    @dihedral:CA_C!_N~_C~__1 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:CA_C!_N~_C~__2 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:CA_C!_N~_C~__1 @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC!*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:CA_C=_CM_CT @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CA_C=_CM_HC @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:CA_CA_Br_XB @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dBr*_i* @atom:*_b*_a*_dXB*_i*
@@ -9543,12 +9545,12 @@ OPLSAA {
     @dihedral:CH_C2_C2_C2 @atom:*_b*_a*_dCH*_i* @atom:*_b*_a*_dC2*_i* @atom:*_b*_a*_dC2*_i* @atom:*_b*_a*_dC2*_i*
     @dihedral:CH_C2_C2_CH @atom:*_b*_a*_dCH*_i* @atom:*_b*_a*_dC2*_i* @atom:*_b*_a*_dC2*_i* @atom:*_b*_a*_dCH*_i*
     @dihedral:CH_C2_OH_HO @atom:*_b*_a*_dCH*_i* @atom:*_b*_a*_dC2*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
-    @dihedral:CK_NA_CT_CT__1 @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CK_NA_CT_CT__2 @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:CK_NA_CT_CT__1 @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CK_NA_CT_OS @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:CK_N§_CT_CT @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dN§*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:CK_N§_CT_OS__1 @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dN§*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:CK_N§_CT_OS__2 @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dN§*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
+    @dihedral:CK_N§_CT_OS__1 @atom:*_b*_a*_dCK*_i* @atom:*_b*_a*_dN§*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:CM_C=_C=_CM @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dCM*_i*
     @dihedral:CM_C=_C=_CT @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CM_C=_C=_HC @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dC=*_i* @atom:*_b*_a*_dHC*_i*
@@ -9637,20 +9639,20 @@ OPLSAA {
     @dihedral:CT_CT_CT_Br @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dBr*_i*
     @dihedral:CT_CT_CT_CA @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCA*_i*
     @dihedral:CT_CT_CT_CO @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCO*_i*
-    @dihedral:CT_CT_CT_CT__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_CT_CT_CT__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:CT_CT_CT_CT__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_CT_CT_CZ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCZ*_i*
     @dihedral:CT_CT_CT_Cl @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCl*_i*
-    @dihedral:CT_CT_CT_C~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
-    @dihedral:CT_CT_CT_C~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
-    @dihedral:CT_CT_CT_C~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:CT_CT_CT_C~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:CT_CT_CT_C~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:CT_CT_CT_C~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:CT_CT_CT_C~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:CT_CT_CT_F~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dF~*_i*
     @dihedral:CT_CT_CT_I~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dI~*_i*
     @dihedral:CT_CT_CT_N3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN3*_i*
     @dihedral:CT_CT_CT_NT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i*
-    @dihedral:CT_CT_CT_OH__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:CT_CT_CT_OH__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
+    @dihedral:CT_CT_CT_OH__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:CT_CT_CT_OS @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:CT_CT_CT_SH @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dSH*_i*
     @dihedral:CT_CT_CT_SY @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dSY*_i*
@@ -9663,22 +9665,22 @@ OPLSAA {
     @dihedral:CT_CT_C~_Cl @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCl*_i*
     @dihedral:CT_CT_C~_F~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dF~*_i*
     @dihedral:CT_CT_C~_HC @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dHC*_i*
-    @dihedral:CT_CT_C~_N~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
-    @dihedral:CT_CT_C~_N~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
-    @dihedral:CT_CT_C~_N~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
-    @dihedral:CT_CT_C~_N~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
     @dihedral:CT_CT_C~_N~__5 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
+    @dihedral:CT_CT_C~_N~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
+    @dihedral:CT_CT_C~_N~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
+    @dihedral:CT_CT_C~_N~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
+    @dihedral:CT_CT_C~_N~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
     @dihedral:CT_CT_C~_O2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO2*_i*
-    @dihedral:CT_CT_C~_OH__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:CT_CT_C~_OH__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i*
+    @dihedral:CT_CT_C~_OH__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:CT_CT_C~_OS @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i*
-    @dihedral:CT_CT_C~_O~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
-    @dihedral:CT_CT_C~_O~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
-    @dihedral:CT_CT_C~_O~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
-    @dihedral:CT_CT_C~_O~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
-    @dihedral:CT_CT_C~_O~__5 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
-    @dihedral:CT_CT_C~_O~__6 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
     @dihedral:CT_CT_C~_O~__7 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
+    @dihedral:CT_CT_C~_O~__6 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
+    @dihedral:CT_CT_C~_O~__5 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
+    @dihedral:CT_CT_C~_O~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
+    @dihedral:CT_CT_C~_O~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
+    @dihedral:CT_CT_C~_O~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
+    @dihedral:CT_CT_C~_O~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
     @dihedral:CT_CT_N2_CA @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN2*_i* @atom:*_b*_a*_dCA*_i*
     @dihedral:CT_CT_N2_H3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN2*_i* @atom:*_b*_a*_dH3*_i*
     @dihedral:CT_CT_N2_H~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN2*_i* @atom:*_b*_a*_dH~*_i*
@@ -9687,15 +9689,15 @@ OPLSAA {
     @dihedral:CT_CT_NC_NZ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNC*_i* @atom:*_b*_a*_dNZ*_i*
     @dihedral:CT_CT_NM_CT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNM*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_CT_NO_ON @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNO*_i* @atom:*_b*_a*_dON*_i*
-    @dihedral:CT_CT_NT_H~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
-    @dihedral:CT_CT_NT_H~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
-    @dihedral:CT_CT_NT_H~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
-    @dihedral:CT_CT_NT_H~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:CT_CT_NT_H~__5 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
+    @dihedral:CT_CT_NT_H~__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
+    @dihedral:CT_CT_NT_H~__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
+    @dihedral:CT_CT_NT_H~__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
+    @dihedral:CT_CT_NT_H~__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:CT_CT_N~_CT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_CT_N~_SY @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dSY*_i*
-    @dihedral:CT_CT_OH_HO__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:CT_CT_OH_HO__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
+    @dihedral:CT_CT_OH_HO__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:CT_CT_OS_C~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:CT_CT_OS_P~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dP~*_i*
     @dihedral:CT_CT_P+_CT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dP+*_i* @atom:*_b*_a*_dCT*_i*
@@ -9726,8 +9728,8 @@ OPLSAA {
     @dihedral:CT_C~_N~_CT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_C~_N~_H~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:CT_C~_N~_OH @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dOH*_i*
-    @dihedral:CT_C~_OH_HO__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:CT_C~_OH_HO__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
+    @dihedral:CT_C~_OH_HO__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:CT_C~_OS_CA @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCA*_i*
     @dihedral:CT_C~_OS_CT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_N2_CA_N2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN2*_i* @atom:*_b*_a*_dCA*_i* @atom:*_b*_a*_dN2*_i*
@@ -9741,10 +9743,10 @@ OPLSAA {
     @dihedral:CT_NS_CW_C! @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNS*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dC!*_i*
     @dihedral:CT_NS_CW_CS @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNS*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCS*_i*
     @dihedral:CT_NT_CP_SA @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCP*_i* @atom:*_b*_a*_dSA*_i*
-    @dihedral:CT_NT_CT_CT__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:CT_NT_CT_CT__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:CT_NT_CT_CT__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_NT_CT_CT__4 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:CT_NT_CT_CT__3 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:CT_NT_CT_CT__2 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:CT_NT_CT_CT__1 @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_NT_NT_CT @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:CT_NT_NT_H~ @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:CT_NT_OH_HO @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
@@ -9864,22 +9866,23 @@ OPLSAA {
     @dihedral:C~_CM_CM_HC @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:C~_CM_CM_N~ @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dCM*_i* @atom:*_b*_a*_dN~*_i*
     @dihedral:C~_CT_CT_CA @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCA*_i*
-    @dihedral:C~_CT_CT_CT__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__3 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__4 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__5 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__6 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__7 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_CT_CT_CT__8 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__10 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C~_CT_CT_CT__9 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__8 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__7 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__6 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__5 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__4 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__3 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_CT_CT_CT__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C~_CT_CT_CV @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCV*_i*
     @dihedral:C~_CT_CT_CW @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCW*_i*
     @dihedral:C~_CT_CT_CX @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCX*_i*
-    @dihedral:C~_CT_CT_C~__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
-    @dihedral:C~_CT_CT_C~__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
-    @dihedral:C~_CT_CT_C~__3 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:C~_CT_CT_C~__4 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:C~_CT_CT_C~__3 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:C~_CT_CT_C~__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:C~_CT_CT_C~__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:C~_CT_CT_HC @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:C~_CT_CT_OH @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:C~_C~_CT_HC @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
@@ -9890,14 +9893,14 @@ OPLSAA {
     @dihedral:C~_NC_OS_CT @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dNC*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C~_NM_CT_CT @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dNM*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C~_NM_CT_HC @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dNM*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
-    @dihedral:C~_N~_CT_CT__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:C~_N~_CT_CT__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C~_N~_CT_CT__3 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_N~_CT_CT__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:C~_N~_CT_CT__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:C~_N~_CT_C~ @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
-    @dihedral:C~_N~_CT_HC__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:C~_N~_CT_HC__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
-    @dihedral:C~_N~_CY_CY__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dCY*_i*
+    @dihedral:C~_N~_CT_HC__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:C~_N~_CY_CY__2 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dCY*_i*
+    @dihedral:C~_N~_CY_CY__1 @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dCY*_i*
     @dihedral:C~_N~_CY_C^ @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dC^*_i*
     @dihedral:C~_N~_OH_HO @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:C~_OS_CT_HC @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
@@ -9999,8 +10002,8 @@ OPLSAA {
     @dihedral:HC_CT_CT_OS @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:HC_CT_CT_P+ @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dP+*_i*
     @dihedral:HC_CT_CT_SH @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dSH*_i*
-    @dihedral:HC_CT_CT_SY__1 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dSY*_i*
     @dihedral:HC_CT_CT_SY__2 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dSY*_i*
+    @dihedral:HC_CT_CT_SY__1 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dSY*_i*
     @dihedral:HC_CT_CT_S~ @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dS~*_i*
     @dihedral:HC_CT_CW_OA @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dOA*_i*
     @dihedral:HC_CT_CY_CT @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCY*_i* @atom:*_b*_a*_dCT*_i*
@@ -10034,9 +10037,9 @@ OPLSAA {
     @dihedral:HC_CT_NZ_CZ @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dNZ*_i* @atom:*_b*_a*_dCZ*_i*
     @dihedral:HC_CT_N~_H~ @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:HC_CT_N~_SY @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dSY*_i*
-    @dihedral:HC_CT_OH_HO__1 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
-    @dihedral:HC_CT_OH_HO__2 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:HC_CT_OH_HO__3 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
+    @dihedral:HC_CT_OH_HO__2 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
+    @dihedral:HC_CT_OH_HO__1 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:HC_CT_OS_CA @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCA*_i*
     @dihedral:HC_CT_OS_CM @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCM*_i*
     @dihedral:HC_CT_OS_CO @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCO*_i*
@@ -10080,8 +10083,8 @@ OPLSAA {
     @dihedral:HC_C|_C|_CT @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC|*_i* @atom:*_b*_a*_dC|*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:HC_C|_C|_HC @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC|*_i* @atom:*_b*_a*_dC|*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:HC_C~_C~_CT @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:HC_C~_C~_HC__1 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:HC_C~_C~_HC__2 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dHC*_i*
+    @dihedral:HC_C~_C~_HC__1 @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:HC_C~_C~_O~ @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
     @dihedral:HC_C~_NC_H~ @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dNC*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:HC_C~_N~_CT @atom:*_b*_a*_dHC*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i*
@@ -10111,7 +10114,8 @@ OPLSAA {
     @dihedral:H~_NT_NT_H~ @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:H~_NT_OH_HO @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:H~_NT_OS_CT @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:H~_N~_CT_CT @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:H~_N~_CT_CT__2 @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:H~_N~_CT_CT__1 @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:H~_N~_CT_C~ @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:H~_N~_C~_C~ @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:H~_N~_OH_HO @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
@@ -10192,23 +10196,23 @@ OPLSAA {
     @dihedral:NT_CW_NA_H~ @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dNA*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:NT_CW_OA_CW @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i*
     @dihedral:N~_CT_CT_CA @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCA*_i*
-    @dihedral:N~_CT_CT_CT__1 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:N~_CT_CT_CT__2 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:N~_CT_CT_CT__3 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:N~_CT_CT_CT__4 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:N~_CT_CT_CT__5 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:N~_CT_CT_CT__6 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:N~_CT_CT_CT__7 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:N~_CT_CT_CT__6 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:N~_CT_CT_CT__5 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:N~_CT_CT_CT__4 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:N~_CT_CT_CT__3 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:N~_CT_CT_CT__2 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:N~_CT_CT_CT__1 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:N~_CT_CT_CV @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCV*_i*
     @dihedral:N~_CT_CT_CW @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCW*_i*
     @dihedral:N~_CT_CT_CX @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCX*_i*
-    @dihedral:N~_CT_CT_C~__1 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
-    @dihedral:N~_CT_CT_C~__2 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:N~_CT_CT_C~__3 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:N~_CT_CT_C~__2 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
+    @dihedral:N~_CT_CT_C~__1 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:N~_CT_CT_HC @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
     @dihedral:N~_CT_CT_OH @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
-    @dihedral:N~_CT_C~_N~__1 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
     @dihedral:N~_CT_C~_N~__2 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
+    @dihedral:N~_CT_C~_N~__1 @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i*
     @dihedral:N~_CT_C~_O~ @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dO~*_i*
     @dihedral:N~_C~_C~_CT @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:N~_C~_C~_HC @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dHC*_i*
@@ -10222,12 +10226,12 @@ OPLSAA {
     @dihedral:N~_C~_N~_H~ @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:N~_C~_OH_HO @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:N~_C~_OS_CT @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:O2_P~_OS_CT__1 @atom:*_b*_a*_dO2*_i* @atom:*_b*_a*_dP~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:O2_P~_OS_CT__2 @atom:*_b*_a*_dO2*_i* @atom:*_b*_a*_dP~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:O2_P~_OS_CT__1 @atom:*_b*_a*_dO2*_i* @atom:*_b*_a*_dP~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:OA_CR_NB_CU @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dNB*_i* @atom:*_b*_a*_dCU*_i*
     @dihedral:OA_CR_N~_CA @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCA*_i*
-    @dihedral:OA_CR_N~_H~__1 @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:OA_CR_N~_H~__2 @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
+    @dihedral:OA_CR_N~_H~__1 @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:OA_CW_CS_CS @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dCS*_i*
     @dihedral:OA_CW_CS_HA @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dHA*_i*
     @dihedral:OA_CW_CT_CT @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
@@ -10239,9 +10243,9 @@ OPLSAA {
     @dihedral:OA_CW_OH_HO @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:OA_CW_OS_CT @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:OA_CW_S~_CT @atom:*_b*_a*_dOA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dS~*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:OH_CT_CT_OH__1 @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
-    @dihedral:OH_CT_CT_OH__2 @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:OH_CT_CT_OH__3 @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
+    @dihedral:OH_CT_CT_OH__2 @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
+    @dihedral:OH_CT_CT_OH__1 @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOH*_i*
     @dihedral:OH_CT_CT_OS @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dOS*_i*
     @dihedral:OH_CW_CS_CS @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dCS*_i*
     @dihedral:OH_CW_CS_HA @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCS*_i* @atom:*_b*_a*_dHA*_i*
@@ -10276,11 +10280,11 @@ OPLSAA {
     @dihedral:O~_C~_N~_CY @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCY*_i*
     @dihedral:O~_C~_N~_H~ @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:O~_C~_N~_OH @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dOH*_i*
-    @dihedral:O~_C~_OH_HO__1 @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:O~_C~_OH_HO__2 @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
+    @dihedral:O~_C~_OH_HO__1 @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:O~_C~_OS_CA @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCA*_i*
-    @dihedral:O~_C~_OS_CT__1 @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:O~_C~_OS_CT__2 @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:O~_C~_OS_CT__1 @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:O~_P~_OH_HO @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dP~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:O~_P~_OS_CA @atom:*_b*_a*_dO~*_i* @atom:*_b*_a*_dP~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCA*_i*
     @dihedral:P~_OS_CT_HC @atom:*_b*_a*_dP~*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dHC*_i*
@@ -10302,8 +10306,8 @@ OPLSAA {
     @dihedral:SA_CR_NT_CA @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dCA*_i*
     @dihedral:SA_CR_NT_H~ @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:SA_CR_N~_CA @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCA*_i*
-    @dihedral:SA_CR_N~_H~__1 @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:SA_CR_N~_H~__2 @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
+    @dihedral:SA_CR_N~_H~__1 @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCR*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:SA_CW_CU_HA @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCU*_i* @atom:*_b*_a*_dHA*_i*
     @dihedral:SA_CW_CV_HA @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCV*_i* @atom:*_b*_a*_dHA*_i*
     @dihedral:SA_CW_CW_HA @atom:*_b*_a*_dSA*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dCW*_i* @atom:*_b*_a*_dHA*_i*
