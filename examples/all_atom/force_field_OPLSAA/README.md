@@ -14,7 +14,7 @@ When it happens, it can cause the names of the
 This could break backward compatibility,
 and cause moltemplate.sh to fail when reading your .lt files.
 So if you are using OPLSAA, it's a good idea to make a backup copy of the
-[oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt)
+[oplsaa.lt file](../../../moltemplate/force_fields/oplsaa.lt)
 (located in the
 [moltemplate/force_fields/](../../../moltemplate/force_fields/) folder).
 Copy it to the folder with your other .lt files for the simulation you are working on.  (Moltemplate will look in the local folder first for all the .lt files that it needs, including "oplsaa.lt".)
