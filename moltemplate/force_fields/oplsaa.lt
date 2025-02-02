@@ -5731,8 +5731,7 @@ OPLSAA {
     angle_coeff @angle:CT_CT_CZ 58.35 112.7 # wlj
     angle_coeff @angle:CT_CT_Cl 69. 109.8 # wlj - from MM2
     angle_coeff @angle:CT_CT_F~ 50. 109.5 # PAK F-CT-HC (emd 5-09-94)
-    angle_coeff @angle:CT_CT_HC__2 37.5 110.7 # CHARMM 22 parameter file
-    angle_coeff @angle:CT_CT_HC__1 37.5 110.7 # CHARMM 22
+    angle_coeff @angle:CT_CT_HC 37.5 110.7 # CHARMM 22
     angle_coeff @angle:CT_CT_I~ 75. 112.0 # wlj
     angle_coeff @angle:CT_CT_N2 80.0 111.2 # ARG JCP 76, 1439
     angle_coeff @angle:CT_CT_N3 80.0 111.2 # LYS(OL) JCP 76, 1439
@@ -6296,8 +6295,7 @@ OPLSAA {
     angle_coeff @angle:NB_NB_OA 70. 110.0 # JT-R oxatriazoles
     angle_coeff @angle:NB_NB_SA 70. 114.0 # JT-R thiatriazole
     angle_coeff @angle:NB_NX_CW 56. 113.1 # MKD synonym for NB-NA-CW
-    angle_coeff @angle:NB_OA_CR__2 70. 101.3 # JT-R oxatriazole
-    angle_coeff @angle:NB_OA_CR__1 70. 101.3 # JT-R oxatriazoles
+    angle_coeff @angle:NB_OA_CR 70. 101.3 # JT-R oxatriazoles
     angle_coeff @angle:NB_OA_NB 70. 103.4 # JT-R oxatriazole
     angle_coeff @angle:NB_OS_CR 70. 101.3 # JT-R oxatriazoles
     angle_coeff @angle:NB_OS_DM 10.0 125. # wlj
@@ -7166,8 +7164,7 @@ OPLSAA {
     @angle:CT_CT_CZ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCZ*_d*_i*
     @angle:CT_CT_Cl @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCl*_d*_i*
     @angle:CT_CT_F~ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aF~*_d*_i*
-    @angle:CT_CT_HC__2 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
-    @angle:CT_CT_HC__1 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
+    @angle:CT_CT_HC @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aHC*_d*_i*
     @angle:CT_CT_I~ @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aI~*_d*_i*
     @angle:CT_CT_N2 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aN2*_d*_i*
     @angle:CT_CT_N3 @atom:*_b*_aCT*_d*_i* @atom:*_b*_aCT*_d*_i* @atom:*_b*_aN3*_d*_i*
@@ -7731,8 +7728,7 @@ OPLSAA {
     @angle:NB_NB_OA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i*
     @angle:NB_NB_SA @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNB*_d*_i* @atom:*_b*_aSA*_d*_i*
     @angle:NB_NX_CW @atom:*_b*_aNB*_d*_i* @atom:*_b*_aNX*_d*_i* @atom:*_b*_aCW*_d*_i*
-    @angle:NB_OA_CR__2 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aCR*_d*_i*
-    @angle:NB_OA_CR__1 @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aCR*_d*_i*
+    @angle:NB_OA_CR @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aCR*_d*_i*
     @angle:NB_OA_NB @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOA*_d*_i* @atom:*_b*_aNB*_d*_i*
     @angle:NB_OS_CR @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOS*_d*_i* @atom:*_b*_aCR*_d*_i*
     @angle:NB_OS_DM @atom:*_b*_aNB*_d*_i* @atom:*_b*_aOS*_d*_i* @atom:*_b*_aDM*_d*_i*
@@ -8915,8 +8911,7 @@ OPLSAA {
     dihedral_coeff @dihedral:H~_NT_NT_H~ 0.0 0.0 0.3 0.0 # generic 
     dihedral_coeff @dihedral:H~_NT_OH_HO 0.0 0.0 0.3 0.0 # generic 
     dihedral_coeff @dihedral:H~_NT_OS_CT 0.0 0.0 0.3 0.0 # generic 
-    dihedral_coeff @dihedral:H~_N~_CT_CT__2 0.000 0.000 0.000 0.0 # N-ethylformamide 
-    dihedral_coeff @dihedral:H~_N~_CT_CT__1 0.000 0.000 0.000 0.0 # peptides 
+    dihedral_coeff @dihedral:H~_N~_CT_CT 0.000 0.000 0.000 0.0 # peptides 
     dihedral_coeff @dihedral:H~_N~_CT_C~ 0.000 0.000 0.000 0.0 # peptides 
     dihedral_coeff @dihedral:H~_N~_C~_C~ 0.000 4.900 0.000 0.0 # dicarbonyls    " 
     dihedral_coeff @dihedral:H~_N~_OH_HO 2.722 -5.154 0.000 0.0 # hydroxamic acids 
@@ -10114,8 +10109,7 @@ OPLSAA {
     @dihedral:H~_NT_NT_H~ @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dH~*_i*
     @dihedral:H~_NT_OH_HO @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
     @dihedral:H~_NT_OS_CT @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dNT*_i* @atom:*_b*_a*_dOS*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:H~_N~_CT_CT__2 @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
-    @dihedral:H~_N~_CT_CT__1 @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
+    @dihedral:H~_N~_CT_CT @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dCT*_i*
     @dihedral:H~_N~_CT_C~ @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dCT*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:H~_N~_C~_C~ @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dC~*_i* @atom:*_b*_a*_dC~*_i*
     @dihedral:H~_N~_OH_HO @atom:*_b*_a*_dH~*_i* @atom:*_b*_a*_dN~*_i* @atom:*_b*_a*_dOH*_i* @atom:*_b*_a*_dHO*_i*
