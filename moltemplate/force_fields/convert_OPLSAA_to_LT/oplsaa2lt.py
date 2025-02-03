@@ -229,9 +229,7 @@ def delete_redundant_duplicates(
 
     # ----------- Step 2: ---------------
     # Decide which of these interactions should be discarded.
-    # (The interactions we want to keep will be stored in
-    #  out_interactions, which will be returned to the caller.)
-    del interactions[:]
+    del interactions[:]  # we store the interactions that aren't discarded here
     for types, params_to_interactions in types_to_paraminteractions.items():
         for params, paramstr_to_interactions in params_to_interactions.items():
             for paramstr, interaction in paramstr_to_interactions.items():
@@ -298,7 +296,8 @@ def sort_duplicates(
         # Since, in this case, we lack any other criteria to choose from, we
         # want moltemplate to select the most general interaction by default
         # for those atoms.  But in order to make it do that, it must appear
-        # last in the generated .lt file.  So (if all other criteria are equal)
+        # last in the generated .lt file.  (Moltemplate gives highest priority
+        # to the last entry in the "By Type" list which matches the atom types.)
         # So we sort the interactions with multiple duplicates
         # according to the duplicate_count (in reverse order).
         interaction_orderkey_pairs = []
