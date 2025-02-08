@@ -14,7 +14,7 @@ cd moltemplate_files
   # To get around this AFTER RUNNING MOLTEMPLATE, run these commands in the
   # shell:
 
-  echo "pair_style hybrid lj/cut 10.0" >> system.in.init
+  echo "pair_style lj/cut 10.0" >> system.in.init
   sed 's/lj\/cut\/coul\/long/lj\/cut/g' system.in.settings > system.in.settings_
   sed 's/kspace_style/#kspace_style/g' system.in.init > system.in.init_
   mv system.in.settings_ system.in.settings

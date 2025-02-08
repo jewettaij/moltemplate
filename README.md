@@ -128,16 +128,28 @@ Alternatively, users can try using LAMMPS' built-in
 ## Installation Instructions
 
 Moltemplate depends on other software to work
-(such as BASH, python, pip, *or python3, and pip3*).  Once these
+(such as BASH, python3, pip3, *or* conda).  Once these
 dependencies have been met, installing moltemplate is relatively easy.
 However many users find it difficult to install these prerequisites correctly.
 A detailed installation guide is located [here](./INSTALL.md).
 
 
-### Quick installation overview
+### Installation for conda users
+If you have installed conda, you can download moltemplate using:
+```
+conda install conda-forge::moltemplate
+```
+This will omit the [moltemplate examples](./tree/master/examples)
+and [documentation](./tree/master/doc).
+You can browse examples [online](./tree/master/examples)
+and/or download them using:
+```
+git clone https://github.com/jewettaij/moltemplate DESTINATION_DIRECTORY
+```
 
-Once you have installed the prerequesites mentioned above, download
-moltemplate using:
+### Installation for pip users
+
+You can download moltemplate using:
 ```
 git clone https://github.com/jewettaij/moltemplate DESTINATION_DIRECTORY
 ```

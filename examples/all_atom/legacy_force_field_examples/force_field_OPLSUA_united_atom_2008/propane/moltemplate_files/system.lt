@@ -29,7 +29,7 @@ propanes[*][*][*].move(2.0, 2.0, 2.0)
 # terminate with an error message and ask you to use a more efficient pair_style
 # To get around this AFTER RUNNING MOLTEMPLATE, run these commands in the shell
 #
-# echo "pair_style hybrid lj/cut 10.0" >> system.in.init
+# echo "pair_style lj/cut 10.0" >> system.in.init
 # sed -i 's/lj\/cut\/coul\/long/lj\/cut/g' system.in.settings
 # sed -i 's/kspace_style/#kspace_style/g' system.in.init
 #
