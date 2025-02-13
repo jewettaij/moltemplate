@@ -8,7 +8,7 @@ import "oplsaa.lt"
 #    @atom:60     "H - HC | H: alkanes"
 # The "oplsaa.lt" file is at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
-# (If you want to customize this file files, download it and copy it to this folder.)
+# (If you want to customize this file, download it and copy it to this folder.)
 
 
 

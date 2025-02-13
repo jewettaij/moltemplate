@@ -4,11 +4,16 @@ import "polyethylene16.lt"  # define "Polyethylene16"
 
 Polyethylene16Star12 inherits OPLSAA {
 
-  # optional:force all monomers to share the same molecule-ID
+  # This defines a molecular complex consisting of 12 polymers bound to a
+  # large spherical particle at the center (modelled as a Lennard-Jones sphere).
 
+
+  # Optional: Force all atoms in the entire star to share the same molecule-ID.
+  # (Molecule-IDs can be used by visualization software and some LAMMPS "fixes")
   create_var {$mol}  
 
-  # Define a central atom, to which the 3 polymers will be attached:
+
+  # Define a central particle, to which these polymers will be attached:
 
   #   atom-id   mol-id  atom-type   charge    x     y     z
 
@@ -16,10 +21,10 @@ Polyethylene16Star12 inherits OPLSAA {
     $atom:center $mol  @atom:Center  0.0    0.0  0.0   0.0
   }
 
-  # Suppose that you want this central atom to be a large atom.
+  # Suppose that you want this central particle to be much larger than an atom.
   # (Perhaps it represents a larger structure that you do not want
   #  to bother modeling explicitly, like a small crystal.  See below.)
-  # Because this atom is NOT defined in the OPLSAA force field, 
+  # Because this new "atom" is NOT defined in the OPLSAA force field,
   # we must define the properties of this new atom type ("Center").
   # We can make its mass and radius as large as we like.
   # (But keep in mind, large particles will slow down the simulation.)
