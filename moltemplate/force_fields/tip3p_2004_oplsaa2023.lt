@@ -87,18 +87,3 @@ TIP3P inherits OPLSAA {
 
 } # "TIP3P" water molecule type
 
-
-
-
-write_once("WARNING_PLEASE_USE_tip3p_2004_oplsaa2023.lt_INSTEAD.TXT") {
-  Both the "tip3p_2004_oplsaa.lt" and "oplsaa.lt" files are being deprecated
-  and will be removed soon.  So in the future, please use
-  "import tip3p_2004_oplsaa2023.lt" and "import oplsaa2023.lt" (instead of
-  "import tip3p_2004_oplsaa.lt" and "import oplsaa.lt") in all of your .lt files.
-
-  Why? All future versions of the OPLSAA force field will
-  be given unique file names (eg "oplsaa2008.lt", "oplsaa2023.lt").
-  This will protect users from future changes in the @atom type numbers
-  (which vary according to the version).
-  This affects the TIP3P molecule type too, since this version uses OPLSAA.
-}

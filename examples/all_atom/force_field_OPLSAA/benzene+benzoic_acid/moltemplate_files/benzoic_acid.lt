@@ -1,7 +1,7 @@
-import "oplsaa.lt"
+import "oplsaa2023.lt"
 
 
-# The "oplsaa.lt" file defines these atom types:
+# The "oplsaa2023.lt" file defines these atom types:
 # Atom type @atom:145 corresponds to "C - CA | Benzene C"
 # Atom type @atom:146 corresponds to "H - HA | Benzene H"
 # Atom type @atom:165 corresponds to "C - CA | Cipso in styrene"
@@ -10,9 +10,9 @@ import "oplsaa.lt"
 # Atom type @atom:268 corresponds to "O - OH | Oh in CCOOH R in RCOOH is"
 # Atom type @atom:269 corresponds to "O - O~ | Oc in CCOOH neutral; use 135-140"
 # Atom type @atom:270 corresponds to "H - HO | H in CCOOH"
-# The "oplsaa.lt" file is located at:
+# The "oplsaa2023.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
-# If you want to customize oplsaa.lt, download it and copy it to this folder.
+# If you want to customize oplsaa2023.lt, download it and copy it to this folder.
 
 
 BenzoicAcid inherits OPLSAA {
@@ -65,7 +65,7 @@ BenzoicAcid inherits OPLSAA {
   }
   # Note1: The $bond string (eg "c3_c4") does not matter as long as it is unique.
   # Note2: In the "Data Bond List" section we don't have to specify the bond type.
-  #        The bond-type will be determined by the atom type (according to "oplsaa.lt")
+  #        The bond-type will be determined by the atom type (according to "oplsaa2023.lt")
 
 
 
@@ -95,8 +95,8 @@ BenzoicAcid inherits OPLSAA {
 
 # HOW TO TELL IF YOU NEED A CUSTOM "Data Dihedrals" section:
 #
-# The "oplsaa.lt" file contains lists of many types of interactions.
-# This "oplsaa.lt" file is too long to browse through all these interactions
+# The "oplsaa2023.lt" file contains lists of many types of interactions.
+# This "oplsaa2023.lt" file is too long to browse through all these interactions
 # to see which best apply to your molecule.
 #
 # Instead, you can ask moltemplate to warn you if it encountered any ambiguity
@@ -113,8 +113,8 @@ BenzoicAcid inherits OPLSAA {
 # Open up the "warning_duplicate_dihedrals.txt".  It will list out the possible
 # choices (such as "@dihedral:O_C_OH_HO__1", "@dihedral:O_C_OH_HO__2").
 #
-# Open up the "oplsaa.lt" file and search for these interactions.
-# "oplsaa.lt" usually has a comment next to each choice explaining when
+# Open up the "oplsaa2023.lt" file and search for these interactions.
+# "oplsaa2023.lt" usually has a comment next to each choice explaining when
 # to use it (eg. "dihedral_coeff @dihedral:O_C_OH_HO__2 ... # benzoic acids").
 # Choose best the dihedral type for your molecule (eg: "@dihedral:O_C_OH_HO__2")
 #

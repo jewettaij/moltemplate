@@ -10,7 +10,7 @@ There is no gaurantee that simulations prepared using moltemplate will reproduce
 In most of the OPLSAA examples,
 the atomic charges are determined by their @atom types
 *(...according to a lookup table located at the beginning of the
-["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+["oplsaa2008.lt"](../../../moltemplate/force_fields/oplsaa2008.lt) file)*.
 *(Any atomic charges listed in the "Data Atoms" section of your molecule's
 LT files will be ignored.)*
 **These charges can be overridden.**
@@ -29,7 +29,7 @@ moltemplate.sh, and later read by LAMMPS.)*
 2) **Specify charges using "set" commands.**
 *(This is how the OPLSAA atom charges are specified.
 After running moltemplate, atom charge information in the
-["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt)
+["oplsaa2008.lt" file](../../../moltemplate/force_fields/oplsaa2008.lt)
 is copied into the "system.in.charges" file created by moltemplate.sh.
 A LAMMPS input script file (eg. "run.in.nvt" or "run.in.npt")
 is included with all of the OPLSAA examples.  It tells LAMMPS to read
@@ -38,7 +38,7 @@ This overrides the atom charges from the "system.data" file.)*
 
 
 #### How to customize atomic charge
-*(without modifying "oplsaa.lt")*
+*(without modifying "oplsaa2008.lt")*
 
 1) If you use use a 3rd-party program to calculate each atom's charge, you can
 copy those charges into the "Data Atoms" section of your molecule's LT files.
@@ -46,7 +46,7 @@ To prevent LAMMPS from ignoring these charges, delete or comment-out the line
 containing: **"include system.in.charges"** from your LAMMPS input script
 (such as "run.in.min", "run.in.nvt", and "run.in.npt").
 2) Alternatively, if you only want to override the charges of *some* of the
-atoms in your molecules (and use default "oplsaa.lt" charges for the remaining
+atoms in your molecules (and use default "oplsaa2008.lt" charges for the remaining
 atoms), then you can do this by adding an "In Charges" section to your LT file
 and providing a list of custom charges for the \$atoms you want to modify.
 This is demonstrated in the ["graphene_nh2.lt"](functionalized_nanotubes_NH2/moltemplate_files/graphene_nh2.lt)

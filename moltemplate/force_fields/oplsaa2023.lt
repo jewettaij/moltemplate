@@ -10376,15 +10376,4 @@ OPLSAA {
     kspace_style pppm 0.0001
   } #end of init parameters
 
-
-  write_once("WARNING_PLEASE_USE_oplsaa2023.lt_INSTEAD.TXT") {
-    The "oplsaa.lt" file is being deprecated and will be removed soon.
-    So in the future, please use "import oplsaa2023.lt"
-    (instead of "import oplsaa.lt") in all of your .lt files.
-
-    Why? All future versions of the OPLSAA force field file will be given unique
-    names (eg "oplsaa2008.lt", "oplsaa2023.lt").  This will protect users from
-    changes in the @atom type numbers (which vary according to the version).
-  }
-
 }

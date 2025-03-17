@@ -1,6 +1,6 @@
-import "spc_oplsaa.lt" # <- defines the "SPC" (water) molecule type
+import "spc_oplsaa2023.lt" # <- defines the "SPC" (water) molecule type
 
-# Note: The "spc_oplsaa.lt" file is located at:
+# Note: The "spc_oplsaa2023.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
 # (If you want to customize it, you can download it and copy it to this folder.)
 

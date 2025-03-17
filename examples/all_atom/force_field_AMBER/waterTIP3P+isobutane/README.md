@@ -18,7 +18,7 @@ The number of molecules, positions, and simulation box size can be controlled by
 
 ### *WARNING: The atomic charges in this examples are not correct*
 
-The AMBER for field does not include charge information.  (In this example, they were borrowed from the corresponding atoms in the ["oplsaa.lt" file](../../../../moltemplate/force_fields/oplsaa.lt).  Do not do this!)
+The AMBER for field does not include charge information.  (In this example, they were borrowed from the corresponding atoms in the ["oplsaa2023.lt" file](../../../../moltemplate/force_fields/oplsaa2023.lt).  Do not do this!)
 
 The generation of atomic partial charges requires 3rd party software.
 

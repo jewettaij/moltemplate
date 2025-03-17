@@ -30,11 +30,11 @@ I suggest starting with the [butane](../butane) example instead.
 
 ### Details
 
-The "Alkane50" molecule, as well as the "CH2", and "CH3" monomers it contains, use the LOPLSAA force-field.  As with all of the OPLSAA examples, when we define these molecules, we only specify the atom names, bond list, and coordinates.  We do not have to list the atom charges, angles, dihedrals, or impropers.  The rules for creating atomic charge and angle topology are contained in the ["loplsaa.lt"](../../../../moltemplate/force_fields/loplsaa.lt) and  ["oplsaa.lt"](../../../../moltemplate/force_fields/oplsaa.lt) files.  To let moltemplate know that you want to use these rules, define your molecules (and molecular subunits) this way:
+The "Alkane50" molecule, as well as the "CH2", and "CH3" monomers it contains, use the LOPLSAA force-field.  As with all of the OPLSAA examples, when we define these molecules, we only specify the atom names, bond list, and coordinates.  We do not have to list the atom charges, angles, dihedrals, or impropers.  The rules for creating atomic charge and angle topology are contained in the ["loplsaa2008.lt"](../../../../moltemplate/force_fields/loplsaa2008.lt) and  ["oplsaa2008.lt"](../../../../moltemplate/force_fields/oplsaa2008.lt) files.  To let moltemplate know that you want to use these rules, define your molecules (and molecular subunits) this way:
 
 
 ```
-import "loplsaa.lt"
+import "loplsaa2008.lt"
 CH2 inherits OPLSAA { ... }         # (see "ch2group.lt")
 CH3 inherits OPLSAA { ... }         # (see "ch3group.lt")
 Alkane50 inherits OPLSAA { ... }    # (see "alkane50.lt")
@@ -43,7 +43,7 @@ Alkane50 inherits OPLSAA { ... }    # (see "alkane50.lt")
 
 #### OPLSAA or LOPLSAA"?
 
-There are only a few differences between LOPLSAA and OPLSAA.  The LOPLSAA force field contains a few extra atom types and dihedral interactions which improve the accuracy of long alkane chains.  The ["loplsaa.lt"](../../../../moltemplate/force_fields/loplsaa.lt) file (referenced above) incorporates these extra atom and dihedral types in the existing OPLSAA force field *instead* of creating a new force field named "LOPLSAA".  *(There is no separate "LOPLSAA" force field object.  I apologize if this is confusing.)*  You can mix LOPLSAA and OPLSAA atoms in the same molecule.
+There are only a few differences between LOPLSAA and OPLSAA.  The LOPLSAA force field contains a few extra atom types and dihedral interactions which improve the accuracy of long alkane chains.  The ["loplsaa2008.lt"](../../../../moltemplate/force_fields/loplsaa2008.lt) file (referenced above) incorporates these extra atom and dihedral types in the existing OPLSAA force field *instead* of creating a new force field named "LOPLSAA".  *(There is no separate "LOPLSAA" force field object.  I apologize if this is confusing.)*  You can mix LOPLSAA and OPLSAA atoms in the same molecule.
 
 
 
@@ -51,7 +51,7 @@ There are only a few differences between LOPLSAA and OPLSAA.  The LOPLSAA force 
 
 In this example, atomic charge for OPLSAA atoms is determined by @atom type
 *(...according to a lookup table located at the beginning of the
-["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+["oplsaa2008.lt"](../../../moltemplate/force_fields/oplsaa2008.lt) file)*.
 *(Any atomic charges listed in the "Data Atoms" section of your molecules'
 LT files will be ignored.)*
 **These charges can be overridden.**

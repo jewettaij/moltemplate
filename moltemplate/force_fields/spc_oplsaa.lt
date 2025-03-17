@@ -1,11 +1,11 @@
-# file "spc_oplsaa.lt" 
+# file "spc_oplsaa2023.lt" 
 #
 #    H1     H2
 #      \   /
 #        O
 #
 # This is the version of the SPC water model suitable for use in a simulation
-# using the OPLSAA force field (as implemented in the "oplsaa.lt" file).
+# using the OPLSAA force field (as implemented in the "oplsaa2023.lt" file).
 #
 # Note: This is not the same as the SPC/E water model.
 #
@@ -18,10 +18,10 @@
 # the the force-field parameters and bond geometry in the file itself.  This
 # makes it easier to use those files in simulations that use other force fields.
 # However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa.lt" file.
+# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
 
 
-import "oplsaa.lt"  # <-- defines OPLSAA, @atom:9991 and @atom:9990
+import "oplsaa2023.lt"  # <-- defines OPLSAA, @atom:9991 and @atom:9990
 
 SPC inherits OPLSAA {
 
@@ -54,10 +54,27 @@ SPC inherits OPLSAA {
 
     # Note:    Bonds of type "@bond:spcO_spcH"
     #  and    Angles of type "@angle:spcH_spcO_spcH"
-    # ...are defined in the "oplsaa.lt" file. These codes are used to lookup the
+    # ...are defined in the "oplsaa2023.lt" file. These codes are used to lookup the
     # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPC water.
     # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
   }
 
 } # end of definition of the "SPC" water molecule type
 
+
+
+
+
+
+write_once("WARNING_PLEASE_USE_spc_oplsaa2023.lt_INSTEAD.TXT") {
+  Both the "spce_oplsaa.lt" and "oplsaa.lt" files are being deprecated
+  and will be removed soon.  So in the future, please use
+  "import spc_oplsaa2023.lt" and "import oplsaa2023.lt" (instead of
+  "import spc_oplsaa.lt" and "import oplsaa.lt") in all of your .lt files.
+
+  Why? All future versions of the OPLSAA force field will
+  be given unique file names (eg "oplsaa2008.lt", "oplsaa2023.lt").
+  This will protect users from future changes in the @atom type numbers
+  (which vary according to the version).
+  This affects the SPC molecule type too, since this version uses OPLSAA.
+}

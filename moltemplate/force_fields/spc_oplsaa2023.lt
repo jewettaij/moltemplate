@@ -21,50 +21,42 @@
 # force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
 
 
-import "oplsaa2023.lt"  # <-- defines OPLSAA, @atom:76 and @atom:77
+import "oplsaa2023.lt"  # <-- defines OPLSAA, @atom:9991 and @atom:9990
 
-SPC_oplsaa inherits OPLSAA {
+SPC inherits OPLSAA {
 
   # Atom types from "oplsa.lt"
-  # @atom:76 <--> "SPC Water O"
-  # @atom:77 <--> "SPC Water H"
+  # @atom:9991 <--> "spcO | SPC water O"
+  # @atom:9990 <--> "spcH | SPC water H"
 
   write("Data Atoms") {
-    $atom:O  $mol:. @atom:76 -0.82   0.0000000 0.00000 0.000000
-    $atom:H1 $mol:. @atom:77  0.41   0.8164904 0.00000 0.5773590
-    $atom:H2 $mol:. @atom:77  0.41  -0.8164904 0.00000 0.5773590
+    $atom:o  $mol:. @atom:9991 -0.82   0.0000000 0.00000 0.000000
+    $atom:h1 $mol:. @atom:9990  0.41   0.8164904 0.00000 0.5773590
+    $atom:h2 $mol:. @atom:9990  0.41  -0.8164904 0.00000 0.5773590
   }
 
   write("Data Bond List") {
-    $bond:OH1  $atom:O $atom:H1
-    $bond:OH2  $atom:O $atom:H2
+    $bond:oh1  $atom:o $atom:h1
+    $bond:oh2  $atom:o $atom:h2
   }
 
   write_once("In Settings") {
-
     # Define a group for the spc water molecules. (We will use "spc" below.)
-    group spc type  @atom:76  @atom:77
+    group spc type  @atom:9991  @atom:9990
 
     # Constrain the angles and distances in spc water:
     # (See "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
 
-    fix fShakeSPC spc shake 0.0001 10 100 b @bond:042_043 a @angle:043_042_043
+    fix fShakeSPC spc shake 0.0001 10 100 b @bond:spcO_spcH a @angle:spcH_spcO_spcH
     # It's a good idea to put this command in your LAMMPS input scripts:
     #  unfix fShakeSPC   # <-- this disables fix shake
     # ...before minimization and pressure equilibration.  (compatibility issues)
 
-    # Note:    Bonds of type "@bond:042_043"
-    #  and    Angles of type "@angle:043_042_043"
+    # Note:    Bonds of type "@bond:spcO_spcH"
+    #  and    Angles of type "@angle:spcH_spcO_spcH"
     # ...are defined in the "oplsaa2023.lt" file. These codes are used to lookup the
     # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPC water.
     # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
-
-    # ------- Remember to put this command in your LAMMPS input script! -------
-    #
-    #  include system.in.constraints
-    #
-    # ...AFTER minimization and after all integration fixes.
-    # -------------------------------------------------------------------------
   }
 
 } # end of definition of the "SPC" water molecule type

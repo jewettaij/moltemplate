@@ -1,4 +1,4 @@
-The "oplsaa.lt" file contains force field parameters which we found in the
+The "oplsaa2023.lt" file contains force field parameters which we found in the
 "oplsaa.prm" file which is distributed with TINKER.
 Jay Ponder, (the author of TINKER) preferred that we do not distribute
 that file with moltemplate.  However you can download that file here:

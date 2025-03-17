@@ -15,13 +15,13 @@ Propane inherits OPLSAA {
     $bond:CC2 $atom:CH2  $atom:CH3b
   }
 
-  # These atom types are defined in the "oplsaa.lt" file (usually located
+  # These atom types are defined in the "oplsaa2008.lt" file (usually located
   # in the "force_fields" subdirectory of the moltemplate distribution).
   #    @atom:10  "N-Alkane CH3- (UA)"
   #    @atom:13  "Alkanes -CH2- (UA)"
   # 
   # NOTE: UA means united atom (no explicit hydrogens).
-  #       The first 56 atoms in the "oplsaa.lt" file are united atoms
+  #       The first 56 atoms in the "oplsaa2008.lt" file are united atoms
   #
   # NOTE: Charges will be assigned by OPLSAA, so we leave them 0.0 here.
   #

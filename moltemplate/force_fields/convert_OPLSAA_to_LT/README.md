@@ -6,9 +6,9 @@ oplsaa2lt.py
 # Typical Usage
 If you have downloaded the latest BOSS parameter files
 (eg "oplsaa.par", and "oplsaa.sb"),
-you can convert them to a moltemplate file (eg. "oplsaa.lt") this way:
+you can convert them to a moltemplate file (eg. "oplsaa2023.lt") this way:
 ```
-./oplsaa2lt.py --name OPLSAA --out oplsaa.lt \
+./oplsaa2lt.py --name OPLSAA --out oplsaa2023.lt \
   --par oplsaa.par \
   --sb  oplsaa.sb
 ```
@@ -17,7 +17,7 @@ In this example, the two BOSS files
 - `oplsaa.sb` contains bond and angle parameters.
 *(Example .par and .sb files are located in the ../oplsaa2023_original_format/ directory.  Those files were published in 2023.)*
 
-This creates a moltemplate file named "oplsaa.lt" containing a force-field object named "OPLSAA"
+This creates a moltemplate file named "oplsaa2023.lt" containing a force-field object named "OPLSAA"
 ```
 OPLSAA {
   :   (Atom types and force-field parameters go here...)
@@ -26,7 +26,7 @@ OPLSAA {
 Later on, users can use this file to define molecules (eg. "Ethylene")
 using this syntax:
 ```
-import "oplsaa.lt"
+import "oplsaa2023.lt"
 
 Ethylene inherits OPLSAA {
   # atom-id mol-id atom-type charge   X       Y       Z     # comment
@@ -45,9 +45,9 @@ Ethylene inherits OPLSAA {
 See the examples in the force_field_OPLSAA2023/ subdirectory directory for details.
 
 
-The "oplsaa.lt" file is normally generated using the published parameters from [this paper](https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602).  Unless otherwise specified in the header, the `oplsaa2lt.py` program is run using these arguments:
+The "oplsaa2023.lt" file is normally generated using the published parameters from [this paper](https://pubs.acs.org/doi/suppl/10.1021/acs.jpcb.3c06602).  Unless otherwise specified in the header, the `oplsaa2lt.py` program is run using these arguments:
 ```
-./oplsaa2lt.py --name OPLSAA --out oplsaa.lt \
+./oplsaa2lt.py --name OPLSAA --out oplsaa2023.lt \
   --par ../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par \
   --sb  ../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb
 ```

@@ -1,11 +1,11 @@
-import "oplsaa.lt"
+import "oplsaa2023.lt"
 
-# The "oplsaa.lt" file defines these atom types:
+# The "oplsaa2023.lt" file defines these atom types:
 #   @atom:143    "C - CM | alkene C (H2-C=)"
 #   @atom:144    "H - HC | alkene H (H-C=)"
-# The "oplsaa.lt" file is located at:
+# The "oplsaa2023.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
-# If you want to customize oplsaa.lt, download it and copy it to this folder.
+# If you want to customize oplsaa2023.lt, download it and copy it to this folder.
 
 
 
@@ -40,7 +40,7 @@ Ethylene inherits OPLSAA {
   }
 
   # In the "Data Bond List" section we don't have to specify the bond type.
-  # The bond-type will be determined by the atom type (according to "oplsaa.lt")
+  # The bond-type will be determined by the atom type (according to "oplsaa2023.lt")
 
 } # Ethylene
 

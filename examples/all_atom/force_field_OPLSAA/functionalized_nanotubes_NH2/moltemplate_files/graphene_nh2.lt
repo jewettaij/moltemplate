@@ -1,12 +1,12 @@
 import "graphene.lt"   # Defines @atom:Graphene/C
-import "oplsaa.lt"     # Defines @atom:OPLSAA/703
+import "oplsaa2023.lt"     # Defines @atom:OPLSAA/703
 import "nh2.lt"        # Defines "NH2"
 
 Graphene_NH2 {
 
   # As with "Graphene", we define a two-atom unit cell, but we change one
-  # of them to one of the atom types defined in OPLSAA ("oplsaa.lt").
-  # This means that "oplsaa.lt" will lookup the angle interactions between
+  # of them to one of the atom types defined in OPLSAA ("oplsaa2023.lt").
+  # This means that "oplsaa2023.lt" will lookup the angle interactions between
   # the C-N-H atoms for us. (We can also specify those manually, if you prefer.)
   # @atom:OPLSAA/903 corresponds to "C - CT|CH3(N) primary aliphatic amines".
   # This atom (@atom:903) is definitely not the same type of carbon I would
@@ -41,7 +41,7 @@ Graphene_NH2 {
   # Note that the charge of the connected carbon atom will have to be modified
   # to neutralize the NH2 atoms. (The sum of the charges in "NH2" is -0.18.)
   write("In Charges") {
-    set atom $atom:c1 charge 0.18  #(This overrides the charges in "oplsaa.lt")
+    set atom $atom:c1 charge 0.18  #(This overrides the charges in "oplsaa2023.lt")
   }
 
   write("In Settings") {

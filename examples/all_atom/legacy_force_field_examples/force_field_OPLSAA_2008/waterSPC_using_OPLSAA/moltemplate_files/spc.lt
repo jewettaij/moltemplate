@@ -9,7 +9,7 @@ import "oplsaa2008.lt"
 
 SPC inherits OPLSAA {
 
-  # Atom types from "oplsaa_lt_generator/oplsaa_subset.prm"
+  # Atom types from "oplsaa2008.lt_generator/oplsaa_subset.prm"
   # @atom:76  <-->  OW  "SPC Water O"
   # @atom:77  <-->  HW  "SPC Water H"
 

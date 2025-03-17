@@ -60,7 +60,7 @@ OPLSAA {
     set type @atom:718L charge 0.06     # "Aliphatic hydrogen diols and triols (LOPLS,2015)"
     # commenting out the next line which appeared in earlier versions...
     #set type @atom:118L charge 0.06    # "Aliphatic hydrogen monoalcohols (LOPLS,2015)"
-    # ...because 118L is compatible with 118 from the original "oplsaa.lt"
+    # ...because 118L is compatible with 118 from the original "oplsaa2023.lt"
     #    file.  So you can use @atom:118 instead.
 
     # LOPLS(2015): Esters
@@ -71,7 +71,7 @@ OPLSAA {
     #set type @atom:81LL charge 0.19    # "Ester COR alkoxy carbon (LOPLS,2015)"
     #set type @atom:718LL charge 0.03   # "α-methoxy hydrogen (LOPLS,2015)"
     # ...because 81LL and 718LL are compatible with 431 and 718, respectively,
-    #    from the original "oplsaa.lt" file. So you can use @atom:431 instead
+    #    from the original "oplsaa2023.lt" file. So you can use @atom:431 instead
     #    of @atom:81LL, and @atom:718 instead of @atom:718LL
   } #(end of atom partial charges)
 

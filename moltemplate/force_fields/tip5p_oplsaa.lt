@@ -1,4 +1,4 @@
-# file "tip5p_oplsaa.lt"
+# file "tip5p_oplsaa2023.lt"
 #
 #    h1     h2
 #      \   /
@@ -17,16 +17,16 @@
 # the the force-field parameters and bond geometry in the file itself.  This
 # means you can use those files in simulations that use any force field.
 # However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa.lt" file.
+# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
 #
 # Credit: This file was contributed by Cheng Chen (Queen Mary University)
 
 
-import "oplsaa.lt"  #<-- defines OPLSAA and @atom:9994, @atom:9993, @atom:9992
+import "oplsaa2023.lt"  #<-- defines OPLSAA and @atom:9994, @atom:9993, @atom:9992
 
 TIP5P inherits OPLSAA {
 
-  # Atom types from "oplsaa.lt"
+  # Atom types from "oplsaa2023.lt"
   # @atom:9994  <-->  tipO | TIP5P water O
   # @atom:9993  <-->  tipH | TIP5P water H
   # @atom:9992  <-->  tipL | TIP5P water L
@@ -61,3 +61,16 @@ TIP5P inherits OPLSAA {
 
 
 
+
+write_once("WARNING_PLEASE_USE_tip5p_oplsaa2023.lt_INSTEAD.TXT") {
+  Both the "tip5p_oplsaa.lt" and "oplsaa.lt" files are being deprecated
+  and will be removed soon.  So in the future, please use
+  "import tip5p_oplsaa2023.lt" and "import oplsaa2023.lt" (instead of
+  "import tip5p_oplsaa.lt" and "import oplsaa.lt") in all of your .lt files.
+
+  Why? All future versions of the OPLSAA force field will
+  be given unique file names (eg "oplsaa2008.lt", "oplsaa2023.lt").
+  This will protect users from future changes in the @atom type numbers
+  (which vary according to the version).
+  This affects the TIP5P molecule type too, since this version uses OPLSAA.
+}

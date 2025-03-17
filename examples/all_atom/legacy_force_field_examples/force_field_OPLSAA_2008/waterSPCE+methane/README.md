@@ -5,9 +5,9 @@ This example contains a mixture of water(SPCE) and methane.  The methane molecul
 
 ## Details
 
-The methane molecules in this example use the OPLSAA force-field.  This means that the database of force-field parameters in the [oplsaa.lt file](../../../../moltemplate/force_fields/oplsaa.lt) will be used to generate angles, dihedrals, and impropers.  The [methane.lt file](moltemplate_files/methane.lt) contains these lines which refer to OPLSAA:
+The methane molecules in this example use the OPLSAA force-field.  This means that the database of force-field parameters in the [oplsaa2008.lt file](../../../../moltemplate/force_fields/oplsaa2008.lt) will be used to generate angles, dihedrals, and impropers.  The [methane.lt file](moltemplate_files/methane.lt) contains these lines which refer to OPLSAA:
 ```
-import "oplsaa.lt"
+import "oplsaa2008.lt"
 Methane inherits OPLSAA { ... }    # (see "methane.lt")
 ```
 However the "SPCE" (water) molecules does NOT use a database to look up the force-field parameters for this tiny molecule.  Instead, the [spce.lt file](moltemplate_files/spce.lt) declares all of the angle interactions, atom properties and force-field parameters for water explicitly. (Consequently, it makes no mention of "OPLSAA".)
@@ -46,7 +46,7 @@ force field, their charges are specified in the ordinary way
 However the charges of atoms belonging to molecules that use the OPLSAA force
 field (such as methane, in this example) are determined by their @atom types
 *(according to a lookup table located at the beginning of the
-["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+["oplsaa2008.lt"](../../../moltemplate/force_fields/oplsaa2008.lt) file)*.
 After running moltemplate.sh, this information will be written to the
 the "system.in.charges" file created by moltemplate.
 For these OPLSAA atom types, we never bother to specify their charges in

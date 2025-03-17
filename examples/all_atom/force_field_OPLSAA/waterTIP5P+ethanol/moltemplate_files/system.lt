@@ -1,7 +1,7 @@
 import "ethanol.lt"       # <-defines the "Ethanol" molecule type
-import "tip5p_oplsaa.lt"  # <-defines the "TIP5P" (water) molecule type
+import "tip5p_oplsaa2023.lt"  # <-defines the "TIP5P" (water) molecule type
 
-# Note: The "tip5p_oplsaa.lt" file is located at:
+# Note: The "tip5p_oplsaa2023.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
 # (If you want to customize it, you can download it and copy it to this folder.)
 

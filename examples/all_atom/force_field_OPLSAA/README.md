@@ -6,7 +6,7 @@ There is no guarantee that simulations prepared using moltemplate will reproduce
 
 
 
-### Suggestion: Make a local copy of the "oplsaa.lt" file
+### Suggestion: Make a local copy of the "oplsaa2023.lt" file
 
 WARNING: The OPLSAA force field changes slightly over time.
 When it happens, it can cause the names of the
@@ -14,10 +14,10 @@ When it happens, it can cause the names of the
 This could break backward compatibility,
 and cause moltemplate.sh to fail when reading your .lt files.
 So if you are using OPLSAA, it's a good idea to make a backup copy of the
-[oplsaa.lt file](../../../moltemplate/force_fields/oplsaa.lt)
+[oplsaa2023.lt file](../../../moltemplate/force_fields/oplsaa2023.lt)
 (located in the
 [moltemplate/force_fields/](../../../moltemplate/force_fields/) folder).
-Copy it to the folder with your other .lt files for the simulation you are working on.  (Moltemplate will look in the local folder first for all the .lt files that it needs, including "oplsaa.lt".)
+Copy it to the folder with your other .lt files for the simulation you are working on.  (Moltemplate will look in the local folder first for all the .lt files that it needs, including "oplsaa2023.lt".)
 This will protect you from force-field parameter changes, and you
 will be able to continue using your existing atom and bonded type names safely.
 
@@ -29,7 +29,7 @@ will be able to continue using your existing atom and bonded type names safely.
 In most of the OPLSAA examples,
 the atomic charges are determined by their @atom types
 *(...according to a lookup table located at the beginning of the
-["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+["oplsaa2023.lt"](../../../moltemplate/force_fields/oplsaa2023.lt) file)*.
 *(Any atomic charges listed in the "Data Atoms" section of your molecule's
 LT files will be ignored.)*
 **These charges can be overridden.**
@@ -49,7 +49,7 @@ moltemplate.sh, and later read by LAMMPS.)*
 2) **Specify charges using "set" commands.**
 *(This is how the OPLSAA atom charges are specified.
 After running moltemplate, atom charge information in the
-["oplsaa.lt" file](../../../moltemplate/force_fields/oplsaa.lt)
+["oplsaa2023.lt" file](../../../moltemplate/force_fields/oplsaa2023.lt)
 is copied into the "system.in.charges" file created by moltemplate.sh.
 A LAMMPS input script file (eg. "run.in.nvt" or "run.in.npt")
 is included with all of the OPLSAA examples.  It tells LAMMPS to read
@@ -58,7 +58,7 @@ This overrides the atom charges from the "system.data" file.)*
 
 
 #### How to customize atomic charge
-*(without modifying "oplsaa.lt")*
+*(without modifying "oplsaa2023.lt")*
 
 1) If you use use a 3rd-party program to calculate each atom's charge, you can
 copy those charges into the "Data Atoms" section of your molecule's LT files.
@@ -66,7 +66,7 @@ To prevent LAMMPS from ignoring these charges, delete or comment-out the line
 containing: **"include system.in.charges"** from your LAMMPS input script
 (such as "run.in.min", "run.in.nvt", and "run.in.npt").
 2) Alternatively, if you only want to override the charges of *some* of the
-atoms in your molecules (and use default "oplsaa.lt" charges for the remaining
+atoms in your molecules (and use default "oplsaa2023.lt" charges for the remaining
 atoms), then you can do this by adding an "In Charges" section to your LT file
 and providing a list of custom charges for the \$atoms you want to modify.
 This is demonstrated in the ["graphene_nh2.lt"](functionalized_nanotubes_NH2/moltemplate_files/graphene_nh2.lt)
@@ -94,7 +94,7 @@ of the [spce.lt](waterSPCE+methane/moltemplate_files/spce.lt) file.
 Sometimes, even after you have specified the (OPLSAA-specific) atom types
 for the atoms in your molecule, there may be multiple possible choices
 of dihedral, angle, or bond interactions between those atoms
-available in OPLSAA force field (stored in the "oplsaa.lt" file).
+available in OPLSAA force field (stored in the "oplsaa2023.lt" file).
 When that happens, moltemplate.sh will *attempt to make a reasonable guess*,
 chosing the original (oldest, most common) version of the interaction between
 those atom types.  However, you can override this choice:

@@ -22,40 +22,42 @@
 # Credit: This file was contributed by Cheng Chen (Queen Mary University)
 
 
-import "oplsaa2023.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
+import "oplsaa2023.lt"  #<-- defines OPLSAA and @atom:9994, @atom:9993, @atom:9992
 
 TIP5P inherits OPLSAA {
 
   # Atom types from "oplsaa2023.lt"
-  # @atom:73  <-->  OW  "TIP5P Water O"
-  # @atom:74  <-->  HW  "TIP5P Water H"
-  # @atom:75  <-->  LP  "TIP5P Water LP"
+  # @atom:9994  <-->  tipO | TIP5P water O
+  # @atom:9993  <-->  tipH | TIP5P water H
+  # @atom:9992  <-->  tipL | TIP5P water L
 
-  # Atom-ID Mol-ID Atom-Type  charge      X      Y       Z
+  # Atom-ID Mol-ID Atom-Type     charge      X      Y       Z
   write("Data Atoms") {
-    $atom:o   $mol:w @atom:73  0.0000    0.00000 0.00000 0.00000
-    $atom:h1  $mol:w @atom:74  0.2410    0.00000 0.81649 0.57736
-    $atom:h2  $mol:w @atom:74  0.2410    0.00000 -0.81649 0.57736
-    $atom:LP1 $mol:w @atom:75 -0.2410    0.57154 0.00000 -0.404151
-    $atom:LP2 $mol:w @atom:75 -0.2410   -0.57154 0.00000 -0.404151
+    $atom:o   $mol:w @atom:9994  0.0000    0.00000 0.00000 0.00000
+    $atom:h1  $mol:w @atom:9993  0.2410    0.00000 0.81649 0.57736
+    $atom:h2  $mol:w @atom:9993  0.2410    0.00000 -0.81649 0.57736
+    $atom:LP1 $mol:w @atom:9992 -0.2410    0.57154 0.00000 -0.404151
+    $atom:LP2 $mol:w @atom:9992 -0.2410   -0.57154 0.00000 -0.404151
   }
 
-  write("Data Bond List") {
-    $bond:oh1 $atom:o $atom:h1
-    $bond:oh2 $atom:o $atom:h2
-    $bond:oLP1 $atom:o $atom:LP1
-    $bond:oLP2 $atom:o $atom:LP2
+  # Bonds are not needed since we are using fix rigid
+  # However, when visualizing the system, sometimes it's nice to see the bonds.
+  # If so feel free to uncomment the following lines:
+  write("Data Bonds") {
+    $bond:oh1 @bond:tipO_tipH $atom:o $atom:h1
+    $bond:oh2 @bond:tipO_tipH $atom:o $atom:h2
+    # $bond:oLP1 @bond:tipO_tipH $atom:o $atom:LP1  # Do you want to show bonds
+    # $bond:oLP2 @bond:tipO_tipH $atom:o $atom:LP2  # between O and LP atoms?
   }
 
   write_once("In Settings") {
     # Define a group.  We will apply "fix rigid" to the atoms 
     # in this group to preserve the shape of each molecule.
-    group gH2O type  @atom:73 @atom:74 @atom:75
+    group gH2O type  @atom:9994 @atom:9993 @atom:9992
     # explanation:  http://lammps.sandia.gov/doc/group.html
   }
 
 } # end of definition of "TIP5P" water molecule type
-
 
 
 

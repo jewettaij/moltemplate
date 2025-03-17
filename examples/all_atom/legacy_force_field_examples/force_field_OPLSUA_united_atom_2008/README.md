@@ -1,7 +1,7 @@
 This directory contains some examples of all-atom simulations using the OPLSUA
 force field.
 
-*Note:* Confusingly, the parameters and atom type definitions for the OPLSUA force-field are contained in the [oplsaa.lt](../../../moltemplate/force_fields/oplsaa.lt) file.  The first 56 atom types defined in that file (specifically *@atom:1*...*@atom:56*) correspond to OPLSUA united-atom particles.  To use the OPLSUA force field, select atoms for your molecule entirely from that list.
+*Note:* Confusingly, the parameters and atom type definitions for the OPLSUA force-field are contained in the [oplsaa2008.lt](../../../moltemplate/force_fields/oplsaa2008.lt) file.  The first 56 atom types defined in that file (specifically *@atom:1*...*@atom:56*) correspond to OPLSUA united-atom particles.  To use the OPLSUA force field, select atoms for your molecule entirely from that list.
 
 ### WARNING
 

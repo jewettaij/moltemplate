@@ -1,11 +1,11 @@
-import "oplsaa.lt"
+import "oplsaa2023.lt"
 
-# The "oplsaa.lt" file defines these atom types:
+# The "oplsaa2023.lt" file defines these atom types:
 # @atom:138  CH4  C: methane mod 1/2020
 # @atom:140  H    H: alkanes
-# The "oplsaa.lt" file is located at:
+# The "oplsaa2023.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
-# If you want to customize oplsaa.lt, download it and copy it to this folder.
+# If you want to customize oplsaa2023.lt, download it and copy it to this folder.
 
 
 

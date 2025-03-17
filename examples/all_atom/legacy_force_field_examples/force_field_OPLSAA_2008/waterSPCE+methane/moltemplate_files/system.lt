@@ -1,4 +1,4 @@
-import "spce_oplsaa.lt" # <- defines the "SPCE" (water) molecule type.
+import "spce_oplsaa2008.lt" # <- defines the "SPCE" (water) molecule type.
 import "methane.lt"     # <- defines the "Methane" molecule type (uses OPLSAA)
 
 # Periodic boundary conditions:

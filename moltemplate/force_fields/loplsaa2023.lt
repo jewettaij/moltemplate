@@ -265,20 +265,6 @@ OPLSAA {
     @dihedral:OHL_CT_CT_OSL    @atom:*_b*_a*_dOHL*_i* @atom:*_b*_a*_dCT*_i*  @atom:*_b*_a*_dCT*_i*  @atom:*_b*_a*_dOSL*_i*
   } #(end of dihedrals by type)
 
-  write_once("WARNING_PLEASE_USE_loplsaa2023.lt_INSTEAD.TXT") {
-    Both the "loplsaa.lt" and "oplsaa.lt" files are being deprecated
-    and will be removed soon.  So in the future, please use
-    "import loplsaa2023.lt" and "import oplsaa2023.lt" (instead of
-    "import loplsaa.lt" and "import oplsaa.lt") in all of your .lt files.
-
-    Why? All future versions of the OPLSAA and LOPLS force fields will
-    be given unique file names (eg "oplsaa2008.lt", "oplsaa2023.lt").
-    This will protect users from future changes in the @atom type numbers
-    (which vary according to the version).
-    This affects the LOPLSAA force field too, since it shares
-    some of the same @atom type names with OPLSAA.
-  }
-
 }  # OPLSAA
 
 

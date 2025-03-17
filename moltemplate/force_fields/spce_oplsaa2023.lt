@@ -52,18 +52,3 @@ SPCE inherits OPLSAA {
 
 } # end of definition of "SPCE" water molecule type
 
-
-
-
-write_once("WARNING_PLEASE_USE_spce_oplsaa2023.lt_INSTEAD.TXT") {
-  Both the "spce_oplsaa.lt" and "oplsaa.lt" files are being deprecated
-  and will be removed soon.  So in the future, please use
-  "import spce_oplsaa2023.lt" and "import oplsaa2023.lt" (instead of
-  "import spce_oplsaa.lt" and "import oplsaa.lt") in all of your .lt files.
-
-  Why? All future versions of the OPLSAA force field will
-  be given unique file names (eg "oplsaa2008.lt", "oplsaa2023.lt").
-  This will protect users from future changes in the @atom type numbers
-  (which vary according to the version).
-  This affects the SPCE molecule type too, since this version uses OPLSAA.
-}

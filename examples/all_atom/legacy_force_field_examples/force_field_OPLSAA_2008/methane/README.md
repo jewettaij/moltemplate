@@ -5,10 +5,10 @@ This example demonstrates how to build a simulation containing a box of methane 
 
 ### Details 
 
-The methane molecules in this example use the OPLSAA force-field.  This means that the database of force-field parameters in "oplsaa.lt" will be used to generate angles, dihedrals, and impropers.  The "moltemplate_files/methane.lt" file contains these lines which refer to OPLSAA:
+The methane molecules in this example use the OPLSAA force-field.  This means that the database of force-field parameters in "oplsaa2008.lt" will be used to generate angles, dihedrals, and impropers.  The "moltemplate_files/methane.lt" file contains these lines which refer to OPLSAA:
 
 ```
-import "oplsaa.lt"
+import "oplsaa2008.lt"
 Methane inherits OPLSAA { ... }    # (see "methane.lt")
 ```
 
@@ -32,7 +32,7 @@ More detailed instructions on how to build LAMMPS input files and run a short si
 
 In this example, atomic charge for OPLSAA atoms is determined by @atom type
 *(...according to a lookup table located at the beginning of the
-["oplsaa.lt"](../../../moltemplate/force_fields/oplsaa.lt) file)*.
+["oplsaa2008.lt"](../../../moltemplate/force_fields/oplsaa2008.lt) file)*.
 *(Any atomic charges listed in the "Data Atoms" section of your molecules'
 LT files will be ignored.)*
 **These charges can be overridden.**
