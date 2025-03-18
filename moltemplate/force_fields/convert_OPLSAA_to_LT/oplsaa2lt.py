@@ -151,7 +151,7 @@ def get_dihedrals_and_impropers(input_lines) -> tuple[list[Dihedral], list[Impro
                 types = [types[1], types[0], types[2], types[3]] # see above comment
                 improper = Improper(types=types, v1=v1, v2=v2, v3=v3, v4=v4, comment=comment)
                 # There is a weird problem with "allenes improper" interactions
-                # that appear in the 2023 version of the BOSS files.
+                # that appear in the 2024 version of the BOSS files.
                 # Those files specify improper interactions between atoms
                 # that are typically collinear.  That would be numerically
                 # unstable so we must comment these out.  This seems like
@@ -325,14 +325,14 @@ def main(argv):
         "--par",
         dest="infile_name_par",
         required=True,
-        # default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par",
+        # default="../oplsaa2024_original_format/Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-2.par",
         help="name of the BOSS .par file.  (Example: \"oplsaa.par\")",
     )
     ap.add_argument(
         "--sb",
         dest="infile_name_sb",
         required=True,
-        # default="../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb",
+        # default="../oplsaa2024_original_format/Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-3.sb",
         help="name of the BOSS .sb file.  (Example: \"oplsaa.sb\")",
     )
     ap.add_argument(

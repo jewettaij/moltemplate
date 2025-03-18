@@ -3,7 +3,7 @@
 # This is an example of a general force-field file in moltemplate
 # format.  I hope that end-users can read this file and modify
 # it to build their own custom force-field files.
-# This is an abbreviated version of the full "oplsaa2023.lt" file
+# This is an abbreviated version of the full "oplsaa2024.lt" file
 # (...which I hope is easier to read.  It contains only the atom
 # types and relevant parameters needed for simple alkanes and alkenes)
 #
@@ -18,7 +18,7 @@
 #   }
 # }
 #
-# (Do not use this file.  Use the full "oplsaa2023.lt" instead.)
+# (Do not use this file.  Use the full "oplsaa2024.lt" instead.)
 
 
 

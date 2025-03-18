@@ -1,12 +1,12 @@
-import "oplsaa2023.lt"
+import "oplsaa2024.lt"
 
 
-# The "oplsaa2023.lt" file defines these atom types:
+# The "oplsaa2024.lt" file defines these atom types:
 #   @atom:145    "C - CA | Benzene C"
 #   @atom:146    "H - HA | Benzene H"
-# The "oplsaa2023.lt" file is located at:
+# The "oplsaa2024.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
-# If you want to customize oplsaa2023.lt, download it and copy it to this folder
+# If you want to customize oplsaa2024.lt, download it and copy it to this folder
 
 
 
@@ -54,6 +54,6 @@ Benzene inherits OPLSAA {
   }
 
   # In the "Data Bond List" section we don't have to specify the bond type.
-  # The bond-type will be determined by the atom type (according to "oplsaa2023.lt")
+  # The bond-type will be determined by the atom type (according to "oplsaa2024.lt")
 
 } # Benzene

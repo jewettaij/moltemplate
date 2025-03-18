@@ -1,4 +1,4 @@
-# file "tip5p_oplsaa2023.lt"
+# file "tip5p_oplsaa2008.lt"
 #
 #    h1     h2
 #      \   /
@@ -17,16 +17,16 @@
 # the the force-field parameters and bond geometry in the file itself.  This
 # means you can use those files in simulations that use any force field.
 # However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
+# force field parameters and bond geometry are defined in the "oplsaa2008.lt" file.
 #
 # Credit: This file was contributed by Cheng Chen (Queen Mary University)
 
 
-import "oplsaa2023.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
+import "oplsaa2008.lt"  #<-- defines OPLSAA and @atom:73, @atom:74, @atom:75
 
 TIP5P inherits OPLSAA {
 
-  # Atom types from "oplsaa2023.lt"
+  # Atom types from "oplsaa2008.lt"
   # @atom:73  <-->  OW  "TIP5P Water O"
   # @atom:74  <-->  HW  "TIP5P Water H"
   # @atom:75  <-->  LP  "TIP5P Water LP"

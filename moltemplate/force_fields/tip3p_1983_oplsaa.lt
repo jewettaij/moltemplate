@@ -12,7 +12,7 @@
 #                 # which uses long-range coulombics
 #########################################################
 
-# file "tip3p_1983_oplsaa2023.lt" 
+# file "tip3p_1983_oplsaa2024.lt" 
 #
 #    h1     h2
 #      \   /
@@ -24,7 +24,7 @@
 # For model details, see:
 # Jorgensen, Chandrasekhar, Madura, Impey, Klein, J Chem Phys, 79, 926 (1983)
 #
-# NOTE:This file does NOT use any of the official OPLS atom types in "oplsaa2023.lt"
+# NOTE:This file does NOT use any of the official OPLS atom types in "oplsaa2024.lt"
 # The TIP3P atom types in that file are for the 2004 version of TIP3P (not 1983)
 # Consequently, I redefined the atom types in this file.
 
@@ -114,14 +114,14 @@ TIP3P_1983 {
 
 
 
-write_once("WARNING_PLEASE_USE_tip3p_1983_oplsaa2023.lt_INSTEAD.TXT") {
+write_once("WARNING_PLEASE_USE_tip3p_1983_oplsaa2024.lt_INSTEAD.TXT") {
   Both the "tip3p_1983_oplsaa.lt" and "oplsaa.lt" files are being deprecated
   and will be removed soon.  So in the future, please use
-  "import tip3p_1983_oplsaa2023.lt" and "import oplsaa2023.lt" (instead of
+  "import tip3p_1983_oplsaa2024.lt" and "import oplsaa2024.lt" (instead of
   "import tip3p_1983_oplsaa.lt" and "import oplsaa.lt") in all of your .lt files.
 
   Why? All future versions of the OPLSAA force field will
-  be given unique file names (eg "oplsaa2008.lt", "oplsaa2023.lt").
+  be given unique file names (eg "oplsaa2008.lt", "oplsaa2024.lt").
   This will protect users from future changes in the @atom type numbers
   (which vary according to the version).
   This affects the TIP3P molecule type too, since this version uses OPLSAA.

@@ -17,7 +17,7 @@
 #        o
 #
 # This is the version of "tip3p_2004.lt" suitable for use in a simulation
-# using the OPLSAA force field (as implemented in the "oplsaa2023.lt" file),
+# using the OPLSAA force field (as implemented in the "oplsaa2024.lt" file),
 # as described in this paper (I think):
 # Daniel J. Price and Charles L. Brooks III
 # J. Chem. Phys., 121(20): 10096 (2004)
@@ -28,16 +28,16 @@
 # the the force-field parameters and bond geometry in the file itself.  This
 # makes it easier to use those files in simulations that use other force fields.
 # However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
+# force field parameters and bond geometry are defined in the "oplsaa2024.lt" file.
 
 
 
-import "oplsaa2023.lt"   # <-- defines @atom:9999 and @atom:9998
+import "oplsaa2024.lt"   # <-- defines @atom:9999 and @atom:9998
 
 
 TIP3P inherits OPLSAA {
 
-  # Atom types from "oplsaa2023.lt"
+  # Atom types from "oplsaa2024.lt"
   # @atom:9999 <--> "TIP3P Water O"
   # @atom:9998 <--> "TIP3P Water H"
 
@@ -47,7 +47,7 @@ TIP3P inherits OPLSAA {
     $atom:h2 $mol:w @atom:9998   0.417  -0.756950327 0.00000 0.5858822766
   }
   # Note the charges (-0.834, 0.417) are ignored and will be overriden.
-  # (Instead, the charges will be read from the "oplsaa2023.lt" file.)
+  # (Instead, the charges will be read from the "oplsaa2024.lt" file.)
 
   write("Data Bond List") {
     $bond:oh1 $atom:o $atom:h1

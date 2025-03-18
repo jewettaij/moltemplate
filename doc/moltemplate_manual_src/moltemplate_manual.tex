@@ -2613,7 +2613,7 @@ A ``ForceField'' object will typically include a long list of
 commands,
 as well as force field parameters and related atom type properties.
 It's also a good idea to store force-field objects in a separate file
-(eg ``forcefield.lt'', ``oplsaa2023.lt'', ``gaff2.lt'', ``compass.lt'', etc...)
+(eg ``forcefield.lt'', ``oplsaa2024.lt'', ``gaff2.lt'', ``compass.lt'', etc...)
 so that these rules and parameters can be be applied to different molecules
 more easily (by using the \textit{import} command to load the file when needed).
 
@@ -2905,7 +2905,7 @@ allowing you to assign particle charge according to atom type (@atom).
   %Some force fields (such as the current implementation of OPLSAA and LOPLSAA)
   %assign atom charge according to atom type.
 For example, here is an excerpt
-from the ``loplsaa2023.lt'' file (on 2020-8-09):
+from the ``loplsaa2024.lt'' file (on 2020-8-09):
 \begin{verbatim}
 write_once("In Charges") {
   set type @atom:80L charge -0.222 # "Alkane CH3- (LOPLS)"
@@ -2983,7 +2983,7 @@ charge of individual atoms in your molecule by placing an
 
 \subsection{The \textit{force\_fields} directory}
 \label{sec:moltemplate_path}
-Files containing popular force fields (like ``oplsaa2023.lt'' and ``gaff2.lt'')
+Files containing popular force fields (like ``oplsaa2024.lt'' and ``gaff2.lt'')
 and molecule models (like ``spce.lt'') are stored in the ``force\_fields/''
 subdirectory distributed with moltemplate.  (This directory is included when
 you download moltemplate using either git or pip.)
@@ -3088,7 +3088,7 @@ MoleculeV2 inherits ForceField {
 \end{verbatim}
 
 Incidentally, this is how the LOPLS force field was implemented.
-See \href{https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/loplsaa2023.lt}{\tt loplsaa2023.lt}.
+See \href{https://github.com/jewettaij/moltemplate/blob/master/moltemplate/force_fields/loplsaa2024.lt}{\tt loplsaa2024.lt}.
 
 
 \textit{
@@ -4632,7 +4632,7 @@ to borrow atom, bond, angle, dihedral, and improper types from
 \textit{multiple} different force-field parents:
 \begin{verbatim}
 import "trappe1998.lt"
-import "oplsaa2023.lt"
+import "oplsaa2024.lt"
 
 Butane inherits TraPPE OPLSAA {
   ...

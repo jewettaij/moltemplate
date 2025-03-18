@@ -1,4 +1,4 @@
-# file "spce_oplsaa2023.lt"
+# file "spce_oplsaa2024.lt"
 #
 #    H1     H2
 #      \   /
@@ -13,10 +13,10 @@
 # the the force-field parameters and bond geometry in the file itself.  This
 # makes it easier to use those files in simulations that use other force fields.
 # However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
+# force field parameters and bond geometry are defined in the "oplsaa2024.lt" file.
 
 
-import "oplsaa2023.lt"  # <-- defines OPLSAA, @atom:9989 and @atom:9988
+import "oplsaa2024.lt"  # <-- defines OPLSAA, @atom:9989 and @atom:9988
 
 SPCE inherits OPLSAA {
 
@@ -45,7 +45,7 @@ SPCE inherits OPLSAA {
 
     # Note:    Bonds of type "@bond:spcO_spcH"
     #  and    Angles of type "@angle:spcH_spcO_spcH"
-    # ...are defined in the "oplsaa2023.lt" file. These codes are used to lookup the
+    # ...are defined in the "oplsaa2024.lt" file. These codes are used to lookup the
     # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPCE water.
     # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
   }

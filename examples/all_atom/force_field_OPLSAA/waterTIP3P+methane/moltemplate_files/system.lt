@@ -1,7 +1,7 @@
-import "tip3p_2004_oplsaa2023.lt" # <- defines the "SPCE" (water) molecule type.
+import "tip3p_2004_oplsaa2024.lt" # <- defines the "SPCE" (water) molecule type.
 import "methane.lt"           # <- defines the "Methane" molecule type
 
-# Note: The "tip3p_2004_oplsaa2023.lt" file is located at:
+# Note: The "tip3p_2004_oplsaa2024.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
 # (If you want to customize it, you can download it and copy it to this folder.)
 

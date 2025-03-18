@@ -12,7 +12,7 @@
 ############################################################################
 
 
-import "oplsaa2023.lt"   # Load the original definition of the "OPLSAA" object
+import "oplsaa2024.lt"   # Load the original definition of the "OPLSAA" object
 
 
 # We will augment the definition of the "OPLSAA" force field below
@@ -63,11 +63,11 @@ OPLSAA {
 
     set type @atom:777L charge 0.06    # H - HC | propylene carbonate H in CH2
     # NOTE: The @atom number for the previous atom might be wrong.
-    #   In the old "loplsaa2023.lt" file, @atom:718L is a hydrogen atom described this way:
+    #   In the old "loplsaa2024.lt" file, @atom:718L is a hydrogen atom described this way:
     #     "Aliphatic hydrogen diols and triols (LOPLS,2015)"
     #   But the corresponding atom in the old "oplsaa2008.lt" file was described this way:
     #     "Propylene Carbonate CH2"
-    #   ...which corresponds to @atom:777 in the new "oplsaa2023.lt" file (from 2023).
+    #   ...which corresponds to @atom:777 in the new "oplsaa2024.lt" file (from 2023).
     #   Anyway, please use caution if selecting this atom type.  -Andrew 2024-12-02
 
 
@@ -75,7 +75,7 @@ OPLSAA {
     # For the next 3 lines, I might have selected the wrong @atom: numbers:
     #   Use caution if selecting these atom types.  -Andrew 2024-12-02
     set type @atom:465L charge 0.75    # C - C  | AA C: esters - for R on C=O, use - (LOPLS,2015)
-    set type @atom:466L charge -0.55   # O - O  | AA =O: esters ketone params (see 280-282 from oplsaa2023.lt) - (LOPLS,2015)
+    set type @atom:466L charge -0.55   # O - O  | AA =O: esters ketone params (see 280-282 from oplsaa2024.lt) - (LOPLS,2015)
     set type @atom:467L charge -0.45   # O - OS | AA -OR: ester - (LOPLS,2015)"
   } #(end of atom partial charges)
 
@@ -275,12 +275,12 @@ OPLSAA {
 # a couple papers describing the LOPLS force field.
 
 write_once("log.cite.loplsaa") {
-  If you use any atom types from the "loplsaa2023.lt" file whose description (in
+  If you use any atom types from the "loplsaa2024.lt" file whose description (in
   the "In Charges" section) contains "LOPLS,2012", here is the relevant paper:
   Sui, Pluhackova, Böckmann, J.Chem.Theory.Comp (2012), 8(4),1459
   https://doi.org/10.1021/ct200908r
 
-  If you use any atom types from the "loplsaa2023.lt" file whose description (in
+  If you use any atom types from the "loplsaa2024.lt" file whose description (in
   the "In Charges" section) contains "LOPLS,2015", here is the relevant paper:
   Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287
   https://doi.org/10.1021/acs.jpcb.5b08569
@@ -290,11 +290,11 @@ write_once("log.cite.loplsaa") {
 ############################################################################
 ## WARNING
 ## This file was originally created to work with the old (2008) version of
-## of the "oplsaa2023.lt" file (now called "oplsaa2008.lt").
-## To make it work with the latest version of "oplsaa2023.lt" (from 2023),
-## I looked up every atom type from the previous version of "loplsaa2023.lt"
+## of the "oplsaa2024.lt" file (now called "oplsaa2008.lt").
+## To make it work with the version of "oplsaa2024.lt".
+## I looked up every atom type from the previous version of "loplsaa2024.lt"
 ## (now called "loplsaa2008.lt"), and tried to find the corresponding atom type
-## in the new "oplsaa2023.lt" file.  For most atoms, it was easy to guess,
+## in the new "oplsaa2024.lt" file.  For most atoms, it was easy to guess,
 ## but there were a few atoms I was not certain about (which I indicated).
 ## Since I did this manually, it's possible that mistakes were made.
 ## Please be careful using this file.  -Andrew 2024-12-02

@@ -1,11 +1,11 @@
-# file "spc_oplsaa2023.lt" 
+# file "spc_oplsaa2008.lt" 
 #
 #    H1     H2
 #      \   /
 #        O
 #
 # This is the version of the SPC water model suitable for use in a simulation
-# using the OPLSAA force field (as implemented in the "oplsaa2023.lt" file).
+# using the OPLSAA force field (as implemented in the "oplsaa2008.lt" file).
 #
 # Note: This is not the same as the SPC/E water model.
 #
@@ -18,10 +18,10 @@
 # the the force-field parameters and bond geometry in the file itself.  This
 # makes it easier to use those files in simulations that use other force fields.
 # However that kind of information was omitted from this file.  Instead the
-# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
+# force field parameters and bond geometry are defined in the "oplsaa2008.lt" file.
 
 
-import "oplsaa2023.lt"  # <-- defines OPLSAA, @atom:76 and @atom:77
+import "oplsaa2008.lt"  # <-- defines OPLSAA, @atom:76 and @atom:77
 
 SPC_oplsaa inherits OPLSAA {
 
@@ -55,7 +55,7 @@ SPC_oplsaa inherits OPLSAA {
 
     # Note:    Bonds of type "@bond:042_043"
     #  and    Angles of type "@angle:043_042_043"
-    # ...are defined in the "oplsaa2023.lt" file. These codes are used to lookup the
+    # ...are defined in the "oplsaa2008.lt" file. These codes are used to lookup the
     # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPC water.
     # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
 

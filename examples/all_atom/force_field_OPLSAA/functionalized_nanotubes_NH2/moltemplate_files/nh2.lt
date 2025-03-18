@@ -1,6 +1,6 @@
-import "oplsaa2023.lt"    # Defines OPLSAA and @atom:900 and @atom:909
+import "oplsaa2024.lt"    # Defines OPLSAA and @atom:900 and @atom:909
 
-# The "oplsaa2023.lt" file contains force-field parameters, atom type definitions,
+# The "oplsaa2024.lt" file contains force-field parameters, atom type definitions,
 # partial charges, masses and bond-angle rules for the atoms in your system,
 # including @atom:900 and @atom:909, which we use below.  By reading this file,
 # you can tell that...
@@ -35,11 +35,11 @@ NH2 inherits OPLSAA {
 
 
 # Note: In the "Data Bond List" section we don't have to specify the bond type.
-#  The bond-type will be determined by the atom type (according to "oplsaa2023.lt")
+#  The bond-type will be determined by the atom type (according to "oplsaa2024.lt")
 # Note: You don't have to specify the charge in the NH2 group because we are
 #       using the OPLSAA force-field which assigns charge according to
 #       atom-type.  Just leave these charge numbers as "0" for now.  You can
-#       look up the charges for these atom types in the "oplsaa2023.lt" file.
+#       look up the charges for these atom types in the "oplsaa2024.lt" file.
 #       (-0.9 and +0.36).  You will notice that the NH2 group has a total
 #       charge of -0.18 (=2*0.36-0.9).  Later, we will have to make sure that
 #       the atoms in the molecule it binds to will neutralize this charge.

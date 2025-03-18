@@ -10,7 +10,7 @@ file_header = """
 #
 # USAGE: You can create molecules using this force-field this way:
 #
-# import "oplsaa2023.lt"
+# import "oplsaa2024.lt"
 #
 # MyMolecule inherits OPLSAA {
 #   # atom-id mol-id atom-type charge   X       Y       Z
@@ -118,7 +118,7 @@ closing_stuff = """
     angle_style harmonic
     dihedral_style opls
     improper_style cvff  #("harmonic" also works but coeffs should be 2x larger)
-    # NOTE: in the original oplsaa2023.lt file the pair style was
+    # NOTE: in the original oplsaa2024.lt file the pair style was
     #   lj/cut/coul/long 11.0 11.0
     # but with an accompanying note stating that OPLSAA/M (2015) 
     # uses a different pair style, the one used here

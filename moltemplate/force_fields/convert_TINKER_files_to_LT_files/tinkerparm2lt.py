@@ -36,9 +36,9 @@ g_program_name = __file__.split('/')[-1]
 
 doc_msg = \
     "Typical Usage:\n\n" + \
-    "   " + g_program_name + " -name OPLS < oplsaa.prm > oplsaa2023.lt\n\n" + \
+    "   " + g_program_name + " -name OPLS < oplsaa.prm > oplsaa2008.lt\n\n" + \
     "   where \"oplsaa.prm\" is a force-field file downloaded from the TINKER website,\n" + \
-    "         \"oplsaa2023.lt\" is the corresponding file converted into moltemplate (.lt) format.\n" + \
+    "         \"oplsaa2008.lt\" is the corresponding file converted into moltemplate (.lt) format.\n" + \
     "   and   \"OPLS\" is the name that future moltemplate users will use to refer to\n" + \
     "         this force-field (optional).\n" + \
     "Optional Arguments\n" + \

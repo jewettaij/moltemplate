@@ -15,7 +15,7 @@ BenzoicAcid {
   # Note: Here we will augment (not overwrite) the existing "BenzoicAcid"
   #       molecule (defined in "benzoic_acid.lt").
   #
-  # The "oplsaa2023.lt" file defines multiple possible dihedral paramter
+  # The "oplsaa2024.lt" file defines multiple possible dihedral paramter
   # choices between these 4 atoms in this molecule:
   #     $atom:o1, $atom:co, $atom:o2, and $atom:ho2
   # (See below to find out how to detect this problem.)  The choices are:

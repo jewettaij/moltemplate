@@ -9102,7 +9102,7 @@ write_once("log.cite.oplsaa") {
    other versions of it can be found at http://zarbi.chem.yale.edu/doc/)
 
   Many additional OPLS papers have been published by the Jorgensen lab
-  over the years, and the "oplsaa2023.lt" file probably contains parameters
+  over the years, and the "oplsaa2024.lt" file probably contains parameters
   from several of them:
     http://zarbi.chem.yale.edu/publications.html
   However, depending on the type of simulation you want to run,

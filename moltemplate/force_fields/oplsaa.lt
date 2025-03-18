@@ -1,5 +1,5 @@
 # This file was generated automatically using:
-# oplsaa2lt.py --name OPLSAA --out oplsaa2023.lt --par ../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-2.par --sb ../oplsaa2023_original_format/Jorgensen_et_al-2023-The_Journal_of_Physical_Chemistry_B.sup-3.sb
+# oplsaa2lt.py --name OPLSAA --out oplsaa2024.lt --par ../oplsaa2024_original_format/Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-2.par --sb ../oplsaa2024_original_format/Jorgensen_et_al-2024-The_Journal_of_Physical_Chemistry_B.sup-3.sb
 
 # This file contains OPLSAA parameters and rules for creating angle, dihedral,
 # and improper interactions according to OPLSAA conventions.
@@ -10,7 +10,7 @@
 #
 # USAGE: You can create molecules using this force-field this way:
 #
-# import "oplsaa2023.lt"
+# import "oplsaa2024.lt"
 #
 # MyMolecule inherits OPLSAA {
 #   # atom-id mol-id atom-type charge   X       Y       Z
@@ -10365,7 +10365,7 @@ OPLSAA {
     angle_style harmonic
     dihedral_style opls
     improper_style cvff  #("harmonic" also works but coeffs should be 2x larger)
-    # NOTE: in the original oplsaa2023.lt file the pair style was
+    # NOTE: in the original oplsaa2008.lt file the pair style was
     #   lj/cut/coul/long 11.0 11.0
     # but with an accompanying note stating that OPLSAA/M (2015) 
     # uses a different pair style, the one used here
@@ -10377,13 +10377,13 @@ OPLSAA {
   } #end of init parameters
 
 
-  write_once("WARNING_PLEASE_USE_oplsaa2023.lt_INSTEAD.TXT") {
+  write_once("WARNING_PLEASE_USE_oplsaa2024.lt_INSTEAD.TXT") {
     The "oplsaa.lt" file is being deprecated and will be removed soon.
-    So in the future, please use "import oplsaa2023.lt"
+    So in the future, please use "import oplsaa2024.lt"
     (instead of "import oplsaa.lt") in all of your .lt files.
 
     Why? All future versions of the OPLSAA force field file will be given unique
-    names (eg "oplsaa2008.lt", "oplsaa2023.lt").  This will protect users from
+    names (eg "oplsaa2008.lt", "oplsaa2024.lt").  This will protect users from
     changes in the @atom type numbers (which vary according to the version).
   }
 

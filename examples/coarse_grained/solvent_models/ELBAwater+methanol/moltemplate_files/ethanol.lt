@@ -1,7 +1,7 @@
-import "oplsaa2023.lt"   # OPLSAA atom types and force field params used by Ethanol
+import "oplsaa2024.lt"   # OPLSAA atom types and force field params used by Ethanol
 
 
-# Atom type numbers are from the "oplsaa2023.lt" file
+# Atom type numbers are from the "oplsaa2024.lt" file
 # (located in moltemplate/force_fields/)  Excerpt:
 #
 #    @atom:80 charge -0.18   mass 12.011 # "Alkane CH3-"

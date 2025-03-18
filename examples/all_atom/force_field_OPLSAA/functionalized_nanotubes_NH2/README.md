@@ -60,7 +60,7 @@ moltemplate.sh and read by LAMMPS.*)
 in the "Graphene_NH2" object *use the OPLSAA force field*.
 Moltemplate's version of the OPLSAA force field assigns atomic charge
 according to @atom type, using a lookup table at the beginning of the
-["oplsaa2023.lt"](../../../../moltemplate/force_fields/oplsaa2023.lt) file.
+["oplsaa2024.lt"](../../../../moltemplate/force_fields/oplsaa2024.lt) file.
 *(After running moltemplate, this information gets copied into the
 "system.in.charges" file created by moltemplate.sh, and read by LAMMPS.)*
 So, for these OPLSAA atom types, we never bother to specify their charges in

@@ -49,8 +49,8 @@ Butane inherits OPLSAA {
 
 # HOW TO TELL IF YOU NEED A CUSTOM "Data Dihedrals" section:
 #
-# The "oplsaa2023.lt" file contains lists of many types of interactions.
-# This "oplsaa2023.lt" file is too long to browse through all these interactions
+# The "oplsaa2024.lt" file contains lists of many types of interactions.
+# This "oplsaa2024.lt" file is too long to browse through all these interactions
 # to see which best apply to your molecule.
 #
 # Instead, you can ask moltemplate to warn you if it encountered any ambiguity
@@ -67,8 +67,8 @@ Butane inherits OPLSAA {
 # Open up the "warning_duplicate_dihedrals.txt".  It will list out the possible
 # choices (such as "@dihedral:CT_CT_CT_CT__1", "@dihedral:CT_CT_CT_CT__2").
 #
-# Open up the "oplsaa2023.lt" file and search for these interactions.
-# "oplsaa2023.lt" usually has a comment next to each choice explaining when
+# Open up the "oplsaa2024.lt" file and search for these interactions.
+# "oplsaa2024.lt" usually has a comment next to each choice explaining when
 # to use it (eg. "@dihedral:CT_CT_CT_CT__2 ... # butane only OPLS/2020").
 # Choose best the dihedral type for your molecule ("@dihedral:CT_CT_CT_CT__2")
 #
@@ -95,12 +95,7 @@ Butane inherits OPLSAA {
 
 
 
-######### (scratchwork calculations for the atomic coordinates) #########
+#### (scratchwork calculations for the horizontal distance between carbons) ####
 # Lcc = 1.5350 # length of the C-C bond (Sp3)
-# Lch = 1.0930 # length of the C-H bond
 # theta=2*atan(sqrt(2)) # ~= 109.5 degrees = tetrahedronal angle (C-C-C angle)
 # DeltaXc = Lcc*sin(theta/2)  # = 1.2533222517240594
-# DeltaYc = Lcc*cos(theta/2)  # = 0.8862326632060754
-#                             # 0.5*DeltaYc = 0.4431163316030377
-# DeltaZh = Lch*sin(theta/2)  # = 0.8924307629540046
-# DeltaYh = Lch*cos(theta/2)  # = 0.6310438442242609

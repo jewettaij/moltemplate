@@ -23,10 +23,10 @@ The number of molecules and simulation box size can be controlled by editing the
 
 ### Details
 
-The "Butane" molecule, as well as the "CH2", and "CH3" monomers it contains, use the OPLSAA force-field.  As with all of the OPLSAA examples, when we define these molecules, we only specify the atom names, bond list, and coordinates.  We do not have to list the atom charges, angles, dihedrals, or impropers.  The rules for creating atomic charge and angle topology are contained in the ["oplsaa2023.lt"](../../../../moltemplate/force_fields/oplsaa2023.lt) file.  To let moltemplate know that you want to use these rules, define your molecules (and molecular subunits) this way:
+The "Butane" molecule, as well as the "CH2", and "CH3" monomers it contains, use the OPLSAA force-field.  As with all of the OPLSAA examples, when we define these molecules, we only specify the atom names, bond list, and coordinates.  We do not have to list the atom charges, angles, dihedrals, or impropers.  The rules for creating atomic charge and angle topology are contained in the ["oplsaa2024.lt"](../../../../moltemplate/force_fields/oplsaa2024.lt) file.  To let moltemplate know that you want to use these rules, define your molecules (and molecular subunits) this way:
 
 ```
-import "oplsaa2023.lt"
+import "oplsaa2024.lt"
 CH2 inherits OPLSAA { ... }      # (see "ch2group.lt")
 CH3 inherits OPLSAA { ... }      # (see "ch3group.lt")
 Butane inherits OPLSAA { ... }   # (see "butane.lt")
@@ -37,7 +37,7 @@ Butane inherits OPLSAA { ... }   # (see "butane.lt")
 
 In this example, atomic charge for OPLSAA atoms is determined by @atom type
 *(...according to a lookup table located at the beginning of the
-["oplsaa2023.lt"](../../../moltemplate/force_fields/oplsaa2023.lt) file)*.
+["oplsaa2024.lt"](../../../moltemplate/force_fields/oplsaa2024.lt) file)*.
 *(Any atomic charges listed in the "Data Atoms" section of your molecules'
 LT files will be ignored.)*
 **These charges can be overridden.**

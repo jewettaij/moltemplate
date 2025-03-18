@@ -1,7 +1,7 @@
-# The oplsaa2023.lt file contains force-field parameters, atom type definitions,
+# The oplsaa2024.lt file contains force-field parameters, atom type definitions,
 # partial charges, masses and bond-angle rules for the atoms in your system.
 
-import oplsaa2023.lt
+import oplsaa2024.lt
 
 # It defines these atom types used below:
 # atom-type charge mass btype epsilon sigma description
@@ -43,7 +43,7 @@ NIPAM_monomer inherits OPLSAA {
     $atom:h11  $mol:...  @atom:60   0.0     0.548305   0.372184   1.038367
   }
 
-  # (Charges are defined in oplsaa2023.lt and can be omitted. Leave them as 0.0)
+  # (Charges are defined in oplsaa2024.lt and can be omitted. Leave them as 0.0)
   #
   # The "..." in "$mol:..." tells moltemplate that this monomer may be part
   # of a larger molecule, and (if so) to associate the larger parent object's 

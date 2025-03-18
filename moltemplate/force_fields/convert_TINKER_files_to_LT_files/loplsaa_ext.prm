@@ -4,14 +4,14 @@
   ##          Pluhackova,...,Böckmann, J.Phys.Chem.B (2015), 119(49), 15287 ##
   ## CREDIT: Sebastian Echeverri, Andrew Jewett (file format conversion)    ##
   ############################################################################
-  ## This file was used with "tinkerparm2lt.py" to create "loplsaa2023.lt"      ##
+  ## This file was used with "tinkerparm2lt.py" to create "loplsaa2008.lt"      ##
   ############################################################################
 
 atom         80L  13L   CT    "Alkane CH3- (LOPLS,2012 CT_CH3)"    6   12.011   4
 atom         81L  13L   CT    "Alkane -CH2- (LOPLS,2012 CT_CH2)"   6   12.011   4
 # COMMENTING OUT
 #atom        81LL  13   CT    "Alkoxy carbon COR (LOPLS,2015)"     6    12.011  4
-# Note: 81LL is not needed. 81LL is equivalent to "431" (from the original "oplsaa2023.lt" file)
+# Note: 81LL is not needed. 81LL is equivalent to "431" (from the original "oplsaa2008.lt" file)
 atom         85LCH3 46  HC    "Alkane H-C CH3 (LOPLS,2012 HC_CH3)" 1    1.008   1
 atom         85LCH2 46  HC    "Alkane H-C CH2 (LOPLS,2012 HC_CH2)" 1    1.008   1
 atom         87L  47L   CM    "Alkene RH-C= (LOPLS,2012 CM_CH)"    6   12.011   3
@@ -28,7 +28,7 @@ atom        113L   5L   OH    "Triol -OH (LOPLS,2015)"        8    15.999  2
 atom        114L   7L   HO    "Triol -OH (LOPLS,2015)"        1     1.008  1
 atom        718L   46   HC    "Aliphatic hydrogen diols and triols (LOPLS,2015)"   1  1.008  1
 #atom        118L  46   HC    "Aliphatic hydrogen monoalcohols (LOPLS,2015)"    1     1.008  1  # <--NOT NEEDED
-# Note: 118L is not needed. 118L is equivalent to "118" from the original "oplsaa2023.lt" file.)
+# Note: 118L is not needed. 118L is equivalent to "118" from the original "oplsaa2008.lt" file.)
 
 atom        169L  47L   CM    "Chloroalkene Cl-CH= (LOPLS,2012)"   6    12.011  3
 atom        266L  47L   CM    "Uracil & Thymine C5 (LOPLS,2012)"   6    12.011  3

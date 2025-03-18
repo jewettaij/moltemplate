@@ -1,7 +1,7 @@
-# The oplsaa2023.lt file contains force-field parameters, atom type definitions,
+# The oplsaa2024.lt file contains force-field parameters, atom type definitions,
 # partial charges, masses and bond-angle rules for the atoms in your system.
 
-import oplsaa2023.lt
+import oplsaa2024.lt
 
 
 # It defines this atom type used below:

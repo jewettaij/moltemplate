@@ -1,4 +1,4 @@
-import oplsaa2023.lt  # defines OPLSAA
+import oplsaa2024.lt  # defines OPLSAA
 import NIPAM.lt       # defines NIPAM_monomer, NIPAM_begin, NIPAM_end
 
 

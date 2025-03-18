@@ -11,7 +11,7 @@ write_once("Data Boundary") {
 import NIPAM_polymer_10mer.lt   # defines NIPAM_polymer_10mer
 import ca++.lt                  # defines Ca
 import cl-.lt                   # defines Cl
-import spce_oplsaa2023.lt       # defines SPCE
+import spce_oplsaa2024.lt       # defines SPCE
 
 
 # 1) Create a single copy of the polymer.
