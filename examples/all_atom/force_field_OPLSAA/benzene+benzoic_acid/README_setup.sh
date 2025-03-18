@@ -4,19 +4,23 @@ cd moltemplate_files
 
   # run moltemplate
 
-  # This was the original (simple) way to run moltemplate:
-  # moltemplate.sh  system.lt  <-- COMMENTING OUT
-  # Instead, this is the recommended way to run moltemplate with OPLSAA:
+  moltemplate.sh  system.lt
 
-  moltemplate.sh  system.lt  -report-duplicates bytype __
-
-  # (The optional "-report-duplicates bytype __" arguments check to make
-  #  sure that there was no ambiguity in the dihedrals that were generated.
-  #  This is an issue with OPLSAA.  If there was, then moltemplate will create
-  #  a file named "warning_duplicate_dihedrals.txt".)
-  #
-  # (Note: You can also check for missing angle,dihedral params this way:)
+  # --- OPTIONAL: ---
+  # You can also check for missing angle,dihedral params this way:
   # moltemplate.sh -checkff system.lt 
+  #
+  # You can also check for alternative possible OPLSAA parameters this way:
+  # moltemplate.sh  system.lt  -report-duplicates bytype __
+  #
+  # The optional "-report-duplicates bytype __" arguments check to make
+  # sure that there was no ambiguity in the chosen dihedrals parameters
+  # Often moltemplate.sh will create a "warning_duplicate_dihedrals.txt"
+  # file containing more warnings than you could possibly hope to read.  Most
+  # OPLSAA molecule builder programs do not warn you about these ambiguities.
+  # Moltemplate does warn you, but in my experience, it's not worth the
+  # trouble to worry about them.  Just use: "moltemplate.sh system.lt"
+  # --- OPTIONAL: ---
 
   
   # Moltemplate generates various files with names ending in *.in* and *.data.

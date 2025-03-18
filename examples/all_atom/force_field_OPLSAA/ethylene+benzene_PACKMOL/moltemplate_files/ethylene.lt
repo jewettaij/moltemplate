@@ -11,15 +11,15 @@ import "oplsaa2023.lt"
 
 Ethylene inherits OPLSAA {
 
-  # atom-id mol-id atom-type charge  X      Y      Z    # comment
+  # atom-id mol-id atom-type charge  X      Y      Z
 
   write('Data Atoms') {
-    $atom:c1  $mol @atom:143 0.0 -0.6695   0.00000 0.0  # 143 --> "C - CM | alkene C (H2-C=)"
-    $atom:c2  $mol @atom:143 0.0  0.6695   0.00000 0.0  # 143 --> "C - CM | alkene C (H2-C=)"
-    $atom:h11 $mol @atom:144 0.0 -1.23422 -0.85446 0.0  # 144 --> "H - HC | alkene H (H-C=)"
-    $atom:h12 $mol @atom:144 0.0 -1.23422  0.85446 0.0  # 144 --> "H - HC | alkene H (H-C=)"
-    $atom:h21 $mol @atom:144 0.0  1.23422 -0.85446 0.0  # 144 --> "H - HC | alkene H (H-C=)"
-    $atom:h22 $mol @atom:144 0.0  1.23422  0.85446 0.0  # 144 --> "H - HC | alkene H (H-C=)"
+    $atom:c1  $mol @atom:143 0.0 -0.6695   0.00000 0.0
+    $atom:c2  $mol @atom:143 0.0  0.6695   0.00000 0.0
+    $atom:h11 $mol @atom:144 0.0 -1.23422 -0.85446 0.0
+    $atom:h12 $mol @atom:144 0.0 -1.23422  0.85446 0.0
+    $atom:h21 $mol @atom:144 0.0  1.23422 -0.85446 0.0
+    $atom:h22 $mol @atom:144 0.0  1.23422  0.85446 0.0
   }
 
   # Note: You don't have to specify the charge in this example because we are

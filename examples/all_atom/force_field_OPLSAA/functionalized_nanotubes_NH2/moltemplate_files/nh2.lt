@@ -11,12 +11,12 @@ import "oplsaa2023.lt"    # Defines OPLSAA and @atom:900 and @atom:909
 
 NH2 inherits OPLSAA {
 
-  # atom-id  mol-id  atom-type charge  X    Y       Z       # comment
+  # atom-id  mol-id  atom-type charge  X    Y       Z
 
   write("Data Atoms") {
-    $atom:n  $mol:... @atom:900  0   0.0  0.00     0.0      #(see comment above
-    $atom:h1 $mol:... @atom:909  0   0.0 -0.952068 0.337145 # regarding how atom
-    $atom:h2 $mol:... @atom:909  0   0.0  0.952068 0.337145 # types were chosen)
+    $atom:n  $mol:... @atom:900  0   0.0  0.00     0.0
+    $atom:h1 $mol:... @atom:909  0   0.0 -0.952068 0.337145
+    $atom:h2 $mol:... @atom:909  0   0.0  0.952068 0.337145
   }
   # Leave charges as "0".  (See below for an explanation.)
 

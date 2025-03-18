@@ -6,25 +6,9 @@ There is no guarantee that simulations prepared using moltemplate will reproduce
 
 
 
-### Suggestion: Make a local copy of the "oplsaa2023.lt" file
+-------------------------
 
-WARNING: The OPLSAA force field changes slightly over time.
-When it happens, it can cause the names of the
-@atoms, @bonds, @angles, and @dihedrals types to change.
-This could break backward compatibility,
-and cause moltemplate.sh to fail when reading your .lt files.
-So if you are using OPLSAA, it's a good idea to make a backup copy of the
-[oplsaa2023.lt file](../../../moltemplate/force_fields/oplsaa2023.lt)
-(located in the
-[moltemplate/force_fields/](../../../moltemplate/force_fields/) folder).
-Copy it to the folder with your other .lt files for the simulation you are working on.  (Moltemplate will look in the local folder first for all the .lt files that it needs, including "oplsaa2023.lt".)
-This will protect you from force-field parameter changes, and you
-will be able to continue using your existing atom and bonded type names safely.
-
-
-
-
-### Atomic charges
+## Atomic charges
 
 In most of the OPLSAA examples,
 the atomic charges are determined by their @atom types
@@ -33,7 +17,6 @@ the atomic charges are determined by their @atom types
 *(Any atomic charges listed in the "Data Atoms" section of your molecule's
 LT files will be ignored.)*
 **These charges can be overridden.**
-
 
 
 ### Customizing atomic charges in OPLSAA molecules
@@ -86,39 +69,68 @@ of the [spce.lt](waterSPCE+methane/moltemplate_files/spce.lt) file.
 
 
 
+-------------------------
+
+## Minor issue: Bloated lammps input scripts
+
+By default, LAMMPS input scripts prepared using moltemplate contain
+the entire contents of the OPLSAA force-field, even when simulating
+small systems with just a few atom types.
+This is harmless, but if you want to get rid of this extra information,
+follow the instructions in the "README_remove_irrelevant_info.sh" files.
 
 
+-------------------------
 
-### Optional: Duplicate dihedrals, angles, and bonds
+## *OPTIONAL*
+## Customizing dihedrals, angles, and bonds
 
-Sometimes, even after you have specified the (OPLSAA-specific) atom types
-for the atoms in your molecule, there may be multiple possible choices
-of dihedral, angle, or bond interactions between those atoms
-available in OPLSAA force field (stored in the "oplsaa2023.lt" file).
-When that happens, moltemplate.sh will *attempt to make a reasonable guess*,
-chosing the original (oldest, most common) version of the interaction between
-those atom types.  However, you can override this choice:
+The OPLSAA force field contains many alternative parameter choices for
+dihedral, angle, and bond interactions.
+It's not always possible to for determine the optimal choice of dihedral angle
+parameters from the @atom types alone.  By default, moltemplate hides this
+issue, and will *attempt to make a reasonable guess*, chosing the most generic
+version of the interaction between those atom types.
+*(The same is true with most other molecule builder programs.)*
 
-- The new (2023) version of OPLSAA contains many additional choices for your dihedral, angle, and bond interactions.  This gives you an opportunity to improve your simulation accuracy, but it also requires more effort on your part.  To see the list of choices, you must now run moltemplate with the "-report-duplicates bytype __" arguments.  For example:
+***Most of the time, this is fine.***
+At the beginning when you are trying to get your simulation to run,
+don't worry about choosing the optimal dihedral, angle, or bond parameters.
+The default choice is often good enough.
+
+*Eventually, if you want to improve the accuracy of your simulation somewhat,
+then you can detect these ambiguous duplicate dihedrals and angles.
+Then you can override the default choice by following the (somewhat laborious)
+procedure below.*
+
+Again, moltemplate hides this issue by default.
+To be informed when moltemplate detects multiple ambiguous dihedrals
+(or angles), you must run moltemplate.sh with the optional
+`-report-duplicates bytype __` arguments.
+For example:
 ```
 moltemplate.sh  system.lt  -report-duplicates bytype __
 ```
-- If you see a file named "warning_duplicate_dihedrals.txt", "warning_duplicate_angles.txt", "warning_duplicate_bonds.txt", or "warning_duplicate_impropers.txt" after running moltemplate, then it might be a good idea to read the first few warning messages
-in those files and modify your .lt files accordingly (for example, by adding a custom "Data Dihedrals" section).  Several example .lt files demonstrate how to do that, including:
-- butane/moltemplate_files/butane.lt
-- benzene+benzoic_acid/moltemplate_files/benzoic_acid.lt
+- If you see a file named "warning_duplicate_dihedrals.txt" after running
+moltemplate.sh, then moltemplate found multiple plausible
+dihedral interactions between the same set of atoms in your molecules.
+If you see this file, then read the first few warning messages in that file.
+*(This file is typically long and redundant, since there are typically many
+copies of the same molecules in a simulation.)*
+Then modify your .lt files accordingly.
+*(This requires adding a custom "Data Dihedrals" section where you specify
+the version of the @dihedral that you want to use for those atoms.
+Several example .lt files demonstrate how to do that in detail, including
+[butane.lt](./butane/moltemplate_files/butane.lt) and
+[benzoic_acid_optimizations.lt](./benzene+benzoic_acid/moltemplate_files/optimized_version_using_custom_dihedrals/benzoic_acid_optimizations.lt).)*
+- Each time you add a line to your "Data Dihedrals" section, the corresponding
+warning(s) in the "warning_duplicate_dihedrals.txt" file will be removed.
+So read the first warning, add a corresponding line to the "Data Dihedrals"
+section to address that warning, and run moltemplate.sh again.  Repeat this
+until the "warning_duplicate_dihedrals.txt" file is no longer being generated.
+- If you see a file named "warning_duplicate_angles.txt"
+or "warning_duplicate_bonds.txt", then follow the same procedure.
+Read those warning messages and add a custom "Data Angles" or "Data Bonds"
+section to your .lt files to override the default choice of
+@angle or @bond type.
 
-
-
-### Minor issue: Improper angles
-
-The style of improper interaction used by OPLS force fields depends on an angle which depends on the order of the atoms surrounding the central atom. When multiple atoms have the same type, this creates ambiguity in atom order. Since there is no guarantee that moltemplate will choose the same atom order as other molecule builders (such as VMD), this can lead to small unavoidable discrepancies in energies and forces computed by LAMMPS and NAMD.  But their effect should be neglegible.
-*(Please let us know if this is not the case.)*
-
-
-
-### Minor issue: Bloated lammps input scripts
-
-By default, LAMMPS input scripts prepared using moltemplate contain the entire contents of the OPLS force-field, even when simulating small systems with just a few atom types.
-
-This is harmless, but if you want to get rid of this extra information, follow the instructions in the "README_remove_irrelevant_info.sh" files.

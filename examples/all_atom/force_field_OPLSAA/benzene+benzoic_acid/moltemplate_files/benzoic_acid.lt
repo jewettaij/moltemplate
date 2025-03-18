@@ -12,128 +12,60 @@ import "oplsaa2023.lt"
 # Atom type @atom:270 corresponds to "H - HO | H in CCOOH"
 # The "oplsaa2023.lt" file is located at:
 # https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
-# If you want to customize oplsaa2023.lt, download it and copy it to this folder.
+# If you want to customize oplsaa2023.lt, download it and copy it to this folder
 
 
 BenzoicAcid inherits OPLSAA {
 
-  # atom-id mol-id atom-type charge  X     Y      Z     #  comment
+  # atom-id mol-id atom-type charge  X     Y      Z
 
   write("Data Atoms") {
-    $atom:co  $mol @atom:470  0.0  1.647 -0.077  0.001  # C~ | Co in benzoic acid
-    $atom:o1  $mol @atom:269  0.0  2.221 -1.147  0.001  # O~ | Oc in CCOOH neutral
-    $atom:o2  $mol @atom:268  0.0  2.357  1.068 -0.004  # OH | Oh in CCOOH R in RCOOH
-    $atom:ho2 $mol @atom:270  0.0  3.321  0.987 -0.007  # HO | H in CCOOH
-    $atom:c1  $mol @atom:165  0.0  0.171 -0.030  0.000  # CA | Cipso in styrene"
-    $atom:c2  $mol @atom:145  0.0 -0.569 -1.214 -0.000  # CA | Benzene C
-    $atom:c3  $mol @atom:145  0.0 -1.947 -1.163 -0.001  # CA | Benzene C
-    $atom:c4  $mol @atom:145  0.0 -2.597  0.058 -0.002  # CA | Benzene C
-    $atom:c5  $mol @atom:145  0.0 -1.871  1.236 -0.002  # CA | Benzene C
-    $atom:c6  $mol @atom:145  0.0 -0.492  1.199  0.006  # CA | Benzene C
-    $atom:h2  $mol @atom:146  0.0 -0.062 -2.168 -0.000  # HA | Benzene H
-    $atom:h3  $mol @atom:146  0.0 -2.520 -2.078 -0.001  # HA | Benzene H
-    $atom:h4  $mol @atom:146  0.0 -3.677  0.093 -0.003  # HA | Benzene H
-    $atom:h5  $mol @atom:146  0.0 -2.385  2.186 -0.002  # HA | Benzene H
-    $atom:h6  $mol @atom:146  0.0  0.074  2.119  0.011  # HA | Benzene H
+    $atom:co  $mol @atom:470  0.0  1.647 -0.077  0.001
+    $atom:o1  $mol @atom:269  0.0  2.221 -1.147  0.001
+    $atom:o2  $mol @atom:268  0.0  2.357  1.068 -0.004
+    $atom:ho2 $mol @atom:270  0.0  3.321  0.987 -0.007
+    $atom:c1  $mol @atom:165  0.0  0.171 -0.030  0.000
+    $atom:c2  $mol @atom:145  0.0 -0.569 -1.214 -0.000
+    $atom:c3  $mol @atom:145  0.0 -1.947 -1.163 -0.001
+    $atom:c4  $mol @atom:145  0.0 -2.597  0.058 -0.002
+    $atom:c5  $mol @atom:145  0.0 -1.871  1.236 -0.002
+    $atom:c6  $mol @atom:145  0.0 -0.492  1.199  0.006
+    $atom:h2  $mol @atom:146  0.0 -0.062 -2.168 -0.000
+    $atom:h3  $mol @atom:146  0.0 -2.520 -2.078 -0.001
+    $atom:h4  $mol @atom:146  0.0 -3.677  0.093 -0.003
+    $atom:h5  $mol @atom:146  0.0 -2.385  2.186 -0.002
+    $atom:h6  $mol @atom:146  0.0  0.074  2.119  0.011
   }
 
-  # Note1: LAMMPS expects an integer in the 2nd column (the Molecule-ID number).
-  #        If we put "$mol" there, moltemplate will generate this integer for you.
-  # Note2: Here we are using the OPLSAA force-field which assigns charge according to
-  #        atom-type.  So I did not bother to specify the charges in the 4th column.
-  #        Just leave these numbers as 0.0 for now.
+  # Note: You don't have to specify the charge in this example because we are
+  #       using the OPLSAA force-field which assigns charge according to
+  #       atom-type.  Just leave these numbers as 0.00 for now.
+  # Note: LAMMPS expects an integer in the 2nd column (the Molecule-ID number).
+  #       If we put "$mol" there, moltemplate will generate this integer for you
 
   # --- Bond List ---
   # BondID     AtomID1  AtomID2
 
   write("Data Bond List") {
-    $bond:c1_co  $atom:c1 $atom:co
-    $bond:co_o1  $atom:co $atom:o1
-    $bond:co_o2  $atom:co $atom:o2
-    $bond:o2_ho2 $atom:o2 $atom:ho2
-    $bond:c1_c2  $atom:c1 $atom:c2
-    $bond:c2_c3  $atom:c2 $atom:c3
-    $bond:c3_c4  $atom:c3 $atom:c4
-    $bond:c4_c5  $atom:c4 $atom:c5
-    $bond:c5_c6  $atom:c5 $atom:c6
-    $bond:c6_c1  $atom:c6 $atom:c1
-    $bond:c2_h2  $atom:c2 $atom:h2
-    $bond:c3_h3  $atom:c3 $atom:h3
-    $bond:c4_h4  $atom:c4 $atom:h4
-    $bond:c5_h5  $atom:c5 $atom:h5
-    $bond:c6_h6  $atom:c6 $atom:h6
-  }
-  # Note1: The $bond string (eg "c3_c4") does not matter as long as it is unique.
-  # Note2: In the "Data Bond List" section we don't have to specify the bond type.
-  #        The bond-type will be determined by the atom type (according to "oplsaa2023.lt")
-
-
-
-  # The angles, dihedrals, and impropers will be generated automatically as well
-  # However, by default, moltemplate might not always choose the optimal 
-  # parameters (types) for each dihedral.  In this example, we can do better
-  # by overriding one of the dihedral interactions which was chosen by default.
-  #
-  # ---- OPTIONAL: Customize the dihedrals ----
-  #
-  # The default type choice for dihedrals is:
-  # "@dihedral:O~_C~_OH_HO__1", which is a generic dihedral for aliphatic
-  # carboxylic acids.  However we can improve this by selecting this version:
-  # "@dihedral:O~_C~_OH_HO__2", which is specific to benzoic acids.
-
-  write("Data Dihedrals") {
-    $dihedral:o1_co_o2_ho2 @dihedral:O~_C~_OH_HO__2 $atom:o1 $atom:co $atom:o2 $atom:ho2
+    $bond:c1co  $atom:c1 $atom:co
+    $bond:coo1  $atom:co $atom:o1
+    $bond:coo2  $atom:co $atom:o2
+    $bond:o2ho2 $atom:o2 $atom:ho2
+    $bond:c1c2  $atom:c1 $atom:c2
+    $bond:c2c3  $atom:c2 $atom:c3
+    $bond:c3c4  $atom:c3 $atom:c4
+    $bond:c4c5  $atom:c4 $atom:c5
+    $bond:c5c6  $atom:c5 $atom:c6
+    $bond:c6c1  $atom:c6 $atom:c1
+    $bond:c2h2  $atom:c2 $atom:h2
+    $bond:c3h3  $atom:c3 $atom:h3
+    $bond:c4h4  $atom:c4 $atom:h4
+    $bond:c5h5  $atom:c5 $atom:h5
+    $bond:c6h6  $atom:c6 $atom:h6
   }
 
-  # NOTE: If you remove or comment out the write("Data Dihedrals") section above
-  # the simulation will still run, but with suboptimal dihedral parameters.
+  # In the "Data Bond List" section we don't have to specify the bond type.
+  # The bond-type will be determined by the atom type (according to "oplsaa2023.lt")
 
 } # BenzoicAcid
 
-
-
-
-# HOW TO TELL IF YOU NEED A CUSTOM "Data Dihedrals" section:
-#
-# The "oplsaa2023.lt" file contains lists of many types of interactions.
-# This "oplsaa2023.lt" file is too long to browse through all these interactions
-# to see which best apply to your molecule.
-#
-# Instead, you can ask moltemplate to warn you if it encountered any ambiguity
-# in the best dihedral type to use, by running it this way:
-#
-#   moltemplate.sh system.lt -report-duplicates bytype __
-#
-# It will generate a file named "warning_duplicate_dihedrals.txt" if it was
-# unsure what the best choice was.  The file will be long, since the same
-# warning will be printed for every copy of each molecule with ambiguous
-# dihedral.  So it's better to do this on a small system.lt file with only
-# one copy of each molecule type.
-#
-# Open up the "warning_duplicate_dihedrals.txt".  It will list out the possible
-# choices (such as "@dihedral:O_C_OH_HO__1", "@dihedral:O_C_OH_HO__2").
-#
-# Open up the "oplsaa2023.lt" file and search for these interactions.
-# "oplsaa2023.lt" usually has a comment next to each choice explaining when
-# to use it (eg. "dihedral_coeff @dihedral:O_C_OH_HO__2 ... # benzoic acids").
-# Choose best the dihedral type for your molecule (eg: "@dihedral:O_C_OH_HO__2")
-#
-# Once you have determined the best @dihedral type to use, create a custom
-# "Data Dihedrals" section similar to the one in the example above.
-# Each line should have 6 entries:
-#
-#   $dihedral:SOME_UNIQUE_NAME  @dihedral:BEST_TYPE  followed by the four $atoms
-#
-# Do this for each interaction you want to override.
-# (Note: Overriden dihedrals don't appear in the warning_duplicate_dihedrals.txt
-#  file.  So when all ambiguous dihedrals have been overriden, this file will
-#  go away.)
-#
-#
-# NOTE:
-# In addition to dihedrals, ambiguity can also happen for bonds, angles, 
-# and impropers.  For example, you might also notice a file named
-# "warning_duplicate_angles.txt".  If so, follow the same procedure described
-# above to choose the best angle type.  Then create a custom "Data Angles"
-# section (similar to the "Data Dihedrals" section above) with 5 columns
-# on each line ($angle, @angle, and the three $atoms).
