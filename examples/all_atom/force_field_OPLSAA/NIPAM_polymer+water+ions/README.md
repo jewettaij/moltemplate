@@ -13,7 +13,7 @@ In this example, the NIPAM polymer
 (defined in [NIPAM_polymer_10mer.lt](./moltemplate_files/NIPAM_polymer_10mer.lt))
 was built from 10 "NIPAM_monomer" subunits
 (defined in [NIPAM.lt](./moltemplate_files/NIPAM.lt))
-and mixed with 500 SPCE water molecules,
+and mixed with 970 SPCE water molecules,
 a Ca++ ion and two Cl- ions.
 The water molecules were initially arranged in an 10x10x10 lattice (with 12 vacancies so the total number of water molecules equals 10*10*10+1+2-27=500).  The polymer and ions were moved to avoid overlap with the water molecules.  *(Alternatively, I could have usde PACKMOL to create random mixtures of molecules.)*
 
