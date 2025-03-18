@@ -1,7 +1,7 @@
 
-import "gaff.lt"
+import "gaff2.lt"
 
-# The "gaff.lt" file is usually located in "force_fields" subdirectory
+# The "gaff2.lt" file is usually located in "force_fields" subdirectory
 # of the moltemplate distribution.
 # It contains definitions of the atoms "c2", "hc", as well as the bonded
 # and non-bonded interactions between them (and many other atoms).
@@ -18,7 +18,7 @@ import "gaff.lt"
 # https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
 
 
-Ethylene inherits GAFF {
+Ethylene inherits GAFF2 {
 
   # atom-id  mol-id  atom-type charge      X         Y        Z
 

@@ -1,8 +1,8 @@
 
-import "gaff.lt"    # <-- defines the "GAFF" force field
+import "gaff2.lt"    # <-- defines the "GAFF2" force field
 
 
-# The "gaff.lt" file is usually located in $MOLTEMPLATE_PATH (and is 
+# The "gaff2.lt" file is usually located in $MOLTEMPLATE_PATH (and is 
 # distributed with moltemplate. See the "Installation" section in the manual.)
 # It contains definitions of the "@atom:c3", "@atom:hc", atoms as well as the
 # force-field parameters for bonded and non-bonded interactions between them 
@@ -20,7 +20,7 @@ import "gaff.lt"    # <-- defines the "GAFF" force field
 # https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
 
 
-CH2 inherits GAFF {
+CH2 inherits GAFF2 {
 
   # atom-id  mol-id atom-type  charge    x        y                z
 

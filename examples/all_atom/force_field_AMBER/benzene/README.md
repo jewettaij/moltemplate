@@ -12,11 +12,11 @@ The number of molecules in the simulation and and the simulation box size can be
 
 ### Details 
 
-The benzene molecules in this example use the AMBER (GAFF) force-field.  *(The GAFF2 force-field is also available.)*  This means that the database of force-field parameters in "gaff.lt" will be used to generate angles, dihedrals, and impropers.  The "moltemplate_files/benzene.lt" file contains these lines which refer to GAFF:
+The benzene molecules in this example use the AMBER (GAFF2) force-field.  *(The GAFF2 force-field is also available.)*  This means that the database of force-field parameters in "gaff2.lt" will be used to generate angles, dihedrals, and impropers.  The "moltemplate_files/benzene.lt" file contains these lines which refer to GAFF2:
 
 ```
-import "gaff.lt"
-Benzene inherits GAFF { ... }    # (see "benzene.lt")
+import "gaff2.lt"
+Benzene inherits GAFF2 { ... }    # (see "benzene.lt")
 ```
 
 

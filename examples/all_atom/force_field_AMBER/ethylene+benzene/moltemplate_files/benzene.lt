@@ -1,7 +1,7 @@
 
-import "gaff.lt"
+import "gaff2.lt"
 
-# The "gaff.lt" file is usually located in the "force_fields" 
+# The "gaff2.lt" file is usually located in the "force_fields" 
 # subdirectory distributed with moltemplate.
 # Excerpt:
 #
@@ -20,7 +20,7 @@ import "gaff.lt"
 # https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_AMBER/README.md
 
 
-Benzene inherits GAFF {
+Benzene inherits GAFF2 {
 
   # atomID   molID  atomType  charge      X       Y      Z
   write('Data Atoms') {

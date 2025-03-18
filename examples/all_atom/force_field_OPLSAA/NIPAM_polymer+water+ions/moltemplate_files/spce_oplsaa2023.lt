@@ -1,0 +1,54 @@
+# file "spce_oplsaa2023.lt"
+#
+#    H1     H2
+#      \   /
+#        O
+#
+# This file contains an implementation of the SPC/E water model which is
+# comptabile with OPLS-related force fields.
+#
+# Note: This file was intended for use in a simulation that uses the OPLSAA
+# force field.  This is different from the other water models included with
+# moltemplate (eg. "spce.lt", "tip3p_2004.lt").  Those files explicitly include
+# the the force-field parameters and bond geometry in the file itself.  This
+# makes it easier to use those files in simulations that use other force fields.
+# However that kind of information was omitted from this file.  Instead the
+# force field parameters and bond geometry are defined in the "oplsaa2023.lt" file.
+
+
+import "oplsaa2023.lt"  # <-- defines OPLSAA, @atom:9989 and @atom:9988
+
+SPCE inherits OPLSAA {
+
+  write("Data Atoms") {
+    $atom:o  $mol:. @atom:9989 -0.8476  0.0000000 0.00000 0.000000
+    $atom:h1 $mol:. @atom:9988  0.4238  0.8164904 0.00000  0.5773590
+    $atom:h2 $mol:. @atom:9988  0.4238  -0.8164904 0.00000 0.5773590
+  }
+
+  write("Data Bond List") {
+    $bond:OH1  $atom:o $atom:h1
+    $bond:OH2  $atom:o $atom:h2
+  }
+
+  write_once("In Settings") {
+    # Define a group for the spce water molecules. (We will use "spce" below.)
+    group spce type  @atom:9989  @atom:9988
+
+    # Constrain the angles and distances in SPCE water:
+    # (See "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
+
+    fix fShakeSPCE spce shake 0.0001 10 100 b @bond:spcO_spcH a @angle:spcH_spcO_spcH
+    # It's a good idea to put this command in your LAMMPS input scripts:
+    #  unfix fShakeSPCE   # <-- this disables fix shake
+    # ...before minimization and pressure equilibration.  (compatibility issues)
+
+    # Note:    Bonds of type "@bond:spcO_spcH"
+    #  and    Angles of type "@angle:spcH_spcO_spcH"
+    # ...are defined in the "oplsaa2023.lt" file. These codes are used to lookup the
+    # OH bond length (1.0 Angstroms) and HOH angle (109.47°) used in SPCE water.
+    # (Also see "fix shake" (See https://lammps.sandia.gov/doc/fix_shake.html)
+  }
+
+} # end of definition of "SPCE" water molecule type
+

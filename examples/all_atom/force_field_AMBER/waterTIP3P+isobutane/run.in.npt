@@ -11,7 +11,7 @@ include     "system.in.init"         # specify the style of force field used
 
 # Weird LAMMPS issue:
 # The "system.in.init" file contains definitions for bond, angle, dihedral,
-# and improper interactions that were defined in the AMBER/GAFF force-field.
+# and improper interactions that were defined in the AMBER/GAFF2 force-field.
 # But since the molecules in this example do not have any improper interactions,
 # LAMMPS will crash.  To get around this, tell LAMMPS to disable all
 # improper interactions:

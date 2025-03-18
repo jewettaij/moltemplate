@@ -5,13 +5,13 @@
 # it to change the length of the alkane chain.
 
 
-import "gaff.lt"     # load the "GAFF" force-field information
+import "gaff2.lt"     # load the "GAFF2" force-field information
 import "ch2.lt"      # load the definition of the "CH2" object
 import "ch3.lt"      # load the definition of the "CH3" object
 
 
 
-Hexadecane inherits GAFF {
+Hexadecane inherits GAFF2 {
 
 
   create_var {$mol}  # optional:force all monomers to share the same molecule-ID

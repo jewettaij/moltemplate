@@ -1,7 +1,7 @@
 # --- Running LAMMPS ---
 # -------- REQUIREMENTS: ---------
 # This example requires building LAMMPS with the "EXTRA-MOLECULE" package.
-# (because it makes use of "gaff.lt" which uses dihedral_style fourier).
+# (because it makes use of "gaff2.lt" which uses dihedral_style fourier).
 # If you encounter the error *"Invalid dihedral_style"*, then this page:
 # https://docs.lammps.org/Build_package.html
 # for instructions to compile LAMMPS to support this package.
