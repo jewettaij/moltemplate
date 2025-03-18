@@ -1,0 +1,65 @@
+import oplsaa2023.lt  # defines OPLSAA
+import NIPAM.lt       # defines NIPAM_monomer, NIPAM_begin, NIPAM_end
+
+
+
+NIPAM_polymer_10mer inherits OPLSAA {
+
+  create_var {$mol}  # optional:force all monomers to share the same molecule-ID
+
+  # Create 10 monomers distributed along the x-axis with spacing 2.5066446, and
+  # a rotation of 45 degrees (per monomer).  The first and last monomers are
+  # different types.  (NIPAM_begin and NIPAM_end have extra hydrogen atoms.)
+
+  monomers[0] = new NIPAM_begin.rot(0,1,0,0).move(0,0,0)
+  monomers[1] = new NIPAM_monomer.rot(45,1,0,0).move(2.5066446,0,0)
+  monomers[2] = new NIPAM_monomer.rot(90,1,0,0).move(5.0132892,0,0)
+  monomers[3] = new NIPAM_monomer.rot(135,1,0,0).move(7.5199338,0,0)
+  monomers[4] = new NIPAM_monomer.rot(180,1,0,0).move(10.0265784,0,0)
+  monomers[5] = new NIPAM_monomer.rot(225,1,0,0).move(12.533223,0,0)
+  monomers[6] = new NIPAM_monomer.rot(270,1,0,0).move(15.0398676,0,0)
+  monomers[7] = new NIPAM_monomer.rot(315,1,0,0).move(17.5465122,0,0)
+  monomers[8] = new NIPAM_monomer.rot(360,1,0,0).move(20.0531568,0,0)
+  monomers[9] = new NIPAM_end.rot(405,1,0,0).move(22.5598014,0,0)
+
+  # Alternatively, you could use this instead:
+  # monomers = new NIPAM_monomer[10].rot(45,1,0,0).move(2.5066446,0,0)
+  # delete monomers[0]
+  # delete monomers[9]
+  # monomers[0] = new NIPAM_begin.rot(0,1,0,0).move(0,0,0)
+  # monomers[9] = new NIPAM_end.rot(405,1,0,0).move(22.5598014,0,0)
+
+
+  # ---- Bonds between monomers ----
+  # Now add a list of bonds connecting the monomers together:
+  # (Angles, dihedrals, impropers will be automatically generated.)
+
+  write('Data Bond List') {
+    $bond:b1  $atom:monomers[0]/c2 $atom:monomers[1]/c1
+    $bond:b2  $atom:monomers[1]/c2 $atom:monomers[2]/c1
+    $bond:b3  $atom:monomers[2]/c2 $atom:monomers[3]/c1
+    $bond:b4  $atom:monomers[3]/c2 $atom:monomers[4]/c1
+    $bond:b5  $atom:monomers[4]/c2 $atom:monomers[5]/c1
+    $bond:b6  $atom:monomers[5]/c2 $atom:monomers[6]/c1
+    $bond:b7  $atom:monomers[6]/c2 $atom:monomers[7]/c1
+    $bond:b8  $atom:monomers[7]/c2 $atom:monomers[8]/c1
+    $bond:b9  $atom:monomers[8]/c2 $atom:monomers[9]/c1
+  }
+} # NIPAM_polymer_10mer
+
+
+
+
+# Note: The following short python script was used to generate the text above:
+# N=10
+# i = 0
+# print('  monomers['+str(i)+'] = new NIPAM_begin.rot('+str(45*i)+',1,0,0).move('+str(i*2.5066446)+',0,0)')
+# for i in range(1,N-1):
+#     print('  monomers['+str(i)+'] = new NIPAM_monomer.rot('+str(45*i)+',1,0,0).move('+str(i*2.5066446)+',0,0)')
+# i=N-1
+# print('  monomers['+str(i)+'] = new NIPAM_end.rot('+str(45*i)+',1,0,0).move('+str(i*2.5066446)+',0,0)')
+## generate the list of bonds
+# print('  write("Data Bond List") {')
+# for i in range(0,N-1):
+#     print('    $bond:b'+str(i+1)+'  $atom:monomers['+str(i)+']/c2 $atom:monomers['+str(i+1)+']/c1')
+# print('  }')

@@ -1,0 +1,52 @@
+# PREREQUISITES:
+#
+#   1) You must use moltemplate.sh to create 4 files:
+#        system.data  system.in.init  system.in.settings  system.in.charges
+#      (Follow the instructions in README_setup.sh, 
+#       or run the file as a script using ./README_setup.sh)
+#   2) You must minimize the system beforehand using "run.in.min".
+#   3) You must equilibrate the system at constant pressure using "run.in.npt".
+#      This will create the file "system_after_npt.data" which this file reads.
+
+# ------------------------------- Initialization Section --------------------
+
+include         "system.in.init"
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       "system_after_npt.data"
+
+# OPLSAA atom charges are stored in a separate file.
+# Load that file now:
+
+include         "system.in.charges"
+
+# ------------------------------- Settings Section --------------------------
+
+include         "system.in.settings"
+
+# ------------------------------- Run Section -------------------------------
+
+
+print "---------------------------------------------------------------------------"
+print "First, use Langevin dynamics to randomize the initial shape of the molecules"
+print "(This is not really necessary, but it seems to speed up equilibration.)"
+print "---------------------------------------------------------------------------"
+
+# Give each atom a random initial velocity consistent with a system at 300K.
+velocity all create 300.0 12345
+
+
+print "---------------------------------------------------------------------------"
+print "--- Now continue the simulation using a Nose-Hoover Thermostat/Barostat ---"
+print "---------------------------------------------------------------------------"
+
+dump         1 all custom 5000 traj_nvt.lammpstrj id mol type x y z ix iy iz
+fix          fxnvt all nvt temp 300.0 300.0 500.0 tchain 1
+
+timestep     2.0
+run          2000000
+thermo       500
+#thermo_modify  flush yes
+
+write_data   system_after_nvt.data

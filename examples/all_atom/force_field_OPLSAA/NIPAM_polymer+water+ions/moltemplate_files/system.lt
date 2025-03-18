@@ -1,0 +1,38 @@
+# Periodic boundary conditions:
+
+write_once("Data Boundary") {
+  0 32.5 xlo xhi
+  0 32.5 ylo yhi
+  0 32.5 zlo zhi
+}
+
+# Define the molecules we will need
+
+import NIPAM_polymer_10mer.lt   # defines NIPAM_polymer_10mer
+import ca++.lt                  # defines Ca
+import cl-.lt                   # defines Cl
+import spce_oplsaa2023.lt       # defines SPCE
+
+
+# 1) Create a single copy of the polymer.
+# (I moved it by an amount (1.25, 16, 14) to reduce overlapping with the water.)
+
+pol = new NIPAM_polymer_10mer.move(1.25, 14, 12)
+
+
+# 2) Create a random mixture of 3 types of small molecules in a box
+#  - 970 water molecules (SPCE),
+#  - 1 calcium ion (Ca)
+#  - 2 chloride ions (Cl)
+#  We will distribute them on a 10x10x10 lattice with spacing 3.25.
+
+waters = new random([SPCE,Ca,Cl,], [970,1,2,27], 12345)
+                    [10].move(3.25, 0, 0)
+                    [10].move(0, 3.25, 0)
+                    [10].move(0, 0, 3.25)
+
+# (970 of 1000 lattice sites are occupied by water, 1 by a Ca ion, 2 by Cl ions.
+#  The remaining 27 lattice sites are unoccupied.  "12345" is a random seed.
+#  For details read about the "new random" command in section 8.9.1 in the
+#  moltemplate manual: "Random multidimensional arrays with exact type counts")
+

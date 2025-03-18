@@ -9,7 +9,7 @@
 
 # First load the original "BenzoicAcid" molecule.
 
-import "benzoic_acid.lt"
+import "../benzoic_acid.lt"
 
 BenzoicAcid {
   # Note: Here we will augment (not overwrite) the existing "BenzoicAcid"

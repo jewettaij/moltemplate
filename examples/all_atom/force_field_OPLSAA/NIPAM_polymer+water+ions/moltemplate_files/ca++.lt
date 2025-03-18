@@ -1,0 +1,16 @@
+# The oplsaa2023.lt file contains force-field parameters, atom type definitions,
+# partial charges, masses and bond-angle rules for the atoms in your system.
+
+import oplsaa2023.lt
+
+
+# It defines this atom type used below:
+# atom-type charge mass btype epsilon sigma description
+# @atom:412 2.0   40.078  Ca  0.449657 2.412031  "Ca++"
+
+
+Ca inherits OPLSAA {
+  write("Data Atoms"){
+    $atom:a1  $mol:. @atom:412 0.0  0.00000 0.00000 0.000000
+  }
+}

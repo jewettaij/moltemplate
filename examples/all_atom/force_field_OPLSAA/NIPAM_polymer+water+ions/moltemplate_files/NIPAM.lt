@@ -1,0 +1,129 @@
+# The oplsaa2023.lt file contains force-field parameters, atom type definitions,
+# partial charges, masses and bond-angle rules for the atoms in your system.
+
+import oplsaa2023.lt
+
+# It defines these atom types used below:
+# atom-type charge mass btype epsilon sigma description
+# @atom:54  -0.18 12.011  CT  0.066 3.5   "n-CH3 all-atom C: alkanes"
+# @atom:57  -0.12 12.011  CT  0.066 3.51  "CH2 all-atom C: alkanes"
+# @atom:58  -0.06 12.011  CT  0.066 3.50  "CH all-atom C: alkanes"
+# @atom:60   0.06 1.008   HC  0.026 2.48  "H all-atom H: alkanes"
+# @atom:229  0.14 12.011  CT  0.066 3.50  "C on N: secondary N-CHR2 amide"
+# @atom:235  0.5  12.011  C~  0.105 3.75  "C: C=O in amide. Acyl R in amides"
+# @atom:236 -0.5  15.999  O~  0.21  2.96  "O: C=O in amide. is neutral - use"
+# @atom:238 -0.5  14.007  N~  0.17  3.25  "N: secondary amide 279 for formyl H"
+# @atom:241  0.3  1.008   H~  0     0     "H on N: secondary amide"
+# (Note: Future versions of OPLSAA might use different @atom type numbers.)
+
+
+
+NIPAM_monomer inherits OPLSAA {
+
+  # AtomId MoleculeId AtomType Charge(ignored)  X     Y        Z
+  write("Data Atoms") {
+    $atom:c1   $mol:...  @atom:57   0.0    -2.974852   5.522390  -0.018155
+    $atom:h1   $mol:...  @atom:60   0.0    -3.724626   5.174570   0.701037
+    $atom:h2   $mol:...  @atom:60   0.0    -2.719268   6.558371   0.228794
+    $atom:c2   $mol:...  @atom:58   0.0    -1.735484   4.646281   0.029083
+    $atom:h3   $mol:...  @atom:60   0.0    -1.508788   4.910628  -0.968071
+    $atom:c3   $mol:...  @atom:235  0.0    -2.025682   3.209199  -0.359358
+    $atom:o    $mol:...  @atom:236  0.0    -3.048503   2.857213  -0.933433
+    $atom:n    $mol:...  @atom:238  0.0    -0.994962   2.354203  -0.028520
+    $atom:h4   $mol:...  @atom:241  0.0    -0.125839   2.768432   0.286529
+    $atom:c4   $mol:...  @atom:229  0.0    -0.984493   0.945198  -0.400372
+    $atom:h5   $mol:...  @atom:60   0.0    -1.122032   0.893743  -1.487254
+    $atom:c5   $mol:...  @atom:54   0.0    -2.106258   0.158743   0.279041
+    $atom:c6   $mol:...  @atom:54   0.0     0.367445   0.328012  -0.042488
+    $atom:h6   $mol:...  @atom:60   0.0    -2.084660   0.295039   1.365520
+    $atom:h7   $mol:...  @atom:60   0.0    -3.090506   0.479803  -0.074254
+    $atom:h8   $mol:...  @atom:60   0.0    -2.018551  -0.912126   0.064931
+    $atom:h9   $mol:...  @atom:60   0.0     0.418128  -0.721000  -0.354464
+    $atom:h10  $mol:...  @atom:60   0.0     1.185249   0.866898  -0.534741
+    $atom:h11  $mol:...  @atom:60   0.0     0.548305   0.372184   1.038367
+  }
+
+  # (Charges are defined in oplsaa2023.lt and can be omitted. Leave them as 0.0)
+  #
+  # The "..." in "$mol:..." tells moltemplate that this monomer may be part
+  # of a larger molecule, and (if so) to associate the larger parent object's 
+  # molecule-id number with each of its atoms.
+
+
+  write("Data Bond List") {
+    $bond:c1_h1    $atom:c1  $atom:h1
+    $bond:c1_h2    $atom:c1  $atom:h2
+    $bond:c1_c2    $atom:c1  $atom:c2
+    $bond:c2_h3    $atom:c2  $atom:h3
+    $bond:c2_c3    $atom:c2  $atom:c3
+    $bond:c3_o     $atom:c3  $atom:o
+    $bond:c3_n     $atom:c3  $atom:n
+    $bond:n_c4     $atom:n   $atom:c4
+    $bond:n_h4     $atom:n   $atom:h4
+    $bond:c4_h5    $atom:c4  $atom:h5
+    $bond:c4_c5    $atom:c4  $atom:c5
+    $bond:c4_c6    $atom:c4  $atom:c6
+    $bond:c5_h6    $atom:c5  $atom:h6
+    $bond:c5_h7    $atom:c5  $atom:h7
+    $bond:c5_h8    $atom:c5  $atom:h8
+    $bond:c6_h9    $atom:c6  $atom:h9
+    $bond:c6_h10   $atom:c6  $atom:h10
+    $bond:c6_h11   $atom:c6  $atom:h11
+  }
+
+} # NIPAM_monomer inherits OPLSAA
+
+
+
+# For convenience, move the monomer so that the first backbone atom ($atom:c1).
+# is located at the origin 0,0,0.  (This makes it easier to create polymers.)
+
+NIPAM_monomer.move(2.974852,  -5.522390,  0.018155)
+
+
+
+# --- variants of NIPAM ---
+
+
+# Define a version of NIPAM_monomer which can be used as the first monomer
+# in a NIPAM polymer.  The first backbone carbon (c1) should be capped with CH3.
+# So we change the first carbon atom type to @atom:54 and add an extra hydrogen
+
+NIPAM_begin inherits NIPAM_monomer {
+  write("Data Atoms") {
+    $atom:c1    $mol:... @atom:54   0.0    -2.974852   5.522390  -0.018155
+    $atom:hcap1 $mol:... @atom:60   0.0    -3.433951   5.511891  -1.012543
+  }
+  write("Data Bond List") {
+    $bond:c1_hcap1 $atom:c1  $atom:hcap1
+  }
+}
+
+# Define a version of NIPAM_monomer which can be used as the last monomer
+# in a NIPAM polymer.  So we change the type of the last backbone carbon (c2)
+# to @atom:57 and add an extra hydrogen (keeping the coordinates the same).
+
+NIPAM_end inherits NIPAM_monomer {
+  write("Data Atoms") {
+    $atom:c2    $mol:... @atom:57   0.0    -1.735484   4.646281   0.029083
+    $atom:hcap2 $mol:... @atom:60   0.0    -0.808067   5.026993   0.312817
+  }
+  write("Data Bond List") {
+    $bond:c2_hcap2 $atom:c2  $atom:hcap2
+  }
+}
+
+# Optional: Define a (free) version of NIPAM which is not part of a polymer.
+# Both carbons on the backbone (c1, c2) are modified and hydrogens are added.
+NIPAM inherits NIPAM_monomer {
+  write("Data Atoms") {
+    $atom:c1    $mol:.  @atom:54   0.0    -2.974852   5.522390  -0.018155
+    $atom:hcap1 $mol:.  @atom:60   0.0    -3.433951   5.511891  -1.012543
+    $atom:c2    $mol:.  @atom:57   0.0    -1.735484   4.646281   0.029083
+    $atom:hcap2 $mol:.  @atom:60   0.0    -0.808067   5.026993   0.312817
+  }
+  write("Data Bond List") {
+    $bond:c1_hcap1 $atom:c1  $atom:hcap1
+    $bond:c2_hcap2 $atom:c2  $atom:hcap2
+  }
+}

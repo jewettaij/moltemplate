@@ -1,0 +1,36 @@
+# PREREQUISITES:
+#
+#     You must use moltemplate.sh to create 4 files:
+#        system.data  system.in.init  system.in.settings  system.in.charges
+#     (Follow the instructions in README_setup.sh, 
+#      or run the file as a script using ./README_setup.sh)
+
+# ------------------------------- Initialization Section --------------------
+
+include         "system.in.init"
+
+# ------------------------------- Atom Definition Section -------------------
+
+read_data       "system.data"
+
+# OPLSAA atom charges are stored in a separate file.
+# Load that file now:
+
+include         "system.in.charges"
+
+# ------------------------------- Settings Section --------------------------
+
+include         "system.in.settings"
+
+# ------------------------------- Run Section -------------------------------
+
+
+# -- minimization protocol --
+
+unfix fShakeSPCE    # Disable SHAKE during minimization and pressure equilibr
+
+# Minimise the input structure
+# min_style       hftn
+minimize        1e-4 1e-6 10000 100000
+write_data      system_after_min.data
+
