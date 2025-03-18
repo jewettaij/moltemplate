@@ -3,7 +3,9 @@ NIPAM polymer in water with ions
 
 ### Images
 
-<img src="images/NIPAM_monomer.jpg" width=60> x10 <img src="images/plus.svg" height=80> <img src="images/wat.jpg" width=70> x970 <img src="images/plus.svg" height=80> <img src="images/Ca++.jpg" width=40> <img src="images/plus.svg" height=80> <img src="images/Cl-.jpg" width=40> x2 <img src="images/rightarrow.svg" height=80> <img src="images/t=0.jpg" width=170> <img src="images/rightarrow.svg" height=80> **LAMMPS** <img src="images/rightarrow.svg" height=80> <img src="images/t=2200000fs.jpg" width=170>
+<img src="images/NIPAM_monomer.jpg" width=60> x10 <img src="images/plus.svg" height=80> <img src="images/wat.jpg" width=70> x970 <img src="images/plus.svg" height=80> <img src="images/Ca++.jpg" width=40> <img src="images/plus.svg" height=80> <img src="images/Cl-.jpg" width=40> x2
+
+<img src="images/rightarrow.svg" height=80> <img src="images/t=0.jpg" width=170> <img src="images/rightarrow.svg" height=80> **LAMMPS** <img src="images/rightarrow.svg" height=80> <img src="images/t=2200000fs.jpg" width=170>
 
 ### Description
 
@@ -20,9 +22,15 @@ The water molecules were initially arranged in an 10x10x10 lattice (with 12 vaca
 
 The number of molecules, positions, and simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The simulation contitions can be controlled by editing the [run_in.npt file](run_in.npt).
 
+
+
 ## Atom types used
 
+(See the [NIPAM.lt](./moltemplate_files/NIPAM.lt) file for details.)
+
 <img src="images/NIPAM_monomer_OPLS.jpg" width=200>
+
+
 
 ## Instructions
 

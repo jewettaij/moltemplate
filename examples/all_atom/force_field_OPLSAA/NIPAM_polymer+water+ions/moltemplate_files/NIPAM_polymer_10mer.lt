@@ -22,14 +22,6 @@ NIPAM_polymer_10mer inherits OPLSAA {
   monomers[8] = new NIPAM_monomer.rot(360,1,0,0).move(20.0531568,0,0)
   monomers[9] = new NIPAM_end.rot(405,1,0,0).move(22.5598014,0,0)
 
-  # Alternatively, you could use this instead:
-  # monomers = new NIPAM_monomer[10].rot(45,1,0,0).move(2.5066446,0,0)
-  # delete monomers[0]
-  # delete monomers[9]
-  # monomers[0] = new NIPAM_begin.rot(0,1,0,0).move(0,0,0)
-  # monomers[9] = new NIPAM_end.rot(405,1,0,0).move(22.5598014,0,0)
-
-
   # ---- Bonds between monomers ----
   # Now add a list of bonds connecting the monomers together:
   # (Angles, dihedrals, impropers will be automatically generated.)
