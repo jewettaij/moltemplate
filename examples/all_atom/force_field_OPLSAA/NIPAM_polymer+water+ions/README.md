@@ -64,6 +64,6 @@ for instructions explaining how to customize atomic charge.
 ### Credit
 
 This example is a modified version of the
-NIPAM polymer example created by Axel Kohlmeyer for the
+NIPAM polymer example created by Otello M. Roscioni (MaterialX) for the
 [moltemplate howto documentation](https://docs.lammps.org/Howto_moltemplate.html).
-Thanks Axel!
+Thanks Otello!

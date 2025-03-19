@@ -493,7 +493,7 @@ in every "pair\_coeff" command after running ltemplify.py
 
 #### Wildcard characters ("*") expansion
 
-Moltemplate is often confused whenever wildcard characters ("*" characters)
+Moltemplate is often confused whenever wildcard characters ("\*" characters)
 appear inside any of the the "coeff" commands
 (or "Coeff" sections of the data file).
 So ltemplify.py attempts to remove these characters and expand these commands,
