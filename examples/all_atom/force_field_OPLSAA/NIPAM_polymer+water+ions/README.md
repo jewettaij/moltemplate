@@ -8,18 +8,25 @@ NIPAM polymer in water with ions
 
 ### Description
 
-A NIPAM polymer (10mer) immersed in (SPCE) water with Ca++ and Cl- ions
+A NIPAM polymer (10mer) immersed in water with Ca++ and Cl- ions
 using the *OPLSAA* force field.
-In this example, the NIPAM polymer
-(defined in [NIPAM_polymer_10mer.lt](./moltemplate_files/NIPAM_polymer_10mer.lt))
+In this example, the NIPAM polymer (defined in
+[NIPAM_polymer_10mer.lt](./moltemplate_files/NIPAM_polymer_10mer.lt))
 was built from 10 "NIPAM_monomer" subunits
 (defined in [NIPAM.lt](./moltemplate_files/NIPAM.lt))
-and mixed with 970 SPCE water molecules,
-a Ca++ ion and two Cl- ions.
-The water molecules were initially arranged in an 10x10x10 lattice (with 12 vacancies so the total number of water molecules equals 10*10*10+1+2-27=500).  The polymer and ions were moved to avoid overlap with the water molecules.  *(Alternatively, I could have usde PACKMOL to create random mixtures of molecules.)*
+and mixed with 970 (SPC/E) water molecules,
+one Ca++ ion and two Cl- ions.
+The 970 water molecules and 3 ions were initially arranged in an 10x10x10
+lattice (with 27 vacancies so the total sums to 10\*10\*10).
+The polymer was moved slightly to avoid overlap with the water molecules.
+*(Alternatively, I could have usde PACKMOL to create random mixtures
+of molecules.)*
 
 
-The number of molecules, positions, and simulation box size can be controlled by editing the [system.lt file](moltemplate_files/system.lt).  The simulation contitions can be controlled by editing the [run_in.npt file](run_in.npt).
+The number of molecules, positions, and simulation box size can be
+controlled by editing the [system.lt file](moltemplate_files/system.lt).
+The simulation contitions can be controlled by editing the
+[run_in.npt](run_in.npt) and [run_in.npt](run_in.nvt) files.
 
 
 
