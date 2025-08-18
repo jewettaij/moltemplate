@@ -24,9 +24,9 @@ of molecules.)*
 
 
 The number of molecules, positions, and simulation box size can be
-controlled by editing the [system.lt file](moltemplate_files/system.lt).
+controlled by editing the [system.lt](moltemplate_files/system.lt) file.
 The simulation contitions can be controlled by editing the
-[run_in.npt](run_in.npt) and [run_in.npt](run_in.nvt) files.
+[run.in.npt](./run.in.npt) and [run.in.npt](./run.in.nvt) files.
 
 
 

@@ -26,10 +26,10 @@ pol = new NIPAM_polymer_10mer.move(1.25, 14, 12)
 #  - 2 chloride ions (Cl)
 #  We will distribute them on a 10x10x10 lattice with spacing 3.25.
 
-waters = new random([SPCE,Ca,Cl,], [970,1,2,27], 12345)
-                    [10].move(3.25, 0, 0)
-                    [10].move(0, 3.25, 0)
-                    [10].move(0, 0, 3.25)
+solvent = new random([SPCE,Ca,Cl,], [970,1,2,27], 12345)
+                     [10].move(3.25, 0, 0)
+                     [10].move(0, 3.25, 0)
+                     [10].move(0, 0, 3.25)
 
 # (970 of 1000 lattice sites are occupied by water, 1 by a Ca ion, 2 by Cl ions.
 #  The remaining 27 lattice sites are unoccupied.  "12345" is a random seed.
