@@ -33,9 +33,9 @@ g_date_str = '2022-6-05'
 g_version_str = '0.80.4'
 
 
+import os
 import sys
 from collections import defaultdict
-import pkg_resources
 
 try:
     from .ttree import BasicUISettings, BasicUIParseArgs, EraseTemplateFiles, \
@@ -107,9 +107,14 @@ class LttreeSettings(BasicUISettings):
 
 
 def LttreeParseArgs(argv, settings, main=False, show_warnings=True):
-    # By default, include force_fields provided with the package
-    argv.extend(["-import-path",
-                 pkg_resources.resource_filename(__name__, 'force_fields/')])
+    # By default, moltemplate should automatically find .lt files located
+    # in the files in `force_fields/` directory.  To make sure that happens,
+    # add that folder path using the "-import-path" command-line argument
+    # (defined in `BasicUIParseArgs()` in ttree.py).
+    current_py_file_path = os.path.abspath(__file__)
+    current_dir = os.path.dirname(current_py_file_path)
+    forcefield_dir = os.path.join(current_dir, 'force_fields')
+    argv.extend(["-import-path", str(forcefield_dir)])
 
     BasicUIParseArgs(argv, settings)
 
