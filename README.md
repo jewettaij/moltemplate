@@ -2,7 +2,7 @@
 [![CodeQL](https://github.com/jewettaij/moltemplate/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/jewettaij/moltemplate/actions/workflows/codeql-analysis.yml)
 [![Requires Python 3.4+](https://img.shields.io/badge/Python-3.4+-blue.svg?logo=python&logoColor=white)](https://python.org/downloads)
 [![PyPI - Version](https://img.shields.io/pypi/v/moltemplate)](https://pypi.org/project/moltemplate/)
-[![PyPI Downloads](https://img.shields.io/pypi/dm/moltemplate?logo=pypi&logoColor=white&color=blue&label=PyPI)](https://pypistats.org/packages/moltemplate)
+[![PyPI Downloads](https://img.shields.io/pepy/dt/moltemplate)](https://pepy.tech/projects/moltemplate)
 [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/moltemplate?logo=condaforge&color=blue&label=Conda)](https://anaconda.org/conda-forge/moltemplate)
 [![Paper](https://img.shields.io/badge/J.MolBiol-2021.5.28-blue?logo=elsevier&logoColor=white)](https://doi.org/10.1016/j.jmb.2021.166841)
 [![Website](https://img.shields.io/website?down_color=orange&down_message=moltemplate.org%20offline&up_color=green&up_message=online&url=https%3A%2F%2Fmoltemplate.org)](https://moltemplate.org)
@@ -68,7 +68,7 @@ The best way to learn how to use moltemplate is to find an example
 which is similar to the system that you wish to simulate and modify it.
 This repository includes approximately 50 [examples](./examples).
 Some of the moltemplate examples are also demonstrated (with pictures)
-[here](https://moltemplate.org/visual_examples.html).
+[here](https://moltemplate.org/examples.html).
 
 All moltemplate users should read chapter 4 of the
 [reference manual](https://moltemplate.org/doc/moltemplate_manual.pdf#section.4)
