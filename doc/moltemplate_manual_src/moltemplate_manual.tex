@@ -3667,7 +3667,7 @@ see section \ref{sec:molecule_customization}.)
 
 \subsection{Customizing individual atoms or bonds}
 
-\subsubsection{Customizing individual atom locations}
+\subsubsection{Customizing individual atom locations and types}
 \label{sec:custom_atom}
 Unfortunately, the ``move'' or ``rot'' commands \textbf{\textit{cannot}}
 be used to control the positions of \textit{individual atoms}.
@@ -3700,6 +3700,23 @@ In that case, the atom coordinates will be defined
 within in the coordinate system of the ``MolecularComplex'' object,
 and will subject to any ``.move()'', ``.rot()'', or ``.scale()''
 commands which are applied to that object (or its copies).
+
+\subsubsection{Customizing atom types}
+\label{sec:customizing_atom_type}
+You can also customize the \textit{type} of an atom after it was created.
+In the example above, you could change the atom typea
+from @atom:R $\rightarrow$ @atom:CA by overriding it by appending \textit{this}
+line instead:
+\begin{verbatim}
+    $atom:polymers[0]/monomers[2]/ca $mol:... @atom:CA 0 6.4 8.2 0.6
+\end{verbatim}
+
+This is demonstrated again later in section \ref{sec:delete_atoms_bonds}.
+
+\textit{(Note: This works because by default moltemplate will ignore all
+duplicate definitions of \$atoms, \$bonds, \$angles, \$dihedrals,
+and \$impropers which appear earlier in the user's .lt files.
+It only considers the most recent definition for each \$atom, \$bond, etc...)}
 
 
 \subsubsection{Customizing individual bonds, angles, dihedrals,...}
@@ -3800,6 +3817,8 @@ See section \ref{sec:array_wildcards_intro} for an
 explanation of ranged (``[2-4]'') array notation, 
 and wildcard characters (``*'').
 
+
+
 \textit{Minor bug notice: 
 Deleting atoms or molecules may cause 
 inaccuracies in the \$atoms, \$bonds, \$angles, \$dihedrals, and \$impropers
@@ -3823,6 +3842,28 @@ to make sure they look reasonable.
 %The temporary work-around is simply to avoid connecting bonds to any molecule
 %which you plan to delete later.  I plan to fix this bug eventually.
 %}
+
+
+\subsubsection*{Changing atom types}
+\label{sec:changing_atom_type}
+\textit{Again, if you want to change the \textbf{type} of atom, do not
+delete the atom}, since this will break any bonded interactions it participates
+in.  \textit{Instead}, add another line to override its @atom type.
+For example, the
+\href{https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_OPLSAA/NIPAM_polymer+water+ions/moltemplate_files/NIPAM.lt}{NIPAM example} defines a ``NIPAM\_monomer'' (containing an \$atom:c1 of type @atom:57).  Excerpt:
+\begin{verbatim}
+  write("Data Atoms") {
+    $atom:c1   $mol:...  @atom:57   0.0    -2.974852   5.522390  -0.018155
+    :
+\end{verbatim}
+Later in that example, we define the ``NIPAM'' molecule.  It is nearly identical to the ``NIPAM\_monomer'' subunit, except that it has some extra atoms, and it also redefines the type of the \$atom:c1 atom to @atom:54:
+\begin{verbatim}
+  write("Data Atoms") {
+    $atom:c1    $mol:... @atom:54   0.0    -2.974852   5.522390  -0.018155
+    :
+\end{verbatim}
+This overrides the previous definition of \$atom:c1 in ``NIPAM\_monomer''.
+
 
 
 
