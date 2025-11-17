@@ -859,17 +859,17 @@ def main():
             (args.filename_dihedral and args.filename_dihedral != '') and
             (args.filename_improper and args.filename_improper != '') and
             (args.filename_pair and args.filename_pair != '')):
-            with open(finename_mass, 'r') as f:
+            with open(args.filename_mass, 'r') as f:
                 lines_mass = f.readlines()
-            with open(finename_bond, 'r') as f:
+            with open(args.filename_bond, 'r') as f:
                 lines_bond = f.readlines()
-            with open(finename_angle, 'r') as f:
+            with open(args.filename_angle, 'r') as f:
                 lines_angle = f.readlines()
-            with open(finename_dihedral, 'r') as f:
+            with open(args.filename_dihedral, 'r') as f:
                 lines_dihedral = f.readlines()
-            with open(finename_improper, 'r') as f:
+            with open(args.filename_improper, 'r') as f:
                 lines_improper = f.readlines()
-            with open(finename_pair, 'r') as f:
+            with open(args.filename_pair, 'r') as f:
                 lines_pair = f.readlines()
         else:
             # (By default, this program will read from the terminal (sys.stdin))
