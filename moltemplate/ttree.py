@@ -2936,7 +2936,7 @@ class StaticObj(object):
 
                         # Check to see if this class has already been defined.
                         if self.children.get(child_name) is not None:
-                            if self.children[i].IsDeleted():
+                            if self.children[child_name].IsDeleted():
                                 del self.children[child_name]
                             else:
                                 raise InputError('Error(' + g_module_name + '.StaticObj.Parse()):\n'

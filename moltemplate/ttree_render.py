@@ -124,7 +124,7 @@ def main():
                     #                 ' unknown variable:\n'
                     #                 '         \"' + var_name + '\"\n'))
                     # ...actually don't raise an error message:
-                    # Actually there are some legitimate reaons this could occur.
+                    # Actually there are some legitimate reasons this could occur.
                     # Some users want to put LAMMPS-style variables in the 
                     # write_once() {...} text blocks in their moltemplate files.
                     # Variables in both LAMMPS and moltemplate contain $ characters, 

@@ -3,10 +3,10 @@
 # moltemplate.sh -atomstyle "hybrid molecular ellipsoid" -molc system.lt
 
 # Force field.
-import xxx.lt
+import benzene.lt
 
 # Create the molecules.
-mol0 = new XXX[1]
+mol0 = new GGZZ[1]
 
 # Simulation box.
 write_once("Data Boundary") {
