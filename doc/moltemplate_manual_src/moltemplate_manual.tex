@@ -3618,7 +3618,8 @@ You can also overwrite or delete individual atoms,
 bonds, and other interactions within a molecule, or their subunits.
 (See sections 
 \ref{sec:delete_atoms_bonds}, 
-\ref{sec:custom_atom},
+\ref{sec:custom_atom_position},
+\ref{sec:custom_atom_type},
 \ref{sec:custom_bond},
 and \ref{sec:adding_atoms_bonds}.)
 You make any of these modifications to \textit{some} copies 
@@ -3684,8 +3685,8 @@ see section \ref{sec:molecule_customization}.)
 
 \subsection{Customizing individual atoms or bonds}
 
-\subsubsection{Customizing individual atom locations and types}
-\label{sec:custom_atom}
+\subsubsection{Customizing atom position}
+\label{sec:custom_atom_position}
 Unfortunately, the ``move'' or ``rot'' commands \textbf{\textit{cannot}}
 be used to control the positions of \textit{individual atoms}.
 Instead simply overwrite their coordinates this way:
@@ -3701,7 +3702,7 @@ to indicate \textit{which} ``ca'' atom we want to overwrite
 (In this case, we want to modify the ``ca'' atom belonging to
 ``monomers[2]'' in ``polymers[0]'' in ``mol\_complex'').
 In this example, the X,Y,Z numbers (6.4, 8.2, 0.6)
-are in the global coordinate system.
+are in the \textit{global} coordinate system.
 If instead, the ``write("Data Atoms")'' statement appears
 inside the definition of the ``MolecularComplex'' object,
 we would specify the atom coordinates this way:
@@ -3719,7 +3720,7 @@ and will subject to any ``.move()'', ``.rot()'', or ``.scale()''
 commands which are applied to that object (or its copies).
 
 \subsubsection{Customizing atom types}
-\label{sec:customizing_atom_type}
+\label{sec:custom_atom_type}
 You can also customize the \textit{type} of an atom after it was created.
 You can do this in two ways:
 
@@ -3739,8 +3740,8 @@ This compltely overwrites definition of atom \verb|$atom:polymers[0]/monomers[2]
 \begin{list}{}
   \item - Force fields (like OPLSAA) will \textbf{still use the old atom type} when looking up the bond, angle, dihedral force-field parameters for any bonded interactions which the atom participates in.
   \item - The X,Y,Z coordinates you supply (e.g. \verb|6.4 8.2 0.6|)
-    must be the \textit{final} X,Y,Z coordinates
-    \textit{(i.e. after any} \verb|.move()| \textit{and} \verb|.rot()| \textit{commands so far have been applied).}
+    must be in the \textit{global} coordinate system
+    \textit{(i.e. after any} \verb|.move()| \textit{and} \verb|.rot()| \textit{commands so far have been applied).}  (See section \ref{sec:custom_atom_position} for details.)
 \end{list}
 
 \subsubsection*{New Method (experimental)}
@@ -4900,22 +4901,6 @@ A {
   %\textit{I will finish this example later...}
 
 
-\subsection{Alchemical transformations}
-\label{sec:alchemical}
-
-In molecular modelling, an alchemical transformation involves transforming e.g. one atom type into a different one.
-LAMMPS already provides a \verb|fix alchemy| command, which is used for measuring thermodynamic differences between two different systems.
-This command is used to alter the composition of a system \textit{during} a molecular dynamic simulation, and relies on defining groups
-using the standard LAMMPS syntax.
-
-In moltemplate, alchemical transformations are used to change the type of individual atoms (and ultimately, the
-molecular species) and associated bonded interactions \textit{after} a sample has been created. These transformations can be seen as a
-post-processing modification of the ``Data Atoms.template'' file that is carried out right after executing \verb|ttree.py| in the moltemplate workflow,
-but before the force field lookup occurs.
-In this way, all \textit{bonded} force field terms are also updated, while preserving the atomic coordinates in the sample's reference system.\\
-%
-Alchemical transformations are triggered by a \verb|write_once("In Set Atom")| command issued after the creation of molecules with the \verb|new| command.
-%
 
 
 \section{Known bugs and limitations}
@@ -5036,6 +5021,8 @@ Please let me know if it is not working.
    (such as ``pair\_style hbond/dreiding/lj''.
     However manybody pair\_styles which use ``pair\_coeff * *''
     notation work fine.)
+   As of 2026-11-10, wildcards also do not work within ``set atom'' commands.
+   (For example, this will fail: ``set atom \$atom:mols[*]/c type @atom:C'')
 
    %As of 2019-9-03, wildcard characters (``*'', ``?'') also fail to work inside
    %\textit{``bond\_modify''} commands, and other commands used for running
