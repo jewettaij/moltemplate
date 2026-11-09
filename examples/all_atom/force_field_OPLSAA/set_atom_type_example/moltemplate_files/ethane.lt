@@ -1,0 +1,46 @@
+import "oplsaa2024.lt"
+
+
+# The "oplsaa2024.lt" file defines these atom types:
+#    @atom:54 charge -0.18    "C - CT | n-CH3 C: alkane"
+#    @atom:60 charge 0.06     "H - HC | H: alkanes"
+#    @atom:154 charge -0.683  "O - OH | O: mono alcohols"
+#    @atom:155 charge 0.418   "H - HO | H(O): mono alcohols"
+#    @atom:156 charge 0.04    "H  - HC   | all-atom H(C): methanol"
+#    @atom:157 charge 0.145   "C - CT | C: CH3 & CH2, prim. alcohols
+# The "oplsaa2024.lt" file is located at:
+# https://github.com/jewettaij/moltemplate/tree/master/moltemplate/force_fields/
+# If you want to customize oplsaa2024.lt, download it and copy it to this folder
+
+
+ethane inherits OPLSAA {
+
+  # atomID   molID  atomTyle  charge     X        Y          Z
+
+  write("Data Atoms") {
+    $atom:c1  $mol:. @atom:54  0.0  -0.62666115  0.4431163  0.000000
+    $atom:h11 $mol:. @atom:60  0.0  -0.62666115  1.0741603  0.892431
+    $atom:h12 $mol:. @atom:60  0.0  -0.62666115  1.0741603 -0.892431
+    $atom:h13 $mol:. @atom:60  0.0  -1.51909215 -0.1879277  0.000000
+    $atom:c2  $mol:. @atom:54  0.0   0.62666115 -0.4431163  0.000000
+    $atom:h21 $mol:. @atom:60  0.0   0.62666115 -1.0741603 -0.892431
+    $atom:h22 $mol:. @atom:60  0.0   0.62666115 -1.0741603  0.892431
+    $atom:h23 $mol:. @atom:60  0.0   1.51909215  0.1879277  0.000000
+  }
+
+  #  Charges will be assigned by OPLSAA, so we can leave them 0.0 here.
+  #
+  #  (The "." in "$mol:." refers to this molecule-object's molecule-ID number.
+  #   The "." simply means this molecule is not a part of a larger molecule.)
+
+  write('Data Bond List') {
+    $bond:cc   $atom:c1 $atom:c2
+    $bond:ch11 $atom:c1 $atom:h11
+    $bond:ch12 $atom:c1 $atom:h12
+    $bond:ch13 $atom:c1 $atom:h13
+    $bond:ch21 $atom:c2 $atom:h21
+    $bond:ch22 $atom:c2 $atom:h22
+    $bond:ch23 $atom:c2 $atom:h23
+  }
+
+} # Ethanol
