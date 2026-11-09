@@ -14,11 +14,11 @@ cd moltemplate_files
 
   # run moltemplate
 
-  moltemplate.sh  system.lt
+  moltemplate.sh -xyz system.xyz system.lt
 
   # --- OPTIONAL: ---
   # You can also check for missing angle,dihedral params this way:
-  #    moltemplate.sh -checkff system.lt 
+  #    moltemplate.sh -checkff -xyz system.xyz system.lt 
   #
   # You can also check for alternative possible OPLSAA parameters this way:
   #    moltemplate.sh  system.lt  -report-duplicates bytype __

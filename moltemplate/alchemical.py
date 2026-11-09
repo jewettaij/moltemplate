@@ -10,7 +10,7 @@ Before the remove_duplicate_atoms.py script is invoked in Moltemplate.sh,
 look for specific atom
 """
 g_program_name = __file__.split('/')[-1]  # ='alchemical.py'
-g_date_str = '2026-11-09'
+g_date_str = '2026-11-10'
 g_version_str = '0.2.0'
 import sys
 import re
