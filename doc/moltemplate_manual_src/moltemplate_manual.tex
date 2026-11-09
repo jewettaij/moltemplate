@@ -3721,6 +3721,11 @@ commands which are applied to that object (or its copies).
 \subsubsection{Customizing atom types}
 \label{sec:customizing_atom_type}
 You can also customize the \textit{type} of an atom after it was created.
+You can do this in two ways:
+
+\subsubsection*{Old Method}
+
+\textbf{Overwrite the \$atom line in the write(``Data Atoms'') section}
 In the example above, you could change the atom typea
 from @atom:R $\rightarrow$ @atom:CA by overriding it by appending \textit{this}
 line instead:
@@ -3728,12 +3733,83 @@ line instead:
     $atom:polymers[0]/monomers[2]/ca $mol:... @atom:CA 0 6.4 8.2 0.6
 \end{verbatim}
 
-This is demonstrated again later in section \ref{sec:delete_atoms_bonds}.
+This compltely overwrites definition of atom \verb|$atom:polymers[0]/monomers[2]/ca|, including its type, molecule membership, charge, and position.
 
-\textit{(Note: This works because by default moltemplate will ignore all
-duplicate definitions of \$atoms, \$bonds, \$angles, \$dihedrals,
-and \$impropers which appear earlier in the user's .lt files.
-It only considers the most recent definition for each \$atom, \$bond, etc...)}
+\textbf{This approach is no longer recommended} because:
+\begin{list}{}
+  \item - Force fields (like OPLSAA) will \textbf{still use the old atom type} when looking up the bond, angle, dihedral force-field parameters for any bonded interactions which the atom participates in.
+  \item - The X,Y,Z coordinates you supply (e.g. \verb|6.4 8.2 0.6|)
+    must be the \textit{final} X,Y,Z coordinates
+    \textit{(i.e. after any} \verb|.move()| \textit{and} \verb|.rot()| \textit{commands so far have been applied).}
+\end{list}
+
+\subsubsection*{New Method (experimental)}
+
+You can also change atom types using the LAMMPS' \verb|set atom| command. Specifically:
+\begin{list}{}
+\item - \textbf{Use ``set atom \$atom:ID type @atom:TYPE'' command.}
+\item - \textbf{Put this command in the} \verb|write(In Set Atom)| \textit{section. (See below.)}
+\end{list}
+
+In the following excerpt, three ethane molecules are created and cumulatively shifted along a vector. The third molecule is transformed from ethane to methanol by deleting two hydrogen atoms in the same methyl group, and then changing the atom types of all atoms in the selected molecule:
+
+\begin{verbatim}
+# Load the force field
+import "oplsaa2024.lt"  # defines the OPLSAA force-field (2024 version)
+
+# Define the molecule
+ethane inherits OPLSAA {
+  <<DETAILS OMITTED>>
+}
+
+# 1. Create the sample: 3 ethane molecules.
+mols = new ethane[3].move(5.0, 2.0, 2.0)
+
+# 2. We want to turn the 3rd molecule (mols[2]) into methanol, but
+#    methanol has two less atoms than ethane.  Delete the extra atoms.
+delete mols[2]/h22
+delete mols[2]/h23
+
+# 3. Now replace atom types to transform ethane in methanol.  (Note that all
+#    nearby atom types must be updated, not just "c2" and "h21".)
+write("In Set Atom") {  # ("In Set Atom" means new atom types->new FF params)
+  set atom $atom:mols[2]/c1  type @atom:OPLSAA/157  # C: CH3 alcohols
+  set atom $atom:mols[2]/h11 type @atom:OPLSAA/156  # H(C): methanol
+  set atom $atom:mols[2]/h12 type @atom:OPLSAA/156  # H(C): methanol
+  set atom $atom:mols[2]/h13 type @atom:OPLSAA/156  # H(C): methanol
+  set atom $atom:mols[2]/c2  type @atom:OPLSAA/154  # O: mono alcohols
+  set atom $atom:mols[2]/h21 type @atom:OPLSAA/155  # H(O): mono alcohols
+}
+
+# See "examples/force_field_OPLSAA/set_atom_type_example/" for details.
+\end{verbatim}
+
+
+\begin{warning}  
+   You must put the \verb|set atom| commands \textit{inside} the \verb|write("In Set Atom")| section \textit{if you want the force-field parameters to be updated}.  The \verb|write("In Set Atom")| is \underline{case sensitive}. The commands specified in this block will modify the atoms types and/or shapes in the DATA file.  \textit{(Those commands will also appear in the ``system.in.set.atom'' file.  Normally you can ignore this file.  You only need to import that file inside LAMMPS if you are changing other atom attributes besides type and shape.)}
+\end{warning}
+
+
+\begin{itemize}
+  \vitem \verb|set atom $atom:ID type @atom:TYPE-ID|\hskip2ex This command will change the atom type of a specific atom in the ``Atoms'' section of the DATA file.
+  \vitem \verb|set atom $atom:ID shape SIGX SIGY SIGZ|\hskip2ex This command will change the ellipsoid diameters of a specific atom in the ``Ellipsoids'' section of the DATA file, if the atom style includes ellipsoids.
+\end{itemize}
+
+This excerpt demonstrates how to change the atom ID of ellipsoid particles, which involves changing both the atom type and the ellipsoid diameters in the DATA file:
+\begin{verbatim}
+# 1. Create the sample: 3*3*3 grid of benzene molecules.
+mols = new BENZ[3].move(6.5, 0, 0)
+               [3].move(0, 6.5, 0)
+               [3].move(0, 0, 6.5)
+
+# 2. Transform one of the disks into a rod.
+#    (Note: Wildcards, "mols[*][*][*]", do not work with "set" commands.)
+write_once("In Set Atom") {
+  set atom mols[2][2][2]/ben type @atom:ROD/b1
+  set atom mols[2][2][2]/ben shape 2.5 2.5 6.5
+}
+\end{verbatim}
+
 
 
 \subsubsection{Customizing individual bonds, angles, dihedrals,...}
@@ -3860,26 +3936,6 @@ to make sure they look reasonable.
 %which you plan to delete later.  I plan to fix this bug eventually.
 %}
 
-
-\subsubsection*{Changing atom types}
-\label{sec:changing_atom_type}
-\textit{Again, if you want to change the \textbf{type} of atom, do not
-delete the atom}, since this will break any bonded interactions it participates
-in.  \textit{Instead}, add another line to override its @atom type.
-For example, the
-\href{https://github.com/jewettaij/moltemplate/blob/master/examples/all_atom/force_field_OPLSAA/NIPAM_polymer+water+ions/moltemplate_files/NIPAM.lt}{NIPAM example} defines a ``NIPAM\_monomer'' (containing an \$atom:c1 of type @atom:57).  Excerpt:
-\begin{verbatim}
-  write("Data Atoms") {
-    $atom:c1   $mol:...  @atom:57   0.0    -2.974852   5.522390  -0.018155
-    :
-\end{verbatim}
-Later in that example, we define the ``NIPAM'' molecule.  It is nearly identical to the ``NIPAM\_monomer'' subunit, except that it has some extra atoms, and it also redefines the type of the \$atom:c1 atom to @atom:54:
-\begin{verbatim}
-  write("Data Atoms") {
-    $atom:c1    $mol:... @atom:54   0.0    -2.974852   5.522390  -0.018155
-    :
-\end{verbatim}
-This overrides the previous definition of \$atom:c1 in ``NIPAM\_monomer''.
 
 
 
@@ -4858,57 +4914,9 @@ post-processing modification of the ``Data Atoms.template'' file that is carried
 but before the force field lookup occurs.
 In this way, all \textit{bonded} force field terms are also updated, while preserving the atomic coordinates in the sample's reference system.\\
 %
-Alchemical transformations are triggered by a \verb|write_once("Postprocess")| command issued after the creation of molecules with the \verb|new| command.
+Alchemical transformations are triggered by a \verb|write_once("In Set Atom")| command issued after the creation of molecules with the \verb|new| command.
 %
-Alchemical transformations are controlled using the LAMMPS' \verb|set atom| command. Currently, moltemplate can process the following keywords:
-\begin{itemize}
-	\vitem \verb|set atom ID type TYPE-ID|\hskip2ex This command will change the atom type of a specific atom in the ``Atoms'' section of the DATA file.
-	\vitem \verb|set atom ID shape SIGX SIGY SIGZ|\hskip2ex This command will change the ellipsoid diameters of a specific atom in the ``Ellipsoids'' section of the DATA file, if the atom style includes ellipsoids.
-\end{itemize}
-%
-The \verb|ID| is specified using moltemplate's internal identifiers, as in the ``Data Atoms.template'' file. Wildcard notation is supported for selecting atoms IDs.
-The \verb|TYPE-ID| is specified using the same variables in the force field definition, with the additional prefix if the ``inherits'' keyword was used to inherit attributes.
 
-These commands are parsed by the script alchemical.py: this tool is designed to be easily expanded, covering other properties or ways of selecting which elements to alter, e.g. molecular indexes.
-
-\begin{warning}  
-	The \verb|write_once("Postprocess")|is \underline{case sensitive}. The commands spe\-ci\-fied in this block are only used for modifying the atoms types and/or shapes in the DATA file and will not appear in the master input file (e.g. ``system.in'').
-\end{warning}
-
-In the following excerpt, three ethane molecules are created and cumulatively shifted along a vector. The third molecule is transformed from ethane to methanol by deleting two hydrogen atoms in the same methyl group, and then changing the atom types of all atoms in the selected molecule:
-%
-\begin{verbatim}
-# 1. Create the sample: 3 ethane molecules.
-mol1 = new ETH[3].move(5.0, 2.0, 2.0)	
-
-# 2. Delete the extra atoms of molecule 3
-delete mol1[2]/H5
-delete mol1[2]/H6
-
-# 3. Replace all atomtypes, transforming ethanol in methanol.
-write("Postprocess") {
-	set atom mol1[2]/C1 type @atom:OPLSAA/99
-	set ATOM mol1[2]/H1 type @atom:OPLSAA/98
-	SET ATOM mol1[2]/H2 TYPE @atom:OPLSAA/98
-	SET atom mol1[2]/H3 TYPE @atom:OPLSAA/98
-	set atom mol1[2]/C2 type @atom:OPLSAA/96
-	set atom mol1[2]/H4 type @atom:OPLSAA/97
-}
-\end{verbatim}
-
-This excerpt demonstrates how to change the atom ID of ellipsoid particles, which involves changing both the atom type and the ellipsoid diameters in the DATA file:
-\begin{verbatim}
-# 1. Create the sample: 3*3*3 grid of benzene molecules.
-mol0 = new BENZ[3].move(6.5, 0, 0)
-               [3].move(0, 6.5, 0)
-               [3].move(0, 0, 6.5)
-
-# 2. Transform a plane of disks into rods.
-write_once("Postprocess") {
-	set atom mol0[*][*][2]/ben type @atom:ROD/b1
-	set atom mol0[*][*][2]/ben shape 2.5 2.5 6.5
-}
-\end{verbatim}
 
 \section{Known bugs and limitations}
 \label{sec:limitations}

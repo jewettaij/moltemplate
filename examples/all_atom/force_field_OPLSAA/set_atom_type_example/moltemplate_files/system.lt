@@ -1,0 +1,29 @@
+import "ethane.lt"      # <-defines the "ethane" molecule type
+import "oplsaa2024.lt"  # <-defines the "OPLSAA" force field
+
+# Periodic boundary conditions:
+write_once("Data Boundary") {
+   0.0  15.0  xlo xhi
+   0.0  15.0  ylo yhi
+   0.0  15.0  zlo zhi
+}
+
+# 1. Create the sample: 3 ethane molecules.
+mols = new ethane[3].move(5.0, 2.0, 2.0)
+
+# 2. We want to turn the 3rd molecule (mols[2]) into methanol, but
+#    methanol has two less atoms than ethane.  Delete the extra atoms.
+delete mols[2]/h22
+delete mols[2]/h23
+
+# 3. Now replace atom types to transform ethane in methanol.  (Note that all
+#    nearby atom types must be updated, not just "c2" and "h21".)
+write("In Set Atom") {  # ("In Set Atoms" means new atom types->new FF params)
+  set atom $atom:mols[2]/c1  type @atom:OPLSAA/157  # C: CH3 alcohols
+  set atom $atom:mols[2]/h11 type @atom:OPLSAA/156  # H(C): methanol
+  set atom $atom:mols[2]/h12 type @atom:OPLSAA/156  # H(C): methanol
+  set atom $atom:mols[2]/h13 type @atom:OPLSAA/156  # H(C): methanol
+  set atom $atom:mols[2]/c2  type @atom:OPLSAA/154  # O: mono alcohols
+  set atom $atom:mols[2]/h21 type @atom:OPLSAA/155  # H(O): mono alcohols
+}
+
