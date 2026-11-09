@@ -1,0 +1,48 @@
+# MOLC model of the molecule: Benzene 
+# Model fitted on the GROMOS-ATB force field. 
+# Epsilon and sigma parameters from fitting of the LJ potential,
+# but not optimised to reproduce the intra-molecular energy.
+# NOTE (November 2025):
+# This is a legacy version of the MOLC force field which relies
+# on a hybrid pair style. The LAMMPS code has been since modified
+# to include a new pair_style molc, which has a more compact syntax
+# (along with many bug fixes!). This example is retained as the code
+# to process the -molc option is still part of molemplate. By
+# making it more general, it could be morphed into an option to
+# deal with LT files using the "pair_style hybdid" and
+# "pair_style hybdid/overlay" styles.
+#
+# Version: 1.0
+# Date:    24 Jan 2023
+#
+# moltemplate.sh -atomstyle "hybrid molecular ellipsoid" -molc system.lt
+
+GGZZ {
+  write("Data Atoms"){
+       $atom:a1  @atom:t1 0. 0. 0. $mol:... 1  1.14746
+  }
+  
+  write("Data Ellipsoids"){
+     $atom:a1 6.3367 6.3367 3.2379 1. 0. 0. 0.
+  }
+  write_once("In Settings") {
+    mass @atom:b1 78.1134
+
+    pair_style hybrid/overlay gayberne 1.0 1.0 -3.0 14. coul/long/offcentre 14. 4 &
+    @atom:b1    0.000000    0.000000    0.000000   -0.585 &
+    @atom:b1    0.000000    2.100630    0.000000    0.195 &
+    @atom:b1    1.819199   -1.050315    0.000000    0.195 &
+    @atom:b1   -1.819199   -1.050315    0.000000    0.195
+    
+    # Electrostatics (after the DATA file).
+    kspace_style    pppm/offcentre 1e-4 4 &
+    @atom:b1    0.000000    0.000000    0.000000   -0.585 &
+    @atom:b1    0.000000    2.100630    0.000000    0.195 &
+    @atom:b1    1.819199   -1.050315    0.000000    0.195 &
+    @atom:b1   -1.819199   -1.050315    0.000000    0.195
+
+    # Gay-Berne parameters.
+    pair_coeff * * coul/long/offcentre
+    pair_coeff @{atom:b1} @{atom:b1} gayberne 2.3612 3.7501 0.26387 0.26387 1. 0.26387 0.26387 1. 14.
+  }
+}

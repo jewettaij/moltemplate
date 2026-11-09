@@ -1,0 +1,83 @@
+# Minimal input deck to reproduce the error.
+# 
+# Note: to run this simulation, you require this custom version of LAMMPS implementing
+# the MOLC pair style (last update: 29 Aug 2024)
+# https://github.com/matteoeghirotta/lammps
+#
+# moltemplate.sh -atomstyle "hybrid molecular ellipsoid" -overlay-bonds -dump water_start.dump sample.lt
+
+# Single molecule definition for water (MOLC).
+import tip4p2005_cg_01.lt
+
+# Create the molecules.
+solv = new TIP4[2]
+
+# Input variables.
+write_once("In Init"){
+
+ # Input variables.
+ variable run    string sample     # Simulation name.
+ variable ts     equal  10           # timestep
+ variable ti     equal  300.         # Initial temperature
+ variable tf     equal  250.         # Final temperature
+ variable p      equal  1.           # Equilibrium pressure
+ variable cutoff equal  14.          # For interactions in real space
+ variable skin   equal  4.           # Skin distance for neighbour list
+ variable cl     equal  200          # correlation length for averaging
+ variable s      equal  5            # sample interval for averaging
+ variable equi   equal  500000       # Equilibration steps
+ variable prod   equal  2000         # Production steps
+
+ # PBC
+ boundary p p p
+  
+ # Force field setup.
+ units real
+ atom_style hybrid molecular ellipsoid
+ bond_style ellipsoid
+ special_bonds lj/coul 0.0 0.2 0.5
+ # gamma upsilon mu lj_cutoff coul_cutoff
+ pair_style molc/long 1 1 -3 \$\{cutoff\} \$\{cutoff\} 
+ 
+ # Neighbour list.
+ neighbor        \$\{skin\} bin
+
+}
+
+write("In Settings"){
+
+ # Force field setup:
+ # Define the K-space after the DATA file is read.
+ # Needed for triclinic boxes.
+ kspace_style pppm/molc 2e-5
+
+}
+
+# Set-up an NVT simulation.
+write("In Run"){
+
+ # Derived variables.
+ # thermo interval.
+ variable d       equal \$\{cl\}*\$s
+ # dump interval ("sample interval" frames).
+ variable dcycle  equal \$\{prod\}/\$s
+ variable tcouple equal \$\{ts\}*100
+ variable pcouple equal \$\{ts\}*1000
+ 
+ # Physical observables.
+ compute temp_trasl      all temp
+ compute temp_rototrasl  all temp/asphere dof all
+ compute press_trasl     all pressure temp_trasl
+
+ # Output.
+ thermo          \$d
+ thermo_style custom step etotal evdwl ecoul elong ebond ke pe temp press vol density cpu
+ thermo_modify temp temp_rototrasl press press_trasl flush yes
+
+ # Thermalisation and relaxation, canonical (NVT) ensemble.
+ timestep 	 \$\{ts\}
+ fix NVT all nvt/asphere temp \$\{ti\} \$\{tf\} \$\{tcouple\}
+ fix_modify      NVT temp temp_rototrasl
+ run    \$\{prod\}
+ unfix NVT
+}

@@ -115,6 +115,8 @@ moltemplate_manual*.blg
 moltemplate_manual*.log
 moltemplate_manual*.out
 moltemplate_manual*.toc
+moltemplate_manual*.gz
+moltemplate_manual*.pdf
 
 ######## files created by running LAMMPS: ########
 
