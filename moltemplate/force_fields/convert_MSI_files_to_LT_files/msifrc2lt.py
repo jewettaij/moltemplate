@@ -2791,7 +2791,7 @@ def main():
                     assert((dihedral_atom_name[-1] == '_') or (dihedral_atom_name[0] == '*'))
                     # assume "auto" equivalences when looking up atom types
                     sys.stderr.write('DEBUG: auto_dihedral2atom['+str(i)+']['+dihedral_atom_name+'] = \n'
-                                     '       '+str(equiv_dihedral2atom[i][dihedral_atom_name])+'\n')
+                                     '       '+str(auto_dihedral2atom[i][dihedral_atom_name])+'\n')
                     for a in auto_dihedral2atom[i][dihedral_atom_name]:
                         atom_combos[i].add(a)
 
