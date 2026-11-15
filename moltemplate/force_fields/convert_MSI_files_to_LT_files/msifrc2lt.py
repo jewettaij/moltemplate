@@ -2324,7 +2324,7 @@ def main():
                 n = tokens[7]
                 chi0 = tokens[8]
                 improper2style[imsym,improper_name] = 'cvff'
-                improper2params[imsym,improper_name] = (Kchi+' '+n+' '+chi0)
+                improper2params[imsym,improper_name] = (K+' '+n+' '+chi0)
                 #if improper_style_name == 'cvff':
                 #    improper2params[improper_name] = (Kchi+' '+n+' '+chi0)
                 #    improper_symmetry_subgraph_or[improper_name] = 'cenJswapIL'
@@ -2788,10 +2788,10 @@ def main():
                     for a in equiv_dihedral2atom[dihedral_atom_name]:
                         atom_combos[i].add(a)
                 else:
-                    assert((dihedral_atom_name[-1] == '_') or (ange_atom_name[0] == '*'))
+                    assert((dihedral_atom_name[-1] == '_') or (dihedral_atom_name[0] == '*'))
                     # assume "auto" equivalences when looking up atom types
                     sys.stderr.write('DEBUG: auto_dihedral2atom['+str(i)+']['+dihedral_atom_name+'] = \n'
-                                     '       '+str(equiv_dihedral2atom[i][dihedral_atom_name])+'\n')
+                                     '       '+str(auto_dihedral2atom[i][dihedral_atom_name])+'\n')
                     for a in auto_dihedral2atom[i][dihedral_atom_name]:
                         atom_combos[i].add(a)
 
