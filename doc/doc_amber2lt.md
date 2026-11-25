@@ -122,7 +122,7 @@ is somewhat ambiguous about where these sections begin and end.
 The "amber2lt.py" attempts to guess where each section is,
 however it sometimes fails.  When this happens, the conversion will fail.
 You can get around this problem by manually dividing the original file
-into seperate files containing only the lines of text that are relevant
+into separate files containing only the lines of text that are relevant
 for that section.  Then you can pass these files individually to
 the *amber2lt.py* program using the following arguments:
 
